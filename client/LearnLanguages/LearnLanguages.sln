@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Business.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.DataAccess.WcfProxy", "..\LearnLanguages.DataAccess.WcfProxy\LearnLanguages.DataAccess.WcfProxy.csproj", "{B858FE17-CC02-4C0C-8DB0-4A803EAD176D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Client.Tests", "LearnLanguages.Client.Tests\LearnLanguages.Client.Tests.csproj", "{534A9854-3EEF-4B5E-809D-AC3013CAC296}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{B858FE17-CC02-4C0C-8DB0-4A803EAD176D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B858FE17-CC02-4C0C-8DB0-4A803EAD176D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B858FE17-CC02-4C0C-8DB0-4A803EAD176D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{534A9854-3EEF-4B5E-809D-AC3013CAC296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{534A9854-3EEF-4B5E-809D-AC3013CAC296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{534A9854-3EEF-4B5E-809D-AC3013CAC296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{534A9854-3EEF-4B5E-809D-AC3013CAC296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
