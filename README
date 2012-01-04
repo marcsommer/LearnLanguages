@@ -1,0 +1,12 @@
+LearnLanguages
+
+Author: William Raiford (bill.mybiz@gmail.com)
+
+Vision: I want to learn languages quickly, efficiently, and organically to maximize retention and minimize time investment.  I also want a specific goal, currently 2000 words, and I want to see just _one_ real number metric to see my progress towards that goal in any particular language.  I want to be able to write in a bunch of text, have the app persist that text, and allow quick user actions to create translations in multiple languages to grow just a database of text and text relationships.  So to start with, the problem becomes three-fold:
+
+1. Input text data ("Phrase"), associated with a Language.
+2. Create text relationships (translations) among those text data.
+3. Execute metrics on user knowledge of those text relationships, or IOW test for knowledge to assess progress.
+
+Code so far:
+Solution architecture down for the most part.  I've fleshed out PhraseEdit and LanguageEdit but I'm still working on the asynchronization of my WCF calls.  Basic WCF service runs using BasicHttpBinding (because of SL requirements, it can't use WsHttpBinding).  
