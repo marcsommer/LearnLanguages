@@ -1,0 +1,24 @@
+﻿<configuration>
+    <system.serviceModel>
+        <bindings>
+            <basicHttpBinding>
+                <binding name="BasicHttpBinding_ILanguageDal" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+                <binding name="BasicHttpBinding_IPhraseDal" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+            </basicHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="http://localhost:8000/LearnLanguage/Language/LanguageService"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ILanguageDal"
+                contract="WcfServices.Language.ILanguageDal" name="BasicHttpBinding_ILanguageDal" />
+            <endpoint address="http://localhost:8000/LearnLanguage/Phrase/PhraseService"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IPhraseDal"
+                contract="WcfServices.Phrase.IPhraseDal" name="BasicHttpBinding_IPhraseDal" />
+        </client>
+    </system.serviceModel>
+</configuration>

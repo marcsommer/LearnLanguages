@@ -1,0 +1,11 @@
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\obj\Release\ResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\LearnLanguages.Common.Server.dll
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\LearnLanguages.Common.Server.pdb
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\Caliburn.Micro.dll
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\Csla.dll
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\System.Windows.Interactivity.dll
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\Caliburn.Micro.pdb
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\Caliburn.Micro.xml
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\bin\Release\System.Windows.Interactivity.xml
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\obj\Release\LearnLanguages.Common.Server.dll
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\server\LearnLanguages.Common.Server\obj\Release\LearnLanguages.Common.Server.pdb

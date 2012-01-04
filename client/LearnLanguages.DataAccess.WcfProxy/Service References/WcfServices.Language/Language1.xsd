@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/LearnLanguages" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/LearnLanguages" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8000/LearnLanguage/Language?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/LearnLanguages.DataAccess" />
+  <xs:complexType name="ResultOfLanguageDtociihImHl">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="ResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/LearnLanguages" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="LanguageDto" Namespace="http://schemas.datacontract.org/2004/07/LearnLanguages.DataAccess" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="_IsSuccess" type="xs:boolean" />
+      <xs:element name="_x003C_Info_x003E_k__BackingField" nillable="true" type="tns:MagicStringsList" />
+      <xs:element name="_x003C_Msg_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/LearnLanguages.DataAccess" name="_x003C_Obj_x003E_k__BackingField" nillable="true" type="q1:LanguageDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ResultOfLanguageDtociihImHl" nillable="true" type="tns:ResultOfLanguageDtociihImHl" />
+  <xs:complexType name="MagicStringsList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MainObject" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MagicStringsList" nillable="true" type="tns:MagicStringsList" />
+  <xs:complexType name="ResultOfArrayOfLanguageDtociihImHl">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="ResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/LearnLanguages" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ArrayOfLanguageDto" Namespace="http://schemas.datacontract.org/2004/07/LearnLanguages.DataAccess" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="_IsSuccess" type="xs:boolean" />
+      <xs:element name="_x003C_Info_x003E_k__BackingField" nillable="true" type="tns:MagicStringsList" />
+      <xs:element name="_x003C_Msg_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/LearnLanguages.DataAccess" name="_x003C_Obj_x003E_k__BackingField" nillable="true" type="q2:ArrayOfLanguageDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ResultOfArrayOfLanguageDtociihImHl" nillable="true" type="tns:ResultOfArrayOfLanguageDtociihImHl" />
+</xs:schema>
