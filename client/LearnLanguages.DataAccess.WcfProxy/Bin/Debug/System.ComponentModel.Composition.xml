@@ -5,45 +5,16 @@
   </assembly>
   <members>
     <member name="T:System.Lazy`2">
-      <summary>Provides an extension of the <see cref="T:System.Lazy`1" /> class with support for metadata.</summary>
-      <typeparam name="T">Specifies the type of object that is being lazily initialized.</typeparam>
-      <typeparam name="TMetadata">Specifies the type of metadata for the object being lazily initialized.</typeparam>
+      <typeparam name="T"></typeparam>
+      <typeparam name="TMetadata"></typeparam>
     </member>
-    <member name="M:System.Lazy`2.#ctor(System.Func{`0},`1)">
-      <summary>Initializes a new instance of the <see cref="T:System.Lazy`2" /> class with the specified metadata and factory for the referenced value.</summary>
-      <param name="valueFactory">A function that returns the referenced value.</param>
-      <param name="metadata">The metadata.</param>
-    </member>
-    <member name="M:System.Lazy`2.#ctor(System.Func{`0},`1,System.Boolean)">
-      <summary>Initializes a new instance of the <see cref="T:System.Lazy`2" /> class with the specified metadata, factory for the referenced value, and thread safety mode.</summary>
-      <param name="valueFactory">A function that returns the referenced value.</param>
-      <param name="metadata">The metadata.</param>
-      <param name="isThreadSafe">true to make this instance usable concurrently by multiple threads; false to make the instance usable by only one thread at a time.</param>
-    </member>
-    <member name="M:System.Lazy`2.#ctor(System.Func{`0},`1,System.Threading.LazyThreadSafetyMode)">
-      <summary>Initializes a new instance of the <see cref="T:System.Lazy`2" /> class with the specified metadata, factory for the referenced value, and thread safety mode.</summary>
-      <param name="valueFactory">A function that returns the referenced value.</param>
-      <param name="metadata">The metadata.</param>
-      <param name="mode">The thread-safety mode.</param>
-    </member>
-    <member name="M:System.Lazy`2.#ctor(`1)">
-      <summary>Initializes a new instance of the <see cref="T:System.Lazy`2" /> class with the specified metadata. </summary>
-      <param name="metadata">The metadata.</param>
-    </member>
-    <member name="M:System.Lazy`2.#ctor(`1,System.Boolean)">
-      <summary>Initializes a new instance of the <see cref="T:System.Lazy`2" /> class with the specified metadata and thread safety mode.</summary>
-      <param name="metadata">The metadata.</param>
-      <param name="isThreadSafe">true to make this instance usable concurrently by multiple threads; false to make the instance usable by only one thread at a time.</param>
-    </member>
-    <member name="M:System.Lazy`2.#ctor(`1,System.Threading.LazyThreadSafetyMode)">
-      <summary>Initializes a new instance of the <see cref="T:System.Lazy`2" /> class with the specified metadata and thread safety mode.</summary>
-      <param name="metadata">The metadata.</param>
-      <param name="mode">The thread-safety mode.</param>
-    </member>
-    <member name="P:System.Lazy`2.Metadata">
-      <summary>Gets or sets the metadata associated with the referenced value.</summary>
-      <returns>The metadata object associated with the referenced value.</returns>
-    </member>
+    <member name="M:System.Lazy`2.#ctor(System.Func{`0},`1)"></member>
+    <member name="M:System.Lazy`2.#ctor(System.Func{`0},`1,System.Boolean)"></member>
+    <member name="M:System.Lazy`2.#ctor(System.Func{`0},`1,System.Threading.LazyThreadSafetyMode)"></member>
+    <member name="M:System.Lazy`2.#ctor(`1)"></member>
+    <member name="M:System.Lazy`2.#ctor(`1,System.Boolean)"></member>
+    <member name="M:System.Lazy`2.#ctor(`1,System.Threading.LazyThreadSafetyMode)"></member>
+    <member name="P:System.Lazy`2.Metadata"></member>
     <member name="T:System.ComponentModel.Composition.AttributedModelServices">
       <summary>Contains helper methods for using the attributed programming model with composition.</summary>
     </member>
@@ -225,7 +196,7 @@
     <member name="M:System.ComponentModel.Composition.CompositionException.#ctor(System.String,System.Exception)">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.CompositionException" /> class with the specified error message and the exception that is the cause of this exception.</summary>
       <param name="message">A message that describes the <see cref="T:System.ComponentModel.Composition.CompositionException" /> or null to set the <see cref="P:System.Exception.Message" /> property to its default value.</param>
-      <param name="innerException">The exception that is the underlying cause of the <see cref="T:System.ComponentModel.Composition.CompositionException" /> or null to set the <see cref="P:System.Exception.InnerException" /> property to null.</param>
+      <param name="innerException">The exception that is the underlying cause of the <see cref="T:System.ComponentModel.Composition.ComposablePartException" /> or null to set the <see cref="P:System.Exception.InnerException" /> property to null.</param>
     </member>
     <member name="P:System.ComponentModel.Composition.CompositionException.Errors">
       <summary>Gets or sets a collection of <see cref="T:System.ComponentModel.Composition.CompositionError" /> objects that describe the errors associated with the <see cref="T:System.ComponentModel.Composition.CompositionException" />.</summary>
@@ -235,9 +206,7 @@
       <summary>Gets a message that describes the exception.</summary>
       <returns> A message that describes the <see cref="T:System.ComponentModel.Composition.CompositionException" />.</returns>
     </member>
-    <member name="T:System.ComponentModel.Composition.CreationPolicy">
-      <summary>Specifies when and how a part will be instantiated.</summary>
-    </member>
+    <member name="T:System.ComponentModel.Composition.CreationPolicy"></member>
     <member name="F:System.ComponentModel.Composition.CreationPolicy.Any">
       <summary>Specifies that the <see cref="T:System.ComponentModel.Composition.Hosting.CompositionContainer" /> will use the most appropriate <see cref="T:System.ComponentModel.Composition.CreationPolicy" /> for the part given the current context. This is the default <see cref="T:System.ComponentModel.Composition.CreationPolicy" />. Be default, <see cref="T:System.ComponentModel.Composition.Hosting.CompositionContainer" /> will use <see cref="F:System.ComponentModel.Composition.CreationPolicy.Shared" />, unless the <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePart" /> or importer requests <see cref="F:System.ComponentModel.Composition.CreationPolicy.NonShared" />.</summary>
     </member>
@@ -378,7 +347,7 @@
     </member>
     <member name="M:System.ComponentModel.Composition.ImportManyAttribute.#ctor(System.Type)">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.ImportManyAttribute" /> class, importing the set of exports with the contract name derived from the specified type.</summary>
-      <param name="contractType">The type to derive the contract name of the exports to import, or null to use the default contract name.</param>
+      <param name="contractType">The type to derive the contract name of the exports to import, or nullto use the default contract name.</param>
     </member>
     <member name="P:System.ComponentModel.Composition.ImportManyAttribute.AllowRecomposition">
       <summary>Gets or sets a value indicating whether the decorated property or field will be recomposed when exports that provide the matching contract change.</summary>
@@ -438,9 +407,7 @@
       <summary>Gets or sets a value that indicates the creation policy of the attributed part.</summary>
       <returns>One of the <see cref="P:System.ComponentModel.Composition.PartCreationPolicyAttribute.CreationPolicy" /> values that indicates the creation policy of the attributed part. The default is <see cref="F:System.ComponentModel.Composition.CreationPolicy.Any" />.</returns>
     </member>
-    <member name="T:System.ComponentModel.Composition.PartMetadataAttribute">
-      <summary>Specifies metadata for a part.</summary>
-    </member>
+    <member name="T:System.ComponentModel.Composition.PartMetadataAttribute"></member>
     <member name="M:System.ComponentModel.Composition.PartMetadataAttribute.#ctor(System.String,System.Object)">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.PartMetadataAttribute" /> class with the specified name and metadata value.</summary>
       <param name="name">A string that contains the name of the metadata value or null to use an empty string ("").</param>
@@ -481,7 +448,7 @@
         <paramref name="catalogs" /> contains an element that is null.</exception>
     </member>
     <member name="P:System.ComponentModel.Composition.Hosting.AggregateCatalog.Catalogs">
-      <summary>Gets the underlying catalogs of the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateCatalog" /> object.</summary>
+      <summary>Gets the underlying catalogs of the <see cref="T:System.ComponentModel.Composition.AggregateCatalog" /> object.</summary>
       <returns>A collection of <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartCatalog" /> objects that underlie the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateCatalog" /> object.</returns>
       <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.ComponentModel.Composition.Hosting.AggregateCatalog" /> object has been disposed of.</exception>
     </member>
@@ -513,7 +480,7 @@
     </member>
     <member name="P:System.ComponentModel.Composition.Hosting.AggregateCatalog.Parts">
       <summary>Gets the part definitions that are contained in the catalog.</summary>
-      <returns>The <see cref="T:System.ComponentModel.Composition.ComposablePartDefinition" /> objects that are contained in the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateCatalog" /> object.</returns>
+      <returns>The <see cref="T:System.ComponentModel.Composition.ComposablePartDefinition" /> objects that are contained in the <see cref="T:System.ComponentModel.Composition.AggregateCatalog" /> object.</returns>
       <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.ComponentModel.Composition.Hosting.AggregateCatalog" /> has been disposed of.</exception>
     </member>
     <member name="T:System.ComponentModel.Composition.Hosting.AggregateExportProvider">
@@ -522,8 +489,6 @@
     <member name="M:System.ComponentModel.Composition.Hosting.AggregateExportProvider.#ctor(System.Collections.Generic.IEnumerable{System.ComponentModel.Composition.Hosting.ExportProvider})">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateExportProvider" /> class.</summary>
       <param name="providers">The prioritized list of export providers. The providers are consulted in the order in which they are supplied.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="providers" /> contains a null element.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.Hosting.AggregateExportProvider.#ctor(System.ComponentModel.Composition.Hosting.ExportProvider[])">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateExportProvider" /> class.</summary>
@@ -543,7 +508,7 @@
       <param name="atomicComposition">The transactional container for the composition.</param>
     </member>
     <member name="P:System.ComponentModel.Composition.Hosting.AggregateExportProvider.Providers">
-      <summary>Gets a collection that contains the providers that the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateExportProvider" /> object aggregates.</summary>
+      <summary>Gets a collection that contains the providers that the <see cref="T:System.ComponentModel.Composition.Hosting.AggregatingExportProvider" /> object aggregates.</summary>
       <returns>A collection of the <see cref="T:System.ComponentModel.Composition.Hosting.ExportProvider" /> objects that the <see cref="T:System.ComponentModel.Composition.Hosting.AggregateExportProvider" /> aggregates.</returns>
       <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.ComponentModel.Composition.Hosting.AggregateExportProvider" /> object has been disposed of.</exception>
     </member>
@@ -710,7 +675,6 @@
     <member name="M:System.ComponentModel.Composition.Hosting.ComposablePartExportProvider.Compose(System.ComponentModel.Composition.Hosting.CompositionBatch)">
       <summary>Executes composition on the specified batch.</summary>
       <param name="batch">The batch to execute composition on.</param>
-      <exception cref="T:System.InvalidOperationException">The container is already in the process of composing.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.Hosting.ComposablePartExportProvider.Dispose">
       <summary>Releases all resources used by the current instance of the <see cref="T:System.ComponentModel.Composition.Hosting.ComposablePartExportProvider" /> class.</summary>
@@ -743,7 +707,7 @@
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Hosting.CompositionBatch" /> class with the specified parts for addition and removal.</summary>
       <param name="partsToAdd">A collection of <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePart" /> objects to add.</param>
       <param name="partsToRemove">A collection of <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePart" /> objects to remove.</param>
-      <exception cref="T:System.ArgumentException">
+      <exception cref="T:System.ArgumentNullException">
         <paramref name="partsToAdd" /> is null.-or-<paramref name="partsToRemove" /> is null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.Hosting.CompositionBatch.AddExport(System.ComponentModel.Composition.Primitives.Export)">
@@ -799,8 +763,6 @@
       <param name="catalog">A catalog that provides <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> objects to the <see cref="T:System.ComponentModel.Composition.Hosting.CompositionContainer" />.</param>
       <param name="isThreadSafe">true if this <see cref="T:System.ComponentModel.Composition.Hosting.CompositionContainer" /> object must be thread-safe; otherwise, false.</param>
       <param name="providers">An array of <see cref="T:System.ComponentModel.Composition.Hosting.ExportProvider" /> objects that provide the <see cref="T:System.ComponentModel.Composition.Hosting.CompositionContainer" /> access to <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> objects, or null to set the <see cref="P:System.ComponentModel.Composition.Hosting.CompositionContainer.Providers" /> property to an empty <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" />.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="providers" /> contains a null element.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor(System.ComponentModel.Composition.Primitives.ComposablePartCatalog,System.ComponentModel.Composition.Hosting.ExportProvider[])">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Hosting.CompositionContainer" /> class with the specified catalog and export providers.</summary>
@@ -1056,7 +1018,8 @@
     </member>
     <member name="M:System.ComponentModel.Composition.Hosting.ExportProvider.TryGetExports(System.ComponentModel.Composition.Primitives.ImportDefinition,System.ComponentModel.Composition.Hosting.AtomicComposition,System.Collections.Generic.IEnumerable{System.ComponentModel.Composition.Primitives.Export}@)">
       <summary>Gets all the exports that match the conditions of the specified import.</summary>
-      <returns>trueif <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.Cardinality" /> is <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrOne" /> or <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrMore" /> and there are zero <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> objects that match the conditions of the specified <see cref="T:System.ComponentModel.Composition.Primitives.ImportDefinition" />; true if <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.Cardinality" /> is <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrOne" /> or <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ExactlyOne" /> and there is exactly one <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> that matches the conditions of the specified <see cref="T:System.ComponentModel.Composition.Primitives.ImportDefinition" />; otherwise, false.</returns>
+      <returns>true
+            if <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.Cardinality" /> is <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrOne" /> or <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrMore" /> and there are zero <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> objects that match the conditions of the specified <see cref="T:System.ComponentModel.Composition.Primitives.ImportDefinition" />; true if <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.Cardinality" /> is <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrOne" /> or <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ExactlyOne" /> and there is exactly one <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> that matches the conditions of the specified <see cref="T:System.ComponentModel.Composition.Primitives.ImportDefinition" />; otherwise, false.</returns>
       <param name="definition">The object that defines the conditions of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> objects to get.</param>
       <param name="atomicComposition">The transactional container for the composition.</param>
       <param name="exports">When this method returns, contains a collection of <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> objects that match the conditions defined by <see cref="T:System.ComponentModel.Composition.Primitives.ImportDefinition" />, if found; otherwise, an empty <see cref="T:System.Collections.Generic.IEnumerable`1" /> object. This parameter is passed uninitialized. </param>
@@ -1134,9 +1097,7 @@
     <member name="E:System.ComponentModel.Composition.Hosting.INotifyComposablePartCatalogChanged.Changing">
       <summary>Occurs when a <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartCatalog" /> is changing.</summary>
     </member>
-    <member name="T:System.ComponentModel.Composition.Hosting.TypeCatalog">
-      <summary>Discovers attributed parts from a collection of types.</summary>
-    </member>
+    <member name="T:System.ComponentModel.Composition.Hosting.TypeCatalog"></member>
     <member name="M:System.ComponentModel.Composition.Hosting.TypeCatalog.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Hosting.TypeCatalog" /> class with the specified types.</summary>
       <param name="types">A collection of attributed <see cref="T:System.Type" /> objects to add to the <see cref="T:System.ComponentModel.Composition.Hosting.TypeCatalog" /> object.</param>
@@ -1226,7 +1187,7 @@
       <exception cref="T:System.ArgumentException">
         <paramref name="definition" /> did not originate from the <see cref="P:System.ComponentModel.Composition.Primitives.ComposablePart.ImportDefinitions" /> property on the <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePart" />. -or- <paramref name="exports" /> contains an element that is null. -or- <paramref name="exports" /> is empty and <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.Cardinality" /> is <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ExactlyOne" />. -or- <paramref name="exports" /> contains more than one element and <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.Cardinality" /> is <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ZeroOrOne" /> or <see cref="F:System.ComponentModel.Composition.Primitives.ImportCardinality.ExactlyOne" />.</exception>
       <exception cref="T:System.InvalidOperationException">
-        <see cref="M:System.ComponentModel.Composition.Primitives.ComposablePart.Activate" /> has been previously called and <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.IsRecomposable" /> is false.</exception>
+        <see cref="M:System.ComponentModel.Composition.Primitives.ComposablePart.OnComposed" /> has been previously called and <see cref="P:System.ComponentModel.Composition.Primitives.ImportDefinition.IsRecomposable" /> is false.</exception>
     </member>
     <member name="T:System.ComponentModel.Composition.Primitives.ComposablePartCatalog">
       <summary>Represents the abstract base class for composable part catalogs, which collect and return <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartDefinition" /> objects.</summary>
@@ -1356,7 +1317,7 @@
     <member name="M:System.ComponentModel.Composition.Primitives.Export.#ctor(System.ComponentModel.Composition.Primitives.ExportDefinition,System.Func{System.Object})">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> class with the specified export definition and exported object getter.</summary>
       <param name="definition">An object that describes the contract that the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> object satisfies.</param>
-      <param name="exportedValueGetter">A method that is called to create the exported object of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" />. This delays the creation of the object until the <see cref="M:System.ComponentModel.Composition.Primitives.Export.Value" /> property is called. </param>
+      <param name="exportedValueGetter">A method that is called to create the exported object of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" />. This delays the creation of the object until the <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedObject" /> property is called. </param>
       <exception cref="T:System.ArgumentNullException">
         <paramref name="definition" /> is null.-or-<paramref name="exportedObjectGetter" /> is null.</exception>
     </member>
@@ -1364,7 +1325,7 @@
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> class with the specified contract name, metadata, and exported value getter.</summary>
       <param name="contractName">The contract name of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> object.</param>
       <param name="metadata">The metadata of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> object or null to set the <see cref="P:System.ComponentModel.Composition.Primitives.Export.Metadata" /> property to an empty, read-only <see cref="T:System.Collections.Generic.IDictionary`2" /> object.</param>
-      <param name="exportedValueGetter">A method that is called to create the exported value of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" />. This delays the creation of the object until the <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedValueCore" />  method is called.</param>
+      <param name="exportedValueGetter">A method that is called to create the exported object of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" />. This delays the creation of the object until the <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedObject" />  method is called.</param>
       <exception cref="T:System.ArgumentNullException">
         <paramref name="contractName" /> is null.-or-<paramref name="exportedObjectGetter" /> is null.</exception>
       <exception cref="T:System.ArgumentException">
@@ -1373,7 +1334,7 @@
     <member name="M:System.ComponentModel.Composition.Primitives.Export.#ctor(System.String,System.Func{System.Object})">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> class with the specified contract name and exported value getter.</summary>
       <param name="contractName">The contract name of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" /> object.</param>
-      <param name="exportedValueGetter">A method that is called to create the exported value of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" />. This delays the creation of the object until the <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedValueCore" /> method is called.</param>
+      <param name="exportedValueGetter">A method that is called to create the exported object of the <see cref="T:System.ComponentModel.Composition.Primitives.Export" />. This delays the creation of the object until the <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedObject" /> method is called.</param>
       <exception cref="T:System.ArgumentNullException">
         <paramref name="contractName" /> is null.-or-<paramref name="exportedObjectGetter" /> is null.</exception>
       <exception cref="T:System.ArgumentException">
@@ -1387,7 +1348,7 @@
     <member name="M:System.ComponentModel.Composition.Primitives.Export.GetExportedValueCore">
       <summary>Returns the exported object the export provides.</summary>
       <returns>The exported object the export provides.</returns>
-      <exception cref="T:System.NotImplementedException">The <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedValueCore" /> method was not overridden by a derived class.</exception>
+      <exception cref="T:System.NotImplementedException">The <see cref="M:System.ComponentModel.Composition.Primitives.Export.GetExportedObjectCore" /> method was not overridden by a derived class.</exception>
       <exception cref="T:System.ComponentModel.Composition.CompositionContractMismatchException">The current instance is an instance of <see cref="T:System.ComponentModel.Composition.Export`1" /> and the underlying exported object cannot be cast to T.</exception>
       <exception cref="T:System.ComponentModel.Composition.CompositionException">An error occurred during composition. <see cref="P:System.ComponentModel.Composition.CompositionException.Errors" /> will contain a collection of errors that occurred.</exception>
     </member>
@@ -1531,7 +1492,6 @@
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.Composition.ReflectionModel.LazyMemberInfo" /> class for a member of the specified type with the specified accessors.</summary>
       <param name="memberType">The type of the represented member.</param>
       <param name="accessors">An array of the accessors for the represented member.</param>
-      <exception cref="T:System.ArgumentException">One of the members of <paramref name="accessors" /> is an invalid accessor or null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.LazyMemberInfo.Equals(System.Object)">
       <param name="obj">The other object.</param>
@@ -1539,7 +1499,6 @@
     <member name="M:System.ComponentModel.Composition.ReflectionModel.LazyMemberInfo.GetAccessors">
       <summary>Gets an array of the accessors for the represented member.</summary>
       <returns>An array of the accessors for the represented member.</returns>
-      <exception cref="T:System.InvalidOperationException">One or more of the accessors is invalid.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.LazyMemberInfo.GetHashCode"></member>
     <member name="P:System.ComponentModel.Composition.ReflectionModel.LazyMemberInfo.MemberType">
@@ -1606,43 +1565,31 @@
       <summary>Gets the exporting member from a specified export definition.</summary>
       <returns>The member specified in the export definition.</returns>
       <param name="exportDefinition">The export definition to examine.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="exportDefinition" /> is null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.ReflectionModelServices.GetImportingMember(System.ComponentModel.Composition.Primitives.ImportDefinition)">
       <summary>Gets the importing member from a specified import definition.</summary>
       <returns>The member specified in the import definition.</returns>
       <param name="importDefinition">The import definition to examine.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="importDefinition" /> is null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.ReflectionModelServices.GetImportingParameter(System.ComponentModel.Composition.Primitives.ImportDefinition)">
       <summary>Gets the importing parameter from a specified import definition.</summary>
       <returns>The parameter specified in the import definition.</returns>
       <param name="importDefinition">The import definition to examine.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="importDefinition" /> is null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.ReflectionModelServices.GetPartType(System.ComponentModel.Composition.Primitives.ComposablePartDefinition)">
       <summary>Gets the type of a part from a specified part definition.</summary>
       <returns>The type of the defined part.</returns>
       <param name="partDefinition">The part definition to examine.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="partDefinition" /> is null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.ReflectionModelServices.IsDisposalRequired(System.ComponentModel.Composition.Primitives.ComposablePartDefinition)">
       <summary>Determines whether the specified part requires disposal.</summary>
       <returns>true if the part requires disposal; otherwise, false.</returns>
       <param name="partDefinition">The part to examine.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="partDefinition" /> is null.</exception>
     </member>
     <member name="M:System.ComponentModel.Composition.ReflectionModel.ReflectionModelServices.IsImportingParameter(System.ComponentModel.Composition.Primitives.ImportDefinition)">
       <summary>Determines whether an import definition represents a member or a parameter.</summary>
       <returns>true if the import definition represents a parameter; otherwise, false.</returns>
       <param name="importDefinition">The import definition to examine.</param>
-      <exception cref="T:System.ArgumentException">
-        <paramref name="importDefinition" /> is null.</exception>
     </member>
   </members>
 </doc>

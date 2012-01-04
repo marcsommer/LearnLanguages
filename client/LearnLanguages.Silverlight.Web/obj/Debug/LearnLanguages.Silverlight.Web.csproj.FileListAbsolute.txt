@@ -1,5 +1,0 @@
-C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.Silverlight.Web\bin\LearnLanguages.Silverlight.Web.dll
-C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.Silverlight.Web\bin\LearnLanguages.Silverlight.Web.pdb
-C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.Silverlight.Web\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.Silverlight.Web\obj\Debug\LearnLanguages.Silverlight.Web.dll
-C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.Silverlight.Web\obj\Debug\LearnLanguages.Silverlight.Web.pdb

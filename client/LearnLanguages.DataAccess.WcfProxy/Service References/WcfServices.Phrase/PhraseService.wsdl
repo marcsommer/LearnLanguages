@@ -8,72 +8,72 @@
       <xsd:import schemaLocation="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/LearnLanguages.DataAccess" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPhraseDal_New_InputMessage">
+  <wsdl:message name="IPhraseDalAsync_New_InputMessage">
     <wsdl:part name="parameters" element="tns:New" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_New_OutputMessage">
+  <wsdl:message name="IPhraseDalAsync_New_OutputMessage">
     <wsdl:part name="parameters" element="tns:NewResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Fetch_InputMessage">
+  <wsdl:message name="IPhraseDalAsync_Fetch_InputMessage">
     <wsdl:part name="parameters" element="tns:Fetch" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Fetch_OutputMessage">
+  <wsdl:message name="IPhraseDalAsync_Fetch_OutputMessage">
     <wsdl:part name="parameters" element="tns:FetchResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Update_InputMessage">
+  <wsdl:message name="IPhraseDalAsync_Update_InputMessage">
     <wsdl:part name="parameters" element="tns:Update" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Update_OutputMessage">
+  <wsdl:message name="IPhraseDalAsync_Update_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Insert_InputMessage">
+  <wsdl:message name="IPhraseDalAsync_Insert_InputMessage">
     <wsdl:part name="parameters" element="tns:Insert" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Insert_OutputMessage">
+  <wsdl:message name="IPhraseDalAsync_Insert_OutputMessage">
     <wsdl:part name="parameters" element="tns:InsertResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Delete_InputMessage">
+  <wsdl:message name="IPhraseDalAsync_Delete_InputMessage">
     <wsdl:part name="parameters" element="tns:Delete" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_Delete_OutputMessage">
+  <wsdl:message name="IPhraseDalAsync_Delete_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_GetAll_InputMessage">
+  <wsdl:message name="IPhraseDalAsync_GetAll_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAll" />
   </wsdl:message>
-  <wsdl:message name="IPhraseDal_GetAll_OutputMessage">
+  <wsdl:message name="IPhraseDalAsync_GetAll_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAllResponse" />
   </wsdl:message>
-  <wsdl:portType name="IPhraseDal">
+  <wsdl:portType name="IPhraseDalAsync">
     <wsdl:operation name="New">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDal/New" message="tns:IPhraseDal_New_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDal/NewResponse" message="tns:IPhraseDal_New_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDalAsync/New" message="tns:IPhraseDalAsync_New_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDalAsync/NewResponse" message="tns:IPhraseDalAsync_New_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Fetch">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDal/Fetch" message="tns:IPhraseDal_Fetch_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDal/FetchResponse" message="tns:IPhraseDal_Fetch_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDalAsync/Fetch" message="tns:IPhraseDalAsync_Fetch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDalAsync/FetchResponse" message="tns:IPhraseDalAsync_Fetch_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Update">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDal/Update" message="tns:IPhraseDal_Update_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDal/UpdateResponse" message="tns:IPhraseDal_Update_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDalAsync/Update" message="tns:IPhraseDalAsync_Update_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDalAsync/UpdateResponse" message="tns:IPhraseDalAsync_Update_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Insert">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDal/Insert" message="tns:IPhraseDal_Insert_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDal/InsertResponse" message="tns:IPhraseDal_Insert_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDalAsync/Insert" message="tns:IPhraseDalAsync_Insert_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDalAsync/InsertResponse" message="tns:IPhraseDalAsync_Insert_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Delete">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDal/Delete" message="tns:IPhraseDal_Delete_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDal/DeleteResponse" message="tns:IPhraseDal_Delete_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDalAsync/Delete" message="tns:IPhraseDalAsync_Delete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDalAsync/DeleteResponse" message="tns:IPhraseDalAsync_Delete_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAll">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDal/GetAll" message="tns:IPhraseDal_GetAll_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDal/GetAllResponse" message="tns:IPhraseDal_GetAll_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhraseDalAsync/GetAll" message="tns:IPhraseDalAsync_GetAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhraseDalAsync/GetAllResponse" message="tns:IPhraseDalAsync_GetAll_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="BasicHttpBinding_IPhraseDal" type="tns:IPhraseDal">
+  <wsdl:binding name="BasicHttpBinding_IPhraseDalAsync" type="tns:IPhraseDalAsync">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="New">
-      <soap:operation soapAction="http://tempuri.org/IPhraseDal/New" style="document" />
+      <soap:operation soapAction="http://tempuri.org/IPhraseDalAsync/New" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -82,7 +82,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Fetch">
-      <soap:operation soapAction="http://tempuri.org/IPhraseDal/Fetch" style="document" />
+      <soap:operation soapAction="http://tempuri.org/IPhraseDalAsync/Fetch" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -91,7 +91,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Update">
-      <soap:operation soapAction="http://tempuri.org/IPhraseDal/Update" style="document" />
+      <soap:operation soapAction="http://tempuri.org/IPhraseDalAsync/Update" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -100,7 +100,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Insert">
-      <soap:operation soapAction="http://tempuri.org/IPhraseDal/Insert" style="document" />
+      <soap:operation soapAction="http://tempuri.org/IPhraseDalAsync/Insert" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -109,7 +109,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Delete">
-      <soap:operation soapAction="http://tempuri.org/IPhraseDal/Delete" style="document" />
+      <soap:operation soapAction="http://tempuri.org/IPhraseDalAsync/Delete" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -118,7 +118,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetAll">
-      <soap:operation soapAction="http://tempuri.org/IPhraseDal/GetAll" style="document" />
+      <soap:operation soapAction="http://tempuri.org/IPhraseDalAsync/GetAll" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -128,7 +128,7 @@
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="PhraseService">
-    <wsdl:port name="BasicHttpBinding_IPhraseDal" binding="tns:BasicHttpBinding_IPhraseDal">
+    <wsdl:port name="BasicHttpBinding_IPhraseDalAsync" binding="tns:BasicHttpBinding_IPhraseDalAsync">
       <soap:address location="http://localhost:8000/LearnLanguage/Phrase/PhraseService" />
     </wsdl:port>
   </wsdl:service>

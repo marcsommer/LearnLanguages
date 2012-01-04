@@ -538,19 +538,6 @@
     <member name="T:System.ComponentModel.DataAnnotations.ValidationContext">
       <summary>Provides information about a type or member to validate.</summary>
     </member>
-    <member name="M:System.ComponentModel.DataAnnotations.ValidationContext.#ctor(System.Object)">
-      <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationContext" /> class with the specified object to validate.</summary>
-      <param name="instance">The object to validate.</param>
-      <exception cref="T:System.ArgumentNullException">
-        <paramref name="instance" /> is null.</exception>
-    </member>
-    <member name="M:System.ComponentModel.DataAnnotations.ValidationContext.#ctor(System.Object,System.Collections.Generic.IDictionary{System.Object,System.Object})">
-      <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationContext" /> class with the specified object to validate and a collection of values related to validation.</summary>
-      <param name="instance">The object to validate.</param>
-      <param name="items">A collection of values related to validation. This value can be null.</param>
-      <exception cref="T:System.ArgumentNullException">
-        <paramref name="instance" /> is null.</exception>
-    </member>
     <member name="M:System.ComponentModel.DataAnnotations.ValidationContext.#ctor(System.Object,System.IServiceProvider,System.Collections.Generic.IDictionary{System.Object,System.Object})">
       <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationContext" /> class with the specified object to validate, a service provider that enables validation methods to access external services, and a collection of values related to validation.</summary>
       <param name="instance">The object to validate.</param>
@@ -569,10 +556,6 @@
       <summary>Retrieves an instance of the service to use during validation.</summary>
       <returns>An instance of that service or null if the service is not available.</returns>
       <param name="serviceType">The type of the service to use during validation.</param>
-    </member>
-    <member name="M:System.ComponentModel.DataAnnotations.ValidationContext.InitializeServiceProvider(System.Func{System.Type,System.Object})">
-      <summary>Initializes the <see cref="T:System.ComponentModel.DataAnnotations.ValidationContext" /> with a service provider that can return service instances of the specified type when the <see cref="M:System.ComponentModel.DataAnnotations.ValidationContext.GetService(System.Type)" /> method is called. </summary>
-      <param name="serviceProvider">A service provider that can return service instances of the specified type when <see cref="M:System.ComponentModel.DataAnnotations.ValidationContext.GetService(System.Type)" /> is called. If <paramref name="serviceProvider" /> is null, <see cref="M:System.ComponentModel.DataAnnotations.ValidationContext.GetService(System.Type)" /> will always return null. </param>
     </member>
     <member name="P:System.ComponentModel.DataAnnotations.ValidationContext.Items">
       <summary>Gets the collection of values associated with the validation request.</summary>
@@ -740,29 +723,6 @@
         <paramref name="validationContext" /> is null.</exception>
       <exception cref="T:System.ComponentModel.DataAnnotations.ValidationException">
         <paramref name="value" /> is not valid.</exception>
-    </member>
-    <member name="T:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute">
-      <summary>Specifies how the database generates values for a property. </summary>
-    </member>
-    <member name="M:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute.#ctor(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption)">
-      <summary>Initializes a new instance of the <see cref="T:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute" /> class.</summary>
-      <param name="databaseGeneratedOption">The pattern used to generate values for the property in the database.</param>
-    </member>
-    <member name="P:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute.DatabaseGeneratedOption">
-      <summary>Gets the pattern used to generate values for the property in the database. </summary>
-      <returns>The pattern used.</returns>
-    </member>
-    <member name="T:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption">
-      <summary>The pattern used to generate values for a property in the database. </summary>
-    </member>
-    <member name="F:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None">
-      <summary>The database does not generate values. </summary>
-    </member>
-    <member name="F:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity">
-      <summary>The database generates a value when a row is inserted. </summary>
-    </member>
-    <member name="F:System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed">
-      <summary>The database generates a value when a row is inserted or updated. </summary>
     </member>
   </members>
 </doc>

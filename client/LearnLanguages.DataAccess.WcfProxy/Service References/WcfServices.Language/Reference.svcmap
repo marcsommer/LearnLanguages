@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="7bfe3e8e-8aef-43c9-85c8-f68d21edd6ee" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="56d35b63-b843-47f0-9c7b-c16b48bbd3fc" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -23,12 +23,12 @@
     <MetadataSource Address="http://localhost:8000/LearnLanguage/Language" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Language.xsd" MetadataType="Schema" ID="7dba89e6-fc63-4cea-bd7b-a3eb1fe43286" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd3" />
-    <MetadataFile FileName="Language1.xsd" MetadataType="Schema" ID="f80bd9bd-190b-43b7-b269-d6267d283709" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd2" />
-    <MetadataFile FileName="Language2.xsd" MetadataType="Schema" ID="c93cccd2-d58c-428b-897c-37e6cc627d6f" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd1" />
-    <MetadataFile FileName="Language3.xsd" MetadataType="Schema" ID="f7ae082b-a48c-4c6d-a815-32453502dd0c" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd0" />
-    <MetadataFile FileName="LanguageService.wsdl" MetadataType="Wsdl" ID="b2f1b10a-007f-45ca-b43b-78855615bf59" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?wsdl" />
-    <MetadataFile FileName="Language.disco" MetadataType="Disco" ID="183cf725-69d4-4e16-96d7-2b30bb497f2b" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?disco" />
+    <MetadataFile FileName="Language.xsd" MetadataType="Schema" ID="cbc4b726-ecc3-493f-a821-1932d5778579" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd3" />
+    <MetadataFile FileName="Language1.xsd" MetadataType="Schema" ID="7271e85e-8fa8-49a1-b600-a04b8a485ea3" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd2" />
+    <MetadataFile FileName="Language2.xsd" MetadataType="Schema" ID="5ffbb1de-7503-40c8-b62a-dfd820a21880" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd1" />
+    <MetadataFile FileName="Language3.xsd" MetadataType="Schema" ID="2ab08d42-f068-4cf7-b640-ca6a6f3110fb" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?xsd=xsd0" />
+    <MetadataFile FileName="LanguageService.wsdl" MetadataType="Wsdl" ID="b67ac119-a12b-4d6b-8457-d7547d17f998" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?wsdl" />
+    <MetadataFile FileName="Language.disco" MetadataType="Disco" ID="c8553957-0095-4705-8067-59787e051d1b" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Language?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

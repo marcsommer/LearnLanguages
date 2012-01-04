@@ -1,6 +1,4 @@
-﻿// Copyright ©  2012
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -22,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("56d7cb17-81ab-4e94-876a-11e5bb65ead8")]
+[assembly: Guid("7ae6e089-0356-4332-b573-1fcf7cfbcf7e")]
 
 // Version information for an assembly consists of the following four values:
 //

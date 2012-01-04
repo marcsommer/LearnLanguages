@@ -1,9 +1,8 @@
-﻿<Deployment xmlns="http://schemas.microsoft.com/client/2007/deployment" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" EntryPointAssembly="LearnLanguages.Common" EntryPointType="LearnLanguages.Common.App" RuntimeVersion="5.0.61118.0">
+﻿<Deployment xmlns="http://schemas.microsoft.com/client/2007/deployment" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" EntryPointAssembly="LearnLanguages.Common" EntryPointType="LearnLanguages.Common.App" RuntimeVersion="4.0.60310.0">
   <Deployment.Parts>
     <AssemblyPart x:Name="LearnLanguages.Common" Source="LearnLanguages.Common.dll" />
     <AssemblyPart x:Name="Caliburn.Micro" Source="Caliburn.Micro.dll" />
     <AssemblyPart x:Name="Csla" Source="Csla.dll" />
-    <AssemblyPart x:Name="Csla.Xaml" Source="Csla.Xaml.dll" />
     <AssemblyPart x:Name="System.ComponentModel.Composition" Source="System.ComponentModel.Composition.dll" />
     <AssemblyPart x:Name="System.ComponentModel.DataAnnotations" Source="System.ComponentModel.DataAnnotations.dll" />
     <AssemblyPart x:Name="System.Windows.Interactivity" Source="System.Windows.Interactivity.dll" />

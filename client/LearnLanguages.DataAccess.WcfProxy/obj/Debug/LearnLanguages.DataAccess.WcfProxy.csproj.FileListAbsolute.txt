@@ -1,3 +1,4 @@
+C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\Bin\Debug\LearnLanguages.DataAccess.WcfProxy.dll
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\Bin\Debug\LearnLanguages.DataAccess.WcfProxy.pdb
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\Bin\Debug\AppManifest.xaml
@@ -74,7 +75,6 @@ C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnL
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\Bin\Debug\vi\System.ComponentModel.DataAnnotations.resources.dll
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\Bin\Debug\zh-Hans\System.ComponentModel.DataAnnotations.resources.dll
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\Bin\Debug\zh-Hant\System.ComponentModel.DataAnnotations.resources.dll
-C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\obj\Debug\LearnLanguages.DataAccess.WcfProxy.dll
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\obj\Debug\LearnLanguages.DataAccess.WcfProxy.pdb
 C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\client\LearnLanguages.DataAccess.WcfProxy\obj\Debug\XapCacheFile.xml

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="57622b17-8ebe-4570-998f-a9a16705a5dd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="dce1ffdd-cb18-4039-9f16-ff2b9cc906ab" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -23,12 +23,12 @@
     <MetadataSource Address="http://localhost:8000/LearnLanguage/Phrase" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Phrase.xsd" MetadataType="Schema" ID="350f4833-ec0a-470a-9dd1-99fb5b8a3277" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd2" />
-    <MetadataFile FileName="Phrase.disco" MetadataType="Disco" ID="9ed20d4e-017e-4ae5-a2fc-021db0e7cd73" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?disco" />
-    <MetadataFile FileName="Phrase1.xsd" MetadataType="Schema" ID="da31bcd6-97cd-431f-9e00-e2574af6745a" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd3" />
-    <MetadataFile FileName="PhraseService.wsdl" MetadataType="Wsdl" ID="65223b53-7fde-4b16-bec9-64a732f38b08" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?wsdl" />
-    <MetadataFile FileName="Phrase2.xsd" MetadataType="Schema" ID="c77861c2-8bd7-49f3-8bfb-bba4e598e726" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd0" />
-    <MetadataFile FileName="Phrase3.xsd" MetadataType="Schema" ID="13591c3f-c980-4e61-8f77-1423013bfe87" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd1" />
+    <MetadataFile FileName="Phrase.xsd" MetadataType="Schema" ID="2e790016-b336-40e7-b26c-22f42fa8de82" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd2" />
+    <MetadataFile FileName="Phrase.disco" MetadataType="Disco" ID="0149372c-e2e4-4593-9d79-466466bb3e78" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?disco" />
+    <MetadataFile FileName="Phrase1.xsd" MetadataType="Schema" ID="44327ed8-68fb-4255-aab2-374dde8e2adb" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd3" />
+    <MetadataFile FileName="PhraseService.wsdl" MetadataType="Wsdl" ID="11b26715-7624-4032-bc2d-64710601afaf" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?wsdl" />
+    <MetadataFile FileName="Phrase2.xsd" MetadataType="Schema" ID="48ef2800-3673-4a44-808f-b0523d5cfe15" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd0" />
+    <MetadataFile FileName="Phrase3.xsd" MetadataType="Schema" ID="cc6a5ebe-8674-4be8-864f-c8315610ae6f" SourceId="1" SourceUrl="http://localhost:8000/LearnLanguage/Phrase?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
