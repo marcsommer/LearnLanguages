@@ -10,5 +10,9 @@ To start with, the problem becomes three-fold:
 2. Create text relationships (translations) among those text data.
 3. Execute metrics on user knowledge of those text relationships, or IOW test for knowledge to assess progress.
 
-Code so far:
-Solution architecture down for the most part.  I've fleshed out PhraseEdit and LanguageEdit but I'm still working on the asynchronization of my WCF calls.  Basic WCF service runs using BasicHttpBinding (because of SL requirements, it can't use WsHttpBinding).  
+JOURNAL:
+01/03/12
+I've fleshed out PhraseEdit and LanguageEdit somewhat, but I'm still working on the asynchronization of my WCF calls.  Basic WCF service runs using BasicHttpBinding (because of SL requirements, it can't use WsHttpBinding).  
+
+01/04/12
+Restructured architecture to better reflect my increasing knowledge of setting up the data portal properly.  Instead of trying to host my own WCF service, I have created a IIS web page that exposes the Csla data portal service, so I can program a more proper Csla-way.
