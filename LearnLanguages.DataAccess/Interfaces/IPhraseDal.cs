@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LearnLanguages.DataAccess
 {
-  public interface IPhraseDalSync
+  public interface IPhraseDal
   {
     Result<PhraseDto> New(object criteria);
     Result<PhraseDto> Fetch(Guid id);

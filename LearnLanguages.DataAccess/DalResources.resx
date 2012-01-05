@@ -120,6 +120,10 @@
   <data name="AllPhrasesList_DalKey" xml:space="preserve">
     <value>AllPhrasesList_DalKey</value>
   </data>
+  <data name="AppSettingsKeyDalManagerTypeName" xml:space="preserve">
+    <value>DalManagerType</value>
+    <comment>This is the key used in ConfigurationManager.AppSettings[__key__];</comment>
+  </data>
   <data name="Dal_CreateFailedErrorMessage" xml:space="preserve">
     <value>The Create operation failed.</value>
   </data>

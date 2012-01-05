@@ -1,11 +1,14 @@
 ﻿using System;
 using Csla;
 using System.ComponentModel;
-using LearnLanguages.Common.Interfaces;
-using LearnLanguages.DataAccess;
-using LearnLanguages.DataAccess.Exceptions;
 using Csla.Serialization;
 using Csla.DataPortalClient;
+using LearnLanguages.Common.Interfaces;
+#if !SILVERLIGHT
+using LearnLanguages.DataAccess.Exceptions;
+#endif
+using LearnLanguages.DataAccess;
+
 
 namespace LearnLanguages.Business
 {
@@ -69,18 +72,6 @@ namespace LearnLanguages.Business
 
 #endif
     #endregion
-
-    #region Shared Factory Methods
-
-    /// <summary>
-    /// Begins to persist object
-    /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
-    {
-      base.BeginSave(forceUpdate, handler, userState);
-    }
-
-    #endregion
     #endregion
 
     #region Business Properties & Methods
@@ -137,6 +128,14 @@ namespace LearnLanguages.Business
       return retDto;
     }
 
+    /// <summary>
+    /// Begins to persist object
+    /// </summary>
+    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    {
+      base.BeginSave(forceUpdate, handler, userState);
+    }
+    
     #endregion
 
     #region Validation Rules
@@ -164,25 +163,6 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Data Access (This is run on the server, unless run local set)
-#if !SILVERLIGHT
-
-    private IPhraseDalSync _PhraseDal;
-
-    public IPhraseDalSync PhraseDal
-    {
-      get
-      {
-        if (_PhraseDal == null)
-        {
-          _PhraseDal = Services.Container.GetExportedValue<IPhraseDalSync>();
-          if (_PhraseDal == null)
-            throw new Exception(CommonResources.ErrorMsgNotInjected("PhraseDal"));
-        }
-        return _PhraseDal;
-      }
-    }
-
-#endif
  
 //    #region Silverlight DP_XYZ
 //#if SILVERLIGHT
@@ -331,6 +311,7 @@ namespace LearnLanguages.Business
 
     #region Wpf DP_XYZ
 #if !SILVERLIGHT
+
     protected override void DataPortal_Create()
     {
       using (BypassPropertyChecks)
@@ -351,13 +332,17 @@ namespace LearnLanguages.Business
         Language = null;
       }
     }
-    protected void DataPortal_Fetch(Guid id) //Guid SingleCriteria
+    protected void DataPortal_Fetch(Guid id)
     {
-      Result<PhraseDto> result = PhraseDal.Fetch(id);
-      if (!result.IsSuccess || result.IsError)
-        throw new FetchFailedException(result.Msg);
-      PhraseDto dto = result.Obj;
-      LoadFromDtoBypassPropertyChecks(dto);
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        Result<PhraseDto> result = phraseDal.Fetch(id);
+        if (!result.IsSuccess || result.IsError)
+          throw new FetchFailedException(result.Msg);
+        PhraseDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
     }
     protected override void DataPortal_Insert()
     {
@@ -368,34 +353,51 @@ namespace LearnLanguages.Business
         LanguageId = this.LanguageId,
         Text = this.Text
       };
-      var result = PhraseDal.Insert(dto);
-      if (!result.IsSuccess || result.IsError)
-        throw new InsertFailedException(result.Msg);
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.Insert(dto);
+        if (!result.IsSuccess || result.IsError)
+          throw new InsertFailedException(result.Msg);
+      }
     }
     protected override void DataPortal_Update()
     {
-      Result<PhraseDto> result = PhraseDal.Update(
-                                                    new PhraseDto()
-                                                    {
-                                                      Id = this.Id,
-                                                      LanguageId = this.LanguageId,
-                                                      Text = this.Text
-                                                    }
-                                                 );
-      if (!result.IsSuccess || result.IsError)
-        throw new UpdateFailedException(result.Msg);
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+
+        Result<PhraseDto> result = phraseDal.Update(
+                                                      new PhraseDto()
+                                                      {
+                                                        Id = this.Id,
+                                                        LanguageId = this.LanguageId,
+                                                        Text = this.Text
+                                                      }
+                                                   );
+        if (!result.IsSuccess || result.IsError)
+          throw new UpdateFailedException(result.Msg);
+      }
     }
     protected override void DataPortal_DeleteSelf()
     {
-      var result = PhraseDal.Delete(ReadProperty<Guid>(IdProperty));
-      if (!result.IsSuccess || result.IsError)
-        throw new DeleteFailedException(result.Msg);
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.Delete(ReadProperty<Guid>(IdProperty));
+        if (!result.IsSuccess || result.IsError)
+          throw new DeleteFailedException(result.Msg);
+      }
     }
     protected void DataPortal_Delete(Guid id)
     {
-      var result = PhraseDal.Delete(id);
-      if (!result.IsSuccess || result.IsError)
-        throw new DeleteFailedException(result.Msg);
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.Delete(id);
+        if (!result.IsSuccess || result.IsError)
+          throw new DeleteFailedException(result.Msg);
+      }
     }
 
 #endif
@@ -403,33 +405,25 @@ namespace LearnLanguages.Business
     
     #region Child DP_XYZ
 
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(PhraseDto dto)
+    public void Child_Create(Guid id)
     {
-      //throw new Exception("Just throwing this cause I wanna see execution location. " +
-      //                    "Should be 'Server'.  Here is what it actually is:       " +
-      //                    Csla.ApplicationContext.LogicalExecutionLocation.ToString());
-
-      //if (Csla.ApplicationContext.LogicalExecutionLocation != ApplicationContext.LogicalExecutionLocations.Server)
-      //  throw new Exception();
-
-      LoadFromDtoBypassPropertyChecks(dto);
+      using (BypassPropertyChecks)
+      {
+        this.Id = id;
+        this.Text = "";
+        this.LanguageId = Guid.Empty;
+        this.Language = null;
+      }
     }
-#if !SILVERLIGHT
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(Guid id)
-    {
-      var result = PhraseDal.Fetch(id);
-      if (result.IsError)
-        throw new FetchFailedException(result.Msg);
-      PhraseDto dto = result.Obj;
-      LoadFromDtoBypassPropertyChecks(dto);
-    }
-#endif
+
 #if SILVERLIGHT
+    /// <summary>
+    /// Just throws exception.  I assume this will not be run.
+    /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Fetch(Guid id)
     {
+      //TODO: TAKE OUT CHILD FETCH IN SILVERLIGHT BLOCK WHEN I KNOW THAT CHILD FETCH ALWAYS RUNS ON SERVER
       throw new Exception("Child_Fetch has been executed on silverlight client.  I assumed this wouldn't happen.");
       //var result = PhraseDal.Fetch(id);
       //if (result.IsError)
@@ -438,56 +432,81 @@ namespace LearnLanguages.Business
       //LoadFromDtoBypassPropertyChecks(dto);
     }
 #endif
-
-    public void Child_Create(Guid id)
+    
+#if !SILVERLIGHT
+     
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void Child_Fetch(PhraseDto dto)
     {
-      using (BypassPropertyChecks)
+      //Debug
+      //throw new Exception("Just throwing this cause I wanna see execution location. " +
+      //                    "Should be 'Server'.  Here is what it actually is:       " +
+      //                    Csla.ApplicationContext.LogicalExecutionLocation.ToString());
+
+      //if (Csla.ApplicationContext.LogicalExecutionLocation != ApplicationContext.LogicalExecutionLocations.Server)
+      //  throw new Exception();
+      throw new Exception("debug: why am i calling this method: childfetch(dto)?");
+      LoadFromDtoBypassPropertyChecks(dto);
+    }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void Child_Fetch(Guid id)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
       {
-        LoadDefaults();
-        this.Id = id;
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.Fetch(id);
+        if (result.IsError)
+          throw new FetchFailedException(result.Msg);
+        PhraseDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
       }
     }
-
-    private void LoadDefaults()
-    {
-      this.Id = Guid.Empty;
-      this.Text = "";
-      this.LanguageId = Guid.Empty;
-      this.Language = null;
-    }
-
-#if !SILVERLIGHT
     public void Child_Insert()
-    {
-      using (BypassPropertyChecks)
+    {   
+      using (var dalManager = DalFactory.GetDalManager())
       {
-        var dto = CreateDto();
-        var result = PhraseDal.Insert(dto);
-        if (result.IsError)
-          throw new InsertFailedException(result.Msg); //hack: string literal exception message
-        Id = result.Obj.Id;
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        using (BypassPropertyChecks)
+        {
+          var dto = CreateDto();
+          var result = phraseDal.Insert(dto);
+          if (result.IsError)
+            throw new InsertFailedException(result.Msg); //hack: string literal exception message
+          Id = result.Obj.Id;
+        }
       }
     }
 
     public void Child_Update()
     {
-      using (BypassPropertyChecks)
+      using (var dalManager = DalFactory.GetDalManager())
       {
-        var dto = CreateDto();
-        var result = PhraseDal.Update(dto);
-        if (result.IsError)
-          throw new UpdateFailedException(result.Msg); //hack: string literal exception message
-        Id = result.Obj.Id;
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+
+        using (BypassPropertyChecks)
+        {
+          var dto = CreateDto();
+          var result = phraseDal.Update(dto);
+          if (result.IsError)
+            throw new UpdateFailedException(result.Msg); //hack: string literal exception message
+          Id = result.Obj.Id;
+        }
       }
     }
 
     public void Child_DeleteSelf()
     {
-      var result = PhraseDal.Delete(Id);
-      if (result.IsError)
-        throw new DeleteFailedException(result.Msg); //hack: string literal exception message
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
+        var result = phraseDal.Delete(Id);
+        if (result.IsError)
+          throw new DeleteFailedException(result.Msg); //hack: string literal exception message
+      }
     }
+
 #endif
 
     #endregion

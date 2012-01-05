@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LearnLanguages.DataAccess
 {
-  public interface ILanguageDalSync
+  public interface ILanguageDal
   {
     Result<LanguageDto> New(object criteria);
 
