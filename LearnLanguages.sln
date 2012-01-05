@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.DataAccess.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.DataAccess.Mock", "LearnLanguages.DataAccess.Mock\LearnLanguages.DataAccess.Mock.csproj", "{1C862615-4006-421E-97C9-46A138F461A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Silverlight.Tests", "LearnLanguages.Silverlight.Tests\LearnLanguages.Silverlight.Tests.csproj", "{8341B23A-A916-4C7D-B52B-A2682B568652}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{1C862615-4006-421E-97C9-46A138F461A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C862615-4006-421E-97C9-46A138F461A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C862615-4006-421E-97C9-46A138F461A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8341B23A-A916-4C7D-B52B-A2682B568652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8341B23A-A916-4C7D-B52B-A2682B568652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8341B23A-A916-4C7D-B52B-A2682B568652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8341B23A-A916-4C7D-B52B-A2682B568652}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

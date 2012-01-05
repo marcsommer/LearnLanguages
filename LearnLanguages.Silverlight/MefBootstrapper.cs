@@ -44,7 +44,7 @@ namespace LearnLanguages.Silverlight
       //Services.Initialize(_Container);
 
       //INITIALIZE CSLA DATA PORTAL
-      //Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
 
       //INITIALIZE DALMANAGER
       //DalManager.Initialize(_Container);

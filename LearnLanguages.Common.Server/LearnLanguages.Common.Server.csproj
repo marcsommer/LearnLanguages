@@ -8,8 +8,8 @@
     <ProjectGuid>{D0155DB8-9B4B-4594-8DE9-6268F0E2595B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LearnLanguages.Common.Server</RootNamespace>
-    <AssemblyName>LearnLanguages.Common.Server</AssemblyName>
+    <RootNamespace>LearnLanguages.Common</RootNamespace>
+    <AssemblyName>LearnLanguages.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,9 +33,6 @@
   <ItemGroup>
     <Reference Include="Caliburn.Micro">
       <HintPath>..\dependencies\caliburn_wpf\Caliburn.Micro.dll</HintPath>
-    </Reference>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
