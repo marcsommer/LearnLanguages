@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D0155DB8-9B4B-4594-8DE9-6268F0E2595B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LearnLanguages.Common.Server</RootNamespace>
+    <AssemblyName>LearnLanguages.Common.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\dependencies\caliburn_wpf\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla">
+      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\dependencies\csla_contrib\ErrorEventArgs.cs">
+      <Link>CslaContrib\ErrorEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\dependencies\csla_contrib\ExecuteEventArgs.cs">
+      <Link>CslaContrib\ExecuteEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\dependencies\csla_contrib\IHaveModel.cs">
+      <Link>CslaContrib\IHaveModel.cs</Link>
+    </Compile>
+    <Compile Include="..\dependencies\csla_contrib\IHaveSubject.cs">
+      <Link>CslaContrib\IHaveSubject.cs</Link>
+    </Compile>
+    <Compile Include="..\dependencies\csla_contrib\ScreenWithModel.cs">
+      <Link>CslaContrib\ScreenWithModel.cs</Link>
+    </Compile>
+    <Compile Include="..\dependencies\csla_contrib\ScreenWithModelBase.cs">
+      <Link>CslaContrib\ScreenWithModelBase.cs</Link>
+    </Compile>
+    <Compile Include="..\dependencies\csla_contrib\ScreenWithSubject.cs">
+      <Link>CslaContrib\ScreenWithSubject.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\CreateArgs.cs">
+      <Link>Args\CreateArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\CreateChildArgs.cs">
+      <Link>Args\CreateChildArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\DeleteArgs.cs">
+      <Link>Args\DeleteArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\EditArgs.cs">
+      <Link>Args\EditArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\InitializeArgs.cs">
+      <Link>Args\InitializeArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\SampleActionArgs.cs">
+      <Link>Args\SampleActionArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\SaveArgs.cs">
+      <Link>Args\SaveArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\AsynchronousCallback.cs">
+      <Link>AsynchronousCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\AsyncResultOfT.cs">
+      <Link>AsyncResultOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\CommonResources.cs">
+      <Link>CommonResources.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\ConsoleLogger.cs">
+      <Link>ConsoleLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\CustomException.cs">
+      <Link>CustomException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IAsyncStub.cs">
+      <Link>Interfaces\IAsyncStub.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\ICreateAsync.cs">
+      <Link>Interfaces\ICreateAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\ICreateChildAsync.cs">
+      <Link>Interfaces\ICreateChildAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IDeleteAsync.cs">
+      <Link>Interfaces\IDeleteAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IEditAsync.cs">
+      <Link>Interfaces\IEditAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveId.cs">
+      <Link>Interfaces\IHaveId.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IInitializeAsync.cs">
+      <Link>Interfaces\IInitializeAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\ILogger.cs">
+      <Link>Interfaces\ILogger.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\ISaveAsync.cs">
+      <Link>Interfaces\ISaveAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\LanguageManager.cs">
+      <Link>LanguageManager.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\LogCategory.cs">
+      <Link>LogCategory.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\LogPriority.cs">
+      <Link>LogPriority.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\MagicStringsList.cs">
+      <Link>MagicStringsList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\ResultOfT.cs">
+      <Link>ResultOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Services.cs">
+      <Link>Services.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\Status.cs">
+      <Link>Statuses\Status.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAborted.cs">
+      <Link>Statuses\StatusAborted.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAborting.cs">
+      <Link>Statuses\StatusAborting.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAdded.cs">
+      <Link>Statuses\StatusAdded.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAdding.cs">
+      <Link>Statuses\StatusAdding.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusCanceled.cs">
+      <Link>Statuses\StatusCanceled.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusCanceling.cs">
+      <Link>Statuses\StatusCanceling.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusCompleted.cs">
+      <Link>Statuses\StatusCompleted.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusDeleted.cs">
+      <Link>Statuses\StatusDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusDeleting.cs">
+      <Link>Statuses\StatusDeleting.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusInitialized.cs">
+      <Link>Statuses\StatusInitialized.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusStarted.cs">
+      <Link>Statuses\StatusStarted.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusUnspecified.cs">
+      <Link>Statuses\StatusUnspecified.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusUpdated.cs">
+      <Link>Statuses\StatusUpdated.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Statuses\StatusUpdating.cs">
+      <Link>Statuses\StatusUpdating.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Tuple.cs">
+      <Link>Tuple.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\UserInterfaceInfo.cs">
+      <Link>UserInterfaceInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\ViewInfoForContainer.cs">
+      <Link>ViewInfoForContainer.cs</Link>
+    </Compile>
+    <Compile Include="Class2.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
