@@ -34,6 +34,9 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\dependencies\caliburn_wpf\Caliburn.Micro.dll</HintPath>
     </Reference>
+    <Reference Include="Csla">
+      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
