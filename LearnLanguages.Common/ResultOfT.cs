@@ -25,6 +25,19 @@ namespace LearnLanguages
     public T Obj { get; set; }
     public string Msg { get; private set; }
     public MagicStringsList Info { get; set; }
+    /// <summary>
+    /// If this object has additional info, and that info contains an exception, this will return that exception
+    /// as type "Exception".  If not, returns null.
+    /// </summary>
+    /// <returns></returns>
+    public Exception GetExceptionFromInfo()
+    {
+      Exception retEx = null;
+      var ex = Info[CommonResources.InfoKeyExceptionObject];
+      if (ex != null)
+        retEx = (Exception)ex;
+      return retEx;
+    }
 
     #region Boolean Info
     
@@ -97,6 +110,7 @@ namespace LearnLanguages
       return retResult;
     }
 
+    
     #endregion
   }
 }

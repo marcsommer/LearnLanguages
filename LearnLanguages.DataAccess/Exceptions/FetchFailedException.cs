@@ -7,9 +7,9 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class FetchFailedException : Exception
   {
     public FetchFailedException()
-      : base()
+      : base(DalResources.Dal_FetchFailedErrorMessage)
     {
-
+      
     }
 
     public FetchFailedException(string errorMsg)

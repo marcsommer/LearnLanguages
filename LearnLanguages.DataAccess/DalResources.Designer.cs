@@ -22,7 +22,7 @@ namespace LearnLanguages.DataAccess {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DalResources {
+    public class DalResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LearnLanguages.DataAccess {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.DataAccess.DalResources", typeof(DalResources).Assembly);
@@ -51,7 +51,7 @@ namespace LearnLanguages.DataAccess {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to AllPhrasesList_DalKey.
         /// </summary>
-        internal static string AllPhrasesList_DalKey {
+        public static string AllPhrasesList_DalKey {
             get {
                 return ResourceManager.GetString("AllPhrasesList_DalKey", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to DalManagerType.
         /// </summary>
-        internal static string AppSettingsKeyDalManagerTypeName {
+        public static string AppSettingsKeyDalManagerTypeName {
             get {
                 return ResourceManager.GetString("AppSettingsKeyDalManagerTypeName", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Create operation failed..
         /// </summary>
-        internal static string Dal_CreateFailedErrorMessage {
+        public static string Dal_CreateFailedErrorMessage {
             get {
                 return ResourceManager.GetString("Dal_CreateFailedErrorMessage", resourceCulture);
             }
@@ -90,25 +90,16 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Delete operation failed..
         /// </summary>
-        internal static string Dal_DeleteFailedErrorMessage {
+        public static string Dal_DeleteFailedErrorMessage {
             get {
                 return ResourceManager.GetString("Dal_DeleteFailedErrorMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Delete operation failed.  The item was not found to delete..
-        /// </summary>
-        internal static string Dal_DeleteFailedErrorMessage_ItemNotFound {
-            get {
-                return ResourceManager.GetString("Dal_DeleteFailedErrorMessage_ItemNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The Delete operation failed.  There were multiple items found to delete..
         /// </summary>
-        internal static string Dal_DeleteFailedErrorMessage_MultipleItemsFound {
+        public static string Dal_DeleteFailedErrorMessage_MultipleItemsFound {
             get {
                 return ResourceManager.GetString("Dal_DeleteFailedErrorMessage_MultipleItemsFound", resourceCulture);
             }
@@ -117,16 +108,25 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Fetch operation failed..
         /// </summary>
-        internal static string Dal_FetchFailedErrorMessage {
+        public static string Dal_FetchFailedErrorMessage {
             get {
                 return ResourceManager.GetString("Dal_FetchFailedErrorMessage", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Id was not found..
+        /// </summary>
+        public static string Dal_IdNotFound {
+            get {
+                return ResourceManager.GetString("Dal_IdNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Insert operation failed..
         /// </summary>
-        internal static string Dal_InsertFailedErrorMessage {
+        public static string Dal_InsertFailedErrorMessage {
             get {
                 return ResourceManager.GetString("Dal_InsertFailedErrorMessage", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Insert operation failed.  The Id {0} already exists..
         /// </summary>
-        internal static string Dal_InsertFailedErrorMessage_IdAlreadyExists {
+        public static string Dal_InsertFailedErrorMessage_IdAlreadyExists {
             get {
                 return ResourceManager.GetString("Dal_InsertFailedErrorMessage_IdAlreadyExists", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Save operation failed..
         /// </summary>
-        internal static string Dal_SaveFailedErrorMessage {
+        public static string Dal_SaveFailedErrorMessage {
             get {
                 return ResourceManager.GetString("Dal_SaveFailedErrorMessage", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Update operation failed..
         /// </summary>
-        internal static string Dal_UpdateFailedErrorMessage {
+        public static string Dal_UpdateFailedErrorMessage {
             get {
                 return ResourceManager.GetString("Dal_UpdateFailedErrorMessage", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to Phrase_DalKey.
         /// </summary>
-        internal static string Phrase_DalKey {
+        public static string Phrase_DalKey {
             get {
                 return ResourceManager.GetString("Phrase_DalKey", resourceCulture);
             }

@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class UpdateFailedException : Exception
   {
     public UpdateFailedException()
-      : base()
+      : base(DalResources.Dal_UpdateFailedErrorMessage)
     {
 
     }

@@ -130,14 +130,14 @@
   <data name="Dal_DeleteFailedErrorMessage" xml:space="preserve">
     <value>The Delete operation failed.</value>
   </data>
-  <data name="Dal_DeleteFailedErrorMessage_ItemNotFound" xml:space="preserve">
-    <value>The Delete operation failed.  The item was not found to delete.</value>
-  </data>
   <data name="Dal_DeleteFailedErrorMessage_MultipleItemsFound" xml:space="preserve">
     <value>The Delete operation failed.  There were multiple items found to delete.</value>
   </data>
   <data name="Dal_FetchFailedErrorMessage" xml:space="preserve">
     <value>The Fetch operation failed.</value>
+  </data>
+  <data name="Dal_IdNotFound" xml:space="preserve">
+    <value>The Id was not found.</value>
   </data>
   <data name="Dal_InsertFailedErrorMessage" xml:space="preserve">
     <value>The Insert operation failed.</value>

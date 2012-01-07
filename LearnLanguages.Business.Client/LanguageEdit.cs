@@ -328,7 +328,18 @@ namespace LearnLanguages.Business
         var languageDal = dalManager.GetProvider<ILanguageDal>();
         Result<LanguageDto> result = languageDal.Fetch(id);
         if (!result.IsSuccess || result.IsError)
-          throw new FetchFailedException(result.Msg);
+        {
+          if (result.Info != null)
+          {
+            var ex = result.GetExceptionFromInfo();
+            if (ex != null)
+              throw new FetchFailedException(ex.Message);
+            else
+              throw new FetchFailedException();
+          }
+          else
+            throw new FetchFailedException();
+        }
         LanguageDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
       }
@@ -348,8 +359,21 @@ namespace LearnLanguages.Business
 
         var result = languageDal.Insert(dto);
         if (!result.IsSuccess || result.IsError)
-          throw new InsertFailedException(result.Msg);
-
+        {
+          if (result.Info != null)
+          {
+            if (result.Info != null)
+            {
+              var ex = result.GetExceptionFromInfo();
+              if (ex != null)
+                throw new InsertFailedException(ex.Message);
+              else
+                throw new InsertFailedException();
+            }
+            else
+              throw new InsertFailedException();
+          }
+        }
         Id = dto.Id;
       }
     }
@@ -365,7 +389,21 @@ namespace LearnLanguages.Business
                                                           Text = this.Text
                                                         });
         if (!result.IsSuccess || result.IsError)
-          throw new UpdateFailedException(result.Msg);
+        {
+          if (result.Info != null)
+          {
+            if (result.Info != null)
+            {
+              var ex = result.GetExceptionFromInfo();
+              if (ex != null)
+                throw new UpdateFailedException(ex.Message);
+              else
+                throw new UpdateFailedException();
+            }
+            else
+              throw new UpdateFailedException();
+          }
+        }
       }
     }
     protected override void DataPortal_DeleteSelf()
@@ -376,7 +414,21 @@ namespace LearnLanguages.Business
 
         var result = languageDal.Delete(ReadProperty<Guid>(IdProperty));
         if (!result.IsSuccess || result.IsError)
-          throw new DeleteFailedException(result.Msg);
+        {
+          if (result.Info != null)
+          {
+            if (result.Info != null)
+            {
+              var ex = result.GetExceptionFromInfo();
+              if (ex != null)
+                throw new DeleteFailedException(ex.Message);
+              else
+                throw new DeleteFailedException();
+            }
+            else
+              throw new DeleteFailedException();
+          }
+        }
       }
     }
     protected void DataPortal_Delete(Guid id)
@@ -387,7 +439,21 @@ namespace LearnLanguages.Business
 
         var result = languageDal.Delete(id);
         if (!result.IsSuccess || result.IsError)
-          throw new DeleteFailedException(result.Msg);
+        {
+          if (result.Info != null)
+          {
+            if (result.Info != null)
+            {
+              var ex = result.GetExceptionFromInfo();
+              if (ex != null)
+                throw new DeleteFailedException(ex.Message);
+              else
+                throw new DeleteFailedException();
+            }
+            else
+              throw new DeleteFailedException();
+          }
+        }
       }
     }
 #endif

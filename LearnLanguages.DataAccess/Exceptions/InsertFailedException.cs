@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class InsertFailedException : Exception
   {
     public InsertFailedException()
-      : base()
+      : base(DalResources.Dal_InsertFailedErrorMessage)
     {
 
     }
