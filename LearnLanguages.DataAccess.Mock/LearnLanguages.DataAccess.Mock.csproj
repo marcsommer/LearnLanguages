@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DalManager.cs" />
     <Compile Include="LanguageDal.cs" />
+    <Compile Include="MockDb.cs" />
     <Compile Include="PhraseDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

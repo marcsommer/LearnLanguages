@@ -176,6 +176,10 @@
       <Project>{902EEF10-42A2-460D-87FE-EEDDC8ED6082}</Project>
       <Name>LearnLanguages.CompressedHost</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Mock\LearnLanguages.DataAccess.Mock.csproj">
+      <Project>{1C862615-4006-421E-97C9-46A138F461A3}</Project>
+      <Name>LearnLanguages.DataAccess.Mock</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

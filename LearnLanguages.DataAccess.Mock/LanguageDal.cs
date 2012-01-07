@@ -7,27 +7,27 @@ namespace LearnLanguages.DataAccess.Mock
 {
   public class LanguageDal : ILanguageDal
   {
-    public LearnLanguages.Result<LanguageDto> New(object criteria)
+    public Result<LanguageDto> New(object criteria)
     {
       throw new NotImplementedException();
     }
 
-    public LearnLanguages.Result<LanguageDto> Fetch(Guid id)
+    public Result<LanguageDto> Fetch(Guid id)
     {
       throw new NotImplementedException();
     }
 
-    public LearnLanguages.Result<LanguageDto> Update(LanguageDto dto)
+    public Result<LanguageDto> Update(LanguageDto dto)
     {
       throw new NotImplementedException();
     }
 
-    public LearnLanguages.Result<LanguageDto> Insert(LanguageDto dto)
+    public Result<LanguageDto> Insert(LanguageDto dto)
     {
       throw new NotImplementedException();
     }
 
-    public LearnLanguages.Result<LanguageDto> Delete(Guid id)
+    public Result<LanguageDto> Delete(Guid id)
     {
       throw new NotImplementedException();
     }
