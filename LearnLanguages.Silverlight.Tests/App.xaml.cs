@@ -18,7 +18,8 @@ namespace LearnLanguages.Silverlight.Tests
 
     private void Application_Startup(object sender, StartupEventArgs e)
     {
-      //Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      Csla.DataPortal.ProxyTypeName = typeof(Compression.CompressedProxy<>).AssemblyQualifiedName;
 
       RootVisual = UnitTestSystem.CreateTestPage();
     }

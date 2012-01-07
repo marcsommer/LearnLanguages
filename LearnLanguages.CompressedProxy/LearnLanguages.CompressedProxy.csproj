@@ -3,48 +3,35 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8341B23A-A916-4C7D-B52B-A2682B568652}</ProjectGuid>
+    <ProjectGuid>{C6D3C11D-57E0-49CF-B9B8-7BB5710EB986}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LearnLanguages.Silverlight.Tests</RootNamespace>
-    <AssemblyName>LearnLanguages.Silverlight.Tests</AssemblyName>
+    <RootNamespace>LearnLanguages.CompressedProxy</RootNamespace>
+    <AssemblyName>LearnLanguages.CompressedProxy</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures />
+    <SupportedCultures>
+    </SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>LearnLanguages.Silverlight.Tests.xap</XapFilename>
+    <XapFilename>LearnLanguages.CompressedProxy.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
-    <SilverlightAppEntry>LearnLanguages.Silverlight.Tests.App</SilverlightAppEntry>
-    <TestPageFileName>TestPage.html</TestPageFileName>
+    <SilverlightAppEntry>LearnLanguages.CompressedProxy.App</SilverlightAppEntry>
+    <TestPageFileName>LearnLanguages.CompressedProxyTestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
     <EnableOutOfBrowser>false</EnableOutOfBrowser>
     <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <LinkedServerProject />
+    <LinkedServerProject>
+    </LinkedServerProject>
   </PropertyGroup>
-  <!--
-  //
-  // Silverlight Code Coverage Instrumentation
-  // List any libraries or assemblies that you would like to instrument during
-  // a code coverage pass. An example, for ClassLibrary1, is provided, and
-  // commented out below as a starting point:
-  //
-  -->
-  <!--
-  <ItemGroup>
-    <InstrumentSilverlightAssemblies Include="SilverlightClassLibrary1">
-      <Visible>false</Visible>
-    </InstrumentSilverlightAssemblies>
-  </ItemGroup>
-  -->
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
        to set the TargetFrameworkVersion to v3.5 -->
@@ -76,14 +63,11 @@
     <Reference Include="Csla">
       <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Silverlight.Testing">
-      <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.Silverlight.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
-      <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+    <Reference Include="mscorlib" />
+    <Reference Include="SharpZipLib.Silverlight4">
+      <HintPath>..\dependencies\sharp_zip_lib_silverlight\SharpZipLib.Silverlight4.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
-    <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -91,42 +75,23 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
+    <Compile Include="..\LearnLanguages.CompressedHost\CompressionUtility.cs">
+      <Link>CompressionUtility.cs</Link>
     </Compile>
-    <Compile Include="LanguageEditTests.cs" />
+    <Compile Include="CompressedProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
-      <Project>{145DDDB7-6CD6-4C72-BF39-669068559DAB}</Project>
-      <Name>LearnLanguages.Business.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
-      <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
-      <Name>LearnLanguages.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.CompressedProxy\LearnLanguages.CompressedProxy.csproj">
-      <Project>{C6D3C11D-57E0-49CF-B9B8-7BB5710EB986}</Project>
-      <Name>LearnLanguages.CompressedProxy</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
-      <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
-      <Name>LearnLanguages.DataAccess.Client</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
-  <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />
-  <Import Condition="$(SilverlightVersion)=='v4.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v4.0)Microsoft.Silverlight.Toolkit.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">

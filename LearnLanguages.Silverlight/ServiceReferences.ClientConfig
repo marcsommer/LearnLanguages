@@ -2,8 +2,11 @@
   <system.serviceModel>
     <bindings>
       <basicHttpBinding>
-        <binding name="BasicHttpBinding_IWcfPortal" maxBufferSize="6553600"
-            maxReceivedMessageSize="6553600" receiveTimeout="10" sendTimeout="10">
+        <binding name="BasicHttpBinding_IWcfPortal" 
+                 maxBufferSize="2147483647"
+                 maxReceivedMessageSize="2147483647" 
+                 receiveTimeout="10" 
+                 sendTimeout="10">
         </binding>
       </basicHttpBinding>
     </bindings>

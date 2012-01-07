@@ -1,7 +1,9 @@
 ﻿using System;
+using Csla.Serialization;
 
 namespace LearnLanguages.DataAccess
 {
+  [Serializable]
   public class PhraseDto
   {
     public Guid Id { get; set; }

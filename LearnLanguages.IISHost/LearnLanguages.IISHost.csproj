@@ -14,7 +14,7 @@
     <AssemblyName>LearnLanguages.IISHost</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <SilverlightApplicationList>{23A302A7-4A66-4D8B-A13F-14A4453EF517}|..\LearnLanguages.Silverlight\LearnLanguages.Silverlight.csproj|ClientBin|False,{145DDDB7-6CD6-4C72-BF39-669068559DAB}|..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj|ClientBin|False,{334F64FB-AA4B-40E7-99D6-F17435E5A319}|..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj|ClientBin|False,{8341B23A-A916-4C7D-B52B-A2682B568652}|..\LearnLanguages.Silverlight.Tests\LearnLanguages.Silverlight.Tests.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>{23A302A7-4A66-4D8B-A13F-14A4453EF517}|..\LearnLanguages.Silverlight\LearnLanguages.Silverlight.csproj|ClientBin|False,{145DDDB7-6CD6-4C72-BF39-669068559DAB}|..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj|ClientBin|False,{334F64FB-AA4B-40E7-99D6-F17435E5A319}|..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj|ClientBin|False,{8341B23A-A916-4C7D-B52B-A2682B568652}|..\LearnLanguages.Silverlight.Tests\LearnLanguages.Silverlight.Tests.csproj|ClientBin|False,{C6D3C11D-57E0-49CF-B9B8-7BB5710EB986}|..\LearnLanguages.CompressedProxy\LearnLanguages.CompressedProxy.csproj|ClientBin|False</SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Csla">
+      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -63,10 +66,22 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="clientaccesspolicy.xml" />
     <Content Include="ClientBin\LearnLanguages.Business.xap" />
+    <Content Include="ClientBin\LearnLanguages.CompressedProxy.xap" />
     <Content Include="ClientBin\LearnLanguages.DataAccess.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.Tests.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.xap" />
+    <None Include="Web.config_Uncompressed">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Debug.config_Uncompressed">
+      <DependentUpon>Web.config_Uncompressed</DependentUpon>
+    </None>
+    <None Include="Web.Release.config_Uncompressed">
+      <DependentUpon>Web.config_Uncompressed</DependentUpon>
+    </None>
+    <None Include="SlPortal.svc_Uncompressed" />
     <Content Include="LearnLanguages.Silverlight.csproj" />
     <Content Include="LearnLanguages.Silverlight.TestsTestPage.aspx" />
     <Content Include="LearnLanguages.Silverlight.TestsTestPage.html" />
@@ -152,6 +167,16 @@
   <ItemGroup>
     <Content Include="Account\Web.config" />
     <Content Include="Site.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Business.Server\LearnLanguages.Business.Server.csproj">
+      <Project>{9AB67D6B-F6B7-4AD4-8C51-C5049AE7898A}</Project>
+      <Name>LearnLanguages.Business.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.CompressedHost\LearnLanguages.CompressedHost.csproj">
+      <Project>{902EEF10-42A2-460D-87FE-EEDDC8ED6082}</Project>
+      <Name>LearnLanguages.CompressedHost</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
