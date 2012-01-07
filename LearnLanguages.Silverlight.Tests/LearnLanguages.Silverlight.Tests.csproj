@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
-      <Project>{145DDDB7-6CD6-4C72-BF39-669068559DAB}</Project>
+      <Project>{4314B702-58FE-44EC-BF55-61CC4483C05C}</Project>
       <Name>LearnLanguages.Business.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
