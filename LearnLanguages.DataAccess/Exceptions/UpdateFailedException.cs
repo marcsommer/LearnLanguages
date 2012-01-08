@@ -6,7 +6,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   [Serializable]
   public class UpdateFailedException : Exception
   {
-    public UpdateFailedException()
+    public UpdateFailedException()  
       : base(DalResources.ErrorMsgUpdateFailed)
     {
 

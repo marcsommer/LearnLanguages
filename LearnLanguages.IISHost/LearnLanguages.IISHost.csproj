@@ -37,8 +37,16 @@
     <Reference Include="Csla">
       <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Migrations">
+      <HintPath>..\packages\EntityFramework.Migrations.0.8.0.0\lib\net40\EntityFramework.Migrations.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -71,6 +79,7 @@
     <Content Include="ClientBin\LearnLanguages.DataAccess.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.Tests.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.xap" />
+    <Content Include="packages.config" />
     <None Include="Web.config_Uncompressed">
       <SubType>Designer</SubType>
     </None>
@@ -151,6 +160,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
