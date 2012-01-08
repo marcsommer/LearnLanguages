@@ -44,17 +44,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessBaseOfT.cs">
-      <Link>Bases\BusinessBaseOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessBaseOfTAndTDto.cs">
+      <Link>Bases\BusinessBaseOfTAndTDto.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessListBaseOfT.cs">
-      <Link>Bases\BusinessListBaseOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessListBaseOfTAndTDto.cs">
+      <Link>Bases\BusinessListBaseOfTAndTDto.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyListBaseOfTAndTDto.cs">
+      <Link>Bases\ReadOnlyListBaseOfTAndTDto.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\LanguageEdit.cs">
       <Link>LanguageEdit.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\LanguageList.cs">
+      <Link>LanguageList.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\PhraseEdit.cs">
       <Link>PhraseEdit.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\PhraseList.cs">
+      <Link>PhraseList.cs</Link>
     </Compile>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

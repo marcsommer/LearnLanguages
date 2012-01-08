@@ -58,11 +58,14 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bases\BusinessBaseOfT.cs" />
-    <Compile Include="Bases\BusinessListBaseOfT.cs" />
+    <Compile Include="Bases\BusinessBaseOfTAndTDto.cs" />
+    <Compile Include="Bases\BusinessListBaseOfTAndTDto.cs" />
+    <Compile Include="Bases\ReadOnlyListBaseOfTAndTDto.cs" />
+    <Compile Include="PhraseList.cs" />
     <Compile Include="LanguageEdit.cs" />
     <Compile Include="PhraseEdit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LanguageList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">

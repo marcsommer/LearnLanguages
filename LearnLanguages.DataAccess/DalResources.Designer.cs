@@ -79,83 +79,137 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9.
+        /// </summary>
+        public static string DefaultEnglishLanguageId {
+            get {
+                return ResourceManager.GetString("DefaultEnglishLanguageId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string DefaultEnglishLanguageText {
+            get {
+                return ResourceManager.GetString("DefaultEnglishLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9.
+        /// </summary>
+        public static string DefaultLanguageId {
+            get {
+                return ResourceManager.GetString("DefaultLanguageId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultLanguageText {
+            get {
+                return ResourceManager.GetString("DefaultLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultPhraseText {
+            get {
+                return ResourceManager.GetString("DefaultPhraseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Create operation failed..
         /// </summary>
-        public static string Dal_CreateFailedErrorMessage {
+        public static string ErrorMsgCreateFailed {
             get {
-                return ResourceManager.GetString("Dal_CreateFailedErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgCreateFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Delete operation failed..
         /// </summary>
-        public static string Dal_DeleteFailedErrorMessage {
+        public static string ErrorMsgDeleteFailed {
             get {
-                return ResourceManager.GetString("Dal_DeleteFailedErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgDeleteFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Delete operation failed.  There were multiple items found to delete..
         /// </summary>
-        public static string Dal_DeleteFailedErrorMessage_MultipleItemsFound {
+        public static string ErrorMsgDeleteFailed_MultipleItemsFound {
             get {
-                return ResourceManager.GetString("Dal_DeleteFailedErrorMessage_MultipleItemsFound", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgDeleteFailed_MultipleItemsFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Fetch operation failed..
         /// </summary>
-        public static string Dal_FetchFailedErrorMessage {
+        public static string ErrorMsgFetchFailed {
             get {
-                return ResourceManager.GetString("Dal_FetchFailedErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgFetchFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Id was not found..
         /// </summary>
-        public static string Dal_IdNotFound {
+        public static string ErrorMsgIdNotFound {
             get {
-                return ResourceManager.GetString("Dal_IdNotFound", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgIdNotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Insert operation failed..
         /// </summary>
-        public static string Dal_InsertFailedErrorMessage {
+        public static string ErrorMsgInsertFailed {
             get {
-                return ResourceManager.GetString("Dal_InsertFailedErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgInsertFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Insert operation failed.  The Id {0} already exists..
         /// </summary>
-        public static string Dal_InsertFailedErrorMessage_IdAlreadyExists {
+        public static string ErrorMsgInsertFailed_IdAlreadyExists {
             get {
-                return ResourceManager.GetString("Dal_InsertFailedErrorMessage_IdAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgInsertFailed_IdAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid LanguageId in Phrase.  This must be a valid Id in the Languages database..
+        /// </summary>
+        public static string ErrorMsgInsertFailedPhraseInvalidLanguageId {
+            get {
+                return ResourceManager.GetString("ErrorMsgInsertFailedPhraseInvalidLanguageId", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Save operation failed..
         /// </summary>
-        public static string Dal_SaveFailedErrorMessage {
+        public static string ErrorMsgSaveFailed {
             get {
-                return ResourceManager.GetString("Dal_SaveFailedErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgSaveFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Update operation failed..
         /// </summary>
-        public static string Dal_UpdateFailedErrorMessage {
+        public static string ErrorMsgUpdateFailed {
             get {
-                return ResourceManager.GetString("Dal_UpdateFailedErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgUpdateFailed", resourceCulture);
             }
         }
         

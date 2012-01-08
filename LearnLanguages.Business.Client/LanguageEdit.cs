@@ -40,6 +40,7 @@ namespace LearnLanguages.Business
     {
       DataPortal.BeginFetch<LanguageEdit>(id, callback);
     }
+
 #endif
     #endregion
 
@@ -76,6 +77,7 @@ namespace LearnLanguages.Business
     {
       LanguageEdit retPhrase = new LanguageEdit();
       retPhrase.LoadFromDtoBypassPropertyChecks(dto);
+      retPhrase.BusinessRules.CheckRules();
       return retPhrase;
     }
     #endregion //Shared Factory Methods
@@ -118,6 +120,31 @@ namespace LearnLanguages.Business
       base.BeginSave(forceUpdate, handler, userState);
     }
 
+    /// <summary>
+    /// Loads the default properties, including generating a new Id, inside of a using (BypassPropertyChecks) block.
+    /// </summary>
+    protected override void LoadDefaults()
+    {
+      using (BypassPropertyChecks)
+      {
+        Id = Guid.NewGuid();
+        Text = DalResources.DefaultLanguageText;
+      }
+    }
+
+    /// <summary>
+    /// Loads the default properties, using the given id parameter, inside of a using (BypassPropertyChecks) block.
+    /// </summary>
+    protected override void LoadDefaults(Guid id)
+    {
+      using (BypassPropertyChecks)
+      {
+        Id = id;
+        Text = DalResources.DefaultLanguageText;
+      }
+    }
+
+
     #endregion
 
     #region Validation Rules
@@ -145,182 +172,25 @@ namespace LearnLanguages.Business
 
     #region Data Access (This is run on the server, unless run local set)
 
-    #region Silverlight DP_XYZ
-
-#if SILVERLIGHT
-    /// <summary>
-    /// Runs locally, does not touch server
-    /// </summary>
-    /// <param name="handler"></param>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public override void DataPortal_Create(LocalProxy<LanguageEdit>.CompletedHandler handler)
-    {
-      try
-      {
-        using (BypassPropertyChecks)
-        {
-          Id = Guid.NewGuid();
-          Text = null;
-        }
-        handler(this, null);
-      }
-      catch (Exception ex)
-      {
-        handler(null, ex);
-      }
-    }
-
-    /// <summary>
-    /// Runs locally, does not touch server.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="handler"></param>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void DataPortal_Create(Guid id, LocalProxy<LanguageEdit>.CompletedHandler handler)
-    {
-      try
-      {
-        using (BypassPropertyChecks)
-        {
-          Id = id;
-          Text = null;
-        }
-        handler(this, null);
-      }
-      catch (Exception ex)
-      {
-        handler(null, ex);
-      }
-    }
-
-    //    //public void DataPortal_Fetch(SingleCriteria<LanguageEdit, Guid> criteria) //Guid SingleCriteria
-    //    [EditorBrowsable(EditorBrowsableState.Never)]
-    //    public void DataPortal_Fetch(Guid id, LocalProxy<LanguageEdit>.CompletedHandler handler) //Guid SingleCriteria
-    //    {
-    //      try
-    //      {
-    //        //Result<LanguageDto> result = LanguageDal.Fetch(id);
-    //        Result<LanguageDto> result = null;
-    //        throw new Exception("Need to fix all of these dp methods");
-    //        if (!result.IsSuccess || result.IsError)
-    //          throw new FetchFailedException(result.Msg);
-    //        LanguageDto dto = result.Obj;
-    //        LoadFromDtoBypassPropertyChecks(dto);
-    //        handler(this, null);
-    //      }
-    //      catch (Exception ex)
-    //      {
-    //        handler(null, ex);
-    //      }
-    //    }
-
-    //    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    //    public override void DataPortal_Insert(LocalProxy<LanguageEdit>.CompletedHandler handler)
-    //    {
-    //      try
-    //      {
-    //        //Dal is responsible for setting new Id
-    //        LanguageDto dto = new LanguageDto()
-    //        {
-    //          Id = this.Id,
-    //          Text = this.Text
-    //        };
-    //        Result<LanguageDto> result = null;
-    //        //var result = LanguageDal.Insert(dto);
-    //        if (!result.IsSuccess || result.IsError)
-    //          throw new InsertFailedException(result.Msg);
-
-    //        Id = dto.Id;
-    //        handler(this, null);
-    //      }
-    //      catch (Exception ex)
-    //      {
-    //        handler(null, ex);
-    //      }
-    //    }
-
-    //    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    //    public override void DataPortal_Update(LocalProxy<LanguageEdit>.CompletedHandler handler)
-    //    {
-    //      try
-    //      {
-    //        Result<LanguageDto> result = null;
-    //        //Result<LanguageDto> result = LanguageDal.Update(
-    //        //                                              new LanguageDto()
-    //        //                                              {
-    //        //                                                Id = this.Id,
-    //        //                                                Text = this.Text
-    //        //                                              }
-    //        //                                           );
-    //        if (!result.IsSuccess || result.IsError)
-    //          throw new UpdateFailedException(result.Msg);
-
-    //        handler(this, null);
-    //      }
-    //      catch (Exception ex)
-    //      {
-    //        handler(null, ex);
-    //      }
-    //    }
-
-    //    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    //    public override void DataPortal_DeleteSelf(LocalProxy<LanguageEdit>.CompletedHandler handler)
-    //    {
-    //      try
-    //      {
-    //        Result<LanguageDto> result = null;
-    //        //var result = LanguageDal.Delete(ReadProperty<Guid>(IdProperty));
-    //        if (!result.IsSuccess || result.IsError)
-    //          throw new DeleteFailedException(result.Msg);
-
-    //        handler(this, null);
-    //      }
-    //      catch (Exception ex)
-    //      {
-    //        handler(null, ex);
-    //      }
-    //    }
-
-    //    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    //    public void DataPortal_Delete(Guid criteriaId, LocalProxy<LanguageEdit>.CompletedHandler handler)
-    //    {
-    //      var id = criteriaId;
-    //      try
-    //      {
-    //        Result<LanguageDto> result = null;
-    //        //var result = LanguageDal.Delete(id);
-    //        if (!result.IsSuccess || result.IsError)
-    //          throw new DeleteFailedException(result.Msg);
-    //      }
-    //      catch (Exception ex)
-    //      {
-    //        handler(null, ex);
-    //      }
-    //    }
-
-#endif
-    
-    #endregion
-
     #region WPF DP_XYZ
 
 #if !SILVERLIGHT
-    protected override void DataPortal_Create()
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = Guid.NewGuid();
-        Text = null;
-      }
-    }
-    protected void DataPortal_Create(Guid id)
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = id;
-        Text = null;
-      }
-    }
+    //protected override void DataPortal_Create()
+    //{
+    //  using (BypassPropertyChecks)
+    //  {
+    //    Id = Guid.NewGuid();
+    //    Text = null;
+    //  }
+    //}
+    //protected void DataPortal_Create(Guid id)
+    //{
+    //  using (BypassPropertyChecks)
+    //  {
+    //    Id = id;
+    //    Text = null;
+    //  }
+    //}
     protected void DataPortal_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -374,7 +244,7 @@ namespace LearnLanguages.Business
               throw new InsertFailedException();
           }
         }
-        Id = dto.Id;
+        SetIdBypassPropertyChecks(result.Obj.Id);
       }
     }
     protected override void DataPortal_Update()
@@ -404,6 +274,7 @@ namespace LearnLanguages.Business
               throw new UpdateFailedException();
           }
         }
+        SetIdBypassPropertyChecks(result.Obj.Id);
       }
     }
     protected override void DataPortal_DeleteSelf()

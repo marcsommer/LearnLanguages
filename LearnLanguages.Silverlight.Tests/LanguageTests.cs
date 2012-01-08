@@ -4,30 +4,29 @@ using LearnLanguages.Business;
 using Microsoft.Silverlight.Testing;
 using LearnLanguages.DataAccess.Mock;
 using LearnLanguages.DataAccess.Exceptions;
-using LearnLanguages.Business;
 
 namespace LearnLanguages.Silverlight.Tests
 {
   [TestClass]
-  [Tag("phrase")]
-  public class PhraseEditTests : Microsoft.Silverlight.Testing.SilverlightTest
+  [Tag("language")]
+  public class LanguageTests : Microsoft.Silverlight.Testing.SilverlightTest
   {
     [TestMethod]
     [Asynchronous]
     public void CREATE_NEW()
     {
       var isCreated = false;
-      PhraseEdit phraseEdit = null;
-      PhraseEdit.NewPhraseEdit( (s,r) =>
+      LanguageEdit languageEdit = null;
+      LanguageEdit.NewLanguageEdit( (s,r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
-          phraseEdit = r.Object;
+          languageEdit = r.Object;
           isCreated = true;
         });
       EnqueueConditional(() => isCreated);
-      EnqueueCallback(() => { Assert.IsNotNull(phraseEdit); },
+      EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
                       () => { Assert.IsNull(null); });
       EnqueueTestComplete();
     }
@@ -39,19 +38,19 @@ namespace LearnLanguages.Silverlight.Tests
       Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
     
       var isCreated = false;
-      PhraseEdit PhraseEdit = null;
-      PhraseEdit.NewPhraseEdit(id, (s,r) =>
+      LanguageEdit languageEdit = null;
+      LanguageEdit.NewLanguageEdit(id, (s,r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
-          PhraseEdit = r.Object;
+          languageEdit = r.Object;
           isCreated = true;
         });
       EnqueueConditional(() => isCreated);
-      EnqueueCallback(() => { Assert.IsNotNull(PhraseEdit); },
+      EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
                       () => { Assert.IsNull(null); },
-                      () => { Assert.AreEqual(id, PhraseEdit.Id); });
+                      () => { Assert.AreEqual(id, languageEdit.Id); });
       EnqueueTestComplete();
     }
 
@@ -62,19 +61,21 @@ namespace LearnLanguages.Silverlight.Tests
       Guid testId = MockDb.EnglishId;
       var isLoaded = false;
       Exception error = null;
-      PhraseEdit PhraseEdit = null;
+      LanguageEdit languageEdit = null;
 
-      PhraseEdit.GetPhraseEdit(testId, (s, r) =>
+      LanguageEdit.GetLanguageEdit(testId, (s, r) =>
       {
         error = r.Error;
-        PhraseEdit = r.Object;
+        if (error != null)
+          throw error;
+        languageEdit = r.Object;
         isLoaded = true;
       });
 
       EnqueueConditional(() => isLoaded);
       EnqueueCallback(() => { Assert.IsNull(error); },
-                      () => { Assert.IsNotNull(PhraseEdit); },
-                      () => { Assert.AreEqual(testId, PhraseEdit.Id); });
+                      () => { Assert.IsNotNull(languageEdit); },
+                      () => { Assert.AreEqual(testId, languageEdit.Id); });
       EnqueueTestComplete();
     }
 
@@ -87,41 +88,41 @@ namespace LearnLanguages.Silverlight.Tests
       Exception savedError = new Exception();
       Exception gottenError = new Exception();
 
-      PhraseEdit PhraseEdit = null;
-      PhraseEdit savedPhraseEdit = null;
-      PhraseEdit gottenPhraseEdit = null;    
+      LanguageEdit languageEdit = null;
+      LanguageEdit savedLanguageEdit = null;
+      LanguageEdit gottenLanguageEdit = null;    
   
       var isNewed = false;
       var isSaved = false;
       var isGotten = false;
       
       //NEW
-      PhraseEdit.NewPhraseEdit((s, r) =>
+      LanguageEdit.NewLanguageEdit((s, r) =>
       {
         newError = r.Error;
         if (newError != null)
           throw newError;
-        PhraseEdit = r.Object;
+        languageEdit = r.Object;
         isNewed = true;
 
         //EDIT
-        PhraseEdit.Text = "TestPhrase";
+        languageEdit.Text = "TestLanguage";
 
         //SAVE
-        PhraseEdit.BeginSave((s2, r2) =>
+        languageEdit.BeginSave((s2, r2) =>
         {
           savedError = r2.Error;
           if (savedError != null)
             throw savedError;
-          savedPhraseEdit = r2.NewObject as PhraseEdit;
+          savedLanguageEdit = r2.NewObject as LanguageEdit;
           isSaved = true;
           //GET (CONFIRM SAVE)
-          PhraseEdit.GetPhraseEdit(savedPhraseEdit.Id, (s3, r3) =>
+          LanguageEdit.GetLanguageEdit(savedLanguageEdit.Id, (s3, r3) =>
           {
             gottenError = r3.Error;
             if (gottenError != null)
               throw gottenError;
-            gottenPhraseEdit = r3.Object;
+            gottenLanguageEdit = r3.Object;
             isGotten = true;
           });
         });
@@ -135,11 +136,11 @@ namespace LearnLanguages.Silverlight.Tests
                       () => { Assert.IsNull(newError); },
                       () => { Assert.IsNull(savedError); },
                       () => { Assert.IsNull(gottenError); },
-                      () => { Assert.IsNotNull(PhraseEdit); },
-                      () => { Assert.IsNotNull(savedPhraseEdit); },
-                      () => { Assert.IsNotNull(gottenPhraseEdit); },
-                      () => { Assert.AreEqual(savedPhraseEdit.Id, gottenPhraseEdit.Id); },
-                      () => { Assert.AreEqual(savedPhraseEdit.Text, gottenPhraseEdit.Text); });
+                      () => { Assert.IsNotNull(languageEdit); },
+                      () => { Assert.IsNotNull(savedLanguageEdit); },
+                      () => { Assert.IsNotNull(gottenLanguageEdit); },
+                      () => { Assert.AreEqual(savedLanguageEdit.Id, gottenLanguageEdit.Id); },
+                      () => { Assert.AreEqual(savedLanguageEdit.Text, gottenLanguageEdit.Text); });
 
       EnqueueTestComplete();
     }
@@ -158,13 +159,13 @@ namespace LearnLanguages.Silverlight.Tests
       //INITIALIZE CONFIRM TO NULL, BECAUSE WE EXPECT THIS TO BE AN ERROR LATER
       Exception deleteConfirmedError = null;
 
-      PhraseEdit PhraseEdit = null;
-      PhraseEdit savedPhraseEdit = null;
-      PhraseEdit gottenPhraseEdit = null;
-      PhraseEdit deletedPhraseEdit = null;
+      LanguageEdit languageEdit = null;
+      LanguageEdit savedLanguageEdit = null;
+      LanguageEdit gottenLanguageEdit = null;
+      LanguageEdit deletedLanguageEdit = null;
 
-      //INITIALIZE TO EMPTY Phrase EDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
-      PhraseEdit deleteConfirmedPhraseEdit = new PhraseEdit();
+      //INITIALIZE TO EMPTY LANGUAGE EDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
+      LanguageEdit deleteConfirmedLanguageEdit = new LanguageEdit();
 
       var isNewed = false;
       var isSaved = false;
@@ -173,45 +174,45 @@ namespace LearnLanguages.Silverlight.Tests
       var isDeleteConfirmed = false;
 
       //NEW
-      PhraseEdit.NewPhraseEdit((s, r) =>
+      LanguageEdit.NewLanguageEdit((s, r) =>
       {
         newError = r.Error;
         if (newError != null)
           throw newError;
-        PhraseEdit = r.Object;
+        languageEdit = r.Object;
         isNewed = true;
 
         //EDIT
-        PhraseEdit.Text = "TestPhrase";
+        languageEdit.Text = "TestLanguage";
 
         //SAVE
-        PhraseEdit.BeginSave((s2, r2) =>
+        languageEdit.BeginSave((s2, r2) =>
         {
           savedError = r2.Error;
           if (savedError != null)
             throw savedError;
-          savedPhraseEdit = r2.NewObject as PhraseEdit;
+          savedLanguageEdit = r2.NewObject as LanguageEdit;
           isSaved = true;
           //GET (CONFIRM SAVE)
-          PhraseEdit.GetPhraseEdit(savedPhraseEdit.Id, (s3, r3) =>
+          LanguageEdit.GetLanguageEdit(savedLanguageEdit.Id, (s3, r3) =>
           {
             gottenError = r3.Error;
             if (gottenError != null)
               throw gottenError;
-            gottenPhraseEdit = r3.Object;
+            gottenLanguageEdit = r3.Object;
             isGotten = true;
 
             //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
-            gottenPhraseEdit.Delete();
-            gottenPhraseEdit.BeginSave((s4, r4) =>
+            gottenLanguageEdit.Delete();
+            gottenLanguageEdit.BeginSave((s4, r4) =>
             {
               deletedError = r4.Error;
               if (deletedError != null)
                 throw deletedError;
 
-              deletedPhraseEdit = r4.NewObject as PhraseEdit;
-              //TODO: Figure out why PhraseEditTests final callback gets thrown twice.  The server throws expected exception, but callback is executed twice.
-              PhraseEdit.GetPhraseEdit(deletedPhraseEdit.Id, (s5, r5) =>
+              deletedLanguageEdit = r4.NewObject as LanguageEdit;
+              //TODO: Figure out why LanguageEditTests final callback gets thrown twice.  The server throws expected exception, but callback is executed twice.
+              LanguageEdit.GetLanguageEdit(deletedLanguageEdit.Id, (s5, r5) =>
               {
                 deleteConfirmedError = r5.Error;
                 if (deleteConfirmedError != null)
@@ -219,7 +220,7 @@ namespace LearnLanguages.Silverlight.Tests
                   isDeleteConfirmed = true;
                   throw new ExpectedException(deleteConfirmedError);
                 }
-                deleteConfirmedPhraseEdit = r5.Object;
+                deleteConfirmedLanguageEdit = r5.Object;
               });
               
             });
@@ -241,13 +242,39 @@ namespace LearnLanguages.Silverlight.Tests
                       //WE EXPECT AN ERROR, AS WE TRIED A GET ON AN ID THAT SHOULD HAVE BEEN DELETED
                       () => { Assert.IsNotNull(deleteConfirmedError); },
 
-                      () => { Assert.IsNotNull(PhraseEdit); },
-                      () => { Assert.IsNotNull(savedPhraseEdit); },
-                      () => { Assert.IsNotNull(gottenPhraseEdit); },
-                      () => { Assert.IsNotNull(deletedPhraseEdit); },
-                      () => { Assert.IsNull(deleteConfirmedPhraseEdit); });
+                      () => { Assert.IsNotNull(languageEdit); },
+                      () => { Assert.IsNotNull(savedLanguageEdit); },
+                      () => { Assert.IsNotNull(gottenLanguageEdit); },
+                      () => { Assert.IsNotNull(deletedLanguageEdit); },
+                      () => { Assert.IsNull(deleteConfirmedLanguageEdit); });
 
       EnqueueTestComplete();
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    public void GET_ALL()
+    {
+      {
+        var isLoaded = false;
+        Exception error = null;
+        LanguageList allLanguages = null;
+        LanguageList.GetAll((s, r) =>
+          {
+            error = r.Error;
+            if (error != null)
+              throw error;
+
+            allLanguages = r.Object;
+            isLoaded = true;
+          });
+
+        EnqueueConditional(() => isLoaded);
+        EnqueueCallback(() => { Assert.IsNull(error); },
+                        () => { Assert.IsNotNull(allLanguages); },
+                        () => { Assert.IsTrue(allLanguages.Count > 0); });
+        EnqueueTestComplete();
+      }
     }
   }
 }

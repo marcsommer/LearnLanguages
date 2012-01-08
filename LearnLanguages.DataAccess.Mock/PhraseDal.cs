@@ -36,7 +36,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<PhraseDto>.FailureWithInfo(null,
-              new Exceptions.FetchFailedException(DalResources.Dal_IdNotFound));
+              new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFound));
           else
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -68,7 +68,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<PhraseDto>.FailureWithInfo(null,
-              new Exceptions.UpdateFailedException(DalResources.Dal_IdNotFound));
+              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFound));
           else
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -91,6 +91,9 @@ namespace LearnLanguages.DataAccess.Mock
         if (results.Count() == 0)
         {
           dto.Id = Guid.NewGuid();
+          //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
+          if (dto.LanguageId == Guid.Empty || !MockDb.ContainsLanguageId(dto.LanguageId))
+            throw new Exceptions.InsertFailedException(DalResources.ErrorMsgInsertFailedPhraseInvalidLanguageId);
           MockDb.Phrases.Add(dto);
           retResult = Result<PhraseDto>.Success(dto);
         }
@@ -98,7 +101,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 1) //ID ALREADY EXISTS
             retResult = Result<PhraseDto>.FailureWithInfo(dto,
-              new Exceptions.UpdateFailedException(DalResources.Dal_IdNotFound));
+              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFound));
           else                      //MULTIPLE IDS ALREADY EXIST??
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -128,7 +131,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<PhraseDto>.FailureWithInfo(null,
-              new Exceptions.DeleteFailedException(DalResources.Dal_IdNotFound));
+              new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFound));
           else
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
         }

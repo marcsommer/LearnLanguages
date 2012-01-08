@@ -53,7 +53,8 @@ namespace LearnLanguages.Business
     /// <param name="callback"></param>
     public static void NewPhraseEdit(EventHandler<DataPortalResult<PhraseEdit>> callback)
     {
-      DataPortal.BeginCreate<PhraseEdit>(callback, DataPortal.ProxyModes.LocalOnly);
+      //DataPortal.BeginCreate<PhraseEdit>(callback, DataPortal.ProxyModes.LocalOnly);
+      DataPortal.BeginCreate<PhraseEdit>(callback);
     }
     /// <summary>
     /// This happens DataPortal.ProxyModes.LocalOnly
@@ -62,8 +63,8 @@ namespace LearnLanguages.Business
     /// <param name="callback"></param>
     public static void NewPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
     {
-      DataPortal.BeginCreate<PhraseEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-      //DataPortal.BeginCreate<PhraseEdit>(id, callback);
+      //DataPortal.BeginCreate<PhraseEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
+      DataPortal.BeginCreate<PhraseEdit>(id, callback);
     }
 
     public static void GetPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
@@ -136,7 +137,35 @@ namespace LearnLanguages.Business
     {
       base.BeginSave(forceUpdate, handler, userState);
     }
-    
+
+    /// <summary>
+    /// Loads the default properties, including generating a new Id, inside of a using (BypassPropertyChecks) block.
+    /// </summary>
+    protected override void LoadDefaults()
+    {
+      using (BypassPropertyChecks)
+      {
+        Id = Guid.NewGuid();
+        LanguageId = Guid.Parse(DalResources.DefaultLanguageId);
+        Text = DalResources.DefaultPhraseText;
+        Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
+      }
+    }
+
+    /// <summary>
+    /// Loads the default properties, using the given id parameter, inside of a using (BypassPropertyChecks) block.
+    /// </summary>
+    protected override void LoadDefaults(Guid id)
+    {
+      using (BypassPropertyChecks)
+      {
+        Id = id;
+        LanguageId = Guid.Parse(DalResources.DefaultLanguageId);
+        Text = DalResources.DefaultPhraseText;
+        Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
+      }
+    }
+
     #endregion
 
     #region Validation Rules
@@ -165,197 +194,9 @@ namespace LearnLanguages.Business
 
     #region Data Access (This is run on the server, unless run local set)
     
-    #region Silverlight DP_XYZ
-    
-#if SILVERLIGHT
-    public void DataPortal_Create(Guid id, LocalProxy<PhraseEdit>.CompletedHandler handler)
-    {
-      try
-      {
-        using (BypassPropertyChecks)
-        {
-          Id = id;
-          LanguageId = Guid.Empty;
-          Text = null;
-          Language = null;
-        }
-        handler(this, null);
-      }
-      catch (Exception ex)
-      {
-        handler(null, ex);
-      }
-    }
-#endif
-        #endregion
-    
-    #region old SL xyz nonsense
-    //    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-//    public override void DataPortal_Create(LocalProxy<PhraseEdit>.CompletedHandler handler)
-//    {
-//      try
-//      {
-//        using (BypassPropertyChecks)
-//        {
-//          Id = Guid.NewGuid();
-//          LanguageId = Guid.Empty;
-//          Text = null;
-//          //Language = null;
-//          Language = DataPortal.CreateChild<LanguageEdit>();
-//        }
-//        handler(this, null);
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-
-//    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-//    public void DataPortal_Create(Guid id, LocalProxy<PhraseEdit>.CompletedHandler handler)
-//    {
-//      try
-//      {
-//        using (BypassPropertyChecks)
-//        {
-//          Id = id;
-//          LanguageId = Guid.Empty;
-//          Text = null;
-//          //Language = null;
-//          Language = DataPortal.CreateChild<LanguageEdit>();
-//        }
-//        handler(this, null);
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-
-//    //public void DataPortal_Fetch(SingleCriteria<PhraseEdit, Guid> criteria) //Guid SingleCriteria
-//    [EditorBrowsable(EditorBrowsableState.Never)]
-//    public void DataPortal_Fetch(Guid criteria, LocalProxy<PhraseEdit>.CompletedHandler handler) //Guid SingleCriteria
-//    {
-//      Guid id = criteria;
-
-//      try
-//      {
-//        Result<PhraseDto> result = PhraseDal.Fetch(id);
-//        if (!result.IsSuccess || result.IsError)
-//          throw new FetchFailedException(result.Msg);
-//        PhraseDto dto = result.Obj;
-//        LoadFromDtoBypassPropertyChecks(dto);
-//        handler(this, null);
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-
-//    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-//    public override void DataPortal_Insert(LocalProxy<PhraseEdit>.CompletedHandler handler)
-//    {
-//      try
-//      {
-//        //Dal is responsible for setting new Id
-//        //PhraseDto dto = new PhraseDto()
-//        //{
-//        //  Id = this.Id,
-//        //  LanguageId = this.LanguageId,
-//        //  Text = this.Text
-//        //};
-//        var dto = CreateDto();
-//        var result = PhraseDal.Insert(dto);
-//        if (!result.IsSuccess || result.IsError)
-//          throw new InsertFailedException(result.Msg);
-
-//        Id = dto.Id;
-//        handler(this, null);
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-
-//    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-//    public override void DataPortal_Update(LocalProxy<PhraseEdit>.CompletedHandler handler)
-//    {
-//      try
-//      {
-//        var dto = CreateDto();
-//        Result<PhraseDto> result = PhraseDal.Update(dto);
-//        if (!result.IsSuccess || result.IsError)
-//          throw new UpdateFailedException(result.Msg);
-
-//        handler(this, null);
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-
-//    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-//    public override void DataPortal_DeleteSelf(LocalProxy<PhraseEdit>.CompletedHandler handler)
-//    {
-//      try
-//      {
-//        var result = PhraseDal.Delete(ReadProperty<Guid>(IdProperty));
-//        if (!result.IsSuccess || result.IsError)
-//          throw new DeleteFailedException(result.Msg);
-
-//        handler(this, null);
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-
-//    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-//    public void DataPortal_Delete(Guid criteriaId, LocalProxy<PhraseEdit>.CompletedHandler handler)
-//    {
-//      var id = criteriaId;
-//      try
-//      {
-//        var result = PhraseDal.Delete(id);
-//        if (!result.IsSuccess || result.IsError)
-//          throw new DeleteFailedException(result.Msg);
-
-//      }
-//      catch (Exception ex)
-//      {
-//        handler(null, ex);
-//      }
-//    }
-//#endif
-    #endregion
-
     #region Wpf DP_XYZ
 #if !SILVERLIGHT
 
-    protected override void DataPortal_Create()
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = Guid.NewGuid();
-        LanguageId = Guid.Empty;
-        Text = null;
-        Language = null;
-      }
-    }
-    protected void DataPortal_Create(Guid id)
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = id;
-        LanguageId = Guid.Empty;
-        Text = null;
-        Language = null;
-      }
-    }
     protected void DataPortal_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -383,7 +224,9 @@ namespace LearnLanguages.Business
         var result = phraseDal.Insert(dto);
         if (!result.IsSuccess || result.IsError)
           throw new InsertFailedException(result.Msg);
+        SetIdBypassPropertyChecks(result.Obj.Id);
       }
+
     }
     protected override void DataPortal_Update()
     {
@@ -401,6 +244,7 @@ namespace LearnLanguages.Business
                                                    );
         if (!result.IsSuccess || result.IsError)
           throw new UpdateFailedException(result.Msg);
+        SetIdBypassPropertyChecks(result.Obj.Id);
       }
     }
     protected override void DataPortal_DeleteSelf()
@@ -429,14 +273,18 @@ namespace LearnLanguages.Business
     
     #region Child DP_XYZ
 
+    /// <summary>
+    /// DOES NOT LOADDEFAULTS()!!!!!
+    /// Child defaults are all empty/null;, not loaded as DalResources.Default_________.
+    /// </summary>
     public void Child_Create(Guid id)
     {
       using (BypassPropertyChecks)
       {
-        this.Id = id;
-        this.Text = "";
-        this.LanguageId = Guid.Empty;
-        this.Language = null;
+        Id = id;
+        Text = null;
+        LanguageId = Guid.Empty;
+        Language = null;
       }
     }
 

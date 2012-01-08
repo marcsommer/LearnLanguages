@@ -7,8 +7,13 @@ namespace LearnLanguages.DataAccess.Mock
 {
   public static class MockDb
   {
-    public static Guid EnglishId = new Guid("C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9");
+    public static Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
+
+    public static Guid EnglishId = Guid.Parse(DalResources.DefaultEnglishLanguageId);
+    public static string EnglishText = DalResources.DefaultEnglishLanguageText;
+
     public static Guid SpanishId = new Guid("DA5AA804-E59F-4608-988E-59C7923BE383");
+    public static string SpanishText = "Spanish";
 
     public static Guid IdHello = new Guid("00D626ED-3EAC-4729-B276-5B9368DA26AD");
     public static Guid IdLongPhrase = new Guid("32D6CB9A-CBFF-47AE-91BB-396FAA7A3506");
@@ -31,13 +36,13 @@ namespace LearnLanguages.DataAccess.Mock
         new LanguageDto()
         {
           Id = EnglishId,
-          Text = "English"
+          Text = EnglishText
         },
 
         new LanguageDto()
         {
           Id = SpanishId,
-          Text = "Spanish"
+          Text = SpanishText
         }
       };
     }
@@ -74,6 +79,15 @@ namespace LearnLanguages.DataAccess.Mock
           Text = "dog"
         }
       };
+    }
+
+    public static bool ContainsLanguageId(Guid id)
+    {
+      var results = from l in Languages
+                    where l.Id == id
+                    select l;
+
+      return results.Count() == 1;
     }
   }
 }

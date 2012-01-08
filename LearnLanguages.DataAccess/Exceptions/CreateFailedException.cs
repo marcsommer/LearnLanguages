@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class CreateFailedException : Exception
   {
     public CreateFailedException()
-      : base(DalResources.Dal_CreateFailedErrorMessage)
+      : base(DalResources.ErrorMsgCreateFailed)
     {
 
     }

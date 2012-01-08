@@ -5,6 +5,7 @@ namespace LearnLanguages.Business.Bases
     Csla.BusinessListBase<T, C>
     where T : Bases.BusinessListBase<T, C, TDto>
     where C : Bases.BusinessBase<C, TDto>
+    where TDto : class
   {
 
   }

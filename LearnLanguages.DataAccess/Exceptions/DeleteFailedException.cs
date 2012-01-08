@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class DeleteFailedException : Exception
   {
     public DeleteFailedException()
-      : base(DalResources.Dal_DeleteFailedErrorMessage)
+      : base(DalResources.ErrorMsgDeleteFailed)
     {
 
     }
