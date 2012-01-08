@@ -5,33 +5,52 @@ using Microsoft.Silverlight.Testing;
 using LearnLanguages.DataAccess.Mock;
 using LearnLanguages.DataAccess.Exceptions;
 
-namespace LearnLanguages.Client.Tests
+namespace LearnLanguages.Silverlight.Tests
 {
   [TestClass]
   public class LanguageEditTests : Microsoft.Silverlight.Testing.SilverlightTest
   {
     [TestMethod]
+    [Asynchronous]
     public void CREATE_NEW()
     {
+      var isCreated = false;
+      LanguageEdit languageEdit = null;
       LanguageEdit.NewLanguageEdit( (s,r) =>
         {
-          Assert.IsNull(r.Error);
-          LanguageEdit newLanguageEdit = r.Object;
-          Assert.IsNotNull(newLanguageEdit);
+          if (r.Error != null)
+            throw r.Error;
+
+          languageEdit = r.Object;
+          isCreated = true;
         });
+      EnqueueConditional(() => isCreated);
+      EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
+                      () => { Assert.IsNull(null); });
+      EnqueueTestComplete();
     }
 
     [TestMethod]
+    [Asynchronous]
     public void CREATE_NEW_WITH_ID()
     {
       Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
-      LanguageEdit.NewLanguageEdit(id, (s, r) =>
-      {
-        Assert.IsNull(r.Error);
-        LanguageEdit newLanguageEdit = r.Object;
-        Assert.IsNotNull(newLanguageEdit);
-        Assert.AreEqual(id, newLanguageEdit.Id);
-      });
+    
+      var isCreated = false;
+      LanguageEdit languageEdit = null;
+      LanguageEdit.NewLanguageEdit(id, (s,r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          languageEdit = r.Object;
+          isCreated = true;
+        });
+      EnqueueConditional(() => isCreated);
+      EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
+                      () => { Assert.IsNull(null); },
+                      () => { Assert.AreEqual(id, languageEdit.Id); });
+      EnqueueTestComplete();
     }
 
     [TestMethod]
@@ -78,6 +97,8 @@ namespace LearnLanguages.Client.Tests
       LanguageEdit.NewLanguageEdit((s, r) =>
       {
         newError = r.Error;
+        if (newError != null)
+          throw newError;
         languageEdit = r.Object;
         isNewed = true;
 
@@ -88,12 +109,16 @@ namespace LearnLanguages.Client.Tests
         languageEdit.BeginSave((s2, r2) =>
         {
           savedError = r2.Error;
+          if (savedError != null)
+            throw savedError;
           savedLanguageEdit = r2.NewObject as LanguageEdit;
           isSaved = true;
           //GET (CONFIRM SAVE)
           LanguageEdit.GetLanguageEdit(savedLanguageEdit.Id, (s3, r3) =>
           {
             gottenError = r3.Error;
+            if (gottenError != null)
+              throw gottenError;
             gottenLanguageEdit = r3.Object;
             isGotten = true;
           });
@@ -119,7 +144,7 @@ namespace LearnLanguages.Client.Tests
 
     [TestMethod]
     [Asynchronous]
-    [ExpectedException(typeof(Csla.DataPortalException))]
+    [ExpectedException(typeof(ExpectedException))]
     public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
     {
       //INITIALIZE ERRORS TO EXCEPTION, BECAUSE EXPECT THEM TO BE NULL LATER
@@ -149,6 +174,8 @@ namespace LearnLanguages.Client.Tests
       LanguageEdit.NewLanguageEdit((s, r) =>
       {
         newError = r.Error;
+        if (newError != null)
+          throw newError;
         languageEdit = r.Object;
         isNewed = true;
 
@@ -159,12 +186,16 @@ namespace LearnLanguages.Client.Tests
         languageEdit.BeginSave((s2, r2) =>
         {
           savedError = r2.Error;
+          if (savedError != null)
+            throw savedError;
           savedLanguageEdit = r2.NewObject as LanguageEdit;
           isSaved = true;
           //GET (CONFIRM SAVE)
           LanguageEdit.GetLanguageEdit(savedLanguageEdit.Id, (s3, r3) =>
           {
             gottenError = r3.Error;
+            if (gottenError != null)
+              throw gottenError;
             gottenLanguageEdit = r3.Object;
             isGotten = true;
 
@@ -173,30 +204,29 @@ namespace LearnLanguages.Client.Tests
             gottenLanguageEdit.BeginSave((s4, r4) =>
             {
               deletedError = r4.Error;
+              if (deletedError != null)
+                throw deletedError;
+
               deletedLanguageEdit = r4.NewObject as LanguageEdit;
 
-              try
+              LanguageEdit.GetLanguageEdit(deletedLanguageEdit.Id, (s5, r5) =>
               {
-                LanguageEdit.GetLanguageEdit(deletedLanguageEdit.Id, (s5, r5) =>
-                {
-                  try
-                  {
-                    deleteConfirmedError = r5.Error;
-                    if (deleteConfirmedError != null)
-                      throw deleteConfirmedError;
-                  }
-                  catch (Csla.DataPortalException dpex)
-                  {
-                    var dummy = 5;
-                  }
-                  //deleteConfirmedLanguageEdit = r5.Object;
-                  isDeleteConfirmed = true;
-                });
-              }
-              catch (Csla.DataPortalException dpex)
-              {
-                var dummy = 5;
-              }
+                //try
+                //{
+                  deleteConfirmedError = r5.Error;
+                  if (deleteConfirmedError != null)
+                    throw new ExpectedException(deleteConfirmedError);
+                //}
+                //catch (Exception ex)
+                //{
+                //  isDeleteConfirmed = true;
+                //  throw deleteConfirmedError;
+                //}
+                
+                deleteConfirmedLanguageEdit = r5.Object;
+                isDeleteConfirmed = true;
+              });
+              
             });
           });
         });
@@ -224,6 +254,5 @@ namespace LearnLanguages.Client.Tests
 
       EnqueueTestComplete();
     }
-
   }
 }
