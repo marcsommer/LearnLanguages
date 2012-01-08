@@ -21,7 +21,6 @@ namespace LearnLanguages.DataAccess.Mock
       }
       return retResult;
     }
-
     public Result<LanguageDto> Fetch(Guid id)
     {
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
@@ -48,7 +47,6 @@ namespace LearnLanguages.DataAccess.Mock
       }
       return retResult;
     }
-
     public Result<LanguageDto> Update(LanguageDto dto)
     {
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
@@ -81,7 +79,6 @@ namespace LearnLanguages.DataAccess.Mock
       }
       return retResult;
     }
-
     public Result<LanguageDto> Insert(LanguageDto dto)
     {
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
@@ -112,7 +109,6 @@ namespace LearnLanguages.DataAccess.Mock
       }
       return retResult;
     }
-
     public Result<LanguageDto> Delete(Guid id)
     {
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
@@ -143,7 +139,6 @@ namespace LearnLanguages.DataAccess.Mock
       }
       return retResult;
     }
-
     public LearnLanguages.Result<ICollection<LanguageDto>> GetAll()
     {
       Result<ICollection<LanguageDto>> retResult = Result<ICollection<LanguageDto>>.Undefined(null);

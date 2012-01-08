@@ -97,6 +97,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PhraseEditTests.cs" />
     <Compile Include="LanguageEditTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExpectedException.cs" />

@@ -63,6 +63,7 @@ namespace LearnLanguages.Business
     public static void NewPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
     {
       DataPortal.BeginCreate<PhraseEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
+      //DataPortal.BeginCreate<PhraseEdit>(id, callback);
     }
 
     public static void GetPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
@@ -163,10 +164,33 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Data Access (This is run on the server, unless run local set)
- 
-//    #region Silverlight DP_XYZ
-//#if SILVERLIGHT
-//    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    
+    #region Silverlight DP_XYZ
+    
+#if SILVERLIGHT
+    public void DataPortal_Create(Guid id, LocalProxy<PhraseEdit>.CompletedHandler handler)
+    {
+      try
+      {
+        using (BypassPropertyChecks)
+        {
+          Id = id;
+          LanguageId = Guid.Empty;
+          Text = null;
+          Language = null;
+        }
+        handler(this, null);
+      }
+      catch (Exception ex)
+      {
+        handler(null, ex);
+      }
+    }
+#endif
+        #endregion
+    
+    #region old SL xyz nonsense
+    //    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 //    public override void DataPortal_Create(LocalProxy<PhraseEdit>.CompletedHandler handler)
 //    {
 //      try
@@ -307,7 +331,7 @@ namespace LearnLanguages.Business
 //      }
 //    }
 //#endif
-//    #endregion //Silverlight DP_XYZ
+    #endregion
 
     #region Wpf DP_XYZ
 #if !SILVERLIGHT
