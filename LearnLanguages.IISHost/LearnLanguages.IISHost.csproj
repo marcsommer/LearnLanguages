@@ -89,7 +89,9 @@
       <DependentUpon>Web.config_Uncompressed</DependentUpon>
     </None>
     <None Include="SlPortal.svc_Uncompressed" />
-    <Content Include="LearnLanguages.Silverlight.csproj" />
+    <Content Include="LearnLanguages.Silverlight.csproj">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="LearnLanguages.Silverlight.TestsTestPage.aspx" />
     <Content Include="LearnLanguages.Silverlight.TestsTestPage.html" />
     <Content Include="LearnLanguages.SilverlightTestPage.aspx" />
@@ -184,9 +186,17 @@
       <Project>{902EEF10-42A2-460D-87FE-EEDDC8ED6082}</Project>
       <Name>LearnLanguages.CompressedHost</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.EFCodeFirst\LearnLanguages.DataAccess.EFCodeFirst.csproj">
+      <Project>{70D3816F-99A2-4A7F-AA40-04D89621BBA4}</Project>
+      <Name>LearnLanguages.DataAccess.EFCodeFirst</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.DataAccess.Mock\LearnLanguages.DataAccess.Mock.csproj">
       <Project>{1C862615-4006-421E-97C9-46A138F461A3}</Project>
       <Name>LearnLanguages.DataAccess.Mock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess\LearnLanguages.DataAccess.csproj">
+      <Project>{63BBC54E-3AF9-40AE-9EA2-D72132D18A1B}</Project>
+      <Name>LearnLanguages.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

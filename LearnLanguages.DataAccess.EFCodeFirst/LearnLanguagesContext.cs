@@ -9,6 +9,12 @@ namespace LearnLanguages.DataAccess.EFCodeFirst
 {
   public class LearnLanguagesContext : DbContext
   {
+    public LearnLanguagesContext()
+      : base()
+    {
+
+    }
+
     public LearnLanguagesContext(string nameOrConnectionString)
       : base(nameOrConnectionString)
     {

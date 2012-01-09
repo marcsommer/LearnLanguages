@@ -16,6 +16,7 @@ namespace LearnLanguages.DataAccess.EFCodeFirst
       _Label = label;
       _NameOrConnectionString = nameOrConnectionString;
       Context = (C)Activator.CreateInstance(typeof(C), _NameOrConnectionString);
+      var debugLoc = Csla.ApplicationContext.LogicalExecutionLocation;
       Context.Database.Connection.Open();
     }
 
