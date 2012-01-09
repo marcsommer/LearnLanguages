@@ -108,18 +108,18 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        public static string DefaultLanguageText {
+        public static string DefaultNewLanguageText {
             get {
-                return ResourceManager.GetString("DefaultLanguageText", resourceCulture);
+                return ResourceManager.GetString("DefaultNewLanguageText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        public static string DefaultPhraseText {
+        public static string DefaultNewPhraseText {
             get {
-                return ResourceManager.GetString("DefaultPhraseText", resourceCulture);
+                return ResourceManager.GetString("DefaultNewPhraseText", resourceCulture);
             }
         }
         

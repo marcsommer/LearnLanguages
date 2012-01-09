@@ -147,7 +147,7 @@ namespace LearnLanguages.Business
       {
         Id = Guid.NewGuid();
         LanguageId = Guid.Parse(DalResources.DefaultLanguageId);
-        Text = DalResources.DefaultPhraseText;
+        Text = DalResources.DefaultNewPhraseText;
         Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
       }
     }
@@ -161,7 +161,7 @@ namespace LearnLanguages.Business
       {
         Id = id;
         LanguageId = Guid.Parse(DalResources.DefaultLanguageId);
-        Text = DalResources.DefaultPhraseText;
+        Text = DalResources.DefaultNewPhraseText;
         Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
       }
     }

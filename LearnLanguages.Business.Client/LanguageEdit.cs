@@ -128,7 +128,7 @@ namespace LearnLanguages.Business
       using (BypassPropertyChecks)
       {
         Id = Guid.NewGuid();
-        Text = DalResources.DefaultLanguageText;
+        Text = DalResources.DefaultNewLanguageText;
       }
     }
 
@@ -140,7 +140,7 @@ namespace LearnLanguages.Business
       using (BypassPropertyChecks)
       {
         Id = id;
-        Text = DalResources.DefaultLanguageText;
+        Text = DalResources.DefaultNewLanguageText;
       }
     }
 
