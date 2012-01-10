@@ -79,7 +79,7 @@ namespace LearnLanguages.DataAccess.Ef {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to True.
+        ///   Looks up a localized string similar to False.
         /// </summary>
         public static string DeleteAllExistingDataAndStartNewSeedData {
             get {

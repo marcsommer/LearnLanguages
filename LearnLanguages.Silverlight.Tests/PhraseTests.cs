@@ -342,5 +342,168 @@ namespace LearnLanguages.Silverlight.Tests
         EnqueueTestComplete();
       }
     }
+
+    [TestMethod]
+    [Asynchronous]
+    public void MAKE_PHRASE_WITH_REALLY_LONG_VARIED_TEXT()
+    {
+      #region var reallyLongText
+      var reallyLongText = @"asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`asd;flkjghweqrey8iuweqpoiuqtw[eoizsdfslknjvzxcknvl;/,asdmf;lkasdfj asldkf a/sldkf jwoieuofvahsdkj;fa;weio:KJSLDJIOWEJLKSJDFLWIUQOWUQ}R|)(_)(*+_)(*&^%$#@!~~!@#$%^&*()_+|}{POIUYTREWQASDFGHJKL:			ZXCVBNM<>? "" wijwfekjsdkfj sdfj zxcvbnm,./';lljhgfdsqwertyuiop[]\=-0987654321`";
+      #endregion
+      
+      //INITIALIZE ERRORS TO EXCEPTION, BECAUSE WE TEST IF THEY ARE NULL LATER
+      Exception newError = new Exception();
+      Exception savedError = new Exception();
+      Exception gottenError = new Exception();
+
+      PhraseEdit newPhraseEdit = null;
+      PhraseEdit savedPhraseEdit = null;
+      PhraseEdit gottenPhraseEdit = null;    
+  
+      var isNewed = false;
+      var isEdited = false;
+      var isSaved = false;
+      var isGotten = false;
+      
+      //NEW
+      PhraseEdit.NewPhraseEdit((s, r) =>
+      {
+        newError = r.Error;
+        if (newError != null)
+          throw newError;
+        newPhraseEdit = r.Object;
+        isNewed = true;
+
+        //EDIT
+        newPhraseEdit.Text = reallyLongText;
+        isEdited = true;
+
+        //SAVE
+        newPhraseEdit.BeginSave((s2, r2) =>
+        {
+          savedError = r2.Error;
+          if (savedError != null)
+            throw savedError;
+          savedPhraseEdit = r2.NewObject as PhraseEdit;
+          isSaved = true;
+          //GET (CONFIRM SAVE)
+          PhraseEdit.GetPhraseEdit(savedPhraseEdit.Id, (s3, r3) =>
+          {
+            gottenError = r3.Error;
+            if (gottenError != null)
+              throw gottenError;
+            gottenPhraseEdit = r3.Object;
+            isGotten = true;
+          });
+        });
+
+
+
+      });
+
+      EnqueueConditional(() => isNewed);
+      EnqueueConditional(() => isEdited);
+      EnqueueConditional(() => isSaved);
+      EnqueueConditional(() => isGotten);
+      EnqueueCallback(
+                      () => { Assert.IsNull(newError); },
+                      () => { Assert.IsNull(savedError); },
+                      () => { Assert.IsNull(gottenError); },
+                      () => { Assert.IsNotNull(newPhraseEdit); },
+                      () => { Assert.IsNotNull(savedPhraseEdit); },
+                      () => { Assert.IsNotNull(gottenPhraseEdit); },
+                      () => { Assert.AreEqual(savedPhraseEdit.Id, gottenPhraseEdit.Id); },
+                      () => { Assert.AreEqual(savedPhraseEdit.Text, gottenPhraseEdit.Text); });
+
+      EnqueueTestComplete();
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    public void MAKE_PHRASE_WITH_REALLY_REALLY_LONG_NUMERICAL_TEXT()
+    {
+      var maxLength = 300000;//worked
+      maxLength = 100000;//worked
+      maxLength = 30000; //just for a big number, to lessen time to do test.
+      var i = 0;
+      string reallyReallyLongText = "";
+      while (reallyReallyLongText.Length < maxLength)
+      {
+        reallyReallyLongText += i.ToString();
+        i++;
+        if (i == maxLength) //shouldn't happen, but no big deal if it does. It's just a reallyraeallyreallyreally long text.
+          break;
+      }
+      if (reallyReallyLongText.Length > maxLength)
+        reallyReallyLongText = reallyReallyLongText.Substring(0, maxLength);
+
+      //INITIALIZE ERRORS TO EXCEPTION, BECAUSE WE TEST IF THEY ARE NULL LATER
+      Exception newError = new Exception();
+      Exception savedError = new Exception();
+      Exception gottenError = new Exception();
+
+      PhraseEdit newPhraseEdit = null;
+      PhraseEdit savedPhraseEdit = null;
+      PhraseEdit gottenPhraseEdit = null;
+
+      var isNewed = false;
+      var isEdited = false;
+      var isSaved = false;
+      var isGotten = false;
+
+      //NEW
+      PhraseEdit.NewPhraseEdit((s, r) =>
+      {
+        newError = r.Error;
+        if (newError != null)
+          throw newError;
+        newPhraseEdit = r.Object;
+        isNewed = true;
+
+        //EDIT
+        newPhraseEdit.Text = reallyReallyLongText;
+        isEdited = true;
+
+        //SAVE
+        newPhraseEdit.BeginSave((s2, r2) =>
+        {
+          savedError = r2.Error;
+          if (savedError != null)
+            throw savedError;
+          savedPhraseEdit = r2.NewObject as PhraseEdit;
+          isSaved = true;
+          //GET (CONFIRM SAVE)
+          PhraseEdit.GetPhraseEdit(savedPhraseEdit.Id, (s3, r3) =>
+          {
+            gottenError = r3.Error;
+            if (gottenError != null)
+              throw gottenError;
+            gottenPhraseEdit = r3.Object;
+            isGotten = true;
+          });
+        });
+
+
+
+      });
+
+      EnqueueConditional(() => isNewed);
+      EnqueueConditional(() => isEdited);
+      EnqueueConditional(() => isSaved);
+      EnqueueConditional(() => isGotten);
+      EnqueueCallback(
+                      () => { Assert.IsNull(newError); },
+                      () => { Assert.IsNull(savedError); },
+                      () => { Assert.IsNull(gottenError); },
+                      () => { Assert.IsNotNull(newPhraseEdit); },
+                      () => { Assert.IsNotNull(savedPhraseEdit); },
+                      () => { Assert.IsNotNull(gottenPhraseEdit); },
+                      () => { Assert.AreEqual(savedPhraseEdit.Id, gottenPhraseEdit.Id); },
+                      () => { Assert.AreEqual(reallyReallyLongText.Length, gottenPhraseEdit.Text.Length); },
+                      () => { Assert.AreEqual(savedPhraseEdit.Text, gottenPhraseEdit.Text); });
+
+      EnqueueTestComplete();
+    }
+
   }
 }

@@ -106,7 +106,6 @@
     <Compile Include="Interfaces\IInitializeAsync.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\ISaveAsync.cs" />
-    <Compile Include="LanguageManager.cs" />
     <Compile Include="LogCategory.cs" />
     <Compile Include="LogPriority.cs" />
     <Compile Include="MagicStringsList.cs" />

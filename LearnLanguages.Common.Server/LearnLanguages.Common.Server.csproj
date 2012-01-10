@@ -136,9 +136,6 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\ISaveAsync.cs">
       <Link>Interfaces\ISaveAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\LanguageManager.cs">
-      <Link>LanguageManager.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\LogCategory.cs">
       <Link>LogCategory.cs</Link>
     </Compile>

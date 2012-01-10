@@ -299,7 +299,7 @@ namespace LearnLanguages.Business
           var dto = CreateDto();
           var result = phraseDal.Insert(dto);
           if (result.IsError)
-            throw new InsertFailedException(result.Msg); //hack: string literal exception message
+            throw new InsertFailedException(result.Msg);
           Id = result.Obj.Id;
         }
       }
@@ -316,7 +316,7 @@ namespace LearnLanguages.Business
           var dto = CreateDto();
           var result = phraseDal.Update(dto);
           if (result.IsError)
-            throw new UpdateFailedException(result.Msg); //hack: string literal exception message
+            throw new UpdateFailedException(result.Msg); 
           Id = result.Obj.Id;
         }
       }
@@ -330,7 +330,7 @@ namespace LearnLanguages.Business
 
         var result = phraseDal.Delete(Id);
         if (result.IsError)
-          throw new DeleteFailedException(result.Msg); //hack: string literal exception message
+          throw new DeleteFailedException(result.Msg); 
       }
     }
 

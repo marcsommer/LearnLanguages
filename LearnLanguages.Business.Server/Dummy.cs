@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LearnLanguages.Business.Server
+namespace LearnLanguages.Business
 {
-  public class Dummy
+  /// <summary>
+  /// this class is apparently needed to compile this project.  Otherwise, all other classes are links to other files and it doesn't compile properly.
+  /// </summary>
+  internal class Dummy
   {
-    //TODO: DELETE THIS DUMMY CLASS AND SEE IF COMPILES (ON DOWN THE ROOOOAD).  
   }
 }
