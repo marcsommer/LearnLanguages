@@ -17,5 +17,11 @@ namespace LearnLanguages.DataAccess.Exceptions
     {
 
     }
+
+    public FetchFailedException(Exception innerException)
+      : base(DalResources.ErrorMsgFetchFailed, innerException)
+    {
+
+    }
   }
 }

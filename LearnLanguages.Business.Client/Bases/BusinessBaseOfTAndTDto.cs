@@ -23,8 +23,7 @@ namespace LearnLanguages.Business.Bases
 
     public abstract TDto CreateDto();
     public abstract void LoadFromDtoBypassPropertyChecks(TDto dto);
-    protected abstract void LoadDefaults();
-    protected abstract void LoadDefaults(Guid id);
+
     protected virtual void SetIdBypassPropertyChecks(Guid id)
     {
       using (BypassPropertyChecks)
@@ -37,45 +36,6 @@ namespace LearnLanguages.Business.Bases
 
     #region DP_XYZ (All: .net, sl, child)
 
-#if !SILVERLIGHT
-    protected override void DataPortal_Create()
-    {
-      LoadDefaults();
-    }
-    protected virtual void DataPortal_Create(Guid id)
-    {
-      LoadDefaults(id);
-    }
-#endif
-
-#if SILVERLIGHT
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public override void DataPortal_Create(LocalProxy<C>.CompletedHandler handler)
-    {
-      try
-      {
-        LoadDefaults();
-        handler((C)this, null);
-      }
-      catch (Exception ex)
-      {
-        handler(null, ex);
-      }
-    }
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public virtual void DataPortal_Create(Guid id, LocalProxy<C>.CompletedHandler handler)
-    {
-      try
-      {
-        LoadDefaults(id);
-        handler((C)this, null);
-      }
-      catch (Exception ex)
-      {
-        handler(null, ex);
-      }
-    }
-#endif
 
     public virtual void Child_Create(TDto dto)
     {

@@ -96,6 +96,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GeneralDataAccessException.cs">
       <Link>Exceptions\GeneralDataAccessException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetAllFailedException.cs">
+      <Link>Exceptions\GetAllFailedException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\InsertFailedException.cs">
       <Link>Exceptions\InsertFailedException.cs</Link>
     </Compile>

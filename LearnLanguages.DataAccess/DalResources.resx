@@ -152,6 +152,12 @@
   <data name="ErrorMsgFetchFailed" xml:space="preserve">
     <value>The Fetch operation failed.</value>
   </data>
+  <data name="ErrorMsgGeneralDataAccessException" xml:space="preserve">
+    <value>GeneralDataAccessException.  See Inner Exception for details.</value>
+  </data>
+  <data name="ErrorMsgGetAllFailed" xml:space="preserve">
+    <value>The GetAll operation failed.</value>
+  </data>
   <data name="ErrorMsgIdNotFound" xml:space="preserve">
     <value>The Id was not found.</value>
   </data>

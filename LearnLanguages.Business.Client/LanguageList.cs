@@ -16,6 +16,11 @@ namespace LearnLanguages.Business
     }
 
 #if !SILVERLIGHT
+    public static LanguageList GetAll()
+    {
+      return DataPortal.Fetch<LanguageList>();
+    }
+
     public void DataPortal_Fetch()
     {
       using (var dalManager = DalFactory.GetDalManager())

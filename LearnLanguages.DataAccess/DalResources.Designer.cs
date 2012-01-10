@@ -160,6 +160,24 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GeneralDataAccessException.  See Inner Exception for details..
+        /// </summary>
+        public static string ErrorMsgGeneralDataAccessException {
+            get {
+                return ResourceManager.GetString("ErrorMsgGeneralDataAccessException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The GetAll operation failed..
+        /// </summary>
+        public static string ErrorMsgGetAllFailed {
+            get {
+                return ResourceManager.GetString("ErrorMsgGetAllFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Id was not found..
         /// </summary>
         public static string ErrorMsgIdNotFound {

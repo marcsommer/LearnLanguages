@@ -74,53 +74,67 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueCallback(
                       () => { Assert.IsNotNull(newPhraseEdit); },
                       () => { Assert.IsNull(newError); },
-                      () => { Assert.AreEqual(Guid.Parse(DalResources.DefaultLanguageId), newPhraseEdit.LanguageId); },
+                      () => { Assert.AreEqual(_EnglishId, newPhraseEdit.LanguageId); },
                       () => { Assert.IsNotNull(newPhraseEdit.Language); }
                       );
       EnqueueTestComplete();
     }
 
-    [TestMethod]
-    [Asynchronous]
-    public void CREATE_NEW_WITH_ID()
-    {
-      Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
+    //[TestMethod]
+    //[Asynchronous]
+    //public void CREATE_NEW_WITH_ID()
+    //{
+    //  Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
     
-      var isCreated = false;
-      PhraseEdit PhraseEdit = null;
-      PhraseEdit.NewPhraseEdit(id, (s,r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+    //  var isCreated = false;
+    //  PhraseEdit PhraseEdit = null;
+    //  PhraseEdit.NewPhraseEdit(id, (s,r) =>
+    //    {
+    //      if (r.Error != null)
+    //        throw r.Error;
 
-          PhraseEdit = r.Object;
-          isCreated = true;
-        });
-      EnqueueConditional(() => isCreated);
-      EnqueueCallback(() => { Assert.IsNotNull(PhraseEdit); },
-                      () => { Assert.IsNull(null); },
-                      () => { Assert.AreEqual(id, PhraseEdit.Id); });
-      EnqueueTestComplete();
-    }
+    //      PhraseEdit = r.Object;
+    //      isCreated = true;
+    //    });
+    //  EnqueueConditional(() => isCreated);
+    //  EnqueueCallback(() => { Assert.IsNotNull(PhraseEdit); },
+    //                  () => { Assert.IsNull(null); },
+    //                  () => { Assert.AreEqual(id, PhraseEdit.Id); });
+    //  EnqueueTestComplete();
+    //}
 
     [TestMethod]
     [Asynchronous]
+    [Tag("pget")]
     public void GET()
     {
-      Guid testId = SeedData.IdHello;
+      Guid testId = Guid.Empty;
+      var allLoaded = false;
       var isLoaded = false;
-      Exception error = null;
+      Exception getAllError = new Exception();
+      Exception error = new Exception();
       PhraseEdit PhraseEdit = null;
 
-      PhraseEdit.GetPhraseEdit(testId, (s, r) =>
-      {
-        error = r.Error;
-        PhraseEdit = r.Object;
-        isLoaded = true;
-      });
+      PhraseList.GetAll((s1, r1) =>
+        {
+          getAllError = r1.Error;
+          if (getAllError != null)
+            throw r1.Error;
+          testId = r1.Object.First().Id;
+          allLoaded = true;
+          PhraseEdit.GetPhraseEdit(testId, (s, r) =>
+          {
+            error = r.Error;
+            PhraseEdit = r.Object;
+            isLoaded = true;
+          });
+        });
+
 
       EnqueueConditional(() => isLoaded);
+      EnqueueConditional(() => allLoaded);
       EnqueueCallback(() => { Assert.IsNull(error); },
+                      () => { Assert.IsNull(getAllError); },
                       () => { Assert.IsNotNull(PhraseEdit); },
                       () => { Assert.AreEqual(testId, PhraseEdit.Id); });
       EnqueueTestComplete();

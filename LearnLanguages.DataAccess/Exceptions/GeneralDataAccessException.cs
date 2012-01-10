@@ -17,5 +17,11 @@ namespace LearnLanguages.DataAccess.Exceptions
 
     }
 
+    public GeneralDataAccessException(Exception innerException)
+      : base(DalResources.ErrorMsgGeneralDataAccessException, innerException)
+    {
+
+    }
+
   }
 }

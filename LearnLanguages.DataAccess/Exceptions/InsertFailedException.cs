@@ -17,5 +17,11 @@ namespace LearnLanguages.DataAccess.Exceptions
     {
 
     }
+
+    public InsertFailedException(Exception innerException)
+      : base(DalResources.ErrorMsgInsertFailed, innerException)
+    {
+
+    }
   }
 }

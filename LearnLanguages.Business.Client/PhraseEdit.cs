@@ -56,16 +56,17 @@ namespace LearnLanguages.Business
       //DataPortal.BeginCreate<PhraseEdit>(callback, DataPortal.ProxyModes.LocalOnly);
       DataPortal.BeginCreate<PhraseEdit>(callback);
     }
-    /// <summary>
-    /// This happens DataPortal.ProxyModes.LocalOnly
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="callback"></param>
-    public static void NewPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
-    {
-      //DataPortal.BeginCreate<PhraseEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<PhraseEdit>(id, callback);
-    }
+
+    ///// <summary>
+    ///// This happens DataPortal.ProxyModes.LocalOnly
+    ///// </summary>
+    ///// <param name="id"></param>
+    ///// <param name="callback"></param>
+    //public static void NewPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
+    //{
+    //  DataPortal.BeginCreate<PhraseEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
+    //  //DataPortal.BeginCreate<PhraseEdit>(id, callback);
+    //}
 
     public static void GetPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
     {
@@ -141,26 +142,12 @@ namespace LearnLanguages.Business
     /// <summary>
     /// Loads the default properties, including generating a new Id, inside of a using (BypassPropertyChecks) block.
     /// </summary>
-    protected override void LoadDefaults()
+    private void LoadDefaults()
     {
       using (BypassPropertyChecks)
       {
         Id = Guid.NewGuid();
-        LanguageId = Guid.Parse(DalResources.DefaultLanguageId);
-        Text = DalResources.DefaultNewPhraseText;
-        Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
-      }
-    }
-
-    /// <summary>
-    /// Loads the default properties, using the given id parameter, inside of a using (BypassPropertyChecks) block.
-    /// </summary>
-    protected override void LoadDefaults(Guid id)
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = id;
-        LanguageId = Guid.Parse(DalResources.DefaultLanguageId);
+        //LanguageId = LanguageEdit.GetLanguageEdit
         Text = DalResources.DefaultNewPhraseText;
         Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
       }
@@ -193,14 +180,21 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Data Access (This is run on the server, unless run local set)
-    
 
     #region Wpf DP_XYZ
 #if !SILVERLIGHT
+
     protected override void DataPortal_Create()
     {
-      //todo: tired...need to do this..left off going through getting phraseedit tests working.
-      base.DataPortal_Create();
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.New(null);
+        if (!result.IsSuccess || result.IsError)
+          throw new CreateFailedException(result.Msg);
+        PhraseDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
     }
 
     protected void DataPortal_Fetch(Guid id)
@@ -278,54 +272,8 @@ namespace LearnLanguages.Business
     #endregion //Wpf DP_XYZ
     
     #region Child DP_XYZ
-
-    /// <summary>
-    /// DOES NOT LOADDEFAULTS()!!!!!
-    /// Child defaults are all empty/null;, not loaded as DalResources.Default_________.
-    /// </summary>
-    public void Child_Create(Guid id)
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = id;
-        Text = null;
-        LanguageId = Guid.Empty;
-        Language = null;
-      }
-    }
-
-#if SILVERLIGHT
-    /// <summary>
-    /// Just throws exception.  I assume this will not be run.
-    /// </summary>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(Guid id)
-    {
-      //TODO: TAKE OUT CHILD FETCH IN SILVERLIGHT BLOCK WHEN I KNOW THAT CHILD FETCH ALWAYS RUNS ON SERVER
-      throw new Exception("Child_Fetch has been executed on silverlight client.  I assumed this wouldn't happen.");
-      //var result = PhraseDal.Fetch(id);
-      //if (result.IsError)
-      //  throw new FetchFailedException(result.Msg);
-      //PhraseDto dto = result.Obj;
-      //LoadFromDtoBypassPropertyChecks(dto);
-    }
-#endif
     
 #if !SILVERLIGHT
-     
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(PhraseDto dto)
-    {
-      //Debug
-      //throw new Exception("Just throwing this cause I wanna see execution location. " +
-      //                    "Should be 'Server'.  Here is what it actually is:       " +
-      //                    Csla.ApplicationContext.LogicalExecutionLocation.ToString());
-
-      //if (Csla.ApplicationContext.LogicalExecutionLocation != ApplicationContext.LogicalExecutionLocations.Server)
-      //  throw new Exception();
-      throw new Exception("debug: why am i calling this method: childfetch(dto)?");
-      LoadFromDtoBypassPropertyChecks(dto);
-    }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Fetch(Guid id)
@@ -340,6 +288,7 @@ namespace LearnLanguages.Business
         LoadFromDtoBypassPropertyChecks(dto);
       }
     }
+
     public void Child_Insert()
     {   
       using (var dalManager = DalFactory.GetDalManager())

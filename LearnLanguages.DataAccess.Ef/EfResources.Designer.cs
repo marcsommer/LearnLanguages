@@ -70,6 +70,15 @@ namespace LearnLanguages.DataAccess.Ef {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string DefaultLanguageText {
+            get {
+                return ResourceManager.GetString("DefaultLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to True.
         /// </summary>
         public static string DeleteAllExistingDataAndStartNewSeedData {

@@ -70,28 +70,28 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueTestComplete();
     }
 
-    [TestMethod]
-    [Asynchronous]
-    public void CREATE_NEW_WITH_ID()
-    {
-      Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
+    //[TestMethod]
+    //[Asynchronous]
+    //public void CREATE_NEW_WITH_ID()
+    //{
+    //  Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
     
-      var isCreated = false;
-      LanguageEdit languageEdit = null;
-      LanguageEdit.NewLanguageEdit(id, (s,r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+    //  var isCreated = false;
+    //  LanguageEdit languageEdit = null;
+    //  LanguageEdit.NewLanguageEdit(id, (s,r) =>
+    //    {
+    //      if (r.Error != null)
+    //        throw r.Error;
 
-          languageEdit = r.Object;
-          isCreated = true;
-        });
-      EnqueueConditional(() => isCreated);
-      EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
-                      () => { Assert.IsNull(null); },
-                      () => { Assert.AreEqual(id, languageEdit.Id); });
-      EnqueueTestComplete();
-    }
+    //      languageEdit = r.Object;
+    //      isCreated = true;
+    //    });
+    //  EnqueueConditional(() => isCreated);
+    //  EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
+    //                  () => { Assert.IsNull(null); },
+    //                  () => { Assert.AreEqual(id, languageEdit.Id); });
+    //  EnqueueTestComplete();
+    //}
 
     [TestMethod]
     [Asynchronous]

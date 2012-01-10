@@ -120,6 +120,10 @@
   <data name="DatabaseNameNotFound" xml:space="preserve">
     <value>The database name was not found ({0}).</value>
   </data>
+  <data name="DefaultLanguageText" xml:space="preserve">
+    <value>English</value>
+    <comment>Newly created phrases are populated with the id of the Language that has this as its text.</comment>
+  </data>
   <data name="DeleteAllExistingDataAndStartNewSeedData" xml:space="preserve">
     <value>True</value>
     <comment>warning, this will delete all existing data</comment>

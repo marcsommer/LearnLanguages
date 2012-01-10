@@ -17,5 +17,11 @@ namespace LearnLanguages.DataAccess.Exceptions
     {
 
     }
+
+    public DeleteFailedException(Exception innerException)
+      : base(DalResources.ErrorMsgDeleteFailed, innerException)
+    {
+
+    }
   }
 }

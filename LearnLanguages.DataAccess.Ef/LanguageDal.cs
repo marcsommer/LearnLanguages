@@ -6,15 +6,13 @@ using Csla.Data;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 
-
-
 namespace LearnLanguages.DataAccess.Ef
 {
   public class LanguageDal : ILanguageDal
   {
     public Result<LanguageDto> New(object criteria)
     {
-      throw new NotImplementedException("Ef.LanguageDal.New(object)");
+      throw new NotImplementedException("Ef.LanguageDal.New(object criteria)");
       //Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       //try
       //{
@@ -57,7 +55,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<LanguageDto>.FailureWithInfo(null, ex);
+        retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.FetchFailedException(ex));
       }
       return retResult;
     }
@@ -93,7 +91,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<LanguageDto>.FailureWithInfo(null, ex);
+        retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.UpdateFailedException(ex));
       }
       return retResult;
     }
@@ -129,7 +127,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<LanguageDto>.FailureWithInfo(null, ex);
+        retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.InsertFailedException(ex));
       }
       return retResult;
     }
@@ -163,7 +161,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<LanguageDto>.FailureWithInfo(null, ex);
+        retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException(ex));
       }
       return retResult;
     }
@@ -191,7 +189,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<ICollection<LanguageDto>>.FailureWithInfo(null, ex);
+        retResult = Result<ICollection<LanguageDto>>.FailureWithInfo(null, new Exceptions.GetAllFailedException(ex));
       }
       return retResult;
     }

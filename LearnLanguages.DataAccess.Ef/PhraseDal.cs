@@ -12,23 +12,23 @@ namespace LearnLanguages.DataAccess.Ef
   {
     public Result<PhraseDto> New(object criteria)
     {
-      throw new NotImplementedException("Ef.PhraseDal.New(object)");
-      //Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
-      //try
-      //{
-      //  PhraseDto newPhraseDto = new PhraseDto()
-      //  {
-      //    Id = Guid.NewGuid(),
-      //    Text = DalResources.DefaultNewPhraseText,
-      //    LanguageId = 
-      //  };
-      //  retResult = Result<PhraseDto>.Success(newPhraseDto);
-      //}
-      //catch (Exception ex)
-      //{
-      //  retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
-      //}
-      //return retResult;
+      //throw new NotImplementedException("Ef.PhraseDal.New(object)");
+      Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
+      try
+      {
+        PhraseDto newPhraseDto = new PhraseDto()
+        {
+          Id = Guid.NewGuid(),
+          Text = DalResources.DefaultNewPhraseText,
+          LanguageId = GetDefaultLanguageId()
+        };
+        retResult = Result<PhraseDto>.Success(newPhraseDto);
+      }
+      catch (Exception ex)
+      {
+        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.CreateFailedException(ex));
+      }
+      return retResult;
     }
     public Result<PhraseDto> Fetch(Guid id)
     {
@@ -55,7 +55,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException(ex));
       }
       return retResult;
     }
@@ -92,7 +92,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.UpdateFailedException(ex));
       }
       return retResult;
     }
@@ -128,7 +128,7 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.InsertFailedException(ex));
       }
       return retResult;
     }
@@ -162,11 +162,10 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception ex)
       {
-        retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException(ex));
       }
       return retResult;
     }
-
     public Result<ICollection<PhraseDto>> GetAll()
     {
       Result<ICollection<PhraseDto>> retResult = Result<ICollection<PhraseDto>>.Undefined(null);
@@ -193,6 +192,28 @@ namespace LearnLanguages.DataAccess.Ef
         retResult = Result<ICollection<PhraseDto>>.FailureWithInfo(null, ex);
       }
       return retResult;
+    }
+
+    private Guid GetDefaultLanguageId()
+    {
+      Guid retDefaultLanguageId;
+
+      using (var ctx = LearnLanguagesContextManager.GetManager())
+      {
+        try
+        {
+
+        retDefaultLanguageId = (from defaultLanguage in ctx.ObjectContext.LanguageDatas
+                                where defaultLanguage.Text == EfResources.DefaultLanguageText
+                                select defaultLanguage).First().Id;
+        }
+        catch (Exception ex)
+        {
+          throw new Exceptions.GeneralDataAccessException(ex);
+        }
+      }
+
+      return retDefaultLanguageId;
     }
   }
 }

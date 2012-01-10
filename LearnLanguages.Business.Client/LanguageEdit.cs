@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Csla;
 using Csla.Serialization;
 using Csla.DataPortalClient;
@@ -26,19 +27,45 @@ namespace LearnLanguages.Business
     {
       DataPortal.BeginCreate<LanguageEdit>(callback, DataPortal.ProxyModes.LocalOnly);
     }
-    /// <summary>
-    /// This happens DataPortal.ProxyModes.LocalOnly
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="callback"></param>
-    public static void NewLanguageEdit(Guid id, EventHandler<DataPortalResult<LanguageEdit>> callback)
-    {
-      DataPortal.BeginCreate<LanguageEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-    }
+    ///// <summary>
+    ///// This happens DataPortal.ProxyModes.LocalOnly
+    ///// </summary>
+    ///// <param name="id"></param>
+    ///// <param name="callback"></param>
+    //public static void NewLanguageEdit(Guid id, EventHandler<DataPortalResult<LanguageEdit>> callback)
+    //{
+    //  DataPortal.BeginCreate<LanguageEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
+    //}
 
     public static void GetLanguageEdit(Guid id, EventHandler<DataPortalResult<LanguageEdit>> callback)
     {
       DataPortal.BeginFetch<LanguageEdit>(id, callback);
+    }
+
+    public static void GetDefaultLanguageId(EventHandler<DataPortalResult<Guid>> callback)
+    {
+      LanguageList.GetAll((s, r) =>
+        {
+          DataAccess.Exceptions.GeneralDataAccessException exception = null;
+          if (r.Error != null)
+            throw new DataAccess.Exceptions.GetAllFailedException();
+          var allLanguages = r.Object;
+          Guid defaultLanguageId = Guid.Empty;
+          try
+          {
+            defaultLanguageId = (from language in allLanguages
+                                 where language.Text == DalResources.DefaultEnglishLanguageText
+                                 select language).First().Id;
+          }
+          catch (Exception ex)
+          {
+            exception = new DataAccess.Exceptions.GeneralDataAccessException(ex);
+          }
+          finally
+          {
+            callback(null, new DataPortalResult<Guid>(defaultLanguageId, exception, null));
+          }
+        });
     }
 
 #endif
@@ -60,6 +87,23 @@ namespace LearnLanguages.Business
     public static LanguageEdit GetLanguageEdit(Guid id)
     {
       return DataPortal.Fetch<LanguageEdit>(id);
+    }
+
+    public static Guid GetDefaultLanguageId()
+    {
+      var allLanguages = LanguageList.GetAll();
+      Guid defaultLanguageId = Guid.Empty;
+      try
+      {
+        defaultLanguageId = (from language in allLanguages
+                             where language.Text == DalResources.DefaultEnglishLanguageText
+                             select language).First().Id;
+      }
+      catch (Exception ex)
+      {
+        throw new DataAccess.Exceptions.GeneralDataAccessException(ex);
+      }
+      return defaultLanguageId;
     }
 
 #endif
@@ -123,27 +167,16 @@ namespace LearnLanguages.Business
     /// <summary>
     /// Loads the default properties, including generating a new Id, inside of a using (BypassPropertyChecks) block.
     /// </summary>
-    protected override void LoadDefaults()
+    protected void LoadDefaults()
     {
       using (BypassPropertyChecks)
       {
-        Id = Guid.NewGuid();
+        Id = Guid.Empty;
         Text = DalResources.DefaultNewLanguageText;
       }
     }
 
-    /// <summary>
-    /// Loads the default properties, using the given id parameter, inside of a using (BypassPropertyChecks) block.
-    /// </summary>
-    protected override void LoadDefaults(Guid id)
-    {
-      using (BypassPropertyChecks)
-      {
-        Id = id;
-        Text = DalResources.DefaultNewLanguageText;
-      }
-    }
-
+    
 
     #endregion
 
@@ -175,22 +208,19 @@ namespace LearnLanguages.Business
     #region WPF DP_XYZ
 
 #if !SILVERLIGHT
-    //protected override void DataPortal_Create()
-    //{
-    //  using (BypassPropertyChecks)
-    //  {
-    //    Id = Guid.NewGuid();
-    //    Text = null;
-    //  }
-    //}
-    //protected void DataPortal_Create(Guid id)
-    //{
-    //  using (BypassPropertyChecks)
-    //  {
-    //    Id = id;
-    //    Text = null;
-    //  }
-    //}
+    protected override void DataPortal_Create()
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var languageDal = dalManager.GetProvider<ILanguageDal>();
+        var result = languageDal.New(null);
+        if (!result.IsSuccess || result.IsError)
+          throw new CreateFailedException(result.Msg);
+        LanguageDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+   
     protected void DataPortal_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -418,6 +448,7 @@ namespace LearnLanguages.Business
 #endif
 
     #endregion
+
     #endregion
   }
 }

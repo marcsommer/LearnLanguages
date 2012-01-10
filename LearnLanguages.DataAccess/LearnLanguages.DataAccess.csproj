@@ -51,6 +51,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\GetAllFailedException.cs" />
     <Compile Include="Exceptions\CreateFailedException.cs" />
     <Compile Include="Exceptions\DeleteFailedException.cs" />
     <Compile Include="Exceptions\FetchFailedException.cs" />
