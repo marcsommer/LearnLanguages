@@ -194,8 +194,14 @@ namespace LearnLanguages.Business
 
     #region Data Access (This is run on the server, unless run local set)
     
+
     #region Wpf DP_XYZ
 #if !SILVERLIGHT
+    protected override void DataPortal_Create()
+    {
+      //todo: tired...need to do this..left off going through getting phraseedit tests working.
+      base.DataPortal_Create();
+    }
 
     protected void DataPortal_Fetch(Guid id)
     {

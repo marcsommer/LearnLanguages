@@ -4,6 +4,8 @@ using LearnLanguages.Business;
 using Microsoft.Silverlight.Testing;
 using LearnLanguages.DataAccess.Mock;
 using LearnLanguages.DataAccess.Exceptions;
+using LearnLanguages.DataAccess;
+using System.Linq;
 
 namespace LearnLanguages.Silverlight.Tests
 {
@@ -11,6 +13,43 @@ namespace LearnLanguages.Silverlight.Tests
   [Tag("language")]
   public class LanguageTests : Microsoft.Silverlight.Testing.SilverlightTest
   {
+    private Guid _EnglishId { get; set; }
+    private Guid _SpanishId { get; set; }
+
+    [ClassInitialize]
+    [Asynchronous]
+    public void InitializeLanguageTests()
+    {
+      var isLoaded = false;
+      Exception error = null;
+      LanguageList allLanguages = null;
+      LanguageList.GetAll((s, r) =>
+        {
+          error = r.Error;
+          if (error != null)
+            throw error;
+
+          allLanguages = r.Object;
+          _EnglishId = (from language in allLanguages
+                        where language.Text == SeedData.EnglishText
+                        select language.Id).First();
+
+          _SpanishId = (from language in allLanguages
+                        where language.Text == SeedData.SpanishText
+                        select language.Id).First();
+
+          isLoaded = true;
+        });
+
+      EnqueueConditional(() => isLoaded);
+      EnqueueCallback(() => { Assert.IsNull(error); },
+                      () => { Assert.IsNotNull(allLanguages); },
+                      () => { Assert.AreNotEqual(Guid.Empty, _EnglishId); },
+                      () => { Assert.AreNotEqual(Guid.Empty, _SpanishId); },
+                      () => { Assert.IsTrue(allLanguages.Count > 0); });
+      EnqueueTestComplete();
+    }
+
     [TestMethod]
     [Asynchronous]
     public void CREATE_NEW()
@@ -56,9 +95,10 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
+    [Tag("lget")]
     public void GET()
     {
-      Guid testId = MockDb.EnglishId;
+      Guid testId = _EnglishId;
       var isLoaded = false;
       Exception error = null;
       LanguageEdit languageEdit = null;
@@ -253,6 +293,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
+    [Tag("lgetall")]
     public void GET_ALL()
     {
       {

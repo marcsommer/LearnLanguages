@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7e5d1bda0f2c44208f37653aae212fff" Name="Diagram1" >
+        <EntityTypeShape EntityType="LearnLanguages.LanguageData" Width="1.5" PointX="1.25" PointY="0.75" />
+        <EntityTypeShape EntityType="LearnLanguages.PhraseData" Width="1.5" PointX="4.625" PointY="1" />
+        <AssociationConnector Association="LearnLanguages.AssociateLanguageDataWithPhraseData" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

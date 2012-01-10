@@ -2,10 +2,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearnLanguages.Business;
 using Microsoft.Silverlight.Testing;
+#if USE_MOCK
 using LearnLanguages.DataAccess.Mock;
+#endif
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
+using System.Linq;
 
 namespace LearnLanguages.Silverlight.Tests
 {
@@ -13,6 +16,43 @@ namespace LearnLanguages.Silverlight.Tests
   [Tag("phrase")]
   public class PhraseTests : Microsoft.Silverlight.Testing.SilverlightTest
   {
+    private Guid _EnglishId { get; set; }
+    private Guid _SpanishId { get; set; }
+
+    [ClassInitialize]
+    [Asynchronous]
+    public void InitializePhraseTests()
+    {
+      var isLoaded = false;
+      Exception error = null;
+      LanguageList allLanguages = null;
+      LanguageList.GetAll((s, r) =>
+      {
+        error = r.Error;
+        if (error != null)
+          throw error;
+
+        allLanguages = r.Object;
+        _EnglishId = (from language in allLanguages
+                      where language.Text == SeedData.EnglishText
+                      select language.Id).First();
+
+        _SpanishId = (from language in allLanguages
+                      where language.Text == SeedData.SpanishText
+                      select language.Id).First();
+
+        isLoaded = true;
+      });
+
+      EnqueueConditional(() => isLoaded);
+      EnqueueCallback(() => { Assert.IsNull(error); },
+                      () => { Assert.IsNotNull(allLanguages); },
+                      () => { Assert.AreNotEqual(Guid.Empty, _EnglishId); },
+                      () => { Assert.AreNotEqual(Guid.Empty, _SpanishId); },
+                      () => { Assert.IsTrue(allLanguages.Count > 0); });
+      EnqueueTestComplete();
+    }
+
     [TestMethod]
     [Asynchronous]
     public void CREATE_NEW()
@@ -67,7 +107,7 @@ namespace LearnLanguages.Silverlight.Tests
     [Asynchronous]
     public void GET()
     {
-      Guid testId = MockDb.IdHello;
+      Guid testId = SeedData.IdHello;
       var isLoaded = false;
       Exception error = null;
       PhraseEdit PhraseEdit = null;

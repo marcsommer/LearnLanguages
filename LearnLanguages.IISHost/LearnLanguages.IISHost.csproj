@@ -186,9 +186,9 @@
       <Project>{902EEF10-42A2-460D-87FE-EEDDC8ED6082}</Project>
       <Name>LearnLanguages.CompressedHost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.DataAccess.EFCodeFirst\LearnLanguages.DataAccess.EFCodeFirst.csproj">
-      <Project>{70D3816F-99A2-4A7F-AA40-04D89621BBA4}</Project>
-      <Name>LearnLanguages.DataAccess.EFCodeFirst</Name>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Ef\LearnLanguages.DataAccess.Ef.csproj">
+      <Project>{C3110EBF-314D-44D1-8BEA-2C7CFF21F3A4}</Project>
+      <Name>LearnLanguages.DataAccess.Ef</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.DataAccess.Mock\LearnLanguages.DataAccess.Mock.csproj">
       <Project>{1C862615-4006-421E-97C9-46A138F461A3}</Project>

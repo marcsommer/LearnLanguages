@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LearnLanguages.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="LearnLanguagesStoreContainer">
+    <EntitySet Name="LanguageDatas" EntityType="LearnLanguages.Store.LanguageDatas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PhraseDatas" EntityType="LearnLanguages.Store.PhraseDatas" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="AssociateLanguageDataWithPhraseData" Association="LearnLanguages.Store.AssociateLanguageDataWithPhraseData">
+      <End Role="LanguageData" EntitySet="LanguageDatas" />
+      <End Role="PhraseData" EntitySet="PhraseDatas" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="LanguageDatas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PhraseDatas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LanguageDataId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <Association Name="AssociateLanguageDataWithPhraseData">
+    <End Role="LanguageData" Type="LearnLanguages.Store.LanguageDatas" Multiplicity="1" />
+    <End Role="PhraseData" Type="LearnLanguages.Store.PhraseDatas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LanguageData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PhraseData">
+        <PropertyRef Name="LanguageDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="LearnLanguages" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="LearnLanguagesContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="LanguageDatas" EntityType="LearnLanguages.LanguageData" />
+          <EntitySet Name="PhraseDatas" EntityType="LearnLanguages.PhraseData" />
+          <AssociationSet Name="AssociateLanguageDataWithPhraseData" Association="LearnLanguages.AssociateLanguageDataWithPhraseData">
+            <End Role="LanguageData" EntitySet="LanguageDatas" />
+            <End Role="PhraseData" EntitySet="PhraseDatas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="LanguageData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PhraseData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Text" Nullable="false" />
+          <NavigationProperty Name="LanguageData" Relationship="LearnLanguages.AssociateLanguageDataWithPhraseData" FromRole="PhraseData" ToRole="LanguageData" />
+          <Property Type="Guid" Name="LanguageDataId" Nullable="false" />
+        </EntityType>
+        <Association Name="AssociateLanguageDataWithPhraseData">
+          <End Type="LearnLanguages.LanguageData" Role="LanguageData" Multiplicity="1" />
+          <End Type="LearnLanguages.PhraseData" Role="PhraseData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LanguageData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhraseData">
+              <PropertyRef Name="LanguageDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LearnLanguagesStoreContainer" CdmEntityContainer="LearnLanguagesContext">
+    <EntitySetMapping Name="LanguageDatas">
+      <EntityTypeMapping TypeName="IsTypeOf(LearnLanguages.LanguageData)">
+        <MappingFragment StoreEntitySet="LanguageDatas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhraseDatas">
+      <EntityTypeMapping TypeName="IsTypeOf(LearnLanguages.PhraseData)">
+        <MappingFragment StoreEntitySet="PhraseDatas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="LanguageDataId" ColumnName="LanguageDataId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
