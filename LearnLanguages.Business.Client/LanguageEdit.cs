@@ -208,6 +208,8 @@ namespace LearnLanguages.Business
     #region WPF DP_XYZ
 
 #if !SILVERLIGHT
+
+    [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Create()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -220,7 +222,8 @@ namespace LearnLanguages.Business
         LoadFromDtoBypassPropertyChecks(dto);
       }
     }
-   
+
+    [Transactional(TransactionalTypes.TransactionScope)]
     protected void DataPortal_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -244,6 +247,8 @@ namespace LearnLanguages.Business
         LoadFromDtoBypassPropertyChecks(dto);
       }
     }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Insert()
     {
       //Dal is responsible for setting new Id
@@ -277,6 +282,8 @@ namespace LearnLanguages.Business
         SetIdBypassPropertyChecks(result.Obj.Id);
       }
     }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Update()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -307,6 +314,8 @@ namespace LearnLanguages.Business
         SetIdBypassPropertyChecks(result.Obj.Id);
       }
     }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_DeleteSelf()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -332,6 +341,8 @@ namespace LearnLanguages.Business
         }
       }
     }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
     protected void DataPortal_Delete(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())

@@ -1,14 +1,16 @@
-LearnLanguages
+PROJECT: LearnLanguages
+AUTHOR: William Raiford (bill.mybiz@gmail.com)
 
-Author: William Raiford (bill.mybiz@gmail.com)
 
-Vision: I want to learn languages quickly, efficiently, and organically to maximize retention and minimize time investment.  I also want a specific goal, currently 2000 words, and I want to see just _one_ real number metric to see my progress towards that goal in any particular language.  I want to be able to write in a bunch of text, have the app persist that text, and allow quick user actions to create translations in multiple languages to grow just a database of text and text relationships.  Eventually, I want to include item scheduling using a neural net to maximize retention and minimize repetitions necessary for learning.
+VISION: I want to learn languages quickly, efficiently, and organically to maximize retention and minimize time investment.  I also want a specific goal, currently 2000 words, and I want to see just _one_ real number metric to see my progress towards that goal in any particular language.  I want to be able to write in a bunch of text, have the app persist that text, and allow quick user actions to create translations in multiple languages to grow just a database of text and text relationships.  Eventually, I want to include item scheduling using a neural net to maximize retention and minimize repetitions necessary for learning.
 
-To start with, the problem becomes three-fold:
+
+SUMMARY: To start with, the problem becomes three-fold:
 
 1. Input text data ("Phrase"), associated with a Language.
 2. Create text relationships (translations) among those text data.
 3. Execute metrics on user knowledge of those text relationships, or IOW test for knowledge to assess progress.
+
 
 JOURNAL:
 01/03/12
@@ -16,3 +18,6 @@ I've fleshed out PhraseEdit and LanguageEdit somewhat, but I'm still working on 
 
 01/04/12
 Restructured architecture to better reflect my increasing knowledge of setting up the data portal properly.  Instead of trying to host my own WCF service, I have created a IIS web page that exposes the Csla data portal service, so I can program a more proper Csla-way.
+
+01/10/12
+I've gotten tests passing for basic plumbing for the most basic structure.  I have a PhraseEdit and a LanguageEdit, and I have plumbing to CRUD those objects using EF.  Now, I am going to be focusing on authentication.
