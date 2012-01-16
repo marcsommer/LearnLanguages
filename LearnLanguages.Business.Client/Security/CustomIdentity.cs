@@ -5,7 +5,6 @@ using Csla.Serialization;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 #if !SILVERLIGHT
-using LearnLanguages.DataAccess.Interfaces;
 #endif
 
 namespace LearnLanguages.Business.Security
@@ -54,7 +53,7 @@ namespace LearnLanguages.Business.Security
     /// </summary>
     /// <param name="username"></param>
     /// <param name="dal"></param>
-    private void LoadUserData(string username, LearnLanguages.DataAccess.Interfaces.ICustomIdentityDal dal)
+    private void LoadUserData(string username, ICustomIdentityDal dal)
     {
       if (Csla.ApplicationContext.ExecutionLocation != ApplicationContext.ExecutionLocations.Server)
         throw new GeneralDataAccessException("This could should only be running on the server.");
@@ -75,7 +74,11 @@ namespace LearnLanguages.Business.Security
         if (!resultRoles.IsSuccess || resultRoles.IsError)
           throw new GeneralDataAccessException(resultRoles.Msg);
 
-        Roles = new Csla.Core.MobileList<string>(resultRoles.Obj);
+        Roles = new Csla.Core.MobileList<string>();
+        foreach (var roleDto in resultRoles.Obj)
+        {
+          Roles.Add(roleDto.Text);
+        }
       }
     }
 

@@ -73,22 +73,22 @@
   </EntityType>
   <EntityType Name="AssociationUserDataWithLanguageData">
     <Key>
-      <PropertyRef Name="UserDatas_Id" />
-      <PropertyRef Name="UserDatas_Username" />
+      <PropertyRef Name="AssociationUserDataWithLanguageData_LanguageData_Id" />
+      <PropertyRef Name="AssociationUserDataWithLanguageData_LanguageData_Username" />
       <PropertyRef Name="LanguageDatas_Id" />
     </Key>
-    <Property Name="UserDatas_Id" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="UserDatas_Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AssociationUserDataWithLanguageData_LanguageData_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="AssociationUserDataWithLanguageData_LanguageData_Username" Type="nvarchar(max)" Nullable="false" />
     <Property Name="LanguageDatas_Id" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="AssociationUserDataWithRoleData">
     <Key>
-      <PropertyRef Name="UserDatas_Id" />
-      <PropertyRef Name="UserDatas_Username" />
+      <PropertyRef Name="AssociationUserDataWithRoleData_RoleData_Id" />
+      <PropertyRef Name="AssociationUserDataWithRoleData_RoleData_Username" />
       <PropertyRef Name="RoleDatas_Id" />
     </Key>
-    <Property Name="UserDatas_Id" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="UserDatas_Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AssociationUserDataWithRoleData_RoleData_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="AssociationUserDataWithRoleData_RoleData_Username" Type="nvarchar(max)" Nullable="false" />
     <Property Name="RoleDatas_Id" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <Association Name="AssociateLanguageDataWithPhraseData">
@@ -128,8 +128,8 @@
         <PropertyRef Name="Username" />
       </Principal>
       <Dependent Role="AssociationUserDataWithLanguageData">
-        <PropertyRef Name="UserDatas_Id" />
-        <PropertyRef Name="UserDatas_Username" />
+        <PropertyRef Name="AssociationUserDataWithLanguageData_LanguageData_Id" />
+        <PropertyRef Name="AssociationUserDataWithLanguageData_LanguageData_Username" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -154,8 +154,8 @@
         <PropertyRef Name="Username" />
       </Principal>
       <Dependent Role="AssociationUserDataWithRoleData">
-        <PropertyRef Name="UserDatas_Id" />
-        <PropertyRef Name="UserDatas_Username" />
+        <PropertyRef Name="AssociationUserDataWithRoleData_RoleData_Id" />
+        <PropertyRef Name="AssociationUserDataWithRoleData_RoleData_Username" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -203,7 +203,6 @@
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
-          <NavigationProperty Name="UserDatas" Relationship="LearnLanguages.AssociationUserDataWithLanguageData" FromRole="LanguageData" ToRole="UserData" />
         </EntityType>
         <EntityType Name="PhraseData">
           <Key>
@@ -213,7 +212,6 @@
           <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
           <NavigationProperty Name="LanguageData" Relationship="LearnLanguages.AssociateLanguageDataWithPhraseData" FromRole="PhraseData" ToRole="LanguageData" />
           <Property Type="Guid" Name="LanguageDataId" Nullable="false" />
-          <NavigationProperty Name="UserData" Relationship="LearnLanguages.AssociationUserDataWithPhraseData" FromRole="PhraseData" ToRole="UserData" />
           <Property Type="Guid" Name="UserDataId" Nullable="false" />
           <Property Type="String" Name="UserDataUsername" Nullable="false" Unicode="true" />
         </EntityType>
@@ -268,7 +266,6 @@
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
-          <NavigationProperty Name="UserDatas" Relationship="LearnLanguages.AssociationUserDataWithRoleData" FromRole="RoleData" ToRole="UserData" />
         </EntityType>
         <Association Name="AssociationUserDataWithRoleData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="*" />
@@ -319,8 +316,8 @@
     </EntitySetMapping>
     <AssociationSetMapping Name="AssociationUserDataWithLanguageData" TypeName="LearnLanguages.AssociationUserDataWithLanguageData" StoreEntitySet="AssociationUserDataWithLanguageData">
       <EndProperty Name="UserData">
-        <ScalarProperty Name="Id" ColumnName="UserDatas_Id" />
-        <ScalarProperty Name="Username" ColumnName="UserDatas_Username" />
+        <ScalarProperty Name="Id" ColumnName="AssociationUserDataWithLanguageData_LanguageData_Id" />
+        <ScalarProperty Name="Username" ColumnName="AssociationUserDataWithLanguageData_LanguageData_Username" />
       </EndProperty>
       <EndProperty Name="LanguageData">
         <ScalarProperty Name="Id" ColumnName="LanguageDatas_Id" />
@@ -328,8 +325,8 @@
     </AssociationSetMapping>
     <AssociationSetMapping Name="AssociationUserDataWithRoleData" TypeName="LearnLanguages.AssociationUserDataWithRoleData" StoreEntitySet="AssociationUserDataWithRoleData">
       <EndProperty Name="UserData">
-        <ScalarProperty Name="Id" ColumnName="UserDatas_Id" />
-        <ScalarProperty Name="Username" ColumnName="UserDatas_Username" />
+        <ScalarProperty Name="Id" ColumnName="AssociationUserDataWithRoleData_RoleData_Id" />
+        <ScalarProperty Name="Username" ColumnName="AssociationUserDataWithRoleData_RoleData_Username" />
       </EndProperty>
       <EndProperty Name="RoleData">
         <ScalarProperty Name="Id" ColumnName="RoleDatas_Id" />

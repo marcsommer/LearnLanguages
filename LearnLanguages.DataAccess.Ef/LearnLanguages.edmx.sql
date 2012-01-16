@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/15/2012 23:54:19
+-- Date Created: 01/16/2012 09:18:09
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -29,6 +29,12 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_AssociationUserDataWithLanguageData_LanguageData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[AssociationUserDataWithLanguageData] DROP CONSTRAINT [FK_AssociationUserDataWithLanguageData_LanguageData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_AssociationUserDataWithRoleData_UserData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[AssociationUserDataWithRoleData] DROP CONSTRAINT [FK_AssociationUserDataWithRoleData_UserData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_AssociationUserDataWithRoleData_RoleData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[AssociationUserDataWithRoleData] DROP CONSTRAINT [FK_AssociationUserDataWithRoleData_RoleData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -43,8 +49,14 @@ GO
 IF OBJECT_ID(N'[dbo].[UserDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserDatas];
 GO
+IF OBJECT_ID(N'[dbo].[RoleDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RoleDatas];
+GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
+GO
+IF OBJECT_ID(N'[dbo].[AssociationUserDataWithRoleData]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[AssociationUserDataWithRoleData];
 GO
 
 -- --------------------------------------------------
@@ -86,16 +98,16 @@ GO
 
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
-    [UserDatas_Id] uniqueidentifier  NOT NULL,
-    [UserDatas_Username] nvarchar(max)  NOT NULL,
+    [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
+    [AssociationUserDataWithLanguageData_LanguageData_Username] nvarchar(max)  NOT NULL,
     [LanguageDatas_Id] uniqueidentifier  NOT NULL
 );
 GO
 
 -- Creating table 'AssociationUserDataWithRoleData'
 CREATE TABLE [dbo].[AssociationUserDataWithRoleData] (
-    [UserDatas_Id] uniqueidentifier  NOT NULL,
-    [UserDatas_Username] nvarchar(max)  NOT NULL,
+    [AssociationUserDataWithRoleData_RoleData_Id] uniqueidentifier  NOT NULL,
+    [AssociationUserDataWithRoleData_RoleData_Username] nvarchar(max)  NOT NULL,
     [RoleDatas_Id] uniqueidentifier  NOT NULL
 );
 GO
@@ -128,16 +140,16 @@ ADD CONSTRAINT [PK_RoleDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [UserDatas_Id], [UserDatas_Username], [LanguageDatas_Id] in table 'AssociationUserDataWithLanguageData'
+-- Creating primary key on [AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_LanguageData_Username], [LanguageDatas_Id] in table 'AssociationUserDataWithLanguageData'
 ALTER TABLE [dbo].[AssociationUserDataWithLanguageData]
 ADD CONSTRAINT [PK_AssociationUserDataWithLanguageData]
-    PRIMARY KEY NONCLUSTERED ([UserDatas_Id], [UserDatas_Username], [LanguageDatas_Id] ASC);
+    PRIMARY KEY NONCLUSTERED ([AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_LanguageData_Username], [LanguageDatas_Id] ASC);
 GO
 
--- Creating primary key on [UserDatas_Id], [UserDatas_Username], [RoleDatas_Id] in table 'AssociationUserDataWithRoleData'
+-- Creating primary key on [AssociationUserDataWithRoleData_RoleData_Id], [AssociationUserDataWithRoleData_RoleData_Username], [RoleDatas_Id] in table 'AssociationUserDataWithRoleData'
 ALTER TABLE [dbo].[AssociationUserDataWithRoleData]
 ADD CONSTRAINT [PK_AssociationUserDataWithRoleData]
-    PRIMARY KEY NONCLUSTERED ([UserDatas_Id], [UserDatas_Username], [RoleDatas_Id] ASC);
+    PRIMARY KEY NONCLUSTERED ([AssociationUserDataWithRoleData_RoleData_Id], [AssociationUserDataWithRoleData_RoleData_Username], [RoleDatas_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -172,10 +184,10 @@ ON [dbo].[PhraseDatas]
     ([UserDataId], [UserDataUsername]);
 GO
 
--- Creating foreign key on [UserDatas_Id], [UserDatas_Username] in table 'AssociationUserDataWithLanguageData'
+-- Creating foreign key on [AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_LanguageData_Username] in table 'AssociationUserDataWithLanguageData'
 ALTER TABLE [dbo].[AssociationUserDataWithLanguageData]
 ADD CONSTRAINT [FK_AssociationUserDataWithLanguageData_UserData]
-    FOREIGN KEY ([UserDatas_Id], [UserDatas_Username])
+    FOREIGN KEY ([AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_LanguageData_Username])
     REFERENCES [dbo].[UserDatas]
         ([Id], [Username])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -195,10 +207,10 @@ ON [dbo].[AssociationUserDataWithLanguageData]
     ([LanguageDatas_Id]);
 GO
 
--- Creating foreign key on [UserDatas_Id], [UserDatas_Username] in table 'AssociationUserDataWithRoleData'
+-- Creating foreign key on [AssociationUserDataWithRoleData_RoleData_Id], [AssociationUserDataWithRoleData_RoleData_Username] in table 'AssociationUserDataWithRoleData'
 ALTER TABLE [dbo].[AssociationUserDataWithRoleData]
 ADD CONSTRAINT [FK_AssociationUserDataWithRoleData_UserData]
-    FOREIGN KEY ([UserDatas_Id], [UserDatas_Username])
+    FOREIGN KEY ([AssociationUserDataWithRoleData_RoleData_Id], [AssociationUserDataWithRoleData_RoleData_Username])
     REFERENCES [dbo].[UserDatas]
         ([Id], [Username])
     ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -84,6 +84,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\PhraseDto.cs">
       <Link>Dtos\PhraseDto.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Dtos\RoleDto.cs">
+      <Link>Dtos\RoleDto.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\UserDto.cs">
       <Link>Dtos\UserDto.cs</Link>
     </Compile>
