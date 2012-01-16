@@ -124,6 +124,9 @@
     <value>DalManagerType</value>
     <comment>This is the key used in ConfigurationManager.AppSettings[__key__];</comment>
   </data>
+  <data name="AuthenticationTypeString" xml:space="preserve">
+    <value>Custom</value>
+  </data>
   <data name="DefaultEnglishLanguageId" xml:space="preserve">
     <value>C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9</value>
   </data>
@@ -138,6 +141,9 @@
     <value />
   </data>
   <data name="DefaultNewPhraseText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DefaultNewPhraseUsername" xml:space="preserve">
     <value />
   </data>
   <data name="ErrorMsgCreateFailed" xml:space="preserve">
@@ -179,5 +185,14 @@
   </data>
   <data name="Phrase_DalKey" xml:space="preserve">
     <value>Phrase_DalKey</value>
+  </data>
+  <data name="RoleAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="RoleUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="WcfProxyDefaultUrl" xml:space="preserve">
+    <value>http://localhost:50094/SlPortal.svc</value>
   </data>
 </root>

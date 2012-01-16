@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomIdentityDal.cs" />
     <Compile Include="PhraseDal.cs" />
     <Compile Include="DalManager.cs" />
     <Compile Include="LanguageDal.cs" />

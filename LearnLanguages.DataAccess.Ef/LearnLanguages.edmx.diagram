@@ -4,10 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7e5d1bda0f2c44208f37653aae212fff" Name="Diagram1" >
-        <EntityTypeShape EntityType="LearnLanguages.LanguageData" Width="1.5" PointX="1.25" PointY="0.75" />
-        <EntityTypeShape EntityType="LearnLanguages.PhraseData" Width="1.5" PointX="4.625" PointY="1" />
+      <Diagram DiagramId="7e5d1bda0f2c44208f37653aae212fff" Name="Diagram1" ZoomLevel="90" >
+        <EntityTypeShape EntityType="LearnLanguages.LanguageData" Width="1.5" PointX="3.375" PointY="3.625" />
+        <EntityTypeShape EntityType="LearnLanguages.PhraseData" Width="1.625" PointX="6.75" PointY="2.25" />
         <AssociationConnector Association="LearnLanguages.AssociateLanguageDataWithPhraseData" />
+        <EntityTypeShape EntityType="LearnLanguages.UserData" Width="1.5" PointX="1.375" PointY="0.5" />
+        <AssociationConnector Association="LearnLanguages.AssociationUserDataWithPhraseData" />
+        <AssociationConnector Association="LearnLanguages.AssociationUserDataWithLanguageData" />
+        <EntityTypeShape EntityType="LearnLanguages.RoleData" Width="1.5" PointX="3" PointY="0.5" />
+        <AssociationConnector Association="LearnLanguages.AssociationUserDataWithRoleData" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

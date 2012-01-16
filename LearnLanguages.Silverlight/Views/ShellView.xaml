@@ -5,12 +5,24 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            mc:Ignorable="d"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+           xmlns:local="clr-namespace:LearnLanguages.Silverlight"
            d:DesignWidth="640" d:DesignHeight="480"
            Title="ShellView Page">
-  
-  <Grid x:Name="LayoutRoot">
-    <Border BorderBrush="Red" BorderThickness="3">
-      <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="This is the ShellView"/>
-    </Border>
-  </Grid>
+
+  <controls:DockPanel x:Name="LayoutRoot"
+                      LastChildFill="True">
+    <ContentControl x:Name="NavigationPanel" controls:DockPanel.Dock="Left"/>
+
+
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <ContentControl x:Name="Main" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+      <!--<ContentControl x:Name="Login"                    Grid.Column="0" />-->
+      <!--<ContentControl x:Name="AuthenticationStatus"                  Grid.Column="1" />-->
+
+    </Grid>
+  </controls:DockPanel>
 </navigation:Page>

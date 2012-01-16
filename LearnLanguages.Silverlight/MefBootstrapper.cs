@@ -11,7 +11,7 @@ using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight
 {
-  public class MefBootstrapper : Bootstrapper<ViewModels.ShellViewModel>
+  public class MefBootstrapper : Bootstrapper<ViewModels.ShellViewModel>, IHandle<Interfaces.IPartSatisfiedEventMessage>
   {
     
     private CompositionContainer _Container;
@@ -21,34 +21,42 @@ namespace LearnLanguages.Silverlight
     /// </summary>
     protected override void Configure()
     {
+
       //NEW UP CONTAINER
       //_Container = new CompositionContainer();
 
       //CREATE ASSEMBLY CATALOGS FOR COMPOSITION OF APPLICATION (WPF)
       AssemblyCatalog catThis = new AssemblyCatalog(typeof(MefBootstrapper).Assembly);
-      //AssemblyCatalog catBusiness = new AssemblyCatalog(typeof(Customer).Assembly);
       //AssemblyCatalog catDal = new AssemblyCatalog(typeof(DalManager).Assembly);
       //AssemblyCatalog catWcfClient = new AssemblyCatalog(typeof(CustomerDalProxy).Assembly);
       //AggregateCatalog catAll = new AggregateCatalog(catThis, catBusiness, catDal, catWcfClient);
       AggregateCatalog catAll = new AggregateCatalog(catThis);
       _Container = new CompositionContainer(catAll);
 
-      //ADD BATCH FOR SERVICES TO CONTAINER, INCLUDING CONTAINER ITSELF
-      //var batch = new CompositionBatch();
-      //batch.AddExportedValue<IWindowManager>(new WindowManager());
-      //batch.AddExportedValue<IEventAggregator>(new EventAggregator());
-      //batch.AddExportedValue(_Container);
-      //_Container.Compose(batch);
-
-      //INITIALIZE SERVICES
-      //Services.Initialize(_Container);
+      //ADD BATCH FOR SERVICES TO CONTAINER, INCLUDING CONTAINER ITSELF, AND INITIALIZE SERVICES
+      var batch = new CompositionBatch();
+      batch.AddExportedValue<IWindowManager>(new WindowManager());
+      batch.AddExportedValue<IEventAggregator>(new EventAggregator());
+      batch.AddExportedValue(_Container);
+      _Container.Compose(batch);
+      Services.Initialize(_Container);
 
       //INITIALIZE CSLA DATA PORTAL
-      Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      //Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      Csla.DataPortal.ProxyTypeName = typeof(Compression.CompressedProxy<>).AssemblyQualifiedName;
+      Csla.DataPortalClient.WcfProxy.DefaultUrl = DataAccess.DalResources.WcfProxyDefaultUrl;
+
 
       //INITIALIZE DALMANAGER
       //DalManager.Initialize(_Container);
+
+      //SUBSCRIBE TO EVENTAGGREGATOR
+      Services.EventAggregator.Subscribe(this);
+      _Listener = new DebugEventMessageListener();
+
     }
+
+    private DebugEventMessageListener _Listener;
 
     protected override object GetInstance(Type serviceType, string key)
     {
@@ -69,6 +77,24 @@ namespace LearnLanguages.Silverlight
     protected override void BuildUp(object instance)
     {
       _Container.SatisfyImportsOnce(instance);
+    }
+
+    private bool ShellModelSatisfied = false;
+    private bool NavigationControllerSatisfied = false;
+
+    public void Handle(Interfaces.IPartSatisfiedEventMessage message)
+    {
+      if (message.Part == "Shell")
+        ShellModelSatisfied = true;
+      else if (message.Part == "NavigationController")
+        NavigationControllerSatisfied = true;
+
+      if (ShellModelSatisfied && NavigationControllerSatisfied)
+      {
+        Services.EventAggregator.Unsubscribe(this);
+        //Services.EventAggregator.Publish(new Events.NavigationRequestedEventMessage("Login"));
+        Events.Publish.NavigationRequest<ViewModels.LoginViewModel>();
+      }
     }
   }
 }

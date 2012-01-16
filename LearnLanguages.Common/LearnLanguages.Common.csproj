@@ -93,7 +93,6 @@
     <Compile Include="Args\SaveArgs.cs" />
     <Compile Include="AsynchronousCallback.cs" />
     <Compile Include="AsyncResultOfT.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="CommonResources.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="CustomException.cs" />

@@ -43,7 +43,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT,USE_MOCK</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -72,7 +72,9 @@
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
@@ -80,12 +82,49 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DebugEventMessageListener.cs" />
+    <Compile Include="Events\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="Events\NavigatedEventMessage.cs" />
+    <Compile Include="Events\NavigatingEventMessage.cs" />
+    <Compile Include="Events\NavigationEventMessage.cs" />
+    <Compile Include="Events\NavigationFailedEventMessage.cs" />
+    <Compile Include="Events\NavigationRequestedEventMessage.cs" />
+    <Compile Include="Events\PartSatisfiedEventMessage.cs" />
+    <Compile Include="Events\Publish.cs" />
+    <Compile Include="Interfaces\IAuthenticationChangedEventMessage.cs" />
+    <Compile Include="Interfaces\IHaveUri.cs" />
+    <Compile Include="Interfaces\INavigatedEventMessage.cs" />
+    <Compile Include="Interfaces\INavigatingEventMessage.cs" />
+    <Compile Include="Interfaces\INavigationController.cs" />
+    <Compile Include="Interfaces\INavigationEventMessage.cs" />
+    <Compile Include="Interfaces\INavigationFailedEventMessage.cs" />
+    <Compile Include="Interfaces\INavigationRequestedEventMessage.cs" />
+    <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
+    <Compile Include="Interfaces\IViewModelBase.cs" />
+    <Compile Include="Interfaces\IViewModelMetadata.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MefBootstrapper.cs" />
+    <Compile Include="NavigationController.cs" />
+    <Compile Include="NavigationInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="ViewModels\AuthenticationStatusNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\AuthenticationStatusViewModel.cs" />
+    <Compile Include="ViewModels\LoginNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\LogoutNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\LogoutViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtonViewModelBase.cs" />
+    <Compile Include="ViewModels\NavigationPanelViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelMetadataAttribute.cs" />
+    <Compile Include="ViewModels\_LoginViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,14 +134,40 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AuthenticationStatusNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AuthenticationStatusView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LogoutNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LogoutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationPanelView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShellView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <None Include="Properties\AppManifest.xml" />
     <Content Include="ServiceReferences.ClientConfig" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Views\ShellView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
@@ -111,10 +176,28 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
+      <Project>{4314B702-58FE-44EC-BF55-61CC4483C05C}</Project>
+      <Name>LearnLanguages.Business.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
+      <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
+      <Name>LearnLanguages.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.CompressedProxy\LearnLanguages.CompressedProxy.csproj">
+      <Project>{C6D3C11D-57E0-49CF-B9B8-7BB5710EB986}</Project>
+      <Name>LearnLanguages.CompressedProxy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
       <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
       <Name>LearnLanguages.DataAccess.Client</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AppResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

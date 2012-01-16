@@ -10,11 +10,13 @@ namespace LearnLanguages.DataAccess
   {
     static SeedData()
     {
-      //INITIALIZE LANGUAGES FIRST!!
+      InitializeUsers();
       InitializeLanguages();
       InitializePhrases();
+
     }
 
+    #region Language Data
     public static Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
     public static Guid EnglishId
     {
@@ -36,7 +38,9 @@ namespace LearnLanguages.DataAccess
     }
     public static string EnglishText = DalResources.DefaultEnglishLanguageText;
     public static string SpanishText = "Spanish";
+    #endregion
 
+    #region Phrase Data
     public static string HelloText = "Hello!";
     public static string LongPhraseText = "Why this is a very long phrase indeed.  It is in fact several sentences.  I think it might just be TOO long!";
     public static string HolaText = "Hola!!!";
@@ -58,12 +62,32 @@ namespace LearnLanguages.DataAccess
     {
       get { return GetPhraseId(DogText); }
     }
-    
+    #endregion
+
+    #region User Data
+    public static Guid TestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
+    public static string TestValidUsername = "user";
+    public static string TestValidPassword = "password";
+    public static string TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
+    public static int TestSalt = -54623530;
+    public static string TestInvalidUsername = "ImNotAValidUser";
+    public static string TestInvalidPassword = "ImNotAValidPassword";
+    #endregion
+
+    #region Role Data
+    public static Guid TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
+    public static RoleDto TestRole = new RoleDto()
+    {
+      Id = TestRoleId,
+      Text = DalResources.RoleAdmin
+    };
+    #endregion
 
     public static List<PhraseDto> Phrases { get; private set; }
     public static List<LanguageDto> Languages { get; private set; }
+    public static List<UserDto> Users { get; private set; }
+    public static List<RoleDto> Roles { get; private set; }
 
-    
     private static void InitializeLanguages()
     {
       Languages = new List<LanguageDto>()
@@ -112,6 +136,26 @@ namespace LearnLanguages.DataAccess
           LanguageId = EnglishId,
           Text = DogText
         }
+      };
+    }
+    private static void InitializeUsers()
+    {
+      Users = new List<UserDto>()
+      {
+        new UserDto() 
+        {
+          Id = TestValidUserId,
+          Username = TestValidUsername,
+          Salt = TestSalt,
+          SaltedHashedPasswordValue = TestSaltedHashedPassword
+        }
+      };
+    }
+    private static void InitializeRoles()
+    {
+      Roles = new List<RoleDto>()
+      {
+        TestRole
       };
     }
     public static bool ContainsLanguageId(Guid id)

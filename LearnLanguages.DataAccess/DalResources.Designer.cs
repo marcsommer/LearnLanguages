@@ -79,6 +79,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string AuthenticationTypeString {
+            get {
+                return ResourceManager.GetString("AuthenticationTypeString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9.
         /// </summary>
         public static string DefaultEnglishLanguageId {
@@ -120,6 +129,15 @@ namespace LearnLanguages.DataAccess {
         public static string DefaultNewPhraseText {
             get {
                 return ResourceManager.GetString("DefaultNewPhraseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewPhraseUsername {
+            get {
+                return ResourceManager.GetString("DefaultNewPhraseUsername", resourceCulture);
             }
         }
         
@@ -237,6 +255,33 @@ namespace LearnLanguages.DataAccess {
         public static string Phrase_DalKey {
             get {
                 return ResourceManager.GetString("Phrase_DalKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin.
+        /// </summary>
+        public static string RoleAdmin {
+            get {
+                return ResourceManager.GetString("RoleAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string RoleUser {
+            get {
+                return ResourceManager.GetString("RoleUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://localhost:50094/SlPortal.svc.
+        /// </summary>
+        public static string WcfProxyDefaultUrl {
+            get {
+                return ResourceManager.GetString("WcfProxyDefaultUrl", resourceCulture);
             }
         }
     }

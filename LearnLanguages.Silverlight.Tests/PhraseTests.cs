@@ -5,9 +5,8 @@ using Microsoft.Silverlight.Testing;
 #if USE_MOCK
 using LearnLanguages.DataAccess.Mock;
 #endif
-using LearnLanguages.DataAccess.Exceptions;
-using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
+using LearnLanguages.DataAccess.Exceptions;
 using System.Linq;
 
 namespace LearnLanguages.Silverlight.Tests
@@ -277,9 +276,11 @@ namespace LearnLanguages.Silverlight.Tests
                 throw deletedError;
 
               deletedPhraseEdit = r4.NewObject as PhraseEdit;
-              //TODO: Figure out why PhraseEditTests final callback gets thrown twice.  The server throws expected exception, but callback is executed twice.
+              //TODO: Figure out why PhraseEditTests final callback gets thrown twice.  When server throws an exception (expected because we are trying to fetch a deleted phrase that shouldn't exist), the callback is executed twice.
               PhraseEdit.GetPhraseEdit(deletedPhraseEdit.Id, (s5, r5) =>
               {
+                var debugExecutionLocation = Csla.ApplicationContext.ExecutionLocation;
+                var debugLogicalExecutionLocation = Csla.ApplicationContext.LogicalExecutionLocation;
                 deleteConfirmedError = r5.Error;
                 if (deleteConfirmedError != null)
                 {
@@ -288,11 +289,9 @@ namespace LearnLanguages.Silverlight.Tests
                 }
                 deleteConfirmedPhraseEdit = r5.Object;
               });
-              
             });
           });
         });
-
       });
 
       EnqueueConditional(() => isNewed);

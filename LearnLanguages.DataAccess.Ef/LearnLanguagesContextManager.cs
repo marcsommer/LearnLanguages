@@ -65,6 +65,10 @@ namespace LearnLanguages.DataAccess.Ef
     }
     private static void SeedContext(LearnLanguagesContext context)
     {
+      foreach (var userDto in SeedData.Users)
+      {
+        var data = EfHelper.ToData(userDto);
+      }
       foreach (var langDto in SeedData.Languages)
       {
         var data = EfHelper.ToData(langDto);

@@ -8,6 +8,7 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.DataAccess.Exceptions;
 #endif
 using LearnLanguages.DataAccess;
+using LearnLanguages.Business.Security;
 
 
 namespace LearnLanguages.Business
@@ -78,7 +79,17 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Business Properties & Methods
+    //PHRASE
+    #region public string Text
+    public static readonly PropertyInfo<string> TextProperty = RegisterProperty<string>(c => c.Text);
+    public string Text
+    {
+      get { return GetProperty(TextProperty); }
+      set { SetProperty(TextProperty, value); }
+    }
+    #endregion
 
+    //LANGUAGE
     #region public Guid LanguageId
     public static readonly PropertyInfo<Guid> LanguageIdProperty = RegisterProperty<Guid>(c => c.LanguageId);
     //[Display(ResourceType = typeof(ModelResources), Name = "Phrase_Language_DisplayName")]
@@ -89,23 +100,40 @@ namespace LearnLanguages.Business
       set { SetProperty(LanguageIdProperty, value); }
     }
     #endregion
-    
-    #region public string Text
-    public static readonly PropertyInfo<string> TextProperty = RegisterProperty<string>(c => c.Text);
-    public string Text
-    {
-      get { return GetProperty(TextProperty); }
-      set { SetProperty(TextProperty, value); }
-    }
-    #endregion
-
     #region public LanguageEdit Language
-    public static readonly PropertyInfo<LanguageEdit> LanguageProperty = 
+    public static readonly PropertyInfo<LanguageEdit> LanguageProperty =
       RegisterProperty<LanguageEdit>(c => c.Language, RelationshipTypes.Child);
     public LanguageEdit Language
     {
       get { return GetProperty(LanguageProperty); }
       private set { LoadProperty(LanguageProperty, value); }
+    }
+    #endregion
+    
+    //USER
+    #region public Guid UserId
+    public static readonly PropertyInfo<Guid> UserIdProperty = RegisterProperty<Guid>(c => c.UserId);
+    public Guid UserId
+    {
+      get { return GetProperty(UserIdProperty); }
+      set { SetProperty(UserIdProperty, value); }
+    }
+    #endregion
+    #region public string Username
+    public static readonly PropertyInfo<string> UsernameProperty = RegisterProperty<string>(c => c.Username);
+    public string Username
+    {
+      get { return GetProperty(UsernameProperty); }
+      set { SetProperty(UsernameProperty, value); }
+    }
+    #endregion
+    #region public CustomIdentity User
+    public static readonly PropertyInfo<CustomIdentity> UserProperty =
+      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
+    public CustomIdentity User
+    {
+      get { return GetProperty(UserProperty); }
+      private set { LoadProperty(UserProperty, value); }
     }
     #endregion
 
@@ -118,15 +146,20 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(LanguageIdProperty, dto.LanguageId);
         if (dto.LanguageId != Guid.Empty)
           Language = DataPortal.FetchChild<LanguageEdit>(dto.LanguageId);
+        LoadProperty<Guid>(UserIdProperty, dto.UserId);
+        LoadProperty<string>(UsernameProperty, dto.Username);
+        if (!string.IsNullOrEmpty(dto.Username))
+          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
       }
     }
-
     public override PhraseDto CreateDto()
     {
       PhraseDto retDto = new PhraseDto(){
                                           Id = this.Id,
                                           Text = this.Text,
-                                          LanguageId = this.LanguageId
+                                          LanguageId = this.LanguageId,
+                                          UserId = this.UserId,
+                                          Username = this.Username
                                         };
       return retDto;
     }
@@ -150,6 +183,8 @@ namespace LearnLanguages.Business
         //LanguageId = LanguageEdit.GetLanguageEdit
         Text = DalResources.DefaultNewPhraseText;
         Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
+        UserId = Guid.Empty;
+        Username = DalResources.DefaultNewPhraseUsername;
       }
     }
 
@@ -165,6 +200,8 @@ namespace LearnLanguages.Business
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(IdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(LanguageIdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(TextProperty));
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UserIdProperty));
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UsernameProperty));
     }
 
     #endregion
@@ -173,7 +210,7 @@ namespace LearnLanguages.Business
 
     public static void AddObjectAuthorizationRules()
     {
-      // TODO: add object-level authorization rules
+      // TODO: PhraseEdit Authorization: add object-level authorization rules
       // Csla.Rules.CommonRules.Required
     }
 
@@ -215,21 +252,24 @@ namespace LearnLanguages.Business
     protected override void DataPortal_Insert()
     {
       //Dal is responsible for setting new Id
-      PhraseDto dto = new PhraseDto()
-      {
-        Id = this.Id,
-        LanguageId = this.LanguageId,
-        Text = this.Text
-      };
+      //PhraseDto dto = new PhraseDto()
+      //{
+      //  Id = this.Id,
+      //  LanguageId = this.LanguageId,
+      //  Text = this.Text
+      //};
       using (var dalManager = DalFactory.GetDalManager())
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var dto = CreateDto();
         var result = phraseDal.Insert(dto);
         if (!result.IsSuccess || result.IsError)
           throw new InsertFailedException(result.Msg);
-        SetIdBypassPropertyChecks(result.Obj.Id);
+        //SetIdBypassPropertyChecks(result.Obj.Id);
+        //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
+        //may need to load new LanguageEdit child, new languageId, etc.
+        LoadFromDtoBypassPropertyChecks(result.Obj);
       }
-
     }
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Update()
@@ -237,18 +277,14 @@ namespace LearnLanguages.Business
       using (var dalManager = DalFactory.GetDalManager())
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
-
-        Result<PhraseDto> result = phraseDal.Update(
-                                                      new PhraseDto()
-                                                      {
-                                                        Id = this.Id,
-                                                        LanguageId = this.LanguageId,
-                                                        Text = this.Text
-                                                      }
-                                                   );
+        var dto = CreateDto();
+        Result<PhraseDto> result = phraseDal.Update(dto);
         if (!result.IsSuccess || result.IsError)
           throw new UpdateFailedException(result.Msg);
-        SetIdBypassPropertyChecks(result.Obj.Id);
+        //SetIdBypassPropertyChecks(result.Obj.Id);
+        //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
+        //may need to load new LanguageEdit child, new languageId, etc.
+        LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
     [Transactional(TransactionalTypes.TransactionScope)]
@@ -306,7 +342,7 @@ namespace LearnLanguages.Business
           var result = phraseDal.Insert(dto);
           if (result.IsError)
             throw new InsertFailedException(result.Msg);
-          Id = result.Obj.Id;
+          LoadFromDtoBypassPropertyChecks(result.Obj);
         }
       }
     }
@@ -317,14 +353,11 @@ namespace LearnLanguages.Business
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
-        using (BypassPropertyChecks)
-        {
-          var dto = CreateDto();
-          var result = phraseDal.Update(dto);
-          if (result.IsError)
-            throw new UpdateFailedException(result.Msg); 
-          Id = result.Obj.Id;
-        }
+        var dto = CreateDto();
+        var result = phraseDal.Update(dto);
+        if (result.IsError)
+          throw new UpdateFailedException(result.Msg);
+        LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
 

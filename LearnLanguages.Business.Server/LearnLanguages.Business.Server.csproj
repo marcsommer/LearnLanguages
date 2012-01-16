@@ -65,6 +65,12 @@
     <Compile Include="..\LearnLanguages.Business.Client\PhraseList.cs">
       <Link>PhraseList.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Security\CustomIdentity.cs">
+      <Link>Security\CustomIdentity.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Security\CustomPrincipal.cs">
+      <Link>Security\CustomPrincipal.cs</Link>
+    </Compile>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

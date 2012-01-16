@@ -21,11 +21,25 @@ namespace LearnLanguages
       get
       {
         if (_Container == null)
-          throw new NullReferenceException("Container has not been initialized");
+          throw new NullReferenceException(CommonResources.ErrorMsgNotInjected("Container"));
         if (_EventAggregator == null)
           _EventAggregator = Container.GetExportedValue<IEventAggregator>();
 
         return _EventAggregator;
+      }
+    }
+
+    private static IWindowManager _WindowManager;
+    public static IWindowManager WindowManager
+    {
+      get
+      {
+        if (_Container == null)
+          throw new NullReferenceException(CommonResources.ErrorMsgNotInjected("Container"));
+        if (_WindowManager == null)
+          _WindowManager = Container.GetExportedValue<IWindowManager>();
+
+        return _WindowManager;
       }
     }
 

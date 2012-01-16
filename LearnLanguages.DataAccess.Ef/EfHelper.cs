@@ -8,6 +8,28 @@ namespace LearnLanguages.DataAccess.Ef
 {
   public static class EfHelper
   {
+    public static UserData ToData(UserDto dto)
+    {
+      return new UserData()
+      {
+        Id = dto.Id,
+        Username = dto.Username,
+        Salt = dto.Salt,
+        SaltedHashedPasswordValue = dto.SaltedHashedPasswordValue
+      };
+    }
+
+    public static UserDto ToDto(UserData data)
+    {
+      return new UserDto()
+      {
+        Id = data.Id,
+        Username = data.Username,
+        Salt = data.Salt,
+        SaltedHashedPasswordValue = data.SaltedHashedPasswordValue
+      };
+    }
+
     public static PhraseDto ToDto(PhraseData data)
     {
       return new PhraseDto()
@@ -49,5 +71,6 @@ namespace LearnLanguages.DataAccess.Ef
     {
       return ConfigurationManager.ConnectionStrings[EfResources.LearnLanguagesConnectionStringKey].ConnectionString;
     }
+
   }
 }

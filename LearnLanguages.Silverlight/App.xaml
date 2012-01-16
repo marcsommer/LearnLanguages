@@ -2,9 +2,76 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              x:Class="LearnLanguages.Silverlight.App"
              xmlns:local="clr-namespace:LearnLanguages.Silverlight"
+             xmlns:views="clr-namespace:LearnLanguages.Silverlight.Views"
              >
     
   <Application.Resources>
     <local:MefBootstrapper x:Key="bootstrapper" />
+
+    <Style x:Key="CoolButton" TargetType="Button">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+
+              <Rectangle Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" >
+
+                <Rectangle.Fill>
+                  <RadialGradientBrush GradientOrigin="0.05,.31">
+                    <GradientStop Offset="0.1" Color="White" />
+                    <GradientStop Offset="1.5" Color="Silver" />
+                  </RadialGradientBrush>
+                </Rectangle.Fill>
+              </Rectangle>
+
+              <TextBlock Text="{Binding Path=LabelText}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <!--<Setter Property="Height" Value="40" />-->
+      <!--<Setter Property="Width" Value="120" />-->
+    </Style>
+
+    <Style TargetType="Button">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+
+              <Ellipse Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" >
+
+                <Ellipse.Fill>
+                  <RadialGradientBrush GradientOrigin="0.05,.31">
+                    <GradientStop Offset="0.1" Color="White" />
+                    <GradientStop Offset="1.5" Color="Silver" />
+                  </RadialGradientBrush>
+                </Ellipse.Fill>
+
+              </Ellipse>
+
+              <TextBlock Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+
+    <Style TargetType="views:LoginView" x:Key="DefaultShellViewStyle">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="views:LoginView">
+            <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
   </Application.Resources>
 </Application>

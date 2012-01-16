@@ -79,10 +79,13 @@
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\LanguageDto.cs">
-      <Link>LanguageDto.cs</Link>
+      <Link>Dtos\LanguageDto.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\PhraseDto.cs">
-      <Link>PhraseDto.cs</Link>
+      <Link>Dtos\PhraseDto.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Dtos\UserDto.cs">
+      <Link>Dtos\UserDto.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\CreateFailedException.cs">
       <Link>Exceptions\CreateFailedException.cs</Link>
