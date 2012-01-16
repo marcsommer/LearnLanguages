@@ -12,7 +12,11 @@ namespace LearnLanguages.DataAccess.Mock
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        var dto = new PhraseDto() { Id = Guid.NewGuid() };
+        var dto = new PhraseDto() 
+        { 
+          Id = Guid.NewGuid(),
+          LanguageId = SeedData.DefaultLanguageId
+        };
         retResult = Result<PhraseDto>.Success(dto);
       }
       catch (Exception ex)
@@ -26,7 +30,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Phrases
+        var results = from item in SeedData.Phrases
                       where item.Id == id
                       select item;
 
@@ -52,16 +56,16 @@ namespace LearnLanguages.DataAccess.Mock
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Phrases
+        var results = from item in SeedData.Phrases
                       where item.Id == dto.Id
                       select item;
 
         if (results.Count() == 1)
         {
           var PhraseToUpdate = results.First();
-          MockDb.Phrases.Remove(PhraseToUpdate);
+          SeedData.Phrases.Remove(PhraseToUpdate);
           dto.Id = Guid.NewGuid();
-          MockDb.Phrases.Add(dto);
+          SeedData.Phrases.Add(dto);
           retResult = Result<PhraseDto>.Success(dto);
         }
         else
@@ -84,7 +88,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Phrases
+        var results = from item in SeedData.Phrases
                       where item.Id == dto.Id
                       select item;
 
@@ -92,9 +96,9 @@ namespace LearnLanguages.DataAccess.Mock
         {
           dto.Id = Guid.NewGuid();
           //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-          if (dto.LanguageId == Guid.Empty || !MockDb.ContainsLanguageId(dto.LanguageId))
+          if (dto.LanguageId == Guid.Empty || !SeedData.ContainsLanguageId(dto.LanguageId))
             throw new Exceptions.InsertFailedException(DalResources.ErrorMsgInsertFailedPhraseInvalidLanguageId);
-          MockDb.Phrases.Add(dto);
+          SeedData.Phrases.Add(dto);
           retResult = Result<PhraseDto>.Success(dto);
         }
         else
@@ -117,14 +121,14 @@ namespace LearnLanguages.DataAccess.Mock
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Phrases
+        var results = from item in SeedData.Phrases
                       where item.Id == id
                       select item;
 
         if (results.Count() == 1)
         {
           var PhraseToRemove = results.First();
-          MockDb.Phrases.Remove(PhraseToRemove);
+          SeedData.Phrases.Remove(PhraseToRemove);
           retResult = Result<PhraseDto>.Success(PhraseToRemove);
         }
         else
@@ -147,7 +151,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<ICollection<PhraseDto>> retResult = Result<ICollection<PhraseDto>>.Undefined(null);
       try
       {
-        var allDtos = new List<PhraseDto>(MockDb.Phrases);
+        var allDtos = new List<PhraseDto>(SeedData.Phrases);
         retResult = Result<ICollection<PhraseDto>>.Success(allDtos);
       }
       catch (Exception ex)

@@ -2,9 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearnLanguages.Business;
 using Microsoft.Silverlight.Testing;
-#if USE_MOCK
-using LearnLanguages.DataAccess.Mock;
-#endif
 using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
 using System.Linq;

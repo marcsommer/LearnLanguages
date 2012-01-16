@@ -26,7 +26,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Languages
+        var results = from item in SeedData.Languages
                       where item.Id == id
                       select item;
 
@@ -52,16 +52,16 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Languages
+        var results = from item in SeedData.Languages
                       where item.Id == dto.Id
                       select item;
 
         if (results.Count() == 1)
         {
           var languageToUpdate = results.First();
-          MockDb.Languages.Remove(languageToUpdate);
+          SeedData.Languages.Remove(languageToUpdate);
           dto.Id = Guid.NewGuid();
-          MockDb.Languages.Add(dto);
+          SeedData.Languages.Add(dto);
           retResult = Result<LanguageDto>.Success(dto);
         }
         else
@@ -84,14 +84,14 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Languages
+        var results = from item in SeedData.Languages
                       where item.Id == dto.Id
                       select item;
 
         if (results.Count() == 0)
         {
           dto.Id = Guid.NewGuid();
-          MockDb.Languages.Add(dto);
+          SeedData.Languages.Add(dto);
           retResult = Result<LanguageDto>.Success(dto);
         }
         else
@@ -114,14 +114,14 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in MockDb.Languages
+        var results = from item in SeedData.Languages
                       where item.Id == id
                       select item;
 
         if (results.Count() == 1)
         {
           var languageToRemove = results.First();
-          MockDb.Languages.Remove(languageToRemove);
+          SeedData.Languages.Remove(languageToRemove);
           retResult = Result<LanguageDto>.Success(languageToRemove);
         }
         else
@@ -144,7 +144,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<ICollection<LanguageDto>> retResult = Result<ICollection<LanguageDto>>.Undefined(null);
       try
       {
-        var allDtos = new List<LanguageDto>(MockDb.Languages);
+        var allDtos = new List<LanguageDto>(SeedData.Languages);
         retResult = Result<ICollection<LanguageDto>>.Success(allDtos);
       }
       catch (Exception ex)

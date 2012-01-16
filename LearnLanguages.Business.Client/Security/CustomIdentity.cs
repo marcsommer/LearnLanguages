@@ -55,9 +55,6 @@ namespace LearnLanguages.Business.Security
     /// <param name="dal"></param>
     private void LoadUserData(string username, ICustomIdentityDal dal)
     {
-      if (Csla.ApplicationContext.ExecutionLocation != ApplicationContext.ExecutionLocations.Server)
-        throw new GeneralDataAccessException("This could should only be running on the server.");
-
       var result = dal.GetUser(username);
       if (!result.IsSuccess || result.IsError)
         throw new GeneralDataAccessException(result.Msg);

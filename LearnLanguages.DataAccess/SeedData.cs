@@ -6,14 +6,13 @@ using System.Text;
 namespace LearnLanguages.DataAccess
 {
   public static class SeedData
-  
   {
     static SeedData()
     {
-      InitializeUsers();
       InitializeLanguages();
       InitializePhrases();
-
+      InitializeUsers();
+      InitializeRoles();
     }
 
     #region Language Data
@@ -76,10 +75,11 @@ namespace LearnLanguages.DataAccess
 
     #region Role Data
     public static Guid TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
+    public static string TestRoleText = DalResources.RoleAdmin;
     public static RoleDto TestRole = new RoleDto()
     {
       Id = TestRoleId,
-      Text = DalResources.RoleAdmin
+      Text = TestRoleText
     };
     #endregion
 
@@ -158,6 +158,7 @@ namespace LearnLanguages.DataAccess
         TestRole
       };
     }
+
     public static bool ContainsLanguageId(Guid id)
     {
       var results = from l in Languages

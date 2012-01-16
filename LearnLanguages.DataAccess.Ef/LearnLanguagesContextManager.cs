@@ -65,17 +65,20 @@ namespace LearnLanguages.DataAccess.Ef
     }
     private static void SeedContext(LearnLanguagesContext context)
     {
+      //USERS
       foreach (var userDto in SeedData.Users)
       {
         var data = EfHelper.ToData(userDto);
       }
+
+      //LANGUAGES
       foreach (var langDto in SeedData.Languages)
       {
         var data = EfHelper.ToData(langDto);
         context.LanguageDatas.AddObject(data);
         context.SaveChanges();
-        //update seeddata phrases with new language id
 
+        //UPDATE SEED DATA PHRASES WITH NEW LANGUAGE ID
         var affectedPhrases = (from phraseDto in SeedData.Phrases
                                where phraseDto.LanguageId == langDto.Id
                                select phraseDto).ToList();
@@ -83,10 +86,10 @@ namespace LearnLanguages.DataAccess.Ef
         {
           phraseDto.LanguageId = data.Id;//new Id
         }
-
         langDto.Id = data.Id;
       }
 
+      //PHRASES
       foreach (var phraseDto in SeedData.Phrases)
       {
         var data = EfHelper.ToData(phraseDto);

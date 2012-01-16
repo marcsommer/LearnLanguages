@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearnLanguages.Business;
 using Microsoft.Silverlight.Testing;
-using LearnLanguages.DataAccess.Mock;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using System.Linq;

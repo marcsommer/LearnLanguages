@@ -30,7 +30,6 @@ namespace LearnLanguages.DataAccess.Mock
     {
       if (username != _TestValidUsername)
         throw new GeneralDataAccessException("GetUser(username) not found");
-
       UserDto dto = new UserDto()
       {
         Id = _TestValidUserId,
@@ -38,20 +37,28 @@ namespace LearnLanguages.DataAccess.Mock
         SaltedHashedPasswordValue = _TestSaltedHashedPassword,
         Username = _TestValidUsername
       };
-
       return Result<UserDto>.Success(dto);
     }
     public Result<ICollection<RoleDto>> GetRoles(string username)
     {
-      if (username != _TestValidUsername)
-        throw new GeneralDataAccessException("GetUser(username) not found");
+      Result<ICollection<RoleDto>> retResult = Result<ICollection<RoleDto>>.Undefined(null);
+      try
+      {
+        if (username != _TestValidUsername)
+          throw new GeneralDataAccessException("GetUser(username) not found");
 
-      return Result<ICollection<RoleDto>>.Success(
-        new List<RoleDto>()
+        var role = new RoleDto()
         {
-          
-        }
-      );
+          Id = SeedData.TestRoleId,
+          Text = SeedData.TestRoleText
+        };
+        retResult = Result<ICollection<RoleDto>>.Success(new List<RoleDto>() { role });
+      }
+      catch (Exception ex)
+      {
+        retResult = Result<ICollection<RoleDto>>.FailureWithInfo(null, ex);
+      }
+      return retResult;
     }
   }
 }
