@@ -44,6 +44,9 @@ namespace LearnLanguages.DataAccess.Ef
 
     public static void Initialize()
     {
+      if (InitializedSuccessfully)
+        return;
+
       _Initialized = true;
       
       using (LearnLanguagesContext context = new LearnLanguagesContext())
@@ -65,6 +68,8 @@ namespace LearnLanguages.DataAccess.Ef
     }
     private static void SeedContext(LearnLanguagesContext context)
     {
+      SeedData.InitializeData();
+
       //USERS
       foreach (var userDto in SeedData.Users)
       {
@@ -102,7 +107,7 @@ namespace LearnLanguages.DataAccess.Ef
     public static ObjectContextManager<LearnLanguagesContext> GetManager()
     {
       //hack: Check for Initialize LLContextManager in GetManager() method.  I had this in static constructor, but it was not getting called on the first call to this static class _every_ time the app started!?!  It would work, and then it seemed to start glitching and would completely miss the ctor with absolutely zero change in code.  Compiler optimization maybe?  I dunno.  So, now I have it check _every_ time we're getting a manager, which shouldn't be how it is.  I'll try to troubleshoot the static constructor problem later, hopefully it won't repro and I'll just put it back in the static ctor.
-      if (!InitializedSuccessfully)
+      if (!_Initialized)
         Initialize();
 
       return ObjectContextManager<LearnLanguagesContext>.GetManager(EfResources.LearnLanguagesConnectionStringKey);

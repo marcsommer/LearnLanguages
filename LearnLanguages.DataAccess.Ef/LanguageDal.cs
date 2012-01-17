@@ -12,26 +12,24 @@ namespace LearnLanguages.DataAccess.Ef
   {
     public Result<LanguageDto> New(object criteria)
     {
-      throw new NotImplementedException("Ef.LanguageDal.New(object criteria)");
-      //Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
-      //try
-      //{
-      //  LanguageDto newLanguageDto = new LanguageDto()
-      //  {
-      //    Id = Guid.NewGuid(),
-      //    Text = DalResources.DefaultNewLanguageText
-      //  };
-      //  retResult = Result<LanguageDto>.Success(newLanguageDto);
-      //}
-      //catch (Exception ex)
-      //{
-      //  retResult = Result<LanguageDto>.FailureWithInfo(null, ex);
-      //}
-      //return retResult;
+      Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
+      try
+      {
+        LanguageDto newLanguageDto = new LanguageDto()
+        {
+          Id = Guid.NewGuid(),
+          Text = DalResources.DefaultNewLanguageText
+        };
+        retResult = Result<LanguageDto>.Success(newLanguageDto);
+      }
+      catch (Exception ex)
+      {
+        retResult = Result<LanguageDto>.FailureWithInfo(null, ex);
+      }
+      return retResult;
     }
     public Result<LanguageDto> Fetch(Guid id)
     {
-      
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {

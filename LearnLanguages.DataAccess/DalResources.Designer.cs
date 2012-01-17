@@ -88,6 +88,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DalSeedDataInitializedKey.
+        /// </summary>
+        public static string DalSeedDataInitializedKey {
+            get {
+                return ResourceManager.GetString("DalSeedDataInitializedKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9.
         /// </summary>
         public static string DefaultEnglishLanguageId {

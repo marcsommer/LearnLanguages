@@ -25,7 +25,8 @@ namespace LearnLanguages.Business
     /// <param name="callback"></param>
     public static void NewLanguageEdit(EventHandler<DataPortalResult<LanguageEdit>> callback)
     {
-      DataPortal.BeginCreate<LanguageEdit>(callback, DataPortal.ProxyModes.LocalOnly);
+      //DataPortal.BeginCreate<LanguageEdit>(callback, DataPortal.ProxyModes.LocalOnly);
+      DataPortal.BeginCreate<LanguageEdit>(callback);
     }
     ///// <summary>
     ///// This happens DataPortal.ProxyModes.LocalOnly

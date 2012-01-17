@@ -127,6 +127,10 @@
   <data name="AuthenticationTypeString" xml:space="preserve">
     <value>Custom</value>
   </data>
+  <data name="DalSeedDataInitializedKey" xml:space="preserve">
+    <value>DalSeedDataInitializedKey</value>
+    <comment>This key accesses a bool value in the application context to determine if the dal seed data is initialized.</comment>
+  </data>
   <data name="DefaultEnglishLanguageId" xml:space="preserve">
     <value>C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9</value>
   </data>

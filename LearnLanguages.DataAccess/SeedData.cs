@@ -9,10 +9,32 @@ namespace LearnLanguages.DataAccess
   {
     static SeedData()
     {
-      InitializeLanguages();
-      InitializePhrases();
-      InitializeUsers();
-      InitializeRoles();
+      _Initialized = false;
+      InitializeData();
+    }
+    private static bool _Initialized 
+    {
+      get
+      {
+        return (bool)Csla.ApplicationContext.LocalContext[DalResources.DalSeedDataInitializedKey];
+      }
+      set
+      {
+        Csla.ApplicationContext.LocalContext[DalResources.DalSeedDataInitializedKey] = value;
+      }
+    }
+
+
+    public static void InitializeData()
+    {
+      if (!_Initialized)
+      {
+        InitializeLanguages();
+        InitializePhrases();
+        InitializeUsers();
+        InitializeRoles();
+        _Initialized = true;
+      }
     }
 
     #region Language Data
@@ -147,7 +169,9 @@ namespace LearnLanguages.DataAccess
           Id = TestValidUserId,
           Username = TestValidUsername,
           Salt = TestSalt,
-          SaltedHashedPasswordValue = TestSaltedHashedPassword
+          SaltedHashedPasswordValue = TestSaltedHashedPassword,
+          PhraseIds = new List<Guid>() { IdHello, IdDog, IdHola, IdLongPhrase },
+          RoleIds = new List<Guid>() { TestRoleId }
         }
       };
     }

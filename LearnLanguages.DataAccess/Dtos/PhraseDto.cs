@@ -9,7 +9,7 @@ namespace LearnLanguages.DataAccess
     public Guid Id { get; set; }
     public string Text { get; set; }
     public Guid LanguageId  { get; set; } //primary key
-    public Guid UserId { get; set; }      //composite key
-    public string Username { get; set; }  //composite key
+    public Guid UserId { get; set; }      //primary key
+    public string Username { get; set; }  
   }
 }

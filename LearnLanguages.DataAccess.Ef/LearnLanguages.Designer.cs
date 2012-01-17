@@ -611,7 +611,7 @@ namespace LearnLanguages.DataAccess.Ef
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Username
         {
@@ -621,14 +621,11 @@ namespace LearnLanguages.DataAccess.Ef
             }
             set
             {
-                if (_Username != value)
-                {
-                    OnUsernameChanging(value);
-                    ReportPropertyChanging("Username");
-                    _Username = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Username");
-                    OnUsernameChanged();
-                }
+                OnUsernameChanging(value);
+                ReportPropertyChanging("Username");
+                _Username = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Username");
+                OnUsernameChanged();
             }
         }
         private global::System.String _Username;
