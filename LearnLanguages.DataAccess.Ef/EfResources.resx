@@ -131,6 +131,14 @@
   <data name="ErrorMsgPropertyNotAssigned" xml:space="preserve">
     <value>One of the properties was not assigned in the DbContextManager.</value>
   </data>
+  <data name="Key_ContextManagerInitialized" xml:space="preserve">
+    <value>Key_ContextManagerInitialized</value>
+    <comment>To be used in Csla.ApplicationContext.LocalContext.</comment>
+  </data>
+  <data name="Key_ContextManagerInitializing" xml:space="preserve">
+    <value>Key_ContextManagerInitializing</value>
+    <comment>To be used in Csla.ApplicationContext.LocalContext.</comment>
+  </data>
   <data name="LearnLanguagesConnectionStringKey" xml:space="preserve">
     <value>LearnLanguagesContext</value>
     <comment>This is the name in the app.config connectionstrings section for our object context.</comment>

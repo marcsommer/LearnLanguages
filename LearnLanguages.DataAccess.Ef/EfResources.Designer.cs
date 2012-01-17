@@ -97,6 +97,24 @@ namespace LearnLanguages.DataAccess.Ef {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Key_ContextManagerInitialized.
+        /// </summary>
+        public static string Key_ContextManagerInitialized {
+            get {
+                return ResourceManager.GetString("Key_ContextManagerInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key_ContextManagerInitializing.
+        /// </summary>
+        public static string Key_ContextManagerInitializing {
+            get {
+                return ResourceManager.GetString("Key_ContextManagerInitializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LearnLanguagesContext.
         /// </summary>
         public static string LearnLanguagesConnectionStringKey {
