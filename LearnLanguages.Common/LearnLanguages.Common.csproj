@@ -110,6 +110,7 @@
     <Compile Include="MagicStringsList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultOfT.cs" />
+    <Compile Include="SaltedHashedPassword.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Statuses\Status.cs" />
     <Compile Include="Statuses\StatusAborted.cs" />

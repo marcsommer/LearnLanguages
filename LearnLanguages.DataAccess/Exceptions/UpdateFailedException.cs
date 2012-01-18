@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class UpdateFailedException : Exception
   {
     public UpdateFailedException()  
-      : base(DalResources.ErrorMsgUpdateFailed)
+      : base(DalResources.ErrorMsgUpdateFailedException)
     {
 
     }
@@ -19,7 +19,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public UpdateFailedException(Exception innerException)
-      : base(DalResources.ErrorMsgUpdateFailed, innerException)
+      : base(DalResources.ErrorMsgUpdateFailedException, innerException)
     {
 
     }

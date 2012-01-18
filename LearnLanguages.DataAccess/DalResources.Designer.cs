@@ -205,7 +205,25 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Id was not found..
+        ///   Looks up a localized string similar to The roles of user ({0}) could not be retrieved..
+        /// </summary>
+        public static string ErrorMsgGetRolesFailedException {
+            get {
+                return ResourceManager.GetString("ErrorMsgGetRolesFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Id ({0}) already exists..
+        /// </summary>
+        public static string ErrorMsgIdAlreadyExists {
+            get {
+                return ResourceManager.GetString("ErrorMsgIdAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Id ({0}) was not found..
         /// </summary>
         public static string ErrorMsgIdNotFound {
             get {
@@ -216,45 +234,54 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Insert operation failed..
         /// </summary>
-        public static string ErrorMsgInsertFailed {
+        public static string ErrorMsgInsertFailedException {
             get {
-                return ResourceManager.GetString("ErrorMsgInsertFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Insert operation failed.  The Id {0} already exists..
-        /// </summary>
-        public static string ErrorMsgInsertFailed_IdAlreadyExists {
-            get {
-                return ResourceManager.GetString("ErrorMsgInsertFailed_IdAlreadyExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid LanguageId in Phrase.  This must be a valid Id in the Languages database..
-        /// </summary>
-        public static string ErrorMsgInsertFailedPhraseInvalidLanguageId {
-            get {
-                return ResourceManager.GetString("ErrorMsgInsertFailedPhraseInvalidLanguageId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Save operation failed..
-        /// </summary>
-        public static string ErrorMsgSaveFailed {
-            get {
-                return ResourceManager.GetString("ErrorMsgSaveFailed", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgInsertFailedException", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Update operation failed..
         /// </summary>
-        public static string ErrorMsgUpdateFailed {
+        public static string ErrorMsgUpdateFailedException {
             get {
-                return ResourceManager.GetString("ErrorMsgUpdateFailed", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgUpdateFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The username ({0}) was not found..
+        /// </summary>
+        public static string ErrorMsgUsernameNotFoundException {
+            get {
+                return ResourceManager.GetString("ErrorMsgUsernameNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verifying the user ({0}) threw an exception..
+        /// </summary>
+        public static string ErrorMsgVerifyUserFailedException {
+            get {
+                return ResourceManager.GetString("ErrorMsgVerifyUserFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something happened that was very bad. ({0}).
+        /// </summary>
+        public static string ErrorMsgVeryBadException {
+            get {
+                return ResourceManager.GetString("ErrorMsgVeryBadException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The result count was anticipated to be either one or zero.  This probably occurred when making a call to the database, expecting a unique result set..
+        /// </summary>
+        public static string ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero {
+            get {
+                return ResourceManager.GetString("ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero", resourceCulture);
             }
         }
         

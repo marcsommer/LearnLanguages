@@ -97,7 +97,12 @@ namespace LearnLanguages.DataAccess.Mock
           dto.Id = Guid.NewGuid();
           //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
           if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
-            throw new Exceptions.InsertFailedException(DalResources.ErrorMsgInsertFailedPhraseInvalidLanguageId);
+          {
+            //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
+            //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
+            //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
+            throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFound, dto.LanguageId));
+          }
           SeedData.Instance.Phrases.Add(dto);
           retResult = Result<PhraseDto>.Success(dto);
         }

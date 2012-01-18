@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomIdentityDalBase.cs" />
     <Compile Include="DalFactory.cs" />
     <Compile Include="DalResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -53,6 +54,11 @@
     </Compile>
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\UsernameNotFoundException.cs" />
+    <Compile Include="Exceptions\GetRolesFailedException.cs" />
+    <Compile Include="Exceptions\VeryBadException.cs" />
+    <Compile Include="Exceptions\VerifyUserFailedException.cs" />
+    <Compile Include="Exceptions\GetUserFailedException.cs" />
     <Compile Include="Exceptions\GetAllFailedException.cs" />
     <Compile Include="Exceptions\CreateFailedException.cs" />
     <Compile Include="Exceptions\DeleteFailedException.cs" />
@@ -74,6 +80,7 @@
     <EmbeddedResource Include="DalResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DalResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

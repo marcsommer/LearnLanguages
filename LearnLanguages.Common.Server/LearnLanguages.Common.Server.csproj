@@ -148,6 +148,9 @@
     <Compile Include="..\LearnLanguages.Common\ResultOfT.cs">
       <Link>ResultOfT.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\SaltedHashedPassword.cs">
+      <Link>SaltedHashedPassword.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Services.cs">
       <Link>Services.cs</Link>
     </Compile>
