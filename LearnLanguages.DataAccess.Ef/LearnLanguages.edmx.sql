@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/16/2012 20:33:32
+-- Date Created: 01/17/2012 22:49:36
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -74,9 +74,8 @@ GO
 CREATE TABLE [dbo].[PhraseDatas] (
     [Id] uniqueidentifier  NOT NULL,
     [Text] nvarchar(max)  NOT NULL,
-    [LanguageDataId] uniqueidentifier  NOT NULL,
     [UserDataId] uniqueidentifier  NOT NULL,
-    [UserDataUsername] nvarchar(max)  NOT NULL
+    [LanguageDataId] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -99,13 +98,20 @@ GO
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
     [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
-    [LanguageDatas_Id] uniqueidentifier  NOT NULL
+    [AssociationUserDataWithLanguageData_UserData_Id] uniqueidentifier  NOT NULL
 );
 GO
 
 -- Creating table 'AssociationUserDataWithRoleData'
 CREATE TABLE [dbo].[AssociationUserDataWithRoleData] (
     [AssociationUserDataWithRoleData_RoleData_Id] uniqueidentifier  NOT NULL,
+    [AssociationUserDataWithRoleData_UserData_Id] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'UserDataRoleData'
+CREATE TABLE [dbo].[UserDataRoleData] (
+    [UserDatas_Id] uniqueidentifier  NOT NULL,
     [RoleDatas_Id] uniqueidentifier  NOT NULL
 );
 GO
@@ -138,16 +144,22 @@ ADD CONSTRAINT [PK_RoleDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [AssociationUserDataWithLanguageData_LanguageData_Id], [LanguageDatas_Id] in table 'AssociationUserDataWithLanguageData'
+-- Creating primary key on [AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_UserData_Id] in table 'AssociationUserDataWithLanguageData'
 ALTER TABLE [dbo].[AssociationUserDataWithLanguageData]
 ADD CONSTRAINT [PK_AssociationUserDataWithLanguageData]
-    PRIMARY KEY NONCLUSTERED ([AssociationUserDataWithLanguageData_LanguageData_Id], [LanguageDatas_Id] ASC);
+    PRIMARY KEY NONCLUSTERED ([AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_UserData_Id] ASC);
 GO
 
--- Creating primary key on [AssociationUserDataWithRoleData_RoleData_Id], [RoleDatas_Id] in table 'AssociationUserDataWithRoleData'
+-- Creating primary key on [AssociationUserDataWithRoleData_RoleData_Id], [AssociationUserDataWithRoleData_UserData_Id] in table 'AssociationUserDataWithRoleData'
 ALTER TABLE [dbo].[AssociationUserDataWithRoleData]
 ADD CONSTRAINT [PK_AssociationUserDataWithRoleData]
-    PRIMARY KEY NONCLUSTERED ([AssociationUserDataWithRoleData_RoleData_Id], [RoleDatas_Id] ASC);
+    PRIMARY KEY NONCLUSTERED ([AssociationUserDataWithRoleData_RoleData_Id], [AssociationUserDataWithRoleData_UserData_Id] ASC);
+GO
+
+-- Creating primary key on [UserDatas_Id], [RoleDatas_Id] in table 'UserDataRoleData'
+ALTER TABLE [dbo].[UserDataRoleData]
+ADD CONSTRAINT [PK_UserDataRoleData]
+    PRIMARY KEY NONCLUSTERED ([UserDatas_Id], [RoleDatas_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -191,10 +203,10 @@ ADD CONSTRAINT [FK_AssociationUserDataWithLanguageData_UserData]
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating foreign key on [LanguageDatas_Id] in table 'AssociationUserDataWithLanguageData'
+-- Creating foreign key on [AssociationUserDataWithLanguageData_UserData_Id] in table 'AssociationUserDataWithLanguageData'
 ALTER TABLE [dbo].[AssociationUserDataWithLanguageData]
 ADD CONSTRAINT [FK_AssociationUserDataWithLanguageData_LanguageData]
-    FOREIGN KEY ([LanguageDatas_Id])
+    FOREIGN KEY ([AssociationUserDataWithLanguageData_UserData_Id])
     REFERENCES [dbo].[LanguageDatas]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -202,7 +214,7 @@ ADD CONSTRAINT [FK_AssociationUserDataWithLanguageData_LanguageData]
 -- Creating non-clustered index for FOREIGN KEY 'FK_AssociationUserDataWithLanguageData_LanguageData'
 CREATE INDEX [IX_FK_AssociationUserDataWithLanguageData_LanguageData]
 ON [dbo].[AssociationUserDataWithLanguageData]
-    ([LanguageDatas_Id]);
+    ([AssociationUserDataWithLanguageData_UserData_Id]);
 GO
 
 -- Creating foreign key on [AssociationUserDataWithRoleData_RoleData_Id] in table 'AssociationUserDataWithRoleData'
@@ -214,10 +226,10 @@ ADD CONSTRAINT [FK_AssociationUserDataWithRoleData_UserData]
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating foreign key on [RoleDatas_Id] in table 'AssociationUserDataWithRoleData'
+-- Creating foreign key on [AssociationUserDataWithRoleData_UserData_Id] in table 'AssociationUserDataWithRoleData'
 ALTER TABLE [dbo].[AssociationUserDataWithRoleData]
 ADD CONSTRAINT [FK_AssociationUserDataWithRoleData_RoleData]
-    FOREIGN KEY ([RoleDatas_Id])
+    FOREIGN KEY ([AssociationUserDataWithRoleData_UserData_Id])
     REFERENCES [dbo].[RoleDatas]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -225,7 +237,58 @@ ADD CONSTRAINT [FK_AssociationUserDataWithRoleData_RoleData]
 -- Creating non-clustered index for FOREIGN KEY 'FK_AssociationUserDataWithRoleData_RoleData'
 CREATE INDEX [IX_FK_AssociationUserDataWithRoleData_RoleData]
 ON [dbo].[AssociationUserDataWithRoleData]
+    ([AssociationUserDataWithRoleData_UserData_Id]);
+GO
+
+-- Creating foreign key on [UserDatas_Id] in table 'UserDataRoleData'
+ALTER TABLE [dbo].[UserDataRoleData]
+ADD CONSTRAINT [FK_UserDataRoleData_UserData]
+    FOREIGN KEY ([UserDatas_Id])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [RoleDatas_Id] in table 'UserDataRoleData'
+ALTER TABLE [dbo].[UserDataRoleData]
+ADD CONSTRAINT [FK_UserDataRoleData_RoleData]
+    FOREIGN KEY ([RoleDatas_Id])
+    REFERENCES [dbo].[RoleDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataRoleData_RoleData'
+CREATE INDEX [IX_FK_UserDataRoleData_RoleData]
+ON [dbo].[UserDataRoleData]
     ([RoleDatas_Id]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'PhraseDatas'
+ALTER TABLE [dbo].[PhraseDatas]
+ADD CONSTRAINT [FK_UserDataPhraseData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataPhraseData'
+CREATE INDEX [IX_FK_UserDataPhraseData]
+ON [dbo].[PhraseDatas]
+    ([UserDataId]);
+GO
+
+-- Creating foreign key on [LanguageDataId] in table 'PhraseDatas'
+ALTER TABLE [dbo].[PhraseDatas]
+ADD CONSTRAINT [FK_PhraseDataLanguageData]
+    FOREIGN KEY ([LanguageDataId])
+    REFERENCES [dbo].[LanguageDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PhraseDataLanguageData'
+CREATE INDEX [IX_FK_PhraseDataLanguageData]
+ON [dbo].[PhraseDatas]
+    ([LanguageDataId]);
 GO
 
 -- --------------------------------------------------

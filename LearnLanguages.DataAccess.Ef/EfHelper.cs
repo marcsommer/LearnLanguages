@@ -25,7 +25,7 @@ namespace LearnLanguages.DataAccess.Ef
       };
     }
 
-    public static UserData ToData(UserDto dto)
+    public static UserData ToData(UserDto dto, bool includeForeignEntities = true)
     {
       var retUserData = new UserData()
       {
@@ -35,40 +35,44 @@ namespace LearnLanguages.DataAccess.Ef
         SaltedHashedPasswordValue = dto.SaltedHashedPasswordValue
       };
 
-      using (var dalManager = DalFactory.GetDalManager())
+      if (includeForeignEntities)
       {
-        //USER PHRASES
-        var phraseDal = dalManager.GetProvider<IPhraseDal>();
-        foreach (var phraseId in dto.PhraseIds)
+        using (var dalManager = DalFactory.GetDalManager())
         {
-          var result = phraseDal.Fetch(phraseId);
-          if (!result.IsSuccess || result.IsError)
-            throw new Exceptions.FetchFailedException(result.Msg);
-
-          var phraseData = ToData(result.Obj);
-          retUserData.PhraseDatas.Add(phraseData);
-        }
-
-        //USER ROLES
-        var customIdentityDal = dalManager.GetProvider<ICustomIdentityDal>();
-        foreach (var roleId in dto.RoleIds)
-        {
-          var result = customIdentityDal.GetRoles(dto.Username);
-          if (!result.IsSuccess || result.IsError)
-            throw new Exceptions.FetchFailedException(result.Msg);
-          
-          var roleDtos = result.Obj;
-          foreach (var roleDto in roleDtos)
+          //USER PHRASES
+          var phraseDal = dalManager.GetProvider<IPhraseDal>();
+          foreach (var phraseId in dto.PhraseIds)
           {
-            RoleData roleData = new RoleData()
+            var result = phraseDal.Fetch(phraseId);
+            if (!result.IsSuccess || result.IsError)
+              throw new Exceptions.FetchFailedException(result.Msg);
+
+            var phraseData = ToData(result.Obj);
+            retUserData.PhraseDatas.Add(phraseData);
+          }
+
+          //USER ROLES
+          var customIdentityDal = dalManager.GetProvider<ICustomIdentityDal>();
+          foreach (var roleId in dto.RoleIds)
+          {
+            var result = customIdentityDal.GetRoles(dto.Username);
+            if (!result.IsSuccess || result.IsError)
+              throw new Exceptions.FetchFailedException(result.Msg);
+
+            var roleDtos = result.Obj;
+            foreach (var roleDto in roleDtos)
             {
-              Id = roleDto.Id,
-              Text = roleDto.Text
-            };
-            retUserData.RoleDatas.Add(roleData);
+              RoleData roleData = new RoleData()
+              {
+                Id = roleDto.Id,
+                Text = roleDto.Text
+              };
+              retUserData.RoleDatas.Add(roleData);
+            }
           }
         }
       }
+
       return retUserData;
     }
     public static UserDto ToDto(UserData data)
@@ -114,7 +118,8 @@ namespace LearnLanguages.DataAccess.Ef
       {
         Id = dto.Id,
         Text = dto.Text,
-        LanguageDataId = dto.LanguageId
+        LanguageDataId = dto.LanguageId,
+        UserDataId = dto.UserId
       };
     }
 
@@ -139,5 +144,6 @@ namespace LearnLanguages.DataAccess.Ef
     {
       return ConfigurationManager.ConnectionStrings[EfResources.LearnLanguagesConnectionStringKey].ConnectionString;
     }
+
   }
 }

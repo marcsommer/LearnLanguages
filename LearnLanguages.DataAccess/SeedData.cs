@@ -5,112 +5,118 @@ using System.Text;
 
 namespace LearnLanguages.DataAccess
 {
-  public static class SeedData
+  public sealed class SeedData
   {
-    static SeedData()
+    private SeedData()
     {
-      _Initialized = false;
       InitializeData();
     }
-    private static bool _Initialized 
+
+    private static volatile SeedData _Instance;
+    private static object _Lock = new object();
+
+    private void InitializeData()
+    {
+      TestRole = new RoleDto()
+      {
+        Id = TestRoleId,
+        Text = TestRoleText
+      };
+
+      InitializeLanguages();
+      InitializePhrases();
+      InitializeUsers();
+      InitializeRoles();
+    }
+
+    public static SeedData Instance
     {
       get
       {
-        return (bool)Csla.ApplicationContext.LocalContext[DalResources.DalSeedDataInitializedKey];
-      }
-      set
-      {
-        Csla.ApplicationContext.LocalContext[DalResources.DalSeedDataInitializedKey] = value;
+        if (_Instance == null)
+        {
+          lock (_Lock)
+          {
+            if (_Instance == null)
+              _Instance = new SeedData();
+          }
+        }
+
+        return _Instance;
       }
     }
 
-
-    public static void InitializeData()
-    {
-      if (!_Initialized)
-      {
-        InitializeLanguages();
-        InitializePhrases();
-        InitializeUsers();
-        InitializeRoles();
-        _Initialized = true;
-      }
-    }
 
     #region Language Data
-    public static Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
-    public static Guid EnglishId
+    public Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
+    public Guid EnglishId
     {
       get
       {
-        return (from lang in SeedData.Languages
+        return (from lang in Languages
                 where lang.Text == EnglishText
                 select lang.Id).First();
       }
     }
-    public static Guid SpanishId
+    public Guid SpanishId
     {
       get
       {
-        return (from lang in SeedData.Languages
+        return (from lang in Languages
                 where lang.Text == SpanishText
                 select lang.Id).First();
       }
     }
-    public static string EnglishText = DalResources.DefaultEnglishLanguageText;
-    public static string SpanishText = "Spanish";
+    public string EnglishText = DalResources.DefaultEnglishLanguageText;
+    public string SpanishText = "Spanish";
     #endregion
 
     #region Phrase Data
-    public static string HelloText = "Hello!";
-    public static string LongPhraseText = "Why this is a very long phrase indeed.  It is in fact several sentences.  I think it might just be TOO long!";
-    public static string HolaText = "Hola!!!";
-    public static string DogText = "dog";
+    public string HelloText = "Hello!";
+    public string LongPhraseText = "Why this is a very long phrase indeed.  It is in fact several sentences.  I think it might just be TOO long!";
+    public string HolaText = "Hola!!!";
+    public string DogText = "dog";
 
-    public static Guid IdHello
+    public Guid IdHello
     {
       get { return GetPhraseId(HelloText); }
     }
-    public static Guid IdLongPhrase
+    public Guid IdLongPhrase
     {
       get { return GetPhraseId(LongPhraseText); }
     }
-    public static Guid IdHola
+    public Guid IdHola
     {
       get { return GetPhraseId(HolaText); }
     }
-    public static Guid IdDog
+    public Guid IdDog
     {
       get { return GetPhraseId(DogText); }
     }
     #endregion
 
     #region User Data
-    public static Guid TestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
-    public static string TestValidUsername = "user";
-    public static string TestValidPassword = "password";
-    public static string TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
-    public static int TestSalt = -54623530;
-    public static string TestInvalidUsername = "ImNotAValidUser";
-    public static string TestInvalidPassword = "ImNotAValidPassword";
+    public Guid TestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
+    public string TestValidUsername = "user";
+    public string TestValidPassword = "password";
+    public string TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
+    public int TestSalt = -54623530;
+    public string TestInvalidUsername = "ImNotAValidUser";
+    public string TestInvalidPassword = "ImNotAValidPassword";
     #endregion
 
     #region Role Data
-    public static Guid TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
-    public static string TestRoleText = DalResources.RoleAdmin;
-    public static RoleDto TestRole = new RoleDto()
-    {
-      Id = TestRoleId,
-      Text = TestRoleText
-    };
+    public Guid TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
+    public string TestRoleText = DalResources.RoleAdmin;
+    public RoleDto TestRole;
     #endregion
 
-    public static List<PhraseDto> Phrases { get; private set; }
-    public static List<LanguageDto> Languages { get; private set; }
-    public static List<UserDto> Users { get; private set; }
-    public static List<RoleDto> Roles { get; private set; }
+    public List<PhraseDto> Phrases { get; private set; }
+    public List<LanguageDto> Languages { get; private set; }
+    public List<UserDto> Users { get; private set; }
+    public List<RoleDto> Roles { get; private set; }
 
-    private static void InitializeLanguages()
+    private void InitializeLanguages()
     {
       Languages = new List<LanguageDto>()
       {
@@ -127,7 +133,7 @@ namespace LearnLanguages.DataAccess
         }
       };
     }
-    private static void InitializePhrases()
+    private void InitializePhrases()
     {
       Phrases = new List<PhraseDto>()
       {
@@ -135,32 +141,40 @@ namespace LearnLanguages.DataAccess
         { 
           Id = new Guid("00D626ED-3EAC-4729-B276-5B9368DA26AD"),
           LanguageId = EnglishId,
-          Text = HelloText
+          Text = HelloText,
+          UserId = TestValidUserId,
+          Username = TestValidUsername
         },
           
         new PhraseDto() 
         { 
           Id = new Guid("32D6CB9A-CBFF-47AE-91BB-396FAA7A3506"),
           LanguageId = EnglishId,
-          Text = LongPhraseText
+          Text = LongPhraseText,
+          UserId = TestValidUserId,
+          Username = TestValidUsername
         },
         
         new PhraseDto() 
         { 
           Id = new Guid("CBC5F6DE-3A46-4010-A67D-1E712EBFD3AB"),
           LanguageId = SpanishId,
-          Text = HolaText
+          Text = HolaText,
+          UserId = TestValidUserId,
+          Username = TestValidUsername
         },
 
         new PhraseDto()
         {
           Id = new Guid("B45AC4A3-BAB3-406C-BD03-20D9E55E9740"),
           LanguageId = EnglishId,
-          Text = DogText
+          Text = DogText,
+          UserId = TestValidUserId,
+          Username = TestValidUsername
         }
       };
     }
-    private static void InitializeUsers()
+    private void InitializeUsers()
     {
       Users = new List<UserDto>()
       {
@@ -175,7 +189,7 @@ namespace LearnLanguages.DataAccess
         }
       };
     }
-    private static void InitializeRoles()
+    private void InitializeRoles()
     {
       Roles = new List<RoleDto>()
       {
@@ -183,7 +197,7 @@ namespace LearnLanguages.DataAccess
       };
     }
 
-    public static bool ContainsLanguageId(Guid id)
+    public bool ContainsLanguageId(Guid id)
     {
       var results = from l in Languages
                     where l.Id == id
@@ -191,9 +205,9 @@ namespace LearnLanguages.DataAccess
 
       return results.Count() == 1;
     }
-    public static Guid GetPhraseId(string phraseText)
+    public Guid GetPhraseId(string phraseText)
     {
-        return (from phrase in SeedData.Phrases
+        return (from phrase in Phrases
                 where phrase.Text == phraseText
                 select phrase.Id).First();
     }

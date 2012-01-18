@@ -139,6 +139,10 @@
     <value>Key_ContextManagerInitializing</value>
     <comment>To be used in Csla.ApplicationContext.LocalContext.</comment>
   </data>
+  <data name="Key_ContextManagerObject" xml:space="preserve">
+    <value>Key_ContextManagerObject</value>
+    <comment>Key to the instance of the context manager itself.</comment>
+  </data>
   <data name="LearnLanguagesConnectionStringKey" xml:space="preserve">
     <value>LearnLanguagesContext</value>
     <comment>This is the name in the app.config connectionstrings section for our object context.</comment>

@@ -33,7 +33,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from languageData in ctx.ObjectContext.LanguageDatas
                         where languageData.Id == id
@@ -62,7 +62,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from languageData in ctx.ObjectContext.LanguageDatas
                         where languageData.Id == dto.Id
@@ -98,7 +98,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from languageData in ctx.ObjectContext.LanguageDatas
                         where languageData.Id == dto.Id
@@ -134,7 +134,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from languageData in ctx.ObjectContext.LanguageDatas
                         where languageData.Id == id
@@ -169,7 +169,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<ICollection<LanguageDto>> retResult = Result<ICollection<LanguageDto>>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var allDtos = (
 

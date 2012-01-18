@@ -30,11 +30,11 @@ namespace LearnLanguages.Silverlight.Tests
 
         allLanguages = r.Object;
         _EnglishId = (from language in allLanguages
-                      where language.Text == SeedData.EnglishText
+                      where language.Text == SeedData.Instance.EnglishText
                       select language.Id).First();
 
         _SpanishId = (from language in allLanguages
-                      where language.Text == SeedData.SpanishText
+                      where language.Text == SeedData.Instance.SpanishText
                       select language.Id).First();
 
         isLoaded = true;

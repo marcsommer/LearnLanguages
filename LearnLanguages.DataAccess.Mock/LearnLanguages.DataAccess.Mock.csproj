@@ -44,9 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LearnLanguages.DataAccess\SeedData.cs">
-      <Link>SeedData.cs</Link>
-    </Compile>
     <Compile Include="CustomIdentityDal.cs" />
     <Compile Include="PhraseDal.cs" />
     <Compile Include="DalManager.cs" />

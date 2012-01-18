@@ -35,7 +35,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from phraseData in ctx.ObjectContext.PhraseDatas
                         where phraseData.Id == id
@@ -64,7 +64,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from phraseData in ctx.ObjectContext.PhraseDatas
                         where phraseData.Id == dto.Id
@@ -101,7 +101,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from phraseData in ctx.ObjectContext.PhraseDatas
                         where phraseData.Id == dto.Id
@@ -137,7 +137,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var results = from phraseData in ctx.ObjectContext.PhraseDatas
                         where phraseData.Id == id
@@ -171,7 +171,7 @@ namespace LearnLanguages.DataAccess.Ef
       Result<ICollection<PhraseDto>> retResult = Result<ICollection<PhraseDto>>.Undefined(null);
       try
       {
-        using (var ctx = LearnLanguagesContextManager.GetManager())
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
           var allDtos = (
 
@@ -198,7 +198,7 @@ namespace LearnLanguages.DataAccess.Ef
     {
       Guid retDefaultLanguageId;
 
-      using (var ctx = LearnLanguagesContextManager.GetManager())
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         try
         {

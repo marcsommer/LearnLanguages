@@ -7,127 +7,148 @@ using Csla.Data;
 
 namespace LearnLanguages.DataAccess.Ef
 {
-  public static class LearnLanguagesContextManager
+  public sealed class LearnLanguagesContextManager
   {
-    static LearnLanguagesContextManager()
+    private LearnLanguagesContextManager()
     {
-      Initialized = false;
-      Initializing = false;
       Initialize();
     }
 
-    public static bool Initialized
+    private static object _InstanceLock = new object();
+    private static volatile LearnLanguagesContextManager _Instance;
+
+    public static LearnLanguagesContextManager Instance
     {
       get
       {
-        return (bool)Csla.ApplicationContext.GlobalContext[EfResources.Key_ContextManagerInitialized];
-      }
-      private set
-      {
-        Csla.ApplicationContext.GlobalContext[EfResources.Key_ContextManagerInitialized] = value;
+        if (_Instance == null)
+        {
+          lock (_InstanceLock)
+          {
+            if (_Instance == null)
+            {
+              _Instance = new LearnLanguagesContextManager();
+            }
+          }
+        }
+
+        return _Instance;
       }
     }
 
-    public static bool Initializing
-    {
-      get
-      {
-        return (bool)Csla.ApplicationContext.LocalContext[EfResources.Key_ContextManagerInitializing];
-      }
-      private set
-      {
-        Csla.ApplicationContext.LocalContext[EfResources.Key_ContextManagerInitializing] = value;
-      }
-    }
-
-    public static void Initialize()
+    private void Initialize()
     {
       var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
       var isBackground = System.Threading.Thread.CurrentThread.IsBackground;
       var isPool = System.Threading.Thread.CurrentThread.IsThreadPoolThread;
-      if (Initialized || Initializing)
-        return;
-      Initializing = true;
-      try
+      using (LearnLanguagesContext context = new LearnLanguagesContext())
       {
-        using (LearnLanguagesContext context = new LearnLanguagesContext())
-        {
-          if (context.DatabaseExists() && bool.Parse(EfResources.DeleteAllExistingDataAndStartNewSeedData))
-            context.DeleteDatabase();
+        if (context.DatabaseExists() && bool.Parse(EfResources.DeleteAllExistingDataAndStartNewSeedData))
+          context.DeleteDatabase();
 
-          if (!context.DatabaseExists())
-          {
-            context.CreateDatabase();
-            context.Connection.Open();
-            try
-            {
-              SeedContext(context);
-              context.SaveChanges();
-            }
-            finally
-            {
-              context.Connection.Close();
-            }
-          }
+        if (!context.DatabaseExists())
+        {
+          context.CreateDatabase();
+          context.Connection.Open();
+          SeedContext(context);
+          context.SaveChanges();
         }
-        Initialized = true;
-      }
-      finally
-      {
-        Initializing = false;
       }
     }
 
-    private static void SeedContext(LearnLanguagesContext context)
+    private void SeedContext(LearnLanguagesContext context)
     {
-      SeedData.InitializeData();
-
       //LANGUAGES
-      foreach (var langDto in SeedData.Languages)
+      foreach (var langDto in SeedData.Instance.Languages)
       {
-        var data = EfHelper.ToData(langDto);
-        context.LanguageDatas.AddObject(data);
+        var langData = EfHelper.ToData(langDto);
+        context.LanguageDatas.AddObject(langData);
         context.SaveChanges();
 
         //UPDATE SEED DATA PHRASES WITH NEW LANGUAGE ID
-        var affectedPhrases = (from phraseDto in SeedData.Phrases
+        var affectedPhrases = (from phraseDto in SeedData.Instance.Phrases
                                where phraseDto.LanguageId == langDto.Id
                                select phraseDto).ToList();
         foreach (var phraseDto in affectedPhrases)
         {
-          phraseDto.LanguageId = data.Id;//new Id
+          phraseDto.LanguageId = langData.Id;//new Id
         }
-        langDto.Id = data.Id;
+        langDto.Id = langData.Id;
+      }
+
+      //ROLES
+      foreach (var roleDto in SeedData.Instance.Roles)
+      {
+        var roleData = EfHelper.ToData(roleDto);
+        context.RoleDatas.AddObject(roleData);
+        context.SaveChanges();
+
+        //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS DATA
+        var affectedUsers = (from userDto in SeedData.Instance.Users
+                             where userDto.RoleIds.Contains(roleDto.Id)
+                             select userDto).ToList();
+
+        foreach (var affectedUser in affectedUsers)
+        {
+          affectedUser.RoleIds.Remove(roleDto.Id);
+          affectedUser.RoleIds.Add(roleData.Id);
+        }
+      }
+
+      ////USERS AND PHRASES PER USER
+      //foreach (var userDto in SeedData.Instance.Users)
+      //{
+
+      //}
+      
+      
+      
+      
+      foreach (var userDto in SeedData.Instance.Users)
+      {
+        var userData = EfHelper.ToData(userDto, false);
+        context.UserDatas.AddObject(userData);
+        context.SaveChanges();
+
+        //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS USER
+        var affectedPhrases = (from phraseDto in SeedData.Instance.Phrases
+                               where phraseDto.UserId == userDto.Id
+                               select phraseDto).ToList();
+
+        foreach (var affectedPhrase in affectedPhrases)
+        {
+          affectedPhrase.UserId = userData.Id;
+          affectedPhrase.UserId = userData.Id;
+        }
+
+        userDto.Id = userData.Id;
       }
 
       //PHRASES
-      foreach (var phraseDto in SeedData.Phrases)
+      foreach (var phraseDto in SeedData.Instance.Phrases)
       {
-        var data = EfHelper.ToData(phraseDto);
-        context.PhraseDatas.AddObject(data);
+        var phraseData = EfHelper.ToData(phraseDto);
+        context.PhraseDatas.AddObject(phraseData);
         context.SaveChanges();
-        phraseDto.Id = data.Id;
-      }
 
-      //USERS
-      foreach (var userDto in SeedData.Users)
-      {
-        var data = EfHelper.ToData(userDto);
+        //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS DATA
+        var affectedUsers = (from userDto in SeedData.Instance.Users
+                             where userDto.PhraseIds.Contains(phraseDto.Id)
+                             select userDto).ToList();
+
+        foreach (var affectedUser in affectedUsers)
+        {
+          affectedUser.PhraseIds.Remove(phraseDto.Id);
+          affectedUser.PhraseIds.Add(phraseData.Id);
+        }
+
+        phraseDto.Id = phraseData.Id;
       }
     }
 
-    public static ObjectContextManager<LearnLanguagesContext> GetManager()
+    public ObjectContextManager<LearnLanguagesContext> GetManager()
     {
-      //hack: Check for Initialize LLContextManager in GetManager() method.  I had this in static constructor, but it was not getting called on the first call to this static class _every_ time the app started!?!  It would work, and then it seemed to start glitching and would completely miss the ctor with absolutely zero change in code.  Compiler optimization maybe?  I dunno.  So, now I have it check _every_ time we're getting a manager, which shouldn't be how it is.  I'll try to troubleshoot the static constructor problem later, hopefully it won't repro and I'll just put it back in the static ctor.
-      if (!Initialized)
-        Initialize();
-
       return ObjectContextManager<LearnLanguagesContext>.GetManager(EfResources.LearnLanguagesConnectionStringKey);
-    }
-
-    public static void Dispose()
-    {
-      throw new NotImplementedException();
     }
   }
 }
