@@ -68,7 +68,7 @@ namespace LearnLanguages.Business.Security
         Salt = userData.Salt;
 
         var resultRoles = dal.GetRoles(Name);
-        if (!resultRoles.IsSuccess || resultRoles.IsError)
+        if (!resultRoles.IsSuccess || resultRoles.IsError || resultRoles.Obj.Count == 0)
           throw new GeneralDataAccessException(resultRoles.Msg);
 
         Roles = new Csla.Core.MobileList<string>();

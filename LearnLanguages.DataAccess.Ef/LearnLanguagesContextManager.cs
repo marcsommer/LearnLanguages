@@ -108,6 +108,18 @@ namespace LearnLanguages.DataAccess.Ef
       foreach (var userDto in SeedData.Instance.Users)
       {
         var userData = EfHelper.ToData(userDto, false);
+        //manually add roles (cannot use dal.getroles because we are seeding 
+        //the data and initializing the context that would use)
+        foreach (var roleId in userDto.RoleIds)
+        {
+          var userRoleData = (from roleData in context.RoleDatas
+                              where roleData.Id == roleId
+                              select roleData).First();
+          if (userRoleData == null)
+            throw new Exceptions.SeedDataException();
+          userData.RoleDatas.Add(userRoleData);
+        }
+
         context.UserDatas.AddObject(userData);
         context.SaveChanges();
 

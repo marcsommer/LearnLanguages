@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\SeedDataException.cs" />
     <Compile Include="Exceptions\UsernameNotFoundException.cs" />
     <Compile Include="Exceptions\GetRolesFailedException.cs" />
     <Compile Include="Exceptions\VeryBadException.cs" />

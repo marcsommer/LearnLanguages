@@ -241,6 +241,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SeedData threw an exception..
+        /// </summary>
+        public static string ErrorMsgSeedDataException {
+            get {
+                return ResourceManager.GetString("ErrorMsgSeedDataException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Update operation failed..
         /// </summary>
         public static string ErrorMsgUpdateFailedException {

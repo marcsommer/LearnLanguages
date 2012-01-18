@@ -183,6 +183,9 @@
   <data name="ErrorMsgInsertFailedException" xml:space="preserve">
     <value>The Insert operation failed.</value>
   </data>
+  <data name="ErrorMsgSeedDataException" xml:space="preserve">
+    <value>SeedData threw an exception.</value>
+  </data>
   <data name="ErrorMsgUpdateFailedException" xml:space="preserve">
     <value>The Update operation failed.</value>
   </data>

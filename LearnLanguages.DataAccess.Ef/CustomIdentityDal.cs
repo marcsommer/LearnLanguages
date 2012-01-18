@@ -74,13 +74,19 @@ namespace LearnLanguages.DataAccess.Ef
       var userDto = GetUserImpl(username);
       if (username == null)
         throw new Exceptions.UsernameNotFoundException(username);
-      ICollection<RoleDto> retRoles = null;
+      ICollection<RoleDto> retRoles = new List<RoleDto>();
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         //GET ROLES FOR THAT USER
-        retRoles = (from roleData in ctx.ObjectContext.RoleDatas
-                    where userDto.RoleIds.Contains(roleData.Id)
-                    select EfHelper.ToDto(roleData)).ToList();
+        var results = from roleData in ctx.ObjectContext.RoleDatas
+                      where userDto.RoleIds.Contains(roleData.Id)
+                      select roleData;
+
+        foreach (var roleData in results)
+        {
+          var dto = EfHelper.ToDto(roleData);
+          retRoles.Add(dto);
+        }
       }
 
       return retRoles;
