@@ -8,6 +8,9 @@ using System.Linq;
 
 namespace LearnLanguages.Silverlight.Tests
 {
+  //THE SEEDDATA INSTANCE IS NOT UPDATED ON THE CLIENT.  WE CANNOT TEST AGAINST SEEDDATA.INSTANCE IDS
+  //BECAUSE THESE IDS WERE NOT UPDATED WHEN THE DB WAS SEEDED, THE SEEDDATA.INSTANCE ON THE SERVER 
+  //WAS UPDATED.  THE RELATIONSHIPS SHOULD BE VALID HOWEVER.
   [TestClass]
   [Tag("language")]
   public class LanguageTests : Microsoft.Silverlight.Testing.SilverlightTest
@@ -145,7 +148,7 @@ namespace LearnLanguages.Silverlight.Tests
         isNewed = true;
 
         //EDIT
-        languageEdit.Text = "TestLanguage";
+        languageEdit.Text = "TestLanguage_NEW_EDIT_BEGINSAVE_GET";
 
         //SAVE
         languageEdit.BeginSave((s2, r2) =>
@@ -297,6 +300,11 @@ namespace LearnLanguages.Silverlight.Tests
     {
       {
         var isLoaded = false;
+        var isQueried = false;
+        int countEnglish = 0; 
+        int countSpanish = 0;
+        Guid englishId = Guid.Empty;
+        Guid spanishId = Guid.Empty;
         Exception error = null;
         LanguageList allLanguages = null;
         LanguageList.GetAll((s, r) =>
@@ -307,11 +315,32 @@ namespace LearnLanguages.Silverlight.Tests
 
             allLanguages = r.Object;
             isLoaded = true;
+
+            var englishResults = from lang in allLanguages
+                                 where lang.Text == SeedData.Instance.EnglishText
+                                 select lang;
+            countEnglish = englishResults.Count();
+            var englishLang = englishResults.First();
+            englishId = englishLang.Id;
+
+            var spanishResults = from lang in allLanguages
+                                 where lang.Text == SeedData.Instance.SpanishText
+                                 select lang;
+            countSpanish = spanishResults.Count();
+            var spanishLang = spanishResults.First();
+            spanishId = spanishLang.Id;
+
+            isQueried = true;
           });
 
         EnqueueConditional(() => isLoaded);
+        EnqueueConditional(() => isQueried);
         EnqueueCallback(() => { Assert.IsNull(error); },
                         () => { Assert.IsNotNull(allLanguages); },
+                        () => { Assert.AreEqual(1, countEnglish); },
+                        () => { Assert.AreEqual(1, countSpanish); },
+                        () => { Assert.AreEqual(_EnglishId, englishId); },
+                        () => { Assert.AreEqual(_SpanishId, spanishId); },
                         () => { Assert.IsTrue(allLanguages.Count > 0); });
         EnqueueTestComplete();
       }

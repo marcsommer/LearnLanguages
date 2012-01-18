@@ -315,6 +315,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
+    [Tag("pgetall")]
     public void GET_ALL()
     {
       {

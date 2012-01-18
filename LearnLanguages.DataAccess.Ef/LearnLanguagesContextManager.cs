@@ -14,9 +14,9 @@ namespace LearnLanguages.DataAccess.Ef
       Initialize();
     }
 
+    #region Singleton Pattern Members
     private static object _InstanceLock = new object();
     private static volatile LearnLanguagesContextManager _Instance;
-
     public static LearnLanguagesContextManager Instance
     {
       get
@@ -35,7 +35,8 @@ namespace LearnLanguages.DataAccess.Ef
         return _Instance;
       }
     }
-
+    #endregion
+    
     private void Initialize()
     {
       var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;

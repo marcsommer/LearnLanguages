@@ -12,23 +12,9 @@ namespace LearnLanguages.DataAccess
       InitializeData();
     }
 
+    #region Singleton Pattern Members
     private static volatile SeedData _Instance;
     private static object _Lock = new object();
-
-    private void InitializeData()
-    {
-      TestRole = new RoleDto()
-      {
-        Id = TestRoleId,
-        Text = TestRoleText
-      };
-
-      InitializeLanguages();
-      InitializePhrases();
-      InitializeUsers();
-      InitializeRoles();
-    }
-
     public static SeedData Instance
     {
       get
@@ -45,7 +31,21 @@ namespace LearnLanguages.DataAccess
         return _Instance;
       }
     }
+    #endregion
+    
+    private void InitializeData()
+    {
+      TestRole = new RoleDto()
+      {
+        Id = TestRoleId,
+        Text = TestRoleText
+      };
 
+      InitializeLanguages();
+      InitializePhrases();
+      InitializeUsers();
+      InitializeRoles();
+    }
 
     #region Language Data
     public Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
