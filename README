@@ -21,3 +21,6 @@ Restructured architecture to better reflect my increasing knowledge of setting u
 
 01/10/12
 I've gotten tests passing for basic plumbing for the most basic structure.  I have a PhraseEdit and a LanguageEdit, and I have plumbing to CRUD those objects using EF.  Now, I am going to be focusing on authentication.
+
+01/19/12
+I've integrated authentication into the main LearnLanguages project.  This includes the software architecture with PhraseEdit and LanguageEdit, as well as the Ef database structure/model, including FK associations. I also have some basic pub-sub navigation in place as well, handled by Caliburn event aggregator.  I have the Ef database being deleted and seeded, controlled by a setting in EfResources.  Currently all tests passing for basic CRUD functionality in LanguageTests and PhraseTests, and the SecurityTests are passing as well.
