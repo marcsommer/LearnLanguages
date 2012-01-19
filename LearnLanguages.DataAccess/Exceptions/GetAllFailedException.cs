@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class GetAllFailedException : Exception
   {
     public GetAllFailedException()
-      : base(DalResources.ErrorMsgGetAllFailed)
+      : base(DalResources.ErrorMsgGetAllFailedException)
     {
       
     }
@@ -19,7 +19,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public GetAllFailedException(Exception innerException)
-      : base(DalResources.ErrorMsgGetAllFailed, innerException)
+      : base(DalResources.ErrorMsgGetAllFailedException, innerException)
     {
 
     }

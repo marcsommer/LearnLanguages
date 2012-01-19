@@ -36,7 +36,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<LanguageDto>.FailureWithInfo(null,
-              new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFoundException));
           else
             retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -68,7 +68,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<LanguageDto>.FailureWithInfo(null,
-              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
           else
             retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -98,7 +98,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 1) //ID ALREADY EXISTS
             retResult = Result<LanguageDto>.FailureWithInfo(dto,
-              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
           else                      //MULTIPLE IDS ALREADY EXIST??
             retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -128,7 +128,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<LanguageDto>.FailureWithInfo(null,
-              new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFoundException));
           else
             retResult = Result<LanguageDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
         }

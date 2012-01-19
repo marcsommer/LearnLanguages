@@ -151,38 +151,56 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The criteria given was incorrect.  The expected criteria is as follows: {0}.
+        /// </summary>
+        public static string ErrorMsgBadCriteriaException {
+            get {
+                return ResourceManager.GetString("ErrorMsgBadCriteriaException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Criteria is expected to be of type UserDto.
+        /// </summary>
+        public static string ErrorMsgBadCriteriaExceptionDetail_ExpectedTypeIsUserDto {
+            get {
+                return ResourceManager.GetString("ErrorMsgBadCriteriaExceptionDetail_ExpectedTypeIsUserDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Create operation failed..
         /// </summary>
-        public static string ErrorMsgCreateFailed {
+        public static string ErrorMsgCreateFailedException {
             get {
-                return ResourceManager.GetString("ErrorMsgCreateFailed", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgCreateFailedException", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Delete operation failed..
         /// </summary>
-        public static string ErrorMsgDeleteFailed {
+        public static string ErrorMsgDeleteFailedException {
             get {
-                return ResourceManager.GetString("ErrorMsgDeleteFailed", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgDeleteFailedException", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Delete operation failed.  There were multiple items found to delete..
         /// </summary>
-        public static string ErrorMsgDeleteFailed_MultipleItemsFound {
+        public static string ErrorMsgDeleteFailedExceptionDetail_MultipleItemsFound {
             get {
-                return ResourceManager.GetString("ErrorMsgDeleteFailed_MultipleItemsFound", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgDeleteFailedExceptionDetail_MultipleItemsFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Fetch operation failed..
         /// </summary>
-        public static string ErrorMsgFetchFailed {
+        public static string ErrorMsgFetchFailedException {
             get {
-                return ResourceManager.GetString("ErrorMsgFetchFailed", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgFetchFailedException", resourceCulture);
             }
         }
         
@@ -198,9 +216,9 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The GetAll operation failed..
         /// </summary>
-        public static string ErrorMsgGetAllFailed {
+        public static string ErrorMsgGetAllFailedException {
             get {
-                return ResourceManager.GetString("ErrorMsgGetAllFailed", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgGetAllFailedException", resourceCulture);
             }
         }
         
@@ -225,9 +243,9 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Id ({0}) was not found..
         /// </summary>
-        public static string ErrorMsgIdNotFound {
+        public static string ErrorMsgIdNotFoundException {
             get {
-                return ResourceManager.GetString("ErrorMsgIdNotFound", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgIdNotFoundException", resourceCulture);
             }
         }
         

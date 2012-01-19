@@ -49,6 +49,15 @@ namespace LearnLanguages.DataAccess
 
     #region Language Data
     public Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
+    public LanguageDto EnglishLanguageDto
+    {
+      get
+      {
+        return (from language in Languages
+                where language.Text == EnglishText
+                select language).First();
+      }
+    }
     public Guid EnglishId
     {
       get
@@ -56,6 +65,15 @@ namespace LearnLanguages.DataAccess
         return (from lang in Languages
                 where lang.Text == EnglishText
                 select lang.Id).First();
+      }
+    }
+    public LanguageDto SpanishLanguageDto
+    {
+      get
+      {
+        return (from language in Languages
+                where language.Text == SpanishText
+                select language).First();
       }
     }
     public Guid SpanishId
@@ -72,6 +90,43 @@ namespace LearnLanguages.DataAccess
     #endregion
 
     #region Phrase Data
+    public PhraseDto HelloPhraseDto
+    {
+      get
+      {
+        return (from phrase in Phrases
+                where phrase.Text == HelloText
+                select phrase).First();
+      }
+    }
+    public PhraseDto HolaPhraseDto
+    {
+      get
+      {
+        return (from phrase in Phrases
+                where phrase.Text == HolaText
+                select phrase).First();
+      }
+    }
+    public PhraseDto LongPhraseDto
+    {
+      get
+      {
+        return (from phrase in Phrases
+                where phrase.Text == LongPhraseText
+                select phrase).First();
+      }
+    }
+    public PhraseDto DogPhraseDto
+    {
+      get
+      {
+        return (from phrase in Phrases
+                where phrase.Text == DogText
+                select phrase).First();
+      }
+    }
+
     public string HelloText = "Hello!";
     public string LongPhraseText = "Why this is a very long phrase indeed.  It is in fact several sentences.  I think it might just be TOO long!";
     public string HolaText = "Hola!!!";
@@ -96,7 +151,14 @@ namespace LearnLanguages.DataAccess
     #endregion
 
     #region User Data
-    public Guid TestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
+    public Guid DefaultTestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
+
+    public UserDto GetTestValidUserDto()
+    {
+      return (from userDto in Users
+              where userDto.Username == TestValidUsername
+              select userDto).First();
+    }
     public string TestValidUsername = "user";
     public string TestValidPassword = "password";
     public string TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
@@ -142,7 +204,7 @@ namespace LearnLanguages.DataAccess
           Id = new Guid("00D626ED-3EAC-4729-B276-5B9368DA26AD"),
           LanguageId = EnglishId,
           Text = HelloText,
-          UserId = TestValidUserId,
+          UserId = DefaultTestValidUserId,
           Username = TestValidUsername
         },
           
@@ -151,7 +213,7 @@ namespace LearnLanguages.DataAccess
           Id = new Guid("32D6CB9A-CBFF-47AE-91BB-396FAA7A3506"),
           LanguageId = EnglishId,
           Text = LongPhraseText,
-          UserId = TestValidUserId,
+          UserId = DefaultTestValidUserId,
           Username = TestValidUsername
         },
         
@@ -160,7 +222,7 @@ namespace LearnLanguages.DataAccess
           Id = new Guid("CBC5F6DE-3A46-4010-A67D-1E712EBFD3AB"),
           LanguageId = SpanishId,
           Text = HolaText,
-          UserId = TestValidUserId,
+          UserId = DefaultTestValidUserId,
           Username = TestValidUsername
         },
 
@@ -169,7 +231,7 @@ namespace LearnLanguages.DataAccess
           Id = new Guid("B45AC4A3-BAB3-406C-BD03-20D9E55E9740"),
           LanguageId = EnglishId,
           Text = DogText,
-          UserId = TestValidUserId,
+          UserId = DefaultTestValidUserId,
           Username = TestValidUsername
         }
       };
@@ -180,7 +242,7 @@ namespace LearnLanguages.DataAccess
       {
         new UserDto() 
         {
-          Id = TestValidUserId,
+          Id = DefaultTestValidUserId,
           Username = TestValidUsername,
           Salt = TestSalt,
           SaltedHashedPasswordValue = TestSaltedHashedPassword,

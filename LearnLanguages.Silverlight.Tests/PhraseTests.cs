@@ -12,39 +12,86 @@ namespace LearnLanguages.Silverlight.Tests
   [Tag("phrase")]
   public class PhraseTests : Microsoft.Silverlight.Testing.SilverlightTest
   {
-    private Guid _EnglishId { get; set; }
-    private Guid _SpanishId { get; set; }
-
-    [ClassInitialize]
+    
+    [AssemblyInitialize]
     [Asynchronous]
     public void InitializePhraseTests()
     {
+      //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
       var isLoaded = false;
-      Exception error = null;
+      var phrasesCorrected = false;
+      Exception error = new Exception();
+      Exception errorPhraseList = new Exception();
       LanguageList allLanguages = null;
+      PhraseList allPhrases = null;
+
       LanguageList.GetAll((s, r) =>
       {
+        #region Initialize Language Data
         error = r.Error;
         if (error != null)
           throw error;
 
         allLanguages = r.Object;
-        _EnglishId = (from language in allLanguages
-                      where language.Text == SeedData.Instance.EnglishText
-                      select language.Id).First();
+        var serverEnglishLang = (from language in allLanguages
+                                 where language.Text == SeedData.Instance.EnglishText
+                                 select language).First();
 
-        _SpanishId = (from language in allLanguages
-                      where language.Text == SeedData.Instance.SpanishText
-                      select language.Id).First();
+        SeedData.Instance.EnglishLanguageDto.Id = serverEnglishLang.Id;
+
+        var serverSpanishLang = (from language in allLanguages
+                                 where language.Text == SeedData.Instance.SpanishText
+                                 select language).First();
+
+        SeedData.Instance.SpanishLanguageDto.Id = serverSpanishLang.Id;
+
+        #endregion
 
         isLoaded = true;
+
+        PhraseList.GetAll((s2, r2) =>
+          {
+            errorPhraseList = r2.Error;
+            if (errorPhraseList != null)
+              throw errorPhraseList;
+
+            allPhrases = r2.Object;
+            var serverHelloPhrase = (from phrase in allPhrases
+                                     where phrase.Text == SeedData.Instance.HelloText
+                                     select phrase).First();
+            var serverHolaPhrase = (from phrase in allPhrases
+                                     where phrase.Text == SeedData.Instance.HolaText
+                                     select phrase).First();
+            var serverLongPhrase = (from phrase in allPhrases
+                                     where phrase.Text == SeedData.Instance.LongPhraseText
+                                     select phrase).First();
+            var serverDogPhrase = (from phrase in allPhrases
+                                     where phrase.Text == SeedData.Instance.DogText
+                                     select phrase).First();
+
+            var validUserId = serverHelloPhrase.UserId;
+            SeedData.Instance.GetTestValidUserDto().Id = validUserId;
+
+            SeedData.Instance.HelloPhraseDto.Id = serverHelloPhrase.Id;
+            SeedData.Instance.HolaPhraseDto.Id = serverHolaPhrase.Id;
+            SeedData.Instance.LongPhraseDto.Id = serverLongPhrase.Id;
+            SeedData.Instance.DogPhraseDto.Id = serverDogPhrase.Id;
+
+            SeedData.Instance.HelloPhraseDto.UserId = serverHelloPhrase.UserId;
+            SeedData.Instance.HolaPhraseDto.UserId = serverHolaPhrase.UserId;
+            SeedData.Instance.LongPhraseDto.UserId = serverLongPhrase.UserId;
+            SeedData.Instance.DogPhraseDto.UserId = serverDogPhrase.UserId;
+
+            phrasesCorrected = true;
+          });
       });
 
       EnqueueConditional(() => isLoaded);
+      EnqueueConditional(() => phrasesCorrected);
       EnqueueCallback(() => { Assert.IsNull(error); },
                       () => { Assert.IsNotNull(allLanguages); },
-                      () => { Assert.AreNotEqual(Guid.Empty, _EnglishId); },
-                      () => { Assert.AreNotEqual(Guid.Empty, _SpanishId); },
+                      () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.EnglishId); },
+                      () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.SpanishId); },
                       () => { Assert.IsTrue(allLanguages.Count > 0); });
       EnqueueTestComplete();
     }
@@ -56,7 +103,7 @@ namespace LearnLanguages.Silverlight.Tests
       var isCreated = false;
       PhraseEdit newPhraseEdit = null;
       Exception newError = new Exception();
-
+      
       PhraseEdit.NewPhraseEdit( (s,r) =>
         {
           newError = r.Error;
@@ -70,7 +117,7 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueCallback(
                       () => { Assert.IsNotNull(newPhraseEdit); },
                       () => { Assert.IsNull(newError); },
-                      () => { Assert.AreEqual(_EnglishId, newPhraseEdit.LanguageId); },
+                      () => { Assert.AreEqual(SeedData.Instance.EnglishId, newPhraseEdit.LanguageId); },
                       () => { Assert.IsNotNull(newPhraseEdit.Language); }
                       );
       EnqueueTestComplete();
@@ -165,6 +212,8 @@ namespace LearnLanguages.Silverlight.Tests
 
         //EDIT
         newPhraseEdit.Text = "TestPhrase NEW_EDIT_BEGINSAVE_GET";
+        newPhraseEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+        newPhraseEdit.Username = SeedData.Instance.TestValidUsername;
         isEdited = true;
 
         //SAVE
@@ -221,7 +270,7 @@ namespace LearnLanguages.Silverlight.Tests
       //INITIALIZE CONFIRM TO NULL, BECAUSE WE EXPECT THIS TO BE AN ERROR LATER
       Exception deleteConfirmedError = null;
 
-      PhraseEdit PhraseEdit = null;
+      PhraseEdit newPhraseEdit = null;
       PhraseEdit savedPhraseEdit = null;
       PhraseEdit gottenPhraseEdit = null;
       PhraseEdit deletedPhraseEdit = null;
@@ -241,14 +290,16 @@ namespace LearnLanguages.Silverlight.Tests
         newError = r.Error;
         if (newError != null)
           throw newError;
-        PhraseEdit = r.Object;
+        newPhraseEdit = r.Object;
         isNewed = true;
 
         //EDIT
-        PhraseEdit.Text = "TestPhrase NEW_EDIT_BEGINSAVE_GET_DELETE_GET";
+        newPhraseEdit.Text = "TestPhrase NEW_EDIT_BEGINSAVE_GET_DELETE_GET";
+        newPhraseEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+        newPhraseEdit.Username = SeedData.Instance.TestValidUsername;
 
         //SAVE
-        PhraseEdit.BeginSave((s2, r2) =>
+        newPhraseEdit.BeginSave((s2, r2) =>
         {
           savedError = r2.Error;
           if (savedError != null)
@@ -304,7 +355,7 @@ namespace LearnLanguages.Silverlight.Tests
                       //WE EXPECT AN ERROR, AS WE TRIED A GET ON AN ID THAT SHOULD HAVE BEEN DELETED
                       () => { Assert.IsNotNull(deleteConfirmedError); },
 
-                      () => { Assert.IsNotNull(PhraseEdit); },
+                      () => { Assert.IsNotNull(newPhraseEdit); },
                       () => { Assert.IsNotNull(savedPhraseEdit); },
                       () => { Assert.IsNotNull(gottenPhraseEdit); },
                       () => { Assert.IsNotNull(deletedPhraseEdit); },
@@ -342,6 +393,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
+    [Tag("preallylong")]
     public void MAKE_PHRASE_WITH_REALLY_LONG_VARIED_TEXT()
     {
       #region var reallyLongText
@@ -373,6 +425,9 @@ namespace LearnLanguages.Silverlight.Tests
 
         //EDIT
         newPhraseEdit.Text = reallyLongText;
+        newPhraseEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+        newPhraseEdit.Username = SeedData.Instance.TestValidUsername;
+        Assert.AreEqual(SeedData.Instance.EnglishId, newPhraseEdit.LanguageId);
         isEdited = true;
 
         //SAVE
@@ -417,6 +472,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
+    [Tag("preallyreallylong")]
     public void MAKE_PHRASE_WITH_REALLY_REALLY_LONG_NUMERICAL_TEXT()
     {
       var maxLength = 300000;//worked
@@ -459,6 +515,9 @@ namespace LearnLanguages.Silverlight.Tests
 
         //EDIT
         newPhraseEdit.Text = reallyReallyLongText;
+        newPhraseEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+        newPhraseEdit.Username = SeedData.Instance.TestValidUsername;
+
         isEdited = true;
 
         //SAVE

@@ -40,7 +40,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<PhraseDto>.FailureWithInfo(null,
-              new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFoundException));
           else
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -72,7 +72,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<PhraseDto>.FailureWithInfo(null,
-              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
           else
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -101,7 +101,7 @@ namespace LearnLanguages.DataAccess.Mock
             //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
             //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
             //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
-            throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFound, dto.LanguageId));
+            throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
           }
           SeedData.Instance.Phrases.Add(dto);
           retResult = Result<PhraseDto>.Success(dto);
@@ -110,7 +110,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 1) //ID ALREADY EXISTS
             retResult = Result<PhraseDto>.FailureWithInfo(dto,
-              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
           else                      //MULTIPLE IDS ALREADY EXIST??
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
         }
@@ -140,7 +140,7 @@ namespace LearnLanguages.DataAccess.Mock
         {
           if (results.Count() == 0)
             retResult = Result<PhraseDto>.FailureWithInfo(null,
-              new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFound));
+              new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFoundException));
           else
             retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
         }

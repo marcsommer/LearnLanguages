@@ -96,18 +96,16 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
 
-      ////USERS AND PHRASES PER USER
-      //foreach (var userDto in SeedData.Instance.Users)
-      //{
-
-      //}
-      
-      
-      
-      
+      //USERS
       foreach (var userDto in SeedData.Instance.Users)
       {
-        var userData = EfHelper.ToData(userDto, false);
+        //var userData = EfHelper.ToData(userDto, false);
+        var userData = context.UserDatas.CreateObject();
+        userData.Id = userDto.Id;
+        userData.Username = userDto.Username;
+        userData.Salt = userDto.Salt;
+        userData.SaltedHashedPasswordValue = userDto.SaltedHashedPasswordValue;
+        
         //manually add roles (cannot use dal.getroles because we are seeding 
         //the data and initializing the context that would use)
         foreach (var roleId in userDto.RoleIds)
@@ -140,8 +138,9 @@ namespace LearnLanguages.DataAccess.Ef
       //PHRASES
       foreach (var phraseDto in SeedData.Instance.Phrases)
       {
-        var phraseData = EfHelper.ToData(phraseDto);
-        context.PhraseDatas.AddObject(phraseData);
+        var phraseData = EfHelper.AddToContext(phraseDto, context);
+        //var phraseData = EfHelper.ToData(phraseDto);
+        //context.PhraseDatas.AddObject(phraseData);
         context.SaveChanges();
 
         //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS DATA

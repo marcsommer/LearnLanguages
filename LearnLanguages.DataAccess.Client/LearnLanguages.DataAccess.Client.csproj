@@ -93,6 +93,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\CreateFailedException.cs">
       <Link>Exceptions\CreateFailedException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\CriteriaException.cs">
+      <Link>Exceptions\CriteriaException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\DeleteFailedException.cs">
       <Link>Exceptions\DeleteFailedException.cs</Link>
     </Compile>
@@ -111,11 +114,17 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetUserFailedException.cs">
       <Link>Exceptions\GetUserFailedException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdNotFoundException.cs">
+      <Link>Exceptions\IdNotFoundException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\InsertFailedException.cs">
       <Link>Exceptions\InsertFailedException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\MultipleItemsFoundDataAccessException.cs">
       <Link>Exceptions\MultipleItemsFoundDataAccessException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\SeedDataException.cs">
+      <Link>Exceptions\SeedDataException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UpdateFailedException.cs">
       <Link>Exceptions\UpdateFailedException.cs</Link>

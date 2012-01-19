@@ -106,6 +106,16 @@ namespace LearnLanguages.Business.Security
         LoadUserData(username, dal);
       }
     }
+
+    private void Child_Fetch(string username)
+    {
+      AuthenticationType = DalResources.AuthenticationTypeString;
+      using (var dalManager = DataAccess.DalFactory.GetDalManager())
+      {
+        var dal = dalManager.GetProvider<ICustomIdentityDal>();
+        LoadUserData(username, dal);
+      }
+    }
 #endif
   }
 }
