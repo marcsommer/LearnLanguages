@@ -8,6 +8,12 @@
   <Application.Resources>
     <local:MefBootstrapper x:Key="bootstrapper" />
 
+    <Style x:Key="DebugBorder" TargetType="Border">
+      <Setter Property="BorderBrush" Value="Purple" />
+      <Setter Property="BorderThickness" Value="3" />
+      <Setter Property="Margin" Value="1" />
+    </Style>
+    
     <Style x:Key="CoolButton" TargetType="Button">
       <Setter Property="Template">
         <Setter.Value>
@@ -34,13 +40,28 @@
       <!--<Setter Property="Width" Value="120" />-->
     </Style>
 
-    <Style TargetType="Button">
+    <Style x:Key="EllipseButton" TargetType="Button">
+      <Setter Property="Margin" Value="1" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <!--<Setter Property="Background">
+        <Setter.Value>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="Azure" Offset="0.2" />
+            <GradientStop Color="Orange" Offset="0.85" />
+            <GradientStop Color="Red" Offset="1.0" />
+          </LinearGradientBrush>
+        </Setter.Value>
+      </Setter>-->
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="Button">
+            <Border>
             <Grid>
 
-              <Ellipse Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" >
+              <Ellipse Width="{TemplateBinding Width}" 
+                       Height="{TemplateBinding Height}" 
+                       StrokeThickness="5">
 
                 <Ellipse.Fill>
                   <RadialGradientBrush GradientOrigin="0.05,.31">
@@ -54,7 +75,10 @@
               <TextBlock Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             </Grid>
+            </Border>
+            
           </ControlTemplate>
+          
         </Setter.Value>
       </Setter>
     </Style>

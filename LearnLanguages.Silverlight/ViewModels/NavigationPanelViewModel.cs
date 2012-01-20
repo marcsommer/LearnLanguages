@@ -42,6 +42,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(logoutNavButtonViewModel);
       var authStatusNavButtonViewModel = Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
       Items.Add(authStatusNavButtonViewModel);
+      var addUserNavButtonViewModel = Services.Container.GetExportedValue<AddUserNavigationButtonViewModel>();
+      Items.Add(addUserNavButtonViewModel);
     }
 
     #endregion
@@ -60,6 +62,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     public bool LoadFromUri(Uri uri)
     {
       return true;
+    }
+
+
+    public bool ShowGridLines
+    {
+      get { return bool.Parse(AppResources.ShowGridLines); }
     }
   }
 }

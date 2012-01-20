@@ -6,7 +6,7 @@
     mc:Ignorable="d"
     d:DesignHeight="117" d:DesignWidth="229">
 
-  <Border BorderBrush="Red" BorderThickness="3" Padding="10" >
+  <Border Style="{StaticResource DebugBorder}" Padding="10" >
     <Grid Background="White" VerticalAlignment="Center" HorizontalAlignment="Center">
       <Grid.RowDefinitions>
         <RowDefinition Height="30"/>
@@ -24,7 +24,8 @@
                  VerticalAlignment="Center"/>
       <TextBox Grid.Row="0" Grid.Column="1" 
                x:Name="Username"
-               Margin="2"/>
+               Margin="2"
+               TabIndex="0"/>
 
       <!--password-->
       <TextBlock Grid.Row="1" Grid.Column="0"
@@ -32,12 +33,14 @@
                  VerticalAlignment="Center"/>
       <PasswordBox Grid.Row="1" Grid.Column="1" 
                    x:Name="Password"
-                   Margin="2"/>
+                   Margin="2"
+                   TabIndex="1"/>
 
       <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
               x:Name="Login"
               Content="Login" 
-              Margin="10,3,10,3" />
+              Margin="10,3,10,3" 
+              TabIndex="2"/>
     </Grid>
   </Border>
 </UserControl>

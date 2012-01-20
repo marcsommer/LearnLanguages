@@ -22,24 +22,24 @@ namespace LearnLanguages.Silverlight {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AppResources {
+    public class ViewResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AppResources() {
+        internal ViewResources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Silverlight.AppResources", typeof(AppResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Silverlight.ViewResources", typeof(ViewResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace LearnLanguages.Silverlight {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,47 +61,20 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://localhost:50094/.
+        ///   Looks up a localized string similar to Language: .
         /// </summary>
-        internal static string BaseAddress {
+        public static string LabelAddPhraseViewLanguageText {
             get {
-                return ResourceManager.GetString("BaseAddress", resourceCulture);
+                return ResourceManager.GetString("LabelAddPhraseViewLanguageText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are now logged out...Come back soon!.
+        ///   Looks up a localized string similar to Phrase: .
         /// </summary>
-        internal static string LogoutMessage {
+        public static string LabelAddPhraseViewPhraseText {
             get {
-                return ResourceManager.GetString("LogoutMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login.
-        /// </summary>
-        internal static string NavButtonTextLogin {
-            get {
-                return ResourceManager.GetString("NavButtonTextLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logout.
-        /// </summary>
-        internal static string NavButtonTextLogout {
-            get {
-                return ResourceManager.GetString("NavButtonTextLogout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to True.
-        /// </summary>
-        internal static string ShowGridLines {
-            get {
-                return ResourceManager.GetString("ShowGridLines", resourceCulture);
+                return ResourceManager.GetString("LabelAddPhraseViewPhraseText", resourceCulture);
             }
         }
     }

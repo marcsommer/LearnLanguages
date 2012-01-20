@@ -46,10 +46,14 @@ namespace LearnLanguages.Silverlight.Events
       return navInfo;
     }
 
-
     public static void AuthenticationChanged()
     {
       Services.EventAggregator.Publish(new AuthenticationChangedEventMessage());
+    }
+
+    public static void PartSatisfied(string part)
+    {
+      Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage(part));
     }
 
   }

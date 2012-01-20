@@ -30,8 +30,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// <returns></returns>
     public virtual string GetNavigationTargetViewModelCoreName(bool withSpaces)
     {
-      var viewModelCoreName = ViewModelBase.GetCoreViewModelName(this.GetType(), true);
-      var coreMinusNavigationButtonText = viewModelCoreName.Replace(" Navigation Button", string.Empty); //NB space before Navigation
+      var viewModelCoreName = ViewModelBase.GetCoreViewModelName(this.GetType(), withSpaces);
+      string coreMinusNavigationButtonText = "";
+      if (withSpaces)
+        coreMinusNavigationButtonText = viewModelCoreName.Replace(" Navigation Button", string.Empty); //NB space before Navigation
+      else 
+        coreMinusNavigationButtonText = viewModelCoreName.Replace("NavigationButton", string.Empty); //NB space before Navigation
       return coreMinusNavigationButtonText;
     }
     public bool CanNavigate

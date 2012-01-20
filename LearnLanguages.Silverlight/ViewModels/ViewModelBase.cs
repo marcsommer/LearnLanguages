@@ -96,5 +96,19 @@ namespace LearnLanguages.Silverlight.ViewModels
     //{
     //  throw new NotImplementedException();
     //}
+
+    private bool _ShowGridLines = bool.Parse(AppResources.ShowGridLines);
+    public bool ShowGridLines
+    {
+      get { return _ShowGridLines; }
+      set
+      {
+        if (value != _ShowGridLines)
+        {
+          _ShowGridLines = value;
+          NotifyOfPropertyChange(() => ShowGridLines);
+        }
+      }
+    }
   }
 }

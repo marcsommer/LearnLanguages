@@ -7,5 +7,6 @@ namespace LearnLanguages.Silverlight.Interfaces
   {
     bool LoadFromUri(Uri uri);
     //string GetCoreViewModelName(bool withSpaces = false);
+    bool ShowGridLines { get; }
   }
 }
