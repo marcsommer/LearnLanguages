@@ -13,10 +13,11 @@ namespace LearnLanguages.Silverlight.Tests
   public class PhraseTests : Microsoft.Silverlight.Testing.SilverlightTest
   {
     
-    [AssemblyInitialize]
+    [ClassInitialize]
     [Asynchronous]
     public void InitializePhraseTests()
     {
+
       //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
       var isLoaded = false;
       var phrasesCorrected = false;

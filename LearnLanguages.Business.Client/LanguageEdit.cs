@@ -227,7 +227,6 @@ namespace LearnLanguages.Business
       }
     }
 
-    [Transactional(TransactionalTypes.TransactionScope)]
     protected void DataPortal_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())

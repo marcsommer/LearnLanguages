@@ -49,8 +49,8 @@ namespace LearnLanguages.DataAccess.Mock
 
         var role = new RoleDto()
         {
-          Id = SeedData.Instance.TestRoleId,
-          Text = SeedData.Instance.TestRoleText
+          Id = SeedData.Instance.AdminRoleId,
+          Text = SeedData.Instance.AdminRoleText
         };
         retResult = Result<ICollection<RoleDto>>.Success(new List<RoleDto>() { role });
       }

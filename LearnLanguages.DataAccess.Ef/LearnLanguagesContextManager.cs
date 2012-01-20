@@ -94,6 +94,8 @@ namespace LearnLanguages.DataAccess.Ef
           affectedUser.RoleIds.Remove(roleDto.Id);
           affectedUser.RoleIds.Add(roleData.Id);
         }
+
+        roleDto.Id = roleData.Id;
       }
 
       //USERS

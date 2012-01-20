@@ -46,6 +46,13 @@ namespace LearnLanguages.Business
         }
       }
     }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
+    protected override void DataPortal_Update()
+    {
+      base.Child_Update();
+    }
+
 #endif
 
   }

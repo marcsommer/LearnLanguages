@@ -78,7 +78,7 @@ namespace LearnLanguages.Business.Security
         }
       }
     }
-
+    
     private void DataPortal_Fetch(UsernameCriteria criteria)
     {
       AuthenticationType = DalResources.AuthenticationTypeString;
@@ -106,7 +106,6 @@ namespace LearnLanguages.Business.Security
         LoadUserData(username, dal);
       }
     }
-
     private void Child_Fetch(string username)
     {
       AuthenticationType = DalResources.AuthenticationTypeString;

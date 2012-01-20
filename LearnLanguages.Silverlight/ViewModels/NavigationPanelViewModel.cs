@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using Caliburn.Micro;
 using LearnLanguages.Silverlight.Interfaces;
+using LearnLanguages.Business.Security;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -27,7 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       if (!user.IsAuthenticated)
         AddUnauthenticatedButtons();
       else
-        AddAuthenticatedButtons(user);
+        AddAuthenticatedButtons((CustomIdentity)user);
     }
 
     private void AddUnauthenticatedButtons()
@@ -36,14 +37,31 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(loginNavButtonViewModel);
     }
 
-    private void AddAuthenticatedButtons(System.Security.Principal.IIdentity user)
+    private void AddAuthenticatedButtons(CustomIdentity user)
     {
+      if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin))
+        AddAdminButtons();
+      if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleUser))
+        AddUserButtons();
+
+      
       var logoutNavButtonViewModel = Services.Container.GetExportedValue<LogoutNavigationButtonViewModel>();
       Items.Add(logoutNavButtonViewModel);
-      var authStatusNavButtonViewModel = Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
-      Items.Add(authStatusNavButtonViewModel);
+    }
+
+    private void AddAdminButtons()
+    {
       var addUserNavButtonViewModel = Services.Container.GetExportedValue<AddUserNavigationButtonViewModel>();
       Items.Add(addUserNavButtonViewModel);
+     
+      var authStatusNavButtonViewModel = Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
+      Items.Add(authStatusNavButtonViewModel);
+    }
+
+    private void AddUserButtons()
+    {
+      var viewPhrasesNavButtonViewModel = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();
+      Items.Add(viewPhrasesNavButtonViewModel);
       var addPhraseNavButtonViewModel = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
       Items.Add(addPhraseNavButtonViewModel);
     }

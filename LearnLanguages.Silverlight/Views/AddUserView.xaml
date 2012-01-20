@@ -51,7 +51,7 @@
               Grid.ColumnSpan="1"
               HorizontalAlignment="Center"
               Width="100"
-              Content="Add User"
+              Content="Create User"
               TabIndex="3"
               
               />

@@ -52,6 +52,15 @@ namespace LearnLanguages.Business
         }
       }
     }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
+    protected override void DataPortal_Update()
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        base.Child_Update();
+      }
+    }
 #endif
 
   }

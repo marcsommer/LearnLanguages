@@ -35,10 +35,16 @@ namespace LearnLanguages.DataAccess
     
     private void InitializeData()
     {
-      TestRole = new RoleDto()
+      AdminRole = new RoleDto()
       {
-        Id = TestRoleId,
-        Text = TestRoleText
+        Id = AdminRoleId,
+        Text = AdminRoleText
+      };
+
+      UserRole = new RoleDto()
+      {
+        Id = UserRoleId,
+        Text = UserRoleText
       };
 
       InitializeLanguages();
@@ -168,9 +174,13 @@ namespace LearnLanguages.DataAccess
     #endregion
 
     #region Role Data
-    public Guid TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
-    public string TestRoleText = DalResources.RoleAdmin;
-    public RoleDto TestRole;
+    public Guid AdminRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
+    public string AdminRoleText = DalResources.RoleAdmin;
+    public RoleDto AdminRole;
+
+    public Guid UserRoleId = new Guid("BD8C1940-59FD-412A-B710-91BECCF7D469");
+    public string UserRoleText = DalResources.RoleUser;
+    public RoleDto UserRole;
     #endregion
 
     public List<PhraseDto> Phrases { get; private set; }
@@ -247,7 +257,7 @@ namespace LearnLanguages.DataAccess
           Salt = TestSalt,
           SaltedHashedPasswordValue = TestSaltedHashedPassword,
           PhraseIds = new List<Guid>() { IdHello, IdDog, IdHola, IdLongPhrase },
-          RoleIds = new List<Guid>() { TestRoleId }
+          RoleIds = new List<Guid>() { AdminRoleId, UserRoleId }
         }
       };
     }
@@ -255,7 +265,8 @@ namespace LearnLanguages.DataAccess
     {
       Roles = new List<RoleDto>()
       {
-        TestRole
+        AdminRole,
+        UserRole
       };
     }
 
