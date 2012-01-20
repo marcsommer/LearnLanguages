@@ -10,10 +10,34 @@
 
     <Style x:Key="DebugBorder" TargetType="Border">
       <Setter Property="BorderBrush" Value="Purple" />
-      <Setter Property="BorderThickness" Value="3" />
-      <Setter Property="Margin" Value="1" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="Padding" Value="2" />
     </Style>
     
+    <Style TargetType="ComboBoxItem">
+      <Setter Property="Background">
+        <Setter.Value>
+          <RadialGradientBrush GradientOrigin="0.05,.31">
+            <GradientStop Offset="0.1" Color="White" />
+            <GradientStop Offset="1.5" Color="White" />
+          </RadialGradientBrush>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style TargetType="ComboBox">
+      <Setter Property="Background">
+        <Setter.Value>
+          <RadialGradientBrush GradientOrigin="0.05,.31">
+            <GradientStop Offset="0.1" Color="White" />
+            <GradientStop Offset="1.5" Color="Silver" />
+          </RadialGradientBrush>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+
     <Style x:Key="CoolButton" TargetType="Button">
       <Setter Property="Template">
         <Setter.Value>

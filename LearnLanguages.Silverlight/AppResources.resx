@@ -130,7 +130,7 @@
     <value>Logout</value>
   </data>
   <data name="ShowGridLines" xml:space="preserve">
-    <value>True</value>
+    <value>False</value>
     <comment>debug</comment>
   </data>
 </root>

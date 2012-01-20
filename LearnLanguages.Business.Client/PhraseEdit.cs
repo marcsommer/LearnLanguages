@@ -137,7 +137,7 @@ namespace LearnLanguages.Business
     }
     #endregion
 
-    public override void LoadFromDtoBypassPropertyChecks(PhraseDto dto)
+    public override void LoadFromDtoBypassPropertyChecksImpl(PhraseDto dto)
     {
       using (BypassPropertyChecks)
       {
@@ -186,6 +186,7 @@ namespace LearnLanguages.Business
         UserId = Guid.Empty;
         Username = DalResources.DefaultNewPhraseUsername;
       }
+      BusinessRules.CheckRules();
     }
 
     #endregion
@@ -202,6 +203,7 @@ namespace LearnLanguages.Business
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(TextProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UserIdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UsernameProperty));
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.MinLength(TextProperty, 1));
     }
 
     #endregion

@@ -6,7 +6,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
 
-  <Border BorderBrush="Red" BorderThickness="3" Padding="10" >
+  <Border Style="{StaticResource DebugBorder}" Padding="10" >
     <Grid x:Name="LayoutRoot" Background="White">
       <TextBlock x:Name="LogoutMessage" />
     </Grid>

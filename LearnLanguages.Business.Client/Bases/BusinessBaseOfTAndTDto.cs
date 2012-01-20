@@ -22,7 +22,12 @@ namespace LearnLanguages.Business.Bases
     #endregion
 
     public abstract TDto CreateDto();
-    public abstract void LoadFromDtoBypassPropertyChecks(TDto dto);
+    public virtual void LoadFromDtoBypassPropertyChecks(TDto dto)
+    {
+      LoadFromDtoBypassPropertyChecksImpl(dto);
+      BusinessRules.CheckRules();
+    }
+    public abstract void LoadFromDtoBypassPropertyChecksImpl(TDto dto);
 
     protected virtual void SetIdBypassPropertyChecks(Guid id)
     {
@@ -36,11 +41,9 @@ namespace LearnLanguages.Business.Bases
 
     #region DP_XYZ (All: .net, sl, child)
 
-
     public virtual void Child_Create(TDto dto)
     {
       LoadFromDtoBypassPropertyChecks(dto);
-      BusinessRules.CheckRules();
     }
 
     #endregion

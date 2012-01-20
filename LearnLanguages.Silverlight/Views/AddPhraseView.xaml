@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
-  <Border BorderBrush="BlueViolet" BorderThickness="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+  <Border Style="{StaticResource DebugBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
       <ContentControl x:Name="Phrase" />
     </Grid>

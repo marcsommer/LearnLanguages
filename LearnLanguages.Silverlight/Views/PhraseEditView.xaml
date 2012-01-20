@@ -8,7 +8,7 @@
   <Border Style="{StaticResource DebugBorder}">
     <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
       <Grid.RowDefinitions>
-        <RowDefinition Height="25" />
+        <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
         <RowDefinition Height="25" />
       </Grid.RowDefinitions>
@@ -25,7 +25,8 @@
                       Grid.Column="1"
                       Margin="0,1,0,1" 
                       MinWidth="50"
-                      TabIndex="0"/>
+                      TabIndex="0"
+                      HorizontalContentAlignment="Stretch"/>
 
       <TextBlock Grid.Row="1" 
                  Grid.Column="0" 
@@ -34,8 +35,9 @@
       <TextBox x:Name="Model_Text" 
                Grid.Row="1"
                Grid.Column="1"
-               Margin="0,1,0,1" 
+               Margin="1,2,1,2" 
                MinWidth="250"
+               MinHeight="100"
                TabIndex="1"/>
 
 

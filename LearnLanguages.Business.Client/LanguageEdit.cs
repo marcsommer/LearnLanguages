@@ -140,7 +140,7 @@ namespace LearnLanguages.Business
     }
     #endregion
 
-    public override void LoadFromDtoBypassPropertyChecks(LanguageDto dto)
+    public override void LoadFromDtoBypassPropertyChecksImpl(LanguageDto dto)
     {
       using (BypassPropertyChecks)
       {
@@ -177,7 +177,10 @@ namespace LearnLanguages.Business
       }
     }
 
-    
+    public override string ToString()
+    {
+      return Text;
+    }
 
     #endregion
 

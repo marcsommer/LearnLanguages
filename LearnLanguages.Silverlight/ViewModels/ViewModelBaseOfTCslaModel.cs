@@ -34,15 +34,18 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     protected virtual void UnhookFromModel(TCslaModel model)
     {
-      model.PropertyChanged -= HandleModelPropertyChanged;
+      if (model != null)
+        model.PropertyChanged -= HandleModelPropertyChanged;
     }
     protected virtual void HookIntoModel(TCslaModel model)
     {
-      model.PropertyChanged += HandleModelPropertyChanged;
+      if (model != null)
+        model.PropertyChanged += HandleModelPropertyChanged;
     }
     void HandleModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
       NotifyOfPropertyChange(() => e.PropertyName);
+      NotifyOfPropertyChange(() => CanSave);
     }
 
     public bool CanSave
@@ -54,7 +57,14 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     public virtual void Save()
     {
-      Model.BeginSave();
+      Model.BeginSave((s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          Model = (TCslaModel)r.NewObject;
+          NotifyOfPropertyChange(() => CanSave);
+        });
     }
   }
 }

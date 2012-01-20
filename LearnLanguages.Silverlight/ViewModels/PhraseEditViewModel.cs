@@ -9,6 +9,11 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class PhraseEditViewModel : ViewModelBase<PhraseEdit, PhraseDto>
   {
+    public PhraseEditViewModel()
+    {
+      Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
+    }
+
     private LanguageSelectorViewModel _Languages;
     public LanguageSelectorViewModel Languages
     {

@@ -40,18 +40,37 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public void Login()
     {
+      LoggingIn = true;
       CustomPrincipal.BeginLogin(Username, Password, (e) =>
         {
           if (e != null)
             throw e;
           Events.Publish.AuthenticationChanged();
+          LoggingIn = false;
         });
     }
     public bool CanLogin
     {
       get
       {
-        return (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password));
+        return (!string.IsNullOrEmpty(Username) && 
+                !string.IsNullOrEmpty(Password) &&
+                !LoggingIn);
+      }
+    }
+
+    private bool _LoggingIn = false;
+    public bool LoggingIn
+    {
+      get { return _LoggingIn; }
+      set
+      {
+        if (value != _LoggingIn)
+        {
+          _LoggingIn = value;
+          NotifyOfPropertyChange(() => LoggingIn);
+          NotifyOfPropertyChange(() => CanLogin);
+        }
       }
     }
   }

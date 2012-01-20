@@ -97,7 +97,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to True.
+        ///   Looks up a localized string similar to False.
         /// </summary>
         internal static string ShowGridLines {
             get {
