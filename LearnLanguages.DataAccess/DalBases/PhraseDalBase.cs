@@ -17,6 +17,8 @@ namespace LearnLanguages.DataAccess
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
+        CheckAuthentication();
+
         var dto = NewImpl(criteria);
         retResult = Result<PhraseDto>.Success(dto);
       }
@@ -32,6 +34,8 @@ namespace LearnLanguages.DataAccess
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
+        CheckAuthentication();
+
         var dto = FetchImpl(id);
         retResult = Result<PhraseDto>.Success(dto);
       }
@@ -47,6 +51,8 @@ namespace LearnLanguages.DataAccess
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
+        CheckAuthentication();
+
         var updatedDto = UpdateImpl(dtoToUpdate);
         retResult = Result<PhraseDto>.Success(updatedDto);
       }
@@ -62,6 +68,8 @@ namespace LearnLanguages.DataAccess
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
+        CheckAuthentication();
+        
         var insertedDto = InsertImpl(dtoToInsert);
         retResult = Result<PhraseDto>.Success(insertedDto);
       }
@@ -77,6 +85,8 @@ namespace LearnLanguages.DataAccess
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
       try
       {
+        CheckAuthentication();
+        
         var dto = DeleteImpl(id);
         retResult = Result<PhraseDto>.Success(dto);
       }
@@ -92,6 +102,8 @@ namespace LearnLanguages.DataAccess
       Result<ICollection<PhraseDto>> retResult = Result<ICollection<PhraseDto>>.Undefined(null);
       try
       {
+        CheckAuthentication();
+        
         var allDtos = GetAllImpl();
         retResult = Result<ICollection<PhraseDto>>.Success(allDtos);
       }
@@ -109,5 +121,11 @@ namespace LearnLanguages.DataAccess
     protected abstract PhraseDto InsertImpl(PhraseDto dto);
     protected abstract PhraseDto DeleteImpl(Guid id);
     protected abstract ICollection<PhraseDto> GetAllImpl();
+
+    protected void CheckAuthentication()
+    {
+      if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
+        throw new Exceptions.UserNotAuthenticatedException();
+    }
   }
 }

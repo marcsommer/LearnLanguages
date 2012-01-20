@@ -16,16 +16,11 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
   public class AddUserNavigationButtonViewModel : NavigationButtonViewModelBase
   {
-    
     public override bool CanNavigateImpl()
     {
       var identity = Csla.ApplicationContext.User.Identity;
       return (identity.IsAuthenticated &&
               Csla.ApplicationContext.User.IsInRole(LearnLanguages.DataAccess.DalResources.RoleAdmin));
     }
-
-    public new string LabelText { get { return "AddUser"; } }
-
-    //public string Text { get { return "AddUser"; } }
   }
 }

@@ -1,38 +1,28 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using LearnLanguages.Business;
+using LearnLanguages.DataAccess;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(PhraseEditViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class PhraseEditViewModel : ViewModelBase
+  public class PhraseEditViewModel : ViewModelBase<PhraseEdit, PhraseDto>
   {
-    private PhraseEdit _PhraseEdit;
-    public PhraseEdit PhraseEdit
+    private LanguageSelectorViewModel _Languages;
+    public LanguageSelectorViewModel Languages
     {
-      get { return _PhraseEdit; }
+      get { return _Languages; }
       set
       {
-        if (value != _PhraseEdit)
+        if (value != _Languages)
         {
-          _PhraseEdit = value;
-          NotifyOfPropertyChange(() => PhraseEdit);
+          _Languages = value;
+          NotifyOfPropertyChange(() => Languages);
         }
       }
     }
-
-    public string PhraseEditText
-    {
-      get { return PhraseEdit.Text; }
-      set
-      {
-        if (value != PhraseEditText)
-        {
-          PhraseEditText = value;
-          NotifyOfPropertyChange(() => PhraseEditText);
-        }
-      }
-    }
+    public string LabelPhraseText { get { return ViewViewModelResources.LabelAddPhraseViewPhraseText; } }
+    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddPhraseViewLanguageText; } }
   }
 }

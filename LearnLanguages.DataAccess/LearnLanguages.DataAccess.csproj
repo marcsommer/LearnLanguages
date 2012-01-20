@@ -55,11 +55,13 @@
     </Compile>
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\UserNotAuthorizedException.cs" />
     <Compile Include="Exceptions\IdNotFoundException.cs" />
     <Compile Include="Exceptions\CriteriaException.cs" />
     <Compile Include="Exceptions\SeedDataException.cs" />
     <Compile Include="Exceptions\UsernameNotFoundException.cs" />
     <Compile Include="Exceptions\GetRolesFailedException.cs" />
+    <Compile Include="Exceptions\UserNotAuthenticatedException.cs" />
     <Compile Include="Exceptions\VeryBadException.cs" />
     <Compile Include="Exceptions\VerifyUserFailedException.cs" />
     <Compile Include="Exceptions\GetUserFailedException.cs" />

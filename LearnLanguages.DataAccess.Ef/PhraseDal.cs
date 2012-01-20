@@ -5,6 +5,7 @@ using Csla.Data;
 
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
+using LearnLanguages.Business.Security;
 
 namespace LearnLanguages.DataAccess.Ef
 {
@@ -201,23 +202,26 @@ namespace LearnLanguages.DataAccess.Ef
 
     protected override PhraseDto NewImpl(object criteria)
     {
-
-      if ((criteria != null) && !(criteria is UserDto))
-        throw new Exceptions.BadCriteriaException(DalResources.ErrorMsgBadCriteriaExceptionDetail_ExpectedTypeIsUserDto);
+      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      string currentUsername = identity.Name;
+      Guid currentUserId = Guid.Empty;
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      {
+        currentUserId = (from user in ctx.ObjectContext.UserDatas
+                         where user.Username == currentUsername
+                         select user.Id).First();
+      }
+      //if ((criteria != null) && !(criteria is UserDto))
+      //  throw new Exceptions.BadCriteriaException(DalResources.ErrorMsgBadCriteriaExceptionDetail_ExpectedTypeIsUserDto);
 
       PhraseDto newPhraseDto = new PhraseDto()
       {
         Id = Guid.NewGuid(),
         Text = DalResources.DefaultNewPhraseText,
-        LanguageId = GetDefaultLanguageId()
+        LanguageId = GetDefaultLanguageId(),
+        UserId = currentUserId,
+        Username = currentUsername
       };
-
-      if (criteria != null)
-      {
-        var userDto = (UserDto)criteria;
-        newPhraseDto.UserId = userDto.Id;
-        newPhraseDto.Username = userDto.Username;
-      }
 
       return newPhraseDto;
     }
@@ -232,7 +236,10 @@ namespace LearnLanguages.DataAccess.Ef
 
         if (results.Count() == 1)
         {
-          var phraseDto = EfHelper.ToDto(results.First());
+          var fetchedPhraseData = results.First();
+          CheckPhraseAuthorization(fetchedPhraseData);
+
+          var phraseDto = EfHelper.ToDto(fetchedPhraseData);
           return phraseDto;
         }
         else
@@ -264,6 +271,8 @@ namespace LearnLanguages.DataAccess.Ef
           //INSTEAD OF UPDATING STRAIGHT, I'M JUST DELETING AND ADDING.  PROBABLY NOT BEST
           //FOR PERFORMANCE.
           var oldPhraseData = results.First();
+          CheckPhraseAuthorization(oldPhraseData);
+
           var userData = oldPhraseData.UserDataReference.Value;
 
           //DELETE
@@ -325,6 +334,7 @@ namespace LearnLanguages.DataAccess.Ef
         if (results.Count() == 1)
         {
           var phraseDataToDelete = results.First();
+          CheckPhraseAuthorization(phraseDataToDelete);
           var retDto = EfHelper.ToDto(phraseDataToDelete);
           ctx.ObjectContext.PhraseDatas.DeleteObject(phraseDataToDelete);
           ctx.ObjectContext.SaveChanges();
@@ -346,19 +356,33 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
-
+    
     protected override ICollection<PhraseDto> GetAllImpl()
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var allPhraseDtos = new List<PhraseDto>();
-        foreach (var phraseData in ctx.ObjectContext.PhraseDatas)
+        CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+
+        var allPhrasesOfThisUser = (from phraseData in ctx.ObjectContext.PhraseDatas
+                                    where phraseData.UserData.Username == identity.Name
+                                    select phraseData).ToList();
+
+        foreach (var usersPhraseData in ctx.ObjectContext.PhraseDatas)
         {
-          allPhraseDtos.Add(EfHelper.ToDto(phraseData));
+          allPhraseDtos.Add(EfHelper.ToDto(usersPhraseData));
         }
 
         return allPhraseDtos;
       }
     }
+
+    private void CheckPhraseAuthorization(PhraseData phraseData)
+    {
+      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      if (identity.Name != phraseData.UserData.Username)
+        throw new Exceptions.UserNotAuthorizedException();
+    }
+
   }
 }

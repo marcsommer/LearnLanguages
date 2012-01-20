@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
+using LearnLanguages.Business;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -19,36 +20,27 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public AddPhraseViewModel()
     {
-      
+      PhraseEdit.NewPhraseEdit((s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          var phraseViewModel = Services.Container.GetExportedValue<PhraseEditViewModel>();
+          phraseViewModel.Model = r.Object;
+          Phrase = phraseViewModel;
+        });
     }
 
-    public string LabelPhraseText { get { return ViewResources.LabelAddPhraseViewPhraseText; } }
-    public string LabelLanguageText { get { return ViewResources.LabelAddPhraseViewLanguageText; } }
-
-    private LanguageSelectorViewModel _LanguagesViewModel;
-    public LanguageSelectorViewModel LanguagesViewModel
+    private PhraseEditViewModel _Phrase;
+    public PhraseEditViewModel Phrase
     {
-      get { return _LanguagesViewModel; }
+      get { return _Phrase; }
       set
       {
-        if (value != _LanguagesViewModel)
+        if (value != _Phrase)
         {
-          _LanguagesViewModel = value;
-          NotifyOfPropertyChange(() => LanguagesViewModel);
-        }
-      }
-    }
-
-    private PhraseEditViewModel _PhraseViewModel;
-    public PhraseEditViewModel PhraseViewModel
-    {
-      get { return _PhraseViewModel; }
-      set
-      {
-        if (value != _PhraseViewModel)
-        {
-          _PhraseViewModel = value;
-          NotifyOfPropertyChange(() => PhraseViewModel);
+          _Phrase = value;
+          NotifyOfPropertyChange(() => Phrase);
         }
       }
     }

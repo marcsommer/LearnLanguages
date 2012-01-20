@@ -44,6 +44,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(authStatusNavButtonViewModel);
       var addUserNavButtonViewModel = Services.Container.GetExportedValue<AddUserNavigationButtonViewModel>();
       Items.Add(addUserNavButtonViewModel);
+      var addPhraseNavButtonViewModel = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
+      Items.Add(addPhraseNavButtonViewModel);
     }
 
     #endregion

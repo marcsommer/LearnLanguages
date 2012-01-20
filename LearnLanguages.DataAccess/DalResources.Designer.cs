@@ -286,6 +286,24 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current user has not been authenticated..
+        /// </summary>
+        public static string ErrorMsgUserNotAuthenticatedException {
+            get {
+                return ResourceManager.GetString("ErrorMsgUserNotAuthenticatedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The user is not authorized to perform this operation..
+        /// </summary>
+        public static string ErrorMsgUserNotAuthorizedException {
+            get {
+                return ResourceManager.GetString("ErrorMsgUserNotAuthorizedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verifying the user ({0}) threw an exception..
         /// </summary>
         public static string ErrorMsgVerifyUserFailedException {

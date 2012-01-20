@@ -119,8 +119,9 @@
     <Compile Include="ViewModels\AddUserNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\AddPhraseViewModel.cs" />
+    <Compile Include="ViewModels\AddPhraseNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\LanguageEditViewModel.cs" />
     <Compile Include="ViewModels\PhraseEditViewModel.cs" />
-    <Compile Include="ViewModels\LanguageReadOnlyViewModel.cs" />
     <Compile Include="ViewModels\LanguageSelectorViewModel.cs" />
     <Compile Include="ViewModels\LoginNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -129,12 +130,13 @@
     <Compile Include="ViewModels\NavigationButtonViewModelBase.cs" />
     <Compile Include="ViewModels\NavigationPanelViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelBaseOfTCslaModel.cs" />
     <Compile Include="ViewModels\ViewModelMetadataAttribute.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="ViewResources.Designer.cs">
+    <Compile Include="ViewViewModelResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ViewResources.resx</DependentUpon>
+      <DependentUpon>ViewViewModelResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -144,21 +146,25 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\LanguagesView.xaml">
+    <Page Include="Views\AddPhraseNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LanguageEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LanguageReadOnlyView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PhraseEditView.xaml">
+    <Page Include="Views\LanguageSelectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddPhraseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PhraseEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddUserView.xaml">
       <SubType>Designer</SubType>
@@ -232,9 +238,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewResources.resx">
+    <EmbeddedResource Include="ViewViewModelResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ViewResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>ViewViewModelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

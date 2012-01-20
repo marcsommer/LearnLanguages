@@ -132,6 +132,12 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UsernameNotFoundException.cs">
       <Link>Exceptions\UsernameNotFoundException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UserNotAuthenticatedException.cs">
+      <Link>Exceptions\UserNotAuthenticatedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UserNotAuthorizedException.cs">
+      <Link>Exceptions\UserNotAuthorizedException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\VerifyUserFailedException.cs">
       <Link>Exceptions\VerifyUserFailedException.cs</Link>
     </Compile>
