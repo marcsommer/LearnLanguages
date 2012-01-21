@@ -367,29 +367,27 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
-    [Tag("pgetall")]
+    [Tag("plist")]
     public void GET_ALL()
     {
+      var isLoaded = false;
+      Exception error = null;
+      PhraseList allLanguages = null;
+      PhraseList.GetAll((s, r) =>
       {
-        var isLoaded = false;
-        Exception error = null;
-        PhraseList allLanguages = null;
-        PhraseList.GetAll((s, r) =>
-        {
-          error = r.Error;
-          if (error != null)
-            throw error;
+        error = r.Error;
+        if (error != null)
+          throw error;
 
-          allLanguages = r.Object;
-          isLoaded = true;
-        });
+        allLanguages = r.Object;
+        isLoaded = true;
+      });
 
-        EnqueueConditional(() => isLoaded);
-        EnqueueCallback(() => { Assert.IsNull(error); },
-                        () => { Assert.IsNotNull(allLanguages); },
-                        () => { Assert.IsTrue(allLanguages.Count > 0); });
-        EnqueueTestComplete();
-      }
+      EnqueueConditional(() => isLoaded);
+      EnqueueCallback(() => { Assert.IsNull(error); },
+                      () => { Assert.IsNotNull(allLanguages); },
+                      () => { Assert.IsTrue(allLanguages.Count > 0); });
+      EnqueueTestComplete();
     }
 
     [TestMethod]
@@ -560,6 +558,150 @@ namespace LearnLanguages.Silverlight.Tests
                       () => { Assert.AreEqual(savedPhraseEdit.Text, gottenPhraseEdit.Text); });
 
       EnqueueTestComplete();
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    [Tag("plist")]
+    public void GET_ALL_EDIT_SAVE()
+    {
+      var isLoaded = false;
+      var isEdited = false;
+      var isSaved = false;
+
+      var loadError = new Exception();
+      var saveError = new Exception();
+
+      var allPhrasesCount = -1;
+      bool phrasesCountStaysTheSame = false;
+      var text0 = "This is edited Text00000._save";
+      var text1 = "This is edited Text11111._save";
+      var text2 = "This is edited Text22222222222222222222222._save";
+      var containsText0 = false;
+      var containsText1 = false;
+      var containsText2 = false;  
+
+      PhraseList allPhrases = null;
+      PhraseList savedPhrases = null;
+      PhraseList.GetAll((s, r) =>
+      {
+        loadError = r.Error;
+        if (loadError != null)
+          throw loadError;
+
+        allPhrases = r.Object;
+        isLoaded = true;
+        allPhrases[0].Text = text0;
+        allPhrases[1].Text = text1;
+        allPhrases[2].Text = text2;
+
+        allPhrasesCount = allPhrases.Count;
+
+        isEdited = true;
+        allPhrases.BeginSave((s2, r2) =>
+          {
+            saveError = r2.Error;
+            if (saveError != null)
+              throw saveError;
+
+            savedPhrases = (PhraseList)r2.NewObject;
+            phrasesCountStaysTheSame = allPhrasesCount == savedPhrases.Count;
+
+            containsText0 = (from phrase in savedPhrases
+                             where phrase.Text == text0
+                             select phrase).Count() == 1;
+            containsText1 = (from phrase in savedPhrases
+                             where phrase.Text == text1
+                             select phrase).Count() == 1;
+            containsText2 = (from phrase in savedPhrases
+                             where phrase.Text == text2
+                             select phrase).Count() == 1;
+            isSaved = true;
+          });
+      });
+
+      EnqueueConditional(() => isLoaded);
+      EnqueueConditional(() => isEdited);
+      EnqueueConditional(() => isSaved);
+      EnqueueCallback(
+                      () => { Assert.IsNull(loadError); },
+                      () => { Assert.IsNull(saveError); },
+                      () => { Assert.IsNotNull(allPhrases); },
+                      () => { Assert.IsNotNull(savedPhrases); },
+                      () => { Assert.IsTrue(containsText0); },
+                      () => { Assert.IsTrue(containsText1); },
+                      () => { Assert.IsTrue(containsText2); },
+                      () => { Assert.IsTrue(phrasesCountStaysTheSame); },
+                      () => { Assert.IsTrue(allPhrases.Count > 0); });
+      EnqueueTestComplete();
+
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    [Tag("plist")]
+    public void GET_ALL_EDIT_CANCELEDIT()
+    {
+      var isLoaded = false;
+      var isEdited = false;
+      var isCanceled = false;
+
+      var loadError = new Exception();
+
+      var text0 = "This is edited Text00000._canceledit";
+      var text1 = "This is edited Text11111._canceledit";
+      var text2 = "This is edited Text22222222222222222222222._canceledit";
+      var containsText0 = false;
+      var containsText1 = false;
+      var containsText2 = false;
+
+      PhraseList allPhrases = null;
+      PhraseList canceledEditPhrases = null;
+      PhraseList.GetAll((s, r) =>
+      {
+        loadError = r.Error;
+        if (loadError != null)
+          throw loadError;
+
+        allPhrases = r.Object;
+        isLoaded = true;
+        //allPhrases.BeginEdit();
+        //allPhrases.CancelEdit();
+        allPhrases.BeginEdit();
+        allPhrases[0].Text = text0;
+        allPhrases[1].Text = text1;
+        allPhrases[2].Text = text2;
+        allPhrases.CancelEdit();
+
+        isEdited = true;
+        
+        canceledEditPhrases = allPhrases;
+
+        containsText0 = (from phrase in canceledEditPhrases
+                         where phrase.Text == text0
+                         select phrase).Count() == 1;
+        containsText1 = (from phrase in canceledEditPhrases
+                         where phrase.Text == text1
+                         select phrase).Count() == 1;
+        containsText2 = (from phrase in canceledEditPhrases
+                         where phrase.Text == text2
+                         select phrase).Count() == 1;
+        isCanceled = true;
+      });
+
+      EnqueueConditional(() => isLoaded);
+      EnqueueConditional(() => isEdited);
+      EnqueueConditional(() => isCanceled);
+      EnqueueCallback(
+                      () => { Assert.IsNull(loadError); },
+                      () => { Assert.IsNotNull(allPhrases); },
+                      () => { Assert.IsNotNull(canceledEditPhrases); },
+                      () => { Assert.IsFalse(containsText0); },
+                      () => { Assert.IsFalse(containsText1); },
+                      () => { Assert.IsFalse(containsText2); },
+                      () => { Assert.IsTrue(allPhrases.Count > 0); });
+      EnqueueTestComplete();
+
     }
 
   }
