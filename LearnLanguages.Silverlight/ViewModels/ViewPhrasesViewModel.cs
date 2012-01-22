@@ -21,22 +21,5 @@ namespace LearnLanguages.Silverlight.ViewModels
         });
     }
 
-    public void BeginEdit()
-    {
-      Model.BeginEdit();
-    }
-    public void EndEdit()
-    {
-      Model.ApplyEdit();
-    }
-
-    private void UnBindUI()
-    {
-    }
-
-    private void BindUI()
-    {
-      
-    }
   }
 }

@@ -15,20 +15,16 @@
         <RowDefinition Height="30"/>
       </Grid.RowDefinitions>
       <Border Style="{StaticResource ViewSection}">
-        <sdk:DataGrid ItemsSource="{Binding Path=Model}"
-                      AutoGenerateColumns="True" 
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      IsReadOnly="False"
-                      >
-          <i:Interaction.Triggers>
+        <ListBox>
+          <!--<i:Interaction.Triggers>
             <i:EventTrigger EventName="BeginningEdit">
               <cal:ActionMessage MethodName="BeginEdit" />
             </i:EventTrigger>
             <i:EventTrigger EventName="CellEditEnded">
               <cal:ActionMessage MethodName="EndEdit" />
             </i:EventTrigger>
-          </i:Interaction.Triggers>
-        </sdk:DataGrid>
+          </i:Interaction.Triggers>-->
+        </ListBox>
       </Border>
       <Border Style="{StaticResource ViewSection}"
               Grid.Row="1"

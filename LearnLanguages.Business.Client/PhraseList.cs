@@ -41,8 +41,9 @@ namespace LearnLanguages.Business
         var allPhraseDtos = result.Obj;
         foreach (var PhraseDto in allPhraseDtos)
         {
-          var PhraseEdit = DataPortal.CreateChild<PhraseEdit>(PhraseDto);
-          Add(PhraseEdit);
+          //var PhraseEdit = DataPortal.CreateChild<PhraseEdit>(PhraseDto);
+          var PhraseEdit = DataPortal.FetchChild<PhraseEdit>(PhraseDto);
+          this.Add(PhraseEdit);
         }
       }
     }
@@ -50,7 +51,10 @@ namespace LearnLanguages.Business
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Update()
     {
-      base.Child_Update();
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        base.Child_Update();
+      }
     }
 
 #endif

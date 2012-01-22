@@ -119,7 +119,7 @@ namespace LearnLanguages.DataAccess
       get
       {
         return (from phrase in Phrases
-                where phrase.Text == LongPhraseText
+                where phrase.Text == LongText
                 select phrase).First();
       }
     }
@@ -134,7 +134,7 @@ namespace LearnLanguages.DataAccess
     }
 
     public string HelloText = "Hello!";
-    public string LongPhraseText = "Why this is a very long phrase indeed.  It is in fact several sentences.  I think it might just be TOO long!";
+    public string LongText = "Why this is a very long phrase indeed.  It is in fact several sentences.  I think it might just be TOO long!";
     public string HolaText = "Hola!!!";
     public string DogText = "dog";
 
@@ -144,7 +144,7 @@ namespace LearnLanguages.DataAccess
     }
     public Guid IdLongPhrase
     {
-      get { return GetPhraseId(LongPhraseText); }
+      get { return GetPhraseId(LongText); }
     }
     public Guid IdHola
     {
@@ -222,7 +222,7 @@ namespace LearnLanguages.DataAccess
         { 
           Id = new Guid("32D6CB9A-CBFF-47AE-91BB-396FAA7A3506"),
           LanguageId = EnglishId,
-          Text = LongPhraseText,
+          Text = LongText,
           UserId = DefaultTestValidUserId,
           Username = TestValidUsername
         },

@@ -106,7 +106,15 @@ namespace LearnLanguages.Business
     public LanguageEdit Language
     {
       get { return GetProperty(LanguageProperty); }
-      private set { LoadProperty(LanguageProperty, value); }
+      set 
+      {
+        LoadProperty(LanguageProperty, value);
+        
+        if (value != null)
+          LanguageId = value.Id;
+        else
+          LanguageId = Guid.Empty;
+      }
     }
     #endregion
     
@@ -319,20 +327,37 @@ namespace LearnLanguages.Business
     
 #if !SILVERLIGHT
 
+    //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    //public void Child_Fetch(Guid id)
+    //{
+    //  using (var dalManager = DalFactory.GetDalManager())
+    //  {
+    //    var phraseDal = dalManager.GetProvider<IPhraseDal>();
+    //    var result = phraseDal.Fetch(id);
+    //    if (result.IsError)
+    //      throw new FetchFailedException(result.Msg);
+    //    PhraseDto dto = result.Obj;
+    //    LoadFromDtoBypassPropertyChecks(dto);
+    //  }
+    //}
+
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(Guid id)
+    public void Child_Fetch(PhraseDto dto)
     {
-      using (var dalManager = DalFactory.GetDalManager())
-      {
-        var phraseDal = dalManager.GetProvider<IPhraseDal>();
-        var result = phraseDal.Fetch(id);
-        if (result.IsError)
-          throw new FetchFailedException(result.Msg);
-        PhraseDto dto = result.Obj;
-        LoadFromDtoBypassPropertyChecks(dto);
-      }
+      LoadFromDtoBypassPropertyChecks(dto);
+
+      //using (var dalManager = DalFactory.GetDalManager())
+      //{
+      //  var phraseDal = dalManager.GetProvider<IPhraseDal>();
+      //  var result = phraseDal.Fetch(id);
+      //  if (result.IsError)
+      //    throw new FetchFailedException(result.Msg);
+      //  PhraseDto dto = result.Obj;
+      //  LoadFromDtoBypassPropertyChecks(dto);
+      //}
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()
     {   
       using (var dalManager = DalFactory.GetDalManager())
@@ -349,6 +374,7 @@ namespace LearnLanguages.Business
       }
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Update()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -363,6 +389,7 @@ namespace LearnLanguages.Business
       }
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_DeleteSelf()
     {
       using (var dalManager = DalFactory.GetDalManager())

@@ -41,6 +41,8 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _SelectedItem = value;
           NotifyOfPropertyChange(() => SelectedItem);
+          if (SelectedItemChanged != null)
+            SelectedItemChanged(_SelectedItem, EventArgs.Empty);
         }
       }
     }
@@ -72,6 +74,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     //    }
     //  }
     //}
+
+    public event EventHandler SelectedItemChanged;
 
     public bool LoadFromUri(Uri uri)
     {
