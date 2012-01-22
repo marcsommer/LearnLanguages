@@ -15,7 +15,7 @@ namespace LearnLanguages.Silverlight.Tests
     private LanguageEdit _ServerEnglishLang;
     private LanguageEdit _ServerSpanishLang;
     
-    [ClassInitialize]
+    [TestInitialize]
     [Asynchronous]
     public void InitializePhraseTests()
     {
@@ -326,6 +326,7 @@ namespace LearnLanguages.Silverlight.Tests
     [TestMethod]
     [Asynchronous]
     [Tag("plang")]
+    [Tag("current")]
     public void GET_ALL_SET_NEW_LANGUAGE_SAVE()
     {
       var isLoaded = false;
@@ -357,18 +358,46 @@ namespace LearnLanguages.Silverlight.Tests
         initLang1 = allPhrases[1].Language;
         initLang2 = allPhrases[2].Language;
 
+        //this is fine
         allPhrases.BeginEdit();
-        allPhrases[0].Language = _ServerSpanishLang;
-        allPhrases[1].Language = _ServerSpanishLang;
-        allPhrases[2].Language = _ServerSpanishLang;
-        isEdited = true;
         allPhrases.ApplyEdit();
+
+        //just checking to see if removing from phraselist and apply edit deletes phrase from db.  it does.
+        //PhraseEdit.GetPhraseEdit(SeedData.Instance.IdHello, (s3, r3) =>
+        //{
+        //  if (r3.Error != null)
+        //    throw r3.Error;
+        //});
+        //allPhrases.BeginEdit(); //this does delete the item.
+        //allPhrases.RemoveAt(3);
+        //allPhrases.ApplyEdit();
+
+        allPhrases[0].BeginEdit();
+        allPhrases[0].Language = _ServerSpanishLang;
+        allPhrases[0].ApplyEdit();
+
+        allPhrases[1].BeginEdit();
+        allPhrases[1].Language = _ServerSpanishLang;
+        allPhrases[1].ApplyEdit();
+
+        allPhrases[2].BeginEdit();
+        allPhrases[2].Language = _ServerSpanishLang;
+        allPhrases[2].ApplyEdit();
+
+        isEdited = true;
+        //allPhrases.ApplyEdit(); //just because we are 
         allPhrases.BeginSave((s2, r2) =>
         {
           saveError = r2.Error;
           if (saveError != null)
             throw saveError;
 
+          //just checking to see if removing and applyingedit to allPhrases list deletes the item from db.  it looks like it does.
+          //PhraseEdit.GetPhraseEdit(SeedData.Instance.IdHello, (s3, r3) =>
+          //{
+          //  if (r3.Error != null)
+          //    throw r3.Error;
+          //});
           savedPhrases = (PhraseList)r2.NewObject;
           phrasesCountStaysTheSame = allPhrasesCount == savedPhrases.Count;
 
@@ -430,10 +459,9 @@ namespace LearnLanguages.Silverlight.Tests
         initLang1 = allPhrases[1].Language;
         initLang2 = allPhrases[2].Language;
 
-        allPhrases.BeginEdit();
-        //allPhrases[0].BeginEdit();
+        //allPhrases.BeginEdit();
+        allPhrases[0].BeginEdit();
         allPhrases[0].Language = _ServerSpanishLang;
-
         //allPhrases[0].ApplyEdit();
         //allPhrases[0].ApplyEdit();
         allPhrases[0].CancelEdit();
@@ -446,9 +474,9 @@ namespace LearnLanguages.Silverlight.Tests
         //allPhrases[3].ApplyEdit();
         isEdited = true;
 
-        allPhrases.CancelEdit();
+        //allPhrases.CancelEdit();
         canceledEditPhrases = allPhrases;
-
+        phrasesCountStaysTheSame = allPhrasesCount == canceledEditPhrases.Count;
         isCanceled = true;
 
         //allPhrases.BeginSave((s2, r2) =>
