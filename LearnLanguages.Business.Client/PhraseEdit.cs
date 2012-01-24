@@ -197,6 +197,11 @@ namespace LearnLanguages.Business
       BusinessRules.CheckRules();
     }
 
+    public int GetEditLevel()
+    {
+      return EditLevel;
+    }
+
     #endregion
 
     #region Validation Rules

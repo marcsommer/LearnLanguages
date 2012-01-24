@@ -62,7 +62,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       NotifyOfPropertyChange(() => CanSave);
       NotifyOfPropertyChange(() => CanCancelEdit);
     }
-    
+
     public bool CanSave
     {
       get

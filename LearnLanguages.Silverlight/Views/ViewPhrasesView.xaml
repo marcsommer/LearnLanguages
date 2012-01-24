@@ -14,8 +14,10 @@
         <RowDefinition />
         <RowDefinition Height="30"/>
       </Grid.RowDefinitions>
-      <Border Style="{StaticResource ViewSection}">
-        <ListBox x:Name="Items" >
+      <Border Style="{StaticResource ViewSection}" HorizontalAlignment="Stretch">
+        <ListBox x:Name="Items" 
+                 HorizontalContentAlignment="Stretch"
+                 ItemContainerStyle="{StaticResource ListBoxItemStyle}">
           <!--<i:Interaction.Triggers>
             <i:EventTrigger EventName="BeginningEdit">
               <cal:ActionMessage MethodName="BeginEdit" />
@@ -29,15 +31,29 @@
       <Border Style="{StaticResource ViewSection}"
               Grid.Row="1"
               HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-          <StackPanel.Resources>
+        <Grid HorizontalAlignment="Center" >
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Grid.Resources>
             <Style TargetType="Button">
               <Setter Property="Margin" Value="2" />
             </Style>
-          </StackPanel.Resources>
-          <Button x:Name="Save" Content="Save Changes"/>
-          <Button x:Name="CancelEdit" Content="Cancel Changes"/>
-        </StackPanel>
+          </Grid.Resources>
+          <Button x:Name="Save" Content="Save Changes"
+                  Grid.Column="0"/>
+          <Button x:Name="InitiateDeleteChecked" Content="Delete Checked Items"
+                  Grid.Column="1"
+                  Visibility="{Binding Path=InitiateDeleteVisibility}"/>
+          <Button x:Name="FinalizeDeleteChecked" Content="Confirm Delete" 
+                  Grid.Column="1"
+                  Visibility="{Binding Path=FinalizeDeleteVisibility}"/>
+          <Button x:Name="CancelDeleteChecked" Content="Cancel Delete" 
+                  Grid.Column="2"
+                  Visibility="{Binding Path=FinalizeDeleteVisibility}"/>
+        </Grid>
       </Border>
     </Grid>
   </Border>

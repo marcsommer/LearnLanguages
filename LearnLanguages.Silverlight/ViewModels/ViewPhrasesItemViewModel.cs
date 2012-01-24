@@ -16,11 +16,14 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       _Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
       HookInto(_Languages);
+      IsChecked = false;
     }
 
     #endregion
 
-    #region Properties
+    #region Fields and Properties
+
+    private bool _SettingModel { get; set; }
 
     private LanguageSelectorViewModel _Languages;
     public LanguageSelectorViewModel Languages
@@ -36,38 +39,67 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    private bool _IsChecked;
+    public bool IsChecked
+    {
+      get { return _IsChecked; }
+      set
+      {
+        if (value != _IsChecked)
+        {
+          _IsChecked = value;
+          NotifyOfPropertyChange(() => IsChecked);
+        }
+      }
+    }
+
     #endregion
 
     #region Methods
 
     private void HookInto(LanguageSelectorViewModel _Languages)
     {
-      //_Languages.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_Languages_PropertyChanged);
+      _Languages.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_Languages_PropertyChanged);
     }
 
     void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-      //System.Windows.MessageBox.Show("languages_property changed");
+      if (!_SettingModel)
+      {
+        Model.BeginEdit();
+        Model.Language = Languages.SelectedItem.Model;
+        Model.ApplyEdit();
+        NotifyOfPropertyChange(() => Model);
+        //Model.BeginSave((s, r) =>
+        //  {
+        //    if (r.Error != null)
+        //      throw r.Error;
+        //    Model = (PhraseEdit)(r.NewObject);
+        //  });
+      }
     }
 
     public override void SetModel(PhraseEdit model)
     {
-      base.SetModel(model);
-      if (model != null)
+      _SettingModel = true;
       {
-        var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
-        languageViewModel.Model = model.Language;
-        Languages.SelectedItem = (from l in Languages.Items
-                                  where l.Model.Id == model.LanguageId
-                                  select l).FirstOrDefault();
-        Languages.SelectedItem = languageViewModel;
+        base.SetModel(model);
+        if (model != null)
+        {
+          var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
+          languageViewModel.Model = model.Language;
+          Languages.SelectedItem = (from l in Languages.Items
+                                    where l.Model.Id == model.LanguageId
+                                    select l).FirstOrDefault();
+          Languages.SelectedItem = languageViewModel;
+        }
+        else
+        {
+          Languages.SelectedItem = null;
+        }
       }
-      else
-      {
-        Languages.SelectedItem = null;
-      }
+      _SettingModel = false;
     }
     #endregion
-
   }
 }
