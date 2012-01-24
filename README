@@ -24,3 +24,6 @@ I've gotten tests passing for basic plumbing for the most basic structure.  I ha
 
 01/19/12
 I've integrated authentication into the main LearnLanguages project.  This includes the software architecture with PhraseEdit and LanguageEdit, as well as the Ef database structure/model, including FK associations. I also have some basic pub-sub navigation in place as well, handled by Caliburn event aggregator.  I have the Ef database being deleted and seeded, controlled by a setting in EfResources.  Currently all tests passing for basic CRUD functionality in LanguageTests and PhraseTests, and the SecurityTests are passing as well.
+
+01/24/12
+Basic functionality is working now.  I can login, add phrases, view phrases, edit phrases, delete phrases.  None of it is super evolved, ie you can't do everything very fast, and it is not efficient, but it is usable with my vision of how it is intended to be used.  I won't be adding a bunch of little words, I will be adding long texts, ie groups of words.  Some may be song lyrics, or poems, or whatever.  Then, it will be part of the process of "learning" these phrases that will break these phrases down into different atomic units.  
