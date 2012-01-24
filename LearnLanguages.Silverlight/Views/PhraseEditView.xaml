@@ -38,7 +38,7 @@
                Margin="1,2,1,2" 
                MinWidth="250"
                MinHeight="100"
-               TabIndex="1"/>
+               TabIndex="1" TextWrapping="Wrap" AcceptsReturn="True" />
 
 
       <Button x:Name="Save"

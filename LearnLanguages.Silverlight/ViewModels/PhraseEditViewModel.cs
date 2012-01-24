@@ -12,6 +12,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     public PhraseEditViewModel()
     {
       Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
+      Languages.SelectedItemChanged += HandleLanguageChanged;
+    }
+
+    void HandleLanguageChanged(object sender, EventArgs e)
+    {
+      Model.Language = ((LanguageEditViewModel)sender).Model;
     }
 
     private LanguageSelectorViewModel _Languages;

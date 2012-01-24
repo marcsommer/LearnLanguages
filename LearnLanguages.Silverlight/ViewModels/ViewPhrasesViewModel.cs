@@ -19,6 +19,8 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public ViewPhrasesViewModel()
     {
+      _InitiateDeleteVisibility = Visibility.Visible;
+      _FinalizeDeleteVisibility = Visibility.Collapsed;
       PhraseList.GetAll((s, r) =>
         {
           if (r.Error != null)
@@ -43,9 +45,15 @@ namespace LearnLanguages.Silverlight.ViewModels
       foreach (var phraseEdit in allPhrases)
       {
         var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
+        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
         itemViewModel.Model = phraseEdit;
         Items.Add(itemViewModel);
       }
+    }
+
+    void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
 
     public bool LoadFromUri(Uri uri)
@@ -105,6 +113,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       //  Model = (PhraseList)r2.NewObject;
       //});
       NotifyOfPropertyChange(() => CanSave);
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
     protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -162,7 +172,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     //}
 
 
-    public bool CanDeleteChecked
+    public bool CanInitiateDeleteChecked
     {
       get
       {
@@ -216,7 +226,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       foreach (var toDelete in checkedForDeletion)
       {
-        toDelete.Model.Delete();
+        Model.Remove(toDelete.Model);
       }
 
       Save();
@@ -227,6 +237,15 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public void CancelDeleteChecked()
     {
+      foreach (var item in Items)
+      {
+        var vm = (ViewPhrasesItemViewModel)item;
+        vm.IsChecked = false;
+      }
+
+      InitiateDeleteVisibility = Visibility.Visible;
+      FinalizeDeleteVisibility = Visibility.Collapsed;
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
   }
 }

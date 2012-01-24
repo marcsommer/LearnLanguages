@@ -19,7 +19,7 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
-      <ContentControl x:Name="Main" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+      <ContentControl x:Name="Main" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
       <!--<ContentControl x:Name="Login"                    Grid.Column="0" />-->
       <!--<ContentControl x:Name="AuthenticationStatus"                  Grid.Column="1" />-->
 
