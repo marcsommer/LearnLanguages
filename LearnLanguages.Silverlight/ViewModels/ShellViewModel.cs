@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.ComponentModel.Composition;
 using Caliburn.Micro;
+using LearnLanguages.Silverlight.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -65,8 +66,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     //  }
     //}
 
-    private ViewModelBase _Main;
-    public ViewModelBase Main
+    private IViewModelBase _Main;
+    public IViewModelBase Main
     {
       get { return _Main; }
       set

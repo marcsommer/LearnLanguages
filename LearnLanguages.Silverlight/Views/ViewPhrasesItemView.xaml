@@ -11,9 +11,16 @@
         <RowDefinition Height="*" />
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="25" />
         <ColumnDefinition Width="Auto" MinWidth="50"/>
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>      
+      
+      <!--Checkbox-->
+      <CheckBox Grid.Column="0" 
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsChecked="{Binding Path=Model_IsSavable}"/>
       
       <!--LanguageSelector-->
       <ContentControl x:Name="Languages" 

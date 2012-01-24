@@ -3,6 +3,7 @@ using System.Net;
 using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
+using System.Linq;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -10,22 +11,16 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class ViewPhrasesItemViewModel : ViewModelBase<PhraseEdit, PhraseDto>
   {
+    #region Ctors and Init
     public ViewPhrasesItemViewModel()
     {
       _Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
       HookInto(_Languages);
     }
 
-    private void HookInto(LanguageSelectorViewModel _Languages)
-    {
-      _Languages.SelectedItemChanged += HandleLanguageChanged;
-    }
+    #endregion
 
-    void HandleLanguageChanged(object sender, EventArgs e)
-    {
-      //sender is the new LanguageEdit
-      Model.Language = (LanguageEdit)sender;
-    }
+    #region Properties
 
     private LanguageSelectorViewModel _Languages;
     public LanguageSelectorViewModel Languages
@@ -40,6 +35,39 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
-    
+
+    #endregion
+
+    #region Methods
+
+    private void HookInto(LanguageSelectorViewModel _Languages)
+    {
+      //_Languages.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_Languages_PropertyChanged);
+    }
+
+    void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      //System.Windows.MessageBox.Show("languages_property changed");
+    }
+
+    public override void SetModel(PhraseEdit model)
+    {
+      base.SetModel(model);
+      if (model != null)
+      {
+        var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
+        languageViewModel.Model = model.Language;
+        Languages.SelectedItem = (from l in Languages.Items
+                                  where l.Model.Id == model.LanguageId
+                                  select l).FirstOrDefault();
+        Languages.SelectedItem = languageViewModel;
+      }
+      else
+      {
+        Languages.SelectedItem = null;
+      }
+    }
+    #endregion
+
   }
 }

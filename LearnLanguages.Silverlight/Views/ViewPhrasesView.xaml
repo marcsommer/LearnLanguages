@@ -15,7 +15,7 @@
         <RowDefinition Height="30"/>
       </Grid.RowDefinitions>
       <Border Style="{StaticResource ViewSection}">
-        <ListBox>
+        <ListBox x:Name="Items" >
           <!--<i:Interaction.Triggers>
             <i:EventTrigger EventName="BeginningEdit">
               <cal:ActionMessage MethodName="BeginEdit" />

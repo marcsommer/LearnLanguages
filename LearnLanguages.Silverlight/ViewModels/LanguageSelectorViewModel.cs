@@ -2,23 +2,42 @@
 using System.ComponentModel.Composition;
 using Caliburn.Micro;
 using LearnLanguages.Business;
+using System.Linq;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(LanguageSelectorViewModel))]
+  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   //public class LanguageSelectorViewModel : Conductor<LanguageEditViewModel>.Collection.OneActive, Interfaces.IViewModelBase
   public class LanguageSelectorViewModel : ViewModelBase
   {
     public LanguageSelectorViewModel()
     {
+      Items = new BindableCollection<LanguageEditViewModel>();
+
       LanguageList.GetAll((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
           var allLanguages = r.Object;
-          Items = new BindableCollection<LanguageEdit>(allLanguages);
-          SelectedItem = Items[0];
+          foreach (var languageEdit in allLanguages)
+          {
+            var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
+            languageViewModel.Model = languageEdit;
+            Items.Add(languageViewModel);
+          }
+
+          if (SelectedItem != null)
+          {
+            //our currently selected item is not the actual item in the list, as it is being set
+            //before our list is getting populated.
+            SelectedItem = (from language in Items
+                            where language.Model.Id == SelectedItem.Model.Id
+                            select language).FirstOrDefault();
+          }
+
+          //SelectedItem = Items[0];
           //foreach (var language in allLanguages)
           //{
           //  //var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
@@ -31,8 +50,8 @@ namespace LearnLanguages.Silverlight.ViewModels
         });
     }
 
-    private LanguageEdit _SelectedItem;
-    public LanguageEdit SelectedItem
+    private LanguageEditViewModel _SelectedItem;
+    public LanguageEditViewModel SelectedItem
     {
       get { return _SelectedItem; }
       set
@@ -47,8 +66,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private BindableCollection<LanguageEdit> _Items;
-    public BindableCollection<LanguageEdit> Items
+    private BindableCollection<LanguageEditViewModel> _Items;
+    public BindableCollection<LanguageEditViewModel> Items
     {
       get { return _Items; }
       set

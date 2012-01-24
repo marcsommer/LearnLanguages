@@ -22,16 +22,20 @@ namespace LearnLanguages.Silverlight.ViewModels
       get { return _Model; }
       set
       {
-        if (value != _Model)
-        {
-          UnhookFrom(_Model);
-          _Model = value;
-          HookInto(_Model);
-          NotifyOfPropertyChange(() => Model);
-        }
+        SetModel(value);
       }
     }
 
+    public virtual void SetModel(TCslaModel model)
+    {
+      if (model != _Model)
+      {
+        UnhookFrom(_Model);
+        _Model = model;
+        HookInto(_Model);
+        NotifyOfPropertyChange(() => Model);
+      }
+    }
     protected virtual void HookInto(TCslaModel model)
     {
       if (model != null)
@@ -42,7 +46,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       if (model != null)
         model.PropertyChanged -= HandleModelPropertyChanged;
     }
-    void HandleModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+    protected virtual void HandleModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
       NotifyOfPropertyChange(() => e.PropertyName);
       NotifyOfPropertyChange(() => CanSave);

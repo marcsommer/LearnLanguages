@@ -57,11 +57,11 @@ namespace LearnLanguages.Silverlight
       //GET THE VIEWMODEL FROM THE CONTAINER
       //var exports = Services.Container.GetExports(requestedViewModelType, typeof(ViewModelMetadataAttribute), requestedContractName);
       var exportFound = false;
-      ViewModels.ViewModelBase requestedViewModel = null;
+      IViewModelBase requestedViewModel = null;
       //Hack: I can't seem to use GetExports(type,null,null).FirstOrDefault() extension method for whatever reason, so i'm just doing a foreach with a break at the end.
       foreach (var export in exports)
       {
-        requestedViewModel = export.Value as ViewModels.ViewModelBase;
+        requestedViewModel = export.Value as IViewModelBase;
         if (requestedViewModel != null)
           exportFound = true;
 

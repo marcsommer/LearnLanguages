@@ -9,6 +9,12 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class LanguageEditViewModel : ViewModelBase<LanguageEdit, LanguageDto>
   {
-
+    public override string ToString()
+    {
+      if (Model == null)
+        return "";
+      else
+        return Model.Text;
+    }
   }
 }

@@ -9,7 +9,7 @@
   <Border Style="{StaticResource DebugBorder}">
     <Grid x:Name="LayoutRoot" Background="White">
       <!--<ComboBox x:Name="Items" />-->
-      <ComboBox ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem}" />
+      <ComboBox ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" />
     </Grid>
   </Border>
 </UserControl>
