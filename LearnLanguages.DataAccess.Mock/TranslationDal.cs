@@ -5,90 +5,90 @@ using System.Text;
 
 namespace LearnLanguages.DataAccess.Mock
 {
-  public class PhraseDal : PhraseDalBase
+  public class TranslationDal : TranslationDalBase
   {
-    //public Result<PhraseDto> New(object criteria)
+    //public Result<TranslationDto> New(object criteria)
     //{
-    //  Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
+    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var dto = new PhraseDto() 
+    //    var dto = new TranslationDto() 
     //    { 
     //      Id = Guid.NewGuid(),
     //      LanguageId = SeedData.Instance.DefaultLanguageId
     //    };
-    //    retResult = Result<PhraseDto>.Success(dto);
+    //    retResult = Result<TranslationDto>.Success(dto);
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<PhraseDto> Fetch(Guid id)
+    //public Result<TranslationDto> Fetch(Guid id)
     //{
-    //  Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
+    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Phrases
+    //    var results = from item in SeedData.Instance.Translations
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
-    //      retResult = Result<PhraseDto>.Success(results.First());
+    //      retResult = Result<TranslationDto>.Success(results.First());
     //    else
     //    {
     //      if (results.Count() == 0)
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null,
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null,
     //          new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<PhraseDto> Update(PhraseDto dto)
+    //public Result<TranslationDto> Update(TranslationDto dto)
     //{
-    //  Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
+    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Phrases
+    //    var results = from item in SeedData.Instance.Translations
     //                  where item.Id == dto.Id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
-    //      var PhraseToUpdate = results.First();
-    //      SeedData.Instance.Phrases.Remove(PhraseToUpdate);
+    //      var TranslationToUpdate = results.First();
+    //      SeedData.Instance.Translations.Remove(TranslationToUpdate);
     //      dto.Id = Guid.NewGuid();
-    //      SeedData.Instance.Phrases.Add(dto);
-    //      retResult = Result<PhraseDto>.Success(dto);
+    //      SeedData.Instance.Translations.Add(dto);
+    //      retResult = Result<TranslationDto>.Success(dto);
     //    }
     //    else
     //    {
     //      if (results.Count() == 0)
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null,
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null,
     //          new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<PhraseDto> Insert(PhraseDto dto)
+    //public Result<TranslationDto> Insert(TranslationDto dto)
     //{
-    //  Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
+    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Phrases
+    //    var results = from item in SeedData.Instance.Translations
     //                  where item.Id == dto.Id
     //                  select item;
 
@@ -100,84 +100,86 @@ namespace LearnLanguages.DataAccess.Mock
     //      {
     //        //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
     //        //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
-    //        //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
+    //        //TranslationDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
     //        throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
     //      }
-    //      SeedData.Instance.Phrases.Add(dto);
-    //      retResult = Result<PhraseDto>.Success(dto);
+    //      SeedData.Instance.Translations.Add(dto);
+    //      retResult = Result<TranslationDto>.Success(dto);
     //    }
     //    else
     //    {
     //      if (results.Count() == 1) //ID ALREADY EXISTS
-    //        retResult = Result<PhraseDto>.FailureWithInfo(dto,
+    //        retResult = Result<TranslationDto>.FailureWithInfo(dto,
     //          new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else                      //MULTIPLE IDS ALREADY EXIST??
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<PhraseDto> Delete(Guid id)
+    //public Result<TranslationDto> Delete(Guid id)
     //{
-    //  Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
+    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Phrases
+    //    var results = from item in SeedData.Instance.Translations
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
-    //      var PhraseToRemove = results.First();
-    //      SeedData.Instance.Phrases.Remove(PhraseToRemove);
-    //      retResult = Result<PhraseDto>.Success(PhraseToRemove);
+    //      var TranslationToRemove = results.First();
+    //      SeedData.Instance.Translations.Remove(TranslationToRemove);
+    //      retResult = Result<TranslationDto>.Success(TranslationToRemove);
     //    }
     //    else
     //    {
     //      if (results.Count() == 0)
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null,
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null,
     //          new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else
-    //        retResult = Result<PhraseDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
+    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<PhraseDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public LearnLanguages.Result<ICollection<PhraseDto>> GetAll()
+    //public LearnLanguages.Result<ICollection<TranslationDto>> GetAll()
     //{
-    //  Result<ICollection<PhraseDto>> retResult = Result<ICollection<PhraseDto>>.Undefined(null);
+    //  Result<ICollection<TranslationDto>> retResult = Result<ICollection<TranslationDto>>.Undefined(null);
     //  try
     //  {
-    //    var allDtos = new List<PhraseDto>(SeedData.Instance.Phrases);
-    //    retResult = Result<ICollection<PhraseDto>>.Success(allDtos);
+    //    var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
+    //    retResult = Result<ICollection<TranslationDto>>.Success(allDtos);
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<ICollection<PhraseDto>>.FailureWithInfo(null, ex);
+    //    retResult = Result<ICollection<TranslationDto>>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
 
-    protected override PhraseDto NewImpl(object criteria)
+    protected override TranslationDto NewImpl(object criteria)
     {
-      var dto = new PhraseDto()
+      var dto = new TranslationDto()
       {
         Id = Guid.NewGuid(),
-        LanguageId = SeedData.Instance.DefaultLanguageId
+        UserId = SeedData.Instance.GetTestValidUserDto().Id,
+        Username = SeedData.Instance.TestValidUsername
       };
       return dto;
     }
-    protected override PhraseDto FetchImpl(Guid id)
+    protected override TranslationDto FetchImpl(Guid id)
+
     {
-      var results = from item in SeedData.Instance.Phrases
+      var results = from item in SeedData.Instance.Translations
                     where item.Id == id
                     select item;
 
@@ -191,35 +193,35 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override ICollection<PhraseDto> FetchImpl(ICollection<Guid> ids)
+    protected override ICollection<TranslationDto> FetchImpl(ICollection<Guid> ids)
     {
       if (ids == null)
         throw new ArgumentNullException("ids");
       else if (ids.Count == 0)
         throw new ArgumentOutOfRangeException("ids", "ids cannot be empty.");
 
-      var retPhrases = new List<PhraseDto>();
+      var retTranslations = new List<TranslationDto>();
 
       foreach (var id in ids)
       {
         var dto = FetchImpl(id);
-        retPhrases.Add(dto);
+        retTranslations.Add(dto);
       }
 
-      return retPhrases;
+      return retTranslations;
     }
-    protected override PhraseDto UpdateImpl(PhraseDto dto)
+    protected override TranslationDto UpdateImpl(TranslationDto dto)
     {
-      var results = from item in SeedData.Instance.Phrases
+      var results = from item in SeedData.Instance.Translations
                     where item.Id == dto.Id
                     select item;
 
       if (results.Count() == 1)
       {
-        var PhraseToUpdate = results.First();
-        SeedData.Instance.Phrases.Remove(PhraseToUpdate);
+        var TranslationToUpdate = results.First();
+        SeedData.Instance.Translations.Remove(TranslationToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Phrases.Add(dto);
+        SeedData.Instance.Translations.Add(dto);
         return dto;
       }
       else
@@ -230,9 +232,9 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override PhraseDto InsertImpl(PhraseDto dto)
+    protected override TranslationDto InsertImpl(TranslationDto dto)
     {
-      var results = from item in SeedData.Instance.Phrases
+      var results = from item in SeedData.Instance.Translations
                     where item.Id == dto.Id
                     select item;
 
@@ -240,35 +242,35 @@ namespace LearnLanguages.DataAccess.Mock
       {
         dto.Id = Guid.NewGuid();
         //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-        if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
+        if (dto.PhraseIds == null || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
         {
           //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
           //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
-          //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
+          //TranslationDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
           throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
         }
-        SeedData.Instance.Phrases.Add(dto);
+        SeedData.Instance.Translations.Add(dto);
         return dto;
       }
       else
       {
         if (results.Count() == 1) //ID ALREADY EXISTS
-          throw new Exceptions.IdAlreadyExistsException();
+          throw new Exceptions.IdAlreadyExistsException(dto.Id);
         else                      //MULTIPLE IDS ALREADY EXIST??
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override PhraseDto DeleteImpl(Guid id)
+    protected override TranslationDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Phrases
+      var results = from item in SeedData.Instance.Translations
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
-        var PhraseToRemove = results.First();
-        SeedData.Instance.Phrases.Remove(PhraseToRemove);
-        return PhraseToRemove;
+        var TranslationToRemove = results.First();
+        SeedData.Instance.Translations.Remove(TranslationToRemove);
+        return TranslationToRemove;
       }
       else
       {
@@ -278,9 +280,9 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override ICollection<PhraseDto> GetAllImpl()
+    protected override ICollection<TranslationDto> GetAllImpl()
     {
-      var allDtos = new List<PhraseDto>(SeedData.Instance.Phrases);
+      var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
       return allDtos;
     }
   }

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DalBases\TranslationDalBase.cs" />
     <Compile Include="DalBases\PhraseDalBase.cs" />
     <Compile Include="DalBases\CustomIdentityDalBase.cs" />
     <Compile Include="DalFactory.cs" />
@@ -53,8 +54,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Dtos\TranslationDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\IdAlreadyExistsException.cs" />
     <Compile Include="Exceptions\UserNotAuthorizedException.cs" />
     <Compile Include="Exceptions\IdNotFoundException.cs" />
     <Compile Include="Exceptions\CriteriaException.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="Exceptions\InsertFailedException.cs" />
     <Compile Include="Exceptions\MultipleItemsFoundDataAccessException.cs" />
     <Compile Include="Exceptions\UpdateFailedException.cs" />
+    <Compile Include="Interfaces\ITranslationDal.cs" />
     <Compile Include="Interfaces\IDalManager.cs" />
     <Compile Include="Interfaces\ICustomIdentityDal.cs" />
     <Compile Include="Interfaces\ILanguageDal.cs" />

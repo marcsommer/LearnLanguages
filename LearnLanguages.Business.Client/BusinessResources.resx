@@ -117,122 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AllPhrasesList_DalKey" xml:space="preserve">
-    <value>AllPhrasesList_DalKey</value>
+  <data name="RuleInfoCountsMustBeEqual" xml:space="preserve">
+    <value>{0}.Count must equal {1}.Count</value>
+    <comment>{0} = Primary Collection Property Name, e.g. Phrases
+{1} = Secondary Collection Property Name, e.g. PhraseIds</comment>
   </data>
-  <data name="AppSettingsKeyDalManagerTypeName" xml:space="preserve">
-    <value>DalManagerType</value>
-    <comment>This is the key used in ConfigurationManager.AppSettings[__key__];</comment>
-  </data>
-  <data name="AuthenticationTypeString" xml:space="preserve">
-    <value>Custom</value>
-  </data>
-  <data name="DalSeedDataInitializedKey" xml:space="preserve">
-    <value>DalSeedDataInitializedKey</value>
-    <comment>This key accesses a bool value in the application context to determine if the dal seed data is initialized.</comment>
-  </data>
-  <data name="DefaultEnglishLanguageId" xml:space="preserve">
-    <value>C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9</value>
-  </data>
-  <data name="DefaultEnglishLanguageText" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="DefaultLanguageId" xml:space="preserve">
-    <value>C10D85B4-4DE4-40CB-8ABD-9458AD9B7FD9</value>
-    <comment>Set this to the LanguageId that should populate newly created Phrases.  As of this typing, this equals DefaultEnglishLanguageId.</comment>
-  </data>
-  <data name="DefaultNewLanguageText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DefaultNewPhraseText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DefaultNewPhraseUsername" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ErrorMsgBadCriteriaException" xml:space="preserve">
-    <value>The criteria given was incorrect.  The expected criteria is as follows: {0}</value>
-    <comment>{0} = expected criteria description</comment>
-  </data>
-  <data name="ErrorMsgBadCriteriaExceptionDetail_ExpectedTypeIsUserDto" xml:space="preserve">
-    <value>Criteria is expected to be of type UserDto</value>
-  </data>
-  <data name="ErrorMsgCreateFailedException" xml:space="preserve">
-    <value>The Create operation failed.</value>
-  </data>
-  <data name="ErrorMsgDeleteFailedException" xml:space="preserve">
-    <value>The Delete operation failed.</value>
-  </data>
-  <data name="ErrorMsgDeleteFailedExceptionDetail_MultipleItemsFound" xml:space="preserve">
-    <value>The Delete operation failed.  There were multiple items found to delete.</value>
-  </data>
-  <data name="ErrorMsgFetchFailedException" xml:space="preserve">
-    <value>The Fetch operation failed.</value>
-  </data>
-  <data name="ErrorMsgGeneralDataAccessException" xml:space="preserve">
-    <value>GeneralDataAccessException.  See Inner Exception for details.</value>
-  </data>
-  <data name="ErrorMsgGetAllFailedException" xml:space="preserve">
-    <value>The GetAll operation failed.</value>
-  </data>
-  <data name="ErrorMsgGetRolesFailedException" xml:space="preserve">
-    <value>The roles of user ({0}) could not be retrieved.</value>
-    <comment>{0} = username</comment>
-  </data>
-  <data name="ErrorMsgIdAlreadyExists" xml:space="preserve">
-    <value>The Id ({0}) already exists.</value>
-    <comment>{0} = id</comment>
-  </data>
-  <data name="ErrorMsgIdNotFoundException" xml:space="preserve">
-    <value>The Id ({0}) was not found.</value>
-    <comment>{0} = id</comment>
-  </data>
-  <data name="ErrorMsgInsertFailedException" xml:space="preserve">
-    <value>The Insert operation failed.</value>
-  </data>
-  <data name="ErrorMsgSeedDataException" xml:space="preserve">
-    <value>SeedData threw an exception.</value>
-  </data>
-  <data name="ErrorMsgUpdateFailedException" xml:space="preserve">
-    <value>The Update operation failed.</value>
-  </data>
-  <data name="ErrorMsgUsernameNotFoundException" xml:space="preserve">
-    <value>The username ({0}) was not found.</value>
-  </data>
-  <data name="ErrorMsgUserNotAuthenticatedException" xml:space="preserve">
-    <value>The current user has not been authenticated.</value>
-  </data>
-  <data name="ErrorMsgVerifyUserFailedException" xml:space="preserve">
-    <value>Verifying the user ({0}) threw an exception.</value>
-    <comment>{0} = username</comment>
-  </data>
-  <data name="ErrorMsgVeryBadException" xml:space="preserve">
-    <value>Something happened that was very bad. ({0})</value>
-    <comment>({0}) = detailed message</comment>
-  </data>
-  <data name="ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero" xml:space="preserve">
-    <value>The result count was anticipated to be either one or zero.  This probably occurred when making a call to the database, expecting a unique result set.</value>
-  </data>
-  <data name="Phrase_DalKey" xml:space="preserve">
-    <value>Phrase_DalKey</value>
-  </data>
-  <data name="RoleAdmin" xml:space="preserve">
-    <value>Admin</value>
-  </data>
-  <data name="RoleUser" xml:space="preserve">
-    <value>User</value>
-  </data>
-  <data name="WcfProxyDefaultUrl" xml:space="preserve">
-    <value>http://localhost:50094/SlPortal.svc</value>
-  </data>
-  <data name="ErrorMsgUserNotAuthorizedException" xml:space="preserve">
-    <value>The user is not authorized to perform this operation.</value>
-  </data>
-  <data name="DefaultNewTranslationUsername" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ErrorMsgIdAlreadyExistException" xml:space="preserve">
-    <value>The Id ({0}) already exists.</value>
-    <comment>{0} = id</comment>
+  <data name="RuleInfoMinimumCount" xml:space="preserve">
+    <value>The minimum count of phrases in a valid translation is 2.</value>
   </data>
 </root>

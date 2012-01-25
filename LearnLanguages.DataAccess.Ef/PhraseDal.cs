@@ -384,5 +384,10 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.UserNotAuthorizedException();
     }
 
+
+    protected override ICollection<PhraseDto> FetchImpl(ICollection<Guid> ids)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

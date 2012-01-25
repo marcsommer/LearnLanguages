@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TranslationDal.cs" />
     <Compile Include="CustomIdentityDal.cs" />
     <Compile Include="PhraseDal.cs" />
     <Compile Include="DalManager.cs" />

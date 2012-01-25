@@ -61,6 +61,14 @@
     <Compile Include="Bases\BusinessBaseOfTAndTDto.cs" />
     <Compile Include="Bases\BusinessListBaseOfTAndTDto.cs" />
     <Compile Include="Bases\ReadOnlyListBaseOfTAndTDto.cs" />
+    <Compile Include="BusinessResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="CollectionMinimumCountBusinessRule.cs" />
+    <Compile Include="CollectionCountsAreEqualBusinessRule.cs" />
+    <Compile Include="TranslationEdit.cs" />
     <Compile Include="PhraseList.cs" />
     <Compile Include="LanguageEdit.cs" />
     <Compile Include="PhraseEdit.cs" />
@@ -78,6 +86,12 @@
       <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
       <Name>LearnLanguages.DataAccess.Client</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BusinessResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

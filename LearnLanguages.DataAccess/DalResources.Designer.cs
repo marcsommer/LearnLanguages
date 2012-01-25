@@ -151,6 +151,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewTranslationUsername {
+            get {
+                return ResourceManager.GetString("DefaultNewTranslationUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The criteria given was incorrect.  The expected criteria is as follows: {0}.
         /// </summary>
         public static string ErrorMsgBadCriteriaException {
@@ -228,6 +237,15 @@ namespace LearnLanguages.DataAccess {
         public static string ErrorMsgGetRolesFailedException {
             get {
                 return ResourceManager.GetString("ErrorMsgGetRolesFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Id ({0}) already exists..
+        /// </summary>
+        public static string ErrorMsgIdAlreadyExistException {
+            get {
+                return ResourceManager.GetString("ErrorMsgIdAlreadyExistException", resourceCulture);
             }
         }
         

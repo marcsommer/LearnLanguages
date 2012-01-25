@@ -49,6 +49,7 @@ namespace LearnLanguages.DataAccess
 
       InitializeLanguages();
       InitializePhrases();
+      InitializeTranslations();
       InitializeUsers();
       InitializeRoles();
     }
@@ -94,7 +95,6 @@ namespace LearnLanguages.DataAccess
     public string EnglishText = DalResources.DefaultEnglishLanguageText;
     public string SpanishText = "Spanish";
     #endregion
-
     #region Phrase Data
     public PhraseDto HelloPhraseDto
     {
@@ -155,7 +155,34 @@ namespace LearnLanguages.DataAccess
       get { return GetPhraseId(DogText); }
     }
     #endregion
-
+    #region Translation Data
+    public TranslationDto HelloTranslationDto
+    {
+      get 
+      {
+        return new TranslationDto()
+        {
+          Id = IdHelloTranslation,
+          PhraseIds = new List<Guid>()
+          {
+            IdHello, 
+            IdHola
+          },
+          UserId = GetTestValidUserDto().Id,
+          Username = TestValidUsername
+        };
+      }
+    }
+    public Guid IdHelloTranslation
+    {
+      get
+      {
+        return (from t in Translations
+                where t.PhraseIds.Contains(IdHello)
+                select t).First().Id;
+      }
+    }
+    #endregion
     #region User Data
     public Guid DefaultTestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
 
@@ -172,7 +199,6 @@ namespace LearnLanguages.DataAccess
     public string TestInvalidUsername = "ImNotAValidUser";
     public string TestInvalidPassword = "ImNotAValidPassword";
     #endregion
-
     #region Role Data
     public Guid AdminRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
     public string AdminRoleText = DalResources.RoleAdmin;
@@ -183,8 +209,9 @@ namespace LearnLanguages.DataAccess
     public RoleDto UserRole;
     #endregion
 
-    public List<PhraseDto> Phrases { get; private set; }
     public List<LanguageDto> Languages { get; private set; }
+    public List<PhraseDto> Phrases { get; private set; }
+    public List<TranslationDto> Translations { get; private set; }
     public List<UserDto> Users { get; private set; }
     public List<RoleDto> Roles { get; private set; }
 
@@ -246,6 +273,23 @@ namespace LearnLanguages.DataAccess
         }
       };
     }
+    private void InitializeTranslations()
+    {
+      Translations = new List<TranslationDto>()
+      {
+        new TranslationDto()
+        {
+          Id = new Guid("3E077DBA-8E71-4E64-9D30-68204F989242"),
+          PhraseIds = new List<Guid>()
+          {
+            IdHello, 
+            IdHola
+          },
+          UserId = DefaultTestValidUserId,
+          Username = TestValidUsername
+        }
+      };
+    }
     private void InitializeUsers()
     {
       Users = new List<UserDto>()
@@ -257,6 +301,7 @@ namespace LearnLanguages.DataAccess
           Salt = TestSalt,
           SaltedHashedPasswordValue = TestSaltedHashedPassword,
           PhraseIds = new List<Guid>() { IdHello, IdDog, IdHola, IdLongPhrase },
+          TranslationIds = new List<Guid>() { IdHelloTranslation },
           RoleIds = new List<Guid>() { AdminRoleId, UserRoleId }
         }
       };

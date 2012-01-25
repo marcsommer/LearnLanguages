@@ -422,7 +422,8 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Child DP_XYZ
-    
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Create(Guid id)
     {
       using (BypassPropertyChecks)
@@ -461,6 +462,7 @@ namespace LearnLanguages.Business
       }
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -478,6 +480,7 @@ namespace LearnLanguages.Business
       }
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Update()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -494,6 +497,7 @@ namespace LearnLanguages.Business
       }
     }
 
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_DeleteSelf()
     {
       using (var dalManager = DalFactory.GetDalManager())

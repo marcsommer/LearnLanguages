@@ -12,6 +12,9 @@
         <AssociationConnector Association="LearnLanguages.UserDataRoleData" />
         <AssociationConnector Association="LearnLanguages.UserDataPhraseData" />
         <AssociationConnector Association="LearnLanguages.PhraseDataLanguageData" />
+        <EntityTypeShape EntityType="LearnLanguages.TranslationData" Width="1.5" PointX="9.75" PointY="1.5" />
+        <AssociationConnector Association="LearnLanguages.TranslationDataPhraseData" />
+        <AssociationConnector Association="LearnLanguages.UserDataTranslationData" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

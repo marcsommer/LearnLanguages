@@ -87,6 +87,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\RoleDto.cs">
       <Link>Dtos\RoleDto.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Dtos\TranslationDto.cs">
+      <Link>Dtos\TranslationDto.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\UserDto.cs">
       <Link>Dtos\UserDto.cs</Link>
     </Compile>
@@ -113,6 +116,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetUserFailedException.cs">
       <Link>Exceptions\GetUserFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdAlreadyExistsException.cs">
+      <Link>Exceptions\IdAlreadyExistsException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdNotFoundException.cs">
       <Link>Exceptions\IdNotFoundException.cs</Link>
