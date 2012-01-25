@@ -177,7 +177,6 @@ namespace LearnLanguages.DataAccess.Mock
       return dto;
     }
     protected override TranslationDto FetchImpl(Guid id)
-
     {
       var results = from item in SeedData.Instance.Translations
                     where item.Id == id
@@ -218,6 +217,7 @@ namespace LearnLanguages.DataAccess.Mock
 
       if (results.Count() == 1)
       {
+        CheckContraints(dto);
         var TranslationToUpdate = results.First();
         SeedData.Instance.Translations.Remove(TranslationToUpdate);
         dto.Id = Guid.NewGuid();
@@ -240,15 +240,8 @@ namespace LearnLanguages.DataAccess.Mock
 
       if (results.Count() == 0)
       {
+        CheckContraints(dto);
         dto.Id = Guid.NewGuid();
-        //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-        if (dto.PhraseIds == null || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
-        {
-          //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
-          //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
-          //TranslationDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
-          throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
-        }
         SeedData.Instance.Translations.Add(dto);
         return dto;
       }
@@ -284,6 +277,30 @@ namespace LearnLanguages.DataAccess.Mock
     {
       var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
       return allDtos;
+    }
+
+    private void CheckContraints(TranslationDto dto)
+    {
+      //VALIDITY
+      if (dto == null)
+        throw new ArgumentNullException("dto");
+      if (dto.PhraseIds.Count < int.Parse(DalResources.MinPhrasesPerTranslation))
+        throw new ArgumentOutOfRangeException("dto.PhraseIds.Count");
+
+      //REFERENTIAL INTEGRITY
+      foreach (var id in dto.PhraseIds)
+      {
+        var count = (from p in SeedData.Instance.Phrases
+                     where p.Id == id
+                     select p).Count();
+
+        if (count == 1)
+          continue;
+        else if (count == 0)
+          throw new Exceptions.IdNotFoundException(id);
+        else
+          throw new Exceptions.VeryBadException();
+      }
     }
   }
 }

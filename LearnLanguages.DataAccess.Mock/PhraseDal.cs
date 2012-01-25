@@ -216,6 +216,8 @@ namespace LearnLanguages.DataAccess.Mock
 
       if (results.Count() == 1)
       {
+        CheckContraints(dto);
+
         var PhraseToUpdate = results.First();
         SeedData.Instance.Phrases.Remove(PhraseToUpdate);
         dto.Id = Guid.NewGuid();
@@ -238,22 +240,16 @@ namespace LearnLanguages.DataAccess.Mock
 
       if (results.Count() == 0)
       {
+        CheckContraints(dto);
+
         dto.Id = Guid.NewGuid();
-        //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-        if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
-        {
-          //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
-          //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
-          //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
-          throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
-        }
         SeedData.Instance.Phrases.Add(dto);
         return dto;
       }
       else
       {
         if (results.Count() == 1) //ID ALREADY EXISTS
-          throw new Exceptions.IdAlreadyExistsException();
+          throw new Exceptions.IdAlreadyExistsException(dto.Id);
         else                      //MULTIPLE IDS ALREADY EXIST??
           throw new Exceptions.VeryBadException();
       }
@@ -282,6 +278,18 @@ namespace LearnLanguages.DataAccess.Mock
     {
       var allDtos = new List<PhraseDto>(SeedData.Instance.Phrases);
       return allDtos;
+    }
+
+    private void CheckContraints(PhraseDto dto)
+    {
+      //REFERENTIAL INTEGRITY
+      if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
+        throw new Exceptions.IdNotFoundException(dto.LanguageId);
+      if (dto.UserId == Guid.Empty || !SeedData.Instance.ContainsUserId(dto.UserId))
+        throw new Exceptions.IdNotFoundException(dto.UserId);
+      if (string.IsNullOrEmpty(dto.Username) ||
+         !(SeedData.Instance.GetUsername(dto.UserId) == dto.Username))
+        throw new ArgumentException("dto.Username");
     }
   }
 }

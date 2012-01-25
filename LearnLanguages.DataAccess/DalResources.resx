@@ -235,4 +235,7 @@
     <value>The Id ({0}) already exists.</value>
     <comment>{0} = id</comment>
   </data>
+  <data name="MinPhrasesPerTranslation" xml:space="preserve">
+    <value>2</value>
+  </data>
 </root>

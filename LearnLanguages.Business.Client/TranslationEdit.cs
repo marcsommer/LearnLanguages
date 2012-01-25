@@ -84,7 +84,7 @@ namespace LearnLanguages.Business
       set { SetProperty(PhraseIdsProperty, value); }
     }
     #endregion
-    #region public PhraseList Phrases
+    #region public PhraseList Phrases (child)
     public static readonly PropertyInfo<PhraseList> PhrasesProperty = 
       RegisterProperty<PhraseList>(c => c.Phrases, RelationshipTypes.Child);
     public PhraseList Phrases
@@ -178,6 +178,13 @@ namespace LearnLanguages.Business
       return EditLevel;
     }
 
+    public void AddPhrase(PhraseEdit phrase)
+    {
+      PhraseIds.Add(phrase.Id);
+      Phrases.Add(phrase);
+      BusinessRules.CheckRules();
+    }
+
     #endregion
 
     #region Validation Rules
@@ -193,8 +200,8 @@ namespace LearnLanguages.Business
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UsernameProperty));
 
       //translation must have 2 phraseids to be valid
-      BusinessRules.AddRule(new CollectionMinimumCountBusinessRule(PhrasesProperty, 2));
-      BusinessRules.AddRule(new CollectionCountsAreEqualBusinessRule(PhrasesProperty, PhraseIdsProperty));
+      //BusinessRules.AddRule(new CollectionMinimumCountBusinessRule(PhrasesProperty, 2));
+      //BusinessRules.AddRule(new CollectionCountsAreEqualBusinessRule(PhrasesProperty, PhraseIdsProperty));
     }
 
     #endregion

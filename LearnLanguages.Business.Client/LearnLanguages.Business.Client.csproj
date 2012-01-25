@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="CollectionMinimumCountBusinessRule.cs" />
     <Compile Include="CollectionCountsAreEqualBusinessRule.cs" />
+    <Compile Include="TranslationList.cs" />
     <Compile Include="TranslationEdit.cs" />
     <Compile Include="PhraseList.cs" />
     <Compile Include="LanguageEdit.cs" />

@@ -323,11 +323,26 @@ namespace LearnLanguages.DataAccess
 
       return results.Count() == 1;
     }
+    public bool ContainsUserId(Guid id)
+    {
+      var results = from u in Users
+                    where u.Id == id
+                    select u;
+
+      return results.Count() == 1;
+    }
     public Guid GetPhraseId(string phraseText)
     {
         return (from phrase in Phrases
                 where phrase.Text == phraseText
                 select phrase.Id).First();
+    }
+
+    public string GetUsername(Guid userId)
+    {
+      return (from u in Users
+              where u.Id == userId
+              select u.Username).FirstOrDefault();
     }
   }
 }

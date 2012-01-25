@@ -349,6 +349,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        public static string MinPhrasesPerTranslation {
+            get {
+                return ResourceManager.GetString("MinPhrasesPerTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phrase_DalKey.
         /// </summary>
         public static string Phrase_DalKey {
