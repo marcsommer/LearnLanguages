@@ -10,15 +10,15 @@
     <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      
-      <ListBox x:Name="Phrases" />
-      
-      
+      <ContentControl Grid.Row="0"
+                      Grid.Column="0"
+                      x:Name="PhrasesViewModel" 
+                      />
+
     </Grid>
   </Border>
 </UserControl>

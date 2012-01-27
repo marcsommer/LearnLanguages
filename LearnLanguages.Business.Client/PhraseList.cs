@@ -146,6 +146,8 @@ namespace LearnLanguages.Business
 
     #endregion
 
+    #region AddNewCore
+
 #if SILVERLIGHT
     protected override void AddNewCore()
     {
@@ -156,24 +158,23 @@ namespace LearnLanguages.Business
 
     private void PhraseList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
     {
-      CustomIdentity.CheckAuthentication();
+      //CustomIdentity.CheckAuthentication();
       var phraseEdit = e.NewObject;
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
-      phraseEdit.UserId = identity.UserId;
-      phraseEdit.Username = identity.Name;
+      phraseEdit.LoadCurrentUser(); 
+      //var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      //phraseEdit.UserId = identity.UserId;
+      //phraseEdit.Username = identity.Name;
     }
-#else 
+#else
     protected override PhraseEdit AddNewCore()
     {
       //SERVER
       var phraseEdit = base.AddNewCore();
-      CustomIdentity.CheckAuthentication();
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
-      phraseEdit.UserId = identity.UserId;
-      phraseEdit.Username = identity.Name;
-
+      phraseEdit.LoadCurrentUser();
       return phraseEdit;
     }
 #endif
+
+    #endregion
   }
 }

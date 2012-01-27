@@ -7,7 +7,7 @@
     d:DesignHeight="300" d:DesignWidth="400">
   <Border Style="{StaticResource DebugBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
-      <ContentControl x:Name="Translation" />
+      <ContentControl x:Name="TranslationViewModel" />
     </Grid>
   </Border>
 </UserControl>

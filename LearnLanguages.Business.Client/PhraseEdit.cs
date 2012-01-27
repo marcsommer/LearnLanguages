@@ -204,6 +204,18 @@ namespace LearnLanguages.Business
       return EditLevel;
     }
 
+    /// <summary>
+    /// Does CheckAuthentication().  Then Loads the phrase with the current user, userid, username.
+    /// </summary>
+    internal void LoadCurrentUser()
+    {
+      CustomIdentity.CheckAuthentication();
+      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      UserId = identity.UserId;
+      Username = identity.Name;
+      User = identity;
+    }
+
     #endregion
 
     #region Validation Rules

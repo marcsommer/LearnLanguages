@@ -67,11 +67,26 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    private bool _IsInUserRole;
+    public bool IsInUserRole
+    {
+      get { return _IsInUserRole; }
+      set
+      {
+        if (value != _IsInUserRole)
+        {
+          _IsInUserRole = value;
+          NotifyOfPropertyChange(() => IsInUserRole);
+        }
+      }
+    }
+
     public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
     {
       CurrentPrincipalName = message.CurrentPrincipalName;
       IsAuthenticated = message.IsAuthenticated;
       IsInAdminRole = message.IsInRole(DataAccess.DalResources.RoleAdmin);
+      IsInUserRole = message.IsInRole(DataAccess.DalResources.RoleUser);
     }
 
     public void Dispose()

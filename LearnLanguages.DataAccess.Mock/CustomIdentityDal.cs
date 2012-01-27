@@ -56,15 +56,36 @@ namespace LearnLanguages.DataAccess.Mock
       Result<ICollection<RoleDto>> retResult = Result<ICollection<RoleDto>>.Undefined(null);
       try
       {
-        if (username != _TestValidUsername)
-          throw new GeneralDataAccessException("GetUser(username) not found");
+        var roleDtos = new List<RoleDto>();
 
-        var role = new RoleDto()
+        var userResults = (from user in SeedData.Instance.Users
+                           where user.Username == username
+                           select user);
+
+        if (userResults.Count() == 1)
         {
-          Id = SeedData.Instance.AdminRoleId,
-          Text = SeedData.Instance.AdminRoleText
-        };
-        retResult = Result<ICollection<RoleDto>>.Success(new List<RoleDto>() { role });
+          var roleIds = userResults.First().RoleIds;
+          foreach (var roleId in roleIds)
+          {
+            var roleResults = (from role in SeedData.Instance.Roles
+                               where role.Id == roleId
+                               select role);
+            if (roleResults.Count() == 1)
+            {
+              roleDtos.Add(roleResults.First());
+            }
+            else if (roleResults.Count() == 0)
+              throw new Exceptions.IdNotFoundException(roleId);
+            else
+              throw new Exceptions.VeryBadException();
+          }
+        }
+        else if (userResults.Count() == 0)
+          throw new Exceptions.UsernameNotFoundException(username);
+        else
+          throw new Exceptions.VeryBadException();
+
+        retResult = Result<ICollection<RoleDto>>.Success(roleDtos);
       }
       catch (Exception ex)
       {

@@ -7,8 +7,9 @@
     d:DesignHeight="300" d:DesignWidth="400">
 
   <Border Style="{StaticResource DebugBorder}" Padding="10" >
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Grid x:Name="LayoutRoot" Background="White" Height="125" Width="200">
       <Grid.RowDefinitions>
+        <RowDefinition />
         <RowDefinition />
         <RowDefinition />
         <RowDefinition />
@@ -20,10 +21,12 @@
       <TextBlock Text="Current Principal Name: " Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
       <TextBlock Text="IsAuthenticated" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
       <TextBlock Text="IsInAdminRole" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+      <TextBlock Text="IsInUserRole" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
 
       <TextBlock x:Name="CurrentPrincipalName" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
       <CheckBox x:Name="IsAuthenticated" Grid.Row="1" Grid.Column="1" IsEnabled="False" VerticalAlignment="Center" HorizontalAlignment="Center" />
       <CheckBox x:Name="IsInAdminRole" Grid.Row="2" Grid.Column="1" IsEnabled="False" VerticalAlignment="Center" HorizontalAlignment="Center" />
+      <CheckBox x:Name="IsInUserRole" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Center" HorizontalAlignment="Center" />
     </Grid>
   </Border>
 </UserControl>

@@ -84,7 +84,7 @@ namespace LearnLanguages.Business.Security
         Name = userData.Username;
         Salt = userData.Salt;
         UserId = userData.Id;
-
+        
         var resultRoles = dal.GetRoles(Name);
         if (!result.IsSuccess)
         {

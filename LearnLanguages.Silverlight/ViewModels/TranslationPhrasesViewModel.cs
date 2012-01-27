@@ -16,62 +16,41 @@ namespace LearnLanguages.Silverlight.ViewModels
   public class TranslationPhrasesViewModel : Conductor<ViewModelBase>.Collection.AllActive, 
                                              Interfaces.IViewModelBase
   {
+    #region Ctors and Init
+
     public TranslationPhrasesViewModel()
     {
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
-      PhraseList.GetAll((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+      //PhraseList.NewPhraseList((s, r) =>
+      ////PhraseList.GetAll((s, r) =>
+      //{
+      //  if (r.Error != null)
+      //    throw r.Error;
 
-          var allPhrases = r.Object;
-          Model = allPhrases;
-          PopulateViewModels(allPhrases);
-          //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
-          //Model.BeginSave((s2, r2) =>
-          //  {
-          //    if (r2.Error != null)
-          //      throw r2.Error;
-          //    Model = (PhraseList)r2.NewObject;
-          //  });
-        });
+      //  var allPhrases = r.Object;
+      //  Model = allPhrases;
+      //  //PopulateViewModels(allPhrases);
+      //  //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
+      //  //Model.BeginSave((s2, r2) =>
+      //  //  {
+      //  //    if (r2.Error != null)
+      //  //      throw r2.Error;
+      //  //    Model = (PhraseList)r2.NewObject;
+      //  //  });
+      //});
     }
 
-    private void PopulateViewModels(PhraseList allPhrases)
-    {
-      Items.Clear();
-      foreach (var phraseEdit in allPhrases)
-      {
-        var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
-        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
-        itemViewModel.Model = phraseEdit;
-        Items.Add(itemViewModel);
-      }
-    }
+    #endregion
 
-    void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
-    }
+    #region Fields
 
-    public bool LoadFromUri(Uri uri)
-    {
-      return true;
-    }
+    #endregion
 
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(AppResources.ShowGridLines); }
-    }
-
-    public void OnImportsSatisfied()
-    {
-      Publish.PartSatisfied("ViewPhrases");
-    }
+    #region Properties
 
     private PhraseList _ModelList;
-    public PhraseList Model
+    public PhraseList ModelList
     {
       get { return _ModelList; }
       set
@@ -81,108 +60,12 @@ namespace LearnLanguages.Silverlight.ViewModels
           UnhookFrom(_ModelList);
           _ModelList = value;
           HookInto(_ModelList);
-          NotifyOfPropertyChange(() => Model);
+          PopulateViewModels(_ModelList);
+          NotifyOfPropertyChange(() => ModelList);
         }
       }
     }
 
-    protected virtual void HookInto(PhraseList modelList)
-    {
-      if (modelList != null)
-      {
-        modelList.CollectionChanged += HandleCollectionChanged;
-        modelList.ChildChanged += HandleChildChanged;
-      }
-    }
-    protected virtual void UnhookFrom(PhraseList modelList)
-    {
-      if (modelList != null)
-      {
-        modelList.CollectionChanged += HandleCollectionChanged;
-        modelList.ChildChanged += HandleChildChanged;
-      }
-    }
-    protected virtual void HandleChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
-    {
-      NotifyOfPropertyChange(() => this.Model);
-      //Model.BeginSave((s2, r2) =>
-      //{
-      //  if (r2.Error != null)
-      //    throw r2.Error;
-      //  Model = (PhraseList)r2.NewObject;
-      //});
-      NotifyOfPropertyChange(() => CanSave);
-      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
-
-      //NotifyOfPropertyChange(() => CanCancelEdit);
-    }
-    protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-      NotifyOfPropertyChange(() => this.Model);
-      NotifyOfPropertyChange(() => CanSave);
-      //NotifyOfPropertyChange(() => CanCancelEdit);
-    }
-
-    public bool CanSave
-    {
-      get
-      {
-        return (Model != null && Model.IsSavable);
-      }
-    }
-    public virtual void Save()
-    {
-      Model.BeginSave((s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
-
-        Model = (PhraseList)r.NewObject;
-        //propagate new PhraseEdits to their ViewModels
-        PopulateViewModels(Model);
-
-        NotifyOfPropertyChange(() => CanSave);
-      });
-    }
-
-    //public bool CanCancelEdit
-    //{
-    //  get
-    //  {
-    //    return (Model != null && Model.IsDirty);
-    //  }
-    //}
-    //public virtual void CancelEdit()
-    //{
-    //  foreach (var phraseEdit in Model)
-    //  {
-    //    if (phraseEdit.IsDirty)
-    //    {
-    //      var initialEditLevel = phraseEdit.GetEditLevel();
-    //      for (int i = 0; i < initialEditLevel; i++)
-    //      {
-    //        phraseEdit.CancelEdit();
-    //      }
-    //    }
-    //  }
-    //  //Model.CancelEdit();
-    //  NotifyOfPropertyChange(() => CanCancelEdit);
-    //  NotifyOfPropertyChange(() => CanSave);
-    //}
-
-
-    public bool CanInitiateDeleteChecked
-    {
-      get
-      {
-        bool somethingIsChecked = (from viewModel in Items
-                                   where ((ViewPhrasesItemViewModel)viewModel).IsChecked
-                                   select viewModel).Count() > 0;
-
-        return somethingIsChecked;
-      }
-    }
-    
     private Visibility _InitiateDeleteVisibility;
     public Visibility InitiateDeleteVisibility
     {
@@ -211,6 +94,127 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    #endregion
+
+    #region Methods
+
+    public void AddPhrase(PhraseEdit phrase)
+    {
+      ModelList.Add(phrase);
+    }
+
+
+    public bool LoadFromUri(Uri uri)
+    {
+      return true;
+    }
+
+    public bool ShowGridLines
+    {
+      get { return bool.Parse(AppResources.ShowGridLines); }
+    }
+
+    private void PopulateViewModels(PhraseList allPhrases)
+    {
+      Items.Clear();
+      foreach (var phraseEdit in allPhrases)
+      {
+        var itemViewModel = Services.Container.GetExportedValue<TranslationPhrasesItemViewModel>();
+        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
+        itemViewModel.Model = phraseEdit;
+        Items.Add(itemViewModel);
+      }
+    }
+
+    protected virtual void HookInto(PhraseList modelList)
+    {
+      if (modelList != null)
+      {
+        modelList.CollectionChanged += HandleCollectionChanged;
+        modelList.ChildChanged += HandleChildChanged;
+      }
+    }
+    protected virtual void UnhookFrom(PhraseList modelList)
+    {
+      if (modelList != null)
+      {
+        modelList.CollectionChanged += HandleCollectionChanged;
+        modelList.ChildChanged += HandleChildChanged;
+      }
+    }
+    
+
+    #endregion
+
+    #region Events
+
+    void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+    }
+    protected virtual void HandleChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => this.ModelList);
+      //Model.BeginSave((s2, r2) =>
+      //{
+      //  if (r2.Error != null)
+      //    throw r2.Error;
+      //  Model = (PhraseList)r2.NewObject;
+      //});
+      NotifyOfPropertyChange(() => CanSave);
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+
+      //NotifyOfPropertyChange(() => CanCancelEdit);
+    }
+    protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => this.ModelList);
+      NotifyOfPropertyChange(() => CanSave);
+      //NotifyOfPropertyChange(() => CanCancelEdit);
+    }
+    public void OnImportsSatisfied()
+    {
+      Publish.PartSatisfied("ViewPhrases");
+    }
+
+
+    #endregion
+
+    #region Commands
+
+    public bool CanSave
+    {
+      get
+      {
+        return (ModelList != null && ModelList.IsSavable);
+      }
+    }
+    public virtual void Save()
+    {
+      ModelList.BeginSave((s, r) =>
+      {
+        if (r.Error != null)
+          throw r.Error;
+
+        ModelList = (PhraseList)r.NewObject;
+        //propagate new PhraseEdits to their ViewModels
+        PopulateViewModels(ModelList);
+
+        NotifyOfPropertyChange(() => CanSave);
+      });
+    }
+
+    public bool CanInitiateDeleteChecked
+    {
+      get
+      {
+        bool somethingIsChecked = (from viewModel in Items
+                                   where ((TranslationPhrasesItemViewModel)viewModel).IsChecked
+                                   select viewModel).Count() > 0;
+
+        return somethingIsChecked;
+      }
+    }
     public void InitiateDeleteChecked()
     {
       InitiateDeleteVisibility = Visibility.Collapsed;
@@ -220,12 +224,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     public void FinalizeDeleteChecked()
     {
       var checkedForDeletion = from viewModel in Items
-                               where ((ViewPhrasesItemViewModel)viewModel).IsChecked
-                               select (ViewPhrasesItemViewModel)viewModel;
+                               where ((TranslationPhrasesItemViewModel)viewModel).IsChecked
+                               select (TranslationPhrasesItemViewModel)viewModel;
 
       foreach (var toDelete in checkedForDeletion)
       {
-        Model.Remove(toDelete.Model);
+        ModelList.Remove(toDelete.Model);
       }
 
       Save();
@@ -238,7 +242,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       foreach (var item in Items)
       {
-        var vm = (ViewPhrasesItemViewModel)item;
+        var vm = (TranslationPhrasesItemViewModel)item;
         vm.IsChecked = false;
       }
 
@@ -246,5 +250,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       FinalizeDeleteVisibility = Visibility.Collapsed;
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
+
+
+    #endregion
   }
 }

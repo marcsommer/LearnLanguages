@@ -21,37 +21,26 @@ namespace LearnLanguages.Silverlight.ViewModels
     public AddTranslationViewModel()
     {
       BlankTranslationRetriever.CreateNew((s, r) =>
-      //TranslationEdit.NewTranslationEdit((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
           var retriever = r.Object;
 
-          var translationViewModel = Services.Container.GetExportedValue<TranslationEditViewModel>();
-          translationViewModel.Model = retriever.Translation;
-
-            //translationViewModel.Model = r.Object;
-          Translation = translationViewModel;
-
-          Translation.Model.Phrases.AddedNew += (s2, r2) =>
-            {
-              var phraseEdit = r2.NewObject;
-              phraseEdit.Username = Csla.ApplicationContext.User.Identity.Name;
-
-            };
+          TranslationViewModel = Services.Container.GetExportedValue<TranslationEditViewModel>();
+          TranslationViewModel.Model = retriever.Translation;
         });
     }
 
-    private TranslationEditViewModel _Translation;
-    public TranslationEditViewModel Translation
+    private TranslationEditViewModel _TranslationViewModel;
+    public TranslationEditViewModel TranslationViewModel
     {
-      get { return _Translation; }
+      get { return _TranslationViewModel; }
       set
       {
-        if (value != _Translation)
+        if (value != _TranslationViewModel)
         {
-          _Translation = value;
-          NotifyOfPropertyChange(() => Translation);
+          _TranslationViewModel = value;
+          NotifyOfPropertyChange(() => TranslationViewModel);
         }
       }
     }
