@@ -180,7 +180,7 @@ namespace LearnLanguages.Silverlight.ViewModels
                                    where ((ViewPhrasesItemViewModel)viewModel).IsChecked
                                    select viewModel).Count() > 0;
 
-        return somethingIsChecked;
+        return somethingIsChecked && CanSave;
       }
     }
     
@@ -229,7 +229,10 @@ namespace LearnLanguages.Silverlight.ViewModels
         Model.Remove(toDelete.Model);
       }
 
-      Save();
+      NotifyOfPropertyChange(() => CanSave);
+      NotifyOfPropertyChange(() => Model);
+      if (CanSave)
+        Save();
 
       InitiateDeleteVisibility = Visibility.Visible;
       FinalizeDeleteVisibility = Visibility.Collapsed;

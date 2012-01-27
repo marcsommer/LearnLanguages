@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Bases\BusinessBaseOfCAndCDto.cs" />
     <Compile Include="Bases\BusinessListBaseOfLAndCAndCDto.cs" />
+    <Compile Include="Bases\CommandBaseOfC.cs" />
     <Compile Include="Bases\ReadOnlyBaseOfC.cs" />
     <Compile Include="Bases\ReadOnlyListBaseOfLAndCAndCDto.cs" />
     <Compile Include="BlankTranslationRetriever.cs" />
@@ -70,6 +71,8 @@
     </Compile>
     <Compile Include="CollectionMinimumCountBusinessRule.cs" />
     <Compile Include="CollectionCountsAreEqualBusinessRule.cs" />
+    <Compile Include="BlankPhraseRetriever.cs" />
+    <Compile Include="PhraseDefaultSetterCommand.cs" />
     <Compile Include="TranslationList.cs" />
     <Compile Include="TranslationEdit.cs" />
     <Compile Include="PhraseList.cs" />

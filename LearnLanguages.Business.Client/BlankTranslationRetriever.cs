@@ -49,11 +49,13 @@ namespace LearnLanguages.Business
       
       var phraseA = Translation.Phrases.AddNew();
       phraseA.LanguageId = LanguageEdit.GetDefaultLanguageId();
-      phraseA.Language = LanguageEdit.GetLanguageEdit(phraseA.LanguageId);
-
+      //phraseA.Language = LanguageEdit.GetLanguageEdit(phraseA.LanguageId);
+      phraseA.Language = DataPortal.FetchChild<LanguageEdit>(phraseA.LanguageId);
+      
       var phraseB = Translation.Phrases.AddNew();
       phraseB.LanguageId = LanguageEdit.GetDefaultLanguageId();
-      phraseB.Language = LanguageEdit.GetLanguageEdit(phraseB.LanguageId);
+      //phraseB.Language = LanguageEdit.GetLanguageEdit(phraseB.LanguageId);
+      phraseB.Language = DataPortal.FetchChild<LanguageEdit>(phraseB.LanguageId);
     }
 #endif
 

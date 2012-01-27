@@ -56,6 +56,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyListBaseOfLAndCAndCDto.cs">
       <Link>Bases\ReadOnlyListBaseOfLAndCAndCDto.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\BlankPhraseRetriever.cs">
+      <Link>BlankPhraseRetriever.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\BlankTranslationRetriever.cs">
       <Link>BlankTranslationRetriever.cs</Link>
     </Compile>
@@ -73,6 +76,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\LanguageList.cs">
       <Link>LanguageList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\PhraseDefaultSetterCommand.cs">
+      <Link>PhraseDefaultSetterCommand.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\PhraseEdit.cs">
       <Link>PhraseEdit.cs</Link>

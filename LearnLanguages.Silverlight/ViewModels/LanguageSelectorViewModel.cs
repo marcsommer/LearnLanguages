@@ -28,7 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
             Items.Add(languageViewModel);
           }
 
-          if (SelectedItem != null)
+          if (SelectedItem != null && SelectedItem.Model != null)
           {
             //our currently selected item is not the actual item in the list, as it is being set
             //before our list is getting populated.

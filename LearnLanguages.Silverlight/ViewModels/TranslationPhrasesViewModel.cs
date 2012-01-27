@@ -114,10 +114,10 @@ namespace LearnLanguages.Silverlight.ViewModels
       get { return bool.Parse(AppResources.ShowGridLines); }
     }
 
-    private void PopulateViewModels(PhraseList allPhrases)
+    private void PopulateViewModels(PhraseList phrases)
     {
       Items.Clear();
-      foreach (var phraseEdit in allPhrases)
+      foreach (var phraseEdit in phrases)
       {
         var itemViewModel = Services.Container.GetExportedValue<TranslationPhrasesItemViewModel>();
         itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
@@ -212,7 +212,7 @@ namespace LearnLanguages.Silverlight.ViewModels
                                    where ((TranslationPhrasesItemViewModel)viewModel).IsChecked
                                    select viewModel).Count() > 0;
 
-        return somethingIsChecked;
+        return somethingIsChecked && CanSave;
       }
     }
     public void InitiateDeleteChecked()
@@ -232,7 +232,9 @@ namespace LearnLanguages.Silverlight.ViewModels
         ModelList.Remove(toDelete.Model);
       }
 
-      Save();
+      NotifyOfPropertyChange(() => CanSave);
+      if (CanSave)
+        Save();
 
       InitiateDeleteVisibility = Visibility.Visible;
       FinalizeDeleteVisibility = Visibility.Collapsed;
@@ -251,6 +253,39 @@ namespace LearnLanguages.Silverlight.ViewModels
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
 
+    public bool CanAdd
+    {
+      get
+      {
+        //for now, this always returns true.  in the future, we may check to see if user has the privelages to add more than
+        //two phrases or something similar
+        return true;
+      }
+    }
+    /// <summary>
+    /// Adds a blank phrase to Phrases.
+    /// </summary>
+    public void Add()
+    {
+      ModelList.AddedNew += ModelList_AddedNew;
+      ModelList.AddNew();
+      ModelList.AddedNew -= ModelList_AddedNew;
+      NotifyOfPropertyChange(() => CanSave);
+    }
+
+    void ModelList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
+    {
+      var phrase = e.NewObject;
+      PhraseDefaultSetterCommand.BeginExecute(phrase, (s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          phrase = r.Object.Phrase;
+
+          PopulateViewModels(ModelList);
+        });
+    }
 
     #endregion
   }
