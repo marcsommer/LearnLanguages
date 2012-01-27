@@ -101,14 +101,6 @@ namespace LearnLanguages.Business
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void Child_Fetch(ICollection<Guid> translationIds)
     {
-      try
-      {
-        throw new Exception("I just wanted to see where this gets called");
-      }
-      catch
-      {
-        //
-      }
       Items.Clear();
       foreach (var id in translationIds)
       {

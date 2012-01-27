@@ -326,7 +326,6 @@ namespace LearnLanguages.Silverlight.Tests
     [TestMethod]
     [Asynchronous]
     [Tag("plang")]
-    [Tag("current")]
     public void GET_ALL_SET_NEW_LANGUAGE_SAVE()
     {
       var isLoaded = false;

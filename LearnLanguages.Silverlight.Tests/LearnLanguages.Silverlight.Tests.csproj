@@ -94,6 +94,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BlankTranslationRetrieverTests.cs" />
     <Compile Include="TranslationTests.cs" />
     <Compile Include="PhraseListTests.cs" />
     <Compile Include="InitializeCleanupClass.cs" />

@@ -6,9 +6,9 @@ using Csla.DataPortalClient;
 namespace LearnLanguages.Business.Bases
 {
   [Serializable]
-  public abstract class BusinessBase<C, TDto> : Csla.BusinessBase<C>
-    where C : Bases.BusinessBase<C, TDto>
-    where TDto : class
+  public abstract class BusinessBase<C, CDto> : Csla.BusinessBase<C>
+    where C : Bases.BusinessBase<C, CDto>
+    where CDto : class
   {
     #region Business Properties and Methods
 
@@ -21,13 +21,13 @@ namespace LearnLanguages.Business.Bases
     }
     #endregion
 
-    public abstract TDto CreateDto();
-    public virtual void LoadFromDtoBypassPropertyChecks(TDto dto)
+    public abstract CDto CreateDto();
+    public virtual void LoadFromDtoBypassPropertyChecks(CDto dto)
     {
       LoadFromDtoBypassPropertyChecksImpl(dto);
       BusinessRules.CheckRules();
     }
-    public abstract void LoadFromDtoBypassPropertyChecksImpl(TDto dto);
+    public abstract void LoadFromDtoBypassPropertyChecksImpl(CDto dto);
 
     protected virtual void SetIdBypassPropertyChecks(Guid id)
     {
@@ -41,7 +41,7 @@ namespace LearnLanguages.Business.Bases
 
     #region DP_XYZ (All: .net, sl, child)
 
-    public virtual void Child_Create(TDto dto)
+    public virtual void Child_Create(CDto dto)
     {
       LoadFromDtoBypassPropertyChecks(dto);
     }

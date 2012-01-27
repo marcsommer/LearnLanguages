@@ -68,7 +68,6 @@ namespace LearnLanguages.Business
     //  DataPortal.BeginCreate<PhraseEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
     //  //DataPortal.BeginCreate<PhraseEdit>(id, callback);
     //}
-
     public static void GetPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
     {
       DataPortal.BeginFetch<PhraseEdit>(id, callback);
@@ -152,6 +151,9 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(IdProperty, dto.Id);
         LoadProperty<string>(TextProperty, dto.Text);
         LoadProperty<Guid>(LanguageIdProperty, dto.LanguageId);
+        var d = SeedData.Instance;
+        var loc = Csla.ApplicationContext.LogicalExecutionLocation;
+        var loc2 = Csla.ApplicationContext.ExecutionLocation;
         if (dto.LanguageId != Guid.Empty)
           Language = DataPortal.FetchChild<LanguageEdit>(dto.LanguageId);
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
@@ -243,8 +245,14 @@ namespace LearnLanguages.Business
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var result = phraseDal.New(null);
-        if (!result.IsSuccess || result.IsError)
-          throw new CreateFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new CreateFailedException(result.Msg);
+        }
         PhraseDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
       }
@@ -257,8 +265,14 @@ namespace LearnLanguages.Business
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         Result<PhraseDto> result = phraseDal.Fetch(id);
-        if (!result.IsSuccess || result.IsError)
-          throw new FetchFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(result.Msg);
+        }
         PhraseDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
       }
@@ -278,8 +292,14 @@ namespace LearnLanguages.Business
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var dto = CreateDto();
         var result = phraseDal.Insert(dto);
-        if (!result.IsSuccess || result.IsError)
-          throw new InsertFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new InsertFailedException(result.Msg);
+        }
         //SetIdBypassPropertyChecks(result.Obj.Id);
         //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
         //may need to load new LanguageEdit child, new languageId, etc.
@@ -294,8 +314,14 @@ namespace LearnLanguages.Business
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var dto = CreateDto();
         Result<PhraseDto> result = phraseDal.Update(dto);
-        if (!result.IsSuccess || result.IsError)
-          throw new UpdateFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new UpdateFailedException(result.Msg);
+        }
         //SetIdBypassPropertyChecks(result.Obj.Id);
         //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
         //may need to load new LanguageEdit child, new languageId, etc.
@@ -309,8 +335,14 @@ namespace LearnLanguages.Business
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var result = phraseDal.Delete(ReadProperty<Guid>(IdProperty));
-        if (!result.IsSuccess || result.IsError)
-          throw new DeleteFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new DeleteFailedException(result.Msg);
+        }
       }
     }
     [Transactional(TransactionalTypes.TransactionScope)]
@@ -320,8 +352,14 @@ namespace LearnLanguages.Business
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var result = phraseDal.Delete(id);
-        if (!result.IsSuccess || result.IsError)
-          throw new DeleteFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new DeleteFailedException(result.Msg);
+        }
       }
     }
 
@@ -331,7 +369,7 @@ namespace LearnLanguages.Business
     #region Child DP_XYZ
     
 #if !SILVERLIGHT
-
+    
     //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     //public void Child_Fetch(Guid id)
     //{
@@ -363,6 +401,20 @@ namespace LearnLanguages.Business
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void Child_Fetch(Guid id)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.Fetch(id);
+        if (result.IsError)
+          throw new FetchFailedException(result.Msg);
+        PhraseDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()
     {   
       using (var dalManager = DalFactory.GetDalManager())
@@ -372,8 +424,14 @@ namespace LearnLanguages.Business
         {
           var dto = CreateDto();
           var result = phraseDal.Insert(dto);
-          if (result.IsError)
-            throw new InsertFailedException(result.Msg);
+          if (!result.IsSuccess)
+          {
+            Exception error = result.GetExceptionFromInfo();
+            if (error != null)
+              throw error;
+            else
+              throw new InsertFailedException(result.Msg);
+          }
           LoadFromDtoBypassPropertyChecks(result.Obj);
         }
       }
@@ -388,8 +446,14 @@ namespace LearnLanguages.Business
 
         var dto = CreateDto();
         var result = phraseDal.Update(dto);
-        if (result.IsError)
-          throw new UpdateFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new UpdateFailedException(result.Msg);
+        }
         LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
@@ -402,8 +466,14 @@ namespace LearnLanguages.Business
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
         var result = phraseDal.Delete(Id);
-        if (result.IsError)
-          throw new DeleteFailedException(result.Msg); 
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new DeleteFailedException(result.Msg);
+        }
       }
     }
 

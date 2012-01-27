@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace LearnLanguages.DataAccess.Mock
 {
@@ -168,10 +169,25 @@ namespace LearnLanguages.DataAccess.Mock
 
     protected override PhraseDto NewImpl(object criteria)
     {
+      //to get to this point, we must have already been authenticated
+      Debug.Assert(Csla.ApplicationContext.User.Identity.IsAuthenticated);
+      //if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
+      //  throw new Exceptions.UserNotAuthenticatedException();
+
+      var username = Csla.ApplicationContext.User.Identity.Name;
+      var userId = (from u in SeedData.Instance.Users
+                    where u.Username == username
+                    select u.Id).FirstOrDefault();
+      if (userId == Guid.Empty)
+        throw new Exceptions.UserNotAuthorizedException();
+
+
       var dto = new PhraseDto()
       {
         Id = Guid.NewGuid(),
-        LanguageId = SeedData.Instance.DefaultLanguageId
+        LanguageId = SeedData.Instance.DefaultLanguageId,
+        UserId = userId, 
+        Username = username
       };
       return dto;
     }
@@ -218,10 +234,11 @@ namespace LearnLanguages.DataAccess.Mock
       {
         CheckContraints(dto);
 
-        var PhraseToUpdate = results.First();
-        SeedData.Instance.Phrases.Remove(PhraseToUpdate);
+        var phraseToUpdate = results.First();
+        SeedData.Instance.Phrases.Remove(phraseToUpdate);
         dto.Id = Guid.NewGuid();
         SeedData.Instance.Phrases.Add(dto);
+        UpdateReferences(phraseToUpdate, dto);
         return dto;
       }
       else
@@ -290,6 +307,30 @@ namespace LearnLanguages.DataAccess.Mock
       if (string.IsNullOrEmpty(dto.Username) ||
          !(SeedData.Instance.GetUsername(dto.UserId) == dto.Username))
         throw new ArgumentException("dto.Username");
+    }
+    private void UpdateReferences(PhraseDto oldPhrase, PhraseDto newPhrase)
+    {
+      //UPDATE USERS WHO REFERENCE THIS PHRASE
+      var referencedUsers = from u in SeedData.Instance.Users
+                            where u.PhraseIds.Contains(oldPhrase.Id)
+                            select u;
+
+      foreach (var user in referencedUsers)
+      {
+        user.PhraseIds.Remove(oldPhrase.Id);
+        user.PhraseIds.Add(newPhrase.Id);
+      }
+
+      //UPDATE TRANSLATIONS WHO REFERENCE THIS PHRASE
+      var referencedTranslations = from t in SeedData.Instance.Translations
+                                   where t.PhraseIds.Contains(oldPhrase.Id)
+                                   select t;
+
+      foreach (var translation in referencedTranslations)
+      {
+        translation.PhraseIds.Remove(oldPhrase.Id);
+        translation.PhraseIds.Add(newPhrase.Id);
+      }
     }
   }
 }

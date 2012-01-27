@@ -5,6 +5,7 @@ using Microsoft.Silverlight.Testing;
 using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
 using System.Linq;
+using Csla;
 
 namespace LearnLanguages.Silverlight.Tests
 {
@@ -172,6 +173,8 @@ namespace LearnLanguages.Silverlight.Tests
             throw newError;
 
           newTranslationEdit = r.Object;
+          Assert.IsTrue(newTranslationEdit.User.IsAuthenticated);
+          Assert.AreEqual(Csla.ApplicationContext.User.Identity.Name, newTranslationEdit.Username);
           isCreated = true;
         });
       EnqueueConditional(() => isCreated);
@@ -182,28 +185,6 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueTestComplete();
     }
 
-    //[TestMethod]
-    //[Asynchronous]
-    //public void CREATE_NEW_WITH_ID()
-    //{
-    //  Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
-
-    //  var isCreated = false;
-    //  TranslationEdit TranslationEdit = null;
-    //  TranslationEdit.NewTranslationEdit(id, (s,r) =>
-    //    {
-    //      if (r.Error != null)
-    //        throw r.Error;
-
-    //      TranslationEdit = r.Object;
-    //      isCreated = true;
-    //    });
-    //  EnqueueConditional(() => isCreated);
-    //  EnqueueCallback(() => { Assert.IsNotNull(TranslationEdit); },
-    //                  () => { Assert.IsNull(null); },
-    //                  () => { Assert.AreEqual(id, TranslationEdit.Id); });
-    //  EnqueueTestComplete();
-    //}
 
     [TestMethod]
     [Asynchronous]
@@ -222,6 +203,7 @@ namespace LearnLanguages.Silverlight.Tests
           getAllError = r1.Error;
           if (getAllError != null)
             throw r1.Error;
+
           testId = r1.Object.First().Id;
           allLoaded = true;
           TranslationEdit.GetTranslationEdit(testId, (s, r) =>
@@ -238,8 +220,8 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueCallback(() => { Assert.IsNull(error); },
                       () => { Assert.IsNull(getAllError); },
                       () => { Assert.IsNotNull(translationEdit); },
-                      () => { Assert.IsTrue(translationEdit.PhraseIds.Count >= 2); },
-                      () => { Assert.IsTrue(translationEdit.Phrases.Count == translationEdit.PhraseIds.Count); },
+                      () => { Assert.IsTrue(translationEdit.Phrases.Count >= 2); },
+        //() => { Assert.IsTrue(translationEdit.Phrases.Count == translationEdit.PhraseIds.Count); },
                       () => { Assert.AreEqual(testId, translationEdit.Id); });
       EnqueueTestComplete();
     }
@@ -248,218 +230,216 @@ namespace LearnLanguages.Silverlight.Tests
     [Asynchronous]
     public void NEW_EDIT_BEGINSAVE_GET()
     {
-      //INITIALIZE ERRORS TO EXCEPTION, BECAUSE WE TEST IF THEY ARE NULL LATER
-      Exception newError = new Exception();
-      Exception savedError = new Exception();
-      Exception gottenError = new Exception();
-
       TranslationEdit newTranslationEdit = null;
       TranslationEdit savedTranslationEdit = null;
       TranslationEdit gottenTranslationEdit = null;
-
-      PhraseEdit phraseA = null;
-      PhraseEdit phraseB = null;
 
       var isNewed = false;
       var isEdited = false;
       var isSaved = false;
       var isGotten = false;
 
+      string phraseAText = "Test Phrase A Text.  This is phrase A in English.";
+      string phraseBText = "Test Phrase BBBB Text.  This is phrase B in Spanish.";
+      PhraseEdit phraseA = null;
+      PhraseEdit phraseB = null;
+      
+      //AT THIS POINT, WE HAVE TWO PHRASES THAT WOULD BE EQUIVALENT PHRASES (A TRANSLATION).
       //NEW
       TranslationEdit.NewTranslationEdit((s, r) =>
-      {
-        newError = r.Error;
-        if (newError != null)
-          throw newError;
-        newTranslationEdit = r.Object;
-        isNewed = true;
+        {
+          if (r.Error != null)
+            throw r.Error;
+          newTranslationEdit = r.Object;
+          isNewed = true;
 
-        //EDIT
-        newTranslationEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
-        newTranslationEdit.Username = SeedData.Instance.TestValidUsername;
-        PhraseEdit.NewPhraseEdit((s4, r4) => 
-          {
-            if (r4.Error != null)
-              throw r4.Error;
+          //EDIT
+          //newTranslationEdit.Phrases.add
 
-            phraseA = r4.Object;
-            phraseA.Text = "Test Phrase A Text.  This is phrase A in English.";
-            phraseA.LanguageId = SeedData.Instance.EnglishId;
-            newTranslationEdit.AddPhrase(phraseA);
-
-            PhraseEdit.NewPhraseEdit((s5, r5) =>
+          newTranslationEdit.Phrases.AddedNew += (s5, r5) =>
+            {
+              if (phraseA == null)
               {
-                if (r5.Error != null)
-                  throw r5.Error;
+                phraseA = r5.NewObject;
+                phraseA.Id = Guid.NewGuid();
+                phraseA.Text = phraseAText;
                 
-                phraseB = r5.Object;
-                phraseB.Text = "Test Phrase B Text.  This is phrase B in Spanish.";
+                phraseA.LanguageId = SeedData.Instance.EnglishId;
+                //phraseA.Username = Csla.ApplicationContext.User.Identity.Name;
+                //phraseA.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+              }
+              else
+              {
+                phraseB = r5.NewObject;
+                phraseB.Id = Guid.NewGuid();
+                phraseB.Text = phraseBText;
                 phraseB.LanguageId = SeedData.Instance.SpanishId;
-                newTranslationEdit.AddPhrase(phraseB);
+                //phraseB.Username = Csla.ApplicationContext.User.Identity.Name;
+                //phraseB.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+              }
+            };
 
-                isEdited = true;
+          newTranslationEdit.Phrases.AddNew();
+          newTranslationEdit.Phrases.AddNew();
+          isEdited = true;
 
-                //SAVE
-                newTranslationEdit.BeginSave((s2, r2) =>
+          //newTranslationEdit.AddPhrase(phraseA);
+          //newTranslationEdit.AddPhrase(phraseB);
+
+          //SAVE
+          newTranslationEdit.BeginSave((s2, r2) =>
+            {
+              if (r2.Error != null)
+                throw r2.Error;
+
+              savedTranslationEdit = (TranslationEdit)r2.NewObject;
+              isSaved = true;
+
+              //GET (CONFIRM SAVE)
+              TranslationEdit.GetTranslationEdit(savedTranslationEdit.Id, (s3, r3) =>
                 {
-                  savedError = r2.Error;
-                  if (savedError != null)
-                    throw savedError;
-                  savedTranslationEdit = (TranslationEdit)r2.NewObject;
-
-                  isSaved = true;
-                  
-                  //GET (CONFIRM SAVE)
-                  TranslationEdit.GetTranslationEdit(savedTranslationEdit.Id, (s3, r3) =>
-                  {
-                    gottenError = r3.Error;
-                    if (gottenError != null)
-                      throw gottenError;
-                    gottenTranslationEdit = r3.Object;
-                    isGotten = true;
-                  });
+                  if (r3.Error != null)
+                    throw r3.Error;
+                  gottenTranslationEdit = r3.Object;
+                  isGotten = true;
                 });
-              });
-          });
-      });
+            });
+        });
 
       EnqueueConditional(() => isNewed);
       EnqueueConditional(() => isEdited);
       EnqueueConditional(() => isSaved);
       EnqueueConditional(() => isGotten);
       EnqueueCallback(
-                      () => { Assert.IsNull(newError); },
-                      () => { Assert.IsNull(savedError); },
-                      () => { Assert.IsNull(gottenError); },
                       () => { Assert.IsNotNull(newTranslationEdit); },
                       () => { Assert.IsNotNull(savedTranslationEdit); },
                       () => { Assert.IsNotNull(gottenTranslationEdit); },
                       () => { Assert.IsNotNull(phraseA); },
                       () => { Assert.IsNotNull(phraseB); },
-                      () => { Assert.AreEqual(gottenTranslationEdit.Phrases.Count, gottenTranslationEdit.PhraseIds.Count); },
+                      () => { Assert.IsTrue(gottenTranslationEdit.Phrases.Count >= 2); },
                       () => { Assert.AreEqual(savedTranslationEdit.Id, gottenTranslationEdit.Id); }
                      );
 
       EnqueueTestComplete();
     }
 
-    [TestMethod]
-    [Asynchronous]
-    [ExpectedException(typeof(ExpectedException))]
-    public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
-    {
-      TranslationEdit newTranslationEdit = null;
-      TranslationEdit savedTranslationEdit = null;
-      TranslationEdit gottenTranslationEdit = null;
-      TranslationEdit deletedTranslationEdit = null;
+    //[TestMethod]
+    //[Asynchronous]
+    //[ExpectedException(typeof(ExpectedException))]
+    //public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
+    //{
+    //  TranslationEdit newTranslationEdit = null;
+    //  TranslationEdit savedTranslationEdit = null;
+    //  TranslationEdit gottenTranslationEdit = null;
+    //  TranslationEdit deletedTranslationEdit = null;
 
-      PhraseEdit phraseA = null;
-      PhraseEdit phraseB = null;
+    //  PhraseEdit phraseA = null;
+    //  PhraseEdit phraseB = null;
 
-      //INITIALIZE TO EMPTY TRANSLATIONEDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
-      TranslationEdit deleteConfirmedTranslationEdit = new TranslationEdit();
+    //  //INITIALIZE TO EMPTY TRANSLATIONEDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
+    //  TranslationEdit deleteConfirmedTranslationEdit = new TranslationEdit();
 
-      var isNewed = false;
-      var isEdited = false;
-      var isSaved = false;
-      var isGotten = false;
-      var isDeleted = false;
-      var isDeleteConfirmed = false;
+    //  var isNewed = false;
+    //  var isEdited = false;
+    //  var isSaved = false;
+    //  var isGotten = false;
+    //  var isDeleted = false;
+    //  var isDeleteConfirmed = false;
 
-      //NEW
-      TranslationEdit.NewTranslationEdit((sNew, rNew) =>
-      {
-        if (rNew.Error != null)
-          throw rNew.Error;
-        newTranslationEdit = rNew.Object;
-        isNewed = true;
+    //  //NEW
+    //  TranslationEdit.NewTranslationEdit((sNew, rNew) =>
+    //  {
+    //    if (rNew.Error != null)
+    //      throw rNew.Error;
+    //    newTranslationEdit = rNew.Object;
+    //    isNewed = true;
 
-        //EDIT
-        newTranslationEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
-        newTranslationEdit.Username = SeedData.Instance.TestValidUsername;
-        PhraseEdit.NewPhraseEdit((sNewPhraseA, rNewPhraseA) =>
-        {
-          if (rNewPhraseA.Error != null)
-            throw rNewPhraseA.Error;
+    //    //EDIT
+    //    newTranslationEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+    //    newTranslationEdit.Username = SeedData.Instance.TestValidUsername;
+    //    PhraseEdit.NewPhraseEdit((sNewPhraseA, rNewPhraseA) =>
+    //    {
+    //      if (rNewPhraseA.Error != null)
+    //        throw rNewPhraseA.Error;
 
-          phraseA = rNewPhraseA.Object;
-          phraseA.Text = "Test Phrase A Text.  This is phrase A in English.";
-          phraseA.LanguageId = SeedData.Instance.EnglishId;
-          newTranslationEdit.AddPhrase(phraseA);
+    //      phraseA = rNewPhraseA.Object;
+    //      phraseA.Text = "Test Phrase A Text.  This is phrase A in English.";
+    //      phraseA.LanguageId = SeedData.Instance.EnglishId;
+    //      newTranslationEdit.AddPhrase(phraseA);
 
-          PhraseEdit.NewPhraseEdit((sNewPhraseB, rNewPhraseB) =>
-          {
-            if (rNewPhraseB.Error != null)
-              throw rNewPhraseB.Error;
+    //      PhraseEdit.NewPhraseEdit((sNewPhraseB, rNewPhraseB) =>
+    //      {
+    //        if (rNewPhraseB.Error != null)
+    //          throw rNewPhraseB.Error;
 
-            phraseB = rNewPhraseB.Object;
-            phraseB.Text = "Test Phrase B Text.  This is phrase B in Spanish.";
-            phraseB.LanguageId = SeedData.Instance.SpanishId;
-            newTranslationEdit.AddPhrase(phraseB);
+    //        phraseB = rNewPhraseB.Object;
+    //        phraseB.Text = "Test Phrase B Text.  This is phrase B in Spanish.";
+    //        phraseB.LanguageId = SeedData.Instance.SpanishId;
+    //        newTranslationEdit.AddPhrase(phraseB);
 
-            isEdited = true;
+    //        isEdited = true;
 
-            //SAVE
-            newTranslationEdit.BeginSave((sSave, rSave) =>
-            {
-              if (rSave.Error!= null)
-                throw rSave.Error;
-              savedTranslationEdit = (TranslationEdit)rSave.NewObject;
+    //        //SAVE
+    //        newTranslationEdit.BeginSave((sSave, rSave) =>
+    //        {
+    //          if (rSave.Error!= null)
+    //            throw rSave.Error;
+    //          savedTranslationEdit = (TranslationEdit)rSave.NewObject;
 
-              isSaved = true;
+    //          isSaved = true;
 
-              //GET (CONFIRM SAVE)
-              TranslationEdit.GetTranslationEdit(savedTranslationEdit.Id, (sGet, rGet) =>
-              {
-                if (rGet.Error!= null)
-                  throw rGet.Error;
+    //          //GET (CONFIRM SAVE)
+    //          TranslationEdit.GetTranslationEdit(savedTranslationEdit.Id, (sGet, rGet) =>
+    //          {
+    //            if (rGet.Error!= null)
+    //              throw rGet.Error;
 
-                gottenTranslationEdit = rGet.Object;
-                isGotten = true;
+    //            gottenTranslationEdit = rGet.Object;
+    //            isGotten = true;
 
-                //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
-                gottenTranslationEdit.Delete();
-                gottenTranslationEdit.BeginSave((sSaveGotten, rSaveGotten) =>
-                {
-                  if (rSaveGotten.Error != null)
-                    throw rSaveGotten.Error;
+    //            //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
+    //            gottenTranslationEdit.Delete();
+    //            gottenTranslationEdit.BeginSave((sSaveGotten, rSaveGotten) =>
+    //            {
+    //              if (rSaveGotten.Error != null)
+    //                throw rSaveGotten.Error;
 
-                  deletedTranslationEdit = (TranslationEdit)rSaveGotten.NewObject;
-                  //TODO: Figure out why TranslationEditTests final callback gets thrown twice.  When server throws an exception (expected because we are trying to fetch a deleted translation that shouldn't exist), the callback is executed twice.
+    //              deletedTranslationEdit = (TranslationEdit)rSaveGotten.NewObject;
+    //              //TODO: Figure out why TranslationEditTests final callback gets thrown twice.  When server throws an exception (expected because we are trying to fetch a deleted translation that shouldn't exist), the callback is executed twice.
 
-                  TranslationEdit.GetTranslationEdit(deletedTranslationEdit.Id, (sGetDeleted, rGetDeleted) =>
-                  {
-                    var debugExecutionLocation = Csla.ApplicationContext.ExecutionLocation;
-                    var debugLogicalExecutionLocation = Csla.ApplicationContext.LogicalExecutionLocation;
-                    if (rGetDeleted.Error != null)
-                    {
-                      isDeleteConfirmed = true;
-                      throw new ExpectedException(rGetDeleted.Error);
-                    }
-                    deleteConfirmedTranslationEdit = rGetDeleted.Object;
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
+    //              TranslationEdit.GetTranslationEdit(deletedTranslationEdit.Id, (sGetDeleted, rGetDeleted) =>
+    //              {
+    //                var debugExecutionLocation = Csla.ApplicationContext.ExecutionLocation;
+    //                var debugLogicalExecutionLocation = Csla.ApplicationContext.LogicalExecutionLocation;
+    //                if (rGetDeleted.Error != null)
+    //                {
+    //                  isDeleteConfirmed = true;
+    //                  throw new ExpectedException(rGetDeleted.Error);
+    //                }
+    //                deleteConfirmedTranslationEdit = rGetDeleted.Object;
+    //              });
+    //            });
+    //          });
+    //        });
+    //      });
+    //    });
+    //  });
 
-      EnqueueConditional(() => isNewed);
-      EnqueueConditional(() => isEdited);
-      EnqueueConditional(() => isSaved);
-      EnqueueConditional(() => isGotten);
-      EnqueueConditional(() => isDeleted);
-      EnqueueConditional(() => isDeleteConfirmed);
-      EnqueueCallback(
-                      () => { Assert.IsNotNull(newTranslationEdit); },
-                      () => { Assert.IsNotNull(savedTranslationEdit); },
-                      () => { Assert.IsNotNull(gottenTranslationEdit); },
-                      () => { Assert.IsNotNull(deletedTranslationEdit); },
-                      () => { Assert.IsNull(deleteConfirmedTranslationEdit); });
+    //  EnqueueConditional(() => isNewed);
+    //  EnqueueConditional(() => isEdited);
+    //  EnqueueConditional(() => isSaved);
+    //  EnqueueConditional(() => isGotten);
+    //  EnqueueConditional(() => isDeleted);
+    //  EnqueueConditional(() => isDeleteConfirmed);
+    //  EnqueueCallback(
+    //                  () => { Assert.IsNotNull(newTranslationEdit); },
+    //                  () => { Assert.IsNotNull(savedTranslationEdit); },
+    //                  () => { Assert.IsNotNull(gottenTranslationEdit); },
+    //                  () => { Assert.IsNotNull(deletedTranslationEdit); },
+    //                  () => { Assert.IsNull(deleteConfirmedTranslationEdit); });
 
-      EnqueueTestComplete();
-    }
+    //  EnqueueTestComplete();
+    //}
 
   }
 }

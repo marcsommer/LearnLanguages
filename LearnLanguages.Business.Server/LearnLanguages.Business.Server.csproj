@@ -44,14 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessBaseOfTAndTDto.cs">
-      <Link>Bases\BusinessBaseOfTAndTDto.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessBaseOfCAndCDto.cs">
+      <Link>Bases\BusinessBaseOfCAndCDto.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessListBaseOfTAndTDto.cs">
-      <Link>Bases\BusinessListBaseOfTAndTDto.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessListBaseOfLAndCAndCDto.cs">
+      <Link>Bases\BusinessListBaseOfLAndCAndCDto.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyListBaseOfTAndTDto.cs">
-      <Link>Bases\ReadOnlyListBaseOfTAndTDto.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyBaseOfC.cs">
+      <Link>Bases\ReadOnlyBaseOfC.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyListBaseOfLAndCAndCDto.cs">
+      <Link>Bases\ReadOnlyListBaseOfLAndCAndCDto.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\BlankTranslationRetriever.cs">
+      <Link>BlankTranslationRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\BusinessResources.Designer.cs">
       <Link>BusinessResources.Designer.cs</Link>
@@ -82,6 +88,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\TranslationEdit.cs">
       <Link>TranslationEdit.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\TranslationList.cs">
+      <Link>TranslationList.cs</Link>
     </Compile>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

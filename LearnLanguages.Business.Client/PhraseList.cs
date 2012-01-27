@@ -5,12 +5,15 @@ using Csla.Serialization;
 using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
 using System.ComponentModel;
+using LearnLanguages.Business.Security;
 
 namespace LearnLanguages.Business
 {
   [Serializable]
   public class PhraseList : Bases.BusinessListBase<PhraseList, PhraseEdit, PhraseDto>
   {
+    #region Factory Methods
+
     public static void GetAll(EventHandler<DataPortalResult<PhraseList>> callback)
     {
       DataPortal.BeginFetch<PhraseList>(callback);
@@ -20,6 +23,37 @@ namespace LearnLanguages.Business
     {
       DataPortal.BeginFetch<PhraseList>(phraseIds, callback);
     }
+
+    public static PhraseList NewPhraseList()
+    {
+      return new PhraseList();
+    }
+
+
+    
+#if SILVERLIGHT
+    /// <summary>
+    /// Runs locally.
+    /// </summary>
+    /// <param name="callback"></param>
+    public static void NewPhraseList(EventHandler<DataPortalResult<PhraseList>> callback)
+    {
+      DataPortal.BeginCreate<PhraseList>(callback, DataPortal.ProxyModes.LocalOnly);
+    }
+#else
+    /// <summary>
+    /// Runs locally.
+    /// </summary>
+    [RunLocal]
+    public static void NewPhraseList(EventHandler<DataPortalResult<PhraseList>> callback)
+    {
+      DataPortal.BeginCreate<PhraseList>(callback);
+    }
+#endif
+
+    #endregion
+
+    #region Data Portal methods (including child)
 
 #if !SILVERLIGHT
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -101,20 +135,44 @@ namespace LearnLanguages.Business
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void Child_Fetch(ICollection<Guid> phraseIds)
     {
-      try
-      {
-        throw new Exception("I just wanted to see where this gets called");
-      }
-      catch
-      {
-        //
-      }
       Items.Clear();
       foreach (var id in phraseIds)
       {
         var phraseEdit = DataPortal.FetchChild<PhraseEdit>(id);
         Items.Add(phraseEdit);
       }
+    }
+#endif
+
+    #endregion
+
+#if SILVERLIGHT
+    protected override void AddNewCore()
+    {
+      AddedNew += PhraseList_AddedNew; 
+      base.AddNewCore();
+      AddedNew -= PhraseList_AddedNew;
+    }
+
+    private void PhraseList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
+    {
+      CustomIdentity.CheckAuthentication();
+      var phraseEdit = e.NewObject;
+      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      phraseEdit.UserId = identity.UserId;
+      phraseEdit.Username = identity.Name;
+    }
+#else 
+    protected override PhraseEdit AddNewCore()
+    {
+      //SERVER
+      var phraseEdit = base.AddNewCore();
+      CustomIdentity.CheckAuthentication();
+      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      phraseEdit.UserId = identity.UserId;
+      phraseEdit.Username = identity.Name;
+
+      return phraseEdit;
     }
 #endif
   }

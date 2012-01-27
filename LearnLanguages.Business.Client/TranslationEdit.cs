@@ -17,6 +17,13 @@ namespace LearnLanguages.Business
   [Serializable]
   public class TranslationEdit : LearnLanguages.Business.Bases.BusinessBase<TranslationEdit, TranslationDto>, IHaveId
   {
+    #region Ctors and Init
+    public TranslationEdit()
+    {
+      Phrases = PhraseList.NewPhraseList();
+    }
+    #endregion
+    
     #region Factory Methods
     #region Wpf Factory Methods
 #if !SILVERLIGHT
@@ -75,15 +82,15 @@ namespace LearnLanguages.Business
     #region Business Properties & Methods
 
     //PHRASES
-    #region public ICollection<Guid> PhraseIds
-    public static readonly PropertyInfo<ICollection<Guid>> PhraseIdsProperty = 
-      RegisterProperty<ICollection<Guid>>(c => c.PhraseIds);
-    public ICollection<Guid> PhraseIds
-    {
-      get { return GetProperty(PhraseIdsProperty); }
-      set { SetProperty(PhraseIdsProperty, value); }
-    }
-    #endregion
+    //#region public ICollection<Guid> PhraseIds
+    //public static readonly PropertyInfo<ICollection<Guid>> PhraseIdsProperty =
+    //  RegisterProperty<ICollection<Guid>>(c => c.PhraseIds);
+    //public ICollection<Guid> PhraseIds
+    //{
+    //  get { return GetProperty(PhraseIdsProperty); }
+    //  set { SetProperty(PhraseIdsProperty, value); }
+    //}
+    //#endregion
     #region public PhraseList Phrases (child)
     public static readonly PropertyInfo<PhraseList> PhrasesProperty = 
       RegisterProperty<PhraseList>(c => c.Phrases, RelationshipTypes.Child);
@@ -128,7 +135,7 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(IdProperty, dto.Id);
         if (dto.PhraseIds != null && dto.PhraseIds.Count > 0)
         {
-          PhraseIds = dto.PhraseIds;
+          //PhraseIds = dto.PhraseIds;
           Phrases = DataPortal.FetchChild<PhraseList>(dto.PhraseIds);
         }
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
@@ -141,9 +148,18 @@ namespace LearnLanguages.Business
     }
     public override TranslationDto CreateDto()
     {
+      var _phraseIds = new List<Guid>();
+      if (Phrases != null)
+      {
+        foreach (var p in Phrases)
+        {
+          _phraseIds.Add(p.Id);
+        }
+      }
       TranslationDto retDto = new TranslationDto(){
                                           Id = this.Id,
-                                          PhraseIds = this.PhraseIds,
+                                          //PhraseIds = this.PhraseIds,
+                                          PhraseIds = _phraseIds,
                                           UserId = this.UserId,
                                           Username = this.Username
                                         };
@@ -180,7 +196,7 @@ namespace LearnLanguages.Business
 
     public void AddPhrase(PhraseEdit phrase)
     {
-      PhraseIds.Add(phrase.Id);
+      //PhraseIds.Add(phrase.Id);
       Phrases.Add(phrase);
       BusinessRules.CheckRules();
     }
@@ -228,10 +244,17 @@ namespace LearnLanguages.Business
       {
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var result = TranslationDal.New(null);
-        if (!result.IsSuccess || result.IsError)
-          throw new CreateFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new CreateFailedException(result.Msg);
+        }
         TranslationDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
+        var dummy = this;
       }
     }
 
@@ -242,8 +265,14 @@ namespace LearnLanguages.Business
       {
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         Result<TranslationDto> result = TranslationDal.Fetch(id);
-        if (!result.IsSuccess || result.IsError)
-          throw new FetchFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(result.Msg);
+        }
         TranslationDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
       }
@@ -260,11 +289,19 @@ namespace LearnLanguages.Business
       //};
       using (var dalManager = DalFactory.GetDalManager())
       {
+        DataPortal.UpdateChild(Phrases);
+
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var dto = CreateDto();
         var result = TranslationDal.Insert(dto);
-        if (!result.IsSuccess || result.IsError)
-          throw new InsertFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new InsertFailedException(result.Msg);
+        }
         //SetIdBypassPropertyChecks(result.Obj.Id);
         //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
         //may need to load new LanguageEdit child, new languageId, etc.
@@ -279,8 +316,14 @@ namespace LearnLanguages.Business
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var dto = CreateDto();
         Result<TranslationDto> result = TranslationDal.Update(dto);
-        if (!result.IsSuccess || result.IsError)
-          throw new UpdateFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new UpdateFailedException(result.Msg);
+        }
         //SetIdBypassPropertyChecks(result.Obj.Id);
         //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
         //may need to load new LanguageEdit child, new languageId, etc.
@@ -294,8 +337,14 @@ namespace LearnLanguages.Business
       {
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var result = TranslationDal.Delete(ReadProperty<Guid>(IdProperty));
-        if (!result.IsSuccess || result.IsError)
-          throw new DeleteFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new DeleteFailedException(result.Msg);
+        }
       }
     }
     [Transactional(TransactionalTypes.TransactionScope)]
@@ -305,8 +354,14 @@ namespace LearnLanguages.Business
       {
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var result = TranslationDal.Delete(id);
-        if (!result.IsSuccess || result.IsError)
-          throw new DeleteFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new DeleteFailedException(result.Msg);
+        }
       }
     }
 
@@ -357,8 +412,14 @@ namespace LearnLanguages.Business
         {
           var dto = CreateDto();
           var result = TranslationDal.Insert(dto);
-          if (result.IsError)
-            throw new InsertFailedException(result.Msg);
+          if (!result.IsSuccess)
+          {
+            Exception error = result.GetExceptionFromInfo();
+            if (error != null)
+              throw error;
+            else
+              throw new InsertFailedException(result.Msg);
+          }
           LoadFromDtoBypassPropertyChecks(result.Obj);
         }
       }
@@ -373,8 +434,14 @@ namespace LearnLanguages.Business
 
         var dto = CreateDto();
         var result = TranslationDal.Update(dto);
-        if (result.IsError)
-          throw new UpdateFailedException(result.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new UpdateFailedException(result.Msg);
+        }
         LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
@@ -387,8 +454,14 @@ namespace LearnLanguages.Business
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
 
         var result = TranslationDal.Delete(Id);
-        if (result.IsError)
-          throw new DeleteFailedException(result.Msg); 
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new DeleteFailedException(result.Msg);
+        }
       }
     }
 
@@ -397,5 +470,7 @@ namespace LearnLanguages.Business
     #endregion
 
     #endregion
+
+    
   }
 }

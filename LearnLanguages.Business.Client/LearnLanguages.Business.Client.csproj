@@ -58,9 +58,11 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bases\BusinessBaseOfTAndTDto.cs" />
-    <Compile Include="Bases\BusinessListBaseOfTAndTDto.cs" />
-    <Compile Include="Bases\ReadOnlyListBaseOfTAndTDto.cs" />
+    <Compile Include="Bases\BusinessBaseOfCAndCDto.cs" />
+    <Compile Include="Bases\BusinessListBaseOfLAndCAndCDto.cs" />
+    <Compile Include="Bases\ReadOnlyBaseOfC.cs" />
+    <Compile Include="Bases\ReadOnlyListBaseOfLAndCAndCDto.cs" />
+    <Compile Include="BlankTranslationRetriever.cs" />
     <Compile Include="BusinessResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

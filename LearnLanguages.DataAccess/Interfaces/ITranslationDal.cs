@@ -9,6 +9,7 @@ namespace LearnLanguages.DataAccess
   {
     Result<TranslationDto> New(object criteria);
     Result<TranslationDto> Fetch(Guid id);
+    Result<ICollection<TranslationDto>> Fetch(ICollection<Guid> ids);
     /// <summary>
     /// Dal implementation is responsible for assigning new Id to dto
     /// </summary>

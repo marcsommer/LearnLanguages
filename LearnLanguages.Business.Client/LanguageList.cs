@@ -10,6 +10,8 @@ namespace LearnLanguages.Business
   [Serializable]
   public class LanguageList : Bases.BusinessListBase<LanguageList, LanguageEdit, LanguageDto>
   {
+    #region Factory Methods
+
     public static void GetAll(EventHandler<DataPortalResult<LanguageList>> callback)
     {
       DataPortal.BeginFetch<LanguageList>(callback);
@@ -20,7 +22,13 @@ namespace LearnLanguages.Business
     {
       return DataPortal.Fetch<LanguageList>();
     }
+#endif
 
+    #endregion
+
+    #region DP_XYZ
+
+#if !SILVERLIGHT
     public void DataPortal_Fetch()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -63,5 +71,6 @@ namespace LearnLanguages.Business
     }
 #endif
 
+    #endregion
   }
 }

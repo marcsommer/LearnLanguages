@@ -119,6 +119,11 @@
     <Compile Include="NavigationController.cs" />
     <Compile Include="NavigationInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AddTranslationViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtonViewModels\AddTranslationNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\TranslationPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\TranslationPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\TranslationEditViewModel.cs" />
     <Compile Include="ViewModels\ViewPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\ViewPhrasesNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\ViewPhrasesViewModel.cs" />
@@ -155,6 +160,22 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NavigationButtonViews\AddTranslationNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TranslationPhrasesItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TranslationEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddTranslationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ViewPhrasesItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

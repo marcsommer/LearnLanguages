@@ -217,7 +217,8 @@ namespace LearnLanguages.DataAccess.Mock
 
       if (results.Count() == 1)
       {
-        CheckContraints(dto);
+        CheckValidity(dto);
+        CheckReferentialIntegrity(dto);
         var TranslationToUpdate = results.First();
         SeedData.Instance.Translations.Remove(TranslationToUpdate);
         dto.Id = Guid.NewGuid();
@@ -240,7 +241,7 @@ namespace LearnLanguages.DataAccess.Mock
 
       if (results.Count() == 0)
       {
-        CheckContraints(dto);
+        CheckValidity(dto);
         dto.Id = Guid.NewGuid();
         SeedData.Instance.Translations.Add(dto);
         return dto;
@@ -279,14 +280,16 @@ namespace LearnLanguages.DataAccess.Mock
       return allDtos;
     }
 
-    private void CheckContraints(TranslationDto dto)
+    private void CheckValidity(TranslationDto dto)
     {
       //VALIDITY
       if (dto == null)
         throw new ArgumentNullException("dto");
       if (dto.PhraseIds.Count < int.Parse(DalResources.MinPhrasesPerTranslation))
         throw new ArgumentOutOfRangeException("dto.PhraseIds.Count");
-
+    }
+    private static void CheckReferentialIntegrity(TranslationDto dto)
+    {
       //REFERENTIAL INTEGRITY
       foreach (var id in dto.PhraseIds)
       {
