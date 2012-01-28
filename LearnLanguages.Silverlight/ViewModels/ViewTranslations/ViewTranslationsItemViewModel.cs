@@ -9,7 +9,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(ViewTranslationsItemViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class ViewTranslationsItemViewModel : AddTranslationTranslationEditViewModel
+  public class ViewTranslationsItemViewModel : TranslationEditViewModelBase<ViewTranslationsPhrasesViewModel>
   {
     #region Ctors and Init
 

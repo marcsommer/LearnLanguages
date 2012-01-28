@@ -12,15 +12,17 @@ using LearnLanguages.Silverlight.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  [Export(typeof(TranslationPhrasesViewModel))]
+  [Export(typeof(AddTranslationPhrasesViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class TranslationPhrasesViewModel : Conductor<ViewModelBase>.Collection.AllActive, 
-                                             IViewModelBase,
-                                             IHaveModelList<PhraseList>
+  public class 
+    AddTranslationPhrasesViewModel 
+      : Conductor<AddTranslationPhrasesItemViewModel>.Collection.AllActive, 
+        IViewModelBase,
+        IHaveModelList<PhraseList>
   {
     #region Ctors and Init
 
-    public TranslationPhrasesViewModel()
+    public AddTranslationPhrasesViewModel()
     {
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
@@ -116,7 +118,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Clear();
       foreach (var phraseEdit in phrases)
       {
-        var itemViewModel = Services.Container.GetExportedValue<TranslationPhrasesItemViewModel>();
+        var itemViewModel = Services.Container.GetExportedValue<AddTranslationPhrasesItemViewModel>();
         itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
         itemViewModel.Model = phraseEdit;
         Items.Add(itemViewModel);
@@ -204,7 +206,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       get
       {
         bool somethingIsChecked = (from viewModel in Items
-                                   where ((TranslationPhrasesItemViewModel)viewModel).IsChecked
+                                   where viewModel.IsChecked
                                    select viewModel).Count() > 0;
 
         return somethingIsChecked && CanSave;
@@ -219,8 +221,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public void FinalizeDeleteChecked()
     {
       var checkedForDeletion = from viewModel in Items
-                               where ((TranslationPhrasesItemViewModel)viewModel).IsChecked
-                               select (TranslationPhrasesItemViewModel)viewModel;
+                               where viewModel.IsChecked
+                               select viewModel;
 
       foreach (var toDelete in checkedForDeletion)
       {
@@ -237,10 +239,9 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public void CancelDeleteChecked()
     {
-      foreach (var item in Items)
+      foreach (var phraseItemViewModel in Items)
       {
-        var vm = (TranslationPhrasesItemViewModel)item;
-        vm.IsChecked = false;
+        phraseItemViewModel.IsChecked = false;
       }
 
       InitiateDeleteVisibility = Visibility.Visible;
@@ -277,7 +278,6 @@ namespace LearnLanguages.Silverlight.ViewModels
             throw r.Error;
 
           phrase = r.Object.Phrase;
-
           PopulateViewModels(ModelList);
         });
     }

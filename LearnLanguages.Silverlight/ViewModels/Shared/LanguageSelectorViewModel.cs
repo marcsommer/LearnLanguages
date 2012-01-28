@@ -96,6 +96,20 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public event EventHandler SelectedItemChanged;
 
+    private bool _IsEnabled = true;
+    public bool IsEnabled
+    {
+      get { return _IsEnabled; }
+      set
+      {
+        if (value != _IsEnabled)
+        {
+          _IsEnabled = value;
+          NotifyOfPropertyChange(() => IsEnabled);
+        }
+      }
+    }
+
     public bool LoadFromUri(Uri uri)
     {
       return true;

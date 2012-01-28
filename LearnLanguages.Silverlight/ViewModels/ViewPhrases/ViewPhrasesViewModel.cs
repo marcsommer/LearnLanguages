@@ -14,7 +14,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [Export(typeof(ViewPhrasesViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   //public class ViewPhrasesViewModel : ViewModelBase<PhraseList, PhraseEdit, PhraseDto>
-  public class ViewPhrasesViewModel : Conductor<ViewModelBase>.Collection.AllActive, 
+  public class ViewPhrasesViewModel : Conductor<ViewPhrasesItemViewModel>.Collection.AllActive, 
                                       Interfaces.IViewModelBase
   {
     public ViewPhrasesViewModel()
@@ -177,7 +177,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       get
       {
         bool somethingIsChecked = (from viewModel in Items
-                                   where ((ViewPhrasesItemViewModel)viewModel).IsChecked
+                                   where viewModel.IsChecked
                                    select viewModel).Count() > 0;
 
         return somethingIsChecked && CanSave;
@@ -221,8 +221,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public void FinalizeDeleteChecked()
     {
       var checkedForDeletion = from viewModel in Items
-                               where ((ViewPhrasesItemViewModel)viewModel).IsChecked
-                               select (ViewPhrasesItemViewModel)viewModel;
+                               where viewModel.IsChecked
+                               select viewModel;
 
       foreach (var toDelete in checkedForDeletion)
       {
@@ -240,10 +240,9 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public void CancelDeleteChecked()
     {
-      foreach (var item in Items)
+      foreach (var phraseItemViewModel in Items)
       {
-        var vm = (ViewPhrasesItemViewModel)item;
-        vm.IsChecked = false;
+        phraseItemViewModel.IsChecked = false;
       }
 
       InitiateDeleteVisibility = Visibility.Visible;

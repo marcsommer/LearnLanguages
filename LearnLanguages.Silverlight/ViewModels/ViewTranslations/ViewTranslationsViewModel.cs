@@ -11,9 +11,14 @@ using System.Windows;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
+
+  /// <summary>
+  /// This contains Items that each represent a Translation.  
+  /// A Translation contains Phrases, so each Item in this collection is itself a collection.
+  /// </summary>
   [Export(typeof(ViewTranslationsViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class ViewTranslationsViewModel : Conductor<ViewModelBase>.Collection.AllActive, 
+  public class ViewTranslationsViewModel : Conductor<ViewTranslationsItemViewModel>.Collection.AllActive, 
                                            Interfaces.IViewModelBase
   {
     public ViewTranslationsViewModel()

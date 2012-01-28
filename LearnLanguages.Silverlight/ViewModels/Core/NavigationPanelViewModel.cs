@@ -60,12 +60,14 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void AddUserButtons()
     {
-      var viewPhrasesNavButtonViewModel = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();
-      Items.Add(viewPhrasesNavButtonViewModel);
-      var addPhraseNavButtonViewModel = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
-      Items.Add(addPhraseNavButtonViewModel);
-      var addTranslationNavButtonViewModel = Services.Container.GetExportedValue<AddTranslationNavigationButtonViewModel>();
-      Items.Add(addTranslationNavButtonViewModel);
+      var viewTranslations = Services.Container.GetExportedValue<ViewTranslationsNavigationButtonViewModel>();
+      Items.Add(viewTranslations);
+      var viewPhrases = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();
+      Items.Add(viewPhrases);
+      var addTranslation = Services.Container.GetExportedValue<AddTranslationNavigationButtonViewModel>();
+      Items.Add(addTranslation);
+      var addPhrase = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
+      Items.Add(addPhrase);
     }
 
     #endregion

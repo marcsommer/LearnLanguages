@@ -7,25 +7,30 @@ using System.Linq;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  [Export(typeof(TranslationPhrasesItemViewModel))]
-  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class TranslationPhrasesItemViewModel : ViewModelBase<PhraseEdit, PhraseDto>
+  
+  //[Export(typeof(TranslationPhrasesItemViewModelBase))]
+  //[PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+  /// <summary>
+  /// This is the ViewModelBase for any PhrasesItem in a TranslationViewModel.  So this represents a 
+  /// Phrase contained in a Translation.  It provides a LanguageSelectorViewModel and wirings, common to LanguageEdits.
+  /// </summary>
+  public class TranslationPhrasesItemViewModelBase : ViewModelBase<PhraseEdit, PhraseDto>
   {
     #region Ctors and Init
-    public TranslationPhrasesItemViewModel()
+
+    public TranslationPhrasesItemViewModelBase()
     {
       _Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
       HookInto(_Languages);
-      IsChecked = false;
     }
 
     #endregion
 
     #region Fields and Properties
 
-    private bool _SettingModel { get; set; }
+    protected bool _SettingModel { get; set; }
 
-    private LanguageSelectorViewModel _Languages;
+    protected LanguageSelectorViewModel _Languages;
     public LanguageSelectorViewModel Languages
     {
       get { return _Languages; }
@@ -39,30 +44,17 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private bool _IsChecked;
-    public bool IsChecked
-    {
-      get { return _IsChecked; }
-      set
-      {
-        if (value != _IsChecked)
-        {
-          _IsChecked = value;
-          NotifyOfPropertyChange(() => IsChecked);
-        }
-      }
-    }
-
+    
     #endregion
 
     #region Methods
 
-    private void HookInto(LanguageSelectorViewModel _Languages)
+    protected void HookInto(LanguageSelectorViewModel _Languages)
     {
       _Languages.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_Languages_PropertyChanged);
     }
 
-    void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    protected void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
       if (!_SettingModel)
       {

@@ -8,7 +8,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [Export(typeof(AddTranslationTranslationEditViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   //public class AddTranslationTranslationEditViewModel : ViewModelBase<TranslationEdit, TranslationDto>
-  public class AddTranslationTranslationEditViewModel : TranslationEditViewModelBase<TranslationPhrasesViewModel>
+  public class AddTranslationTranslationEditViewModel : TranslationEditViewModelBase<AddTranslationPhrasesViewModel>
   {
     //public AddTranslationTranslationEditViewModel()
     //{

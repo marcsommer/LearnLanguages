@@ -123,11 +123,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AddTranslation\AddTranslationViewModel.cs" />
     <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
+    <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
+    <Compile Include="ViewModels\NavigationButtonViewModels\ViewTranslationsNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsItemViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\AddTranslationNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\AddTranslation\TranslationPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\AddTranslation\TranslationPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\AddTranslation\AddTranslationPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\AddTranslation\AddTranslationPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\AddTranslation\AddTranslationTranslationEditViewModel.cs" />
     <Compile Include="ViewModels\ViewPhrases\ViewPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\ViewPhrasesNavigationButtonViewModel.cs" />
@@ -150,7 +154,7 @@
     <Compile Include="ViewModels\Bases\ViewModelBase.cs" />
     <Compile Include="ViewModels\Bases\ViewModelBaseOfTCslaModel.cs" />
     <Compile Include="ViewModels\Bases\ViewModelBaseOfTCslaModelList.cs" />
-    <Compile Include="ViewModels\Core\ViewModelMetadataAttribute.cs" />
+    <Compile Include="ViewModels\MetaDataAttributes\ViewModelMetadataAttribute.cs" />
     <Compile Include="ViewModels\Core\ShellViewModel.cs" />
     <Compile Include="ViewViewModelResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -165,7 +169,27 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\TranslationPhrasesView.xaml">
+    <Page Include="Views\NavigationButtonViews\ViewTranslationsNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewTranslations\ViewTranslationsPhrasesItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewTranslations\ViewTranslationsPhrasesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewTranslations\ViewTranslationsItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewTranslations\ViewTranslationsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AddTranslation\AddTranslationPhrasesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -173,19 +197,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\TranslationPhrasesItemView.xaml">
+    <Page Include="Views\AddTranslation\AddTranslationPhrasesItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AddTranslationTranslationEditView.xaml">
+    <Page Include="Views\AddTranslation\AddTranslationTranslationEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddTranslationView.xaml">
+    <Page Include="Views\AddTranslation\AddTranslationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ViewPhrasesItemView.xaml">
+    <Page Include="Views\ViewPhrases\ViewPhrasesItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -193,7 +217,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ViewPhrasesView.xaml">
+    <Page Include="Views\ViewPhrases\ViewPhrasesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -201,23 +225,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LanguageEditView.xaml">
+    <Page Include="Views\Shared\LanguageEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LanguageSelectorView.xaml">
+    <Page Include="Views\Shared\LanguageSelectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddPhraseView.xaml">
+    <Page Include="Views\AddPhrase\AddPhraseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\PhraseEditView.xaml">
+    <Page Include="Views\AddPhrase\PhraseEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddUserView.xaml">
+    <Page Include="Views\AddUser\AddUserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,7 +253,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AuthenticationStatusView.xaml">
+    <Page Include="Views\Core\AuthenticationStatusView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -237,7 +261,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LoginView.xaml">
+    <Page Include="Views\Core\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -245,15 +269,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LogoutView.xaml">
+    <Page Include="Views\Core\LogoutView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationPanelView.xaml">
+    <Page Include="Views\Core\NavigationPanelView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ShellView.xaml">
+    <Page Include="Views\Core\ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -294,6 +318,7 @@
       <LastGenOutput>ViewViewModelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
