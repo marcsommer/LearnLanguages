@@ -9,10 +9,12 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using LearnLanguages.Silverlight.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  public abstract class ViewModelBase<TCslaModel, TCslaModelDto> : ViewModelBase
+  public abstract class ViewModelBase<TCslaModel, TCslaModelDto> : ViewModelBase,
+                                                                   IHaveModel<TCslaModel>
     where TCslaModel : Business.Bases.BusinessBase<TCslaModel, TCslaModelDto>
     where TCslaModelDto : class
   {

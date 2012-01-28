@@ -26,13 +26,13 @@ namespace LearnLanguages.Silverlight.ViewModels
             throw r.Error;
           var retriever = r.Object;
 
-          TranslationViewModel = Services.Container.GetExportedValue<TranslationEditViewModel>();
+          TranslationViewModel = Services.Container.GetExportedValue<AddTranslationTranslationEditViewModel>();
           TranslationViewModel.Model = retriever.Translation;
         });
     }
 
-    private TranslationEditViewModel _TranslationViewModel;
-    public TranslationEditViewModel TranslationViewModel
+    private AddTranslationTranslationEditViewModel _TranslationViewModel;
+    public AddTranslationTranslationEditViewModel TranslationViewModel
     {
       get { return _TranslationViewModel; }
       set

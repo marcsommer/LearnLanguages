@@ -8,13 +8,15 @@ using Caliburn.Micro;
 using LearnLanguages.Silverlight.Events;
 using System.Collections.Specialized;
 using System.Windows;
+using LearnLanguages.Silverlight.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(TranslationPhrasesViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class TranslationPhrasesViewModel : Conductor<ViewModelBase>.Collection.AllActive, 
-                                             Interfaces.IViewModelBase
+                                             IViewModelBase,
+                                             IHaveModelList<PhraseList>
   {
     #region Ctors and Init
 
@@ -40,10 +42,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       //  //  });
       //});
     }
-
-    #endregion
-
-    #region Fields
 
     #endregion
 
@@ -103,7 +101,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       ModelList.Add(phrase);
     }
 
-
     public bool LoadFromUri(Uri uri)
     {
       return true;
@@ -143,7 +140,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
     
-
     #endregion
 
     #region Events
@@ -176,7 +172,6 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       Publish.PartSatisfied("ViewPhrases");
     }
-
 
     #endregion
 

@@ -56,47 +56,47 @@
     <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyListBaseOfLAndCAndCDto.cs">
       <Link>Bases\ReadOnlyListBaseOfLAndCAndCDto.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\BlankPhraseRetriever.cs">
-      <Link>BlankPhraseRetriever.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\BlankTranslationRetriever.cs">
-      <Link>BlankTranslationRetriever.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\BusinessResources.Designer.cs">
       <Link>BusinessResources.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\CollectionCountsAreEqualBusinessRule.cs">
-      <Link>CollectionCountsAreEqualBusinessRule.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\BusinessRules\CollectionCountsAreEqualBusinessRule.cs">
+      <Link>BusinessRules\CollectionCountsAreEqualBusinessRule.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\CollectionMinimumCountBusinessRule.cs">
-      <Link>CollectionMinimumCountBusinessRule.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\BusinessRules\CollectionMinimumCountBusinessRule.cs">
+      <Link>BusinessRules\CollectionMinimumCountBusinessRule.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\LanguageEdit.cs">
-      <Link>LanguageEdit.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Commands\PhraseDefaultSetterCommand.cs">
+      <Link>Commands\PhraseDefaultSetterCommand.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\LanguageList.cs">
-      <Link>LanguageList.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\LanguageEdit.cs">
+      <Link>Edits\LanguageEdit.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\PhraseDefaultSetterCommand.cs">
-      <Link>PhraseDefaultSetterCommand.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\PhraseEdit.cs">
+      <Link>Edits\PhraseEdit.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\PhraseEdit.cs">
-      <Link>PhraseEdit.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\TranslationEdit.cs">
+      <Link>Edits\TranslationEdit.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\PhraseList.cs">
-      <Link>PhraseList.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\LanguageList.cs">
+      <Link>Lists\LanguageList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\PhraseList.cs">
+      <Link>Lists\PhraseList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\TranslationList.cs">
+      <Link>Lists\TranslationList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\BlankPhraseRetriever.cs">
+      <Link>Retrievers\BlankPhraseRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\BlankTranslationRetriever.cs">
+      <Link>Retrievers\BlankTranslationRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Security\CustomIdentity.cs">
       <Link>Security\CustomIdentity.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Security\CustomPrincipal.cs">
       <Link>Security\CustomPrincipal.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\TranslationEdit.cs">
-      <Link>TranslationEdit.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\TranslationList.cs">
-      <Link>TranslationList.cs</Link>
     </Compile>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

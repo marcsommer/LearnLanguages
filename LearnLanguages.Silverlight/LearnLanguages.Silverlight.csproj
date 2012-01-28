@@ -101,6 +101,8 @@
     <Compile Include="Events\NavigationRequestedEventMessage.cs" />
     <Compile Include="Events\PartSatisfiedEventMessage.cs" />
     <Compile Include="Events\Publish.cs" />
+    <Compile Include="Interfaces\IHaveModelOfT.cs" />
+    <Compile Include="Interfaces\IHaveModelListOfTList.cs" />
     <Compile Include="Interfaces\IAuthenticationChangedEventMessage.cs" />
     <Compile Include="Interfaces\IHaveUri.cs" />
     <Compile Include="Interfaces\INavigatedEventMessage.cs" />
@@ -119,34 +121,37 @@
     <Compile Include="NavigationController.cs" />
     <Compile Include="NavigationInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\AddTranslationViewModel.cs" />
+    <Compile Include="ViewModels\AddTranslation\AddTranslationViewModel.cs" />
+    <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
+    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsItemViewModel.cs" />
+    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\AddTranslationNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\TranslationPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\TranslationPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\TranslationEditViewModel.cs" />
-    <Compile Include="ViewModels\ViewPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\AddTranslation\TranslationPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\AddTranslation\TranslationPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\AddTranslation\AddTranslationTranslationEditViewModel.cs" />
+    <Compile Include="ViewModels\ViewPhrases\ViewPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\ViewPhrasesNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\ViewPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\ViewPhrases\ViewPhrasesViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\AuthenticationStatusNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\AuthenticationStatusViewModel.cs" />
+    <Compile Include="ViewModels\Core\AuthenticationStatusViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\AddUserNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\AddUserViewModel.cs" />
-    <Compile Include="ViewModels\AddPhraseViewModel.cs" />
+    <Compile Include="ViewModels\AddUser\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\AddPhrase\AddPhraseViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\AddPhraseNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\LanguageEditViewModel.cs" />
-    <Compile Include="ViewModels\PhraseEditViewModel.cs" />
-    <Compile Include="ViewModels\LanguageSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Shared\LanguageEditViewModel.cs" />
+    <Compile Include="ViewModels\AddPhrase\PhraseEditViewModel.cs" />
+    <Compile Include="ViewModels\Shared\LanguageSelectorViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\LoginNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\Core\LoginViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\LogoutNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\LogoutViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\NavigationButtonViewModelBase.cs" />
-    <Compile Include="ViewModels\NavigationPanelViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="ViewModels\ViewModelBaseOfTCslaModel.cs" />
-    <Compile Include="ViewModels\ViewModelBaseOfTCslaModelList.cs" />
-    <Compile Include="ViewModels\ViewModelMetadataAttribute.cs" />
-    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\Core\LogoutViewModel.cs" />
+    <Compile Include="ViewModels\Bases\NavigationButtonViewModelBase.cs" />
+    <Compile Include="ViewModels\Core\NavigationPanelViewModel.cs" />
+    <Compile Include="ViewModels\Bases\ViewModelBase.cs" />
+    <Compile Include="ViewModels\Bases\ViewModelBaseOfTCslaModel.cs" />
+    <Compile Include="ViewModels\Bases\ViewModelBaseOfTCslaModelList.cs" />
+    <Compile Include="ViewModels\Core\ViewModelMetadataAttribute.cs" />
+    <Compile Include="ViewModels\Core\ShellViewModel.cs" />
     <Compile Include="ViewViewModelResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -172,7 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\TranslationEditView.xaml">
+    <Page Include="Views\AddTranslationTranslationEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
