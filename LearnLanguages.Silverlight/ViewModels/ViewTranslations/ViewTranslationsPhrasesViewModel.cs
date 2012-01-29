@@ -145,7 +145,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       //    throw r2.Error;
       //  Model = (PhraseList)r2.NewObject;
       //});
-      NotifyOfPropertyChange(() => CanSave);
+      //NotifyOfPropertyChange(() => CanSave);
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
 
       //NotifyOfPropertyChange(() => CanCancelEdit);
@@ -153,7 +153,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
       NotifyOfPropertyChange(() => this.ModelList);
-      NotifyOfPropertyChange(() => CanSave);
+      //NotifyOfPropertyChange(() => CanSave);
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
     public void OnImportsSatisfied()
@@ -165,27 +165,27 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #region Commands
 
-    public bool CanSave
-    {
-      get
-      {
-        return (ModelList != null && ModelList.IsSavable);
-      }
-    }
-    public virtual void Save()
-    {
-      ModelList.BeginSave((s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
+    //public bool CanSave
+    //{
+    //  get
+    //  {
+    //    return (ModelList != null && ModelList.IsSavable);
+    //  }
+    //}
+    //public virtual void Save()
+    //{
+    //  ModelList.BeginSave((s, r) =>
+    //  {
+    //    if (r.Error != null)
+    //      throw r.Error;
 
-        ModelList = (PhraseList)r.NewObject;
-        //propagate new PhraseEdits to their ViewModels
-        PopulateViewModels(ModelList);
+    //    ModelList = (PhraseList)r.NewObject;
+    //    //propagate new PhraseEdits to their ViewModels
+    //    PopulateViewModels(ModelList);
 
-        NotifyOfPropertyChange(() => CanSave);
-      });
-    }
+    //    NotifyOfPropertyChange(() => CanSave);
+    //  });
+    //}
 
     public bool CanInitiateDeleteChecked
     {
@@ -195,7 +195,8 @@ namespace LearnLanguages.Silverlight.ViewModels
                                    where viewModel.IsChecked
                                    select viewModel).Count() > 0;
 
-        return somethingIsChecked && CanSave;
+        //return somethingIsChecked && CanSave;
+        return somethingIsChecked;
       }
     }
     public void InitiateDeleteChecked()
@@ -215,9 +216,9 @@ namespace LearnLanguages.Silverlight.ViewModels
         ModelList.Remove(toDelete.Model);
       }
 
-      NotifyOfPropertyChange(() => CanSave);
-      if (CanSave)
-        Save();
+      //NotifyOfPropertyChange(() => CanSave);
+      //if (CanSave)
+      //  Save();
 
       InitiateDeleteVisibility = Visibility.Visible;
       FinalizeDeleteVisibility = Visibility.Collapsed;
@@ -253,7 +254,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       ModelList.AddedNew += ModelList_AddedNew;
       ModelList.AddNew();
       ModelList.AddedNew -= ModelList_AddedNew;
-      NotifyOfPropertyChange(() => CanSave);
+      //NotifyOfPropertyChange(() => CanSave);
     }
 
     void ModelList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)

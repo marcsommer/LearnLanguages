@@ -31,7 +31,7 @@ namespace LearnLanguages.Silverlight.ViewModels
             throw r.Error;
 
           var allTranslations = r.Object;
-          Model = allTranslations;
+          ModelList = allTranslations;
           PopulateViewModels(allTranslations);
         });
     }
@@ -69,7 +69,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     private TranslationList _ModelList;
-    public TranslationList Model
+    public TranslationList ModelList
     {
       get { return _ModelList; }
       set
@@ -79,7 +79,8 @@ namespace LearnLanguages.Silverlight.ViewModels
           UnhookFrom(_ModelList);
           _ModelList = value;
           HookInto(_ModelList);
-          NotifyOfPropertyChange(() => Model);
+          NotifyOfPropertyChange(() => ModelList);
+          NotifyOfPropertyChange(() => CanSave);
         }
       }
     }
@@ -102,7 +103,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     protected virtual void HandleChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
     {
-      NotifyOfPropertyChange(() => this.Model);
+      NotifyOfPropertyChange(() => this.ModelList);
       //Model.BeginSave((s2, r2) =>
       //{
       //  if (r2.Error != null)
@@ -116,7 +117,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-      NotifyOfPropertyChange(() => this.Model);
+      NotifyOfPropertyChange(() => this.ModelList);
       NotifyOfPropertyChange(() => CanSave);
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
@@ -125,19 +126,19 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get
       {
-        return (Model != null && Model.IsSavable);
+        return (ModelList != null && ModelList.IsSavable);
       }
     }
     public virtual void Save()
     {
-      Model.BeginSave((s, r) =>
+      ModelList.BeginSave((s, r) =>
       {
         if (r.Error != null)
           throw r.Error;
 
-        Model = (TranslationList)r.NewObject;
+        ModelList = (TranslationList)r.NewObject;
         //propagate new TranslationEdits to their ViewModels
-        PopulateViewModels(Model);
+        PopulateViewModels(ModelList);
 
         NotifyOfPropertyChange(() => CanSave);
       });
@@ -167,7 +168,6 @@ namespace LearnLanguages.Silverlight.ViewModels
     //  NotifyOfPropertyChange(() => CanCancelEdit);
     //  NotifyOfPropertyChange(() => CanSave);
     //}
-
 
     public bool CanInitiateDeleteChecked
     {
@@ -223,11 +223,11 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       foreach (var toDelete in checkedForDeletion)
       {
-        Model.Remove(toDelete.Model);
+        ModelList.Remove(toDelete.Model);
       }
 
       NotifyOfPropertyChange(() => CanSave);
-      NotifyOfPropertyChange(() => Model);
+      NotifyOfPropertyChange(() => ModelList);
       if (CanSave)
         Save();
 

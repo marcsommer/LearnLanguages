@@ -10,7 +10,7 @@
 
     <Style x:Key="DebugBorder" TargetType="Border">
       <Setter Property="BorderBrush" Value="Purple" />
-      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderThickness" Value="0" />
       <Setter Property="Margin" Value="2" />
       <Setter Property="Padding" Value="2" />
     </Style>

@@ -39,29 +39,29 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
-            <ColumnDefinition />
           </Grid.ColumnDefinitions>
           <Grid.Resources>
             <Style TargetType="Button">
               <Setter Property="Margin" Value="2" />
+              <Setter Property="Width" Value="120" />
             </Style>
           </Grid.Resources>
           <Button x:Name="Add" Content="Add Phrase"
                   Grid.Column="0"
                   />
-          <Button x:Name="Save" Content="Save Changes"
+          <!--<Button x:Name="Save" Content="Save Changes"
                   Grid.Column="1"
-                  />
+                  />-->
           <Button x:Name="InitiateDeleteChecked" Content="Delete Checked Items"
-                  Grid.Column="2"
+                  Grid.Column="1"
                   Visibility="{Binding Path=InitiateDeleteVisibility}"
                   />
           <Button x:Name="FinalizeDeleteChecked" Content="Confirm Delete" 
-                  Grid.Column="2"
+                  Grid.Column="1"
                   Visibility="{Binding Path=FinalizeDeleteVisibility}"
                   />
           <Button x:Name="CancelDeleteChecked" Content="Cancel Delete" 
-                  Grid.Column="3"
+                  Grid.Column="2"
                   Visibility="{Binding Path=FinalizeDeleteVisibility}"
                   />
         </Grid>

@@ -28,6 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
           TranslationViewModel = Services.Container.GetExportedValue<AddTranslationTranslationEditViewModel>();
           TranslationViewModel.Model = retriever.Translation;
+          HookInto(TranslationViewModel);
         });
     }
 
@@ -43,6 +44,38 @@ namespace LearnLanguages.Silverlight.ViewModels
           NotifyOfPropertyChange(() => TranslationViewModel);
         }
       }
+    }
+
+
+    public bool CanSave
+    {
+      get
+      {
+        return (TranslationViewModel != null &&
+                TranslationViewModel.Model != null &&
+                TranslationViewModel.Model.IsSavable);
+      }
+    }
+    public void Save()
+    {
+      TranslationViewModel.Model.BeginSave((s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          TranslationViewModel.Model = (TranslationEdit)r.NewObject;
+          NotifyOfPropertyChange(() => CanSave);
+        });
+    }
+
+    private void HookInto(AddTranslationTranslationEditViewModel translationViewModel)
+    {
+      translationViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(translationViewModel_PropertyChanged);
+    }
+
+    void translationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanSave);
     }
   }
 }

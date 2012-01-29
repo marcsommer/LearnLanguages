@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Silverlight.Interfaces;
+using System.ComponentModel;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -18,7 +19,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   //[Export(typeof(TranslationEditViewModelBase<TPhrasesViewModel>))]
   //[PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class TranslationEditViewModelBase<TPhrasesViewModel> : ViewModelBase<TranslationEdit, TranslationDto>
-    where TPhrasesViewModel : class, IViewModelBase, IHaveModelList<PhraseList>, new()
+    where TPhrasesViewModel : class, IViewModelBase, IHaveModelList<PhraseList>, INotifyPropertyChanged, new()
   {
     public TranslationEditViewModelBase()
     {
@@ -39,10 +40,30 @@ namespace LearnLanguages.Silverlight.ViewModels
       {
         if (value != _PhrasesViewModel)
         {
+          if (_PhrasesViewModel != null)
+            UnhookFrom(_PhrasesViewModel);
           _PhrasesViewModel = value;
           NotifyOfPropertyChange(() => PhrasesViewModel);
+          HookInto(_PhrasesViewModel);
         }
       }
     }
+
+    private void UnhookFrom(TPhrasesViewModel phrasesViewModel)
+    {
+      phrasesViewModel.PropertyChanged -= HandlePhrasesViewModelPropertyChanged;
+    }
+
+    private void HookInto(TPhrasesViewModel phrasesViewModel)
+    {
+      phrasesViewModel.PropertyChanged += HandlePhrasesViewModelPropertyChanged;
+    }
+
+    void HandlePhrasesViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => Model);
+    }
+
+
   }
 }
