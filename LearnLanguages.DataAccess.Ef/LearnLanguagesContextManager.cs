@@ -126,12 +126,22 @@ namespace LearnLanguages.DataAccess.Ef
         //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS USER
         var affectedPhrases = (from phraseDto in SeedData.Instance.Phrases
                                where phraseDto.UserId == userDto.Id
-                               select phraseDto).ToList();
+                               select phraseDto);//.ToList();
 
         foreach (var affectedPhrase in affectedPhrases)
         {
           affectedPhrase.UserId = userData.Id;
           affectedPhrase.UserId = userData.Id;
+        }
+
+        var affectedTranslations = (from translationDto in SeedData.Instance.Translations
+                                    where translationDto.UserId == userDto.Id
+                                    select translationDto);//.ToList();
+
+        foreach (var affectedTranslation in affectedTranslations)
+        {
+          affectedTranslation.UserId = userData.Id;
+          affectedTranslation.UserId = userData.Id;
         }
 
         userDto.Id = userData.Id;
@@ -148,7 +158,7 @@ namespace LearnLanguages.DataAccess.Ef
         //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS DATA
         var affectedUsers = (from userDto in SeedData.Instance.Users
                              where userDto.PhraseIds.Contains(phraseDto.Id)
-                             select userDto).ToList();
+                             select userDto);//.ToList();
 
         foreach (var affectedUser in affectedUsers)
         {
@@ -156,7 +166,37 @@ namespace LearnLanguages.DataAccess.Ef
           affectedUser.PhraseIds.Add(phraseData.Id);
         }
 
+        var affectedTranslations = (from translationDto in SeedData.Instance.Translations
+                                    where translationDto.PhraseIds.Contains(phraseDto.Id)
+                                    select translationDto);
+        foreach (var affectedTranslation in affectedTranslations)
+        {
+          affectedTranslation.PhraseIds.Remove(phraseDto.Id);
+          affectedTranslation.PhraseIds.Add(phraseData.Id);
+        }
+
         phraseDto.Id = phraseData.Id;
+      }
+
+      //TRANSLATIONS
+      foreach (var translationDto in SeedData.Instance.Translations)
+      {
+        var translationData = EfHelper.AddToContext(translationDto, context);
+        context.SaveChanges();
+
+        //UPDATE USERS
+        var affectedUsers = (from userDto in SeedData.Instance.Users
+                             where userDto.TranslationIds.Contains(translationDto.Id)
+                             select userDto).ToList();
+
+        foreach (var affectedUser in affectedUsers)
+        {
+          affectedUser.PhraseIds.Remove(translationDto.Id);
+          affectedUser.PhraseIds.Add(translationData.Id);
+        }
+
+        translationDto.Id = translationData.Id;
+
       }
     }
 

@@ -123,9 +123,9 @@ namespace LearnLanguages.DataAccess.Ef
     public static PhraseData AddToContext(PhraseDto dto, LearnLanguagesContext context)
     {
       //only creates, does not add to phrasedatas
-      var beforeCount = context.PhraseDatas.Count();
+      //var beforeCount = context.PhraseDatas.Count();
       var newPhraseData = context.PhraseDatas.CreateObject();
-      var afterCount = context.PhraseDatas.Count();
+      //var afterCount = context.PhraseDatas.Count();
 
       //assign properties
       newPhraseData.Text = dto.Text;
@@ -135,6 +135,65 @@ namespace LearnLanguages.DataAccess.Ef
       context.PhraseDatas.AddObject(newPhraseData);
 
       return newPhraseData;
+    }
+    /// <summary>
+    /// Adds the TranslationDto to the context, loading UserData and PhraseDatas into the newly
+    /// created PhraseData.  Does NOT save changes to the context.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="learnLanguagesContext"></param>
+    /// <returns></returns>
+    public static TranslationData AddToContext(TranslationDto dto, LearnLanguagesContext context)
+    {
+      //CREATE NEW TRANSLATIONDATA
+      var newTranslationData = context.TranslationDatas.CreateObject();
+
+      //ASSIGN USER INFO
+      newTranslationData.UserDataId = dto.UserId;
+      //var userResults = (from user in context.UserDatas
+      //                   where user.Id == dto.UserId
+      //                   select user);
+      //if (userResults.Count() == 1)
+      //  newTranslationData.UserData = userResults.First();
+      //else if (userResults.Count() == 0)
+      //  throw new Exceptions.IdNotFoundException(dto.UserId);
+      //else
+      //{
+      //  var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+      //                               DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+      //  throw new Exceptions.VeryBadException(errorMsg);
+      //}
+      
+
+      //GET AND ADD PHRASEDATAS TO TRANSLATIONDATA
+      if (dto.PhraseIds != null)
+      {
+        foreach (var id in dto.PhraseIds)
+        {
+          var results = (from phrase in context.PhraseDatas
+                         where phrase.Id == id
+                         select phrase);
+
+          if (results.Count() == 1)
+          {
+            var phraseData = results.First();
+            newTranslationData.PhraseDatas.Add(phraseData);
+          }
+          else if (results.Count() == 0)
+            throw new Exceptions.IdNotFoundException(id);
+          else
+          {
+            var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                         DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+            throw new Exceptions.VeryBadException(errorMsg);
+          }
+        }
+      }
+      
+      //ADD TRANSLATIONDATA TO CONTEXT
+      context.TranslationDatas.AddObject(newTranslationData);
+
+      return newTranslationData;
     }
 
     public static LanguageDto ToDto(LanguageData data)
@@ -251,5 +310,7 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.VeryBadException(errorMsg);
       }
     }
+
+    
   }
 }

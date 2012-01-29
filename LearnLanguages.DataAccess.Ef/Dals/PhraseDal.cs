@@ -177,29 +177,6 @@ namespace LearnLanguages.DataAccess.Ef
     //    return retAllPhraseDtos;
     //  }
     //}
-
-    private Guid GetDefaultLanguageId()
-    {
-      Guid retDefaultLanguageId;
-
-      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
-      {
-        try
-        {
-
-        retDefaultLanguageId = (from defaultLanguage in ctx.ObjectContext.LanguageDatas
-                                where defaultLanguage.Text == EfResources.DefaultLanguageText
-                                select defaultLanguage).First().Id;
-        }
-        catch (Exception ex)
-        {
-          throw new Exceptions.GeneralDataAccessException(ex);
-        }
-      }
-
-      return retDefaultLanguageId;
-    }
-
     protected override PhraseDto NewImpl(object criteria)
     {
       var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
@@ -225,7 +202,6 @@ namespace LearnLanguages.DataAccess.Ef
 
       return newPhraseDto;
     }
-
     protected override PhraseDto FetchImpl(Guid id)
     {
       var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
@@ -240,7 +216,6 @@ namespace LearnLanguages.DataAccess.Ef
         if (results.Count() == 1)
         {
           var fetchedPhraseData = results.First();
-          CheckPhraseAuthorization(fetchedPhraseData);
 
           var phraseDto = EfHelper.ToDto(fetchedPhraseData);
           return phraseDto;
@@ -260,13 +235,24 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
-
+    protected override ICollection<PhraseDto> FetchImpl(ICollection<Guid> ids)
+    {
+      var phraseDtos = new List<PhraseDto>();
+      foreach (var id in ids)
+      {
+        phraseDtos.Add(FetchImpl(id));
+      }
+      return phraseDtos;
+    }
     protected override PhraseDto UpdateImpl(PhraseDto dto)
     {
+      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var results = from phraseData in ctx.ObjectContext.PhraseDatas
-                      where phraseData.Id == dto.Id
+                      where phraseData.Id == dto.Id &&
+                            phraseData.UserDataId == currentUserId
                       select phraseData;
 
         if (results.Count() == 1)
@@ -274,7 +260,6 @@ namespace LearnLanguages.DataAccess.Ef
           //INSTEAD OF UPDATING STRAIGHT, I'M JUST DELETING AND ADDING.  PROBABLY NOT BEST
           //FOR PERFORMANCE.
           var oldPhraseData = results.First();
-          CheckPhraseAuthorization(oldPhraseData);
 
           var userData = oldPhraseData.UserDataReference.Value;
 
@@ -314,7 +299,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
-
     protected override PhraseDto InsertImpl(PhraseDto dto)
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -325,21 +309,43 @@ namespace LearnLanguages.DataAccess.Ef
         return dto;
       }
     }
-
     protected override PhraseDto DeleteImpl(Guid id)
     {
+      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var results = from phraseData in ctx.ObjectContext.PhraseDatas
-                      where phraseData.Id == id
+                      where phraseData.Id == id &&
+                            phraseData.UserDataId == currentUserId
                       select phraseData;
 
         if (results.Count() == 1)
         {
           var phraseDataToDelete = results.First();
-          CheckPhraseAuthorization(phraseDataToDelete);
           var retDto = EfHelper.ToDto(phraseDataToDelete);
+          
+          //WHEN WE DELETE PHRASES, IF IT IS PART OF A TRANSLATION, AND THAT TRANSLATION
+          //AFTER DELETE WOULD HAVE LESS THAN TWO PHRASES, WE NEED TO CASCADE THE DELETE TO THE TRANSLATION
+          var translationsToDelete = new List<TranslationData>();
+          foreach (var translation in phraseDataToDelete.TranslationDatas)
+          {
+            //IF WE ONLY HAVE TWO OR LESS PHRASES *NOW* (WE HAVE NOT DELETED PHRASE YET), THEN AFTER DELETE 
+            //WE *WILL* HAVE ONLY ONE OR ZERO, SO MARK THIS TRANSLATION FOR DELETION.
+            if (translation.PhraseDatas.Count <= 2)
+              translationsToDelete.Add(translation);
+          }
+
+          //EXECUTE DELETE OF THOSE TRANSLATIONS
+          foreach (var translation in translationsToDelete)
+          {
+            ctx.ObjectContext.TranslationDatas.DeleteObject(translation);
+          }
+
+          //DELETE THE PHRASE ITSELF
           ctx.ObjectContext.PhraseDatas.DeleteObject(phraseDataToDelete);
+
+          //SAVE CHANGES
           ctx.ObjectContext.SaveChanges();
 
           return retDto;
@@ -359,7 +365,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
-    
     protected override ICollection<PhraseDto> GetAllImpl()
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -367,11 +372,11 @@ namespace LearnLanguages.DataAccess.Ef
         var allPhraseDtos = new List<PhraseDto>();
         CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
 
-        var allPhrasesOfThisUser = (from phraseData in ctx.ObjectContext.PhraseDatas
-                                    where phraseData.UserData.Username == identity.Name
-                                    select phraseData).ToList();
+        var phraseDatas = (from phraseData in ctx.ObjectContext.PhraseDatas
+                           where phraseData.UserDataId == identity.UserId
+                           select phraseData).ToList();
 
-        foreach (var usersPhraseData in ctx.ObjectContext.PhraseDatas)
+        foreach (var usersPhraseData in phraseDatas)
         {
           allPhraseDtos.Add(EfHelper.ToDto(usersPhraseData));
         }
@@ -380,17 +385,27 @@ namespace LearnLanguages.DataAccess.Ef
       }
     }
 
-    private void CheckPhraseAuthorization(PhraseData phraseData)
+    private Guid GetDefaultLanguageId()
     {
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
-      if (identity.Name != phraseData.UserData.Username)
-        throw new Exceptions.UserNotAuthorizedException();
+      Guid retDefaultLanguageId;
+
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      {
+        try
+        {
+
+          retDefaultLanguageId = (from defaultLanguage in ctx.ObjectContext.LanguageDatas
+                                  where defaultLanguage.Text == EfResources.DefaultLanguageText
+                                  select defaultLanguage).First().Id;
+        }
+        catch (Exception ex)
+        {
+          throw new Exceptions.GeneralDataAccessException(ex);
+        }
+      }
+
+      return retDefaultLanguageId;
     }
 
-
-    protected override ICollection<PhraseDto> FetchImpl(ICollection<Guid> ids)
-    {
-      throw new NotImplementedException();
-    }
   }
 }
