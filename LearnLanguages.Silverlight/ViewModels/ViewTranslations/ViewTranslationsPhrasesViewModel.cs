@@ -216,6 +216,8 @@ namespace LearnLanguages.Silverlight.ViewModels
         ModelList.Remove(toDelete.Model);
       }
 
+      PopulateViewModels(ModelList);
+
       //NotifyOfPropertyChange(() => CanSave);
       //if (CanSave)
       //  Save();

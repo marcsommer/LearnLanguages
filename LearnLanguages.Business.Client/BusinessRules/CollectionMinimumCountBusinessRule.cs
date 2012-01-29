@@ -10,9 +10,7 @@ namespace LearnLanguages.Business
     public CollectionMinimumCountBusinessRule(IPropertyInfo collectionProperty, int minCount)
       : base(collectionProperty)
     {
-      //var isCorrectType = collectionProperty.Type.IsAssignableFrom(typeof(ICollection));
-      var isCorrectType = (collectionProperty as ICollection) != null;
-
+      PrimaryProperty = collectionProperty;
       InputProperties = new List<IPropertyInfo>() { collectionProperty };
       _MinCount = minCount;
     }
@@ -27,7 +25,7 @@ namespace LearnLanguages.Business
     {
       var collection = (ICollection)(context.InputPropertyValues[PrimaryProperty]);
       if (collection.Count < _MinCount)
-        context.AddInformationResult(BusinessResources.RuleInfoMinimumCount);
+        context.AddErrorResult(BusinessResources.RuleInfoMinimumCount);
       //var target = (TranslationEdit)context.Target;
       //if (target.Phrases.Count < _MinCount)
       //  context.AddInformationResult(BusinessResources.RuleInfoMinimumCount);

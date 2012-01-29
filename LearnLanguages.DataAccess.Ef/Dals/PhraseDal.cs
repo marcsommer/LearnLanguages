@@ -228,10 +228,13 @@ namespace LearnLanguages.DataAccess.Ef
 
     protected override PhraseDto FetchImpl(Guid id)
     {
+      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var results = from phraseData in ctx.ObjectContext.PhraseDatas
-                      where phraseData.Id == id
+                      where phraseData.Id == id &&
+                            phraseData.UserDataId == currentUserId
                       select phraseData;
 
         if (results.Count() == 1)

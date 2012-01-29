@@ -201,6 +201,12 @@ namespace LearnLanguages.Business
       BusinessRules.CheckRules();
     }
 
+    protected override void OnChildChanged(Csla.Core.ChildChangedEventArgs e)
+    {
+      base.OnChildChanged(e);
+      BusinessRules.CheckRules(PhrasesProperty);
+    }
+
     #endregion
 
     #region Validation Rules
@@ -215,8 +221,9 @@ namespace LearnLanguages.Business
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UserIdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UsernameProperty));
 
+
       //translation must have 2 phraseids to be valid
-      //BusinessRules.AddRule(new CollectionMinimumCountBusinessRule(PhrasesProperty, 2));
+      BusinessRules.AddRule(new CollectionMinimumCountBusinessRule(PhrasesProperty, 2));
       //BusinessRules.AddRule(new CollectionCountsAreEqualBusinessRule(PhrasesProperty, PhraseIdsProperty));
     }
 
@@ -289,7 +296,8 @@ namespace LearnLanguages.Business
       //};
       using (var dalManager = DalFactory.GetDalManager())
       {
-        DataPortal.UpdateChild(Phrases);
+        FieldManager.UpdateChildren(this);
+        //DataPortal.UpdateChild(Phrases);
 
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var dto = CreateDto();
@@ -313,6 +321,8 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
+        FieldManager.UpdateChildren(this);
+
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         var dto = CreateDto();
         Result<TranslationDto> result = TranslationDal.Update(dto);
@@ -407,6 +417,8 @@ namespace LearnLanguages.Business
     {   
       using (var dalManager = DalFactory.GetDalManager())
       {
+        FieldManager.UpdateChildren(this);
+
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
         using (BypassPropertyChecks)
         {
@@ -430,6 +442,8 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
+        FieldManager.UpdateChildren(this);
+
         var TranslationDal = dalManager.GetProvider<ITranslationDal>();
 
         var dto = CreateDto();

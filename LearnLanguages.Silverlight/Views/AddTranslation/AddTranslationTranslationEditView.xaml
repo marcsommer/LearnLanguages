@@ -17,6 +17,7 @@
       <ContentControl Grid.Row="0"
                       Grid.Column="0"
                       x:Name="PhrasesViewModel" 
+                      HorizontalContentAlignment="Stretch"
                       />
 
     </Grid>

@@ -28,8 +28,6 @@ namespace LearnLanguages.Business
     {
       return new PhraseList();
     }
-
-
     
 #if SILVERLIGHT
     /// <summary>
@@ -160,7 +158,7 @@ namespace LearnLanguages.Business
     {
       //CustomIdentity.CheckAuthentication();
       var phraseEdit = e.NewObject;
-      phraseEdit.LoadCurrentUser(); 
+      phraseEdit.LoadCurrentUser();
       //var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
       //phraseEdit.UserId = identity.UserId;
       //phraseEdit.Username = identity.Name;
@@ -176,5 +174,12 @@ namespace LearnLanguages.Business
 #endif
 
     #endregion
+
+    protected override void OnChildChanged(Csla.Core.ChildChangedEventArgs e)
+    {
+      base.OnChildChanged(e);
+      //if (e.ChildObject != null)
+      //  (Csla.Core.BusinessBase)e.ChildObject.BusinessRules.CheckRules();
+    }
   }
 }

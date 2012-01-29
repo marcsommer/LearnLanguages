@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
+using LearnLanguages.Business.Security;
 
 namespace LearnLanguages.DataAccess.Ef
 {
@@ -156,6 +157,99 @@ namespace LearnLanguages.DataAccess.Ef
     public static string GetConnectionString()
     {
       return ConfigurationManager.ConnectionStrings[EfResources.LearnLanguagesConnectionStringKey].ConnectionString;
+    }
+
+    public static TranslationDto ToDto(TranslationData fetchedTranslationData)
+    {
+      var dto = new TranslationDto()
+      {
+        Id = fetchedTranslationData.Id,
+        PhraseIds = (from phrase in fetchedTranslationData.PhraseDatas
+                     select phrase.Id).ToList(),
+        UserId = fetchedTranslationData.UserDataId,
+        Username = fetchedTranslationData.UserData.Username
+      };
+
+      return dto;
+    }
+
+    /// <summary>
+    /// Does NOT load dto.Id.
+    /// </summary>
+    /// <param name="translationData"></param>
+    /// <param name="dto"></param>
+    public static void LoadFrom(ref TranslationData translationData, 
+                                TranslationDto dto, 
+                                LearnLanguagesContext context)
+    {
+      //COPY USER INFO
+      translationData.UserDataId = dto.UserId;
+      translationData.UserData = EfHelper.GetUserData(dto.UserId, context);
+
+      var currentPhraseIds = (from phrase in translationData.PhraseDatas
+                              select phrase.Id);
+
+      //COPY PHRASEID INFO
+      //ADD NEW PHRASEDATAS IN THE DTO
+      foreach (var id in dto.PhraseIds)
+      {
+        if (!currentPhraseIds.Contains(id))
+        {
+          PhraseData phraseData = EfHelper.GetPhraseData(id, context);
+          translationData.PhraseDatas.Add(phraseData);
+        }
+      }
+
+      //REMOVE PHRASEDATAS THAT ARE NOT IN DTO ANYMORE
+      foreach (var phraseId in currentPhraseIds)
+      {
+        if (!dto.PhraseIds.Contains(phraseId))
+        {
+          var dataToRemove = (from phraseData in translationData.PhraseDatas
+                              where phraseData.Id == phraseId
+                              select phraseData).First();
+          translationData.PhraseDatas.Remove(dataToRemove);
+        }
+      }
+    }
+
+    private static UserData GetUserData(Guid userId, LearnLanguagesContext context)
+    {
+      var results = (from user in context.UserDatas
+                     where user.Id == userId
+                     select user);
+
+      if (results.Count() == 1)
+        return results.First();
+      else if (results.Count() == 0)
+        throw new Exceptions.IdNotFoundException(userId);
+      else
+      {
+        var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                     DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+        throw new Exceptions.VeryBadException(errorMsg);
+      }
+    }
+
+    private static PhraseData GetPhraseData(Guid id, LearnLanguagesContext context)
+    {
+      var currentUserId = ((CustomIdentity)Csla.ApplicationContext.User.Identity).UserId;
+
+      var results = from phraseData in context.PhraseDatas
+                    where phraseData.Id == id &&
+                          phraseData.UserDataId == currentUserId
+                    select phraseData;
+
+      if (results.Count() == 1)
+        return results.First();
+      else if (results.Count() == 0)
+        throw new Exceptions.IdNotFoundException(id);
+      else
+      {
+        var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                     DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+        throw new Exceptions.VeryBadException(errorMsg);
+      }
     }
   }
 }

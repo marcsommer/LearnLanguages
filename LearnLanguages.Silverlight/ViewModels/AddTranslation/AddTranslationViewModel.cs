@@ -64,7 +64,7 @@ namespace LearnLanguages.Silverlight.ViewModels
             throw r.Error;
 
           TranslationViewModel.Model = (TranslationEdit)r.NewObject;
-          NotifyOfPropertyChange(() => CanSave);
+          //NotifyOfPropertyChange(() => CanSave);
         });
     }
 

@@ -40,8 +40,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       {
         if (value != _PhrasesViewModel)
         {
-          if (_PhrasesViewModel != null)
-            UnhookFrom(_PhrasesViewModel);
+          UnhookFrom(_PhrasesViewModel);
           _PhrasesViewModel = value;
           NotifyOfPropertyChange(() => PhrasesViewModel);
           HookInto(_PhrasesViewModel);
@@ -51,14 +50,32 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void UnhookFrom(TPhrasesViewModel phrasesViewModel)
     {
-      phrasesViewModel.PropertyChanged -= HandlePhrasesViewModelPropertyChanged;
+      if (phrasesViewModel != null)
+      {
+        phrasesViewModel.PropertyChanged -= HandlePhrasesViewModelPropertyChanged;
+       
+        if (phrasesViewModel.ModelList != null)
+        {
+          phrasesViewModel.ModelList.ChildChanged -= HandlePhrasesList_ChildChanged;
+        }
+      }
     }
-
     private void HookInto(TPhrasesViewModel phrasesViewModel)
     {
-      phrasesViewModel.PropertyChanged += HandlePhrasesViewModelPropertyChanged;
+      if (phrasesViewModel != null)
+      {
+        phrasesViewModel.PropertyChanged += HandlePhrasesViewModelPropertyChanged;
+        if (phrasesViewModel.ModelList != null)
+        {
+          phrasesViewModel.ModelList.ChildChanged += HandlePhrasesList_ChildChanged;
+        }
+      }
     }
 
+    void HandlePhrasesList_ChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => Model);
+    }
     void HandlePhrasesViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
       NotifyOfPropertyChange(() => Model);

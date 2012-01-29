@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/24/2012 18:12:03
+-- Date Created: 01/29/2012 01:35:59
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -47,6 +47,15 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_PhraseDataLanguageData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PhraseDatas] DROP CONSTRAINT [FK_PhraseDataLanguageData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_TranslationDataPhraseData_TranslationData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDataPhraseData] DROP CONSTRAINT [FK_TranslationDataPhraseData_TranslationData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TranslationDataPhraseData_PhraseData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDataPhraseData] DROP CONSTRAINT [FK_TranslationDataPhraseData_PhraseData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataTranslationData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDatas] DROP CONSTRAINT [FK_UserDataTranslationData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -64,6 +73,9 @@ GO
 IF OBJECT_ID(N'[dbo].[RoleDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RoleDatas];
 GO
+IF OBJECT_ID(N'[dbo].[TranslationDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TranslationDatas];
+GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
 GO
@@ -72,6 +84,9 @@ IF OBJECT_ID(N'[dbo].[AssociationUserDataWithRoleData]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[UserDataRoleData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserDataRoleData];
+GO
+IF OBJECT_ID(N'[dbo].[TranslationDataPhraseData]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TranslationDataPhraseData];
 GO
 
 -- --------------------------------------------------
