@@ -257,31 +257,12 @@ namespace LearnLanguages.DataAccess.Ef
 
         if (results.Count() == 1)
         {
-          //INSTEAD OF UPDATING STRAIGHT, I'M JUST DELETING AND ADDING.  PROBABLY NOT BEST
-          //FOR PERFORMANCE.
-          var oldPhraseData = results.First();
-
-          var userData = oldPhraseData.UserDataReference.Value;
-
-          //DELETE
-          ctx.ObjectContext.DeleteObject(oldPhraseData);
-
-          //SAVE TO MAKE SURE AFFECTED USERS ARE UPDATED TO REMOVE THIS PHRASE
+          var phraseData = results.First();
+          EfHelper.LoadDataFromDto(ref phraseData, dto, ctx.ObjectContext);
+          
           ctx.ObjectContext.SaveChanges(); 
-          
-          //ADD
-          var newPhraseData = EfHelper.AddToContext(dto, ctx.ObjectContext);
-          
-          //check to see if user is affected by this.  I may not even need to do the following manually.
-          ctx.ObjectContext.SaveChanges();
 
-          //ADD TO CORRECT USER...this shouldn't be necessary
-          userData.PhraseDatas.Add(newPhraseData);
-
-          //SAVE ADDED
-          ctx.ObjectContext.SaveChanges();
-
-          var updatedDto = EfHelper.ToDto(newPhraseData);
+          var updatedDto = EfHelper.ToDto(phraseData);
           return updatedDto;
         }
         else

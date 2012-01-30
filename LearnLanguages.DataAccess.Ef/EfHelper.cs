@@ -233,13 +233,14 @@ namespace LearnLanguages.DataAccess.Ef
     }
 
     /// <summary>
+    /// Loads the information from the dto into the data object. Except...
     /// Does NOT load dto.Id.
     /// </summary>
     /// <param name="translationData"></param>
     /// <param name="dto"></param>
-    public static void LoadFrom(ref TranslationData translationData, 
-                                TranslationDto dto, 
-                                LearnLanguagesContext context)
+    public static void LoadDataFromDto(ref TranslationData translationData, 
+                                       TranslationDto dto, 
+                                       LearnLanguagesContext context)
     {
       //COPY USER INFO
       translationData.UserDataId = dto.UserId;
@@ -272,6 +273,50 @@ namespace LearnLanguages.DataAccess.Ef
       }
     }
 
+    /// <summary>
+    /// Loads the information from the dto into the data object. Except...
+    /// Does NOT load dto.Id.
+    /// </summary>
+    /// <param name="phraseData"></param>
+    /// <param name="dto"></param>
+    public static void LoadDataFromDto(ref PhraseData phraseData,
+                                       PhraseDto dto,
+                                       LearnLanguagesContext context)
+    {
+      //USER INFO
+      phraseData.UserDataId = dto.UserId;
+      phraseData.UserData = EfHelper.GetUserData(dto.UserId, context);
+
+      //LANGUAGE INFO
+      phraseData.LanguageDataId = dto.LanguageId;
+      phraseData.LanguageData = EfHelper.GetLanguageData(dto.LanguageId, context);
+
+      //TEXT
+      phraseData.Text = dto.Text;
+
+      //TRANSLATIONDATAS
+      phraseData.TranslationDatas.Load();
+    }
+
+    private static LanguageData GetLanguageData(Guid languageId, LearnLanguagesContext context)
+    {
+      var currentUserId = ((CustomIdentity)Csla.ApplicationContext.User.Identity).UserId;
+
+      var results = from languageData in context.LanguageDatas
+                    where languageData.Id == languageId 
+                    select languageData;
+
+      if (results.Count() == 1)
+        return results.First();
+      else if (results.Count() == 0)
+        throw new Exceptions.IdNotFoundException(languageId);
+      else
+      {
+        var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                     DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+        throw new Exceptions.VeryBadException(errorMsg);
+      }
+    }
     private static UserData GetUserData(Guid userId, LearnLanguagesContext context)
     {
       var results = (from user in context.UserDatas
@@ -289,20 +334,19 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.VeryBadException(errorMsg);
       }
     }
-
-    private static PhraseData GetPhraseData(Guid id, LearnLanguagesContext context)
+    private static PhraseData GetPhraseData(Guid phraseId, LearnLanguagesContext context)
     {
       var currentUserId = ((CustomIdentity)Csla.ApplicationContext.User.Identity).UserId;
 
       var results = from phraseData in context.PhraseDatas
-                    where phraseData.Id == id &&
+                    where phraseData.Id == phraseId &&
                           phraseData.UserDataId == currentUserId
                     select phraseData;
 
       if (results.Count() == 1)
         return results.First();
       else if (results.Count() == 0)
-        throw new Exceptions.IdNotFoundException(id);
+        throw new Exceptions.IdNotFoundException(phraseId);
       else
       {
         var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
@@ -310,7 +354,5 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.VeryBadException(errorMsg);
       }
     }
-
-    
   }
 }

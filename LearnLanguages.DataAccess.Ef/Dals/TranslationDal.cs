@@ -26,7 +26,6 @@ namespace LearnLanguages.DataAccess.Ef
 
       return newTranslationDto;
     }
-
     protected override TranslationDto FetchImpl(Guid id)
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -59,7 +58,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
-
     protected override ICollection<TranslationDto> FetchImpl(ICollection<Guid> ids)
     {
       var translationDtos = new List<TranslationDto>();
@@ -69,7 +67,6 @@ namespace LearnLanguages.DataAccess.Ef
       }
       return translationDtos;
     }
-
     protected override TranslationDto UpdateImpl(TranslationDto dto)
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -83,7 +80,7 @@ namespace LearnLanguages.DataAccess.Ef
         {
           //UPDATE THE TRANSLATIONDATA IN THE CONTEXT
           var translationData = results.First();
-          EfHelper.LoadFrom(ref translationData, dto, ctx.ObjectContext);
+          EfHelper.LoadDataFromDto(ref translationData, dto, ctx.ObjectContext);
 
           //SAVE TO MAKE SURE AFFECTED USERS ARE UPDATED TO REMOVE THIS PHRASE
           ctx.ObjectContext.SaveChanges();
@@ -106,7 +103,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
-
     protected override TranslationDto InsertImpl(TranslationDto dto)
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -117,7 +113,6 @@ namespace LearnLanguages.DataAccess.Ef
         return dto;
       }
     }
-
     protected override TranslationDto DeleteImpl(Guid id)
     {
       var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
