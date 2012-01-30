@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/29/2012 01:35:59
+-- Date Created: 01/30/2012 15:49:51
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -96,7 +96,8 @@ GO
 -- Creating table 'LanguageDatas'
 CREATE TABLE [dbo].[LanguageDatas] (
     [Id] uniqueidentifier  NOT NULL,
-    [Text] nvarchar(max)  NOT NULL
+    [Text] nvarchar(max)  NOT NULL,
+    [UserDataId] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -381,6 +382,20 @@ ADD CONSTRAINT [FK_UserDataTranslationData]
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserDataTranslationData'
 CREATE INDEX [IX_FK_UserDataTranslationData]
 ON [dbo].[TranslationDatas]
+    ([UserDataId]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'LanguageDatas'
+ALTER TABLE [dbo].[LanguageDatas]
+ADD CONSTRAINT [FK_UserDataLanguageData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataLanguageData'
+CREATE INDEX [IX_FK_UserDataLanguageData]
+ON [dbo].[LanguageDatas]
     ([UserDataId]);
 GO
 

@@ -67,6 +67,10 @@
       <End Role="UserData" EntitySet="UserDatas" />
       <End Role="TranslationData" EntitySet="TranslationDatas" />
     </AssociationSet>
+    <AssociationSet Name="UserDataLanguageData" Association="LearnLanguages.Store.UserDataLanguageData">
+      <End Role="UserData" EntitySet="UserDatas" />
+      <End Role="LanguageData" EntitySet="LanguageDatas" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="LanguageDatas">
     <Key>
@@ -74,6 +78,7 @@
     </Key>
     <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserDataId" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="PhraseDatas">
     <Key>
@@ -197,6 +202,18 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="TranslationData">
+        <PropertyRef Name="UserDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserDataLanguageData">
+    <End Role="UserData" Type="LearnLanguages.Store.UserDatas" Multiplicity="1" />
+    <End Role="LanguageData" Type="LearnLanguages.Store.LanguageDatas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LanguageData">
         <PropertyRef Name="UserDataId" />
       </Dependent>
     </ReferentialConstraint>
@@ -343,6 +360,10 @@
             <End Role="UserData" EntitySet="UserDatas" />
             <End Role="TranslationData" EntitySet="TranslationDatas" />
           </AssociationSet>
+          <AssociationSet Name="UserDataLanguageData" Association="LearnLanguages.UserDataLanguageData">
+            <End Role="UserData" EntitySet="UserDatas" />
+            <End Role="LanguageData" EntitySet="LanguageDatas" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="LanguageData">
           <Key>
@@ -351,6 +372,8 @@
           <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
           <NavigationProperty Name="PhraseDatas" Relationship="LearnLanguages.PhraseDataLanguageData" FromRole="LanguageData" ToRole="PhraseData" />
+          <NavigationProperty Name="UserData" Relationship="LearnLanguages.UserDataLanguageData" FromRole="LanguageData" ToRole="UserData" />
+          <Property Type="Guid" Name="UserDataId" Nullable="false" />
         </EntityType>
         <EntityType Name="PhraseData">
           <Key>
@@ -387,6 +410,7 @@
           <NavigationProperty Name="RoleDatas" Relationship="LearnLanguages.UserDataRoleData" FromRole="UserData" ToRole="RoleData" />
           <NavigationProperty Name="PhraseDatas" Relationship="LearnLanguages.UserDataPhraseData" FromRole="UserData" ToRole="PhraseData" />
           <NavigationProperty Name="TranslationDatas" Relationship="LearnLanguages.UserDataTranslationData" FromRole="UserData" ToRole="TranslationData" />
+          <NavigationProperty Name="LanguageDatas" Relationship="LearnLanguages.UserDataLanguageData" FromRole="UserData" ToRole="LanguageData" />
         </EntityType>
         <Association Name="AssociationUserDataWithPhraseData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" >
@@ -471,6 +495,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="UserDataLanguageData">
+          <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" />
+          <End Type="LearnLanguages.LanguageData" Role="LanguageData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LanguageData">
+              <PropertyRef Name="UserDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -482,6 +518,7 @@
         <MappingFragment StoreEntitySet="LanguageDatas">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="UserDataId" ColumnName="UserDataId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

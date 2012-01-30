@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DalBases\LanguageDalBase.cs" />
     <Compile Include="DalBases\TranslationDalBase.cs" />
     <Compile Include="DalBases\PhraseDalBase.cs" />
     <Compile Include="DalBases\CustomIdentityDalBase.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Dtos\TranslationDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\UsernameAndUserIdDoNotMatchException.cs" />
     <Compile Include="Exceptions\LanguageTextAlreadyExistsException.cs" />
     <Compile Include="Exceptions\IdAlreadyExistsException.cs" />
     <Compile Include="Exceptions\UserNotAuthorizedException.cs" />

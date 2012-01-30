@@ -27,6 +27,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LearnLanguages", "PhraseDataLanguageData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "LanguageData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.LanguageData), true)]
 [assembly: EdmRelationshipAttribute("LearnLanguages", "TranslationDataPhraseData", "TranslationData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.TranslationData), "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.PhraseData))]
 [assembly: EdmRelationshipAttribute("LearnLanguages", "UserDataTranslationData", "UserData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.UserData), "TranslationData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.TranslationData), true)]
+[assembly: EdmRelationshipAttribute("LearnLanguages", "UserDataLanguageData", "UserData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.UserData), "LanguageData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.LanguageData), true)]
 
 #endregion
 
@@ -225,11 +226,13 @@ namespace LearnLanguages.DataAccess.Ef
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="text">Initial value of the Text property.</param>
-        public static LanguageData CreateLanguageData(global::System.Guid id, global::System.String text)
+        /// <param name="userDataId">Initial value of the UserDataId property.</param>
+        public static LanguageData CreateLanguageData(global::System.Guid id, global::System.String text, global::System.Guid userDataId)
         {
             LanguageData languageData = new LanguageData();
             languageData.Id = id;
             languageData.Text = text;
+            languageData.UserDataId = userDataId;
             return languageData;
         }
 
@@ -287,6 +290,30 @@ namespace LearnLanguages.DataAccess.Ef
         private global::System.String _Text;
         partial void OnTextChanging(global::System.String value);
         partial void OnTextChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid UserDataId
+        {
+            get
+            {
+                return _UserDataId;
+            }
+            set
+            {
+                OnUserDataIdChanging(value);
+                ReportPropertyChanging("UserDataId");
+                _UserDataId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserDataId");
+                OnUserDataIdChanged();
+            }
+        }
+        private global::System.Guid _UserDataId;
+        partial void OnUserDataIdChanging(global::System.Guid value);
+        partial void OnUserDataIdChanged();
 
         #endregion
 
@@ -311,6 +338,44 @@ namespace LearnLanguages.DataAccess.Ef
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PhraseData>("LearnLanguages.PhraseDataLanguageData", "PhraseData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "UserDataLanguageData", "UserData")]
+        public UserData UserData
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.UserDataLanguageData", "UserData").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.UserDataLanguageData", "UserData").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<UserData> UserDataReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.UserDataLanguageData", "UserData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<UserData>("LearnLanguages.UserDataLanguageData", "UserData", value);
                 }
             }
         }
@@ -1009,6 +1074,28 @@ namespace LearnLanguages.DataAccess.Ef
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<TranslationData>("LearnLanguages.UserDataTranslationData", "TranslationData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "UserDataLanguageData", "LanguageData")]
+        public EntityCollection<LanguageData> LanguageDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<LanguageData>("LearnLanguages.UserDataLanguageData", "LanguageData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<LanguageData>("LearnLanguages.UserDataLanguageData", "LanguageData", value);
                 }
             }
         }

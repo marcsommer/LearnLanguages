@@ -126,6 +126,7 @@
     <Compile Include="ViewModels\AddTranslation\AddTranslationViewModel.cs" />
     <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
     <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
+    <Compile Include="ViewModels\NavigationButtonViewModels\AddLanguageNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\ViewTranslationsNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
@@ -171,6 +172,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NavigationButtonViews\AddLanguageNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\AddLanguage\AddLanguageLanguageEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

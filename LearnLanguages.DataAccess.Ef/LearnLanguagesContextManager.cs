@@ -59,23 +59,7 @@ namespace LearnLanguages.DataAccess.Ef
 
     private void SeedContext(LearnLanguagesContext context)
     {
-      //LANGUAGES
-      foreach (var langDto in SeedData.Instance.Languages)
-      {
-        var langData = EfHelper.ToData(langDto);
-        context.LanguageDatas.AddObject(langData);
-        context.SaveChanges();
-
-        //UPDATE SEED DATA PHRASES WITH NEW LANGUAGE ID
-        var affectedPhrases = (from phraseDto in SeedData.Instance.Phrases
-                               where phraseDto.LanguageId == langDto.Id
-                               select phraseDto).ToList();
-        foreach (var phraseDto in affectedPhrases)
-        {
-          phraseDto.LanguageId = langData.Id;//new Id
-        }
-        langDto.Id = langData.Id;
-      }
+      
 
       //ROLES
       foreach (var roleDto in SeedData.Instance.Roles)
@@ -124,27 +108,52 @@ namespace LearnLanguages.DataAccess.Ef
         context.SaveChanges();
 
         //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS USER
+        var affectedLanguages = (from languageDto in SeedData.Instance.Languages
+                                 where languageDto.UserId == userDto.Id
+                                 select languageDto);
+
+        foreach (var affectedLanguage in affectedLanguages)
+        {
+          affectedLanguage.UserId = userData.Id;
+        }
+        
         var affectedPhrases = (from phraseDto in SeedData.Instance.Phrases
                                where phraseDto.UserId == userDto.Id
-                               select phraseDto);//.ToList();
+                               select phraseDto);
 
         foreach (var affectedPhrase in affectedPhrases)
         {
-          affectedPhrase.UserId = userData.Id;
           affectedPhrase.UserId = userData.Id;
         }
 
         var affectedTranslations = (from translationDto in SeedData.Instance.Translations
                                     where translationDto.UserId == userDto.Id
-                                    select translationDto);//.ToList();
+                                    select translationDto);
 
         foreach (var affectedTranslation in affectedTranslations)
         {
           affectedTranslation.UserId = userData.Id;
-          affectedTranslation.UserId = userData.Id;
         }
 
         userDto.Id = userData.Id;
+      }
+
+      //LANGUAGES
+      foreach (var langDto in SeedData.Instance.Languages)
+      {
+        var langData = EfHelper.ToData(langDto, context);
+        context.LanguageDatas.AddObject(langData);
+        context.SaveChanges();
+
+        //UPDATE SEED DATA PHRASES WITH NEW LANGUAGE ID
+        var affectedPhrases = (from phraseDto in SeedData.Instance.Phrases
+                               where phraseDto.LanguageId == langDto.Id
+                               select phraseDto).ToList();
+        foreach (var phraseDto in affectedPhrases)
+        {
+          phraseDto.LanguageId = langData.Id;//new Id
+        }
+        langDto.Id = langData.Id;
       }
 
       //PHRASES

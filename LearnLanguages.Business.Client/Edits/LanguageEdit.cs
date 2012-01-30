@@ -5,10 +5,11 @@ using Csla.Serialization;
 using Csla.DataPortalClient;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.DataAccess;
-
 #if !SILVERLIGHT
 using LearnLanguages.DataAccess.Exceptions;
 #endif
+using LearnLanguages.Business.Security;
+
 
 namespace LearnLanguages.Business
 {
@@ -131,6 +132,7 @@ namespace LearnLanguages.Business
 
     #region Business Properties & Methods
 
+    //LANGUAGE
     #region public string Text
     public static readonly PropertyInfo<string> TextProperty = RegisterProperty<string>(c => c.Text);
     public string Text
@@ -140,12 +142,44 @@ namespace LearnLanguages.Business
     }
     #endregion
 
+    //USER
+    #region public Guid UserId
+    public static readonly PropertyInfo<Guid> UserIdProperty = RegisterProperty<Guid>(c => c.UserId);
+    public Guid UserId
+    {
+      get { return GetProperty(UserIdProperty); }
+      set { SetProperty(UserIdProperty, value); }
+    }
+    #endregion
+    #region public string Username
+    public static readonly PropertyInfo<string> UsernameProperty = RegisterProperty<string>(c => c.Username);
+    public string Username
+    {
+      get { return GetProperty(UsernameProperty); }
+      set { SetProperty(UsernameProperty, value); }
+    }
+    #endregion
+    #region public CustomIdentity User
+    public static readonly PropertyInfo<CustomIdentity> UserProperty =
+      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
+    public CustomIdentity User
+    {
+      get { return GetProperty(UserProperty); }
+      private set { LoadProperty(UserProperty, value); }
+    }
+    #endregion
+
     public override void LoadFromDtoBypassPropertyChecksImpl(LanguageDto dto)
     {
       using (BypassPropertyChecks)
       {
         LoadProperty<Guid>(IdProperty, dto.Id);
         LoadProperty<string>(TextProperty, dto.Text);
+        LoadProperty<string>(TextProperty, dto.Text);
+        LoadProperty<Guid>(UserIdProperty, dto.UserId);
+        LoadProperty<string>(UsernameProperty, dto.Username);
+        if (!string.IsNullOrEmpty(dto.Username))
+          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
       }
     }
 
@@ -155,6 +189,8 @@ namespace LearnLanguages.Business
       {
         Id = this.Id,
         Text = this.Text,
+        UserId = this.UserId,
+        Username = this.Username
       };
 
       return retDto;
@@ -302,11 +338,7 @@ namespace LearnLanguages.Business
     protected override void DataPortal_Insert()
     {
       //Dal is responsible for setting new Id
-      LanguageDto dto = new LanguageDto()
-      {
-        Id = this.Id,
-        Text = this.Text
-      };
+      var dto = CreateDto();
 
       using (var dalManager = DalFactory.GetDalManager())
       {
@@ -332,12 +364,9 @@ namespace LearnLanguages.Business
       using (var dalManager = DalFactory.GetDalManager())
       {
         var languageDal = dalManager.GetProvider<ILanguageDal>();
+        var dto = CreateDto();
 
-        Result<LanguageDto> result = languageDal.Update(new LanguageDto()
-                                                        {
-                                                          Id = this.Id,
-                                                          Text = this.Text
-                                                        });
+        Result<LanguageDto> result = languageDal.Update(dto);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -408,13 +437,6 @@ namespace LearnLanguages.Business
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Fetch(LanguageDto dto)
     {
-      //throw new Exception("Just throwing this cause I wanna see execution location. " +
-      //                    "Should be 'Server'.  Here is what it actually is:       " +
-      //                    Csla.ApplicationContext.LogicalExecutionLocation.ToString());
-
-      //if (Csla.ApplicationContext.LogicalExecutionLocation != ApplicationContext.LogicalExecutionLocations.Server)
-      //  throw new Exception();
-
       LoadFromDtoBypassPropertyChecks(dto);
     }
 

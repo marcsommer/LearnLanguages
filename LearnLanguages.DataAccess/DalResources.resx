@@ -242,4 +242,9 @@
     <value>The Language Text ({0}) already exists.</value>
     <comment>{0} = Language Text</comment>
   </data>
+  <data name="ErrorMsgUsernameAndUserIdDoNotMatchException" xml:space="preserve">
+    <value>The Username ({0}) does not match the UserId ({1}) in the database.</value>
+    <comment>{0} = Username
+{1} = UserId</comment>
+  </data>
 </root>

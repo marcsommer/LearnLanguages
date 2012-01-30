@@ -304,6 +304,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Username ({0}) does not match the UserId ({1}) in the database..
+        /// </summary>
+        public static string ErrorMsgUsernameAndUserIdDoNotMatchException {
+            get {
+                return ResourceManager.GetString("ErrorMsgUsernameAndUserIdDoNotMatchException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The username ({0}) was not found..
         /// </summary>
         public static string ErrorMsgUsernameNotFoundException {

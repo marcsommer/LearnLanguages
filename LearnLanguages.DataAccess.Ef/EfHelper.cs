@@ -198,19 +198,48 @@ namespace LearnLanguages.DataAccess.Ef
 
     public static LanguageDto ToDto(LanguageData data)
     {
-      return new LanguageDto()
+      var dto = new LanguageDto()
       {
         Id = data.Id,
-        Text = data.Text
+        Text = data.Text,
+        UserId = data.UserDataId,
+        Username = data.UserData.Username
       };
+
+      return dto;
     }
-    public static LanguageData ToData(LanguageDto dto)
+    public static LanguageData ToData(LanguageDto dto, LearnLanguagesContext context)
     {
-      return new LanguageData()
+      //CREATE DATA OBJECT
+      var languageData = context.LanguageDatas.CreateObject();
+
+      //ASSIGN SIMPLE PROPERTIES
+      languageData.Id = dto.Id;
+      languageData.Text = dto.Text;
+      languageData.UserDataId = dto.UserId;
+
+      //POPULATE USERDATA
+      var results = (from u in context.UserDatas
+                     where u.Id == dto.UserId
+                     select u);
+      if (results.Count() == 1)
       {
-        Id = dto.Id,
-        Text = dto.Text
-      };
+        var userData = results.First();
+
+        //MAKE SURE USERNAMES MATCH
+        if (userData.Username != dto.Username)
+          throw new ArgumentException("languageDto dto");
+        languageData.UserData = results.First();
+      }
+      else if (results.Count() == 0)
+        throw new Exceptions.UsernameAndUserIdDoNotMatchException(dto.Username, dto.UserId);
+      else
+        throw new Exceptions.VeryBadException(
+          string.Format(DalResources.ErrorMsgVeryBadException,
+          DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero));
+
+      //RETURN
+      return languageData;
     }
 
     public static string GetConnectionString()
@@ -297,6 +326,29 @@ namespace LearnLanguages.DataAccess.Ef
       //TRANSLATIONDATAS
       phraseData.TranslationDatas.Load();
     }
+
+    /// <summary>
+    /// Loads the information from the dto into the data object. Except...
+    /// Does NOT load dto.Id.
+    /// </summary>
+    /// <param name="languageData"></param>
+    /// <param name="dto"></param>
+    public static void LoadDataFromDto(ref LanguageData languageData,
+                                       LanguageDto dto,
+                                       LearnLanguagesContext context)
+    {
+      //USER INFO
+      languageData.UserDataId = dto.UserId;
+      languageData.UserData = EfHelper.GetUserData(dto.UserId, context);
+
+      //MAKE SURE USERDATA USERNAME MATCHES DTO.USERNAME
+      if (languageData.UserData.Username != dto.Username)
+        throw new Exceptions.UsernameAndUserIdDoNotMatchException(dto.Username, dto.UserId);
+
+      //TEXT
+      languageData.Text = dto.Text;
+    }
+
 
     private static LanguageData GetLanguageData(Guid languageId, LearnLanguagesContext context)
     {

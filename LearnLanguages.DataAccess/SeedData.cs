@@ -222,13 +222,17 @@ namespace LearnLanguages.DataAccess
         new LanguageDto()
         {
           Id = Guid.Parse(DalResources.DefaultEnglishLanguageId),
-          Text = EnglishText
+          Text = EnglishText, 
+          Username = TestValidUsername,
+          UserId = DefaultTestValidUserId
         },
 
         new LanguageDto()
         {
           Id = new Guid("DA5AA804-E59F-4608-988E-59C7923BE383"),
-          Text = SpanishText
+          Text = SpanishText,
+          Username = TestValidUsername,
+          UserId = DefaultTestValidUserId
         }
       };
     }

@@ -151,9 +151,6 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(IdProperty, dto.Id);
         LoadProperty<string>(TextProperty, dto.Text);
         LoadProperty<Guid>(LanguageIdProperty, dto.LanguageId);
-        var d = SeedData.Instance;
-        var loc = Csla.ApplicationContext.LogicalExecutionLocation;
-        var loc2 = Csla.ApplicationContext.ExecutionLocation;
         if (dto.LanguageId != Guid.Empty)
           Language = DataPortal.FetchChild<LanguageEdit>(dto.LanguageId);
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
