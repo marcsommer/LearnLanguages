@@ -4,12 +4,16 @@ AUTHOR: William Raiford (bill.mybiz@gmail.com)
 
 VISION: I want to learn languages quickly, efficiently, and organically to maximize retention and minimize time investment.  I also want a specific goal, currently 2000 words, and I want to see just _one_ real number metric to see my progress towards that goal in any particular language.  I want to be able to write in a bunch of text, have the app persist that text, and allow quick user actions to create translations in multiple languages to grow just a database of text and text relationships.  Eventually, I want to include item scheduling using a neural net to maximize retention and minimize repetitions necessary for learning.
 
-
 SUMMARY: To start with, the problem becomes three-fold:
 
 1. Input text data ("Phrase"), associated with a Language.
 2. Create text relationships (translations) among those text data.
 3. Execute metrics on user knowledge of those text relationships, or IOW test for knowledge to assess progress.
+
+NOTES ON BUILDING/RUNNING:
+-Be sure to manually set the IISHost project as the StartUp Project.
+-To switch between the Mock and Ef data providers: IISHost project -> Web.config -> <appsettings> -> key="DalManagerType".
+-To switch between Silverlight Unit Testing UI and the actual Silverlight app UI: IISHost project -> Project Properties -> Web tab -> Specific Page(.TestsTestPage is the UnitTesting page right now - bad naming sorry).
 
 
 JOURNAL:
@@ -24,3 +28,6 @@ I've gotten tests passing for basic plumbing for the most basic structure.  I ha
 
 01/19/12
 I've integrated authentication into the main LearnLanguages project.  This includes the software architecture with PhraseEdit and LanguageEdit, as well as the Ef database structure/model, including FK associations. I also have some basic pub-sub navigation in place as well, handled by Caliburn event aggregator.  I have the Ef database being deleted and seeded, controlled by a setting in EfResources.  Currently all tests passing for basic CRUD functionality in LanguageTests and PhraseTests, and the SecurityTests are passing as well.
+
+01/29/12
+I've integrated TranslationEdit functionality into both Mock and Ef Data Providers now.  A translation is a collection of phrases, requiring at minimum two phrases.  In the UI, I can now add translations, view translations, edit translations, but not delete them (the functionality exists but just not in UI yet).  If deleting a _phrase_ causes a translation to contain only one or zero phrases, however, then the translation _is_ automatically deleted cascadingly.  I cannot add existing phrases to a translation yet.  Overall, making progress with basic functionality & plumbing, and almost to the point of the cooler stuff with the learning process.  Nothing is optimized for speed, all for functionality, so that is also probably on the horizon once I'm working with actual larger data sets.  I also anticipate wanting to download a backup of data file.  All in all going well.
