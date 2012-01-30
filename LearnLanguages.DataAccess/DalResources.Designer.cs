@@ -243,18 +243,18 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to The Id ({0}) already exists..
         /// </summary>
-        public static string ErrorMsgIdAlreadyExistException {
+        public static string ErrorMsgIdAlreadyExists {
             get {
-                return ResourceManager.GetString("ErrorMsgIdAlreadyExistException", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgIdAlreadyExists", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The Id ({0}) already exists..
         /// </summary>
-        public static string ErrorMsgIdAlreadyExists {
+        public static string ErrorMsgIdAlreadyExistsException {
             get {
-                return ResourceManager.GetString("ErrorMsgIdAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("ErrorMsgIdAlreadyExistsException", resourceCulture);
             }
         }
         
@@ -273,6 +273,15 @@ namespace LearnLanguages.DataAccess {
         public static string ErrorMsgInsertFailedException {
             get {
                 return ResourceManager.GetString("ErrorMsgInsertFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Language Text ({0}) already exists..
+        /// </summary>
+        public static string ErrorMsgLanguageTextAlreadyExistsException {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextAlreadyExistsException", resourceCulture);
             }
         }
         

@@ -126,6 +126,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\InsertFailedException.cs">
       <Link>Exceptions\InsertFailedException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\LanguageTextAlreadyExistsException.cs">
+      <Link>Exceptions\LanguageTextAlreadyExistsException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\MultipleItemsFoundDataAccessException.cs">
       <Link>Exceptions\MultipleItemsFoundDataAccessException.cs</Link>
     </Compile>

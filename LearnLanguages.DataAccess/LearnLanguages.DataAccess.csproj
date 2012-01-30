@@ -57,6 +57,7 @@
     <Compile Include="Dtos\TranslationDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\LanguageTextAlreadyExistsException.cs" />
     <Compile Include="Exceptions\IdAlreadyExistsException.cs" />
     <Compile Include="Exceptions\UserNotAuthorizedException.cs" />
     <Compile Include="Exceptions\IdNotFoundException.cs" />

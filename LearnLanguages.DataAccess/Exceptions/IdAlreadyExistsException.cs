@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class IdAlreadyExistsException : Exception
   {
     public IdAlreadyExistsException(Guid id)
-      : base(string.Format(DalResources.ErrorMsgIdAlreadyExistException, id))
+      : base(string.Format(DalResources.ErrorMsgIdAlreadyExistsException, id))
     {
       Id = id; 
     }
@@ -19,7 +19,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public IdAlreadyExistsException(Exception innerException, Guid id)
-      : base(string.Format(DalResources.ErrorMsgIdAlreadyExistException, id), innerException)
+      : base(string.Format(DalResources.ErrorMsgIdAlreadyExistsException, id), innerException)
     {
       Id = id;
     }

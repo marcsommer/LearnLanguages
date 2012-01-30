@@ -33,6 +33,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
+
     public string LabelPhraseText { get { return ViewViewModelResources.LabelAddPhraseViewPhraseText; } }
     public string LabelLanguageText { get { return ViewViewModelResources.LabelAddPhraseViewLanguageText; } }
   }
