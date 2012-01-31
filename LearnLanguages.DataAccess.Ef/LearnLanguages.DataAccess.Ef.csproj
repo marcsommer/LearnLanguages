@@ -52,7 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomIdentityDal.cs" />
+    <Compile Include="Dals\TranslationDal.cs" />
+    <Compile Include="Dals\CustomIdentityDal.cs" />
     <Compile Include="DalManager.cs" />
     <Compile Include="DbContextManager.cs" />
     <Compile Include="DbContextManagerException.cs" />
@@ -62,7 +63,7 @@
       <DependentUpon>EfResources.resx</DependentUpon>
     </Compile>
     <Compile Include="EfHelper.cs" />
-    <Compile Include="LanguageDal.cs" />
+    <Compile Include="Dals\LanguageDal.cs" />
     <Compile Include="LearnLanguages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -70,7 +71,7 @@
     </Compile>
     <Compile Include="LearnLanguagesContextManager.cs" />
     <Compile Include="LearnLanguagesDbContext.cs" />
-    <Compile Include="PhraseDal.cs" />
+    <Compile Include="Dals\PhraseDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

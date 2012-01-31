@@ -87,6 +87,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\RoleDto.cs">
       <Link>Dtos\RoleDto.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Dtos\TranslationDto.cs">
+      <Link>Dtos\TranslationDto.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\UserDto.cs">
       <Link>Dtos\UserDto.cs</Link>
     </Compile>
@@ -114,11 +117,17 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetUserFailedException.cs">
       <Link>Exceptions\GetUserFailedException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdAlreadyExistsException.cs">
+      <Link>Exceptions\IdAlreadyExistsException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdNotFoundException.cs">
       <Link>Exceptions\IdNotFoundException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\InsertFailedException.cs">
       <Link>Exceptions\InsertFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\LanguageTextAlreadyExistsException.cs">
+      <Link>Exceptions\LanguageTextAlreadyExistsException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\MultipleItemsFoundDataAccessException.cs">
       <Link>Exceptions\MultipleItemsFoundDataAccessException.cs</Link>
@@ -128,6 +137,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UpdateFailedException.cs">
       <Link>Exceptions\UpdateFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UsernameAndUserIdDoNotMatchException.cs">
+      <Link>Exceptions\UsernameAndUserIdDoNotMatchException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UsernameNotFoundException.cs">
       <Link>Exceptions\UsernameNotFoundException.cs</Link>

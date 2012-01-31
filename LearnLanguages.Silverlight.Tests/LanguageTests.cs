@@ -190,6 +190,7 @@ namespace LearnLanguages.Silverlight.Tests
     [TestMethod]
     [Asynchronous]
     [ExpectedException(typeof(ExpectedException))]
+    [Tag("current")]
     public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
     {
       //INITIALIZE ERRORS TO EXCEPTION, BECAUSE EXPECT THEM TO BE NULL LATER

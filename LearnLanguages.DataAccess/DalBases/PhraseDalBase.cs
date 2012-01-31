@@ -46,6 +46,23 @@ namespace LearnLanguages.DataAccess
       }
       return retResult;
     }
+    public Result<ICollection<PhraseDto>> Fetch(ICollection<Guid> ids)
+    {
+      Result<ICollection<PhraseDto>> retResult = Result<ICollection<PhraseDto>>.Undefined(null);
+      try
+      {
+        CheckAuthentication();
+
+        var dtos = FetchImpl(ids);
+        retResult = Result<ICollection<PhraseDto>>.Success(dtos);
+      }
+      catch (Exception ex)
+      {
+        var wrappedEx = new Exceptions.FetchFailedException(ex);
+        retResult = Result<ICollection<PhraseDto>>.FailureWithInfo(null, wrappedEx);
+      }
+      return retResult;
+    }
     public Result<PhraseDto> Update(PhraseDto dtoToUpdate)
     {
       Result<PhraseDto> retResult = Result<PhraseDto>.Undefined(null);
@@ -117,6 +134,7 @@ namespace LearnLanguages.DataAccess
 
     protected abstract PhraseDto NewImpl(object criteria);
     protected abstract PhraseDto FetchImpl(Guid id);
+    protected abstract ICollection<PhraseDto> FetchImpl(ICollection<Guid> ids);
     protected abstract PhraseDto UpdateImpl(PhraseDto dto);
     protected abstract PhraseDto InsertImpl(PhraseDto dto);
     protected abstract PhraseDto DeleteImpl(Guid id);
@@ -127,5 +145,7 @@ namespace LearnLanguages.DataAccess
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
         throw new Exceptions.UserNotAuthenticatedException();
     }
+
+
   }
 }

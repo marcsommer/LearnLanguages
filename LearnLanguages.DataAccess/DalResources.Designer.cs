@@ -151,6 +151,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewTranslationUsername {
+            get {
+                return ResourceManager.GetString("DefaultNewTranslationUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The criteria given was incorrect.  The expected criteria is as follows: {0}.
         /// </summary>
         public static string ErrorMsgBadCriteriaException {
@@ -241,6 +250,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Id ({0}) already exists..
+        /// </summary>
+        public static string ErrorMsgIdAlreadyExistsException {
+            get {
+                return ResourceManager.GetString("ErrorMsgIdAlreadyExistsException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Id ({0}) was not found..
         /// </summary>
         public static string ErrorMsgIdNotFoundException {
@@ -259,6 +277,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Language Text ({0}) already exists..
+        /// </summary>
+        public static string ErrorMsgLanguageTextAlreadyExistsException {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextAlreadyExistsException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SeedData threw an exception..
         /// </summary>
         public static string ErrorMsgSeedDataException {
@@ -273,6 +300,15 @@ namespace LearnLanguages.DataAccess {
         public static string ErrorMsgUpdateFailedException {
             get {
                 return ResourceManager.GetString("ErrorMsgUpdateFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Username ({0}) does not match the UserId ({1}) in the database..
+        /// </summary>
+        public static string ErrorMsgUsernameAndUserIdDoNotMatchException {
+            get {
+                return ResourceManager.GetString("ErrorMsgUsernameAndUserIdDoNotMatchException", resourceCulture);
             }
         }
         
@@ -327,6 +363,15 @@ namespace LearnLanguages.DataAccess {
         public static string ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero {
             get {
                 return ResourceManager.GetString("ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        public static string MinPhrasesPerTranslation {
+            get {
+                return ResourceManager.GetString("MinPhrasesPerTranslation", resourceCulture);
             }
         }
         

@@ -62,6 +62,9 @@ namespace LearnLanguages.DataAccess.Mock
           SeedData.Instance.Languages.Remove(languageToUpdate);
           dto.Id = Guid.NewGuid();
           SeedData.Instance.Languages.Add(dto);
+          //UPDATE PHRASES WHO REFERENCE THIS LANGUAGE
+          UpdateReferences(languageToUpdate, dto);
+
           retResult = Result<LanguageDto>.Success(dto);
         }
         else
@@ -152,6 +155,19 @@ namespace LearnLanguages.DataAccess.Mock
         retResult = Result<ICollection<LanguageDto>>.FailureWithInfo(null, ex);
       }
       return retResult;
+    }
+
+    private void UpdateReferences(LanguageDto oldLanguageDto, LanguageDto newLanguageDto)
+    {
+      //UPDATE PHRASES
+      var referencedPhrases = from p in SeedData.Instance.Phrases
+                              where p.LanguageId == oldLanguageDto.Id
+                              select p;
+
+      foreach (var phrase in referencedPhrases)
+      {
+        phrase.LanguageId = newLanguageDto.Id;
+      }
     }
   }
 }

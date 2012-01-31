@@ -4,8 +4,6 @@ using Csla;
 using Csla.Serialization;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
-#if !SILVERLIGHT
-#endif
 
 namespace LearnLanguages.Business.Security
 {
@@ -47,6 +45,25 @@ namespace LearnLanguages.Business.Security
     }
     #endregion
 
+    #region public Guid UserId
+    public static readonly PropertyInfo<Guid> UserIdProperty = RegisterProperty<Guid>(c => c.UserId);
+    public Guid UserId
+    {
+      get { return GetProperty(UserIdProperty); }
+      private set { LoadProperty(UserIdProperty, value); }
+    }
+    #endregion
+
+    /// <summary>
+    /// If current user is not authenticated, throws a UserNotAuthenticatedException.
+    /// </summary>
+    /// <exception cref="LearnLanguages.DataAccess.Exceptions.UserNotAuthenticatedException">Thrown when current user is not authenticated.</exception>
+    public static void CheckAuthentication()
+    {
+      if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
+        throw new LearnLanguages.DataAccess.Exceptions.UserNotAuthenticatedException();
+    }
+
 #if !SILVERLIGHT
     /// <summary>
     /// This should run ONLY on the server.
@@ -66,11 +83,20 @@ namespace LearnLanguages.Business.Security
       {
         Name = userData.Username;
         Salt = userData.Salt;
-
+        UserId = userData.Id;
+        
         var resultRoles = dal.GetRoles(Name);
-        if (!resultRoles.IsSuccess || resultRoles.IsError || resultRoles.Obj.Count == 0)
-          throw new GeneralDataAccessException(resultRoles.Msg);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new GeneralDataAccessException(resultRoles.Msg);
+        }
 
+        if (resultRoles.Obj.Count == 0)
+          throw new VeryBadException("Roles.Count == 0.  Every user should have at least one role.");
         Roles = new Csla.Core.MobileList<string>();
         foreach (var roleDto in resultRoles.Obj)
         {
@@ -87,8 +113,14 @@ namespace LearnLanguages.Business.Security
         var dal = dalManager.GetProvider<ICustomIdentityDal>();
 
         var verifyResult = dal.VerifyUser(criteria.Username, criteria.Password);
-        if (!verifyResult.IsSuccess || verifyResult.IsError)
-          throw new FetchFailedException(verifyResult.Msg);
+        if (!verifyResult.IsSuccess)
+        {
+          Exception error = verifyResult.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(verifyResult.Msg);
+        }
         bool? userIsVerified = verifyResult.Obj;
         if (userIsVerified == null)
           userIsVerified = false;

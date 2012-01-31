@@ -19,7 +19,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public UsernameNotFoundException(Exception innerException, string username)
-      : base(DalResources.ErrorMsgUsernameNotFoundException, innerException)
+      : base(string.Format(DalResources.ErrorMsgUsernameNotFoundException, username), innerException)
     {
       Username = username;
     }

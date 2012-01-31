@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/17/2012 22:49:36
+-- Date Created: 01/30/2012 15:49:51
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -35,6 +35,27 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_AssociationUserDataWithRoleData_RoleData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[AssociationUserDataWithRoleData] DROP CONSTRAINT [FK_AssociationUserDataWithRoleData_RoleData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataRoleData_UserData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserDataRoleData] DROP CONSTRAINT [FK_UserDataRoleData_UserData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataRoleData_RoleData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserDataRoleData] DROP CONSTRAINT [FK_UserDataRoleData_RoleData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataPhraseData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PhraseDatas] DROP CONSTRAINT [FK_UserDataPhraseData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PhraseDataLanguageData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PhraseDatas] DROP CONSTRAINT [FK_PhraseDataLanguageData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TranslationDataPhraseData_TranslationData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDataPhraseData] DROP CONSTRAINT [FK_TranslationDataPhraseData_TranslationData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TranslationDataPhraseData_PhraseData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDataPhraseData] DROP CONSTRAINT [FK_TranslationDataPhraseData_PhraseData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataTranslationData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDatas] DROP CONSTRAINT [FK_UserDataTranslationData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -52,11 +73,20 @@ GO
 IF OBJECT_ID(N'[dbo].[RoleDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RoleDatas];
 GO
+IF OBJECT_ID(N'[dbo].[TranslationDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TranslationDatas];
+GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
 GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithRoleData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithRoleData];
+GO
+IF OBJECT_ID(N'[dbo].[UserDataRoleData]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserDataRoleData];
+GO
+IF OBJECT_ID(N'[dbo].[TranslationDataPhraseData]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[TranslationDataPhraseData];
 GO
 
 -- --------------------------------------------------
@@ -66,7 +96,8 @@ GO
 -- Creating table 'LanguageDatas'
 CREATE TABLE [dbo].[LanguageDatas] (
     [Id] uniqueidentifier  NOT NULL,
-    [Text] nvarchar(max)  NOT NULL
+    [Text] nvarchar(max)  NOT NULL,
+    [UserDataId] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -95,6 +126,13 @@ CREATE TABLE [dbo].[RoleDatas] (
 );
 GO
 
+-- Creating table 'TranslationDatas'
+CREATE TABLE [dbo].[TranslationDatas] (
+    [Id] uniqueidentifier  NOT NULL,
+    [UserDataId] uniqueidentifier  NOT NULL
+);
+GO
+
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
     [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
@@ -113,6 +151,13 @@ GO
 CREATE TABLE [dbo].[UserDataRoleData] (
     [UserDatas_Id] uniqueidentifier  NOT NULL,
     [RoleDatas_Id] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'TranslationDataPhraseData'
+CREATE TABLE [dbo].[TranslationDataPhraseData] (
+    [TranslationDatas_Id] uniqueidentifier  NOT NULL,
+    [PhraseDatas_Id] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -144,6 +189,12 @@ ADD CONSTRAINT [PK_RoleDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'TranslationDatas'
+ALTER TABLE [dbo].[TranslationDatas]
+ADD CONSTRAINT [PK_TranslationDatas]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- Creating primary key on [AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_UserData_Id] in table 'AssociationUserDataWithLanguageData'
 ALTER TABLE [dbo].[AssociationUserDataWithLanguageData]
 ADD CONSTRAINT [PK_AssociationUserDataWithLanguageData]
@@ -160,6 +211,12 @@ GO
 ALTER TABLE [dbo].[UserDataRoleData]
 ADD CONSTRAINT [PK_UserDataRoleData]
     PRIMARY KEY NONCLUSTERED ([UserDatas_Id], [RoleDatas_Id] ASC);
+GO
+
+-- Creating primary key on [TranslationDatas_Id], [PhraseDatas_Id] in table 'TranslationDataPhraseData'
+ALTER TABLE [dbo].[TranslationDataPhraseData]
+ADD CONSTRAINT [PK_TranslationDataPhraseData]
+    PRIMARY KEY NONCLUSTERED ([TranslationDatas_Id], [PhraseDatas_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -289,6 +346,57 @@ ADD CONSTRAINT [FK_PhraseDataLanguageData]
 CREATE INDEX [IX_FK_PhraseDataLanguageData]
 ON [dbo].[PhraseDatas]
     ([LanguageDataId]);
+GO
+
+-- Creating foreign key on [TranslationDatas_Id] in table 'TranslationDataPhraseData'
+ALTER TABLE [dbo].[TranslationDataPhraseData]
+ADD CONSTRAINT [FK_TranslationDataPhraseData_TranslationData]
+    FOREIGN KEY ([TranslationDatas_Id])
+    REFERENCES [dbo].[TranslationDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [PhraseDatas_Id] in table 'TranslationDataPhraseData'
+ALTER TABLE [dbo].[TranslationDataPhraseData]
+ADD CONSTRAINT [FK_TranslationDataPhraseData_PhraseData]
+    FOREIGN KEY ([PhraseDatas_Id])
+    REFERENCES [dbo].[PhraseDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_TranslationDataPhraseData_PhraseData'
+CREATE INDEX [IX_FK_TranslationDataPhraseData_PhraseData]
+ON [dbo].[TranslationDataPhraseData]
+    ([PhraseDatas_Id]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'TranslationDatas'
+ALTER TABLE [dbo].[TranslationDatas]
+ADD CONSTRAINT [FK_UserDataTranslationData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataTranslationData'
+CREATE INDEX [IX_FK_UserDataTranslationData]
+ON [dbo].[TranslationDatas]
+    ([UserDataId]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'LanguageDatas'
+ALTER TABLE [dbo].[LanguageDatas]
+ADD CONSTRAINT [FK_UserDataLanguageData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataLanguageData'
+CREATE INDEX [IX_FK_UserDataLanguageData]
+ON [dbo].[LanguageDatas]
+    ([UserDataId]);
 GO
 
 -- --------------------------------------------------

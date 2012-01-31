@@ -9,9 +9,6 @@ namespace LearnLanguages
 
     public Result(T resultObj, bool isSuccess = true, string msg = "", params Tuple<string, object>[] infoParams)
     {
-      if (ObjectIsException(resultObj) && isSuccess == true)
-        throw new ArgumentException(CommonResources.ErrorMsgInvalidResult);
-
       Obj = resultObj;
       _IsSuccess = isSuccess;
       Msg = msg;
@@ -48,7 +45,12 @@ namespace LearnLanguages
     {
       get
       {
-        return ObjectIsException(Obj);
+        //return ObjectIsException(Obj);
+        //HACK: Result<T> IsError is redundant.  I don't remember why
+        if (!HasAdditionalInfo)
+          return !IsSuccess;
+
+        return (Info[CommonResources.InfoKeyExceptionObject] != null);
       }
     }
 
@@ -58,14 +60,6 @@ namespace LearnLanguages
       {
         return (Info != null && Info.Members.Count > 0);
       }
-    }
-
-    protected bool ObjectIsException(T obj)
-    {
-      if (obj == null)
-        return false;
-
-      return (obj is CustomException || obj is Exception);
     }
 
     #endregion

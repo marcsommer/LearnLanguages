@@ -8,8 +8,8 @@ namespace LearnLanguages.DataAccess
   {
     public Guid Id { get; set; }
     public string Text { get; set; }
-    public Guid LanguageId  { get; set; } //primary key
-    public Guid UserId { get; set; }      //primary key
+    public Guid LanguageId  { get; set; } 
+    public Guid UserId { get; set; }      
     public string Username { get; set; }  
   }
 }

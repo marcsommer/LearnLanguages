@@ -82,16 +82,6 @@
     <Content Include="ClientBin\LearnLanguages.DataAccess.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.Tests.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.xap" />
-    <None Include="Web.config_Uncompressed">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.Debug.config_Uncompressed">
-      <DependentUpon>Web.config_Uncompressed</DependentUpon>
-    </None>
-    <None Include="Web.Release.config_Uncompressed">
-      <DependentUpon>Web.config_Uncompressed</DependentUpon>
-    </None>
-    <None Include="SlPortal.svc_Uncompressed" />
     <Content Include="LearnLanguages.Silverlight.csproj">
       <SubType>Designer</SubType>
     </Content>
