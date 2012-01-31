@@ -12,7 +12,7 @@
 
   <controls:DockPanel x:Name="LayoutRoot"
                       LastChildFill="True">
-    <ContentControl x:Name="NavigationPanel" controls:DockPanel.Dock="Left"/>
+    <ContentControl x:Name="NavigationPanel" TabIndex="0" controls:DockPanel.Dock="Left"/>
 
 
     <Grid>

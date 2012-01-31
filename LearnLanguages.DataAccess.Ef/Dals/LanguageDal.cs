@@ -300,11 +300,11 @@ namespace LearnLanguages.DataAccess.Ef
     {
         using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
         {
-          //CHECK TO SEE IF *NEW* LANGUAGE TEXT ALREADY EXISTS.  NO DUPLICATE LANGUAGE TEXTS.
-          //IF THE TEXT IS THE SAME AS THE CURRENT DTO, THEN WHAT ARE WE UPDATING?  THIS IS WHY I'M NOT CHECKING 
-          //IF THE CURRENT TEXT == OLD TEXT
+          //CHECK TO SEE IF *NEW* LANGUAGE TEXT ALREADY EXISTS IN SOME OTHER LANGUAGE EDIT.  IF WE 
+          //ARE REPLACING THE CURRENT TEXT WITH THE SAME TEXT, THAT IS FINE AS IT WILL JUST BE OVERWRITTEN.
           var newLanguageTextAlreadyExists = (from languageData in ctx.ObjectContext.LanguageDatas
-                                              where languageData.Text == dto.Text
+                                              where languageData.Text == dto.Text &&
+                                                    languageData.Id != dto.Id
                                               select languageData).Count() > 0;
 
           if (newLanguageTextAlreadyExists)

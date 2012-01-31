@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="LearnLanguages.Silverlight.Views.ViewPhrasesItemView"
+﻿<UserControl x:Class="LearnLanguages.Silverlight.Views.ViewLanguagesItemView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,7 +12,6 @@
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" MinWidth="50"/>
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>      
       
@@ -22,22 +21,10 @@
                 VerticalAlignment="Center"
                 IsChecked="{Binding Path=IsChecked, Mode=TwoWay}"/>
       
-      <!--LanguageSelector-->
-      <ContentControl x:Name="Languages" 
-                      Grid.Row="0"
-                      Grid.Column="1"
-                      Margin="0,1,0,1" 
-                      TabIndex="0"
-                      HorizontalAlignment="Center"
-                      HorizontalContentAlignment="Stretch"
-                      VerticalAlignment="Center"
-                      VerticalContentAlignment="Center"
-                      />
-      
       <!--Phrase Text-->
       <TextBox x:Name="Model_Text"
                Grid.Row="0"
-               Grid.Column="2"
+               Grid.Column="1"
                Margin="0,1,0,1"
                MinWidth="100"
                MaxWidth="700"

@@ -48,6 +48,54 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    //public bool CanInitiateDeleteChecked
+    //{
+    //  get
+    //  {
+    //    bool somethingIsChecked = (from viewModel in Items
+    //                               where viewModel.IsChecked
+    //                               select viewModel).Count() > 0;
+
+    //    return somethingIsChecked;
+    //  }
+    //}
+    //public void InitiateDeleteChecked()
+    //{
+    //  InitiateDeleteVisibility = Visibility.Collapsed;
+    //  FinalizeDeleteVisibility = Visibility.Visible;
+    //}
+    //public void FinalizeDeleteChecked()
+    //{
+    //  var checkedForDeletion = from viewModel in Items
+    //                           where viewModel.IsChecked
+    //                           select viewModel;
+
+    //  foreach (var toDelete in checkedForDeletion)
+    //  {
+    //    ModelList.Remove(toDelete.Model);
+    //  }
+
+    //  NotifyOfPropertyChange(() => CanSave);
+    //  NotifyOfPropertyChange(() => ModelList);
+    //  if (CanSave)
+    //    Save();
+
+    //  InitiateDeleteVisibility = Visibility.Visible;
+    //  FinalizeDeleteVisibility = Visibility.Collapsed;
+    //}
+    //public void CancelDeleteChecked()
+    //{
+    //  foreach (var languageItemViewModel in Items)
+    //  {
+    //    languageItemViewModel.IsChecked = false;
+    //  }
+
+    //  InitiateDeleteVisibility = Visibility.Visible;
+    //  FinalizeDeleteVisibility = Visibility.Collapsed;
+    //  NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+    //}
+
+
     void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);

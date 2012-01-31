@@ -62,8 +62,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       var addLanguage = Services.Container.GetExportedValue<AddLanguageNavigationButtonViewModel>();
       Items.Add(addLanguage);
-      //var viewLanguages = Services.Container.GetExportedValue<ViewLanguagesNavigationButtonViewModel>();
-      //Items.Add(viewLanguages);
+      var viewLanguages = Services.Container.GetExportedValue<ViewLanguagesNavigationButtonViewModel>();
+      Items.Add(viewLanguages);
       var viewTranslations = Services.Container.GetExportedValue<ViewTranslationsNavigationButtonViewModel>();
       Items.Add(viewTranslations);
       var viewPhrases = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();

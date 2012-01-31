@@ -54,8 +54,7 @@ namespace LearnLanguages.Business
         var allLanguageDtos = result.Obj;
         foreach (var languageDto in allLanguageDtos)
         {
-          //does not use dataportal
-          var languageEdit = DataPortal.CreateChild<LanguageEdit>(languageDto);
+          var languageEdit = DataPortal.FetchChild<LanguageEdit>(languageDto);
           Add(languageEdit);
         }
       }

@@ -127,7 +127,10 @@
     <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
     <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\AddLanguageNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtonViewModels\ViewLanguagesNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtonViewModels\ViewTranslationsNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\ViewLanguages\ViewLanguagesItemViewModel.cs" />
+    <Compile Include="ViewModels\ViewLanguages\ViewLanguagesViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
     <Compile Include="ViewModels\ViewTranslations\ViewTranslationsItemViewModel.cs" />
@@ -172,6 +175,18 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NavigationButtonViews\ViewLanguagesNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewLanguages\ViewLanguagesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewLanguages\ViewLanguagesItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NavigationButtonViews\AddLanguageNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -333,10 +348,7 @@
       <LastGenOutput>ViewViewModelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\ViewLanguages\" />
-    <Folder Include="Views\ViewLanguages\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

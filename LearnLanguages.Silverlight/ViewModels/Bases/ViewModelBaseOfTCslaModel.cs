@@ -64,13 +64,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     public virtual void Save()
     {
       Model.BeginSave((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          Model = (TCslaModel)r.NewObject;
-          NotifyOfPropertyChange(() => CanSave);
-        });
+      {
+        if (r.Error != null)
+          throw r.Error;
+        Model = (TCslaModel)r.NewObject;
+        NotifyOfPropertyChange(() => CanSave);
+      });
     }
   }
 }

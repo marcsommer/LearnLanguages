@@ -80,7 +80,5 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       NotifyOfPropertyChange(() => Model);
     }
-
-
   }
 }

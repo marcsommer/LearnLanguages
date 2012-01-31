@@ -15,8 +15,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public ViewTranslationsItemViewModel()
     {
-      _Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
-      HookInto(_Languages);
+      //_Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
+      //HookInto(_Languages);
       IsChecked = false;
     }
 
@@ -24,21 +24,21 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #region Fields and Properties
 
-    private bool _SettingModel { get; set; }
+    //private bool _SettingModel { get; set; }
 
-    private LanguageSelectorViewModel _Languages;
-    public LanguageSelectorViewModel Languages
-    {
-      get { return _Languages; }
-      set
-      {
-        if (value != _Languages)
-        {
-          _Languages = value;
-          NotifyOfPropertyChange(() => Languages);
-        }
-      }
-    }
+    //private LanguageSelectorViewModel _Languages;
+    //public LanguageSelectorViewModel Languages
+    //{
+    //  get { return _Languages; }
+    //  set
+    //  {
+    //    if (value != _Languages)
+    //    {
+    //      _Languages = value;
+    //      NotifyOfPropertyChange(() => Languages);
+    //    }
+    //  }
+    //}
 
     private bool _IsChecked;
     public bool IsChecked
@@ -58,27 +58,27 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #region Methods
 
-    private void HookInto(LanguageSelectorViewModel _Languages)
-    {
-      _Languages.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_Languages_PropertyChanged);
-    }
+    //private void HookInto(LanguageSelectorViewModel languages)
+    //{
+    //  languages.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_Languages_PropertyChanged);
+    //}
 
-    void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-      //if (!_SettingModel)
-      //{
-      //  Model.BeginEdit();
-      //  Model.Language = Languages.SelectedItem.Model;
-      //  Model.ApplyEdit();
-      //  NotifyOfPropertyChange(() => Model);
-        //Model.BeginSave((s, r) =>
-        //  {
-        //    if (r.Error != null)
-        //      throw r.Error;
-        //    Model = (PhraseEdit)(r.NewObject);
-        //  });
-      //}
-    }
+    //void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    //{
+    //  //if (!_SettingModel)
+    //  //{
+    //  //  Model.BeginEdit();
+    //  //  Model.Language = Languages.SelectedItem.Model;
+    //  //  Model.ApplyEdit();
+    //  //  NotifyOfPropertyChange(() => Model);
+    //    //Model.BeginSave((s, r) =>
+    //    //  {
+    //    //    if (r.Error != null)
+    //    //      throw r.Error;
+    //    //    Model = (PhraseEdit)(r.NewObject);
+    //    //  });
+    //  //}
+    //}
 
     //public override void SetModel(PhraseEdit model)
     //{
@@ -101,6 +101,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     //  }
     //  _SettingModel = false;
     //}
+
+
 
     #endregion
   }

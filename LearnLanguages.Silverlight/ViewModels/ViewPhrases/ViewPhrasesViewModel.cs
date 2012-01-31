@@ -180,7 +180,7 @@ namespace LearnLanguages.Silverlight.ViewModels
                                    where viewModel.IsChecked
                                    select viewModel).Count() > 0;
 
-        return somethingIsChecked && CanSave;
+        return somethingIsChecked;
       }
     }
     

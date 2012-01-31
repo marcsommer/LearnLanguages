@@ -9,13 +9,20 @@
   <Border Style="{StaticResource DebugBorder}" >
     <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
+        <RowDefinition />
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
+      <CheckBox x:Name="IsChecked"
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                />
+      
       <ContentControl Grid.Row="0"
-                      Grid.Column="0"
+                      Grid.Column="1"
                       x:Name="PhrasesViewModel" 
                       HorizontalContentAlignment="Stretch"
                       />
