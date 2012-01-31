@@ -7,7 +7,8 @@
     d:DesignHeight="300" d:DesignWidth="400">
 
   <Border Style="{StaticResource DebugBorder}" >
-    <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
+    <Border Style="{StaticResource ListBoxItemBorder}" >
+      <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
       <Grid.RowDefinitions>
         <RowDefinition />
       </Grid.RowDefinitions>
@@ -28,5 +29,6 @@
                       />
 
     </Grid>
+    </Border>
   </Border>
 </UserControl>

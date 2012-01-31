@@ -120,6 +120,9 @@
   <data name="BaseAddress" xml:space="preserve">
     <value>http://localhost:50094/</value>
   </data>
+  <data name="FilterLabel" xml:space="preserve">
+    <value>Filter: </value>
+  </data>
   <data name="LogoutMessage" xml:space="preserve">
     <value>You are now logged out...Come back soon!</value>
   </data>

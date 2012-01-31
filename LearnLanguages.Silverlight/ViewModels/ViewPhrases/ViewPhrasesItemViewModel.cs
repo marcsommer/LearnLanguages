@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
 using System.Linq;
+using System.Windows;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -49,6 +50,20 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _IsChecked = value;
           NotifyOfPropertyChange(() => IsChecked);
+        }
+      }
+    }
+
+    private bool _IsFilteredOut = false;
+    public bool IsFilteredOut
+    {
+      get { return _IsFilteredOut; }
+      set
+      {
+        if (value != _IsFilteredOut)
+        {
+          _IsFilteredOut = value;
+          NotifyOfPropertyChange(() => IsFilteredOut);
         }
       }
     }

@@ -11,10 +11,26 @@
   <Border Style="{StaticResource DebugBorder}">
     <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
+        <RowDefinition Height="30"/>
         <RowDefinition />
         <RowDefinition Height="30"/>
       </Grid.RowDefinitions>
-      <Border Style="{StaticResource ViewSection}" HorizontalAlignment="Stretch">
+      
+      <!--Filter-->
+      <Border Grid.Row="0"
+              Style="{StaticResource ViewSection}" 
+              HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Text="{Binding Path=FilterLabel}" VerticalAlignment="Center"/>
+          <TextBox x:Name="FilterText" MinWidth="100"/>
+
+        </StackPanel>
+      </Border>
+      
+      <!--Items-->
+      <Border Grid.Row="1"
+              Style="{StaticResource ViewSection}" 
+              HorizontalAlignment="Stretch">
         <ListBox x:Name="Items" 
                  HorizontalContentAlignment="Stretch"
                  ItemContainerStyle="{StaticResource ListBoxItemStyle}">
@@ -28,8 +44,10 @@
           </i:Interaction.Triggers>-->
         </ListBox>
       </Border>
-      <Border Style="{StaticResource ViewSection}"
-              Grid.Row="1"
+      
+      <!--Buttons-->
+      <Border Grid.Row="2"
+              Style="{StaticResource ViewSection}"
               HorizontalAlignment="Stretch">
         <Grid HorizontalAlignment="Center" >
           <Grid.ColumnDefinitions>

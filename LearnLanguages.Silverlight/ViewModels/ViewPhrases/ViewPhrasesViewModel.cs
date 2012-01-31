@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using LearnLanguages.Silverlight.Events;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -27,7 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
             throw r.Error;
 
           var allPhrases = r.Object;
-          Model = allPhrases;
+          ModelList = allPhrases;
           PopulateViewModels(allPhrases);
           //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
           //Model.BeginSave((s2, r2) =>
@@ -39,15 +40,58 @@ namespace LearnLanguages.Silverlight.ViewModels
         });
     }
 
-    private void PopulateViewModels(PhraseList allPhrases)
+    private void PopulateViewModels(PhraseList phrases)
     {
       Items.Clear();
-      foreach (var phraseEdit in allPhrases)
+      var filteredPhrases = FilterPhrases(phrases);
+      foreach (var phraseEdit in filteredPhrases)
       {
         var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
         itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
         itemViewModel.Model = phraseEdit;
         Items.Add(itemViewModel);
+      }
+    }
+
+    private IEnumerable<PhraseEdit> FilterPhrases(PhraseList phrases)
+    {
+      if (string.IsNullOrEmpty(FilterLabel))
+        return phrases;
+
+      var results = from phrase in phrases
+                    where phrase.Text.Contains(FilterText)
+                    select phrase;
+
+      return results;
+    }
+
+
+    private string _FilterLabel = AppResources.FilterLabel;
+    public string FilterLabel
+    {
+      get { return _FilterLabel; }
+      set
+      {
+        if (value != _FilterLabel)
+        {
+          _FilterLabel = value;
+          NotifyOfPropertyChange(() => FilterLabel);
+        }
+      }
+    }
+
+    private string _FilterText = "";
+    public string FilterText
+    {
+      get { return _FilterText; }
+      set
+      {
+        if (value != _FilterText)
+        {
+          _FilterText = value;
+          PopulateViewModels(ModelList);
+          NotifyOfPropertyChange(() => FilterText);
+        }
       }
     }
 
@@ -72,7 +116,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     private PhraseList _ModelList;
-    public PhraseList Model
+    public PhraseList ModelList
     {
       get { return _ModelList; }
       set
@@ -82,7 +126,7 @@ namespace LearnLanguages.Silverlight.ViewModels
           UnhookFrom(_ModelList);
           _ModelList = value;
           HookInto(_ModelList);
-          NotifyOfPropertyChange(() => Model);
+          NotifyOfPropertyChange(() => ModelList);
         }
       }
     }
@@ -105,7 +149,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     protected virtual void HandleChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
     {
-      NotifyOfPropertyChange(() => this.Model);
+      NotifyOfPropertyChange(() => this.ModelList);
       //Model.BeginSave((s2, r2) =>
       //{
       //  if (r2.Error != null)
@@ -119,7 +163,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-      NotifyOfPropertyChange(() => this.Model);
+      NotifyOfPropertyChange(() => this.ModelList);
       NotifyOfPropertyChange(() => CanSave);
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
@@ -128,19 +172,19 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get
       {
-        return (Model != null && Model.IsSavable);
+        return (ModelList != null && ModelList.IsSavable);
       }
     }
     public virtual void Save()
     {
-      Model.BeginSave((s, r) =>
+      ModelList.BeginSave((s, r) =>
       {
         if (r.Error != null)
           throw r.Error;
 
-        Model = (PhraseList)r.NewObject;
+        ModelList = (PhraseList)r.NewObject;
         //propagate new PhraseEdits to their ViewModels
-        PopulateViewModels(Model);
+        PopulateViewModels(ModelList);
 
         NotifyOfPropertyChange(() => CanSave);
       });
@@ -226,11 +270,11 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       foreach (var toDelete in checkedForDeletion)
       {
-        Model.Remove(toDelete.Model);
+        ModelList.Remove(toDelete.Model);
       }
 
       NotifyOfPropertyChange(() => CanSave);
-      NotifyOfPropertyChange(() => Model);
+      NotifyOfPropertyChange(() => ModelList);
       if (CanSave)
         Save();
 

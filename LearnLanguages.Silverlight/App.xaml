@@ -34,7 +34,7 @@
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="Margin" Value="0" />
       <Setter Property="Padding" Value="2" />
-      <Setter Property="MaxHeight" Value="100" />
+      <Setter Property="MaxHeight" Value="150" />
     </Style>
     
     <Style TargetType="ComboBoxItem">

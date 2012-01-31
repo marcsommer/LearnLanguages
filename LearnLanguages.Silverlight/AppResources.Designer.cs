@@ -70,6 +70,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter: .
+        /// </summary>
+        internal static string FilterLabel {
+            get {
+                return ResourceManager.GetString("FilterLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are now logged out...Come back soon!.
         /// </summary>
         internal static string LogoutMessage {

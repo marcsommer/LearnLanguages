@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using LearnLanguages.Silverlight.Events;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -21,100 +22,26 @@ namespace LearnLanguages.Silverlight.ViewModels
   public class ViewTranslationsViewModel : Conductor<ViewTranslationsItemViewModel>.Collection.AllActive, 
                                            Interfaces.IViewModelBase
   {
+    #region Ctors and Init
+
     public ViewTranslationsViewModel()
     {
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
       TranslationList.GetAll((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          var allTranslations = r.Object;
-          ModelList = allTranslations;
-          PopulateViewModels(allTranslations);
-        });
-    }
-
-    private void PopulateViewModels(TranslationList allTranslations)
-    {
-      Items.Clear();
-      foreach (var translationEdit in allTranslations)
       {
-        var itemViewModel = Services.Container.GetExportedValue<ViewTranslationsItemViewModel>();
-        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
-        itemViewModel.Model = translationEdit;
-        Items.Add(itemViewModel);
-      }
+        if (r.Error != null)
+          throw r.Error;
+
+        var allTranslations = r.Object;
+        ModelList = allTranslations;
+        PopulateViewModels(allTranslations);
+      });
     }
+    
+    #endregion
 
-    //public bool CanInitiateDeleteChecked
-    //{
-    //  get
-    //  {
-    //    bool somethingIsChecked = (from viewModel in Items
-    //                               where viewModel.IsChecked
-    //                               select viewModel).Count() > 0;
-
-    //    return somethingIsChecked;
-    //  }
-    //}
-    //public void InitiateDeleteChecked()
-    //{
-    //  InitiateDeleteVisibility = Visibility.Collapsed;
-    //  FinalizeDeleteVisibility = Visibility.Visible;
-    //}
-    //public void FinalizeDeleteChecked()
-    //{
-    //  var checkedForDeletion = from viewModel in Items
-    //                           where viewModel.IsChecked
-    //                           select viewModel;
-
-    //  foreach (var toDelete in checkedForDeletion)
-    //  {
-    //    ModelList.Remove(toDelete.Model);
-    //  }
-
-    //  NotifyOfPropertyChange(() => CanSave);
-    //  NotifyOfPropertyChange(() => ModelList);
-    //  if (CanSave)
-    //    Save();
-
-    //  InitiateDeleteVisibility = Visibility.Visible;
-    //  FinalizeDeleteVisibility = Visibility.Collapsed;
-    //}
-    //public void CancelDeleteChecked()
-    //{
-    //  foreach (var languageItemViewModel in Items)
-    //  {
-    //    languageItemViewModel.IsChecked = false;
-    //  }
-
-    //  InitiateDeleteVisibility = Visibility.Visible;
-    //  FinalizeDeleteVisibility = Visibility.Collapsed;
-    //  NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
-    //}
-
-
-    void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
-    }
-
-    public bool LoadFromUri(Uri uri)
-    {
-      return true;
-    }
-
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(AppResources.ShowGridLines); }
-    }
-
-    public void OnImportsSatisfied()
-    {
-      Publish.PartSatisfied("ViewTranslations");
-    }
+    #region Properties
 
     private TranslationList _ModelList;
     public TranslationList ModelList
@@ -130,6 +57,99 @@ namespace LearnLanguages.Silverlight.ViewModels
           NotifyOfPropertyChange(() => ModelList);
           NotifyOfPropertyChange(() => CanSave);
         }
+      }
+    }
+
+    private Visibility _InitiateDeleteVisibility;
+    public Visibility InitiateDeleteVisibility
+    {
+      get { return _InitiateDeleteVisibility; }
+      set
+      {
+        if (value != _InitiateDeleteVisibility)
+        {
+          _InitiateDeleteVisibility = value;
+          NotifyOfPropertyChange(() => InitiateDeleteVisibility);
+        }
+      }
+    }
+
+    private Visibility _FinalizeDeleteVisibility;
+    public Visibility FinalizeDeleteVisibility
+    {
+      get { return _FinalizeDeleteVisibility; }
+      set
+      {
+        if (value != _FinalizeDeleteVisibility)
+        {
+          _FinalizeDeleteVisibility = value;
+          NotifyOfPropertyChange(() => FinalizeDeleteVisibility);
+        }
+      }
+    }
+
+    private string _FilterLabel = AppResources.FilterLabel;
+    public string FilterLabel
+    {
+      get { return _FilterLabel; }
+      set
+      {
+        if (value != _FilterLabel)
+        {
+          _FilterLabel = value;
+          NotifyOfPropertyChange(() => FilterLabel);
+        }
+      }
+    }
+
+    private string _FilterText = "";
+    public string FilterText
+    {
+      get { return _FilterText; }
+      set
+      {
+        if (value != _FilterText)
+        {
+          _FilterText = value;
+          PopulateViewModels(ModelList);
+          NotifyOfPropertyChange(() => FilterText);
+        }
+      }
+    }
+
+    #endregion
+
+    #region Methods
+
+    private IEnumerable<TranslationEdit> FilterTranslations(TranslationList translations)
+    {
+      if (string.IsNullOrEmpty(FilterLabel))
+        return translations;
+
+      var results = from translation in translations
+                    where (from phrase in translation.Phrases
+                           where phrase.Text.Contains(FilterText)
+                           select phrase).Count() > 0
+                    select translation;
+
+      return results;
+    }
+
+    private void PopulateViewModels(TranslationList allTranslations)
+    {
+      //CLEAR OUR ITEMS (VIEWMODELS)
+      Items.Clear();
+
+      //FILTER OUR TRANSLATIONS
+      var filteredTranslations = FilterTranslations(allTranslations);
+
+      //POPULATE NEW VIEWMODELS WITH FILTERED RESULTS
+      foreach (var translationEdit in filteredTranslations)
+      {
+        var itemViewModel = Services.Container.GetExportedValue<ViewTranslationsItemViewModel>();
+        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
+        itemViewModel.Model = translationEdit;
+        Items.Add(itemViewModel);
       }
     }
 
@@ -169,6 +189,31 @@ namespace LearnLanguages.Silverlight.ViewModels
       NotifyOfPropertyChange(() => CanSave);
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
+    protected void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+    }
+
+    public bool LoadFromUri(Uri uri)
+    {
+      return true;
+    }
+    public bool ShowGridLines
+    {
+      get { return bool.Parse(AppResources.ShowGridLines); }
+    }
+    public void OnImportsSatisfied()
+    {
+      Publish.PartSatisfied("ViewTranslations");
+    }
+
+    #endregion
+
+    #region Events
+
+    #endregion
+
+    #region Commands
 
     public bool CanSave
     {
@@ -192,31 +237,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       });
     }
 
-    //public bool CanCancelEdit
-    //{
-    //  get
-    //  {
-    //    return (Model != null && Model.IsDirty);
-    //  }
-    //}
-    //public virtual void CancelEdit()
-    //{
-    //  foreach (var translationEdit in Model)
-    //  {
-    //    if (translationEdit.IsDirty)
-    //    {
-    //      var initialEditLevel = translationEdit.GetEditLevel();
-    //      for (int i = 0; i < initialEditLevel; i++)
-    //      {
-    //        translationEdit.CancelEdit();
-    //      }
-    //    }
-    //  }
-    //  //Model.CancelEdit();
-    //  NotifyOfPropertyChange(() => CanCancelEdit);
-    //  NotifyOfPropertyChange(() => CanSave);
-    //}
-
     public bool CanInitiateDeleteChecked
     {
       get
@@ -225,49 +245,19 @@ namespace LearnLanguages.Silverlight.ViewModels
                                    where ((ViewTranslationsItemViewModel)viewModel).IsChecked
                                    select viewModel).Count() > 0;
 
-        return somethingIsChecked && CanSave;
+        return somethingIsChecked;
       }
     }
-    
-    private Visibility _InitiateDeleteVisibility;
-    public Visibility InitiateDeleteVisibility
-    {
-      get { return _InitiateDeleteVisibility; }
-      set
-      {
-        if (value != _InitiateDeleteVisibility)
-        {
-          _InitiateDeleteVisibility = value;
-          NotifyOfPropertyChange(() => InitiateDeleteVisibility);
-        }
-      }
-    }
-
-    private Visibility _FinalizeDeleteVisibility;
-    public Visibility FinalizeDeleteVisibility
-    {
-      get { return _FinalizeDeleteVisibility; }
-      set
-      {
-        if (value != _FinalizeDeleteVisibility)
-        {
-          _FinalizeDeleteVisibility = value;
-          NotifyOfPropertyChange(() => FinalizeDeleteVisibility);
-        }
-      }
-    }
-
     public void InitiateDeleteChecked()
     {
       InitiateDeleteVisibility = Visibility.Collapsed;
       FinalizeDeleteVisibility = Visibility.Visible;
     }
-
     public void FinalizeDeleteChecked()
     {
       var checkedForDeletion = from viewModel in Items
-                               where ((ViewTranslationsItemViewModel)viewModel).IsChecked
-                               select (ViewTranslationsItemViewModel)viewModel;
+                               where viewModel.IsChecked
+                               select viewModel;
 
       foreach (var toDelete in checkedForDeletion)
       {
@@ -282,7 +272,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       InitiateDeleteVisibility = Visibility.Visible;
       FinalizeDeleteVisibility = Visibility.Collapsed;
     }
-
     public void CancelDeleteChecked()
     {
       foreach (var item in Items)
@@ -295,5 +284,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       FinalizeDeleteVisibility = Visibility.Collapsed;
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
+
+    #endregion
   }
 }
