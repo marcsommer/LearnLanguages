@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using Csla.Security;
 using Csla;
 using Csla.Serialization;
@@ -54,6 +56,14 @@ namespace LearnLanguages.Business.Security
     }
     #endregion
 
+    public static readonly PropertyInfo<string> NativeLanguageTextProperty = 
+      RegisterProperty<string>(c => c.NativeLanguageText);
+    public string NativeLanguageText
+    {
+      get { return GetProperty(NativeLanguageTextProperty); }
+      private set { LoadProperty(NativeLanguageTextProperty, value); }
+    }
+
     /// <summary>
     /// If current user is not authenticated, throws a UserNotAuthenticatedException.
     /// </summary>
@@ -73,18 +83,28 @@ namespace LearnLanguages.Business.Security
     private void LoadUserData(string username, ICustomIdentityDal dal)
     {
       var result = dal.GetUser(username);
-      if (!result.IsSuccess || result.IsError)
-        throw new GeneralDataAccessException(result.Msg);
+      if (!result.IsSuccess)
+      {
+        var ex = result.GetExceptionFromInfo();
+        if (ex != null)
+          throw ex;
+        else
+          throw new DataAccess.Exceptions.LoadUserDataException(result.Msg, username);
+      }
 
-      var userData = result.Obj;
-
-      IsAuthenticated = (userData != null);
+      var userDto = result.Obj;
+      
+      
+      IsAuthenticated = (userDto != null);
       if (IsAuthenticated)
       {
-        Name = userData.Username;
-        Salt = userData.Salt;
-        UserId = userData.Id;
+        //PROPERTIES
+        Name = userDto.Username;
+        Salt = userDto.Salt;
+        UserId = userDto.Id;
+        NativeLanguageText = userDto.NativeLanguageText;
         
+        //ROLES
         var resultRoles = dal.GetRoles(Name);
         if (!result.IsSuccess)
         {
@@ -104,7 +124,7 @@ namespace LearnLanguages.Business.Security
         }
       }
     }
-    
+
     private void DataPortal_Fetch(UsernameCriteria criteria)
     {
       AuthenticationType = DalResources.AuthenticationTypeString;

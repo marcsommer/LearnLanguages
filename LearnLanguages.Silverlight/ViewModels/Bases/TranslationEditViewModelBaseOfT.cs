@@ -4,6 +4,8 @@ using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Silverlight.Interfaces;
 using System.ComponentModel;
+using LearnLanguages.Common.ViewModelBases;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {

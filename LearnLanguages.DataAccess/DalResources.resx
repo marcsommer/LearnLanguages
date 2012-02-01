@@ -208,7 +208,7 @@
   </data>
   <data name="ErrorMsgVeryBadException" xml:space="preserve">
     <value>Something happened that was very bad. ({0})</value>
-    <comment>({0}) = detailed message</comment>
+    <comment>{0} = detailed message</comment>
   </data>
   <data name="ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero" xml:space="preserve">
     <value>The result count was anticipated to be either one or zero.  This probably occurred when making a call to the database, expecting a unique result set.</value>
@@ -246,5 +246,9 @@
     <value>The Username ({0}) does not match the UserId ({1}) in the database.</value>
     <comment>{0} = Username
 {1} = UserId</comment>
+  </data>
+  <data name="ErrorMsgLoadUserDataException" xml:space="preserve">
+    <value>Error loading data for username ({0}).</value>
+    <comment>{0} = Username</comment>
   </data>
 </root>

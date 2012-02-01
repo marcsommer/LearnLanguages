@@ -93,7 +93,7 @@ namespace LearnLanguages.Silverlight
       {
         Services.EventAggregator.Unsubscribe(this);
         //Services.EventAggregator.Publish(new Events.NavigationRequestedEventMessage("Login"));
-        Events.Publish.NavigationRequest<ViewModels.LoginViewModel>();
+        Navigation.Publish.NavigationRequest<ViewModels.LoginViewModel>(AppResources.BaseAddress);
       }
     }
   }

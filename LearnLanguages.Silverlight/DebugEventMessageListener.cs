@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using System.Diagnostics;
-using LearnLanguages.Silverlight.Interfaces;
+//using LearnLanguages.Silverlight.Interfaces;
+using LearnLanguages.Navigation.Interfaces;
 
 namespace LearnLanguages.Silverlight
 {

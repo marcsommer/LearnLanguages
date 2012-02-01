@@ -95,6 +95,11 @@
     <Compile Include="AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />
+    <Compile Include="CslaBases\BusinessListBaseOfLAndCAndCDto.cs" />
+    <Compile Include="CslaBases\CommandBaseOfC.cs" />
+    <Compile Include="CslaBases\ReadOnlyBaseOfC.cs" />
+    <Compile Include="CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs" />
     <Compile Include="CustomException.cs" />
     <Compile Include="Interfaces\IAsyncStub.cs" />
     <Compile Include="Interfaces\ICreateAsync.cs" />
@@ -102,9 +107,13 @@
     <Compile Include="Interfaces\IDeleteAsync.cs" />
     <Compile Include="Interfaces\IEditAsync.cs" />
     <Compile Include="Interfaces\IHaveId.cs" />
+    <Compile Include="Interfaces\IHaveModelListOfTList.cs" />
+    <Compile Include="Interfaces\IHaveModelOfT.cs" />
+    <Compile Include="Interfaces\IHaveUri.cs" />
     <Compile Include="Interfaces\IInitializeAsync.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\ISaveAsync.cs" />
+    <Compile Include="Interfaces\IViewModelBase.cs" />
     <Compile Include="LogCategory.cs" />
     <Compile Include="LogPriority.cs" />
     <Compile Include="MagicStringsList.cs" />
@@ -130,6 +139,9 @@
     <Compile Include="Tuple.cs" />
     <Compile Include="UserInterfaceInfo.cs" />
     <Compile Include="ViewInfoForContainer.cs" />
+    <Compile Include="ViewModelBases\ViewModelBase.cs" />
+    <Compile Include="ViewModelBases\ViewModelBaseOfTCslaModel.cs" />
+    <Compile Include="ViewModelBases\ViewModelBaseOfTCslaModelList.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

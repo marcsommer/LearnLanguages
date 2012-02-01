@@ -9,7 +9,7 @@ namespace LearnLanguages.Business
   /// This class creates a new translation, loads it with two blank phrases, each with the default language.
   /// </summary>
   [Serializable]
-  public class BlankTranslationRetriever : Bases.ReadOnlyBase<BlankTranslationRetriever>
+  public class BlankTranslationRetriever : Common.CslaBases.ReadOnlyBase<BlankTranslationRetriever>
   {
     #region Factory Methods
 

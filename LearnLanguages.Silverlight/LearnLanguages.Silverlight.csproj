@@ -93,73 +93,55 @@
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
     <Compile Include="DebugEventMessageListener.cs" />
-    <Compile Include="Events\AuthenticationChangedEventMessage.cs" />
-    <Compile Include="Events\NavigatedEventMessage.cs" />
-    <Compile Include="Events\NavigatingEventMessage.cs" />
-    <Compile Include="Events\NavigationEventMessage.cs" />
-    <Compile Include="Events\NavigationFailedEventMessage.cs" />
-    <Compile Include="Events\NavigationRequestedEventMessage.cs" />
-    <Compile Include="Events\PartSatisfiedEventMessage.cs" />
-    <Compile Include="Events\Publish.cs" />
-    <Compile Include="Interfaces\IHaveModelOfT.cs" />
-    <Compile Include="Interfaces\IHaveModelListOfTList.cs" />
-    <Compile Include="Interfaces\IAuthenticationChangedEventMessage.cs" />
-    <Compile Include="Interfaces\IHaveUri.cs" />
-    <Compile Include="Interfaces\INavigatedEventMessage.cs" />
-    <Compile Include="Interfaces\INavigatingEventMessage.cs" />
-    <Compile Include="Interfaces\INavigationController.cs" />
-    <Compile Include="Interfaces\INavigationEventMessage.cs" />
-    <Compile Include="Interfaces\INavigationFailedEventMessage.cs" />
-    <Compile Include="Interfaces\INavigationRequestedEventMessage.cs" />
+    <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
-    <Compile Include="Interfaces\IViewModelBase.cs" />
     <Compile Include="Interfaces\IViewModelMetadata.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MefBootstrapper.cs" />
     <Compile Include="NavigationController.cs" />
-    <Compile Include="NavigationInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\AddLanguage\AddLanguageViewModel.cs" />
-    <Compile Include="ViewModels\AddLanguage\AddLanguageLanguageEditViewModel.cs" />
-    <Compile Include="ViewModels\AddTranslation\AddTranslationViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddLanguage\AddLanguageViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddLanguage\AddLanguageLanguageEditViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationViewModel.cs" />
     <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
     <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\AddLanguageNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\ViewLanguagesNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\ViewTranslationsNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\ViewLanguages\ViewLanguagesItemViewModel.cs" />
-    <Compile Include="ViewModels\ViewLanguages\ViewLanguagesViewModel.cs" />
-    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsItemViewModel.cs" />
-    <Compile Include="ViewModels\ViewTranslations\ViewTranslationsViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\AddTranslationNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\AddTranslation\AddTranslationPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\AddTranslation\AddTranslationPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\AddTranslation\AddTranslationTranslationEditViewModel.cs" />
-    <Compile Include="ViewModels\ViewPhrases\ViewPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\ViewPhrasesNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\ViewPhrases\ViewPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\AuthenticationStatusNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\AddLanguageNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\StudyNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\ViewLanguagesNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\ViewTranslationsNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\Study\AskDoYouKnowThisViewModel.cs" />
+    <Compile Include="ViewModels\Study\StudyViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesItemViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsItemViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\AddTranslationNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationTranslationEditViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewPhrases\ViewPhrasesItemViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\ViewPhrasesNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\View\ViewPhrases\ViewPhrasesViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\AuthenticationStatusNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\AuthenticationStatusViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\AddUserNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\AddUser\AddUserViewModel.cs" />
-    <Compile Include="ViewModels\AddPhrase\AddPhraseViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\AddPhraseNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\Shared\LanguageEditViewModel.cs" />
-    <Compile Include="ViewModels\AddPhrase\PhraseEditViewModel.cs" />
-    <Compile Include="ViewModels\Shared\LanguageSelectorViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\LoginNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\AddUserNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddUser\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddPhrase\AddPhraseViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\AddPhraseNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\Core\LanguageEditViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddPhrase\PhraseEditViewModel.cs" />
+    <Compile Include="ViewModels\Core\LanguageSelectorViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\LoginNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\LoginViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtonViewModels\LogoutNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\LogoutNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\LogoutViewModel.cs" />
     <Compile Include="ViewModels\Bases\NavigationButtonViewModelBase.cs" />
     <Compile Include="ViewModels\Core\NavigationPanelViewModel.cs" />
-    <Compile Include="ViewModels\Bases\ViewModelBase.cs" />
-    <Compile Include="ViewModels\Bases\ViewModelBaseOfTCslaModel.cs" />
-    <Compile Include="ViewModels\Bases\ViewModelBaseOfTCslaModelList.cs" />
     <Compile Include="ViewModels\MetaDataAttributes\ViewModelMetadataAttribute.cs" />
     <Compile Include="ViewModels\Core\ShellViewModel.cs" />
     <Compile Include="ViewViewModelResources.Designer.cs">
@@ -175,111 +157,123 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\NavigationButtonViews\ViewLanguagesNavigationButtonView.xaml">
+    <Page Include="Views\NavigationButtons\StudyNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ViewLanguages\ViewLanguagesView.xaml">
+    <Page Include="Views\Study\AskDoYouKnowThisView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ViewLanguages\ViewLanguagesItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtonViews\AddLanguageNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\AddLanguage\AddLanguageLanguageEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\AddLanguage\AddLanguageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtonViews\ViewTranslationsNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ViewTranslations\ViewTranslationsPhrasesItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ViewTranslations\ViewTranslationsPhrasesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ViewTranslations\ViewTranslationsItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ViewTranslations\ViewTranslationsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\AddTranslation\AddTranslationPhrasesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtonViews\AddTranslationNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\AddTranslation\AddTranslationPhrasesItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\AddTranslation\AddTranslationTranslationEditView.xaml">
+    <Page Include="Views\Study\StudyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddTranslation\AddTranslationView.xaml">
+    <Page Include="Views\NavigationButtons\ViewLanguagesNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ViewPhrases\ViewPhrasesItemView.xaml">
+    <Page Include="Views\View\ViewLanguages\ViewLanguagesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtonViews\ViewPhrasesNavigationButtonView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ViewPhrases\ViewPhrasesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NavigationButtonViews\AddPhraseNavigationButtonView.xaml">
+    <Page Include="Views\View\ViewLanguages\ViewLanguagesItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Shared\LanguageEditView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Shared\LanguageSelectorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddPhrase\AddPhraseView.xaml">
+    <Page Include="Views\NavigationButtons\AddLanguageNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AddPhrase\PhraseEditView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddUser\AddUserView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NavigationButtonViews\AddUserNavigationButtonView.xaml">
+    <Page Include="Views\Add\AddLanguage\AddLanguageLanguageEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtonViews\AuthenticationStatusNavigationButtonView.xaml">
+    <Page Include="Views\Add\AddLanguage\AddLanguageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationButtons\ViewTranslationsNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\View\ViewTranslations\ViewTranslationsPhrasesItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\View\ViewTranslations\ViewTranslationsPhrasesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\View\ViewTranslations\ViewTranslationsItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\View\ViewTranslations\ViewTranslationsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Add\AddTranslation\AddTranslationPhrasesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationButtons\AddTranslationNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Add\AddTranslation\AddTranslationPhrasesItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Add\AddTranslation\AddTranslationTranslationEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Add\AddTranslation\AddTranslationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\View\ViewPhrases\ViewPhrasesItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationButtons\ViewPhrasesNavigationButtonView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\View\ViewPhrases\ViewPhrasesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NavigationButtons\AddPhraseNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Core\LanguageEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Core\LanguageSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Add\AddPhrase\AddPhraseView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Add\AddPhrase\PhraseEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Add\AddUser\AddUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NavigationButtons\AddUserNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationButtons\AuthenticationStatusNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -287,7 +281,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtonViews\LoginNavigationButtonView.xaml">
+    <Page Include="Views\NavigationButtons\LoginNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -295,7 +289,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtonViews\LogoutNavigationButtonView.xaml">
+    <Page Include="Views\NavigationButtons\LogoutNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -336,6 +330,10 @@
     <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
       <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
       <Name>LearnLanguages.DataAccess.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.Client.csproj">
+      <Project>{1CEB7E12-3D55-4EE4-BFCD-1AAB6F64F024}</Project>
+      <Name>LearnLanguages.Navigation.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

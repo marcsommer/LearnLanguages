@@ -1,9 +1,7 @@
-﻿using System;
-using System.Net;
-using System.ComponentModel.Composition;
-using LearnLanguages.Business;
+﻿using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
 using System.Linq;
+using LearnLanguages.Common.ViewModelBases;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {

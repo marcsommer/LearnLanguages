@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Business.Security;
+using LearnLanguages.Common.ViewModelBases;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -45,7 +46,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           if (e != null)
             throw e;
-          Events.Publish.AuthenticationChanged();
+          //Navigation.Publish.AuthenticationChanged();
           LoggingIn = false;
         });
     }

@@ -286,6 +286,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error loading data for username ({0})..
+        /// </summary>
+        public static string ErrorMsgLoadUserDataException {
+            get {
+                return ResourceManager.GetString("ErrorMsgLoadUserDataException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SeedData threw an exception..
         /// </summary>
         public static string ErrorMsgSeedDataException {

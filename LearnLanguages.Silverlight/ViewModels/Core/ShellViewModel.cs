@@ -1,24 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using Caliburn.Micro;
 using LearnLanguages.Silverlight.Interfaces;
+using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Navigation.Interfaces;
+using LearnLanguages.Common.ViewModelBases;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
 
   [Export(typeof(ShellViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class ShellViewModel : ViewModelBase,
-                                IHandle<Interfaces.IPartSatisfiedEventMessage>
+  public class ShellViewModel : ViewModelBase
   {
     public ShellViewModel()
       : base()
@@ -36,7 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     [Import]
-    public Interfaces.INavigationController NavigationController { get; set; }
+    public INavigationController NavigationController { get; set; }
 
     //private LoginViewModel _Login;
     //public LoginViewModel Login
@@ -98,21 +90,10 @@ namespace LearnLanguages.Silverlight.ViewModels
     //private bool NavigationControllerSatisfied = false;
     //private bool ICareAboutPartsSatisfiedMessages = true;
 
-    public void Handle(Interfaces.IPartSatisfiedEventMessage message)
+    
+    public override void OnImportsSatisfied()
     {
-      //  if (!ICareAboutPartsSatisfiedMessages)
-      //    return;
-
-      //  if (message.Part == GetCoreViewModelName())
-      //    ShellModelSatisfied = true;
-      //  else if (message.Part == "NavigationController")
-      //    NavigationControllerSatisfied = true;
-
-      //  if (ShellModelSatisfied && NavigationControllerSatisfied)
-      //  {
-      //    ICareAboutPartsSatisfiedMessages = false;
-      //    //Services.EventAggregator.Publish(new Events.NavigationRequestedEventMessage("Login"));
-      //  }
+      //
     }
   }
 }

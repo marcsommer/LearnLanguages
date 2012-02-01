@@ -72,7 +72,5 @@ namespace LearnLanguages
     //    return _Navigator;
     //  }
     //}
-
-    
   }
 }

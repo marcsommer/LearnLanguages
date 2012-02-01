@@ -77,5 +77,14 @@ namespace LearnLanguages.Business {
                 return ResourceManager.GetString("RuleInfoMinimumCount", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ||.
+        /// </summary>
+        public static string SettingsStringSeparator {
+            get {
+                return ResourceManager.GetString("SettingsStringSeparator", resourceCulture);
+            }
+        }
     }
 }

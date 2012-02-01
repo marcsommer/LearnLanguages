@@ -3,13 +3,15 @@ using System.ComponentModel.Composition;
 using Caliburn.Micro;
 using LearnLanguages.Silverlight.Interfaces;
 using LearnLanguages.Business.Security;
+using LearnLanguages.Common.ViewModelBases;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(NavigationPanelViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class NavigationPanelViewModel : Conductor<ViewModelBase>.Collection.AllActive,
-                                          IHandle<Interfaces.IAuthenticationChangedEventMessage>,
+                                          //IHandle<Interfaces.IAuthenticationChangedEventMessage>,
                                           IViewModelBase
   {
     public NavigationPanelViewModel()
@@ -72,26 +74,27 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(addTranslation);
       var addPhrase = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
       Items.Add(addPhrase);
+      var study = Services.Container.GetExportedValue<StudyNavigationButtonViewModel>();
+      Items.Add(study);
     }
 
     #endregion
 
-    public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
-    {
-      PopulateButtons();
-    }
+    //public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
+    //{
+    //  PopulateButtons();
+    //}
     
     public void OnImportsSatisfied()
     {
-      var coreViewModelName = ViewModelBase.GetCoreViewModelName(typeof(NavigationPanelViewModel));
-      Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage(coreViewModelName));
+      //var coreViewModelName = ViewModelBase.GetCoreViewModelName(typeof(NavigationPanelViewModel));
+      //Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage(coreViewModelName));
     }
 
     public bool LoadFromUri(Uri uri)
     {
       return true;
     }
-
 
     public bool ShowGridLines
     {

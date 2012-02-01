@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class TranslationEdit : LearnLanguages.Business.Bases.BusinessBase<TranslationEdit, TranslationDto>, IHaveId
+  public class TranslationEdit : Common.CslaBases.BusinessBase<TranslationEdit, TranslationDto>, IHaveId
   {
     #region Ctors and Init
     public TranslationEdit()
@@ -484,7 +484,5 @@ namespace LearnLanguages.Business
     #endregion
 
     #endregion
-
-    
   }
 }

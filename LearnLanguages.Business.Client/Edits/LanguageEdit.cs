@@ -14,7 +14,7 @@ using LearnLanguages.Business.Security;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class LanguageEdit : Bases.BusinessBase<LanguageEdit, LanguageDto>, IHaveId
+  public class LanguageEdit : Common.CslaBases.BusinessBase<LanguageEdit, LanguageDto>, IHaveId
   {
     #region Factory Methods
 

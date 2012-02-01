@@ -97,6 +97,7 @@
     <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Salt" Type="int" Nullable="false" />
     <Property Name="SaltedHashedPasswordValue" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NativeLanguageText" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="RoleDatas">
     <Key>
@@ -411,6 +412,7 @@
           <NavigationProperty Name="PhraseDatas" Relationship="LearnLanguages.UserDataPhraseData" FromRole="UserData" ToRole="PhraseData" />
           <NavigationProperty Name="TranslationDatas" Relationship="LearnLanguages.UserDataTranslationData" FromRole="UserData" ToRole="TranslationData" />
           <NavigationProperty Name="LanguageDatas" Relationship="LearnLanguages.UserDataLanguageData" FromRole="UserData" ToRole="LanguageData" />
+          <Property Type="String" Name="NativeLanguageText" Nullable="false" />
         </EntityType>
         <Association Name="AssociationUserDataWithPhraseData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" >
@@ -539,6 +541,7 @@
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="Salt" ColumnName="Salt" />
           <ScalarProperty Name="SaltedHashedPasswordValue" ColumnName="SaltedHashedPasswordValue" />
+          <ScalarProperty Name="NativeLanguageText" ColumnName="NativeLanguageText" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

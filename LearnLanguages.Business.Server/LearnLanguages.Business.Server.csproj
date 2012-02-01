@@ -44,18 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessBaseOfCAndCDto.cs">
-      <Link>Bases\BusinessBaseOfCAndCDto.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\BusinessListBaseOfLAndCAndCDto.cs">
-      <Link>Bases\BusinessListBaseOfLAndCAndCDto.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyBaseOfC.cs">
-      <Link>Bases\ReadOnlyBaseOfC.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Bases\ReadOnlyListBaseOfLAndCAndCDto.cs">
-      <Link>Bases\ReadOnlyListBaseOfLAndCAndCDto.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\BusinessResources.Designer.cs">
       <Link>BusinessResources.Designer.cs</Link>
     </Compile>

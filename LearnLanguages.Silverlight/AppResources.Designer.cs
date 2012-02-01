@@ -61,6 +61,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tell me how much of this phrase you know..
+        /// </summary>
+        internal static string AskDoYouKnowThisInstructionsText {
+            get {
+                return ResourceManager.GetString("AskDoYouKnowThisInstructionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://localhost:50094/.
         /// </summary>
         internal static string BaseAddress {

@@ -106,6 +106,21 @@
     <Compile Include="..\LearnLanguages.Common\ConsoleLogger.cs">
       <Link>ConsoleLogger.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\CslaBases\BusinessBaseOfCAndCDto.cs">
+      <Link>CslaBases\BusinessBaseOfCAndCDto.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\CslaBases\BusinessListBaseOfLAndCAndCDto.cs">
+      <Link>CslaBases\BusinessListBaseOfLAndCAndCDto.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\CslaBases\CommandBaseOfC.cs">
+      <Link>CslaBases\CommandBaseOfC.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\CslaBases\ReadOnlyBaseOfC.cs">
+      <Link>CslaBases\ReadOnlyBaseOfC.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs">
+      <Link>CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\CustomException.cs">
       <Link>CustomException.cs</Link>
     </Compile>
@@ -127,6 +142,15 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveId.cs">
       <Link>Interfaces\IHaveId.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveModelListOfTList.cs">
+      <Link>Interfaces\IHaveModelListOfTList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveModelOfT.cs">
+      <Link>Interfaces\IHaveModelOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveUri.cs">
+      <Link>Interfaces\IHaveUri.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\IInitializeAsync.cs">
       <Link>Interfaces\IInitializeAsync.cs</Link>
     </Compile>
@@ -135,6 +159,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\ISaveAsync.cs">
       <Link>Interfaces\ISaveAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\IViewModelBase.cs">
+      <Link>Interfaces\IViewModelBase.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\LogCategory.cs">
       <Link>LogCategory.cs</Link>
@@ -207,6 +234,15 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\ViewInfoForContainer.cs">
       <Link>ViewInfoForContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\ViewModelBases\ViewModelBase.cs">
+      <Link>ViewModelBases\ViewModelBase.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\ViewModelBases\ViewModelBaseOfTCslaModel.cs">
+      <Link>ViewModelBases\ViewModelBaseOfTCslaModel.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\ViewModelBases\ViewModelBaseOfTCslaModelList.cs">
+      <Link>ViewModelBases\ViewModelBaseOfTCslaModelList.cs</Link>
     </Compile>
     <Compile Include="Class2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,40 +1,41 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using LearnLanguages.Silverlight.ViewModels;
 using Caliburn.Micro;
-using LearnLanguages.Silverlight.Interfaces;
-
+using LearnLanguages.Navigation;
+using LearnLanguages.Navigation.Interfaces;
+using LearnLanguages.Silverlight.ViewModels;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Silverlight
 {
-  [Export(typeof(Interfaces.INavigationController))]
+  [Export(typeof(INavigationController))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class NavigationController : Interfaces.INavigationController,
-                                      IHandle<Interfaces.IAuthenticationChangedEventMessage>,
-                                      IPartImportsSatisfiedNotification
+  public class NavigationController : INavigationController//,
+                                      //IHandle<Interfaces.IAuthenticationChangedEventMessage>,
+                                      //IPartImportsSatisfiedNotification
   {
     public NavigationController()
     {
       Services.EventAggregator.Subscribe(this);
     }
     
-    public void OnImportsSatisfied()
-    {
-      Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage("NavigationController"));
-      //Services.EventAggregator.Publish(
-      //  (Interfaces.INavigationRequestedEventMessage)(new Events.NavigationRequestedEventMessage("Login")));
-    }
+    //public void OnImportsSatisfied()
+    //{
+    //  Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage("NavigationController"));
+    //  //Services.EventAggregator.Publish(
+    //  //  (Interfaces.INavigationRequestedEventMessage)(new Events.NavigationRequestedEventMessage("Login")));
+    //}
     
     #region Handle Event Messages
 
-    public void Handle(IAuthenticationChangedEventMessage message)
-    {
-      if (message.IsAuthenticated)
-        Events.Publish.NavigationRequest<AuthenticationStatusViewModel>();
-      else
-        Events.Publish.NavigationRequest<LoginViewModel>();
-    }
+    //public void Handle(IAuthenticationChangedEventMessage message)
+    //{
+    //  if (message.IsAuthenticated)
+    //    Events.Publish.NavigationRequest<AuthenticationStatusViewModel>();
+    //  else
+    //    Events.Publish.NavigationRequest<LoginViewModel>();
+    //}
 
     public void Handle(INavigationRequestedEventMessage message)
     {
@@ -42,7 +43,7 @@ namespace LearnLanguages.Silverlight
       Type requestedViewModelType = ExtractType(message);
       if (requestedViewModelType == null)
       {
-        Events.Publish.NavigationFailed<LoginViewModel>(message.NavigationInfo.NavigationId);
+        Publish.NavigationFailed<LoginViewModel>(message.NavigationInfo.NavigationId, AppResources.BaseAddress);
         return;
       }
 

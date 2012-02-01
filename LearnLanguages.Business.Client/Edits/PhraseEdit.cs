@@ -14,7 +14,7 @@ using LearnLanguages.Business.Security;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class PhraseEdit : LearnLanguages.Business.Bases.BusinessBase<PhraseEdit, PhraseDto>, IHaveId
+  public class PhraseEdit : LearnLanguages.Common.CslaBases.BusinessBase<PhraseEdit, PhraseDto>, IHaveId
   {
     #region Factory Methods
     #region Wpf Factory Methods

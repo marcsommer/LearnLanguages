@@ -302,6 +302,7 @@ namespace LearnLanguages.DataAccess
         {
           Id = DefaultTestValidUserId,
           Username = TestValidUsername,
+          NativeLanguageText = EnglishText,
           Salt = TestSalt,
           SaltedHashedPasswordValue = TestSaltedHashedPassword,
           PhraseIds = new List<Guid>() { IdHello, IdDog, IdHola, IdLongPhrase },

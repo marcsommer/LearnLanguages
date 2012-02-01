@@ -9,7 +9,7 @@ namespace LearnLanguages.Business
   /// This class creates a new phrase, loads it with the default language.
   /// </summary>
   [Serializable]
-  public class BlankPhraseRetriever : Bases.ReadOnlyBase<BlankPhraseRetriever>
+  public class BlankPhraseRetriever : Common.CslaBases.ReadOnlyBase<BlankPhraseRetriever>
   {
     #region Factory Methods
 

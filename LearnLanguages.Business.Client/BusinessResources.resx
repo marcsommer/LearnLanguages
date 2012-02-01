@@ -125,4 +125,7 @@
   <data name="RuleInfoMinimumCount" xml:space="preserve">
     <value>The minimum count of phrases in a valid translation is 2.</value>
   </data>
+  <data name="SettingsStringSeparator" xml:space="preserve">
+    <value>||</value>
+  </data>
 </root>

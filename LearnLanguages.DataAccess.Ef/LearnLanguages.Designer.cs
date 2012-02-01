@@ -894,13 +894,15 @@ namespace LearnLanguages.DataAccess.Ef
         /// <param name="username">Initial value of the Username property.</param>
         /// <param name="salt">Initial value of the Salt property.</param>
         /// <param name="saltedHashedPasswordValue">Initial value of the SaltedHashedPasswordValue property.</param>
-        public static UserData CreateUserData(global::System.Guid id, global::System.String username, global::System.Int32 salt, global::System.String saltedHashedPasswordValue)
+        /// <param name="nativeLanguageText">Initial value of the NativeLanguageText property.</param>
+        public static UserData CreateUserData(global::System.Guid id, global::System.String username, global::System.Int32 salt, global::System.String saltedHashedPasswordValue, global::System.String nativeLanguageText)
         {
             UserData userData = new UserData();
             userData.Id = id;
             userData.Username = username;
             userData.Salt = salt;
             userData.SaltedHashedPasswordValue = saltedHashedPasswordValue;
+            userData.NativeLanguageText = nativeLanguageText;
             return userData;
         }
 
@@ -1006,6 +1008,30 @@ namespace LearnLanguages.DataAccess.Ef
         private global::System.String _SaltedHashedPasswordValue;
         partial void OnSaltedHashedPasswordValueChanging(global::System.String value);
         partial void OnSaltedHashedPasswordValueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NativeLanguageText
+        {
+            get
+            {
+                return _NativeLanguageText;
+            }
+            set
+            {
+                OnNativeLanguageTextChanging(value);
+                ReportPropertyChanging("NativeLanguageText");
+                _NativeLanguageText = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NativeLanguageText");
+                OnNativeLanguageTextChanged();
+            }
+        }
+        private global::System.String _NativeLanguageText;
+        partial void OnNativeLanguageTextChanging(global::System.String value);
+        partial void OnNativeLanguageTextChanged();
 
         #endregion
 

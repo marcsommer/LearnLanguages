@@ -1,28 +1,19 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Caliburn.Micro;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
+using LearnLanguages.Common.ViewModelBases;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(AuthenticationStatusViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class AuthenticationStatusViewModel : ViewModelBase, IHandle<Interfaces.IAuthenticationChangedEventMessage>, IDisposable
+  public class AuthenticationStatusViewModel : ViewModelBase
+    //, IHandle<Interfaces.IAuthenticationChangedEventMessage>, IDisposable
   {
     public AuthenticationStatusViewModel()
     {
-      Services.EventAggregator.Subscribe(this);
+      //Services.EventAggregator.Subscribe(this);
       //THIS INITIALIZES PROPERTIES INTERNALLY - IT DOES NOT _*PUBLISH*_ THE EVENT
-      var message = new Events.AuthenticationChangedEventMessage();
-      Handle(message);
+      //var message = new Events.AuthenticationChangedEventMessage();
+      //Handle(message);
     }
 
     private string _CurrentPrincipalName;
@@ -81,17 +72,17 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
-    {
-      CurrentPrincipalName = message.CurrentPrincipalName;
-      IsAuthenticated = message.IsAuthenticated;
-      IsInAdminRole = message.IsInRole(DataAccess.DalResources.RoleAdmin);
-      IsInUserRole = message.IsInRole(DataAccess.DalResources.RoleUser);
-    }
+    //public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
+    //{
+    //  CurrentPrincipalName = message.CurrentPrincipalName;
+    //  IsAuthenticated = message.IsAuthenticated;
+    //  IsInAdminRole = message.IsInRole(DataAccess.DalResources.RoleAdmin);
+    //  IsInUserRole = message.IsInRole(DataAccess.DalResources.RoleUser);
+    //}
 
-    public void Dispose()
-    {
-      Services.EventAggregator.Unsubscribe(this);
-    }
+    //public void Dispose()
+    //{
+    //  Services.EventAggregator.Unsubscribe(this);
+    //}
   }
 }

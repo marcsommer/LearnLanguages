@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/30/2012 15:49:51
+-- Date Created: 01/31/2012 19:50:47
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -55,6 +55,9 @@ IF OBJECT_ID(N'[dbo].[FK_TranslationDataPhraseData_PhraseData]', 'F') IS NOT NUL
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserDataTranslationData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TranslationDatas] DROP CONSTRAINT [FK_UserDataTranslationData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataLanguageData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LanguageDatas] DROP CONSTRAINT [FK_UserDataLanguageData];
 GO
 
 -- --------------------------------------------------
@@ -115,7 +118,8 @@ CREATE TABLE [dbo].[UserDatas] (
     [Id] uniqueidentifier  NOT NULL,
     [Username] nvarchar(max)  NOT NULL,
     [Salt] int  NOT NULL,
-    [SaltedHashedPasswordValue] nvarchar(max)  NOT NULL
+    [SaltedHashedPasswordValue] nvarchar(max)  NOT NULL,
+    [NativeLanguageText] nvarchar(max)  NOT NULL
 );
 GO
 

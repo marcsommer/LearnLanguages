@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using LearnLanguages.Silverlight.Interfaces;
+using LearnLanguages.Common.ViewModelBases;
+using LearnLanguages.Navigation;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -45,8 +37,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public abstract bool CanNavigateImpl();
     public virtual void Navigate()
     {
-      var navInfo = new NavigationInfo(Guid.NewGuid(), GetNavigationTargetViewModelCoreName(false));
-      Services.EventAggregator.Publish(new Events.NavigationRequestedEventMessage(navInfo));
+      var navInfo = new NavigationInfo(Guid.NewGuid(), GetNavigationTargetViewModelCoreName(false), AppResources.BaseAddress);
+      Services.EventAggregator.Publish(new Navigation.EventMessages.NavigationRequestedEventMessage(navInfo));
     }
   }
 }

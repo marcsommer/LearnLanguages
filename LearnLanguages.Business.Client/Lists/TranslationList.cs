@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class TranslationList : Bases.BusinessListBase<TranslationList, TranslationEdit, TranslationDto>
+  public class TranslationList : Common.CslaBases.BusinessListBase<TranslationList, TranslationEdit, TranslationDto>
   {
     public static void GetAll(EventHandler<DataPortalResult<TranslationList>> callback)
     {

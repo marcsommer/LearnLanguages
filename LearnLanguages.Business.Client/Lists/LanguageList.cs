@@ -8,7 +8,7 @@ using LearnLanguages.DataAccess.Exceptions;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class LanguageList : Bases.BusinessListBase<LanguageList, LanguageEdit, LanguageDto>
+  public class LanguageList : Common.CslaBases.BusinessListBase<LanguageList, LanguageEdit, LanguageDto>
   {
     #region Factory Methods
 

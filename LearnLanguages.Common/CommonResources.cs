@@ -1,6 +1,7 @@
 ﻿
 namespace LearnLanguages
 {
+  //HACK:  COMMONRESOURCES SHOULD BE IN RESX
   public static class CommonResources
   {
 
@@ -81,5 +82,7 @@ namespace LearnLanguages
 
     #endregion
 
+    
+    public static string ShowGridLines { get { return false.ToString(); } }
   }
 }

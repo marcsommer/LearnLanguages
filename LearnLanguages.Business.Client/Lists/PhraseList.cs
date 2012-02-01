@@ -10,7 +10,7 @@ using LearnLanguages.Business.Security;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class PhraseList : Bases.BusinessListBase<PhraseList, PhraseEdit, PhraseDto>
+  public class PhraseList : Common.CslaBases.BusinessListBase<PhraseList, PhraseEdit, PhraseDto>
   {
     #region Factory Methods
 
