@@ -117,32 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AskDoYouKnowThisInstructionsText" xml:space="preserve">
-    <value>Tell me how much of this phrase you know.</value>
-  </data>
-  <data name="BaseAddress" xml:space="preserve">
-    <value>http://localhost:50094/</value>
-  </data>
-  <data name="FilterLabel" xml:space="preserve">
-    <value>Filter: </value>
-  </data>
-  <data name="LoginFailedMessage" xml:space="preserve">
-    <value>Login incorrect.  Please wait a moment and then try again.</value>
-  </data>
-  <data name="LoginFailedPenaltyInMilliseconds" xml:space="preserve">
-    <value>4000</value>
-  </data>
-  <data name="LogoutMessage" xml:space="preserve">
-    <value>You are now logged out...Come back soon!</value>
-  </data>
-  <data name="NavButtonTextLogin" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="NavButtonTextLogout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
   <data name="ShowGridLines" xml:space="preserve">
     <value>False</value>
-    <comment>debug</comment>
   </data>
 </root>

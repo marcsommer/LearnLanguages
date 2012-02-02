@@ -1,18 +1,17 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using Caliburn.Micro;
 using LearnLanguages.Navigation;
 using LearnLanguages.Navigation.Interfaces;
 using LearnLanguages.Silverlight.ViewModels;
 using LearnLanguages.Common.Interfaces;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight
 {
   [Export(typeof(INavigationController))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class NavigationController : INavigationController//,
-                                      //IHandle<Interfaces.IAuthenticationChangedEventMessage>,
+  public class NavigationController : INavigationController,
+                                      IHandle<EventMessages.AuthenticationChangedEventMessage>//,
                                       //IPartImportsSatisfiedNotification
   {
     public NavigationController()
@@ -29,13 +28,14 @@ namespace LearnLanguages.Silverlight
     
     #region Handle Event Messages
 
-    //public void Handle(IAuthenticationChangedEventMessage message)
-    //{
-    //  if (message.IsAuthenticated)
-    //    Events.Publish.NavigationRequest<AuthenticationStatusViewModel>();
-    //  else
-    //    Events.Publish.NavigationRequest<LoginViewModel>();
-    //}
+    public void Handle(EventMessages.AuthenticationChangedEventMessage message)
+    {
+      if (message.IsAuthenticated)
+        //Navigation.Publish.NavigationRequest<AuthenticationStatusViewModel>(AppResources.BaseAddress);
+        Navigation.Publish.NavigationRequest<StudyViewModel>(AppResources.BaseAddress);
+      else
+        Navigation.Publish.NavigationRequest<LoginViewModel>(AppResources.BaseAddress);
+    }
 
     public void Handle(INavigationRequestedEventMessage message)
     {

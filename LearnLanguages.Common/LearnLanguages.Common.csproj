@@ -101,6 +101,7 @@
     <Compile Include="CslaBases\ReadOnlyBaseOfC.cs" />
     <Compile Include="CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs" />
     <Compile Include="CustomException.cs" />
+    <Compile Include="Exceptions\PartNotSatisfiedException.cs" />
     <Compile Include="Interfaces\IAsyncStub.cs" />
     <Compile Include="Interfaces\ICreateAsync.cs" />
     <Compile Include="Interfaces\ICreateChildAsync.cs" />

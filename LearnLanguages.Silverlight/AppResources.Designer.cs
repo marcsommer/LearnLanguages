@@ -88,6 +88,24 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login incorrect.  Please wait a moment and then try again..
+        /// </summary>
+        internal static string LoginFailedMessage {
+            get {
+                return ResourceManager.GetString("LoginFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4000.
+        /// </summary>
+        internal static string LoginFailedPenaltyInMilliseconds {
+            get {
+                return ResourceManager.GetString("LoginFailedPenaltyInMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are now logged out...Come back soon!.
         /// </summary>
         internal static string LogoutMessage {

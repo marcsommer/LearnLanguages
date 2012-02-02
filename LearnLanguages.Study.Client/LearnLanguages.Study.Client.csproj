@@ -63,15 +63,35 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CycleStudyPartner.cs" />
+    <Compile Include="Edits\CycleStudyDataEdit.cs" />
     <Compile Include="Interfaces\IAskUserExtraData.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudyResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StudyResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AskUserExtraDataViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
+      <Project>{4314B702-58FE-44EC-BF55-61CC4483C05C}</Project>
+      <Name>LearnLanguages.Business.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
       <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
       <Name>LearnLanguages.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StudyResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StudyResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

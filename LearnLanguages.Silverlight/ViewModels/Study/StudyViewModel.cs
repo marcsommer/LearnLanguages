@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
+using LearnLanguages.Study.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -21,6 +22,21 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _AskViewModel = value;
           NotifyOfPropertyChange(() => AskViewModel);
+        }
+      }
+    }
+
+    [Import]
+    private IStudyPartner _StudyPartner;
+    public IStudyPartner StudyPartner
+    {
+      get { return _StudyPartner; }
+      set
+      {
+        if (value != _StudyPartner)
+        {
+          _StudyPartner = value;
+          NotifyOfPropertyChange(() => StudyPartner);
         }
       }
     }

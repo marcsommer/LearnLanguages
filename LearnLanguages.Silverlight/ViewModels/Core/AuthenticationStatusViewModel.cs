@@ -1,19 +1,22 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
+using System;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(AuthenticationStatusViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class AuthenticationStatusViewModel : ViewModelBase
-    //, IHandle<Interfaces.IAuthenticationChangedEventMessage>, IDisposable
+  public class AuthenticationStatusViewModel : ViewModelBase, 
+                                               IHandle<EventMessages.AuthenticationChangedEventMessage>, 
+                                               IDisposable
   {
     public AuthenticationStatusViewModel()
     {
-      //Services.EventAggregator.Subscribe(this);
+      Services.EventAggregator.Subscribe(this);
       //THIS INITIALIZES PROPERTIES INTERNALLY - IT DOES NOT _*PUBLISH*_ THE EVENT
-      //var message = new Events.AuthenticationChangedEventMessage();
-      //Handle(message);
+      var message = new EventMessages.AuthenticationChangedEventMessage();
+      Handle(message);
     }
 
     private string _CurrentPrincipalName;
@@ -72,17 +75,17 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    //public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
-    //{
-    //  CurrentPrincipalName = message.CurrentPrincipalName;
-    //  IsAuthenticated = message.IsAuthenticated;
-    //  IsInAdminRole = message.IsInRole(DataAccess.DalResources.RoleAdmin);
-    //  IsInUserRole = message.IsInRole(DataAccess.DalResources.RoleUser);
-    //}
+    public void Handle(EventMessages.AuthenticationChangedEventMessage message)
+    {
+      CurrentPrincipalName = message.CurrentPrincipalName;
+      IsAuthenticated = message.IsAuthenticated;
+      IsInAdminRole = message.IsInRole(DataAccess.DalResources.RoleAdmin);
+      IsInUserRole = message.IsInRole(DataAccess.DalResources.RoleUser);
+    }
 
-    //public void Dispose()
-    //{
-    //  Services.EventAggregator.Unsubscribe(this);
-    //}
+    public void Dispose()
+    {
+      Services.EventAggregator.Unsubscribe(this);
+    }
   }
 }

@@ -11,7 +11,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [Export(typeof(NavigationPanelViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class NavigationPanelViewModel : Conductor<ViewModelBase>.Collection.AllActive,
-                                          //IHandle<Interfaces.IAuthenticationChangedEventMessage>,
+                                          IHandle<EventMessages.AuthenticationChangedEventMessage>,
                                           IViewModelBase
   {
     public NavigationPanelViewModel()
@@ -80,10 +80,10 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #endregion
 
-    //public void Handle(Interfaces.IAuthenticationChangedEventMessage message)
-    //{
-    //  PopulateButtons();
-    //}
+    public void Handle(EventMessages.AuthenticationChangedEventMessage message)
+    {
+      PopulateButtons();
+    }
     
     public void OnImportsSatisfied()
     {

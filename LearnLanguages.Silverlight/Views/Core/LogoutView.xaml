@@ -8,7 +8,7 @@
 
   <Border Style="{StaticResource DebugBorder}" Padding="10" >
     <Grid x:Name="LayoutRoot" Background="White">
-      <TextBlock x:Name="LogoutMessage" />
+      <TextBlock x:Name="LogoutMessage" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
   </Border>
 </UserControl>

@@ -11,26 +11,22 @@ using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight
 {
-  public class MefBootstrapper : Bootstrapper<ViewModels.ShellViewModel>, IHandle<Interfaces.IPartSatisfiedEventMessage>
+  public class MefBootstrapper : Bootstrapper<ViewModels.ShellViewModel>//, IHandle<Interfaces.IPartSatisfiedEventMessage>
   {
-    
     private CompositionContainer _Container;
 
-    /// <summary>
-    /// Configures container.  Initializes Services
-    /// </summary>
+#if DEBUG
+    private DebugEventMessageListener _Listener;
+#endif
+
     protected override void Configure()
     {
-
-      //NEW UP CONTAINER
-      //_Container = new CompositionContainer();
-
       //CREATE ASSEMBLY CATALOGS FOR COMPOSITION OF APPLICATION (WPF)
       AssemblyCatalog catThis = new AssemblyCatalog(typeof(MefBootstrapper).Assembly);
-      //AssemblyCatalog catDal = new AssemblyCatalog(typeof(DalManager).Assembly);
-      //AssemblyCatalog catWcfClient = new AssemblyCatalog(typeof(CustomerDalProxy).Assembly);
-      //AggregateCatalog catAll = new AggregateCatalog(catThis, catBusiness, catDal, catWcfClient);
-      AggregateCatalog catAll = new AggregateCatalog(catThis);
+      AssemblyCatalog catStudy = new AssemblyCatalog(typeof(Study.CycleStudyPartner).Assembly);
+      AggregateCatalog catAll = new AggregateCatalog(catThis, catStudy);
+
+      //NEW UP CONTAINER WITH CATALOGS
       _Container = new CompositionContainer(catAll);
 
       //ADD BATCH FOR SERVICES TO CONTAINER, INCLUDING CONTAINER ITSELF, AND INITIALIZE SERVICES
@@ -46,18 +42,15 @@ namespace LearnLanguages.Silverlight
       Csla.DataPortal.ProxyTypeName = typeof(Compression.CompressedProxy<>).AssemblyQualifiedName;
       Csla.DataPortalClient.WcfProxy.DefaultUrl = DataAccess.DalResources.WcfProxyDefaultUrl;
 
-
       //INITIALIZE DALMANAGER
       //DalManager.Initialize(_Container);
 
+#if DEBUG
       //SUBSCRIBE TO EVENTAGGREGATOR
       Services.EventAggregator.Subscribe(this);
       _Listener = new DebugEventMessageListener();
-
+#endif
     }
-
-    private DebugEventMessageListener _Listener;
-
     protected override object GetInstance(Type serviceType, string key)
     {
       string contract = string.IsNullOrEmpty(key) ? AttributedModelServices.GetContractName(serviceType) : key;
@@ -68,33 +61,31 @@ namespace LearnLanguages.Silverlight
 
       throw new Exception(string.Format("Could not locate any instances of contract {0}.", contract));
     }
-
     protected override IEnumerable<object> GetAllInstances(Type serviceType)
     {
       return _Container.GetExportedValues<object>(AttributedModelServices.GetContractName(serviceType));
     }
-
     protected override void BuildUp(object instance)
     {
       _Container.SatisfyImportsOnce(instance);
     }
 
-    private bool ShellModelSatisfied = false;
-    private bool NavigationControllerSatisfied = false;
+    //private bool ShellModelSatisfied = false;
+    //private bool NavigationControllerSatisfied = false;
 
-    public void Handle(Interfaces.IPartSatisfiedEventMessage message)
-    {
-      if (message.Part == "Shell")
-        ShellModelSatisfied = true;
-      else if (message.Part == "NavigationController")
-        NavigationControllerSatisfied = true;
+    //public void Handle(Interfaces.IPartSatisfiedEventMessage message)
+    //{
+    //  if (message.Part == "Shell")
+    //    ShellModelSatisfied = true;
+    //  else if (message.Part == "NavigationController")
+    //    NavigationControllerSatisfied = true;
 
-      if (ShellModelSatisfied && NavigationControllerSatisfied)
-      {
-        Services.EventAggregator.Unsubscribe(this);
-        //Services.EventAggregator.Publish(new Events.NavigationRequestedEventMessage("Login"));
-        Navigation.Publish.NavigationRequest<ViewModels.LoginViewModel>(AppResources.BaseAddress);
-      }
-    }
+    //  if (ShellModelSatisfied && NavigationControllerSatisfied)
+    //  {
+    //    Services.EventAggregator.Unsubscribe(this);
+    //    //Services.EventAggregator.Publish(new Events.NavigationRequestedEventMessage("Login"));
+    //    Navigation.Publish.NavigationRequest<ViewModels.LoginViewModel>(AppResources.BaseAddress);
+    //  }
+    //}
   }
 }

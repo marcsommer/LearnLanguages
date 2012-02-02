@@ -9,20 +9,29 @@ namespace LearnLanguages.Study
   [Export(typeof(IStudyPartner))]
   public class CycleStudyPartner : IStudyPartner, IAskUserExtraData
   {
+
     [Import]
     private IEventAggregator _EventAggregator { get; set; }
 
+    [Import]
+    private CompositionContainer _Container { get; set; }
+
     #region Methods
 
-    public void Study(CompositionContainer container)
+    public void Study()
     {
+      //CONTAINER
+      if (_Container == null)
+      {
+        _Container = Services.Container;
+        if (_Container == null)
+          throw new Common.Exceptions.PartNotSatisfiedException("Container");
+      }
+
       //WE NEED EVENT AGGREGATOR FOR PUBLISHING NAVIGATION
       if (_EventAggregator == null)
       {
-        if (container == null)
-          throw new ArgumentNullException("container");
-
-        container.SatisfyImportsOnce(this);
+        _Container.SatisfyImportsOnce(this);
 
         //EVENT AGGREGATOR STILL NULL
         if (_EventAggregator == null)
