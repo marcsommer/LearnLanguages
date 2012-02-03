@@ -16,7 +16,6 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public NavigationPanelViewModel()
     {
-      //Services.Container.SatisfyImportsOnce(this);
       Services.EventAggregator.Subscribe(this);
       PopulateButtons();
     }
@@ -33,12 +32,6 @@ namespace LearnLanguages.Silverlight.ViewModels
         AddAuthenticatedButtons((CustomIdentity)user);
     }
 
-    private void AddUnauthenticatedButtons()
-    {
-      var loginNavButtonViewModel = Services.Container.GetExportedValue<LoginNavigationButtonViewModel>();
-      Items.Add(loginNavButtonViewModel);
-    }
-
     private void AddAuthenticatedButtons(CustomIdentity user)
     {
       if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin))
@@ -46,11 +39,15 @@ namespace LearnLanguages.Silverlight.ViewModels
       if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleUser))
         AddUserButtons();
 
-      
       var logoutNavButtonViewModel = Services.Container.GetExportedValue<LogoutNavigationButtonViewModel>();
       Items.Add(logoutNavButtonViewModel);
     }
-
+    private void AddUnauthenticatedButtons()
+    {
+      var loginNavButtonViewModel = Services.Container.GetExportedValue<LoginNavigationButtonViewModel>();
+      Items.Add(loginNavButtonViewModel);
+    }
+    
     private void AddAdminButtons()
     {
       var addUserNavButtonViewModel = Services.Container.GetExportedValue<AddUserNavigationButtonViewModel>();
@@ -59,7 +56,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       var authStatusNavButtonViewModel = Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
       Items.Add(authStatusNavButtonViewModel);
     }
-
     private void AddUserButtons()
     {
       var addLanguage = Services.Container.GetExportedValue<AddLanguageNavigationButtonViewModel>();

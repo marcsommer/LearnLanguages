@@ -13,56 +13,18 @@ namespace LearnLanguages.Study
   /// partner.
   /// </summary>
   [Export(typeof(IStudyPartner))]
-  public class CycleStudyPartner : IStudyPartner, IAskUserExtraData
+  public class CycleStudyPartner : StudyPartnerBase
   {
-    [Import]
-    public IEventAggregator _EventAggregator { get; set; }
 
-    [Import]
-    public CompositionContainer _Container { get; set; }
-
-    #region Methods
-
-    public void Study()
+    protected override void StudyImpl()
     {
-      //CONTAINER
-      if (_Container == null)
-      {
-        _Container = Services.Container;
-        if (_Container == null)
-          throw new Common.Exceptions.PartNotSatisfiedException("Container");
-      }
-
-      //WE NEED EVENT AGGREGATOR FOR PUBLISHING NAVIGATION
-      if (_EventAggregator == null)
-      {
-        _Container.SatisfyImportsOnce(this);
-
-        //EVENT AGGREGATOR STILL NULL
-        if (_EventAggregator == null)
-          throw new TypeLoadException("EventAggregator could not be satisfied");
-      }
-    }
-    
-    public void AskUserExtraData()
-    {
-      throw new NotImplementedException();
+      AskUserExtraData();
+      System.Windows.MessageBox.Show("study impl()");
     }
 
-    #endregion
-
-    #region Events
-
-    public event EventHandler StudyCompleted;
-    public event EventHandler AskUserExtraDataCompleted;
-
-    #endregion
-
-    public void Study(IEventAggregator eventAggregator)
+    protected override void AskUserExtraDataImpl()
     {
-      System.Windows.MessageBox.Show("study happened.");
-      if (StudyCompleted != null)
-        StudyCompleted(this, EventArgs.Empty);
+      System.Windows.MessageBox.Show("ask extra impl()");
     }
   }
 }

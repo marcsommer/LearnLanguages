@@ -1,6 +1,6 @@
 ﻿namespace LearnLanguages.Navigation.Interfaces
 {
-  public interface INavigatedEventMessage : INavigationRequestedEventMessage
+  public interface INavigatedEventMessage : INavigationEventMessage
   {
 
   }

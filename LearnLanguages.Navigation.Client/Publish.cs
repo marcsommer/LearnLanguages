@@ -11,20 +11,17 @@ namespace LearnLanguages.Navigation
       var navInfo = CreateNavigationInfo<T>(Guid.NewGuid(), baseAddress);
       Services.EventAggregator.Publish(new EventMessages.NavigationRequestedEventMessage(navInfo));
     }
-    public static void Navigating<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    public static void Navigating(NavigationInfo navigationInfo)
     {
-      var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
-      Services.EventAggregator.Publish(new EventMessages.NavigatingEventMessage(navInfo));
+      Services.EventAggregator.Publish(new Navigation.EventMessages.NavigatingEventMessage(navigationInfo));
     }
-    public static void Navigated<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    public static void Navigated(NavigationInfo navigationInfo)
     {
-      var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
-      Services.EventAggregator.Publish(new EventMessages.NavigatedEventMessage(navInfo));
+      Services.EventAggregator.Publish(new Navigation.EventMessages.NavigatedEventMessage(navigationInfo));
     }
-    public static void NavigationFailed<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    public static void NavigationFailed(NavigationInfo navigationInfo)
     {
-      var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
-      Services.EventAggregator.Publish(new EventMessages.NavigationFailedEventMessage(navInfo));
+      Services.EventAggregator.Publish(new Navigation.EventMessages.NavigationFailedEventMessage(navigationInfo));
     }
 
     private static NavigationInfo CreateNavigationInfo<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
@@ -38,6 +35,23 @@ namespace LearnLanguages.Navigation
       return navInfo;
     }
 
+    //public static void Navigating<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    //{
+    //  var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
+    //  Services.EventAggregator.Publish(new EventMessages.NavigatingEventMessage(navInfo));
+    //}
+    //public static void Navigated<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    //{
+    //  var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
+    //  Services.EventAggregator.Publish(new EventMessages.NavigatedEventMessage(navInfo));
+    //}
+    //public static void NavigationFailed<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    //{
+    //  var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
+    //  Services.EventAggregator.Publish(new EventMessages.NavigationFailedEventMessage(navInfo));
+    //}
+    
+
     //public static void AuthenticationChanged()
     //{
     //  Services.EventAggregator.Publish(new AuthenticationChangedEventMessage());
@@ -47,6 +61,5 @@ namespace LearnLanguages.Navigation
     //{
     //  Services.EventAggregator.Publish(new EventMessages.PartSatisfiedEventMessage(part));
     //}
-
   }
 }

@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Study.Interfaces;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(StudyViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class StudyViewModel : ViewModelBase
+  public class StudyViewModel : ViewModelBase,
+                                IHandle<Navigation.EventMessages.NavigatedEventMessage>
   {
     public StudyViewModel()
     {
@@ -17,7 +19,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       if (_StudyPartner == null)
         throw new Common.Exceptions.PartNotSatisfiedException("StudyPartner");
 
-      _StudyPartner.Study(Services.EventAggregator);
+      Services.EventAggregator.Subscribe(this);
     }
 
     private void HandleStudyCompleted(object sender, System.EventArgs e)
@@ -64,6 +66,22 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       if (studyPartner != null)
         studyPartner.StudyCompleted -= HandleStudyCompleted;
+    }
+
+    public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
+    {
+      //WE ARE LISTENING FOR A MESSAGE THAT SAYS WE WERE SUCCESSFULLY NAVIGATED TO (SHELLVIEW.MAIN == STUDYVIEWMODEL)
+      //SO WE ONLY CARE ABOUT NAVIGATED EVENT MESSAGES ABOUT OUR CORE AS DESTINATION.
+      if (message.NavigationInfo.ViewModelCoreNoSpaces != ViewModelBase.GetCoreViewModelName(typeof(StudyViewModel)))
+        return;
+
+      //WE HAVE BEEN SUCCESSFULLY NAVIGATED TO.
+
+      //SINCE THIS IS A NONSHARED COMPOSABLE PART, WE ONLY CARE ABOUT NAVIGATED MESSAGE ONCE, SO UNSUBSCRIBE
+      Services.EventAggregator.Unsubscribe(this);
+
+      //START STUDYING
+      StudyPartner.Study(Services.EventAggregator);
     }
   }
 }

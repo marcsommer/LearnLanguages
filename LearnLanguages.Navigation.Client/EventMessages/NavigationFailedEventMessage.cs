@@ -3,7 +3,7 @@
 namespace LearnLanguages.Navigation.EventMessages
 {
   public class NavigationFailedEventMessage : NavigationEventMessage, 
-                                                          INavigationFailedEventMessage
+                                              INavigationFailedEventMessage
   {
     public NavigationFailedEventMessage(NavigationInfo navigationInfo)
       : base(navigationInfo)

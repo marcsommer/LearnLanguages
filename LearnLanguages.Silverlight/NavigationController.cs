@@ -8,6 +8,11 @@ using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight
 {
+  /// <summary>
+  /// This controller listens only to Authentication and Navigation_***REQUESTED***_EventMessages.  It then publishes
+  /// Navigating, Navigated, NavigationFailed events when appropriate, each of which this controller does NOT listen to.  
+  /// Each is published with the same, essentially readonly NavigationInfo object.
+  /// </summary>
   [Export(typeof(INavigationController))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
   public class NavigationController : INavigationController,
@@ -39,14 +44,16 @@ namespace LearnLanguages.Silverlight
 
     public void Handle(INavigationRequestedEventMessage message)
     {
+      Publish.Navigating(message.NavigationInfo);
+
       //EXTRACT THE TYPE FROM THE NAVIGATION MESSAGE
       Type requestedViewModelType = ExtractType(message);
       if (requestedViewModelType == null)
       {
-        Publish.NavigationFailed<LoginViewModel>(message.NavigationInfo.NavigationId, AppResources.BaseAddress);
+        //Publish.NavigationFailed<LoginViewModel>(message.NavigationInfo.NavigationId, AppResources.BaseAddress);
+        Publish.NavigationFailed(message.NavigationInfo);
         return;
       }
-
 
       string requestedContractName = requestedViewModelType.FullName;
 
@@ -74,12 +81,9 @@ namespace LearnLanguages.Silverlight
       {
         var shellViewModel = Services.Container.GetExportedValue<ViewModels.ShellViewModel>();
         shellViewModel.Main = requestedViewModel;
-        var currentUser = Csla.ApplicationContext.User;
-        shellViewModel.ReloadNavigationPanel();
+        Navigation.Publish.Navigated(message.NavigationInfo);
       }
     }
-
-    
 
     #endregion
 

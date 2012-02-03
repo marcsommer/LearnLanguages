@@ -10,7 +10,7 @@ namespace LearnLanguages.Navigation.EventMessages
   /// generated NavigationId.
   /// </summary>
   public class NavigationRequestedEventMessage : NavigationEventMessage,
-                                                             INavigationRequestedEventMessage
+                                                 INavigationRequestedEventMessage
   {
     public NavigationRequestedEventMessage(NavigationInfo navigationInfo)
       : base(navigationInfo)

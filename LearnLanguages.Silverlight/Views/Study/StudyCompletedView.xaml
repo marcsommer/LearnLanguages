@@ -9,7 +9,8 @@
   <Border Style="{StaticResource DebugBorder}" Padding="10" >
     <Border Style="{StaticResource ViewSection}">
       <Grid x:Name="LayoutRoot" Background="White">
-        <TextBlock x:Name="StudyCompletedMessage" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <!--<TextBlock x:Name="StudyCompletedMessage" HorizontalAlignment="Center" VerticalAlignment="Center" />-->
+        <TextBlock Text="studycompletedview here" />
       </Grid>
     </Border>
   </Border>
