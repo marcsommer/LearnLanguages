@@ -126,6 +126,15 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string DefaultNativeLanguageText {
+            get {
+                return ResourceManager.GetString("DefaultNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string DefaultNewLanguageText {
             get {
                 return ResourceManager.GetString("DefaultNewLanguageText", resourceCulture);

@@ -62,6 +62,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Edits\PhraseEdit.cs">
       <Link>Edits\PhraseEdit.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\StudyDataEdit.cs">
+      <Link>Edits\StudyDataEdit.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Edits\TranslationEdit.cs">
       <Link>Edits\TranslationEdit.cs</Link>
     </Compile>
@@ -70,6 +73,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\PhraseList.cs">
       <Link>Lists\PhraseList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\StudyDataList.cs">
+      <Link>Lists\StudyDataList.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\TranslationList.cs">
       <Link>Lists\TranslationList.cs</Link>

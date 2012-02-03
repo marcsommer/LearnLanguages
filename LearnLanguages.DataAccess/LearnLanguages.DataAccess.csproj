@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DalBases\CycleStudyDataDalBase.cs" />
+    <Compile Include="DalBases\StudyDataDalBase.cs" />
     <Compile Include="DalBases\LanguageDalBase.cs" />
     <Compile Include="DalBases\TranslationDalBase.cs" />
     <Compile Include="DalBases\PhraseDalBase.cs" />
@@ -56,33 +56,33 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Dtos\CycleStudyDataDto.cs" />
+    <Compile Include="Dtos\StudyDataDto.cs" />
     <Compile Include="Dtos\TranslationDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
-    <Compile Include="Exceptions\LoadUserDataException.cs" />
-    <Compile Include="Exceptions\UsernameAndUserIdDoNotMatchException.cs" />
+    <Compile Include="Exceptions\User\LoadUserDataException.cs" />
+    <Compile Include="Exceptions\User\UsernameAndUserIdDoNotMatchException.cs" />
     <Compile Include="Exceptions\LanguageTextAlreadyExistsException.cs" />
     <Compile Include="Exceptions\IdAlreadyExistsException.cs" />
-    <Compile Include="Exceptions\UserNotAuthorizedException.cs" />
+    <Compile Include="Exceptions\User\UserNotAuthorizedException.cs" />
     <Compile Include="Exceptions\IdNotFoundException.cs" />
     <Compile Include="Exceptions\CriteriaException.cs" />
     <Compile Include="Exceptions\SeedDataException.cs" />
-    <Compile Include="Exceptions\UsernameNotFoundException.cs" />
-    <Compile Include="Exceptions\GetRolesFailedException.cs" />
-    <Compile Include="Exceptions\UserNotAuthenticatedException.cs" />
+    <Compile Include="Exceptions\User\UsernameNotFoundException.cs" />
+    <Compile Include="Exceptions\User\GetRolesFailedException.cs" />
+    <Compile Include="Exceptions\User\UserNotAuthenticatedException.cs" />
     <Compile Include="Exceptions\VeryBadException.cs" />
-    <Compile Include="Exceptions\VerifyUserFailedException.cs" />
-    <Compile Include="Exceptions\GetUserFailedException.cs" />
-    <Compile Include="Exceptions\GetAllFailedException.cs" />
-    <Compile Include="Exceptions\CreateFailedException.cs" />
-    <Compile Include="Exceptions\DeleteFailedException.cs" />
-    <Compile Include="Exceptions\FetchFailedException.cs" />
+    <Compile Include="Exceptions\User\VerifyUserFailedException.cs" />
+    <Compile Include="Exceptions\User\GetUserFailedException.cs" />
+    <Compile Include="Exceptions\Crud\GetAllFailedException.cs" />
+    <Compile Include="Exceptions\Crud\CreateFailedException.cs" />
+    <Compile Include="Exceptions\Crud\DeleteFailedException.cs" />
+    <Compile Include="Exceptions\Crud\FetchFailedException.cs" />
     <Compile Include="Exceptions\GeneralDataAccessException.cs" />
-    <Compile Include="Exceptions\InsertFailedException.cs" />
+    <Compile Include="Exceptions\Crud\InsertFailedException.cs" />
     <Compile Include="Exceptions\MultipleItemsFoundDataAccessException.cs" />
-    <Compile Include="Exceptions\UpdateFailedException.cs" />
-    <Compile Include="Interfaces\IExtraDataDal.cs" />
+    <Compile Include="Exceptions\Crud\UpdateFailedException.cs" />
+    <Compile Include="Interfaces\ICycleStudyDataDal.cs" />
     <Compile Include="Interfaces\ITranslationDal.cs" />
     <Compile Include="Interfaces\IDalManager.cs" />
     <Compile Include="Interfaces\ICustomIdentityDal.cs" />
@@ -106,6 +106,7 @@
       <Name>LearnLanguages.Common.Server</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

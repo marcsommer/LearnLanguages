@@ -145,4 +145,7 @@
     <value>False</value>
     <comment>debug</comment>
   </data>
+  <data name="StudyCompletedMessage" xml:space="preserve">
+    <value>Study Complete!</value>
+  </data>
 </root>

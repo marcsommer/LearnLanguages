@@ -115,6 +115,7 @@
     <Compile Include="ViewModels\NavigationButtons\ViewLanguagesNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\ViewTranslationsNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Study\AskDoYouKnowThisViewModel.cs" />
+    <Compile Include="ViewModels\Study\StudyCompletedViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyViewModel.cs" />
     <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesItemViewModel.cs" />
     <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesViewModel.cs" />
@@ -159,6 +160,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Study\StudyCompletedView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NavigationButtons\StudyNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

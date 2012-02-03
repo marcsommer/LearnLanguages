@@ -87,35 +87,38 @@
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\RoleDto.cs">
       <Link>Dtos\RoleDto.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Dtos\StudyDataDto.cs">
+      <Link>Dtos\StudyDataDto.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\TranslationDto.cs">
       <Link>Dtos\TranslationDto.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\UserDto.cs">
       <Link>Dtos\UserDto.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\CreateFailedException.cs">
-      <Link>Exceptions\CreateFailedException.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\CriteriaException.cs">
       <Link>Exceptions\CriteriaException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\DeleteFailedException.cs">
-      <Link>Exceptions\DeleteFailedException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\Crud\CreateFailedException.cs">
+      <Link>Exceptions\Crud\CreateFailedException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\FetchFailedException.cs">
-      <Link>Exceptions\FetchFailedException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\Crud\DeleteFailedException.cs">
+      <Link>Exceptions\Crud\DeleteFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\Crud\FetchFailedException.cs">
+      <Link>Exceptions\Crud\FetchFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\Crud\GetAllFailedException.cs">
+      <Link>Exceptions\Crud\GetAllFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\Crud\InsertFailedException.cs">
+      <Link>Exceptions\Crud\InsertFailedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\Crud\UpdateFailedException.cs">
+      <Link>Exceptions\Crud\UpdateFailedException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GeneralDataAccessException.cs">
       <Link>Exceptions\GeneralDataAccessException.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetAllFailedException.cs">
-      <Link>Exceptions\GetAllFailedException.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetRolesFailedException.cs">
-      <Link>Exceptions\GetRolesFailedException.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\GetUserFailedException.cs">
-      <Link>Exceptions\GetUserFailedException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdAlreadyExistsException.cs">
       <Link>Exceptions\IdAlreadyExistsException.cs</Link>
@@ -123,14 +126,8 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdNotFoundException.cs">
       <Link>Exceptions\IdNotFoundException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\InsertFailedException.cs">
-      <Link>Exceptions\InsertFailedException.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\LanguageTextAlreadyExistsException.cs">
       <Link>Exceptions\LanguageTextAlreadyExistsException.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\LoadUserDataException.cs">
-      <Link>Exceptions\LoadUserDataException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\MultipleItemsFoundDataAccessException.cs">
       <Link>Exceptions\MultipleItemsFoundDataAccessException.cs</Link>
@@ -138,23 +135,29 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\SeedDataException.cs">
       <Link>Exceptions\SeedDataException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UpdateFailedException.cs">
-      <Link>Exceptions\UpdateFailedException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\GetRolesFailedException.cs">
+      <Link>Exceptions\User\GetRolesFailedException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UsernameAndUserIdDoNotMatchException.cs">
-      <Link>Exceptions\UsernameAndUserIdDoNotMatchException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\GetUserFailedException.cs">
+      <Link>Exceptions\User\GetUserFailedException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UsernameNotFoundException.cs">
-      <Link>Exceptions\UsernameNotFoundException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\LoadUserDataException.cs">
+      <Link>Exceptions\User\LoadUserDataException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UserNotAuthenticatedException.cs">
-      <Link>Exceptions\UserNotAuthenticatedException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UsernameAndUserIdDoNotMatchException.cs">
+      <Link>Exceptions\User\UsernameAndUserIdDoNotMatchException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\UserNotAuthorizedException.cs">
-      <Link>Exceptions\UserNotAuthorizedException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UsernameNotFoundException.cs">
+      <Link>Exceptions\User\UsernameNotFoundException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\VerifyUserFailedException.cs">
-      <Link>Exceptions\VerifyUserFailedException.cs</Link>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UserNotAuthenticatedException.cs">
+      <Link>Exceptions\User\UserNotAuthenticatedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UserNotAuthorizedException.cs">
+      <Link>Exceptions\User\UserNotAuthorizedException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\VerifyUserFailedException.cs">
+      <Link>Exceptions\User\VerifyUserFailedException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\VeryBadException.cs">
       <Link>Exceptions\VeryBadException.cs</Link>

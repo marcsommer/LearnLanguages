@@ -14,7 +14,7 @@ NOTES ON BUILDING/RUNNING:
 -Be sure to manually set the IISHost project as the StartUp Project.
 -To switch between the Mock and Ef data providers: IISHost project -> Web.config -> <appsettings> -> key="DalManagerType".
 -To switch between Silverlight Unit Testing UI and the actual Silverlight app UI: IISHost project -> Project Properties -> Web tab -> Specific Page(.TestsTestPage is the UnitTesting page right now - bad naming sorry).
--The "develop" branch is my working branch, and usually contains my most up-to-date code.
+-I usually work in a feature branch and then merge it back into master, so for most up-to-date code, check out the [feature] branch.
 
 JOURNAL:
 01/03/12

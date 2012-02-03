@@ -52,8 +52,12 @@
     <Reference Include="Csla">
       <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
     </Reference>
+    <Reference Include="Csla.Xaml">
+      <HintPath>..\dependencies\csla_silverlight\Csla.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -63,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CycleStudyPartner.cs" />
-    <Compile Include="Edits\CycleStudyDataEdit.cs" />
     <Compile Include="Interfaces\IAskUserExtraData.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +85,10 @@
     <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
       <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
       <Name>LearnLanguages.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
+      <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
+      <Name>LearnLanguages.DataAccess.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

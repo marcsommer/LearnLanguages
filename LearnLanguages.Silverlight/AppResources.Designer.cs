@@ -140,5 +140,14 @@ namespace LearnLanguages.Silverlight {
                 return ResourceManager.GetString("ShowGridLines", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study Complete!.
+        /// </summary>
+        internal static string StudyCompletedMessage {
+            get {
+                return ResourceManager.GetString("StudyCompletedMessage", resourceCulture);
+            }
+        }
     }
 }

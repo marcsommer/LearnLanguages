@@ -6,15 +6,20 @@ using System.ComponentModel.Composition.Hosting;
 
 namespace LearnLanguages.Study
 {
+  /// <summary>
+  /// The CycleStudyPartner is a simple study partner that asks what the user's native language is.
+  /// It then cycles through phrases in foreign languages asking if the user knows it.  It has no memory.
+  /// This is my most basic partner, as I am just forming how they work.  This isn't really a practical study
+  /// partner.
+  /// </summary>
   [Export(typeof(IStudyPartner))]
   public class CycleStudyPartner : IStudyPartner, IAskUserExtraData
   {
+    [Import]
+    public IEventAggregator _EventAggregator { get; set; }
 
     [Import]
-    private IEventAggregator _EventAggregator { get; set; }
-
-    [Import]
-    private CompositionContainer _Container { get; set; }
+    public CompositionContainer _Container { get; set; }
 
     #region Methods
 
@@ -55,7 +60,9 @@ namespace LearnLanguages.Study
 
     public void Study(IEventAggregator eventAggregator)
     {
-      throw new NotImplementedException();
+      System.Windows.MessageBox.Show("study happened.");
+      if (StudyCompleted != null)
+        StudyCompleted(this, EventArgs.Empty);
     }
   }
 }

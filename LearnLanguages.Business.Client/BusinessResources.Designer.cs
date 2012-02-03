@@ -61,6 +61,33 @@ namespace LearnLanguages.Business {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewStudyDataNativeLanguageText {
+            get {
+                return ResourceManager.GetString("DefaultNewStudyDataNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        public static string MinNativeLanguageTextLength {
+            get {
+                return ResourceManager.GetString("MinNativeLanguageTextLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        public static string MinUsernameLength {
+            get {
+                return ResourceManager.GetString("MinUsernameLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}.Count must equal {1}.Count.
         /// </summary>
         public static string RuleInfoCountsMustBeEqual {

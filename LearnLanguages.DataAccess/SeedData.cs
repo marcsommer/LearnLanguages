@@ -52,6 +52,7 @@ namespace LearnLanguages.DataAccess
       InitializeTranslations();
       InitializeUsers();
       InitializeRoles();
+      InitializeStudyDatas();
     }
 
     #region Language Data
@@ -214,6 +215,7 @@ namespace LearnLanguages.DataAccess
     public List<TranslationDto> Translations { get; private set; }
     public List<UserDto> Users { get; private set; }
     public List<RoleDto> Roles { get; private set; }
+    public List<StudyDataDto> StudyDatas { get; private set; }
 
     private void InitializeLanguages()
     {
@@ -319,6 +321,19 @@ namespace LearnLanguages.DataAccess
         UserRole
       };
     }
+    private void InitializeStudyDatas()
+    {
+      var dto = new StudyDataDto()
+      {
+        Id = new Guid("A1F69CEE-05EC-49D2-AA58-A246A8371AC0"),
+        NativeLanguageText = EnglishText,
+        Username = TestValidUsername
+      };
+      StudyDatas = new List<StudyDataDto>()
+      {
+        dto
+      };
+    }
 
     public bool ContainsLanguageId(Guid id)
     {
@@ -349,5 +364,6 @@ namespace LearnLanguages.DataAccess
               where u.Id == userId
               select u.Username).FirstOrDefault();
     }
+
   }
 }
