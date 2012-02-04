@@ -16,6 +16,17 @@ namespace LearnLanguages.Business
       DataPortal.BeginFetch<TranslationList>(callback);
     }
 
+    /// <summary>
+    /// Gets all of the translations that contain the given phrase, using that phrase's id.  This in 
+    /// contrast to searching through all translations' texts and matching up the phrase.text or regex, etc.
+    /// </summary>
+    public static void GetAllTranslationsContainingPhraseById(PhraseEdit phrase, 
+      EventHandler<DataPortalResult<TranslationList>> callback)
+    {
+      var criteria = new PhraseCriteria(phrase);
+      DataPortal.BeginFetch<TranslationList>(criteria, callback);
+    }
+
     public static void NewTranslationList(ICollection<Guid> translationIds, EventHandler<DataPortalResult<TranslationList>> callback)
     {
       DataPortal.BeginFetch<TranslationList>(translationIds, callback);
@@ -23,7 +34,7 @@ namespace LearnLanguages.Business
 
 #if !SILVERLIGHT
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void DataPortal_Fetch(ICollection<Guid> translationIds)
+    protected void DataPortal_Fetch(ICollection<Guid> translationIds)
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
@@ -56,7 +67,7 @@ namespace LearnLanguages.Business
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void DataPortal_Fetch()
+    protected void DataPortal_Fetch()
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
@@ -79,11 +90,38 @@ namespace LearnLanguages.Business
 
         //RESULT WAS SUCCESSFUL
         var allTranslationDtos = result.Obj;
-        foreach (var TranslationDto in allTranslationDtos)
+        foreach (var translationDto in allTranslationDtos)
         {
           //var TranslationEdit = DataPortal.CreateChild<TranslationEdit>(TranslationDto);
-          var TranslationEdit = DataPortal.FetchChild<TranslationEdit>(TranslationDto);
-          this.Add(TranslationEdit);
+          var translationEdit = DataPortal.FetchChild<TranslationEdit>(translationDto);
+          this.Add(translationEdit);
+        }
+      }
+    }
+
+    [Transactional(TransactionalTypes.TransactionScope)]
+    protected void DataPortal_Fetch(PhraseCriteria phraseCriteria)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var TranslationDal = dalManager.GetProvider<ITranslationDal>();
+        Result<ICollection<TranslationDto>> result = TranslationDal.FetchByPhraseId(phraseCriteria.Phrase.Id);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(result.Msg);
+        }
+        
+        //RESULT WAS SUCCESSFUL
+        var translationDtos = result.Obj;
+        foreach (var translationDto in translationDtos)
+        {
+          //var TranslationEdit = DataPortal.CreateChild<TranslationEdit>(TranslationDto);
+          var translationEdit = DataPortal.FetchChild<TranslationEdit>(translationDto);
+          this.Add(translationEdit);
         }
       }
     }
@@ -99,7 +137,7 @@ namespace LearnLanguages.Business
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void Child_Fetch(ICollection<Guid> translationIds)
+    protected void Child_Fetch(ICollection<Guid> translationIds)
     {
       Items.Clear();
       foreach (var id in translationIds)

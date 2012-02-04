@@ -134,6 +134,7 @@ namespace LearnLanguages.DataAccess
 
     protected abstract TranslationDto NewImpl(object criteria);
     protected abstract TranslationDto FetchImpl(Guid id);
+    protected abstract ICollection<TranslationDto> FetchByIdImpl(Guid phraseId);
     protected abstract ICollection<TranslationDto> FetchImpl(ICollection<Guid> ids);
     protected abstract TranslationDto UpdateImpl(TranslationDto dto);
     protected abstract TranslationDto InsertImpl(TranslationDto dto);
@@ -144,6 +145,29 @@ namespace LearnLanguages.DataAccess
     {
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
         throw new Exceptions.UserNotAuthenticatedException();
+    }
+
+    /// <summary>
+    /// Returns all translations that contains the phraseId.
+    /// </summary>
+    /// <param name="phraseDto"></param>
+    /// <returns></returns>
+    public Result<ICollection<TranslationDto>> FetchByPhraseId(Guid phraseId)
+    {
+      Result<ICollection<TranslationDto>> retResult = Result<ICollection<TranslationDto>>.Undefined(null);
+      try
+      {
+        CheckAuthentication();
+
+        var dtos = FetchByIdImpl(phraseId);
+        retResult = Result<ICollection<TranslationDto>>.Success(dtos);
+      }
+      catch (Exception ex)
+      {
+        var wrappedEx = new Exceptions.FetchFailedException(ex);
+        retResult = Result<ICollection<TranslationDto>>.FailureWithInfo(null, wrappedEx);
+      }
+      return retResult;
     }
   }
 }

@@ -197,8 +197,21 @@ namespace LearnLanguages.Business
     public void AddPhrase(PhraseEdit phrase)
     {
       //PhraseIds.Add(phrase.Id);
-      Phrases.Add(phrase);
+      if (_PhraseAdding != null)
+        throw new Exception();
+      _PhraseAdding = phrase;
+      Phrases.AddedNew += Phrases_AddedNew;
+      Phrases.AddNew();
+      Phrases.AddedNew -= Phrases_AddedNew;
       BusinessRules.CheckRules();
+    }
+    private PhraseEdit _PhraseAdding; 
+
+    private void Phrases_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
+    {
+      var phrase = e.NewObject;
+      var phraseDto = _PhraseAdding.CreateDto();
+      phrase.LoadFromDtoBypassPropertyChecks(phraseDto);
     }
 
     protected override void OnChildChanged(Csla.Core.ChildChangedEventArgs e)
@@ -264,7 +277,6 @@ namespace LearnLanguages.Business
         var dummy = this;
       }
     }
-
     [Transactional(TransactionalTypes.TransactionScope)]
     protected void DataPortal_Fetch(Guid id)
     {

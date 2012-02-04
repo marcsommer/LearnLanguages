@@ -10,7 +10,7 @@ namespace LearnLanguages.Study
   /// Simple IStudyPartner base class.  You do NOT need to descend from this, it just provides some 
   /// very basic plumbing for events and checking for 
   /// </summary>
-  public abstract class StudyPartnerBase : IStudyPartner, IAskUserExtraData
+  public abstract class StudyPartnerBase : PropertyChangedBase, IStudyPartner, IAskUserExtraData
   {
     #region Properties 
 
@@ -68,6 +68,10 @@ namespace LearnLanguages.Study
           AskUserExtraDataCompleted(this, EventArgs.Empty);
       }
     }
+    /// <summary>
+    /// Override this for asking the user for extra data.  Abstract instead of virtual 
+    /// to tell the coder of the descending to know of its existence.
+    /// </summary>
     protected abstract void AskUserExtraDataImpl();
 
     #endregion

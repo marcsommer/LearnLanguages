@@ -56,6 +56,12 @@
     <Compile Include="..\LearnLanguages.Business.Client\Commands\PhraseDefaultSetterCommand.cs">
       <Link>Commands\PhraseDefaultSetterCommand.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseCollectionCriteria.cs">
+      <Link>Criteria\PhraseCollectionCriteria.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseCriteria.cs">
+      <Link>Criteria\PhraseCriteria.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Edits\LanguageEdit.cs">
       <Link>Edits\LanguageEdit.cs</Link>
     </Compile>
@@ -85,6 +91,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\BlankTranslationRetriever.cs">
       <Link>Retrievers\BlankTranslationRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationRetriever.cs">
+      <Link>Retrievers\TranslationRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Security\CustomIdentity.cs">
       <Link>Security\CustomIdentity.cs</Link>

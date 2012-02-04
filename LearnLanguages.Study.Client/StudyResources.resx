@@ -117,8 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BingAppId" xml:space="preserve">
+    <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
+  </data>
   <data name="DefaultNewStudyDataNativeLanguageText" xml:space="preserve">
     <value />
+  </data>
+  <data name="DefaultStudyPhrase" xml:space="preserve">
+    <value>This phrase is awesome -  I want to translate it into sooooo many languages!</value>
+  </data>
+  <data name="EnglishLanguageCode" xml:space="preserve">
+    <value>en</value>
+  </data>
+  <data name="EnglishLanguageText" xml:space="preserve">
+    <value>English</value>
   </data>
   <data name="MinNativeLanguageTextLength" xml:space="preserve">
     <value>2</value>
@@ -128,5 +140,11 @@
   </data>
   <data name="ShowGridLines" xml:space="preserve">
     <value>False</value>
+  </data>
+  <data name="SpanishLanguageCode" xml:space="preserve">
+    <value>es</value>
+  </data>
+  <data name="SpanishLanguageText" xml:space="preserve">
+    <value>Spanish</value>
   </data>
 </root>

@@ -61,11 +61,47 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A71DCFCC34133403B25C909D017FE0B140799549.
+        /// </summary>
+        public static string BingAppId {
+            get {
+                return ResourceManager.GetString("BingAppId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string DefaultNewStudyDataNativeLanguageText {
             get {
                 return ResourceManager.GetString("DefaultNewStudyDataNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This phrase is awesome -  I want to translate it into sooooo many languages!.
+        /// </summary>
+        public static string DefaultStudyPhrase {
+            get {
+                return ResourceManager.GetString("DefaultStudyPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to en.
+        /// </summary>
+        public static string EnglishLanguageCode {
+            get {
+                return ResourceManager.GetString("EnglishLanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string EnglishLanguageText {
+            get {
+                return ResourceManager.GetString("EnglishLanguageText", resourceCulture);
             }
         }
         
@@ -93,6 +129,24 @@ namespace LearnLanguages.Study {
         public static string ShowGridLines {
             get {
                 return ResourceManager.GetString("ShowGridLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to es.
+        /// </summary>
+        public static string SpanishLanguageCode {
+            get {
+                return ResourceManager.GetString("SpanishLanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spanish.
+        /// </summary>
+        public static string SpanishLanguageText {
+            get {
+                return ResourceManager.GetString("SpanishLanguageText", resourceCulture);
             }
         }
     }

@@ -171,5 +171,34 @@ namespace LearnLanguages.DataAccess.Ef
         return allTranslationDtos;
       }
     }
+
+    protected override ICollection<TranslationDto> FetchByIdImpl(Guid phraseId)
+    {
+      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      {
+        var retTranslationDtos = new List<TranslationDto>();
+
+        //FIND ALL TRANSLATIONS THAT CONTAIN PHRASEDATAS WITH THE CORRESPONDING PHRASEID
+        var translationDatas = (from translationData in ctx.ObjectContext.TranslationDatas
+
+                                where (from phraseData in translationData.PhraseDatas
+                                       where phraseData.Id == phraseId
+                                       select phraseData).Count() > 0
+
+                                select translationData).ToList();
+
+        //ADD DTOS OF THOSE TRANSLATION DATAS TO RETURN LIST
+        foreach (var translationData in translationDatas)
+        {
+          var dto = EfHelper.ToDto(translationData);
+          retTranslationDtos.Add(dto);
+        }
+
+        //RETURN THE TRANSLATIONS
+        return retTranslationDtos;
+      }
+    }
   }
 }

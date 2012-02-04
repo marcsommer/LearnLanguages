@@ -44,13 +44,45 @@ namespace LearnLanguages.Business
       DataPortal.BeginFetch<LanguageEdit>(id, callback);
     }
 
+    public static void GetLanguageEdit(string languageText, EventHandler<DataPortalResult<LanguageEdit>> callback)
+    {
+      LanguageEdit retLanguage = null;
+
+      //HACK: GETLANGUAGEEDIT BY LANGUAGE TEXT.  RIGHT NOW, THIS GETALL'S THE LANGUAGES AND LOOKS IN THAT RESULT..  NEED TO IMPLEMENT THIS IN LANGUAGEDAL (GETLANGUAGEBYTEXT).
+      LanguageList.GetAll((s, r) =>
+      {
+        DataAccess.Exceptions.GeneralDataAccessException exception = null;
+        if (r.Error != null)
+          throw new DataAccess.Exceptions.GetAllFailedException(r.Error);
+        var allLanguages = r.Object;
+
+        try
+        {
+          var results = (from language in allLanguages
+                         where language.Text == languageText
+                         select language);
+
+          if (results.Count() > 0)
+            retLanguage = results.First();
+        }
+        catch (Exception ex)
+        {
+          exception = new DataAccess.Exceptions.GeneralDataAccessException(ex);
+        }
+        finally
+        {
+          callback(null, new DataPortalResult<LanguageEdit>(retLanguage, exception, null));
+        }
+      });
+    }
+
     public static void GetDefaultLanguageId(EventHandler<DataPortalResult<Guid>> callback)
     {
       LanguageList.GetAll((s, r) =>
         {
           DataAccess.Exceptions.GeneralDataAccessException exception = null;
           if (r.Error != null)
-            throw new DataAccess.Exceptions.GetAllFailedException();
+            throw new DataAccess.Exceptions.GetAllFailedException(r.Error);
           var allLanguages = r.Object;
           Guid defaultLanguageId = Guid.Empty;
           try

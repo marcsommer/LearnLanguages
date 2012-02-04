@@ -305,5 +305,14 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
+
+    protected override ICollection<TranslationDto> FetchByIdImpl(Guid phraseId)
+    {
+      var results = from translation in SeedData.Instance.Translations
+                    where translation.PhraseIds.Contains(phraseId)
+                    select translation;
+
+      return results.ToList();
+    }
   }
 }
