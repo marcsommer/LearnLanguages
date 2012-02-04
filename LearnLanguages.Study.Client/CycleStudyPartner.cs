@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
-using LearnLanguages.Study.Interfaces;
+using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using LearnLanguages.Business;
+using System.Diagnostics;
+using LearnLanguages.Silverlight.Interfaces;
 
 namespace LearnLanguages.Study
 {
@@ -24,7 +26,7 @@ namespace LearnLanguages.Study
     {
       GetRandomQuestionAnswer((q, a) =>
         {
-          
+          //Navigation.Publish.NavigationRequest<LearnLanguages.Silverlight.ViewModels.
         });
     }
 
@@ -86,86 +88,56 @@ namespace LearnLanguages.Study
           }
           #endregion
 
-          #region 3b. NO EXISTING TRANSLATION, SO CREATE NEW TRANSLATION
+          #region 3b. NO EXISTING TRANSLATION, SO AUTO TRANSLATE WITH BING AND CREATE NEW ANSWER PHRASE
           else
-          {
-            //WE DON'T HAVE A TRANSLATION FOR THIS PHRASE, SO CREATE NEW TRANSLATION
-            TranslationEdit.NewTranslationEdit((s3, r3) =>
-              {
-                if (r3.Error != null)
-                  throw r3.Error;
+          {                
+            //USING THE BING/MS TRANSLATE API
+            //ASSUME QUESTION IS IN SPANISH, SO ANSWER IS IN ENGLISH
+            var questionLanguageText = StudyResources.SpanishLanguageText;
+            var questionLanguageCode = StudyResources.SpanishLanguageCode;
+            var answerLanguageText = StudyResources.EnglishLanguageText;
+            var answerLanguageCode = StudyResources.EnglishLanguageCode;
 
-                qaTranslation = r3.Object;
-                
-                //USING THE BING/MS TRANSLATE API
-                //assume question is spanish
-                var questionLanguageText = StudyResources.SpanishLanguageText;
-                var questionLanguageCode = StudyResources.SpanishLanguageCode;
-                var answerLanguageText = StudyResources.EnglishLanguageText;
-                var answerLanguageCode = StudyResources.EnglishLanguageCode;
+            //IF QUESTION IS IN ENGLISH, THEN ANSWER IS SPANISH
+            if (question.Language.Text == StudyResources.EnglishLanguageText)
+            {
+              questionLanguageText = StudyResources.EnglishLanguageText;
+              questionLanguageCode = StudyResources.EnglishLanguageCode;
+              answerLanguageText = StudyResources.SpanishLanguageText;
+              answerLanguageCode = StudyResources.SpanishLanguageCode;
+            }
 
+            #region GET TRANSLATED TEXT
 
-                //if question is already in english, then we're going to create spanish
-                if (question.Language.Text == StudyResources.EnglishLanguageText)
+            BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
+
+            client.TranslateCompleted += (s4, r4) =>
+            {
+              if (r4.Error != null)
+                throw r4.Error;
+
+              var translatedText = r4.Result;
+              
+              PhraseEdit.NewPhraseEdit(answerLanguageText, (s5, r5) =>
                 {
-                  questionLanguageText = StudyResources.EnglishLanguageText;
-                  questionLanguageCode = StudyResources.EnglishLanguageCode;
-                  answerLanguageText = StudyResources.SpanishLanguageText;
-                  answerLanguageCode = StudyResources.SpanishLanguageCode;
-                }
+                  if (r5.Error != null)
+                    throw r5.Error;
 
+                  #region 5. POPULATE ANSWER WITH TRANSLATED TEXT AND INVOKE CALLBACK
 
-                BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
+                  answer = r5.Object;
+                  answer.Text = translatedText;
+                  Debug.Assert(answer.Language != null);
+                  callback(question, answer);
 
-                client.TranslateCompleted += (s4, r4) =>
-                {
-                  if (r4.Error != null)
-                    throw r4.Error;
+                  #endregion
+                });
+            };
 
-                  var translatedText = r4.Result;
-                  var addingQuestion = true;
+            client.TranslateAsync(StudyResources.BingAppId, question.Text, questionLanguageCode, answerLanguageCode);
+            //GOTO ABOVE TRANSLATECOMPLETED HANDLER
+            #endregion
 
-                  qaTranslation.Phrases.AddedNew += (s5, r5) =>
-                  {
-                    if (addingQuestion)
-                      question
-                    answer = r5.NewObject;
-
-                    //we need to assign language to newly created phrase object
-                    LanguageEdit.GetLanguageEdit(answerLanguageText, (s6, r6) =>
-                    {
-                      if (r6.Error != null)
-                        throw r6.Error;
-
-                      answer.Language = r6.Object;
-                      answer.Text = translatedText;
-
-                      //WE NOW HAVE VALID QUESTION AND ANSWER PHRASES, SO CREATE TRANSLATION
-                      TranslationEdit.NewTranslationEdit((s7, r7) =>
-                      {
-                        if (r7.Error != null)
-                          throw r7.Error;
-
-                        //qaTranslation 
-                      });
-
-                    });
-
-
-
-
-                  };
-
-
-                  qaTranslation.Phrases.AddNew();//question
-                  qaTranslation.Phrases.AddNew();//answer
-                  //GOTO ABOVE ADDEDNEW HANDLER
-                };
-
-                client.TranslateAsync(StudyResources.BingAppId, question.Text, questionLanguageCode, answerLanguageCode);
-                //GOTO ABOVE TRANSLATEcOMPLETED HANDLER
-
-              });
           }
           #endregion
 
@@ -197,7 +169,5 @@ namespace LearnLanguages.Study
         }
       }
     }
-
-    
   }
 }

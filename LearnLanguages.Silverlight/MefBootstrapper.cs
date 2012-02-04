@@ -23,7 +23,7 @@ namespace LearnLanguages.Silverlight
     {
       //CREATE ASSEMBLY CATALOGS FOR COMPOSITION OF APPLICATION (WPF)
       AssemblyCatalog catThis = new AssemblyCatalog(typeof(MefBootstrapper).Assembly);
-      AssemblyCatalog catStudy = new AssemblyCatalog(typeof(Study.RandomPhraseStudyPartner).Assembly);
+      AssemblyCatalog catStudy = new AssemblyCatalog(typeof(RandomPhraseStudyPartner).Assembly);
       AggregateCatalog catAll = new AggregateCatalog(catThis, catStudy);
 
       //NEW UP CONTAINER WITH CATALOGS

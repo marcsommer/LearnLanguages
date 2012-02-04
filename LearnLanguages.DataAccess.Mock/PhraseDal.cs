@@ -174,6 +174,26 @@ namespace LearnLanguages.DataAccess.Mock
       //if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
       //  throw new Exceptions.UserNotAuthenticatedException();
 
+      var languageId = SeedData.Instance.DefaultLanguageId;
+
+      if (criteria is string)
+      {
+        //IF WE HAVE A STRING PARAM, THEN IT IS LANGUAGETEXT, SO GET THE LANGUAGE ID FROM THAT
+        var languageText = (string)criteria;
+        var languageResults = (from language in SeedData.Instance.Languages
+                               where language.Text == languageText
+                               select language);
+        if (languageResults.Count() == 1)
+        {
+          var languageDto = languageResults.First();
+          languageId = languageDto.Id;
+        }
+        else if (languageResults.Count() == 0)
+          throw new Exceptions.LanguageTextNotFoundException(languageText);
+        else
+          throw new Exceptions.VeryBadException();
+      }
+
       var username = Csla.ApplicationContext.User.Identity.Name;
       var userId = (from u in SeedData.Instance.Users
                     where u.Username == username
@@ -185,10 +205,11 @@ namespace LearnLanguages.DataAccess.Mock
       var dto = new PhraseDto()
       {
         Id = Guid.NewGuid(),
-        LanguageId = SeedData.Instance.DefaultLanguageId,
+        LanguageId = languageId,
         UserId = userId, 
         Username = username
       };
+
       return dto;
     }
     protected override PhraseDto FetchImpl(Guid id)

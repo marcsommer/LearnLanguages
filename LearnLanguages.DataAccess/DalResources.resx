@@ -254,4 +254,11 @@
   <data name="DefaultNativeLanguageText" xml:space="preserve">
     <value />
   </data>
+  <data name="ErrorMsgLanguageTextNotFoundException" xml:space="preserve">
+    <value>Language ({0}) not found.  Be sure that the spelling and case-sensitivity are correct and that the language has been added.</value>
+    <comment>{0} = Language Text</comment>
+  </data>
+  <data name="ErrorMsgMultipleIdsNotFoundException" xml:space="preserve">
+    <value>Multiple Ids were not found.</value>
+  </data>
 </root>

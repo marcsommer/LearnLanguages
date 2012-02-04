@@ -455,5 +455,10 @@ namespace LearnLanguages.DataAccess.Ef
 
       return allDtos;
     }
+
+    protected override LanguageDto FetchImpl(string languageText)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

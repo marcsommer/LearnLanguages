@@ -10,6 +10,7 @@ namespace LearnLanguages.DataAccess
     Result<LanguageDto> New(object criteria);
 
     Result<LanguageDto> Fetch(Guid id);
+    Result<LanguageDto> Fetch(string languageText);
     
     Result<LanguageDto> Update(LanguageDto dto);
     

@@ -54,6 +54,11 @@ namespace LearnLanguages.Business
       DataPortal.BeginCreate<PhraseEdit>(callback);
     }
 
+    public static void NewPhraseEdit(string languageText, EventHandler<DataPortalResult<PhraseEdit>> callback)
+    {
+      DataPortal.BeginCreate<PhraseEdit>(languageText, callback);
+    }
+
     public static void GetPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
     {
       DataPortal.BeginFetch<PhraseEdit>(id, callback);
@@ -240,6 +245,28 @@ namespace LearnLanguages.Business
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var result = phraseDal.New(null);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new CreateFailedException(result.Msg);
+        }
+        PhraseDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+    [Transactional(TransactionalTypes.TransactionScope)]
+    protected void DataPortal_Create(string languageText)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        //LanguageEdit languageEdit = LanguageEdit.GetLanguageEdit(languageText);
+        //LanguageEdit languageEdit = DataPortal.FetchChild<LanguageEdit>(languageText);
+
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.New(languageText);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();

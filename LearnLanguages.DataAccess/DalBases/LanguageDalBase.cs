@@ -46,6 +46,23 @@ namespace LearnLanguages.DataAccess
       }
       return retResult;
     }
+    public Result<LanguageDto> Fetch(string languageText)
+    {
+      Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
+      try
+      {
+        CheckAuthentication();
+
+        var dto = FetchImpl(languageText);
+        retResult = Result<LanguageDto>.Success(dto);
+      }
+      catch (Exception ex)
+      {
+        var wrappedEx = new Exceptions.FetchFailedException(ex);
+        retResult = Result<LanguageDto>.FailureWithInfo(null, wrappedEx);
+      }
+      return retResult;
+    }
     public Result<ICollection<LanguageDto>> Fetch(ICollection<Guid> ids)
     {
       Result<ICollection<LanguageDto>> retResult = Result<ICollection<LanguageDto>>.Undefined(null);
@@ -134,6 +151,7 @@ namespace LearnLanguages.DataAccess
 
     protected abstract LanguageDto NewImpl(object criteria);
     protected abstract LanguageDto FetchImpl(Guid id);
+    protected abstract LanguageDto FetchImpl(string languageText);
     protected abstract ICollection<LanguageDto> FetchImpl(ICollection<Guid> ids);
     protected abstract LanguageDto UpdateImpl(LanguageDto dto);
     protected abstract LanguageDto InsertImpl(LanguageDto dto);

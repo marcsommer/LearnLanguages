@@ -1,5 +1,5 @@
 ﻿using System;
-using LearnLanguages.Study.Interfaces;
+using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;

@@ -295,11 +295,29 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language ({0}) not found.  Be sure that the spelling and case-sensitivity are correct and that the language has been added..
+        /// </summary>
+        public static string ErrorMsgLanguageTextNotFoundException {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error loading data for username ({0})..
         /// </summary>
         public static string ErrorMsgLoadUserDataException {
             get {
                 return ResourceManager.GetString("ErrorMsgLoadUserDataException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Ids were not found..
+        /// </summary>
+        public static string ErrorMsgMultipleIdsNotFoundException {
+            get {
+                return ResourceManager.GetString("ErrorMsgMultipleIdsNotFoundException", resourceCulture);
             }
         }
         

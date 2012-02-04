@@ -95,7 +95,9 @@
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
+    <Compile Include="Interfaces\IAskUserExtraData.cs" />
     <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
+    <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Interfaces\IViewModelMetadata.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -346,10 +348,6 @@
     <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.Client.csproj">
       <Project>{1CEB7E12-3D55-4EE4-BFCD-1AAB6F64F024}</Project>
       <Name>LearnLanguages.Navigation.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj">
-      <Project>{05F77F9C-9870-465E-BF88-AD0918E8594E}</Project>
-      <Name>LearnLanguages.Study.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -123,6 +123,11 @@ namespace LearnLanguages.Business
       return DataPortal.Fetch<LanguageEdit>(id);
     }
 
+    public static LanguageEdit GetLanguageEdit(string languageText)
+    {
+      return DataPortal.Fetch<LanguageEdit>(languageText);
+    }
+
     public static Guid GetDefaultLanguageId()
     {
       var allLanguages = LanguageList.GetAll();
@@ -366,6 +371,25 @@ namespace LearnLanguages.Business
       }
     }
 
+    protected void DataPortal_Fetch(string languageText)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var languageDal = dalManager.GetProvider<ILanguageDal>();
+        Result<LanguageDto> result = languageDal.Fetch(languageText);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException();
+        }
+        LanguageDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Insert()
     {
@@ -480,6 +504,27 @@ namespace LearnLanguages.Business
         var languageDal = dalManager.GetProvider<ILanguageDal>();
 
         var result = languageDal.Fetch(id);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(result.Msg);
+        }
+        LanguageDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void Child_Fetch(string languageText)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var languageDal = dalManager.GetProvider<ILanguageDal>();
+
+        var result = languageDal.Fetch(languageText);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();

@@ -13,9 +13,15 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void CreateNew(PhraseCollectionCriteria phrases, EventHandler<DataPortalResult<TranslationRetriever>> callback)
+    /// <summary>
+    /// Creates a new translation, making child-copies of the phrasesCriteria.Phrases and adding these
+    /// children to translation.Phrases.
+    /// </summary>
+    /// <param name="phrasesCriteria">collection of PhraseEdits, do not have to be marked as children.</param>
+    /// <param name="callback">callback executed once translation is completely populated</param>
+    public static void CreateNew(ListOfPhrasesCriteria phrasesCriteria, EventHandler<DataPortalResult<TranslationRetriever>> callback)
     {
-      DataPortal.BeginCreate<TranslationRetriever>(phrases, callback);
+      DataPortal.BeginCreate<TranslationRetriever>(phrasesCriteria, callback);
     }
 
     #endregion
@@ -41,27 +47,26 @@ namespace LearnLanguages.Business
     #region DP_XYZ
 
 #if !SILVERLIGHT
-    public void DataPortal_Create(PhraseCollectionCriteria phrasesCriteria)
+    public void DataPortal_Create(ListOfPhrasesCriteria phrasesCriteria)
     {
-      foreach (var phrase in phrasesCriteria.Phrases)
-      {
-        phrase.Save()
-      }
       RetrieverId = Guid.NewGuid();
-
       Translation = TranslationEdit.NewTranslationEdit();
       
-      var phraseA = Translation.Phrases.AddNew();
-      
-      phraseA.LanguageId = LanguageEdit.GetDefaultLanguageId();
-      //phraseA.Language = LanguageEdit.GetLanguageEdit(phraseA.LanguageId);
-      phraseA.Language = DataPortal.FetchChild<LanguageEdit>(phraseA.LanguageId);
-      
-      var phraseB = Translation.Phrases.AddNew();
-      phraseB.LanguageId = LanguageEdit.GetDefaultLanguageId();
-      //phraseB.Language = LanguageEdit.GetLanguageEdit(phraseB.LanguageId);
-      phraseB.Language = DataPortal.FetchChild<LanguageEdit>(phraseB.LanguageId);
+      //FILL TRANSLATION.PHRASES WITH EMPTY PHRASES
+      for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
+      {
+        Translation.Phrases.AddNew();
+      }
+
+      for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
+      {
+        var sourcePhrase = phrasesCriteria.Phrases[i];
+        var targetPhrase = Translation.Phrases[i];
+        var dto = sourcePhrase.CreateDto();
+        targetPhrase.LoadFromDtoBypassPropertyChecks(dto);
+      }
     }
+
 #endif
 
     #endregion

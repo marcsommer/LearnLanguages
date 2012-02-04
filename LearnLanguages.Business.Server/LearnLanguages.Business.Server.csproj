@@ -56,8 +56,8 @@
     <Compile Include="..\LearnLanguages.Business.Client\Commands\PhraseDefaultSetterCommand.cs">
       <Link>Commands\PhraseDefaultSetterCommand.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseCollectionCriteria.cs">
-      <Link>Criteria\PhraseCollectionCriteria.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\ListOfPhrasesCriteria.cs">
+      <Link>Criteria\ListOfPhrasesCriteria.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseCriteria.cs">
       <Link>Criteria\PhraseCriteria.cs</Link>

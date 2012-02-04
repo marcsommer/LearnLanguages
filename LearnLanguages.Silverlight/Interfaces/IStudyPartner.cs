@@ -2,7 +2,7 @@
 using System.Net;
 using Caliburn.Micro;
 
-namespace LearnLanguages.Study.Interfaces
+namespace LearnLanguages.Silverlight.Interfaces
 {
   public interface IStudyPartner
   {

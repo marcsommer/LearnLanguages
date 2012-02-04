@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
-using LearnLanguages.Study.Interfaces;
+using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
 
 namespace LearnLanguages.Silverlight.ViewModels

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace LearnLanguages.Study.Interfaces
+namespace LearnLanguages.Silverlight.Interfaces
 {
   public interface IAskUserExtraData
   {
