@@ -123,6 +123,39 @@
   <data name="BaseAddress" xml:space="preserve">
     <value>http://localhost:50094/</value>
   </data>
+  <data name="BingAppId" xml:space="preserve">
+    <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
+  </data>
+  <data name="ClientIdRegisteredWithAzureMarketplace" xml:space="preserve">
+    <value>A8D01FD8-7937-4675-A098-2437E193F2EA</value>
+  </data>
+  <data name="DefaultNewStudyDataNativeLanguageText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DefaultStudyPhrase" xml:space="preserve">
+    <value>This phrase is awesome -  I want to translate it into sooooo many languages!</value>
+  </data>
+  <data name="EnglishLanguageCode" xml:space="preserve">
+    <value>en</value>
+  </data>
+  <data name="EnglishLanguageText" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="ErrorMsgAnswerIsNull" xml:space="preserve">
+    <value>The answer is null.</value>
+  </data>
+  <data name="ErrorMsgLanguageIsNull" xml:space="preserve">
+    <value>The language is null.</value>
+  </data>
+  <data name="ErrorMsgLanguageTextIsNullOrEmpty" xml:space="preserve">
+    <value>The Language.Text is null or empty.</value>
+  </data>
+  <data name="ErrorMsgQuestionIsNull" xml:space="preserve">
+    <value>The question is null.</value>
+  </data>
+  <data name="ErrorMsgTranslateServiceNotAvailable" xml:space="preserve">
+    <value>Attempted to use auto-translation service, but it is not available at this time.  Causes of this may include: The service could be down, there could be a cross domain policy issue, the internet connection might be down, or the firewall could be blocking the service.</value>
+  </data>
   <data name="FilterLabel" xml:space="preserve">
     <value>Filter: </value>
   </data>
@@ -135,6 +168,12 @@
   <data name="LogoutMessage" xml:space="preserve">
     <value>You are now logged out...Come back soon!</value>
   </data>
+  <data name="MinNativeLanguageTextLength" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="MinUsernameLength" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="NavButtonTextLogin" xml:space="preserve">
     <value>Login</value>
   </data>
@@ -144,6 +183,12 @@
   <data name="ShowGridLines" xml:space="preserve">
     <value>False</value>
     <comment>debug</comment>
+  </data>
+  <data name="SpanishLanguageCode" xml:space="preserve">
+    <value>es</value>
+  </data>
+  <data name="SpanishLanguageText" xml:space="preserve">
+    <value>Spanish</value>
   </data>
   <data name="StudyCompletedMessage" xml:space="preserve">
     <value>Study Complete!</value>

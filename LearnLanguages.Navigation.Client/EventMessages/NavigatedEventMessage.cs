@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using LearnLanguages.Navigation.Interfaces;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Navigation.EventMessages
 {
   public class NavigatedEventMessage : NavigationEventMessage, INavigatedEventMessage
   {
-    public NavigatedEventMessage(NavigationInfo navigationInfo)
+    public NavigatedEventMessage(NavigationInfo navigationInfo, IViewModelBase viewModel)
       : base(navigationInfo)
     {
-
+      ViewModel = viewModel;
     }
+
+    public IViewModelBase ViewModel { get; private set; }
     ///// <summary>
     ///// Navigation requested event message, for navigating to view models using convention over configuration.
     ///// EXPECTED FORMAT: [CoreText]ViewModel

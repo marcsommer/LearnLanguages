@@ -81,7 +81,7 @@ namespace LearnLanguages.Silverlight
       {
         var shellViewModel = Services.Container.GetExportedValue<ViewModels.ShellViewModel>();
         shellViewModel.Main = requestedViewModel;
-        Navigation.Publish.Navigated(message.NavigationInfo);
+        Navigation.Publish.Navigated(message.NavigationInfo, requestedViewModel);
       }
     }
 

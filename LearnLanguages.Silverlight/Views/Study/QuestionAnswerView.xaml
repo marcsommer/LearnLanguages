@@ -12,15 +12,43 @@
         <RowDefinition />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Border Grid.Row="0" Style="{StaticResource ViewSection}">
-        <TextBlock x:Name="Question_Text" Visibility="{Binding Path=QuestionVisibility}" />
-      </Border>
+      <Grid.Resources>
+        <Style TargetType="toolkit:HeaderedContentControl" x:Key="QAHeaderStyle">
+          <Setter Property="Padding" Value="5" />
+          <Setter Property="FontSize" Value="7" />
+          <Setter Property="FontStyle" Value="Italic" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="QAContentStyle">
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="FontSize" Value="14" />
+          <Setter Property="FontStyle" Value="Normal" />
+        </Style>
+      </Grid.Resources>
       
-      <Border Grid.Row="1" Style="{StaticResource ViewSection}">
-        <toolkit:BusyIndicator IsBusy="{Binding Path=HidingQuestion}">
-          <TextBlock x:Name="Answer_Text" Visibility="{Binding Path=AnswerVisibility}" />
-        </toolkit:BusyIndicator>
+      <!--QUESTION-->
+      <Border Grid.Row="0" Style="{StaticResource ViewSection}">
+        <toolkit:HeaderedContentControl Header="{Binding Path=QuestionHeader}" Style="{StaticResource QAHeaderStyle}">
+          <toolkit:HeaderedContentControl.Content>
+          
+            <TextBlock x:Name="Question_Text" Visibility="{Binding Path=QuestionVisibility}" Style="{StaticResource QAContentStyle}"/>
+
+          </toolkit:HeaderedContentControl.Content>
+        </toolkit:HeaderedContentControl>
       </Border>
+
+      <!--ANSWER-->
+      <Border Grid.Row="1" Style="{StaticResource ViewSection}">
+        <toolkit:HeaderedContentControl Header="{Binding Path=AnswerHeader}" Style="{StaticResource QAHeaderStyle}">
+          <toolkit:HeaderedContentControl.Content>
+            <toolkit:BusyIndicator IsBusy="{Binding Path=HidingAnswer}">
+
+              <TextBlock x:Name="Answer_Text" Visibility="{Binding Path=AnswerVisibility}" Style="{StaticResource QAContentStyle}"/>
+
+            </toolkit:BusyIndicator>
+          </toolkit:HeaderedContentControl.Content>
+        </toolkit:HeaderedContentControl>
+      </Border>
+
     </Grid>
   </Border>
 </UserControl>

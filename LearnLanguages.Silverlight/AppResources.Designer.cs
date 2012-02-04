@@ -79,6 +79,105 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A71DCFCC34133403B25C909D017FE0B140799549.
+        /// </summary>
+        internal static string BingAppId {
+            get {
+                return ResourceManager.GetString("BingAppId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A8D01FD8-7937-4675-A098-2437E193F2EA.
+        /// </summary>
+        internal static string ClientIdRegisteredWithAzureMarketplace {
+            get {
+                return ResourceManager.GetString("ClientIdRegisteredWithAzureMarketplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DefaultNewStudyDataNativeLanguageText {
+            get {
+                return ResourceManager.GetString("DefaultNewStudyDataNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This phrase is awesome -  I want to translate it into sooooo many languages!.
+        /// </summary>
+        internal static string DefaultStudyPhrase {
+            get {
+                return ResourceManager.GetString("DefaultStudyPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to en.
+        /// </summary>
+        internal static string EnglishLanguageCode {
+            get {
+                return ResourceManager.GetString("EnglishLanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string EnglishLanguageText {
+            get {
+                return ResourceManager.GetString("EnglishLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The answer is null..
+        /// </summary>
+        internal static string ErrorMsgAnswerIsNull {
+            get {
+                return ResourceManager.GetString("ErrorMsgAnswerIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language is null..
+        /// </summary>
+        internal static string ErrorMsgLanguageIsNull {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Language.Text is null or empty..
+        /// </summary>
+        internal static string ErrorMsgLanguageTextIsNullOrEmpty {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextIsNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The question is null..
+        /// </summary>
+        internal static string ErrorMsgQuestionIsNull {
+            get {
+                return ResourceManager.GetString("ErrorMsgQuestionIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attempted to use auto-translation service, but it is not available at this time.  Causes of this may include: The service could be down, there could be a cross domain policy issue, the internet connection might be down, or the firewall could be blocking the service..
+        /// </summary>
+        internal static string ErrorMsgTranslateServiceNotAvailable {
+            get {
+                return ResourceManager.GetString("ErrorMsgTranslateServiceNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter: .
         /// </summary>
         internal static string FilterLabel {
@@ -115,6 +214,24 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        internal static string MinNativeLanguageTextLength {
+            get {
+                return ResourceManager.GetString("MinNativeLanguageTextLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        internal static string MinUsernameLength {
+            get {
+                return ResourceManager.GetString("MinUsernameLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         internal static string NavButtonTextLogin {
@@ -138,6 +255,24 @@ namespace LearnLanguages.Silverlight {
         internal static string ShowGridLines {
             get {
                 return ResourceManager.GetString("ShowGridLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to es.
+        /// </summary>
+        internal static string SpanishLanguageCode {
+            get {
+                return ResourceManager.GetString("SpanishLanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spanish.
+        /// </summary>
+        internal static string SpanishLanguageText {
+            get {
+                return ResourceManager.GetString("SpanishLanguageText", resourceCulture);
             }
         }
         

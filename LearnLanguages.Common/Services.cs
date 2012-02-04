@@ -51,7 +51,7 @@ namespace LearnLanguages
         if (_Container == null)
           throw new NullReferenceException("Container has not been initialized");
         if (_Logger == null)
-          _Logger = Container.GetExportedValue<ILogger>();
+          _Logger = Container.GetExportedValueOrDefault<ILogger>();
         return _Logger;
       }
     }

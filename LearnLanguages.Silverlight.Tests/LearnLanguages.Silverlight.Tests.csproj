@@ -136,10 +136,6 @@
       <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
       <Name>LearnLanguages.DataAccess.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj">
-      <Project>{05F77F9C-9870-465E-BF88-AD0918E8594E}</Project>
-      <Name>LearnLanguages.Study.Client</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestsResources.resx">

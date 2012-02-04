@@ -2,6 +2,7 @@
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
+using System;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {

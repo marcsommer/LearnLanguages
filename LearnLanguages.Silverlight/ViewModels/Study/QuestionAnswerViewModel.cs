@@ -5,6 +5,8 @@ using Caliburn.Micro;
 using System.Windows;
 using LearnLanguages.Business;
 using System.ComponentModel;
+using System;
+using LearnLanguages.Delegates;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -28,6 +30,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _Question = value;
           NotifyOfPropertyChange(() => Question);
+          NotifyOfPropertyChange(() => QuestionHeader);
         }
       }
     }
@@ -42,20 +45,21 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _Answer = value;
           NotifyOfPropertyChange(() => Answer);
+          NotifyOfPropertyChange(() => AnswerHeader);
         }
       }
     }
 
-    private bool _HidingQuestion;
-    public bool HidingQuestion
+    private bool _HidingAnswer;
+    public bool HidingAnswer
     {
-      get { return _HidingQuestion; }
+      get { return _HidingAnswer; }
       set
       {
-        if (value != _HidingQuestion)
+        if (value != _HidingAnswer)
         {
-          _HidingQuestion = value;
-          NotifyOfPropertyChange(() => HidingQuestion);
+          _HidingAnswer = value;
+          NotifyOfPropertyChange(() => HidingAnswer);
         }
       }
     }
@@ -90,19 +94,66 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     //public int QuestionDurationInMilliseconds { get; set; }
 
-    public void AskQuestion(PhraseEdit question, PhraseEdit answer, int questionDurationInMilliseconds)
+    /// <summary>
+    /// Executes callback when answer is shown, or when exception is thrown.
+    /// </summary>
+    /// <param name="question">Question PhraseEdit</param>
+    /// <param name="answer">Answer PhraseEdit</param>
+    /// <param name="questionDurationInMilliseconds"></param>
+    /// <param name="callback"></param>
+    public void AskQuestion(PhraseEdit question, 
+                            PhraseEdit answer, 
+                            int questionDurationInMilliseconds, 
+                            ExceptionCheckCallback callback)
     {
-      HidingQuestion = true;
-      Question = question;
-      Answer = answer;
-      //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
-      BackgroundWorker timer = new BackgroundWorker();
-      timer.DoWork += (s, e) =>
-        {
-          System.Threading.Thread.Sleep(questionDurationInMilliseconds);
-          AnswerVisibility = Visibility.Visible;
-          HidingQuestion = false;
-        };
+      try
+      {
+        HideAnswer();
+        Question = question;
+        Answer = answer;
+        //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
+        BackgroundWorker timer = new BackgroundWorker();
+        timer.DoWork += (s, e) =>
+          {
+            try
+            {
+
+              System.Threading.Thread.Sleep(questionDurationInMilliseconds);
+              if (AnswerVisibility == Visibility.Collapsed)
+                ShowAnswer();
+              callback(null);
+            }
+            catch (Exception ex)
+            {
+              callback(ex);
+            }
+          };
+
+        timer.RunWorkerAsync();
+      }
+      catch (Exception ex)
+      {
+        callback(ex);
+      }
+    }
+
+    private void HideAnswer()
+    {
+      HidingAnswer = true;
+      AnswerVisibility = Visibility.Collapsed;
+    }
+
+    public bool CanShowAnswer
+    {
+      get
+      {
+        return (Answer != null);
+      }
+    }
+    public void ShowAnswer()
+    {
+      AnswerVisibility = Visibility.Visible;
+      HidingAnswer = false;
     }
 
     //public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
@@ -117,5 +168,40 @@ namespace LearnLanguages.Silverlight.ViewModels
     //  //SINCE THIS IS A NONSHARED COMPOSABLE PART, WE ONLY CARE ABOUT NAVIGATED MESSAGE ONCE, SO UNSUBSCRIBE
     //  Services.EventAggregator.Unsubscribe(this);
     //}
+
+    
+    public string QuestionHeader
+    {
+      get 
+      {
+        if (Question == null)
+          return AppResources.ErrorMsgQuestionIsNull;
+
+        if (Question.Language == null)
+          return AppResources.ErrorMsgLanguageIsNull;
+
+        if (string.IsNullOrEmpty(Question.Language.Text))
+          return AppResources.ErrorMsgLanguageTextIsNullOrEmpty;
+
+        return Question.Language.Text;
+      }
+    }
+
+    public string AnswerHeader
+    {
+      get
+      {
+        if (Answer == null)
+          return AppResources.ErrorMsgAnswerIsNull;
+
+        if (Answer.Language == null)
+          return AppResources.ErrorMsgLanguageIsNull;
+
+        if (string.IsNullOrEmpty(Answer.Language.Text))
+          return AppResources.ErrorMsgLanguageTextIsNullOrEmpty;
+
+        return Answer.Language.Text;
+      }
+    }
   }
 }

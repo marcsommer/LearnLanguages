@@ -1,7 +1,7 @@
 ﻿using System;
 using LearnLanguages.Common.Interfaces;
 
-namespace LearnLanguages.Study.ViewModels
+namespace LearnLanguages.Silverlight.ViewModels
 {
   public class AskUserExtraDataViewModel : IViewModelBase
   {
@@ -12,7 +12,7 @@ namespace LearnLanguages.Study.ViewModels
     }
     public bool ShowGridLines
     {
-      get { return bool.Parse(StudyResources.ShowGridLines); }
+      get { return bool.Parse(AppResources.ShowGridLines); }
     }
     public void OnImportsSatisfied()
     {

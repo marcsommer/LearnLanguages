@@ -9,6 +9,15 @@ namespace LearnLanguages.Business
   [Serializable]
   public class PhraseCriteria : CriteriaBase<PhraseCriteria>
   {
+    /// <summary>
+    /// DON'T USE THIS CTOR.  THIS IS A READ ONLY CRITERIA CLASS.  THIS CTOR IS ONLY HERE
+    /// BECAUSE SERIALIZATION REQUIRES IT.
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public PhraseCriteria()
+    {
+      //required for serialization
+    }
     public PhraseCriteria(PhraseEdit phrase)
     {
       Phrase = phrase;

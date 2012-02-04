@@ -5,7 +5,6 @@ using Microsoft.Silverlight.Testing;
 using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
 using System.Linq;
-using LearnLanguages.Study;
 
 namespace LearnLanguages.Silverlight.Tests
 {

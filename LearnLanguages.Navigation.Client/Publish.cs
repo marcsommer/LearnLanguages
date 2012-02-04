@@ -6,18 +6,31 @@ namespace LearnLanguages.Navigation
 {
   public static class Publish
   {
+
     public static void NavigationRequest<T>(string baseAddress) where T : IViewModelBase
     {
       var navInfo = CreateNavigationInfo<T>(Guid.NewGuid(), baseAddress);
+      Services.EventAggregator.Publish(new EventMessages.NavigationRequestedEventMessage(navInfo));
+    }
+    /// <summary>
+    /// If you want to keep track of this navigation request, provide navigationId and check for this
+    /// in Handle(message) { message.NavInfo.NavigationId }
+    /// </summary>
+    /// <typeparam name="T">Type of IViewModelBase implementation</typeparam>
+    /// <param name="navigationId">tracking id that lasts the course of the navigation process</param>
+    /// <param name="baseAddress">base uri address</param>
+    public static void NavigationRequest<T>(Guid navigationId, string baseAddress) where T : IViewModelBase
+    {
+      var navInfo = CreateNavigationInfo<T>(navigationId, baseAddress);
       Services.EventAggregator.Publish(new EventMessages.NavigationRequestedEventMessage(navInfo));
     }
     public static void Navigating(NavigationInfo navigationInfo)
     {
       Services.EventAggregator.Publish(new Navigation.EventMessages.NavigatingEventMessage(navigationInfo));
     }
-    public static void Navigated(NavigationInfo navigationInfo)
+    public static void Navigated(NavigationInfo navigationInfo, IViewModelBase viewModel)
     {
-      Services.EventAggregator.Publish(new Navigation.EventMessages.NavigatedEventMessage(navigationInfo));
+      Services.EventAggregator.Publish(new Navigation.EventMessages.NavigatedEventMessage(navigationInfo, viewModel));
     }
     public static void NavigationFailed(NavigationInfo navigationInfo)
     {

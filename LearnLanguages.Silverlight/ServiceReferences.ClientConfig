@@ -2,20 +2,21 @@
   <system.serviceModel>
     <bindings>
       <basicHttpBinding>
-        <binding name="BasicHttpBinding_IWcfPortal" 
-                 maxBufferSize="2147483647"
-                 maxReceivedMessageSize="2147483647" 
-                 receiveTimeout="10" 
-                 sendTimeout="10">
+        <binding name="BasicHttpBinding_IWcfPortal" receiveTimeout="10.00:00:00"
+          sendTimeout="10.00:00:00" maxBufferSize="2147483647" maxReceivedMessageSize="2147483647" />
+        <binding name="BasicHttpBinding_LanguageService" maxBufferSize="2147483647"
+          maxReceivedMessageSize="2147483647">
+          <security mode="None" />
         </binding>
       </basicHttpBinding>
     </bindings>
     <client>
-      <endpoint name="BasicHttpBinding_IWcfPortal"
-                address="http://localhost:50094/SlPortal.svc"
-                binding="basicHttpBinding" 
-                bindingConfiguration="BasicHttpBinding_IWcfPortal"
-                contract="WcfPortal.IWcfPortal"  />
+      <endpoint address="http://localhost:50094/SlPortal.svc" binding="basicHttpBinding"
+        bindingConfiguration="BasicHttpBinding_IWcfPortal" contract="WcfPortal.IWcfPortal"
+        name="BasicHttpBinding_IWcfPortal" />
+      <endpoint address="http://api.microsofttranslator.com/V2/soap.svc"
+        binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_LanguageService"
+        contract="BingTranslatorService.LanguageService" name="BasicHttpBinding_LanguageService" />
     </client>
   </system.serviceModel>
 </configuration>

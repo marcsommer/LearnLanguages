@@ -4,7 +4,7 @@ using Caliburn.Micro;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace LearnLanguages.Study
+namespace LearnLanguages.Silverlight
 {
   /// <summary>
   /// Simple IStudyPartner base class.  You do NOT need to descend from this, it just provides some 
@@ -25,34 +25,26 @@ namespace LearnLanguages.Study
 
     public virtual void Study(IEventAggregator eventAggregator)
     {
-      try
+      //INITIALIZE
+      //CONTAINER
+      if (Container == null)
       {
-        //INITIALIZE
-        //CONTAINER
+        Container = Services.Container;
         if (Container == null)
-        {
-          Container = Services.Container;
-          if (Container == null)
-            throw new Common.Exceptions.PartNotSatisfiedException("Container");
-        }
-
-        //WE NEED EVENT AGGREGATOR FOR PUBLISHING NAVIGATION
-        if (EventAggregator == null)
-        {
-          Container.SatisfyImportsOnce(this);
-
-          //EVENT AGGREGATOR STILL NULL
-          if (EventAggregator == null)
-            throw new TypeLoadException("EventAggregator could not be satisfied");
-        }
-
-        StudyImpl();
+          throw new Common.Exceptions.PartNotSatisfiedException("Container");
       }
-      finally
+
+      //WE NEED EVENT AGGREGATOR FOR PUBLISHING NAVIGATION
+      if (EventAggregator == null)
       {
-        if (StudyCompleted != null)
-          StudyCompleted(this, EventArgs.Empty);
+        Container.SatisfyImportsOnce(this);
+
+        //EVENT AGGREGATOR STILL NULL
+        if (EventAggregator == null)
+          throw new TypeLoadException("EventAggregator could not be satisfied");
       }
+
+      StudyImpl();
     }
     protected abstract void StudyImpl();
 

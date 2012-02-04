@@ -69,6 +69,8 @@
     <Reference Include="mscorlib" />
     <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -92,6 +94,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Delegates\ExceptionCheckCallback.cs" />
+    <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
@@ -106,6 +110,14 @@
     <Compile Include="NavigationController.cs" />
     <Compile Include="NavigationSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\BingTranslatorService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Study\RandomPhraseStudyPartner.cs" />
+    <Compile Include="Study\StudyPartnerBase.cs" />
+    <Compile Include="ViewModels\Study\AskUserExtraDataViewModel.cs" />
     <Compile Include="ViewModels\Add\AddLanguage\AddLanguageViewModel.cs" />
     <Compile Include="ViewModels\Add\AddLanguage\AddLanguageLanguageEditViewModel.cs" />
     <Compile Include="ViewModels\Add\AddTranslation\AddTranslationViewModel.cs" />
@@ -163,6 +175,18 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\BingTranslatorService\LearnLanguages.Silverlight.BingTranslatorService.GetTranslationsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\BingTranslatorService\LearnLanguages.Silverlight.BingTranslatorService.TranslateArrayResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\BingTranslatorService\soap1.wsdl" />
+    <None Include="Service References\BingTranslatorService\soap3.xsd" />
+    <None Include="Service References\BingTranslatorService\soap31.xsd" />
+    <None Include="Service References\BingTranslatorService\soap32.xsd" />
+    <None Include="Service References\BingTranslatorService\soap33.xsd" />
+    <None Include="Service References\BingTranslatorService\SoapService2.wsdl" />
     <Page Include="Views\Study\QuestionAnswerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -320,6 +344,12 @@
       <SubType>Designer</SubType>
     </Page>
     <None Include="Properties\AppManifest.xml" />
+    <None Include="Service References\BingTranslatorService\configuration91.svcinfo" />
+    <None Include="Service References\BingTranslatorService\configuration.svcinfo" />
+    <None Include="Service References\BingTranslatorService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
@@ -360,7 +390,12 @@
       <LastGenOutput>ViewViewModelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\BingTranslatorService\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

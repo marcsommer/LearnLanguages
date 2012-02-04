@@ -10,14 +10,10 @@
     <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
         <RowDefinition />
-        <RowDefinition />
       </Grid.RowDefinitions>
       <ContentControl Grid.Row="0"
                       x:Name="AskViewModel" 
                       HorizontalContentAlignment="Stretch" />
-      
-      <TextBlock Grid.Row="1"
-                 Text="This is the StudyView" />
     </Grid>
   </Border>
 </UserControl>

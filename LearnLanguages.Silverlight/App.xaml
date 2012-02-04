@@ -29,6 +29,14 @@
       <Setter Property="Padding" Value="1" />
     </Style>
 
+    <Style x:Key="SubViewSection" TargetType="Border">
+      <Setter Property="BorderBrush" Value="LightBlue" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Margin" Value="1" />
+      <Setter Property="Padding" Value="1" />
+    </Style>
+
+
     <Style x:Key="ListBoxItemBorder" TargetType="Border">
       <Setter Property="BorderBrush" Value="Orange" />
       <Setter Property="BorderThickness" Value="1" />
