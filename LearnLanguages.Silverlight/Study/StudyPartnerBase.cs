@@ -10,7 +10,7 @@ namespace LearnLanguages.Silverlight
   /// Simple IStudyPartner base class.  You do NOT need to descend from this, it just provides some 
   /// very basic plumbing for events and checking for 
   /// </summary>
-  public abstract class StudyPartnerBase : PropertyChangedBase, IStudyPartner, IAskUserExtraData
+  public abstract class StudyPartnerBase : PropertyChangedBase, IStudyPartner, IGetStudyData
   {
     #region Properties 
 
@@ -48,31 +48,20 @@ namespace LearnLanguages.Silverlight
     }
     protected abstract void StudyImpl();
 
-    public virtual void AskUserExtraData()
-    {
-      try
-      {
-        AskUserExtraDataImpl();
-      }
-      finally
-      {
-        if (AskUserExtraDataCompleted != null)
-          AskUserExtraDataCompleted(this, EventArgs.Empty);
-      }
-    }
-    /// <summary>
-    /// Override this for asking the user for extra data.  Abstract instead of virtual 
-    /// to tell the coder of the descending to know of its existence.
-    /// </summary>
-    protected abstract void AskUserExtraDataImpl();
-
+    
     #endregion
 
     #region Events
 
     public event EventHandler StudyCompleted;
-    public event EventHandler AskUserExtraDataCompleted;
 
     #endregion
+
+    public void AskUserExtraData(object criteria, Delegates.StudyDataCallback callback)
+    {
+      AskUserExtraDataImpl(criteria, callback);
+    }
+
+    protected abstract void AskUserExtraDataImpl(object criteria, Delegates.StudyDataCallback callback);
   }
 }

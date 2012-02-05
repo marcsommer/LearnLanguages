@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
-using LearnLanguages.Silverlight.Interfaces;
-using Caliburn.Micro;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using LearnLanguages.Business;
 using System.Diagnostics;
+using Caliburn.Micro;
 using LearnLanguages.Common.ViewModelBases;
+using LearnLanguages.Business;
+using LearnLanguages.Silverlight.Interfaces;
 
 namespace LearnLanguages.Silverlight
 {
@@ -28,24 +26,24 @@ namespace LearnLanguages.Silverlight
 
     protected override void StudyImpl()
     {
-      GetRandomQuestionAnswer((q, a, ex) =>
+      GetRandomQuestionAnswer((s, r) =>
         {
-          if (ex != null)
+          if (r.Error != null)
           {
-            if (ex is System.ServiceModel.CommunicationException)
+            if (r.Error is System.ServiceModel.CommunicationException)
             {
               Services.Log(AppResources.ErrorMsgTranslateServiceNotAvailable, LogPriority.High, LogCategory.Exception);
               Study(EventAggregator);
               return;
             }
             else
-              throw ex;
+              throw r.Error;
           }
-          if (q == null || a == null)
+          if (r.Question == null || r.Answer == null)
             throw new ArgumentNullException("question or answer null");
 
-          _Question = q;
-          _Answer = a;
+          _Question = r.Question;
+          _Answer = r.Answer;
           Services.EventAggregator.Subscribe(this);
           _NavigationId = Guid.NewGuid();
           Navigation.Publish.NavigationRequest<ViewModels.QuestionAnswerViewModel>(_NavigationId, AppResources.BaseAddress);
@@ -67,7 +65,8 @@ namespace LearnLanguages.Silverlight
       {
         if (r.Error != null)
         {
-          callback(null, null, r.Error);
+          //callback(null, null, r.Error);
+          callback(this, new Args.QuestionAnswerArgs(r.Error));
           return;
         }
         _Phrases = r.Object;
@@ -86,7 +85,8 @@ namespace LearnLanguages.Silverlight
         {
           if (r2.Error != null)
           {
-            callback(null, null, r2.Error);
+            callback(this, new Args.QuestionAnswerArgs(r2.Error));
+            //callback(null, null, r2.Error);
             return;
           }
           //throw r2.Error;
@@ -111,11 +111,13 @@ namespace LearnLanguages.Silverlight
             if (answer == null)
             {
               var ex = new Exception("translation located, but all texts are equal");
-              callback(null, null, ex);
+              callback(this, new Args.QuestionAnswerArgs(ex));
+              //callback(null, null, ex);
               return;
             }
             //WE HAVE BOTH QUESTION AND ANSWER SO INITIATE CALLBACK
-            callback(question, answer, null);
+            callback(this, new Args.QuestionAnswerArgs(question, answer));
+            //callback(question, answer, null);
             return;
           }
           #endregion
@@ -137,7 +139,7 @@ namespace LearnLanguages.Silverlight
       #endregion
     }
 
-    private static PhraseEdit AutoTranslateText(Delegates.QuestionAnswerCallback callback, PhraseEdit question, PhraseEdit answer)
+    private PhraseEdit AutoTranslateText(Delegates.QuestionAnswerCallback callback, PhraseEdit question, PhraseEdit answer)
     {
       //USING THE BING/MS TRANSLATE API
       //ASSUME QUESTION IS IN SPANISH, SO ANSWER IS IN ENGLISH
@@ -162,7 +164,8 @@ namespace LearnLanguages.Silverlight
         if (r4.Error != null)
         {
           //throw r4.Error;
-          callback(null, null, r4.Error);
+          //callback(null, null, r4.Error);
+          callback(this, new Args.QuestionAnswerArgs(r4.Error));
           return;
         }
 
@@ -172,7 +175,8 @@ namespace LearnLanguages.Silverlight
         {
           if (r5.Error != null)
           {
-            callback(null, null, r5.Error);
+            //callback(null, null, r5.Error);
+            callback(this, new Args.QuestionAnswerArgs(r5.Error));
             return;
           }
           //throw r5.Error;
@@ -182,7 +186,8 @@ namespace LearnLanguages.Silverlight
           answer = r5.Object;
           answer.Text = translatedText;
           Debug.Assert(answer.Language != null);
-          callback(question, answer, null);
+          //callback(question, answer, null);
+          callback(this, new Args.QuestionAnswerArgs(question, answer));
 
           #endregion
         });
@@ -197,11 +202,6 @@ namespace LearnLanguages.Silverlight
       //GOTO ABOVE TRANSLATECOMPLETED HANDLER
 
       return answer;
-    }
-    
-    protected override void AskUserExtraDataImpl()
-    {
-      //NOT USED IN THIS STUDY PARTNER.
     }
 
     private bool _IsBusy;
@@ -238,9 +238,12 @@ namespace LearnLanguages.Silverlight
         {
           if (ex != null)
             throw ex;
-          //if (StudyCompleted != null)
-          //  StudyCompleted(this, EventArgs.Empty);
         });
+    }
+
+    protected override void AskUserExtraDataImpl(object criteria, Delegates.StudyDataCallback callback)
+    {
+      callback(this, new Args.StudyDataArgs());
     }
   }
 }

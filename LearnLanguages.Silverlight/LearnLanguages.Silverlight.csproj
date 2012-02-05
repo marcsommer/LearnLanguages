@@ -94,12 +94,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Args\StudyDataArgs.cs" />
+    <Compile Include="Args\QuestionAnswerArgs.cs" />
+    <Compile Include="Delegates\StudyDataCallback.cs" />
     <Compile Include="Delegates\ExceptionCheckCallback.cs" />
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
-    <Compile Include="Interfaces\IAskUserExtraData.cs" />
+    <Compile Include="Interfaces\IGetStudyData.cs" />
     <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Interfaces\IViewModelMetadata.cs" />

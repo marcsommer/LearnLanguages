@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7e5d1bda0f2c44208f37653aae212fff" Name="Diagram1" ZoomLevel="74" >
+      <Diagram DiagramId="7e5d1bda0f2c44208f37653aae212fff" Name="Diagram1" ZoomLevel="50" >
         <EntityTypeShape EntityType="LearnLanguages.LanguageData" Width="1.875" PointX="5.625" PointY="3.75" />
         <EntityTypeShape EntityType="LearnLanguages.PhraseData" Width="1.875" PointX="2.5" PointY="3.75" />
         <EntityTypeShape EntityType="LearnLanguages.UserData" Width="1.875" PointX="2.375" PointY="0.5" />
@@ -12,7 +12,7 @@
         <AssociationConnector Association="LearnLanguages.UserDataRoleData" />
         <AssociationConnector Association="LearnLanguages.UserDataPhraseData" />
         <AssociationConnector Association="LearnLanguages.PhraseDataLanguageData" />
-        <EntityTypeShape EntityType="LearnLanguages.TranslationData" Width="1.5" PointX="9.75" PointY="1.5" />
+        <EntityTypeShape EntityType="LearnLanguages.TranslationData" Width="1.625" PointX="8.25" PointY="3.75" />
         <AssociationConnector Association="LearnLanguages.TranslationDataPhraseData" />
         <AssociationConnector Association="LearnLanguages.UserDataTranslationData" />
         <AssociationConnector Association="LearnLanguages.UserDataLanguageData" />
