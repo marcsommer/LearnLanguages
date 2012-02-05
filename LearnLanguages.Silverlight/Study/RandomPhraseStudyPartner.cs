@@ -18,36 +18,69 @@ namespace LearnLanguages.Silverlight
   public class RandomPhraseStudyPartner : StudyPartnerBase,
                                           IHandle<Navigation.EventMessages.NavigatedEventMessage>
   {
-    private PhraseList _Phrases;
+    #region Ctors and Init
+
+    public RandomPhraseStudyPartner()
+    {
+
+    }
+
+    #endregion
+
+    #region Fields
+
+    #endregion
+
+    #region Properties
+
+    private PhraseList _Phrases { get; set; }
     private bool _ShowingQuestion { get; set; }
     private Guid _NavigationId { get; set; }
     private PhraseEdit _Question { get; set; }
     private PhraseEdit _Answer { get; set; }
 
+    private bool _IsBusy;
+    public bool IsBusy
+    {
+      get { return _IsBusy; }
+      set
+      {
+        if (value != _IsBusy)
+        {
+          _IsBusy = value;
+          NotifyOfPropertyChange(() => IsBusy);
+        }
+      }
+    }
+
+    #endregion
+
+    #region Methods
+
     protected override void StudyImpl()
     {
       GetRandomQuestionAnswer((s, r) =>
+      {
+        if (r.Error != null)
         {
-          if (r.Error != null)
+          if (r.Error is System.ServiceModel.CommunicationException)
           {
-            if (r.Error is System.ServiceModel.CommunicationException)
-            {
-              Services.Log(AppResources.ErrorMsgTranslateServiceNotAvailable, LogPriority.High, LogCategory.Exception);
-              Study(EventAggregator);
-              return;
-            }
-            else
-              throw r.Error;
+            Services.Log(AppResources.ErrorMsgTranslateServiceNotAvailable, LogPriority.High, LogCategory.Exception);
+            Study(EventAggregator);
+            return;
           }
-          if (r.Question == null || r.Answer == null)
-            throw new ArgumentNullException("question or answer null");
+          else
+            throw r.Error;
+        }
+        if (r.Question == null || r.Answer == null)
+          throw new ArgumentNullException("question or answer null");
 
-          _Question = r.Question;
-          _Answer = r.Answer;
-          Services.EventAggregator.Subscribe(this);
-          _NavigationId = Guid.NewGuid();
-          Navigation.Publish.NavigationRequest<ViewModels.QuestionAnswerViewModel>(_NavigationId, AppResources.BaseAddress);
-        });
+        _Question = r.Question;
+        _Answer = r.Answer;
+        Services.EventAggregator.Subscribe(this);
+        _NavigationId = Guid.NewGuid();
+        Navigation.Publish.NavigationRequest<ViewModels.QuestionAnswerViewModel>(_NavigationId, AppResources.BaseAddress);
+      });
     }
 
     protected void GetRandomQuestionAnswer(Delegates.QuestionAnswerCallback callback)
@@ -124,7 +157,7 @@ namespace LearnLanguages.Silverlight
 
           #region 3b. NO EXISTING TRANSLATION, SO AUTO TRANSLATE WITH BING AND CREATE NEW ANSWER PHRASE
           else
-          {                
+          {
             AutoTranslateText(callback, question, answer);
           }
           #endregion
@@ -204,18 +237,9 @@ namespace LearnLanguages.Silverlight
       return answer;
     }
 
-    private bool _IsBusy;
-    public bool IsBusy
+    protected override void AskUserExtraDataImpl(object criteria, Delegates.StudyDataCallback callback)
     {
-      get { return _IsBusy; }
-      set
-      {
-        if (value != _IsBusy)
-        {
-          _IsBusy = value;
-          NotifyOfPropertyChange(() => IsBusy);
-        }
-      }
+      callback(this, new Args.StudyDataArgs());
     }
 
     public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
@@ -223,7 +247,7 @@ namespace LearnLanguages.Silverlight
       //check to see if question and answer view model is the target
       if (message.NavigationInfo.NavigationId == _NavigationId &&
           message.NavigationInfo.ViewModelCoreNoSpaces !=
-          ViewModelBase.GetCoreViewModelName(typeof(ViewModels.QuestionAnswerViewModel)) 
+          ViewModelBase.GetCoreViewModelName(typeof(ViewModels.QuestionAnswerViewModel))
           &&
           message.ViewModel is ViewModels.QuestionAnswerViewModel)
       {
@@ -235,15 +259,12 @@ namespace LearnLanguages.Silverlight
 
       var qaViewModel = (ViewModels.QuestionAnswerViewModel)message.ViewModel;
       qaViewModel.AskQuestion(_Question, _Answer, 5000, (ex) =>
-        {
-          if (ex != null)
-            throw ex;
-        });
+      {
+        if (ex != null)
+          throw ex;
+      });
     }
 
-    protected override void AskUserExtraDataImpl(object criteria, Delegates.StudyDataCallback callback)
-    {
-      callback(this, new Args.StudyDataArgs());
-    }
+    #endregion
   }
 }

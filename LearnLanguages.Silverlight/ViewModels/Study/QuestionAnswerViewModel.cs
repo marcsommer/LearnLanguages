@@ -12,13 +12,23 @@ namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(QuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class QuestionAnswerViewModel : ViewModelBase//,
-                                         //IHandle<Navigation.EventMessages.NavigatedEventMessage>
+  public class QuestionAnswerViewModel : ViewModelBase
+                                         
   {
+    #region Ctors and Init
+
     public QuestionAnswerViewModel()
     {
       Services.EventAggregator.Subscribe(this);
     }
+
+    #endregion
+
+    #region Fields
+
+    #endregion
+
+    #region Properties
 
     private PhraseEdit _Question;
     public PhraseEdit Question
@@ -92,7 +102,42 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    //public int QuestionDurationInMilliseconds { get; set; }
+    public string QuestionHeader
+    {
+      get
+      {
+        if (Question == null)
+          return AppResources.ErrorMsgQuestionIsNull;
+
+        if (Question.Language == null)
+          return AppResources.ErrorMsgLanguageIsNull;
+
+        if (string.IsNullOrEmpty(Question.Language.Text))
+          return AppResources.ErrorMsgLanguageTextIsNullOrEmpty;
+
+        return Question.Language.Text;
+      }
+    }
+    public string AnswerHeader
+    {
+      get
+      {
+        if (Answer == null)
+          return AppResources.ErrorMsgAnswerIsNull;
+
+        if (Answer.Language == null)
+          return AppResources.ErrorMsgLanguageIsNull;
+
+        if (string.IsNullOrEmpty(Answer.Language.Text))
+          return AppResources.ErrorMsgLanguageTextIsNullOrEmpty;
+
+        return Answer.Language.Text;
+      }
+    }
+
+    #endregion
+
+    #region Methods
 
     /// <summary>
     /// Executes callback when answer is shown, or when exception is thrown.
@@ -101,9 +146,9 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// <param name="answer">Answer PhraseEdit</param>
     /// <param name="questionDurationInMilliseconds"></param>
     /// <param name="callback"></param>
-    public void AskQuestion(PhraseEdit question, 
-                            PhraseEdit answer, 
-                            int questionDurationInMilliseconds, 
+    public void AskQuestion(PhraseEdit question,
+                            PhraseEdit answer,
+                            int questionDurationInMilliseconds,
                             ExceptionCheckCallback callback)
     {
       try
@@ -114,20 +159,20 @@ namespace LearnLanguages.Silverlight.ViewModels
         //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
         BackgroundWorker timer = new BackgroundWorker();
         timer.DoWork += (s, e) =>
+        {
+          try
           {
-            try
-            {
 
-              System.Threading.Thread.Sleep(questionDurationInMilliseconds);
-              if (AnswerVisibility == Visibility.Collapsed)
-                ShowAnswer();
-              callback(null);
-            }
-            catch (Exception ex)
-            {
-              callback(ex);
-            }
-          };
+            System.Threading.Thread.Sleep(questionDurationInMilliseconds);
+            if (AnswerVisibility == Visibility.Collapsed)
+              ShowAnswer();
+            callback(null);
+          }
+          catch (Exception ex)
+          {
+            callback(ex);
+          }
+        };
 
         timer.RunWorkerAsync();
       }
@@ -156,52 +201,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       HidingAnswer = false;
     }
 
-    //public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
-    //{
-    //  //WE ARE LISTENING FOR A MESSAGE THAT SAYS WE WERE SUCCESSFULLY NAVIGATED TO (SHELLVIEW.MAIN == STUDYVIEWMODEL)
-    //  //SO WE ONLY CARE ABOUT NAVIGATED EVENT MESSAGES ABOUT OUR CORE AS DESTINATION.
-    //  if (message.NavigationInfo.ViewModelCoreNoSpaces != ViewModelBase.GetCoreViewModelName(typeof(QuestionAnswerViewModel)))
-    //    return;
-
-    //  //WE HAVE BEEN SUCCESSFULLY NAVIGATED TO.
-
-    //  //SINCE THIS IS A NONSHARED COMPOSABLE PART, WE ONLY CARE ABOUT NAVIGATED MESSAGE ONCE, SO UNSUBSCRIBE
-    //  Services.EventAggregator.Unsubscribe(this);
-    //}
-
-    
-    public string QuestionHeader
-    {
-      get 
-      {
-        if (Question == null)
-          return AppResources.ErrorMsgQuestionIsNull;
-
-        if (Question.Language == null)
-          return AppResources.ErrorMsgLanguageIsNull;
-
-        if (string.IsNullOrEmpty(Question.Language.Text))
-          return AppResources.ErrorMsgLanguageTextIsNullOrEmpty;
-
-        return Question.Language.Text;
-      }
-    }
-
-    public string AnswerHeader
-    {
-      get
-      {
-        if (Answer == null)
-          return AppResources.ErrorMsgAnswerIsNull;
-
-        if (Answer.Language == null)
-          return AppResources.ErrorMsgLanguageIsNull;
-
-        if (string.IsNullOrEmpty(Answer.Language.Text))
-          return AppResources.ErrorMsgLanguageTextIsNullOrEmpty;
-
-        return Answer.Language.Text;
-      }
-    }
+    #endregion
   }
 }

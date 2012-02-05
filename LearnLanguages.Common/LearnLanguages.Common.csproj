@@ -111,6 +111,8 @@
     <Compile Include="Interfaces\IHaveModelListOfTList.cs" />
     <Compile Include="Interfaces\IHaveModelOfT.cs" />
     <Compile Include="Interfaces\IHaveUri.cs" />
+    <Compile Include="Interfaces\IHistoryEvent.cs" />
+    <Compile Include="Interfaces\IHistoryPublisher.cs" />
     <Compile Include="Interfaces\IInitializeAsync.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\ISaveAsync.cs" />

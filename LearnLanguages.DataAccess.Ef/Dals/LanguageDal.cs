@@ -285,6 +285,27 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
+    protected override LanguageDto FetchImpl(string languageText)
+    {
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      {
+        var results = from languageData in ctx.ObjectContext.LanguageDatas
+                      where languageData.Text == languageText
+                      select languageData;
+
+        if (results.Count() == 1)
+          return EfHelper.ToDto(results.First());
+        else
+        {
+          if (results.Count() == 0)
+            throw new Exceptions.LanguageTextNotFoundException(languageText);
+          else
+            throw new Exceptions.VeryBadException(
+              string.Format(DalResources.ErrorMsgVeryBadException,
+                            DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero));
+        }
+      }
+    }
     protected override ICollection<LanguageDto> FetchImpl(ICollection<Guid> ids)
     {
       var retLanguages = new List<LanguageDto>();
@@ -454,11 +475,6 @@ namespace LearnLanguages.DataAccess.Ef
       }
 
       return allDtos;
-    }
-
-    protected override LanguageDto FetchImpl(string languageText)
-    {
-      throw new NotImplementedException();
     }
   }
 }
