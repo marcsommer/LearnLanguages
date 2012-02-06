@@ -7,7 +7,9 @@
     d:DesignHeight="300" d:DesignWidth="400">
   <Border Style="{StaticResource DebugBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
-      <ContentControl x:Name="Phrase" />
+      <ContentControl x:Name="Phrase" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                      HorizontalContentAlignment="Stretch"
+                      VerticalContentAlignment="Stretch"/>
     </Grid>
   </Border>
 </UserControl>

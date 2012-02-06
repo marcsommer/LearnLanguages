@@ -15,9 +15,9 @@ using LearnLanguages.DataAccess;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  [Export(typeof(AskDoYouKnowThisViewModel))]
+  [Export(typeof(AskHowMuchDoYouKnowViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class AskDoYouKnowThisViewModel : PhraseEditViewModel
+  public class AskHowMuchDoYouKnowViewModel : AddPhrasePhraseEditViewModel
   {
     private string _InstructionsText = AppResources.AskDoYouKnowThisInstructionsText;
     public string InstructionsText

@@ -5,6 +5,7 @@ using LearnLanguages.Silverlight.Interfaces;
 using LearnLanguages.Business.Security;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -30,6 +31,29 @@ namespace LearnLanguages.Silverlight.ViewModels
         AddUnauthenticatedButtons();
       else
         AddAuthenticatedButtons((CustomIdentity)user);
+
+      //sort the items
+      var tmp = new List<ViewModelBase>(Items);
+      Comparison<ViewModelBase> comparison = (a, b) =>
+        {
+          //put Logout last always
+          if (a is LogoutNavigationButtonViewModel)
+            return 1;
+          else if (b is LogoutNavigationButtonViewModel)
+            return -1;
+          else if (a.GetType().Name[0] < b.GetType().Name[0])
+            return -1;
+          else
+            return 1;
+        };
+      tmp.Sort(comparison);
+      Items.Clear();
+      for (int i = 0; i < tmp.Count; i++)
+      {
+        Items.Insert(i, tmp[i]);
+      }
+
+      
     }
 
     private void AddAuthenticatedButtons(CustomIdentity user)
@@ -72,6 +96,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(addPhrase);
       var study = Services.Container.GetExportedValue<StudyNavigationButtonViewModel>();
       Items.Add(study);
+      var iWantToLearn = Services.Container.GetExportedValue<IWantToLearnNavigationButtonViewModel>();
+      Items.Add(iWantToLearn);
     }
 
     #endregion

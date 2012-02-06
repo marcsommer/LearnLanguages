@@ -103,6 +103,10 @@
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
+    <Compile Include="Investment\InvestmentAction.cs" />
+    <Compile Include="Investment\InvestmentMethod.cs" />
+    <Compile Include="Investment\InvestmentComponent.cs" />
+    <Compile Include="Investment\InvestmentSession.cs" />
     <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Interfaces\IViewModelMetadata.cs" />
@@ -120,6 +124,10 @@
     </Compile>
     <Compile Include="Study\RandomPhraseStudyPartner.cs" />
     <Compile Include="Study\StudyPartnerBase.cs" />
+    <Compile Include="ViewModels\IWantToLearn\IWantToLearnViewModel.cs" />
+    <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnASongNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Study\AskUserExtraDataViewModel.cs" />
     <Compile Include="ViewModels\Add\AddLanguage\AddLanguageViewModel.cs" />
     <Compile Include="ViewModels\Add\AddLanguage\AddLanguageLanguageEditViewModel.cs" />
@@ -127,11 +135,12 @@
     <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
     <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
     <Compile Include="ViewModels\Core\LoginFailedViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\AddLanguageNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\Add\AddLanguageNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\StudyNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\ViewLanguagesNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\ViewTranslationsNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\Study\AskDoYouKnowThisViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\View\ViewLanguagesNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\View\ViewTranslationsNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowViewModel.cs" />
+    <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowResponseViewModel.cs" />
     <Compile Include="ViewModels\Study\QuestionAnswerViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyCompletedViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyViewModel.cs" />
@@ -141,21 +150,21 @@
     <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
     <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsItemViewModel.cs" />
     <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\AddTranslationNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\Add\AddTranslationNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Add\AddTranslation\AddTranslationPhrasesViewModel.cs" />
     <Compile Include="ViewModels\Add\AddTranslation\AddTranslationPhrasesItemViewModel.cs" />
     <Compile Include="ViewModels\Add\AddTranslation\AddTranslationTranslationEditViewModel.cs" />
     <Compile Include="ViewModels\View\ViewPhrases\ViewPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\ViewPhrasesNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\View\ViewPhrasesNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\View\ViewPhrases\ViewPhrasesViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\AuthenticationStatusNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\AuthenticationStatusViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\AddUserNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\Add\AddUserNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Add\AddUser\AddUserViewModel.cs" />
     <Compile Include="ViewModels\Add\AddPhrase\AddPhraseViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\AddPhraseNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\Add\AddPhraseNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\LanguageEditViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddPhrase\PhraseEditViewModel.cs" />
+    <Compile Include="ViewModels\Add\AddPhrase\AddPhrasePhraseEditViewModel.cs" />
     <Compile Include="ViewModels\Core\LanguageSelectorViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\LoginNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\LoginViewModel.cs" />
@@ -178,6 +187,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\IWantToLearn\IWantToLearnView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Study\AskHowMuchDoYouKnowResponseView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <None Include="Service References\BingTranslatorService\LearnLanguages.Silverlight.BingTranslatorService.GetTranslationsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -202,7 +219,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Study\AskDoYouKnowThisView.xaml">
+    <Page Include="Views\Study\AskHowMuchDoYouKnowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -302,7 +319,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Add\AddPhrase\PhraseEditView.xaml">
+    <Page Include="Views\Add\AddPhrase\AddPhrasePhraseEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

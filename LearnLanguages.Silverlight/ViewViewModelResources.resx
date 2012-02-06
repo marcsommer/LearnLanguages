@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DefaultPercentKnown" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="InstructionsAskHowMuchDoYouKnowResponse" xml:space="preserve">
+    <value>Select how much of this phrase do you know in the targeted language.  If you know it completely, select 100%.  If you don't know it at all, select 0%.  If you know somewhere in between, estimate to the best of your ability how much of the translation  you know in the targeted language.</value>
+  </data>
+  <data name="InstructionsEnterPhrase" xml:space="preserve">
+    <value>Step 2: Enter as much text as you want to learn, like an original poem, song lyrics, story, vocabulary list, etc.  We will divide this into smaller phrases and words as we go.</value>
+  </data>
+  <data name="InstructionsSelectLanguage" xml:space="preserve">
+    <value>Step 1: Select Language</value>
+  </data>
+  <data name="LabelAcceptPercentKnown" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="LabelAddLanguageViewLanguageText" xml:space="preserve">
     <value>Language: </value>
   </data>
@@ -125,5 +140,8 @@
   </data>
   <data name="LabelAddPhraseViewPhraseText" xml:space="preserve">
     <value>Phrase: </value>
+  </data>
+  <data name="ShowInstructions" xml:space="preserve">
+    <value>True</value>
   </data>
 </root>

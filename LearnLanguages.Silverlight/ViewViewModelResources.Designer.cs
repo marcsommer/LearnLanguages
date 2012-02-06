@@ -61,6 +61,51 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 0.
+        /// </summary>
+        public static string DefaultPercentKnown {
+            get {
+                return ResourceManager.GetString("DefaultPercentKnown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select how much of this phrase do you know in the targeted language.  If you know it completely, select 100%.  If you don&apos;t know it at all, select 0%.  If you know somewhere in between, estimate to the best of your ability how much of the translation  you know in the targeted language..
+        /// </summary>
+        public static string InstructionsAskHowMuchDoYouKnowResponse {
+            get {
+                return ResourceManager.GetString("InstructionsAskHowMuchDoYouKnowResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 2: Enter as much text as you want to learn, like an original poem, song lyrics, story, vocabulary list, etc.  We will divide this into smaller phrases and words as we go..
+        /// </summary>
+        public static string InstructionsEnterPhrase {
+            get {
+                return ResourceManager.GetString("InstructionsEnterPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 1: Select Language.
+        /// </summary>
+        public static string InstructionsSelectLanguage {
+            get {
+                return ResourceManager.GetString("InstructionsSelectLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string LabelAcceptPercentKnown {
+            get {
+                return ResourceManager.GetString("LabelAcceptPercentKnown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language: .
         /// </summary>
         public static string LabelAddLanguageViewLanguageText {
@@ -84,6 +129,15 @@ namespace LearnLanguages.Silverlight {
         public static string LabelAddPhraseViewPhraseText {
             get {
                 return ResourceManager.GetString("LabelAddPhraseViewPhraseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to True.
+        /// </summary>
+        public static string ShowInstructions {
+            get {
+                return ResourceManager.GetString("ShowInstructions", resourceCulture);
             }
         }
     }
