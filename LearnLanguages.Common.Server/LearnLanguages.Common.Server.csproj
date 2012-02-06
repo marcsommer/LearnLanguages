@@ -124,6 +124,9 @@
     <Compile Include="..\LearnLanguages.Common\CustomException.cs">
       <Link>CustomException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\EventArgs\ModelEventArgsOfT.cs">
+      <Link>EventArgs\ModelEventArgsOfT.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\IAsyncStub.cs">
       <Link>Interfaces\IAsyncStub.cs</Link>
     </Compile>

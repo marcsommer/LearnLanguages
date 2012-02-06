@@ -101,6 +101,8 @@
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="EventMessages\LanguageEventMessage.cs" />
+    <Compile Include="EventMessages\LanguageAddedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
     <Compile Include="Investment\InvestmentAction.cs" />
@@ -124,6 +126,7 @@
     </Compile>
     <Compile Include="Study\RandomPhraseStudyPartner.cs" />
     <Compile Include="Study\StudyPartnerBase.cs" />
+    <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongPhraseEditViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnNavigationButtonViewModel.cs" />
@@ -187,7 +190,19 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NavigationButtons\IWantToLearnASongNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationButtons\IWantToLearnNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\IWantToLearn\IWantToLearnView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\IWantToLearn\IWantToLearnASong\IWantToLearnASongView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

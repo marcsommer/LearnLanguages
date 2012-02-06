@@ -12,7 +12,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [Export(typeof(IWantToLearnViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class IWantToLearnViewModel : Conductor<ViewModelBase>.Collection.AllActive,
-                                          IViewModelBase
+                                       IViewModelBase
   {
     public IWantToLearnViewModel()
     {
@@ -28,7 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       //ADD THESE BUTTONS
       var iWantToLearnASongNavButtonViewModel = Services.Container.GetExportedValue<IWantToLearnASongNavigationButtonViewModel>();
-      Items.Add(iWantToLearnASongNavButtonViewModel);
+      sortedItems.Add(iWantToLearnASongNavButtonViewModel);
 
       //SORT THE BUTTONS COMPARER
       Comparison<ViewModelBase> comparison = (a, b) =>

@@ -30,14 +30,15 @@
                  Grid.Column="0"
                  Text="{Binding Path=LabelLanguageText}" 
                  VerticalAlignment="Center" />
+      
       <!--LANGUAGE SELECTOR-->
-      <ContentControl x:Name="Languages" 
-                      Grid.Row="1"
-                      Grid.Column="1"
-                      Margin="0,1,0,1" 
-                      MinWidth="50"
-                      TabIndex="0"
-                      HorizontalContentAlignment="Stretch"/>
+        <ContentControl x:Name="Languages" 
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0,1,0,1" 
+                        MinWidth="50"
+                        TabIndex="0"
+                        HorizontalContentAlignment="Stretch"/>
 
       <!--INSTRUCTIONS ENTER PHRASE-->
       <TextBlock x:Name="InstructionsEnterPhrase" 

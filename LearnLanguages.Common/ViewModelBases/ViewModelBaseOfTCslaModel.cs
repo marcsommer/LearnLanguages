@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using LearnLanguages.Common.Interfaces;
+using System;
 
 namespace LearnLanguages.Common.ViewModelBases
 {
@@ -58,8 +59,11 @@ namespace LearnLanguages.Common.ViewModelBases
         if (r.Error != null)
           throw r.Error;
         Model = (TCslaModel)r.NewObject;
+        if (Saved != null)
+          Saved(this, new EventArgs.ModelEventArgs<TCslaModel>(Model));
         NotifyOfPropertyChange(() => CanSave);
       });
     }
+    public event EventHandler<Common.EventArgs.ModelEventArgs<TCslaModel>> Saved;
   }
 }

@@ -23,7 +23,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void HandleLanguageChanged(object sender, EventArgs e)
     {
-      Model.Language = ((LanguageEditViewModel)sender).Model;
+      if (sender != null) 
+        Model.Language = ((LanguageEditViewModel)sender).Model;
     }
 
     private LanguageSelectorViewModel _Languages;
@@ -60,5 +61,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    
   }
 }

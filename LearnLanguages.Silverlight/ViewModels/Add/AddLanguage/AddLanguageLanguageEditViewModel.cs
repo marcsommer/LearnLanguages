@@ -21,6 +21,7 @@ namespace LearnLanguages.Silverlight.ViewModels
              throw r.Error;
            Model = (LanguageEdit)r.NewObject;
            NotifyOfPropertyChange(() => CanSave);
+           Services.EventAggregator.Publish(new EventMessages.LanguageAddedEventMessage(Model.Text));
          }
          catch (Csla.DataPortalException dpex)
          {

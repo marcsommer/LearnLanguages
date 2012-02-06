@@ -129,6 +129,9 @@
   <data name="InstructionsSelectLanguage" xml:space="preserve">
     <value>Step 1: Select Language</value>
   </data>
+  <data name="InstructionsSelectLanguageIWantToLearnASong" xml:space="preserve">
+    <value>Step 1: Select the language of the song.  If it is not in the list, click "Add Language" first.</value>
+  </data>
   <data name="LabelAcceptPercentKnown" xml:space="preserve">
     <value>OK</value>
   </data>
@@ -141,7 +144,22 @@
   <data name="LabelAddPhraseViewPhraseText" xml:space="preserve">
     <value>Phrase: </value>
   </data>
+  <data name="LabelLanguageTextIWantToLearnASongView" xml:space="preserve">
+    <value>Language: </value>
+  </data>
+  <data name="LabelPhraseTextIWantToLearnASongView" xml:space="preserve">
+    <value>Phrase: </value>
+  </data>
+  <data name="LineDelimiter" xml:space="preserve">
+    <value>\\r\\n</value>
+  </data>
+  <data name="RegExSplitPatternWords" xml:space="preserve">
+    <value>\\W+</value>
+  </data>
   <data name="ShowInstructions" xml:space="preserve">
     <value>True</value>
+  </data>
+  <data name="ToolTipTextAddLanguage" xml:space="preserve">
+    <value>Add New Language</value>
   </data>
 </root>

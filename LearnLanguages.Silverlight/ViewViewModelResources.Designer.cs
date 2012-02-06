@@ -97,6 +97,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Step 1: Select the language of the song.  If it is not in the list, click &quot;Add Language&quot; first..
+        /// </summary>
+        public static string InstructionsSelectLanguageIWantToLearnASong {
+            get {
+                return ResourceManager.GetString("InstructionsSelectLanguageIWantToLearnASong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string LabelAcceptPercentKnown {
@@ -133,11 +142,56 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language: .
+        /// </summary>
+        public static string LabelLanguageTextIWantToLearnASongView {
+            get {
+                return ResourceManager.GetString("LabelLanguageTextIWantToLearnASongView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phrase: .
+        /// </summary>
+        public static string LabelPhraseTextIWantToLearnASongView {
+            get {
+                return ResourceManager.GetString("LabelPhraseTextIWantToLearnASongView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \\r\\n.
+        /// </summary>
+        public static string LineDelimiter {
+            get {
+                return ResourceManager.GetString("LineDelimiter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \\W+.
+        /// </summary>
+        public static string RegExSplitPatternWords {
+            get {
+                return ResourceManager.GetString("RegExSplitPatternWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to True.
         /// </summary>
         public static string ShowInstructions {
             get {
                 return ResourceManager.GetString("ShowInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Language.
+        /// </summary>
+        public static string ToolTipTextAddLanguage {
+            get {
+                return ResourceManager.GetString("ToolTipTextAddLanguage", resourceCulture);
             }
         }
     }

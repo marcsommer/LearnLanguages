@@ -14,6 +14,33 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class IWantToLearnASongViewModel : ViewModelBase
   {
-    
+    public IWantToLearnASongViewModel()
+    {
+      PhraseEdit.NewPhraseEdit((s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          var phraseViewModel = Services.Container.GetExportedValue<AddPhrasePhraseEditViewModel>();
+          phraseViewModel.Model = r.Object;
+          Phrase = phraseViewModel;
+          
+        });
+    }
+
+    private AddPhrasePhraseEditViewModel _Phrase;
+    public AddPhrasePhraseEditViewModel Phrase
+    {
+      get { return _Phrase; }
+      set
+      {
+        if (value != _Phrase)
+        {
+          _Phrase = value;
+          NotifyOfPropertyChange(() => Phrase);
+        }
+      }
+    }
+
   }
 }
