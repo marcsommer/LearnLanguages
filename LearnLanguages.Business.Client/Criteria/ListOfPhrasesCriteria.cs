@@ -5,7 +5,7 @@ using Csla.Serialization;
 using Csla;
 using System.Collections.Generic;
 
-namespace LearnLanguages.Business
+namespace LearnLanguages.Business.Criteria
 {
   /// <summary>
   /// This is NOT the same as PhraseList.  This is just a List[PhraseEdit] criteria object.  Tried to make this

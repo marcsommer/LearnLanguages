@@ -105,7 +105,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         NotifyOfPropertyChange(() => Items);
         NotifyOfPropertyChange(() => SelectedItem);
-        SelectedItem = Items[0];
+        //SelectedItem = Items[0];
         //SelectedItem = Items[0];
         //foreach (var language in allLanguages)
         //{

@@ -25,7 +25,7 @@
     <TestPageFileName>LearnLanguages.SilverlightTestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
-    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <EnableOutOfBrowser>true</EnableOutOfBrowser>
     <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
@@ -96,6 +96,7 @@
     </Compile>
     <Compile Include="Args\StudyDataArgs.cs" />
     <Compile Include="Args\QuestionAnswerArgs.cs" />
+    <Compile Include="BingTranslateHelper.cs" />
     <Compile Include="Delegates\StudyDataCallback.cs" />
     <Compile Include="Delegates\ExceptionCheckCallback.cs" />
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
@@ -190,6 +191,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\IWantToLearn\IWantToLearnASong\IWantToLearnASongPhraseEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NavigationButtons\IWantToLearnASongNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -385,6 +390,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Properties\OutOfBrowserSettings.xml" />
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>

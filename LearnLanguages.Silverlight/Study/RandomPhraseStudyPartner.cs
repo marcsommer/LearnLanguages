@@ -191,7 +191,7 @@ namespace LearnLanguages.Silverlight
       }
 
       BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
-
+      
       client.TranslateCompleted += (s4, r4) =>
       {
         if (r4.Error != null)

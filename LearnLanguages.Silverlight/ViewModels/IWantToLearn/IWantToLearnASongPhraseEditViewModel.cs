@@ -51,7 +51,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public string LabelLanguageText { get { return ViewViewModelResources.LabelLanguageTextIWantToLearnASongView; } }
 
     public string InstructionsSelectLanguage { get { return ViewViewModelResources.InstructionsSelectLanguageIWantToLearnASong; } }
-    public string InstructionsEnterPhrase { get { return ViewViewModelResources.InstructionsEnterPhrase; } }
+    public string InstructionsEnterPhrase { get { return ViewViewModelResources.InstructionsEnterPhraseIWantToLearnASong; } }
+    public int MaxInstructionsWidth { get { return int.Parse(ViewViewModelResources.MaxInstructionsWidth); } }
 
     private Visibility _InstructionsVisibility;
     public Visibility InstructionsVisibility
@@ -84,14 +85,17 @@ namespace LearnLanguages.Silverlight.ViewModels
       ///  word-subphrases: "this" "is" "line" "one" "two" "three"
 
       //PARSE PHRASE INTO WORDS
-      var phrase = e.Model;
-      var phraseText = phrase.Text;
+      var parentPhrase = e.Model;
+      var parentPhraseText = parentPhrase.Text;
 
       var lineDelimiter = ViewViewModelResources.LineDelimiter;
-      var lines = new List<string>(phraseText.Split(new string[] { lineDelimiter }, StringSplitOptions.RemoveEmptyEntries));
+      lineDelimiter = lineDelimiter.Replace("\\r", "\r");
+      lineDelimiter = lineDelimiter.Replace("\\n", "\n");
+      var lines = new List<string>(parentPhraseText.Split(new string[] { lineDelimiter }, StringSplitOptions.RemoveEmptyEntries));
 
       var splitIntoWordsPattern = ViewViewModelResources.RegExSplitPatternWords;
-      var words = new List<string>(Regex.Split(phraseText, splitIntoWordsPattern));
+      splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");
+      var words = new List<string>(Regex.Split(parentPhraseText, splitIntoWordsPattern));
 
       var allSubPhrases = new List<string>(lines);
       allSubPhrases.AddRange(words);
@@ -100,7 +104,21 @@ namespace LearnLanguages.Silverlight.ViewModels
       allSubPhrases = allSubPhrases.Distinct().ToList();
 
       //CREATE PHRASE FOR EACH LINE AND WORD
-      var phraseList = PhraseList.NewPhraseList(allSubPhrases);
+      var languageText = parentPhrase.Language.Text;
+      PhraseList.NewPhraseList(new Business.Criteria.PhraseTextsCriteria(languageText, allSubPhrases), (s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          var allSubPhrasesPhraseList = r.Object;
+          allSubPhrasesPhraseList.BeginSave((s2, r2) =>
+            {
+              if (r2.Error != null)
+                throw r2.Error;
+
+              allSubPhrasesPhraseList = (PhraseList)r2.NewObject;
+            });
+        });
 
     }
     private void HandleLanguageChanged(object sender, EventArgs e)

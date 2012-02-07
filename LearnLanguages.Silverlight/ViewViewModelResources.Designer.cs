@@ -88,6 +88,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don&apos;t know these, it&apos;s okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them..
+        /// </summary>
+        public static string InstructionsEnterPhraseIWantToLearnASong {
+            get {
+                return ResourceManager.GetString("InstructionsEnterPhraseIWantToLearnASong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Step 1: Select Language.
         /// </summary>
         public static string InstructionsSelectLanguage {
@@ -160,11 +169,20 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \\r\\n.
+        ///   Looks up a localized string similar to \r.
         /// </summary>
         public static string LineDelimiter {
             get {
                 return ResourceManager.GetString("LineDelimiter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 400.
+        /// </summary>
+        public static string MaxInstructionsWidth {
+            get {
+                return ResourceManager.GetString("MaxInstructionsWidth", resourceCulture);
             }
         }
         

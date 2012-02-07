@@ -23,7 +23,7 @@ namespace LearnLanguages.Business
     public static void GetAllTranslationsContainingPhraseById(PhraseEdit phrase, 
       EventHandler<DataPortalResult<TranslationList>> callback)
     {
-      var criteria = new PhraseCriteria(phrase);
+      var criteria = new Criteria.PhraseCriteria(phrase);
       DataPortal.BeginFetch<TranslationList>(criteria, callback);
     }
 
@@ -100,7 +100,7 @@ namespace LearnLanguages.Business
     }
 
     [Transactional(TransactionalTypes.TransactionScope)]
-    protected void DataPortal_Fetch(PhraseCriteria phraseCriteria)
+    protected void DataPortal_Fetch(Criteria.PhraseCriteria phraseCriteria)
     {
       using (var dalManager = DalFactory.GetDalManager())
       {

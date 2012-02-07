@@ -58,6 +58,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Criteria\PhraseTextsCriteria.cs" />
     <Compile Include="Criteria\ListOfPhrasesCriteria.cs" />
     <Compile Include="Edits\StudyDataEdit.cs" />
     <Compile Include="Lists\StudyDataList.cs" />

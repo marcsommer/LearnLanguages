@@ -261,4 +261,8 @@
   <data name="ErrorMsgMultipleIdsNotFoundException" xml:space="preserve">
     <value>Multiple Ids were not found.</value>
   </data>
+  <data name="ErrorMsgLanguageTextProblemWhileCreatingPhraseTexts" xml:space="preserve">
+    <value>During a PhraseList create operation with PhraseTextsCriteria, there was a problem when trying to fetch/create the languagetext ({0}).</value>
+    <comment>{0} = language text</comment>
+  </data>
 </root>

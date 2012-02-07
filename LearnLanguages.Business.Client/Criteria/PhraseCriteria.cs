@@ -4,7 +4,7 @@ using System.Net;
 using Csla.Serialization;
 using Csla;
 
-namespace LearnLanguages.Business
+namespace LearnLanguages.Business.Criteria
 {
   [Serializable]
   public class PhraseCriteria : CriteriaBase<PhraseCriteria>

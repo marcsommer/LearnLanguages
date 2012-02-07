@@ -19,7 +19,7 @@ namespace LearnLanguages.Business
     /// </summary>
     /// <param name="phrasesCriteria">collection of PhraseEdits, do not have to be marked as children.</param>
     /// <param name="callback">callback executed once translation is completely populated</param>
-    public static void CreateNew(ListOfPhrasesCriteria phrasesCriteria, EventHandler<DataPortalResult<TranslationRetriever>> callback)
+    public static void CreateNew(Criteria.ListOfPhrasesCriteria phrasesCriteria, EventHandler<DataPortalResult<TranslationRetriever>> callback)
     {
       DataPortal.BeginCreate<TranslationRetriever>(phrasesCriteria, callback);
     }
@@ -47,7 +47,7 @@ namespace LearnLanguages.Business
     #region DP_XYZ
 
 #if !SILVERLIGHT
-    public void DataPortal_Create(ListOfPhrasesCriteria phrasesCriteria)
+    public void DataPortal_Create(Criteria.ListOfPhrasesCriteria phrasesCriteria)
     {
       RetrieverId = Guid.NewGuid();
       Translation = TranslationEdit.NewTranslationEdit();

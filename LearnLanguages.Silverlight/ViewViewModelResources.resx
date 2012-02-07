@@ -126,6 +126,9 @@
   <data name="InstructionsEnterPhrase" xml:space="preserve">
     <value>Step 2: Enter as much text as you want to learn, like an original poem, song lyrics, story, vocabulary list, etc.  We will divide this into smaller phrases and words as we go.</value>
   </data>
+  <data name="InstructionsEnterPhraseIWantToLearnASong" xml:space="preserve">
+    <value>Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don't know these, it's okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them.</value>
+  </data>
   <data name="InstructionsSelectLanguage" xml:space="preserve">
     <value>Step 1: Select Language</value>
   </data>
@@ -151,7 +154,10 @@
     <value>Phrase: </value>
   </data>
   <data name="LineDelimiter" xml:space="preserve">
-    <value>\\r\\n</value>
+    <value>\r</value>
+  </data>
+  <data name="MaxInstructionsWidth" xml:space="preserve">
+    <value>400</value>
   </data>
   <data name="RegExSplitPatternWords" xml:space="preserve">
     <value>\\W+</value>

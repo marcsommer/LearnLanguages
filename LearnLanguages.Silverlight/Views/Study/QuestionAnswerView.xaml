@@ -29,8 +29,8 @@
       <Border Grid.Row="0" Style="{StaticResource ViewSection}">
         <toolkit:HeaderedContentControl Header="{Binding Path=QuestionHeader}" Style="{StaticResource QAHeaderStyle}">
           <toolkit:HeaderedContentControl.Content>
-          
-            <TextBlock x:Name="Question_Text" Visibility="{Binding Path=QuestionVisibility}" Style="{StaticResource QAContentStyle}"/>
+
+              <TextBlock x:Name="Question_Text" Visibility="{Binding Path=QuestionVisibility}" Style="{StaticResource QAContentStyle}"/>
 
           </toolkit:HeaderedContentControl.Content>
         </toolkit:HeaderedContentControl>

@@ -7,6 +7,8 @@ using LearnLanguages.Business;
 using System.ComponentModel;
 using System;
 using LearnLanguages.Delegates;
+using System.Net;
+using System.Windows.Controls;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -153,6 +155,11 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       try
       {
+
+        //BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
+        //client.SpeakCompleted += client_SpeakCompleted;
+        //client.SpeakAsync(AppResources.BingAppId, question.Text, BingTranslateHelper.GetLanguageCode(question.Language.Text), string.Empty, string.Empty);
+
         HideAnswer();
         Question = question;
         Answer = answer;
@@ -182,6 +189,10 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+
+    
+
+    
     private void HideAnswer()
     {
       HidingAnswer = true;

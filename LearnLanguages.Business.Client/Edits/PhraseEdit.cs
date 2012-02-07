@@ -407,6 +407,26 @@ namespace LearnLanguages.Business
     //}
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    protected override void Child_Create()
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+        var result = phraseDal.New(null);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new CreateFailedException(result.Msg);
+        }
+        PhraseDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Fetch(PhraseDto dto)
     {
       LoadFromDtoBypassPropertyChecks(dto);

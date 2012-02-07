@@ -304,6 +304,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to During a PhraseList create operation with PhraseTextsCriteria, there was a problem when trying to fetch/create the languagetext ({0})..
+        /// </summary>
+        public static string ErrorMsgLanguageTextProblemWhileCreatingPhraseTexts {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextProblemWhileCreatingPhraseTexts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error loading data for username ({0})..
         /// </summary>
         public static string ErrorMsgLoadUserDataException {

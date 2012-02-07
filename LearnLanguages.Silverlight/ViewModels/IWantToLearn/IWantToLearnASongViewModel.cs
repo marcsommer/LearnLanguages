@@ -21,15 +21,14 @@ namespace LearnLanguages.Silverlight.ViewModels
           if (r.Error != null)
             throw r.Error;
 
-          var phraseViewModel = Services.Container.GetExportedValue<AddPhrasePhraseEditViewModel>();
+          var phraseViewModel = Services.Container.GetExportedValue<IWantToLearnASongPhraseEditViewModel>();
           phraseViewModel.Model = r.Object;
           Phrase = phraseViewModel;
-          
         });
     }
 
-    private AddPhrasePhraseEditViewModel _Phrase;
-    public AddPhrasePhraseEditViewModel Phrase
+    private IWantToLearnASongPhraseEditViewModel _Phrase;
+    public IWantToLearnASongPhraseEditViewModel Phrase
     {
       get { return _Phrase; }
       set
