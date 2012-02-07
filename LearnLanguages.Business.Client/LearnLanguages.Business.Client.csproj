@@ -58,9 +58,12 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Criteria\LineInfosCriteria.cs" />
     <Compile Include="Criteria\PhraseTextsCriteria.cs" />
     <Compile Include="Criteria\ListOfPhrasesCriteria.cs" />
+    <Compile Include="Edits\LineEdit.cs" />
     <Compile Include="Edits\StudyDataEdit.cs" />
+    <Compile Include="Lists\LineList.cs" />
     <Compile Include="Lists\StudyDataList.cs" />
     <Compile Include="Criteria\PhraseCriteria.cs" />
     <Compile Include="Retrievers\BlankTranslationRetriever.cs" />

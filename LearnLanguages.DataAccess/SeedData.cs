@@ -49,11 +49,13 @@ namespace LearnLanguages.DataAccess
 
       InitializeLanguages();
       InitializePhrases();
+      InitializeLines();
       InitializeTranslations();
       InitializeUsers();
       InitializeRoles();
       InitializeStudyDatas();
     }
+
 
     #region Language Data
     public Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
@@ -212,6 +214,7 @@ namespace LearnLanguages.DataAccess
 
     public List<LanguageDto> Languages { get; private set; }
     public List<PhraseDto> Phrases { get; private set; }
+    public List<LineDto> Lines { get; private set; }
     public List<TranslationDto> Translations { get; private set; }
     public List<UserDto> Users { get; private set; }
     public List<RoleDto> Roles { get; private set; }
@@ -274,6 +277,29 @@ namespace LearnLanguages.DataAccess
           Id = new Guid("B45AC4A3-BAB3-406C-BD03-20D9E55E9740"),
           LanguageId = EnglishId,
           Text = DogText,
+          UserId = DefaultTestValidUserId,
+          Username = TestValidUsername
+        }
+      };
+    }
+    private void InitializeLines()
+    {
+      Lines = new List<LineDto>()
+      {
+        new LineDto()
+        {
+          Id = new Guid("527A8025-25B1-4518-B448-1CD27A801ECE"),
+          PhraseId = IdHello, 
+          LineNumber = 0,
+          UserId = DefaultTestValidUserId,
+          Username = TestValidUsername
+        },
+
+        new LineDto()
+        {
+          Id = new Guid("40F83D40-CC12-4C14-A2DA-D82960C6DFBA"),
+          PhraseId = IdLongPhrase, 
+          LineNumber = 1,
           UserId = DefaultTestValidUserId,
           Username = TestValidUsername
         }
@@ -365,5 +391,14 @@ namespace LearnLanguages.DataAccess
               select u.Username).FirstOrDefault();
     }
 
+
+    public bool ContainsPhraseId(Guid id)
+    {
+      var results = from p in Phrases
+                    where p.Id == id
+                    select p;
+
+      return results.Count() == 1;
+    }
   }
 }

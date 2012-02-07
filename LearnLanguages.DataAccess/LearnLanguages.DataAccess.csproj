@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DalBases\LineDalBase.cs" />
     <Compile Include="DalBases\StudyDataDalBase.cs" />
     <Compile Include="DalBases\LanguageDalBase.cs" />
     <Compile Include="DalBases\TranslationDalBase.cs" />
@@ -56,6 +57,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Dtos\LineDto.cs" />
     <Compile Include="Dtos\StudyDataDto.cs" />
     <Compile Include="Dtos\TranslationDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Exceptions\Crud\InsertFailedException.cs" />
     <Compile Include="Exceptions\MultipleItemsFoundDataAccessException.cs" />
     <Compile Include="Exceptions\Crud\UpdateFailedException.cs" />
+    <Compile Include="Interfaces\ILineDal.cs" />
     <Compile Include="Interfaces\ICycleStudyDataDal.cs" />
     <Compile Include="Interfaces\ITranslationDal.cs" />
     <Compile Include="Interfaces\IDalManager.cs" />

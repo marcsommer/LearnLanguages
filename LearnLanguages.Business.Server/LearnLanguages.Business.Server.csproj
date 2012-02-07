@@ -56,6 +56,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Commands\PhraseDefaultSetterCommand.cs">
       <Link>Commands\PhraseDefaultSetterCommand.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\LineInfosCriteria.cs">
+      <Link>Criteria\LineInfosCriteria.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\ListOfPhrasesCriteria.cs">
       <Link>Criteria\ListOfPhrasesCriteria.cs</Link>
     </Compile>
@@ -68,6 +71,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Edits\LanguageEdit.cs">
       <Link>Edits\LanguageEdit.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\LineEdit.cs">
+      <Link>Edits\LineEdit.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Edits\PhraseEdit.cs">
       <Link>Edits\PhraseEdit.cs</Link>
     </Compile>
@@ -79,6 +85,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\LanguageList.cs">
       <Link>Lists\LanguageList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\LineList.cs">
+      <Link>Lists\LineList.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\PhraseList.cs">
       <Link>Lists\PhraseList.cs</Link>

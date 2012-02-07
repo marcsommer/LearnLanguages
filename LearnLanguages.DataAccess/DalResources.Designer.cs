@@ -124,6 +124,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -1.
+        /// </summary>
+        public static string DefaultLineNumber {
+            get {
+                return ResourceManager.GetString("DefaultLineNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string DefaultNativeLanguageText {
@@ -138,6 +147,15 @@ namespace LearnLanguages.DataAccess {
         public static string DefaultNewLanguageText {
             get {
                 return ResourceManager.GetString("DefaultNewLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewLineUsername {
+            get {
+                return ResourceManager.GetString("DefaultNewLineUsername", resourceCulture);
             }
         }
         
@@ -300,6 +318,15 @@ namespace LearnLanguages.DataAccess {
         public static string ErrorMsgLanguageTextNotFoundException {
             get {
                 return ResourceManager.GetString("ErrorMsgLanguageTextNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to During a LineList create operation with LineInfosCriteria, there was a problem when trying to fetch/create the languagetext ({0})..
+        /// </summary>
+        public static string ErrorMsgLanguageTextProblemWhileCreatingLineInfos {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextProblemWhileCreatingLineInfos", resourceCulture);
             }
         }
         

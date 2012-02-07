@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LineDal.cs" />
     <Compile Include="StudyDataDal.cs" />
     <Compile Include="TranslationDal.cs" />
     <Compile Include="CustomIdentityDal.cs" />
