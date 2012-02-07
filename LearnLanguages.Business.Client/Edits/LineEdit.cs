@@ -90,7 +90,7 @@ namespace LearnLanguages.Business
       set 
       {
         LoadProperty(PhraseProperty, value);
-        
+
         if (value != null)
           PhraseId = value.Id;
         else
@@ -262,6 +262,9 @@ namespace LearnLanguages.Business
         }
         LineDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
+
+        //PHRASE CHILD
+        Phrase = DataPortal.CreateChild<PhraseEdit>();
       }
     }
     //[Transactional(TransactionalTypes.TransactionScope)]
@@ -318,6 +321,13 @@ namespace LearnLanguages.Business
       //};
       using (var dalManager = DalFactory.GetDalManager())
       {
+        //NEED TO UPDATE CHILDREN FIRST
+        FieldManager.UpdateChildren(this);
+
+        //UPDATE CHILDREN WILL INSERT/UPDATE PHRASE AS NEEDED AND THUS CHANGE PHRASE ID
+        PhraseId = Phrase.Id;
+
+        //UPDATE OUR LINE ITSELF
         var lineDal = dalManager.GetProvider<ILineDal>();
         var dto = CreateDto();
         var result = lineDal.Insert(dto);
@@ -457,6 +467,9 @@ namespace LearnLanguages.Business
         var lineDal = dalManager.GetProvider<ILineDal>();
         using (BypassPropertyChecks)
         {
+          FieldManager.UpdateChildren(this);
+          PhraseId = Phrase.Id;
+
           var dto = CreateDto();
           var result = lineDal.Insert(dto);
           if (!result.IsSuccess)
@@ -477,6 +490,9 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
+        FieldManager.UpdateChildren(this);
+        PhraseId = Phrase.Id;
+
         var lineDal = dalManager.GetProvider<ILineDal>();
 
         var dto = CreateDto();

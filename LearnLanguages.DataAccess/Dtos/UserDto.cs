@@ -14,6 +14,7 @@ namespace LearnLanguages.DataAccess
     public string SaltedHashedPasswordValue { get; set; }
     public ICollection<Guid> TranslationIds { get; set; }
     public ICollection<Guid> PhraseIds { get; set; }
+    public ICollection<Guid> LineIds { get; set; }
     public ICollection<Guid> RoleIds { get; set; }
   }
 }

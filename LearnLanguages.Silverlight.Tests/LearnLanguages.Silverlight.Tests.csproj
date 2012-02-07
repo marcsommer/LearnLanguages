@@ -95,8 +95,10 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="BlankTranslationRetrieverTests.cs" />
+    <Compile Include="Edits\LineTests.cs" />
     <Compile Include="Edits\StudyDataTests.cs" />
     <Compile Include="Edits\TranslationTests.cs" />
+    <Compile Include="Lists\LineListTests.cs" />
     <Compile Include="Lists\PhraseListTests.cs" />
     <Compile Include="InitializeCleanupClass.cs" />
     <Compile Include="Edits\SecurityTests.cs" />

@@ -183,6 +183,7 @@ namespace LearnLanguages.Silverlight.Tests
     
     [TestMethod]
     [Asynchronous]
+    [Tag("current")]
     public void GET_ALL_EDIT_SAVE()
     {
       var isLoaded = false;
@@ -229,13 +230,13 @@ namespace LearnLanguages.Silverlight.Tests
 
             containsText0 = (from phrase in savedPhrases
                              where phrase.Text == text0
-                             select phrase).Count() == 1;
-            containsText1 = (from phrase in savedPhrases
-                             where phrase.Text == text1
-                             select phrase).Count() == 1;
-            containsText2 = (from phrase in savedPhrases
-                             where phrase.Text == text2
-                             select phrase).Count() == 1;
+                             select phrase).Count() > 0;
+            containsText1 = (from phrase2 in savedPhrases
+                             where phrase2.Text == text1
+                             select phrase2).Count() > 0 ;
+            containsText2 = (from phrase3 in savedPhrases
+                             where phrase3.Text == text2
+                             select phrase3).Count() > 0;
             isSaved = true;
           });
       });
@@ -298,13 +299,13 @@ namespace LearnLanguages.Silverlight.Tests
 
         containsText0 = (from phrase in canceledEditPhrases
                          where phrase.Text == text0
-                         select phrase).Count() == 1;
+                         select phrase).Count() > 0;
         containsText1 = (from phrase in canceledEditPhrases
                          where phrase.Text == text1
-                         select phrase).Count() == 1;
+                         select phrase).Count() > 0;
         containsText2 = (from phrase in canceledEditPhrases
                          where phrase.Text == text2
-                         select phrase).Count() == 1;
+                         select phrase).Count() > 0;
         isCanceled = true;
       });
 

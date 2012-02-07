@@ -461,6 +461,10 @@ namespace LearnLanguages.Business
     {   
       using (var dalManager = DalFactory.GetDalManager())
       {
+        FieldManager.UpdateChildren(this);
+        if (Language != null)
+          LanguageId = Language.Id;
+
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         using (BypassPropertyChecks)
         {
@@ -484,6 +488,9 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
+        FieldManager.UpdateChildren(this);
+        LanguageId = Language.Id;
+
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
         var dto = CreateDto();

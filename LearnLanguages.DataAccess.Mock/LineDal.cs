@@ -202,11 +202,12 @@ namespace LearnLanguages.DataAccess.Mock
                     select u.Id).FirstOrDefault();
       if (userId == Guid.Empty)
         throw new Exceptions.UserNotAuthorizedException();
+      
 
       var dto = new LineDto()
       {
         Id = Guid.NewGuid(),
-        PhraseId = Guid.Empty,
+        LineNumber = -1,
         UserId = userId, 
         Username = username
       };
@@ -332,17 +333,16 @@ namespace LearnLanguages.DataAccess.Mock
     }
     private void UpdateReferences(LineDto oldLine, LineDto newLine)
     {
-      throw new NotImplementedException();
-      ////UPDATE USERS WHO REFERENCE THIS PHRASE
-      //var referencedUsers = from u in SeedData.Instance.Users
-      //                      where u.LineIds.Contains(oldLine.Id)
-      //                      select u;
+      ////UPDATE USERS WHO REFERENCE THIS LINE
+      var referencedUsers = from u in SeedData.Instance.Users
+                            where u.LineIds.Contains(oldLine.Id)
+                            select u;
 
-      //foreach (var user in referencedUsers)
-      //{
-      //  user.LineIds.Remove(oldLine.Id);
-      //  user.LineIds.Add(newLine.Id);
-      //}
+      foreach (var user in referencedUsers)
+      {
+        user.LineIds.Remove(oldLine.Id);
+        user.LineIds.Add(newLine.Id);
+      }
 
       ////UPDATE TRANSLATIONS WHO REFERENCE THIS PHRASE
       //var referencedTranslations = from t in SeedData.Instance.Translations

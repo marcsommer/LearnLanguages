@@ -56,7 +56,6 @@ namespace LearnLanguages.DataAccess
       InitializeStudyDatas();
     }
 
-
     #region Language Data
     public Guid DefaultLanguageId = Guid.Parse(DalResources.DefaultLanguageId);
     public LanguageDto EnglishLanguageDto
@@ -156,6 +155,28 @@ namespace LearnLanguages.DataAccess
     public Guid IdDog
     {
       get { return GetPhraseId(DogText); }
+    }
+    #endregion
+    #region Line Data
+    public Guid IdLine0
+    {
+      get
+      {
+        var results = (from line in Lines
+                       where line.LineNumber == 0
+                       select line);
+        return results.First().Id;
+      }
+    }
+    public Guid IdLine1
+    {
+      get
+      {
+        var results = (from line in Lines
+                       where line.LineNumber == 1
+                       select line);
+        return results.First().Id;
+      }
     }
     #endregion
     #region Translation Data
@@ -334,6 +355,7 @@ namespace LearnLanguages.DataAccess
           Salt = TestSalt,
           SaltedHashedPasswordValue = TestSaltedHashedPassword,
           PhraseIds = new List<Guid>() { IdHello, IdDog, IdHola, IdLongPhrase },
+          LineIds = new List<Guid>() { IdLine0, IdLine1 },
           TranslationIds = new List<Guid>() { IdHelloTranslation },
           RoleIds = new List<Guid>() { AdminRoleId, UserRoleId }
         }
@@ -369,6 +391,14 @@ namespace LearnLanguages.DataAccess
 
       return results.Count() == 1;
     }
+    public bool ContainsPhraseId(Guid id)
+    {
+      var results = from p in Phrases
+                    where p.Id == id
+                    select p;
+
+      return results.Count() == 1;
+    }
     public bool ContainsUserId(Guid id)
     {
       var results = from u in Users
@@ -377,28 +407,18 @@ namespace LearnLanguages.DataAccess
 
       return results.Count() == 1;
     }
+
     public Guid GetPhraseId(string phraseText)
     {
         return (from phrase in Phrases
                 where phrase.Text == phraseText
                 select phrase.Id).First();
     }
-
     public string GetUsername(Guid userId)
     {
       return (from u in Users
               where u.Id == userId
               select u.Username).FirstOrDefault();
-    }
-
-
-    public bool ContainsPhraseId(Guid id)
-    {
-      var results = from p in Phrases
-                    where p.Id == id
-                    select p;
-
-      return results.Count() == 1;
     }
   }
 }
