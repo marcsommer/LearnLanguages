@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Csla.Core;
 using System.Collections;
 
-namespace LearnLanguages.Business
+namespace LearnLanguages.Business.Rules
 {
   public class CollectionCountsAreEqualBusinessRule : Csla.Rules.BusinessRule
   {

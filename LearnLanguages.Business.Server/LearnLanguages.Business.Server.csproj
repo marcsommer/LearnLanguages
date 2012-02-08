@@ -74,6 +74,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Edits\LineEdit.cs">
       <Link>Edits\LineEdit.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\MultiLineTextEdit.cs">
+      <Link>Edits\MultiLineTextEdit.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Edits\PhraseEdit.cs">
       <Link>Edits\PhraseEdit.cs</Link>
     </Compile>
@@ -88,6 +91,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\LineList.cs">
       <Link>Lists\LineList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\MultiLineTextList.cs">
+      <Link>Lists\MultiLineTextList.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\PhraseList.cs">
       <Link>Lists\PhraseList.cs</Link>

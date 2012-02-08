@@ -275,4 +275,19 @@
   <data name="DefaultNewLineUsername" xml:space="preserve">
     <value />
   </data>
+  <data name="DefaultNewArtistName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DefaultNewMultiLineTextTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DefaultNewMultiLineTextUsername" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DefaultMultiLineTextAdditionalMetadata" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MinLinesPerMultiLineText" xml:space="preserve">
+    <value>1</value>
+  </data>
 </root>

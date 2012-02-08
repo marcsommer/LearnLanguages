@@ -135,9 +135,27 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string DefaultMultiLineTextAdditionalMetadata {
+            get {
+                return ResourceManager.GetString("DefaultMultiLineTextAdditionalMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string DefaultNativeLanguageText {
             get {
                 return ResourceManager.GetString("DefaultNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewArtistName {
+            get {
+                return ResourceManager.GetString("DefaultNewArtistName", resourceCulture);
             }
         }
         
@@ -156,6 +174,24 @@ namespace LearnLanguages.DataAccess {
         public static string DefaultNewLineUsername {
             get {
                 return ResourceManager.GetString("DefaultNewLineUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewMultiLineTextTitle {
+            get {
+                return ResourceManager.GetString("DefaultNewMultiLineTextTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DefaultNewMultiLineTextUsername {
+            get {
+                return ResourceManager.GetString("DefaultNewMultiLineTextUsername", resourceCulture);
             }
         }
         
@@ -435,6 +471,15 @@ namespace LearnLanguages.DataAccess {
         public static string ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero {
             get {
                 return ResourceManager.GetString("ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        public static string MinLinesPerMultiLineText {
+            get {
+                return ResourceManager.GetString("MinLinesPerMultiLineText", resourceCulture);
             }
         }
         

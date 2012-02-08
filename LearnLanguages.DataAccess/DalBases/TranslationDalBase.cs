@@ -63,6 +63,28 @@ namespace LearnLanguages.DataAccess
       }
       return retResult;
     }
+    /// <summary>
+    /// Returns all translations that contains the phraseId.
+    /// </summary>
+    /// <param name="phraseDto"></param>
+    /// <returns></returns>
+    public Result<ICollection<TranslationDto>> FetchByPhraseId(Guid phraseId)
+    {
+      Result<ICollection<TranslationDto>> retResult = Result<ICollection<TranslationDto>>.Undefined(null);
+      try
+      {
+        CheckAuthentication();
+
+        var dtos = FetchByIdImpl(phraseId);
+        retResult = Result<ICollection<TranslationDto>>.Success(dtos);
+      }
+      catch (Exception ex)
+      {
+        var wrappedEx = new Exceptions.FetchFailedException(ex);
+        retResult = Result<ICollection<TranslationDto>>.FailureWithInfo(null, wrappedEx);
+      }
+      return retResult;
+    }
     public Result<TranslationDto> Update(TranslationDto dtoToUpdate)
     {
       Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
@@ -145,29 +167,6 @@ namespace LearnLanguages.DataAccess
     {
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
         throw new Exceptions.UserNotAuthenticatedException();
-    }
-
-    /// <summary>
-    /// Returns all translations that contains the phraseId.
-    /// </summary>
-    /// <param name="phraseDto"></param>
-    /// <returns></returns>
-    public Result<ICollection<TranslationDto>> FetchByPhraseId(Guid phraseId)
-    {
-      Result<ICollection<TranslationDto>> retResult = Result<ICollection<TranslationDto>>.Undefined(null);
-      try
-      {
-        CheckAuthentication();
-
-        var dtos = FetchByIdImpl(phraseId);
-        retResult = Result<ICollection<TranslationDto>>.Success(dtos);
-      }
-      catch (Exception ex)
-      {
-        var wrappedEx = new Exceptions.FetchFailedException(ex);
-        retResult = Result<ICollection<TranslationDto>>.FailureWithInfo(null, wrappedEx);
-      }
-      return retResult;
     }
   }
 }

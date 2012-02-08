@@ -5,90 +5,90 @@ using System.Text;
 
 namespace LearnLanguages.DataAccess.Mock
 {
-  public class TranslationDal : TranslationDalBase
+  public class MultiLineTextDal : MultiLineTextDalBase
   {
-    //public Result<TranslationDto> New(object criteria)
+    //public Result<MultiLineTextDto> New(object criteria)
     //{
-    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
+    //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var dto = new TranslationDto() 
+    //    var dto = new MultiLineTextDto() 
     //    { 
     //      Id = Guid.NewGuid(),
     //      LanguageId = SeedData.Instance.DefaultLanguageId
     //    };
-    //    retResult = Result<TranslationDto>.Success(dto);
+    //    retResult = Result<MultiLineTextDto>.Success(dto);
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<MultiLineTextDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<TranslationDto> Fetch(Guid id)
+    //public Result<MultiLineTextDto> Fetch(Guid id)
     //{
-    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
+    //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Instance.MultiLineTexts
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
-    //      retResult = Result<TranslationDto>.Success(results.First());
+    //      retResult = Result<MultiLineTextDto>.Success(results.First());
     //    else
     //    {
     //      if (results.Count() == 0)
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null,
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null,
     //          new Exceptions.FetchFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<MultiLineTextDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<TranslationDto> Update(TranslationDto dto)
+    //public Result<MultiLineTextDto> Update(MultiLineTextDto dto)
     //{
-    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
+    //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Instance.MultiLineTexts
     //                  where item.Id == dto.Id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
-    //      var TranslationToUpdate = results.First();
-    //      SeedData.Instance.Translations.Remove(TranslationToUpdate);
+    //      var MultiLineTextToUpdate = results.First();
+    //      SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToUpdate);
     //      dto.Id = Guid.NewGuid();
-    //      SeedData.Instance.Translations.Add(dto);
-    //      retResult = Result<TranslationDto>.Success(dto);
+    //      SeedData.Instance.MultiLineTexts.Add(dto);
+    //      retResult = Result<MultiLineTextDto>.Success(dto);
     //    }
     //    else
     //    {
     //      if (results.Count() == 0)
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null,
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null,
     //          new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<MultiLineTextDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<TranslationDto> Insert(TranslationDto dto)
+    //public Result<MultiLineTextDto> Insert(MultiLineTextDto dto)
     //{
-    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
+    //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Instance.MultiLineTexts
     //                  where item.Id == dto.Id
     //                  select item;
 
@@ -100,75 +100,75 @@ namespace LearnLanguages.DataAccess.Mock
     //      {
     //        //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
     //        //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
-    //        //TranslationDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
+    //        //MultiLineTextDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
     //        throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
     //      }
-    //      SeedData.Instance.Translations.Add(dto);
-    //      retResult = Result<TranslationDto>.Success(dto);
+    //      SeedData.Instance.MultiLineTexts.Add(dto);
+    //      retResult = Result<MultiLineTextDto>.Success(dto);
     //    }
     //    else
     //    {
     //      if (results.Count() == 1) //ID ALREADY EXISTS
-    //        retResult = Result<TranslationDto>.FailureWithInfo(dto,
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(dto,
     //          new Exceptions.UpdateFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else                      //MULTIPLE IDS ALREADY EXIST??
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null, new Exceptions.FetchFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<MultiLineTextDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public Result<TranslationDto> Delete(Guid id)
+    //public Result<MultiLineTextDto> Delete(Guid id)
     //{
-    //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
+    //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Instance.MultiLineTexts
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
-    //      var TranslationToRemove = results.First();
-    //      SeedData.Instance.Translations.Remove(TranslationToRemove);
-    //      retResult = Result<TranslationDto>.Success(TranslationToRemove);
+    //      var MultiLineTextToRemove = results.First();
+    //      SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToRemove);
+    //      retResult = Result<MultiLineTextDto>.Success(MultiLineTextToRemove);
     //    }
     //    else
     //    {
     //      if (results.Count() == 0)
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null,
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null,
     //          new Exceptions.DeleteFailedException(DalResources.ErrorMsgIdNotFoundException));
     //      else
-    //        retResult = Result<TranslationDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
+    //        retResult = Result<MultiLineTextDto>.FailureWithInfo(null, new Exceptions.DeleteFailedException());
     //    }
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<TranslationDto>.FailureWithInfo(null, ex);
+    //    retResult = Result<MultiLineTextDto>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
-    //public LearnLanguages.Result<ICollection<TranslationDto>> GetAll()
+    //public LearnLanguages.Result<ICollection<MultiLineTextDto>> GetAll()
     //{
-    //  Result<ICollection<TranslationDto>> retResult = Result<ICollection<TranslationDto>>.Undefined(null);
+    //  Result<ICollection<MultiLineTextDto>> retResult = Result<ICollection<MultiLineTextDto>>.Undefined(null);
     //  try
     //  {
-    //    var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
-    //    retResult = Result<ICollection<TranslationDto>>.Success(allDtos);
+    //    var allDtos = new List<MultiLineTextDto>(SeedData.Instance.MultiLineTexts);
+    //    retResult = Result<ICollection<MultiLineTextDto>>.Success(allDtos);
     //  }
     //  catch (Exception ex)
     //  {
-    //    retResult = Result<ICollection<TranslationDto>>.FailureWithInfo(null, ex);
+    //    retResult = Result<ICollection<MultiLineTextDto>>.FailureWithInfo(null, ex);
     //  }
     //  return retResult;
     //}
 
-    protected override TranslationDto NewImpl(object criteria)
+    protected override MultiLineTextDto NewImpl(object criteria)
     {
-      var dto = new TranslationDto()
+      var dto = new MultiLineTextDto()
       {
         Id = Guid.NewGuid(),
         UserId = SeedData.Instance.GetTestValidUserDto().Id,
@@ -176,9 +176,9 @@ namespace LearnLanguages.DataAccess.Mock
       };
       return dto;
     }
-    protected override TranslationDto FetchImpl(Guid id)
+    protected override MultiLineTextDto FetchImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Instance.MultiLineTexts
                     where item.Id == id
                     select item;
 
@@ -192,34 +192,34 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override ICollection<TranslationDto> FetchImpl(ICollection<Guid> ids)
+    protected override ICollection<MultiLineTextDto> FetchImpl(ICollection<Guid> ids)
     {
       if (ids == null)
         throw new ArgumentNullException("ids");
       else if (ids.Count == 0)
         throw new ArgumentOutOfRangeException("ids", "ids cannot be empty.");
 
-      var retTranslations = new List<TranslationDto>();
+      var retMultiLineTexts = new List<MultiLineTextDto>();
 
       foreach (var id in ids)
       {
         var dto = FetchImpl(id);
-        retTranslations.Add(dto);
+        retMultiLineTexts.Add(dto);
       }
 
-      return retTranslations;
+      return retMultiLineTexts;
     }
-    protected override ICollection<TranslationDto> FetchByIdImpl(Guid phraseId)
+    protected override ICollection<MultiLineTextDto> FetchByIdImpl(Guid lineId)
     {
-      var results = from translation in SeedData.Instance.Translations
-                    where translation.PhraseIds.Contains(phraseId)
-                    select translation;
+      var results = from multiLineText in SeedData.Instance.MultiLineTexts
+                    where multiLineText.LineIds.Contains(lineId)
+                    select multiLineText;
 
       return results.ToList();
     }
-    protected override TranslationDto UpdateImpl(TranslationDto dto)
+    protected override MultiLineTextDto UpdateImpl(MultiLineTextDto dto)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Instance.MultiLineTexts
                     where item.Id == dto.Id
                     select item;
 
@@ -227,10 +227,10 @@ namespace LearnLanguages.DataAccess.Mock
       {
         CheckValidity(dto);
         CheckReferentialIntegrity(dto);
-        var TranslationToUpdate = results.First();
-        SeedData.Instance.Translations.Remove(TranslationToUpdate);
+        var MultiLineTextToUpdate = results.First();
+        SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Translations.Add(dto);
+        SeedData.Instance.MultiLineTexts.Add(dto);
         return dto;
       }
       else
@@ -241,9 +241,9 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override TranslationDto InsertImpl(TranslationDto dto)
+    protected override MultiLineTextDto InsertImpl(MultiLineTextDto dto)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Instance.MultiLineTexts
                     where item.Id == dto.Id
                     select item;
 
@@ -251,7 +251,7 @@ namespace LearnLanguages.DataAccess.Mock
       {
         CheckValidity(dto);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Translations.Add(dto);
+        SeedData.Instance.MultiLineTexts.Add(dto);
         return dto;
       }
       else
@@ -262,17 +262,17 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override TranslationDto DeleteImpl(Guid id)
+    protected override MultiLineTextDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Instance.MultiLineTexts
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
-        var TranslationToRemove = results.First();
-        SeedData.Instance.Translations.Remove(TranslationToRemove);
-        return TranslationToRemove;
+        var MultiLineTextToRemove = results.First();
+        SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToRemove);
+        return MultiLineTextToRemove;
       }
       else
       {
@@ -282,26 +282,26 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
     }
-    protected override ICollection<TranslationDto> GetAllImpl()
+    protected override ICollection<MultiLineTextDto> GetAllImpl()
     {
-      var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
+      var allDtos = new List<MultiLineTextDto>(SeedData.Instance.MultiLineTexts);
       return allDtos;
     }
 
-    private void CheckValidity(TranslationDto dto)
+    private void CheckValidity(MultiLineTextDto dto)
     {
       //VALIDITY
       if (dto == null)
         throw new ArgumentNullException("dto");
-      if (dto.PhraseIds.Count < int.Parse(DalResources.MinPhrasesPerTranslation))
-        throw new ArgumentOutOfRangeException("dto.PhraseIds.Count");
+      if (dto.LineIds.Count < int.Parse(DalResources.MinLinesPerMultiLineText))
+        throw new ArgumentOutOfRangeException("dto.LineIds.Count");
     }
-    private static void CheckReferentialIntegrity(TranslationDto dto)
+    private static void CheckReferentialIntegrity(MultiLineTextDto dto)
     {
-      //PHRASE IDS ARE VALID
-      foreach (var id in dto.PhraseIds)
+      //LINE IDS ARE VALID
+      foreach (var id in dto.LineIds)
       {
-        var count = (from p in SeedData.Instance.Phrases
+        var count = (from p in SeedData.Instance.Lines
                      where p.Id == id
                      select p).Count();
 
@@ -323,5 +323,7 @@ namespace LearnLanguages.DataAccess.Mock
       else if (userCount != 1)
         throw new Exceptions.VeryBadException();
     }
+
+    
   }
 }

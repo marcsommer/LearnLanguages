@@ -30,7 +30,15 @@ namespace LearnLanguages.Business
     {
       DataPortal.BeginCreate<LineList>(lineInfos, callback);
     }
-    
+
+    /// <summary>
+    /// Just news up a LineList.
+    /// </summary>
+    public static LineList NewLineListNewedUpOnly()
+    {
+      return new LineList();
+    }
+
 #if SILVERLIGHT
     /// <summary>
     /// Runs locally.

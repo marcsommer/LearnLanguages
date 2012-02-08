@@ -53,6 +53,7 @@ namespace LearnLanguages.DataAccess
       InitializeTranslations();
       InitializeUsers();
       InitializeRoles();
+      InitializeMultiLineTexts();
       InitializeStudyDatas();
     }
 
@@ -207,6 +208,9 @@ namespace LearnLanguages.DataAccess
       }
     }
     #endregion
+    #region MultiLineText Data
+    public string MultiLineTextTitle { get { return "This is my wonderful MultiLineTextTitle!"; } }
+    #endregion
     #region User Data
     public Guid DefaultTestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
 
@@ -239,6 +243,7 @@ namespace LearnLanguages.DataAccess
     public List<TranslationDto> Translations { get; private set; }
     public List<UserDto> Users { get; private set; }
     public List<RoleDto> Roles { get; private set; }
+    public List<MultiLineTextDto> MultiLineTexts { get; private set; }
     public List<StudyDataDto> StudyDatas { get; private set; }
 
     private void InitializeLanguages()
@@ -367,6 +372,24 @@ namespace LearnLanguages.DataAccess
       {
         AdminRole,
         UserRole
+      };
+    }
+    private void InitializeMultiLineTexts()
+    {
+      MultiLineTexts = new List<MultiLineTextDto>()
+      {
+        new MultiLineTextDto()
+        {
+          Id = new Guid("2A3608BB-69C3-4680-8268-073F4B9E3270"),
+          Title = MultiLineTextTitle,
+          LineIds = new List<Guid>()
+          {
+            IdLine0, 
+            IdLine1
+          },
+          UserId = DefaultTestValidUserId,
+          Username = TestValidUsername
+        }
       };
     }
     private void InitializeStudyDatas()

@@ -4,9 +4,7 @@ using System.ComponentModel;
 using Csla.Serialization;
 using Csla.DataPortalClient;
 using LearnLanguages.Common.Interfaces;
-#if !SILVERLIGHT
 using LearnLanguages.DataAccess.Exceptions;
-#endif
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
 using System.Collections.Generic;
@@ -15,12 +13,12 @@ using System.Collections.Generic;
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class TranslationEdit : Common.CslaBases.BusinessBase<TranslationEdit, TranslationDto>, IHaveId
+  public class MultiLineTextEdit : Common.CslaBases.BusinessBase<MultiLineTextEdit, MultiLineTextDto>, IHaveId
   {
     #region Ctors and Init
-    public TranslationEdit()
+    public MultiLineTextEdit()
     {
-      Phrases = PhraseList.NewPhraseList();
+      Lines = LineList.NewLineListNewedUpOnly();
     }
     #endregion
     
@@ -29,25 +27,25 @@ namespace LearnLanguages.Business
 #if !SILVERLIGHT
 
     /// <summary>
-    /// Creates a new TranslationEdit sync
+    /// Creates a new MultiLineTextEdit sync
     /// </summary>
-    public static TranslationEdit NewTranslationEdit()
+    public static MultiLineTextEdit NewMultiLineTextEdit()
     {
-      return DataPortal.Create<TranslationEdit>();
+      return DataPortal.Create<MultiLineTextEdit>();
     }
     /// <summary>
-    /// Creates a new TranslationEdit sync with given id.
+    /// Creates a new MultiLineTextEdit sync with given id.
     /// </summary>
-    public static TranslationEdit NewTranslationEdit(Guid id)
+    public static MultiLineTextEdit NewMultiLineTextEdit(Guid id)
     {
-      return DataPortal.Create<TranslationEdit>(id);
+      return DataPortal.Create<MultiLineTextEdit>(id);
     }
     /// <summary>
-    /// Fetches a TranslationEdit sync with given id
+    /// Fetches a MultiLineTextEdit sync with given id
     /// </summary>
-    public static TranslationEdit GetTranslationEdit(Guid id)
+    public static MultiLineTextEdit GetMultiLineTextEdit(Guid id)
     {
-      return DataPortal.Fetch<TranslationEdit>(id);
+      return DataPortal.Fetch<MultiLineTextEdit>(id);
     }
 
 #endif
@@ -56,23 +54,23 @@ namespace LearnLanguages.Business
     #region Silverlight Factory Methods
 #if SILVERLIGHT
 
-    public static void NewTranslationEdit(EventHandler<DataPortalResult<TranslationEdit>> callback)
+    public static void NewMultiLineTextEdit(EventHandler<DataPortalResult<MultiLineTextEdit>> callback)
     {
-      DataPortal.BeginCreate<TranslationEdit>(callback);
+      DataPortal.BeginCreate<MultiLineTextEdit>(callback);
     }
 
     ///// <summary>
     ///// This happens DataPortal.ProxyModes.LocalOnly
     ///// </summary>
-    //public static void NewTranslationEdit(Guid id, EventHandler<DataPortalResult<TranslationEdit>> callback)
+    //public static void NewMultiLineTextEdit(Guid id, EventHandler<DataPortalResult<MultiLineTextEdit>> callback)
     //{
-    //  DataPortal.BeginCreate<TranslationEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-    //  //DataPortal.BeginCreate<TranslationEdit>(id, callback);
+    //  DataPortal.BeginCreate<MultiLineTextEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
+    //  //DataPortal.BeginCreate<MultiLineTextEdit>(id, callback);
     //}
 
-    public static void GetTranslationEdit(Guid id, EventHandler<DataPortalResult<TranslationEdit>> callback)
+    public static void GetMultiLineTextEdit(Guid id, EventHandler<DataPortalResult<MultiLineTextEdit>> callback)
     {
-      DataPortal.BeginFetch<TranslationEdit>(id, callback);
+      DataPortal.BeginFetch<MultiLineTextEdit>(id, callback);
     }
 
 #endif
@@ -82,22 +80,40 @@ namespace LearnLanguages.Business
     #region Business Properties & Methods
 
     //PHRASES
-    //#region public ICollection<Guid> PhraseIds
-    //public static readonly PropertyInfo<ICollection<Guid>> PhraseIdsProperty =
-    //  RegisterProperty<ICollection<Guid>>(c => c.PhraseIds);
-    //public ICollection<Guid> PhraseIds
+    //#region public ICollection<Guid> LineIds
+    //public static readonly PropertyInfo<ICollection<Guid>> LineIdsProperty =
+    //  RegisterProperty<ICollection<Guid>>(c => c.LineIds);
+    //public ICollection<Guid> LineIds
     //{
-    //  get { return GetProperty(PhraseIdsProperty); }
-    //  set { SetProperty(PhraseIdsProperty, value); }
+    //  get { return GetProperty(LineIdsProperty); }
+    //  set { SetProperty(LineIdsProperty, value); }
     //}
     //#endregion
-    #region public PhraseList Phrases (child)
-    public static readonly PropertyInfo<PhraseList> PhrasesProperty = 
-      RegisterProperty<PhraseList>(c => c.Phrases, RelationshipTypes.Child);
-    public PhraseList Phrases
+    //SCALAR PROPERTIES
+
+    #region public string Title
+    public static readonly PropertyInfo<string> TitleProperty = RegisterProperty<string>(c => c.Title);
+    public string Title
     {
-      get { return GetProperty(PhrasesProperty); }
-      set { LoadProperty(PhrasesProperty, value); }
+      get { return GetProperty(TitleProperty); }
+      set { SetProperty(TitleProperty, value); }
+    }
+    #endregion
+    #region public string AdditionalMetadata
+    public static readonly PropertyInfo<string> AdditionalMetadataProperty = RegisterProperty<string>(c => c.AdditionalMetadata);
+    public string AdditionalMetadata
+    {
+      get { return GetProperty(AdditionalMetadataProperty); }
+      set { SetProperty(AdditionalMetadataProperty, value); }
+    }
+    #endregion
+    #region public LineList Lines (child)
+    public static readonly PropertyInfo<LineList> LinesProperty = 
+      RegisterProperty<LineList>(c => c.Lines, RelationshipTypes.Child);
+    public LineList Lines
+    {
+      get { return GetProperty(LinesProperty); }
+      set { LoadProperty(LinesProperty, value); }
     }
     #endregion
         
@@ -128,15 +144,15 @@ namespace LearnLanguages.Business
     }
     #endregion
 
-    public override void LoadFromDtoBypassPropertyChecksImpl(TranslationDto dto)
+    public override void LoadFromDtoBypassPropertyChecksImpl(MultiLineTextDto dto)
     {
       using (BypassPropertyChecks)
       {
         LoadProperty<Guid>(IdProperty, dto.Id);
-        if (dto.PhraseIds != null && dto.PhraseIds.Count > 0)
+        if (dto.LineIds != null && dto.LineIds.Count > 0)
         {
-          //PhraseIds = dto.PhraseIds;
-          Phrases = DataPortal.FetchChild<PhraseList>(dto.PhraseIds);
+          //LineIds = dto.LineIds;
+          Lines = DataPortal.FetchChild<LineList>(dto.LineIds);
         }
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
@@ -146,20 +162,19 @@ namespace LearnLanguages.Business
 
       BusinessRules.CheckRules();
     }
-    public override TranslationDto CreateDto()
+    public override MultiLineTextDto CreateDto()
     {
-      var _phraseIds = new List<Guid>();
-      if (Phrases != null)
+      var _lineIds = new List<Guid>();
+      if (Lines != null)
       {
-        foreach (var p in Phrases)
+        foreach (var line in Lines)
         {
-          _phraseIds.Add(p.Id);
+          _lineIds.Add(line.Id);
         }
       }
-      TranslationDto retDto = new TranslationDto(){
+      MultiLineTextDto retDto = new MultiLineTextDto(){
                                           Id = this.Id,
-                                          //PhraseIds = this.PhraseIds,
-                                          PhraseIds = _phraseIds,
+                                          LineIds = _lineIds,
                                           UserId = this.UserId,
                                           Username = this.Username
                                         };
@@ -182,9 +197,9 @@ namespace LearnLanguages.Business
       using (BypassPropertyChecks)
       {
         Id = Guid.NewGuid();
-        Phrases = null;
+        Lines = null;
         UserId = Guid.Empty;
-        Username = DalResources.DefaultNewTranslationUsername;
+        Username = DalResources.DefaultNewMultiLineTextUsername;
       }
       BusinessRules.CheckRules();
     }
@@ -194,31 +209,31 @@ namespace LearnLanguages.Business
       return EditLevel;
     }
 
-    public void AddPhrase(PhraseEdit phrase)
+    public void AddLine(LineEdit line)
     {
-      //PhraseIds.Add(phrase.Id);
-      if (_PhraseAdding != null)
+      //LineIds.Add(line.Id);
+      if (_LineAdding != null)
         throw new Exception();
-      _PhraseAdding = phrase;
-      Phrases.AddedNew += Phrases_AddedNew;
-      Phrases.AddNew();
-      Phrases.AddedNew -= Phrases_AddedNew;
+      _LineAdding = line;
+      Lines.AddedNew += Lines_AddedNew;
+      Lines.AddNew();
+      Lines.AddedNew -= Lines_AddedNew;
       BusinessRules.CheckRules();
     }
-    private PhraseEdit _PhraseAdding; 
+    private LineEdit _LineAdding; 
 
-    private void Phrases_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
+    private void Lines_AddedNew(object sender, Csla.Core.AddedNewEventArgs<LineEdit> e)
     {
-      var phrase = e.NewObject;
-      var phraseDto = _PhraseAdding.CreateDto();
-      _PhraseAdding = null;
-      phrase.LoadFromDtoBypassPropertyChecks(phraseDto);
+      var line = e.NewObject;
+      var lineDto = _LineAdding.CreateDto();
+      _LineAdding = null;
+      line.LoadFromDtoBypassPropertyChecks(lineDto);
     }
 
     protected override void OnChildChanged(Csla.Core.ChildChangedEventArgs e)
     {
       base.OnChildChanged(e);
-      BusinessRules.CheckRules(PhrasesProperty);
+      BusinessRules.CheckRules(LinesProperty);
     }
 
     #endregion
@@ -231,14 +246,14 @@ namespace LearnLanguages.Business
 
       // TODO: add validation rules
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(IdProperty));
-      BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(PhrasesProperty));
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(LinesProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UserIdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UsernameProperty));
 
 
-      //translation must have 2 phraseids to be valid
-      BusinessRules.AddRule(new Rules.CollectionMinimumCountBusinessRule(PhrasesProperty, 2));
-      //BusinessRules.AddRule(new CollectionCountsAreEqualBusinessRule(PhrasesProperty, PhraseIdsProperty));
+      //multiLineText must have 2 lineids to be valid
+      BusinessRules.AddRule(new Rules.CollectionMinimumCountBusinessRule(LinesProperty, 2));
+      //BusinessRules.AddRule(new CollectionCountsAreEqualBusinessRule(LinesProperty, LineIdsProperty));
     }
 
     #endregion
@@ -247,7 +262,7 @@ namespace LearnLanguages.Business
 
     public static void AddObjectAuthorizationRules()
     {
-      // TODO: TranslationEdit Authorization: add object-level authorization rules
+      // TODO: MultiLineTextEdit Authorization: add object-level authorization rules
       // Csla.Rules.CommonRules.Required
     }
 
@@ -263,8 +278,8 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
-        var result = translationDal.New(null);
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+        var result = multiLineTextDal.New(null);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -273,7 +288,7 @@ namespace LearnLanguages.Business
           else
             throw new CreateFailedException(result.Msg);
         }
-        TranslationDto dto = result.Obj;
+        MultiLineTextDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
         var dummy = this;
       }
@@ -283,8 +298,8 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
-        Result<TranslationDto> result = translationDal.Fetch(id);
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+        Result<MultiLineTextDto> result = multiLineTextDal.Fetch(id);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -293,7 +308,7 @@ namespace LearnLanguages.Business
           else
             throw new FetchFailedException(result.Msg);
         }
-        TranslationDto dto = result.Obj;
+        MultiLineTextDto dto = result.Obj;
         LoadFromDtoBypassPropertyChecks(dto);
       }
     }
@@ -301,7 +316,7 @@ namespace LearnLanguages.Business
     protected override void DataPortal_Insert()
     {
       //Dal is responsible for setting new Id
-      //TranslationDto dto = new TranslationDto()
+      //MultiLineTextDto dto = new MultiLineTextDto()
       //{
       //  Id = this.Id,
       //  LanguageId = this.LanguageId,
@@ -310,11 +325,11 @@ namespace LearnLanguages.Business
       using (var dalManager = DalFactory.GetDalManager())
       {
         FieldManager.UpdateChildren(this);
-        //DataPortal.UpdateChild(Phrases);
+        //DataPortal.UpdateChild(Lines);
 
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
         var dto = CreateDto();
-        var result = translationDal.Insert(dto);
+        var result = multiLineTextDal.Insert(dto);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -336,9 +351,9 @@ namespace LearnLanguages.Business
       {
         FieldManager.UpdateChildren(this);
 
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
         var dto = CreateDto();
-        Result<TranslationDto> result = translationDal.Update(dto);
+        Result<MultiLineTextDto> result = multiLineTextDal.Update(dto);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -358,8 +373,8 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
-        var result = translationDal.Delete(ReadProperty<Guid>(IdProperty));
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+        var result = multiLineTextDal.Delete(ReadProperty<Guid>(IdProperty));
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -375,8 +390,8 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
-        var result = translationDal.Delete(id);
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+        var result = multiLineTextDal.Delete(id);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -400,27 +415,27 @@ namespace LearnLanguages.Business
     //{
     //  using (var dalManager = DalFactory.GetDalManager())
     //  {
-    //    var TranslationDal = dalManager.GetProvider<ITranslationDal>();
-    //    var result = TranslationDal.Fetch(id);
+    //    var MultiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+    //    var result = MultiLineTextDal.Fetch(id);
     //    if (result.IsError)
     //      throw new FetchFailedException(result.Msg);
-    //    TranslationDto dto = result.Obj;
+    //    MultiLineTextDto dto = result.Obj;
     //    LoadFromDtoBypassPropertyChecks(dto);
     //  }
     //}
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(TranslationDto dto)
+    public void Child_Fetch(MultiLineTextDto dto)
     {
       LoadFromDtoBypassPropertyChecks(dto);
 
       //using (var dalManager = DalFactory.GetDalManager())
       //{
-      //  var TranslationDal = dalManager.GetProvider<ITranslationDal>();
-      //  var result = TranslationDal.Fetch(id);
+      //  var MultiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+      //  var result = MultiLineTextDal.Fetch(id);
       //  if (result.IsError)
       //    throw new FetchFailedException(result.Msg);
-      //  TranslationDto dto = result.Obj;
+      //  MultiLineTextDto dto = result.Obj;
       //  LoadFromDtoBypassPropertyChecks(dto);
       //}
     }
@@ -432,11 +447,11 @@ namespace LearnLanguages.Business
       {
         FieldManager.UpdateChildren(this);
 
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
         using (BypassPropertyChecks)
         {
           var dto = CreateDto();
-          var result = translationDal.Insert(dto);
+          var result = multiLineTextDal.Insert(dto);
           if (!result.IsSuccess)
           {
             Exception error = result.GetExceptionFromInfo();
@@ -457,10 +472,10 @@ namespace LearnLanguages.Business
       {
         FieldManager.UpdateChildren(this);
 
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
 
         var dto = CreateDto();
-        var result = translationDal.Update(dto);
+        var result = multiLineTextDal.Update(dto);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -478,9 +493,9 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var translationDal = dalManager.GetProvider<ITranslationDal>();
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
 
-        var result = translationDal.Delete(Id);
+        var result = multiLineTextDal.Delete(Id);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
