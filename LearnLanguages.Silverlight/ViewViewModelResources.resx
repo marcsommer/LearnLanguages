@@ -147,6 +147,12 @@
   <data name="LabelAddPhraseViewPhraseText" xml:space="preserve">
     <value>Phrase: </value>
   </data>
+  <data name="LabelAddSongLanguage" xml:space="preserve">
+    <value>Language: </value>
+  </data>
+  <data name="LabelAddSongText" xml:space="preserve">
+    <value>Song Text: </value>
+  </data>
   <data name="LabelLanguageTextIWantToLearnASongView" xml:space="preserve">
     <value>Language: </value>
   </data>

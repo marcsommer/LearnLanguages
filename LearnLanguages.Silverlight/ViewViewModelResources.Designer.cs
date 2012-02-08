@@ -153,6 +153,24 @@ namespace LearnLanguages.Silverlight {
         /// <summary>
         ///   Looks up a localized string similar to Language: .
         /// </summary>
+        public static string LabelAddSongLanguage {
+            get {
+                return ResourceManager.GetString("LabelAddSongLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Song Text: .
+        /// </summary>
+        public static string LabelAddSongText {
+            get {
+                return ResourceManager.GetString("LabelAddSongText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language: .
+        /// </summary>
         public static string LabelLanguageTextIWantToLearnASongView {
             get {
                 return ResourceManager.GetString("LabelLanguageTextIWantToLearnASongView", resourceCulture);
