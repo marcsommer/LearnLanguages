@@ -208,6 +208,27 @@ namespace LearnLanguages.DataAccess.Ef
         translationDto.Id = translationData.Id;
 
       }
+
+      //LINES
+      foreach (var lineDto in SeedData.Instance.Translations)
+      {
+        var lineData = EfHelper.AddToContext(lineDto, context);
+        context.SaveChanges();
+
+        //UPDATE USERS
+        //UPDATE USERS
+        var affectedUsers = (from userDto in SeedData.Instance.Users
+                             where userDto.TranslationIds.Contains(lineDto.Id)
+                             select userDto).ToList();
+
+        foreach (var affectedUser in affectedUsers)
+        {
+          affectedUser.PhraseIds.Remove(lineDto.Id);
+          affectedUser.PhraseIds.Add(lineDto.Id);
+        }
+
+        lineDto.Id = lineData.Id;
+      }
     }
 
     public ObjectContextManager<LearnLanguagesContext> GetManager()

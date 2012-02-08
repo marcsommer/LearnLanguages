@@ -137,6 +137,26 @@ namespace LearnLanguages.DataAccess.Ef
       return newPhraseData;
     }
     /// <summary>
+    /// Adds the lineDto to the context, loading UserData and PhraseData into the newly
+    /// created LineData.  Does NOT save changes to the context.
+    /// </summary>
+    public static LineData AddToContext(LineDto dto, LearnLanguagesContext context)
+    {
+      //only creates, does not add to linedatas
+      //var beforeCount = context.LineDatas.Count();
+      var newLineData = context.LineDatas.CreateObject();
+      //var afterCount = context.LineDatas.Count();
+
+      //assign properties
+      newLineData.LineNumber = dto.LineNumber;
+      newLineData.PhraseDataId = dto.PhraseId;
+      newLineData.UserDataId = dto.UserId;
+
+      context.LineDatas.AddObject(newLineData);
+
+      return newLineData;
+    }
+    /// <summary>
     /// Adds the TranslationDto to the context, loading UserData and PhraseDatas into the newly
     /// created PhraseData.  Does NOT save changes to the context.
     /// </summary>
@@ -349,6 +369,23 @@ namespace LearnLanguages.DataAccess.Ef
       languageData.Text = dto.Text;
     }
 
+    public static void LoadDataFromDto(ref LineData lineData,
+                                       LineDto dto, 
+                                       LearnLanguagesContext context)
+    {
+      //USER INFO
+      lineData.UserDataId = dto.UserId;
+      lineData.UserData = EfHelper.GetUserData(dto.UserId, context);
+
+      //PHRASE INFO
+      lineData.PhraseDataId = dto.PhraseId;
+      lineData.PhraseData = EfHelper.GetPhraseData(dto.PhraseId, context);
+
+      //TEXT
+      lineData.LineNumber = dto.LineNumber;
+    }
+
+
 
     private static LanguageData GetLanguageData(Guid languageId, LearnLanguagesContext context)
     {
@@ -406,5 +443,22 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.VeryBadException(errorMsg);
       }
     }
+
+    public static LineDto ToDto(LineData fetchedLineData)
+    {
+      var dto = new LineDto()
+      {
+        Id = fetchedLineData.Id,
+        LineNumber = fetchedLineData.LineNumber,
+        PhraseId = fetchedLineData.PhraseDataId,
+        UserId = fetchedLineData.UserDataId,
+        Username = fetchedLineData.UserData.Username
+      };
+
+      return dto;
+    }
+
+
+    
   }
 }

@@ -11,6 +11,7 @@
     <EntitySet Name="UserDatas" EntityType="LearnLanguages.Store.UserDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RoleDatas" EntityType="LearnLanguages.Store.RoleDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TranslationDatas" EntityType="LearnLanguages.Store.TranslationDatas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="LineDatas" EntityType="LearnLanguages.Store.LineDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="AssociationUserDataWithLanguageData" EntityType="LearnLanguages.Store.AssociationUserDataWithLanguageData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="AssociationUserDataWithRoleData" EntityType="LearnLanguages.Store.AssociationUserDataWithRoleData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserDataRoleData" EntityType="LearnLanguages.Store.UserDataRoleData" store:Type="Tables" Schema="dbo" />
@@ -71,6 +72,14 @@
       <End Role="UserData" EntitySet="UserDatas" />
       <End Role="LanguageData" EntitySet="LanguageDatas" />
     </AssociationSet>
+    <AssociationSet Name="UserDataLineData" Association="LearnLanguages.Store.UserDataLineData">
+      <End Role="UserData" EntitySet="UserDatas" />
+      <End Role="LineData" EntitySet="LineDatas" />
+    </AssociationSet>
+    <AssociationSet Name="PhraseDataLineData" Association="LearnLanguages.Store.PhraseDataLineData">
+      <End Role="PhraseData" EntitySet="PhraseDatas" />
+      <End Role="LineData" EntitySet="LineDatas" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="LanguageDatas">
     <Key>
@@ -112,6 +121,15 @@
     </Key>
     <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserDataId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LineDatas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LineNumber" Type="int" Nullable="false" />
+    <Property Name="UserDataId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="PhraseDataId" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="AssociationUserDataWithLanguageData">
     <Key>
@@ -216,6 +234,30 @@
       </Principal>
       <Dependent Role="LanguageData">
         <PropertyRef Name="UserDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserDataLineData">
+    <End Role="UserData" Type="LearnLanguages.Store.UserDatas" Multiplicity="1" />
+    <End Role="LineData" Type="LearnLanguages.Store.LineDatas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineData">
+        <PropertyRef Name="UserDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PhraseDataLineData">
+    <End Role="PhraseData" Type="LearnLanguages.Store.PhraseDatas" Multiplicity="1" />
+    <End Role="LineData" Type="LearnLanguages.Store.LineDatas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhraseData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineData">
+        <PropertyRef Name="PhraseDataId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -365,6 +407,15 @@
             <End Role="UserData" EntitySet="UserDatas" />
             <End Role="LanguageData" EntitySet="LanguageDatas" />
           </AssociationSet>
+          <EntitySet Name="LineDatas" EntityType="LearnLanguages.LineData" />
+          <AssociationSet Name="UserDataLineData" Association="LearnLanguages.UserDataLineData">
+            <End Role="UserData" EntitySet="UserDatas" />
+            <End Role="LineData" EntitySet="LineDatas" />
+          </AssociationSet>
+          <AssociationSet Name="PhraseDataLineData" Association="LearnLanguages.PhraseDataLineData">
+            <End Role="PhraseData" EntitySet="PhraseDatas" />
+            <End Role="LineData" EntitySet="LineDatas" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="LanguageData">
           <Key>
@@ -387,6 +438,7 @@
           <NavigationProperty Name="LanguageData" Relationship="LearnLanguages.PhraseDataLanguageData" FromRole="PhraseData" ToRole="LanguageData" />
           <Property Type="Guid" Name="LanguageDataId" Nullable="false" />
           <NavigationProperty Name="TranslationDatas" Relationship="LearnLanguages.TranslationDataPhraseData" FromRole="PhraseData" ToRole="TranslationData" />
+          <NavigationProperty Name="LineDatas" Relationship="LearnLanguages.PhraseDataLineData" FromRole="PhraseData" ToRole="LineData" />
         </EntityType>
         <Association Name="AssociateLanguageDataWithPhraseData">
           <End Type="LearnLanguages.LanguageData" Role="LanguageData" Multiplicity="1" />
@@ -413,6 +465,7 @@
           <NavigationProperty Name="TranslationDatas" Relationship="LearnLanguages.UserDataTranslationData" FromRole="UserData" ToRole="TranslationData" />
           <NavigationProperty Name="LanguageDatas" Relationship="LearnLanguages.UserDataLanguageData" FromRole="UserData" ToRole="LanguageData" />
           <Property Type="String" Name="NativeLanguageText" Nullable="false" />
+          <NavigationProperty Name="LineDatas" Relationship="LearnLanguages.UserDataLineData" FromRole="UserData" ToRole="LineData" />
         </EntityType>
         <Association Name="AssociationUserDataWithPhraseData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" >
@@ -509,6 +562,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="LineData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LineNumber" Nullable="false" />
+          <NavigationProperty Name="UserData" Relationship="LearnLanguages.UserDataLineData" FromRole="LineData" ToRole="UserData" />
+          <Property Type="Guid" Name="UserDataId" Nullable="false" />
+          <NavigationProperty Name="PhraseData" Relationship="LearnLanguages.PhraseDataLineData" FromRole="LineData" ToRole="PhraseData" />
+          <Property Type="Guid" Name="PhraseDataId" Nullable="false" />
+        </EntityType>
+        <Association Name="UserDataLineData">
+          <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" />
+          <End Type="LearnLanguages.LineData" Role="LineData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LineData">
+              <PropertyRef Name="UserDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PhraseDataLineData">
+          <End Type="LearnLanguages.PhraseData" Role="PhraseData" Multiplicity="1" />
+          <End Type="LearnLanguages.LineData" Role="LineData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhraseData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LineData">
+              <PropertyRef Name="PhraseDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -558,6 +646,16 @@
         <MappingFragment StoreEntitySet="TranslationDatas">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="UserDataId" ColumnName="UserDataId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LineDatas">
+      <EntityTypeMapping TypeName="IsTypeOf(LearnLanguages.LineData)">
+        <MappingFragment StoreEntitySet="LineDatas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LineNumber" ColumnName="LineNumber" />
+          <ScalarProperty Name="UserDataId" ColumnName="UserDataId" />
+          <ScalarProperty Name="PhraseDataId" ColumnName="PhraseDataId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

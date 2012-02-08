@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 01/31/2012 19:50:47
+-- Date Created: 02/07/2012 17:57:59
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -137,6 +137,15 @@ CREATE TABLE [dbo].[TranslationDatas] (
 );
 GO
 
+-- Creating table 'LineDatas'
+CREATE TABLE [dbo].[LineDatas] (
+    [Id] uniqueidentifier  NOT NULL,
+    [LineNumber] int  NOT NULL,
+    [UserDataId] uniqueidentifier  NOT NULL,
+    [PhraseDataId] uniqueidentifier  NOT NULL
+);
+GO
+
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
     [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
@@ -196,6 +205,12 @@ GO
 -- Creating primary key on [Id] in table 'TranslationDatas'
 ALTER TABLE [dbo].[TranslationDatas]
 ADD CONSTRAINT [PK_TranslationDatas]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'LineDatas'
+ALTER TABLE [dbo].[LineDatas]
+ADD CONSTRAINT [PK_LineDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -401,6 +416,34 @@ ADD CONSTRAINT [FK_UserDataLanguageData]
 CREATE INDEX [IX_FK_UserDataLanguageData]
 ON [dbo].[LanguageDatas]
     ([UserDataId]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'LineDatas'
+ALTER TABLE [dbo].[LineDatas]
+ADD CONSTRAINT [FK_UserDataLineData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataLineData'
+CREATE INDEX [IX_FK_UserDataLineData]
+ON [dbo].[LineDatas]
+    ([UserDataId]);
+GO
+
+-- Creating foreign key on [PhraseDataId] in table 'LineDatas'
+ALTER TABLE [dbo].[LineDatas]
+ADD CONSTRAINT [FK_PhraseDataLineData]
+    FOREIGN KEY ([PhraseDataId])
+    REFERENCES [dbo].[PhraseDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PhraseDataLineData'
+CREATE INDEX [IX_FK_PhraseDataLineData]
+ON [dbo].[LineDatas]
+    ([PhraseDataId]);
 GO
 
 -- --------------------------------------------------

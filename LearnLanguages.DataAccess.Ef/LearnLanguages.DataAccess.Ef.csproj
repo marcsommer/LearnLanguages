@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dals\LineDal.cs" />
     <Compile Include="Dals\TranslationDal.cs" />
     <Compile Include="Dals\CustomIdentityDal.cs" />
     <Compile Include="DalManager.cs" />
