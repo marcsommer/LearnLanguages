@@ -98,6 +98,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(study);
       var iWantToLearn = Services.Container.GetExportedValue<IWantToLearnNavigationButtonViewModel>();
       Items.Add(iWantToLearn);
+      var addSong = Services.Container.GetExportedValue<AddSongNavigationButtonViewModel>();
+      Items.Add(addSong);
     }
 
     #endregion

@@ -4,33 +4,49 @@ using LearnLanguages.Common.ViewModelBases;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  [Export(typeof(AddPhraseViewModel))]
+  [Export(typeof(AddSongViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class AddPhraseViewModel : ViewModelBase
+  public class AddSongViewModel : ViewModelBase
   {
-    public AddPhraseViewModel()
+    public AddSongViewModel()
     {
-      PhraseEdit.NewPhraseEdit((s, r) =>
+      MultiLineTextEdit.NewMultiLineTextEdit((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
-          var phraseViewModel = Services.Container.GetExportedValue<AddPhrasePhraseEditViewModel>();
-          phraseViewModel.Model = r.Object;
-          Phrase = phraseViewModel;
+          var songViewModel = Services.Container.GetExportedValue<AddSongMultiLineTextEditViewModel>();
+          songViewModel.Model = r.Object;
+          Song = songViewModel;
+          Song.Saved += new System.EventHandler<Common.EventArgs.ModelEventArgs<MultiLineTextEdit>>(Song_Saved);
         });
+      //PhraseEdit.NewPhraseEdit((s, r) =>
+      //  {
+      //    if (r.Error != null)
+      //      throw r.Error;
+
+      //    var phraseViewModel = Services.Container.GetExportedValue<AddSongMultiLineTextEditViewModel>();
+      //    phraseViewModel.Model = r.Object;
+      //    Song = phraseViewModel;
+      //  });
     }
 
-    private AddPhrasePhraseEditViewModel _Phrase;
-    public AddPhrasePhraseEditViewModel Phrase
+    public void Song_Saved(object sender, Common.EventArgs.ModelEventArgs<MultiLineTextEdit> e)
     {
-      get { return _Phrase; }
+      //once the song is saved, we should go to a different screen...view songs maybe?  Save successful screen?
+      //edit song viewmodel?
+    }
+
+    private AddSongMultiLineTextEditViewModel _Song;
+    public AddSongMultiLineTextEditViewModel Song
+    {
+      get { return _Song; }
       set
       {
-        if (value != _Phrase)
+        if (value != _Song)
         {
-          _Phrase = value;
-          NotifyOfPropertyChange(() => Phrase);
+          _Song = value;
+          NotifyOfPropertyChange(() => Song);
         }
       }
     }

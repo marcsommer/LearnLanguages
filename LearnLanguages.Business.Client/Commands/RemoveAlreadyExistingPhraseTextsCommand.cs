@@ -114,7 +114,7 @@ namespace LearnLanguages.Business
         PrunedPhraseTexts = new MobileList<string>();
       foreach (var phraseText in OriginalPhraseTexts)
       {
-        if (phrasesExist.ExistenceDictionary[phraseText] == true)
+        if (phrasesExist.ExistenceDictionary[phraseText] == false)
           PrunedPhraseTexts.Add(phraseText);
       }
     }

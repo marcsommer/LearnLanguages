@@ -61,6 +61,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1st Line: .
+        /// </summary>
+        public static string AutoTitlePrefix {
+            get {
+                return ResourceManager.GetString("AutoTitlePrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 0.
         /// </summary>
         public static string DefaultPercentKnown {

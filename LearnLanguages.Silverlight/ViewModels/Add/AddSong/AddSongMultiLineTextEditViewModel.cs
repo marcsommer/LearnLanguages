@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
@@ -7,7 +6,6 @@ using LearnLanguages.Common.ViewModelBases;
 using System.Windows;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Csla.Core;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -15,6 +13,8 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class AddSongMultiLineTextEditViewModel : ViewModelBase<MultiLineTextEdit, MultiLineTextDto>
   {
+    #region Ctors and Init
+
     public AddSongMultiLineTextEditViewModel()
     {
       Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
@@ -24,6 +24,10 @@ namespace LearnLanguages.Silverlight.ViewModels
       else
         InstructionsVisibility = Visibility.Visible;
     }
+
+    #endregion
+
+    #region Properties
 
     private LanguageEdit _SongLanguage;
     public LanguageEdit SongLanguage
@@ -35,14 +39,37 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _SongLanguage = value;
           NotifyOfPropertyChange(() => SongLanguage);
+          NotifyOfPropertyChange(() => CanSave);
         }
       }
     }
 
-    private void HandleLanguageChanged(object sender, EventArgs e)
+    private string _SongText;
+    public string SongText
     {
-      if (sender != null)
-        SongLanguage = ((LanguageEditViewModel)sender).Model;
+      get { return _SongText; }
+      set
+      {
+        if (value != _SongText)
+        {
+          _SongText = value;
+          NotifyOfPropertyChange(() => SongText);
+          NotifyOfPropertyChange(() => CanSave);
+        }
+      }
+    }
+
+    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddSongLanguage; } }
+    public string LabelSongText { get { return ViewViewModelResources.LabelAddSongSongText; } }
+    public string LabelSongTitle { get { return ViewViewModelResources.LabelAddSongSongTitle; } }
+    public string LabelSongAdditionalMetadata { get { return ViewViewModelResources.LabelSongAdditionalMetadata; } }
+
+    public string InstructionsSelectLanguage { get { return ViewViewModelResources.InstructionsAddSongSelectLanguage; } }
+    public string InstructionsEnterSongText { get { return ViewViewModelResources.InstructionsAddSongEnterSongText; } }
+    public string InstructionsEnterSongTitle { get { return ViewViewModelResources.InstructionsAddSongEnterSongTitle; } }
+    public string InstructionsEnterSongAdditionalMetadata
+    {
+      get { return ViewViewModelResources.InstructionsAddSongEnterSongAdditionalMetadata; }
     }
 
     private LanguageSelectorViewModel _Languages;
@@ -59,19 +86,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddSongLanguage; } }
-    public string LabelSongText { get { return ViewViewModelResources.LabelAddSongSongText; } }
-    public string LabelSongTitle { get { return ViewViewModelResources.LabelAddSongSongTitle; } }
-    public string LabelSongAdditionalMetadata { get { return ViewViewModelResources.LabelSongAdditionalMetadata; } }
-
-    public string InstructionsSelectLanguage { get { return ViewViewModelResources.InstructionsAddSongSelectLanguage; } }
-    public string InstructionsEnterSongText { get { return ViewViewModelResources.InstructionsAddSongEnterSongText; } }
-    public string InstructionsEnterSongTitle { get { return ViewViewModelResources.InstructionsAddSongEnterSongTitle; } }
-    public string InstructionsEnterSongAdditionalMetadata 
-    { 
-      get { return ViewViewModelResources.InstructionsAddSongEnterSongAdditionalMetadata; } 
-    }
-
     private Visibility _InstructionsVisibility;
     public Visibility InstructionsVisibility
     {
@@ -86,30 +100,47 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private string _SongText;
-    public string SongText
+    private bool _SongHasBeenSaved;
+    public bool SongHasBeenSaved
     {
-      get { return _SongText; }
+      get { return _SongHasBeenSaved; }
       set
       {
-        if (value != _SongText)
+        if (value != _SongHasBeenSaved)
         {
-          _SongText = value;
-          NotifyOfPropertyChange(() => SongText);
+          _SongHasBeenSaved = value;
+          NotifyOfPropertyChange(() => SongHasBeenSaved);
         }
       }
     }
+
+    #endregion
+
+    #region Methods
+
+    private void HandleLanguageChanged(object sender, EventArgs e)
+    {
+      if (sender != null)
+        SongLanguage = ((LanguageEditViewModel)sender).Model;
+    }
+    
+    #endregion
+
+    #region Commands
 
     public override bool CanSave
     {
       get
       {
-        if (SongText.Length < 2 ||
+        if (string.IsNullOrEmpty(SongText) ||
+            SongHasBeenSaved || //Song can only be saved once.  After this, we should be on a new screen.
+            SongText.Length < 2 ||
             SongLanguage == null)
           return false;
         else
           return true;
       }
+
     }
     public override void Save()
     {
@@ -126,13 +157,9 @@ namespace LearnLanguages.Silverlight.ViewModels
       ///  this is line three
       ///  subphrases: "this is line one" "this is line two" "this is line three"
       ///  word-subphrases: "this" "is" "line" "one" "two" "three"
+
       #region PARSE THE SONGTEXT INTO LINES AND ADD TO MODEL.LINES
       {
-        
-
-        //PARSE PHRASE INTO LINES/WORDS
-        
-        //var parentPhrase = e.Model;
         var songText = SongText;
         var languageText = SongLanguage.Text;
 
@@ -144,6 +171,19 @@ namespace LearnLanguages.Silverlight.ViewModels
         var splitIntoWordsPattern = ViewViewModelResources.RegExSplitPatternWords;
         splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");
         var words = new List<string>(Regex.Split(songText, splitIntoWordsPattern));
+        var wordCount = words.Count;
+        var escapeHelper = 0;
+        while (words.Contains(""))
+        {
+          //ESCAPE HELPER TO ESCAPE IN CASE OF INFINITE LOOP WITH WHILE STATEMENT.
+          //I WANT THE WHILE LOOP TO USE THE QUICKNESS OF CONTAINS(), 
+          //AS OPPOSED TO FOREACH-ING OR FOR-ING.  BUT I HATE POSSIBILITY OF
+          //ENDLESS LOOP, EVEN THOUGH I DON'T SEE HOW IT COULD HAPPEN.
+          words.Remove("");
+          escapeHelper++;
+          if (escapeHelper > wordCount)
+            break;
+        }
 
         //I'M CHANGING THIS TO UTILIZE MY LINELIST.NEWLINELIST(INFOS) ALREADY IN PLACE.
         //SO AT THIS TIME, WE ONLY NEED TO SAVE THE WORDS THEMSELVES.  THE LINES WILL BE SAVED
@@ -165,7 +205,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
             var allWordsNotAlreadyInDatabase = r.Object.PrunedPhraseTexts;
 
-            //CREATE PHRASE FOR EACH NEW WORD
+            #region CREATE PHRASE FOR EACH NEW WORD
+
             PhraseList.NewPhraseList(new Business.Criteria.PhraseTextsCriteria(languageText, 
                                                                                allWordsNotAlreadyInDatabase), 
                                                                                (s2, r2) =>
@@ -183,7 +224,7 @@ namespace LearnLanguages.Silverlight.ViewModels
                   throw r3.Error;
 
                 phraseListContainingAllWordsNotAlreadyInDatabase = (PhraseList)r3.NewObject;
-                //SO NOW, ALL OF OUR WORDS IN THE SONG THAT WERE NOT ALREADY IN THE DATABASE ARE INDEED NOW 
+                //SO NOW, ALL OF OUR SONG'S WORDS THAT WERE NOT ALREADY IN THE DATABASE ARE INDEED NOW 
                 //STORED IN THE DATABASE.
 
                 #region CREATE LINEEDIT OBJECTS FOR EACH TEXT LINE AND ADD TO MODEL
@@ -194,35 +235,33 @@ namespace LearnLanguages.Silverlight.ViewModels
                   lineInfoDictionary.Add(i, lines[i]);
                 }
 
+                //WE NOW HAVE INFO DICTIONARY WHICH HAS LINE NUMBER AND CORRESPONDING LINE TEXT
+                //CREATE A NEW LINELIST WITH THIS CRITERIA WILL CREATE PHRASES WITH EACH LINE TEXT,
+                //AND LINEEDITS OBJECT FOR EACH LINE NUMBER + PHRASE.
                 var criteria2 = new Business.Criteria.LineInfosCriteria(languageText, lineInfoDictionary);
                 LineList.NewLineList(criteria2, (s5, r5) =>
                   {
+                    if (r5.Error != null)
+                      throw r5.Error;
 
-                  });
-
-                var criteria = new Business.Criteria.PhraseTextsCriteria(languageText, lines);
-                PhraseList.NewPhraseList(criteria, (s4, r4) =>
-                  {
-                    if (r4.Error != null)
-                      throw r4.Error;
-
-                    var phraseEditLines = r4.Object;
-
-                    //LineList.NewLineList(
+                    //WE NOW HAVE A LIST OF LINEEDITS, EACH WITH A PHRASE WITH A SINGLE LINE OF TEXT AND LINE NUMBER.
+                    //SET OUR MODEL.LINES TO THIS LINELIST
+                    Model.Lines = r5.Object;
 
                     #region SET SONG TITLE (IF NECESSARY)
                     //IF THE SONGTITLE IS EMPTY, THEN USE THE FIRST LINE OF THE SONG AS THE SONG TITLE
+                    if (string.IsNullOrEmpty(Model.Title))
+                      Model.Title = ViewViewModelResources.AutoTitlePrefix + Model.Lines.GetLine(0).Phrase.Text;
                     #endregion
 
                     #region SAVE THE ACTUAL SONG MODEL
 
                     //NOW WE CAN USE THE BASE SAVE
                     base.Save();
+                    SongHasBeenSaved = true;
 
                     #endregion
-
                   });
-
                 
                 #endregion
               });
@@ -230,14 +269,17 @@ namespace LearnLanguages.Silverlight.ViewModels
               #endregion
             });
 
+            #endregion
+
           });
         #endregion
 
 
       }
 
-
-
+      #endregion
     }
+
+    #endregion
   }
 }

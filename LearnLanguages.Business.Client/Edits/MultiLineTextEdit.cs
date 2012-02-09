@@ -113,7 +113,7 @@ namespace LearnLanguages.Business
     public LineList Lines
     {
       get { return GetProperty(LinesProperty); }
-      set { LoadProperty(LinesProperty, value); }
+      set { SetProperty(LinesProperty, value); }
     }
     #endregion
         

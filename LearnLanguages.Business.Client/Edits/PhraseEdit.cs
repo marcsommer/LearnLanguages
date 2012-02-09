@@ -1,16 +1,13 @@
 ﻿using System;
-using Csla;
 using System.ComponentModel;
+using System.Collections.Generic;
+using Csla;
 using Csla.Serialization;
 using Csla.DataPortalClient;
 using LearnLanguages.Common.Interfaces;
-#if !SILVERLIGHT
 using LearnLanguages.DataAccess.Exceptions;
-#endif
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
-using System.Collections.Generic;
-
 
 namespace LearnLanguages.Business
 {
@@ -77,6 +74,7 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Business Properties & Methods
+
     //PHRASE
     #region public string Text
     public static readonly PropertyInfo<string> TextProperty = RegisterProperty<string>(c => c.Text);
@@ -106,7 +104,7 @@ namespace LearnLanguages.Business
       get { return GetProperty(LanguageProperty); }
       set 
       {
-        LoadProperty(LanguageProperty, value);
+        SetProperty(LanguageProperty, value);
         
         if (value != null)
           LanguageId = value.Id;
@@ -115,7 +113,7 @@ namespace LearnLanguages.Business
       }
     }
     #endregion
-    
+
     //USER
     #region public Guid UserId
     public static readonly PropertyInfo<Guid> UserIdProperty = RegisterProperty<Guid>(c => c.UserId);

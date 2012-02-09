@@ -41,8 +41,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
     
-    public string LabelPhraseText { get { return ViewViewModelResources.LabelAddPhraseViewPhraseText; } }
-    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddPhraseViewLanguageText; } }
+    public string LabelPhraseText { get { return ViewViewModelResources.LabelAddPhrasePhraseText; } }
+    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddPhraseLanguageText; } }
 
     public string InstructionsSelectLanguage { get { return ViewViewModelResources.InstructionsSelectLanguage; } }
     public string InstructionsEnterPhrase { get { return ViewViewModelResources.InstructionsEnterPhrase; } }
