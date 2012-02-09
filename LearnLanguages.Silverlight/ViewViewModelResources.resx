@@ -120,44 +120,53 @@
   <data name="DefaultPercentKnown" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="InstructionsAddSongEnterSongAdditionalMetadata" xml:space="preserve">
+    <value>InstructionsAddSongEnterSongAdditionalMetadata</value>
+  </data>
+  <data name="InstructionsAddSongEnterSongText" xml:space="preserve">
+    <value>Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don't know these, it's okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them.</value>
+  </data>
+  <data name="InstructionsAddSongEnterSongTitle" xml:space="preserve">
+    <value>InstructionsAddSongEnterSongTitle</value>
+  </data>
+  <data name="InstructionsAddSongSelectLanguage" xml:space="preserve">
+    <value>Step 1: Select the language of the song.  If it is not in the list, click "Add Language" first, then select the newly added language.</value>
+  </data>
   <data name="InstructionsAskHowMuchDoYouKnowResponse" xml:space="preserve">
     <value>Select how much of this phrase do you know in the targeted language.  If you know it completely, select 100%.  If you don't know it at all, select 0%.  If you know somewhere in between, estimate to the best of your ability how much of the translation  you know in the targeted language.</value>
   </data>
   <data name="InstructionsEnterPhrase" xml:space="preserve">
     <value>Step 2: Enter as much text as you want to learn, like an original poem, song lyrics, story, vocabulary list, etc.  We will divide this into smaller phrases and words as we go.</value>
   </data>
-  <data name="InstructionsEnterPhraseIWantToLearnASong" xml:space="preserve">
-    <value>Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don't know these, it's okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them.</value>
-  </data>
   <data name="InstructionsSelectLanguage" xml:space="preserve">
     <value>Step 1: Select Language</value>
-  </data>
-  <data name="InstructionsSelectLanguageIWantToLearnASong" xml:space="preserve">
-    <value>Step 1: Select the language of the song.  If it is not in the list, click "Add Language" first.</value>
   </data>
   <data name="LabelAcceptPercentKnown" xml:space="preserve">
     <value>OK</value>
   </data>
-  <data name="LabelAddLanguageViewLanguageText" xml:space="preserve">
+  <data name="LabelAddLanguageLanguageText" xml:space="preserve">
     <value>Language: </value>
   </data>
-  <data name="LabelAddPhraseViewLanguageText" xml:space="preserve">
+  <data name="LabelAddPhraseLanguageText" xml:space="preserve">
     <value>Language: </value>
   </data>
-  <data name="LabelAddPhraseViewPhraseText" xml:space="preserve">
+  <data name="LabelAddPhrasePhraseText" xml:space="preserve">
     <value>Phrase: </value>
   </data>
   <data name="LabelAddSongLanguage" xml:space="preserve">
     <value>Language: </value>
   </data>
+  <data name="LabelAddSongSongText" xml:space="preserve">
+    <value>Song Lyrics: </value>
+  </data>
+  <data name="LabelAddSongSongTitle" xml:space="preserve">
+    <value>df</value>
+  </data>
   <data name="LabelAddSongText" xml:space="preserve">
     <value>Song Text: </value>
   </data>
-  <data name="LabelLanguageTextIWantToLearnASongView" xml:space="preserve">
-    <value>Language: </value>
-  </data>
-  <data name="LabelPhraseTextIWantToLearnASongView" xml:space="preserve">
-    <value>Phrase: </value>
+  <data name="LabelSongAdditionalMetadata" xml:space="preserve">
+    <value>sdfds</value>
   </data>
   <data name="LineDelimiter" xml:space="preserve">
     <value>\r</value>

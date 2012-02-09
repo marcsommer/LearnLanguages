@@ -56,6 +56,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Commands\PhraseDefaultSetterCommand.cs">
       <Link>Commands\PhraseDefaultSetterCommand.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Commands\RemoveAlreadyExistingPhraseTextsCommand.cs">
+      <Link>Commands\RemoveAlreadyExistingPhraseTextsCommand.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\LineInfosCriteria.cs">
       <Link>Criteria\LineInfosCriteria.cs</Link>
     </Compile>
@@ -109,6 +112,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\BlankTranslationRetriever.cs">
       <Link>Retrievers\BlankTranslationRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesExistRetriever.cs">
+      <Link>Retrievers\PhrasesExistRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationRetriever.cs">
       <Link>Retrievers\TranslationRetriever.cs</Link>

@@ -33,7 +33,7 @@ namespace LearnLanguages.Business
     {
       return new PhraseList();
     }
-    
+
 #if SILVERLIGHT
     /// <summary>
     /// Runs locally.
@@ -51,6 +51,11 @@ namespace LearnLanguages.Business
     public static void NewPhraseList(EventHandler<DataPortalResult<PhraseList>> callback)
     {
       DataPortal.BeginCreate<PhraseList>(callback);
+    }
+
+    public static PhraseList GetAll()
+    {
+      return DataPortal.Fetch<PhraseList>();
     }
 #endif
 

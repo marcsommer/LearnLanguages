@@ -70,6 +70,42 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to InstructionsAddSongEnterSongAdditionalMetadata.
+        /// </summary>
+        public static string InstructionsAddSongEnterSongAdditionalMetadata {
+            get {
+                return ResourceManager.GetString("InstructionsAddSongEnterSongAdditionalMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don&apos;t know these, it&apos;s okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them..
+        /// </summary>
+        public static string InstructionsAddSongEnterSongText {
+            get {
+                return ResourceManager.GetString("InstructionsAddSongEnterSongText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InstructionsAddSongEnterSongTitle.
+        /// </summary>
+        public static string InstructionsAddSongEnterSongTitle {
+            get {
+                return ResourceManager.GetString("InstructionsAddSongEnterSongTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step 1: Select the language of the song.  If it is not in the list, click &quot;Add Language&quot; first, then select the newly added language..
+        /// </summary>
+        public static string InstructionsAddSongSelectLanguage {
+            get {
+                return ResourceManager.GetString("InstructionsAddSongSelectLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select how much of this phrase do you know in the targeted language.  If you know it completely, select 100%.  If you don&apos;t know it at all, select 0%.  If you know somewhere in between, estimate to the best of your ability how much of the translation  you know in the targeted language..
         /// </summary>
         public static string InstructionsAskHowMuchDoYouKnowResponse {
@@ -88,29 +124,11 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don&apos;t know these, it&apos;s okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them..
-        /// </summary>
-        public static string InstructionsEnterPhraseIWantToLearnASong {
-            get {
-                return ResourceManager.GetString("InstructionsEnterPhraseIWantToLearnASong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Step 1: Select Language.
         /// </summary>
         public static string InstructionsSelectLanguage {
             get {
                 return ResourceManager.GetString("InstructionsSelectLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Step 1: Select the language of the song.  If it is not in the list, click &quot;Add Language&quot; first..
-        /// </summary>
-        public static string InstructionsSelectLanguageIWantToLearnASong {
-            get {
-                return ResourceManager.GetString("InstructionsSelectLanguageIWantToLearnASong", resourceCulture);
             }
         }
         
@@ -126,27 +144,27 @@ namespace LearnLanguages.Silverlight {
         /// <summary>
         ///   Looks up a localized string similar to Language: .
         /// </summary>
-        public static string LabelAddLanguageViewLanguageText {
+        public static string LabelAddLanguageLanguageText {
             get {
-                return ResourceManager.GetString("LabelAddLanguageViewLanguageText", resourceCulture);
+                return ResourceManager.GetString("LabelAddLanguageLanguageText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Language: .
         /// </summary>
-        public static string LabelAddPhraseViewLanguageText {
+        public static string LabelAddPhraseLanguageText {
             get {
-                return ResourceManager.GetString("LabelAddPhraseViewLanguageText", resourceCulture);
+                return ResourceManager.GetString("LabelAddPhraseLanguageText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Phrase: .
         /// </summary>
-        public static string LabelAddPhraseViewPhraseText {
+        public static string LabelAddPhrasePhraseText {
             get {
-                return ResourceManager.GetString("LabelAddPhraseViewPhraseText", resourceCulture);
+                return ResourceManager.GetString("LabelAddPhrasePhraseText", resourceCulture);
             }
         }
         
@@ -160,6 +178,24 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Song Lyrics: .
+        /// </summary>
+        public static string LabelAddSongSongText {
+            get {
+                return ResourceManager.GetString("LabelAddSongSongText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to df.
+        /// </summary>
+        public static string LabelAddSongSongTitle {
+            get {
+                return ResourceManager.GetString("LabelAddSongSongTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Song Text: .
         /// </summary>
         public static string LabelAddSongText {
@@ -169,20 +205,11 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language: .
+        ///   Looks up a localized string similar to sdfds.
         /// </summary>
-        public static string LabelLanguageTextIWantToLearnASongView {
+        public static string LabelSongAdditionalMetadata {
             get {
-                return ResourceManager.GetString("LabelLanguageTextIWantToLearnASongView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Phrase: .
-        /// </summary>
-        public static string LabelPhraseTextIWantToLearnASongView {
-            get {
-                return ResourceManager.GetString("LabelPhraseTextIWantToLearnASongView", resourceCulture);
+                return ResourceManager.GetString("LabelSongAdditionalMetadata", resourceCulture);
             }
         }
         

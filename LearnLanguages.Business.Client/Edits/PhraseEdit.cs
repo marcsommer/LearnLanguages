@@ -9,6 +9,7 @@ using LearnLanguages.DataAccess.Exceptions;
 #endif
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
+using System.Collections.Generic;
 
 
 namespace LearnLanguages.Business
@@ -40,6 +41,13 @@ namespace LearnLanguages.Business
     public static PhraseEdit GetPhraseEdit(Guid id)
     {
       return DataPortal.Fetch<PhraseEdit>(id);
+    }
+
+    public static PhrasesExistRetriever PhrasesExist(string languageText, IList<string> phraseTexts)
+    {
+      var criteria = new Criteria.PhraseTextsCriteria(languageText, phraseTexts);
+      var retriever = PhrasesExistRetriever.CreateNew(criteria);
+      return retriever;
     }
 
 #endif

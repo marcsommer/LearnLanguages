@@ -9,7 +9,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class AddLanguageLanguageEditViewModel : LanguageEditViewModel
   {
-    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddLanguageViewLanguageText; } }
+    public string LabelLanguageText { get { return ViewViewModelResources.LabelAddLanguageLanguageText; } }
 
     public override void Save()
     {

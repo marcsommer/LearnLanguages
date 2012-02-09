@@ -45,7 +45,7 @@ namespace LearnLanguages.Common.ViewModelBases
       NotifyOfPropertyChange(() => CanSave);
     }
 
-    public bool CanSave
+    public virtual bool CanSave
     {
       get
       {
