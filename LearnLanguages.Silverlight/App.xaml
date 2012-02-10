@@ -22,6 +22,15 @@
       <Setter Property="Padding" Value="1" />
     </Style>
 
+    <Style x:Key="NavigationSetBorder" TargetType="Border">
+      <Setter Property="BorderBrush" Value="Purple" />
+      <Setter Property="BorderThickness" Value="2" />
+      <Setter Property="Margin" Value="1" />
+      <Setter Property="Padding" Value="1" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+
     <Style x:Key="ViewSection" TargetType="Border">
       <Setter Property="BorderBrush" Value="Blue" />
       <Setter Property="BorderThickness" Value="1" />
@@ -137,6 +146,31 @@
       </Setter>
     </Style>
 
+    <Style x:Key="NavigationSetTitle" TargetType="Button">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+
+              <Rectangle Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" >
+
+                <Rectangle.Fill>
+                  <RadialGradientBrush GradientOrigin="0.05,.31">
+                    <GradientStop Offset="0.1" Color="Azure" />
+                    <GradientStop Offset="1.5" Color="Silver" />
+                  </RadialGradientBrush>
+                </Rectangle.Fill>
+              </Rectangle>
+
+              <TextBlock Text="{Binding Path=LabelText}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <!--<Setter Property="Height" Value="40" />-->
+      <!--<Setter Property="Width" Value="120" />-->
+    </Style>
 
     <Style TargetType="views:LoginView" x:Key="DefaultShellViewStyle">
       <Setter Property="Template">

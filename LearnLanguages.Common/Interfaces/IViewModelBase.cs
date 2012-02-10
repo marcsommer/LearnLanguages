@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows;
 
 namespace LearnLanguages.Common.Interfaces
 {
@@ -8,5 +9,6 @@ namespace LearnLanguages.Common.Interfaces
     bool LoadFromUri(Uri uri);
     //string GetCoreViewModelName(bool withSpaces = false);
     bool ShowGridLines { get; }
+    Visibility ViewModelVisibility { get; set; }
   }
 }

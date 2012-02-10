@@ -259,6 +259,69 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Admin.
+        /// </summary>
+        public static string TitleLabelTextAdmin {
+            get {
+                return ResourceManager.GetString("TitleLabelTextAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chug!!.
+        /// </summary>
+        public static string TitleLabelTextChug {
+            get {
+                return ResourceManager.GetString("TitleLabelTextChug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string TitleLabelTextEdit {
+            get {
+                return ResourceManager.GetString("TitleLabelTextEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        public static string TitleLabelTextProgress {
+            get {
+                return ResourceManager.GetString("TitleLabelTextProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Review.
+        /// </summary>
+        public static string TitleLabelTextReview {
+            get {
+                return ResourceManager.GetString("TitleLabelTextReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study.
+        /// </summary>
+        public static string TitleLabelTextStudy {
+            get {
+                return ResourceManager.GetString("TitleLabelTextStudy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string TitleLabelTextTest {
+            get {
+                return ResourceManager.GetString("TitleLabelTextTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Language.
         /// </summary>
         public static string ToolTipTextAddLanguage {

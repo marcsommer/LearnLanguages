@@ -1,123 +1,41 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using Caliburn.Micro;
-using LearnLanguages.Silverlight.Interfaces;
-using LearnLanguages.Business.Security;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(NavigationSetViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class NavigationSetViewModel : Conductor<ViewModelBase>.Collection.AllActive,
+  public class NavigationSetViewModel : Conductor<IViewModelBase>.Collection.AllActive,
                                         IViewModelBase
   {
     public NavigationSetViewModel()
     {
     }
 
-    private string _Title;
-    public string Title
+    private NavigationSetTitleViewModelBase _TitleControl;
+    public NavigationSetTitleViewModelBase TitleControl
     {
-      get { return _Title; }
+      get { return _TitleControl; }
       set
       {
-        if (value != _Title)
+        if (value != _TitleControl)
         {
-          _Title = value;
-          NotifyOfPropertyChange(() => Title);
+          _TitleControl = value;
+          NotifyOfPropertyChange(() => TitleControl);
         }
       }
     }
 
-    //#region Populate Buttons
-    
-    //private void PopulateButtons()
-    //{
-    //  Items.Clear();
-    //  var user = Csla.ApplicationContext.User.Identity;
-    //  if (!user.IsAuthenticated)
-    //    AddUnauthenticatedButtons();
-    //  else
-    //    AddAuthenticatedButtons((CustomIdentity)user);
-
-    //  //sort the items
-    //  var tmp = new List<ViewModelBase>(Items);
-    //  Comparison<ViewModelBase> comparison = (a, b) =>
-    //    {
-    //      //put Logout last always
-    //      if (a is LogoutNavigationButtonViewModel)
-    //        return 1;
-    //      else if (b is LogoutNavigationButtonViewModel)
-    //        return -1;
-    //      else if (a.GetType().Name[0] < b.GetType().Name[0])
-    //        return -1;
-    //      else
-    //        return 1;
-    //    };
-    //  tmp.Sort(comparison);
-    //  Items.Clear();
-    //  for (int i = 0; i < tmp.Count; i++)
-    //  {
-    //    Items.Insert(i, tmp[i]);
-    //  }
-
-      
-    //}
-
-    //private void AddAuthenticatedButtons(CustomIdentity user)
-    //{
-    //  if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin))
-    //    AddAdminButtons();
-    //  if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleUser))
-    //    AddUserButtons();
-
-    //  var logoutNavButtonViewModel = Services.Container.GetExportedValue<LogoutNavigationButtonViewModel>();
-    //  Items.Add(logoutNavButtonViewModel);
-    //}
-    //private void AddUnauthenticatedButtons()
-    //{
-    //  var loginNavButtonViewModel = Services.Container.GetExportedValue<LoginNavigationButtonViewModel>();
-    //  Items.Add(loginNavButtonViewModel);
-    //}
-    
-    //private void AddAdminButtons()
-    //{
-    //  var addUserNavButtonViewModel = Services.Container.GetExportedValue<AddUserNavigationButtonViewModel>();
-    //  Items.Add(addUserNavButtonViewModel);
-     
-    //  var authStatusNavButtonViewModel = Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
-    //  Items.Add(authStatusNavButtonViewModel);
-    //}
-    //private void AddUserButtons()
-    //{
-    //  var addLanguage = Services.Container.GetExportedValue<AddLanguageNavigationButtonViewModel>();
-    //  Items.Add(addLanguage);
-    //  var viewLanguages = Services.Container.GetExportedValue<ViewLanguagesNavigationButtonViewModel>();
-    //  Items.Add(viewLanguages);
-    //  var viewTranslations = Services.Container.GetExportedValue<ViewTranslationsNavigationButtonViewModel>();
-    //  Items.Add(viewTranslations);
-    //  var viewPhrases = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();
-    //  Items.Add(viewPhrases);
-    //  var addTranslation = Services.Container.GetExportedValue<AddTranslationNavigationButtonViewModel>();
-    //  Items.Add(addTranslation);
-    //  var addPhrase = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
-    //  Items.Add(addPhrase);
-    //  var study = Services.Container.GetExportedValue<StudyNavigationButtonViewModel>();
-    //  Items.Add(study);
-    //  var iWantToLearn = Services.Container.GetExportedValue<IWantToLearnNavigationButtonViewModel>();
-    //  Items.Add(iWantToLearn);
-    //  var addSong = Services.Container.GetExportedValue<AddSongNavigationButtonViewModel>();
-    //  Items.Add(addSong);
-    //}
-
-    //#endregion
-
-    public void AddControl(int index, ViewModelBase controlViewModel)
+    public void AddControl(int index, IViewModelBase controlViewModel)
     {
       Items.Insert(index, controlViewModel);
+
+      RefreshItemsVisibility();
     }
 
     /// <summary>
@@ -131,6 +49,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       for (int i = 0; i < orderedControlViewModels.Count; i++)
         Items.Insert(i, orderedControlViewModels[i]);
+
+      RefreshItemsVisibility();
     }
 
     public void OnImportsSatisfied()
@@ -145,6 +65,46 @@ namespace LearnLanguages.Silverlight.ViewModels
     public bool ShowGridLines
     {
       get { return bool.Parse(AppResources.ShowGridLines); }
+    }
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
+    private bool _ShowItems;
+    public bool ShowItems
+    {
+      get { return _ShowItems; }
+      set
+      {
+        if (value != _ShowItems)
+        {
+          _ShowItems = value;
+          NotifyOfPropertyChange(() => ShowItems);
+          RefreshItemsVisibility();
+        }
+      }
+    }
+
+    private void RefreshItemsVisibility()
+    {
+      foreach (var viewModelControl in Items)
+      {
+        if (ShowItems)
+          viewModelControl.ViewModelVisibility = Visibility.Visible;
+        else
+          viewModelControl.ViewModelVisibility = Visibility.Collapsed;
+      }
     }
   }
 }

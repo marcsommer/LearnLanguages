@@ -1,6 +1,7 @@
 ﻿using System;
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
+using System.Windows;
 
 namespace LearnLanguages.Common.ViewModelBases
 {
@@ -101,6 +102,20 @@ namespace LearnLanguages.Common.ViewModelBases
         {
           _ShowGridLines = value;
           NotifyOfPropertyChange(() => ShowGridLines);
+        }
+      }
+    }
+
+    private Visibility _ViewModelVisibility = Visibility.Visible;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
         }
       }
     }

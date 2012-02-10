@@ -11,30 +11,30 @@ namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(NavigationPanelViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class NavigationPanelViewModel : Conductor<ViewModelBase>.Collection.AllActive,
+  public class NavigationPanelViewModel : Conductor<IViewModelBase>.Collection.AllActive,
                                           IHandle<EventMessages.AuthenticationChangedEventMessage>,
                                           IViewModelBase
   {
     public NavigationPanelViewModel()
     {
       Services.EventAggregator.Subscribe(this);
-      PopulateButtons();
+      PopulatePanel();
     }
 
-    #region Populate Buttons
+    #region Populate Panel
     
-    private void PopulateButtons()
+    private void PopulatePanel()
     {
       Items.Clear();
       var user = Csla.ApplicationContext.User.Identity;
       if (!user.IsAuthenticated)
-        AddUnauthenticatedButtons();
+        AddUnauthenticatedItems();
       else
-        AddAuthenticatedButtons((CustomIdentity)user);
+        AddAuthenticatedItems((CustomIdentity)user);
 
       //sort the items
-      var tmp = new List<ViewModelBase>(Items);
-      Comparison<ViewModelBase> comparison = (a, b) =>
+      var tmp = new List<IViewModelBase>(Items);
+      Comparison<IViewModelBase> comparison = (a, b) =>
         {
           //put Logout last always
           if (a is LogoutNavigationButtonViewModel)
@@ -56,32 +56,54 @@ namespace LearnLanguages.Silverlight.ViewModels
       
     }
 
-    private void AddAuthenticatedButtons(CustomIdentity user)
+    private void AddAuthenticatedItems(CustomIdentity user)
     {
       if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin))
-        AddAdminButtons();
+        AddAdminItems();
       if (Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleUser))
-        AddUserButtons();
+        AddUserItems();
 
       var logoutNavButtonViewModel = Services.Container.GetExportedValue<LogoutNavigationButtonViewModel>();
       Items.Add(logoutNavButtonViewModel);
     }
-    private void AddUnauthenticatedButtons()
+    private void AddUnauthenticatedItems()
     {
       var loginNavButtonViewModel = Services.Container.GetExportedValue<LoginNavigationButtonViewModel>();
       Items.Add(loginNavButtonViewModel);
     }
     
-    private void AddAdminButtons()
+    private void AddAdminItems()
     {
+      //INITIALIZE NAVIGATION ITSELF
+      var adminNavigationSet = Services.Container.GetExportedValue<NavigationSetViewModel>();
+      var adminTitle = Services.Container.GetExportedValue<AdminNavigationSetTitleViewModel>();
+      adminNavigationSet.TitleControl = adminTitle;
+
+      //CREATE BUTTONS TO GO INTO NAVIGATION SET
+      var authStatusNavButtonViewModel = 
+        Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
       var addUserNavButtonViewModel = Services.Container.GetExportedValue<AddUserNavigationButtonViewModel>();
-      Items.Add(addUserNavButtonViewModel);
-     
-      var authStatusNavButtonViewModel = Services.Container.GetExportedValue<AuthenticationStatusNavigationButtonViewModel>();
-      Items.Add(authStatusNavButtonViewModel);
+
+      //INSERT BUTTONS IN LIST ***IN THE ORDER IN WHICH YOU WANT THEM TO APPEAR***
+      List<ViewModelBase> orderedAdminButtons = new List<ViewModelBase>();
+      orderedAdminButtons.Insert(0, authStatusNavButtonViewModel);
+      orderedAdminButtons.Insert(1, addUserNavButtonViewModel);
+
+      //ADD ORDERED LIST OF NAV BUTTONS TO NAVIGATION SET
+      adminNavigationSet.AddControls(orderedAdminButtons);
+
+      //ADD THE SET TO THE ITEMS
+      Items.Add(adminNavigationSet);
     }
-    private void AddUserButtons()
+    private void AddUserItems()
     {
+      AddStudyNavigationSet();
+      AddEditNavigationSet();
+      AddTestNavigationSet();
+      AddReviewNavigationSet();
+      AddProgressNavigationSet();
+      AddChugNavigationSet();
+
       var addLanguage = Services.Container.GetExportedValue<AddLanguageNavigationButtonViewModel>();
       Items.Add(addLanguage);
       var viewLanguages = Services.Container.GetExportedValue<ViewLanguagesNavigationButtonViewModel>();
@@ -102,11 +124,41 @@ namespace LearnLanguages.Silverlight.ViewModels
       Items.Add(addSong);
     }
 
+    private void AddStudyNavigationSet()
+    {
+      //throw new NotImplementedException();
+    }
+
+    private void AddEditNavigationSet()
+    {
+      throw new NotImplementedException();
+    }
+
+    private void AddTestNavigationSet()
+    {
+      throw new NotImplementedException();
+    }
+
+    private void AddReviewNavigationSet()
+    {
+      throw new NotImplementedException();
+    }
+
+    private void AddProgressNavigationSet()
+    {
+      throw new NotImplementedException();
+    }
+
+    private void AddChugNavigationSet()
+    {
+      throw new NotImplementedException();
+    }
+
     #endregion
 
     public void Handle(EventMessages.AuthenticationChangedEventMessage message)
     {
-      PopulateButtons();
+      PopulatePanel();
     }
     
     public void OnImportsSatisfied()

@@ -102,6 +102,8 @@
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />
+    <Compile Include="Interfaces\ICanExpand.cs" />
     <Compile Include="EventMessages\LanguageEventMessage.cs" />
     <Compile Include="EventMessages\LanguageAddedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Study\StudyPartnerBase.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongViewModel.cs" />
+    <Compile Include="ViewModels\Bases\NavigationSetTitleViewModelBase.cs" />
     <Compile Include="ViewModels\Core\NavigationSetViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongPhraseEditViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnViewModel.cs" />
@@ -136,6 +139,13 @@
     <Compile Include="ViewModels\NavigationButtons\Add\AddSongNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnASongNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\ChugNavigationSetTitleViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\AdminNavigationSetTitleViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\ProgressNavigationSetTitleViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\ReviewNavigationSetTitleViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\TestNavigationSetTitleViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\EditNavigationSetTitleViewModel.cs" />
+    <Compile Include="ViewModels\NavigationSetTitles\StudyNavigationSetTitleViewModel.cs" />
     <Compile Include="ViewModels\Study\AskUserExtraDataViewModel.cs" />
     <Compile Include="ViewModels\Add\AddLanguage\AddLanguageViewModel.cs" />
     <Compile Include="ViewModels\Add\AddLanguage\AddLanguageLanguageEditViewModel.cs" />
@@ -195,6 +205,42 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NavigationSetTitles\AdminNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\TestNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\ProgressNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\ReviewNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\EditNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\ChugNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\StudyNavigationSetTitleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationSetTitles\NavigationSetView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Core\NavigationSetView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NavigationButtons\AddSongNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -453,6 +499,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\BingTranslatorService\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

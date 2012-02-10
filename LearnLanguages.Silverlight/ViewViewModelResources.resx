@@ -183,6 +183,27 @@
   <data name="ShowInstructions" xml:space="preserve">
     <value>True</value>
   </data>
+  <data name="TitleLabelTextAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="TitleLabelTextChug" xml:space="preserve">
+    <value>Chug!!</value>
+  </data>
+  <data name="TitleLabelTextEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="TitleLabelTextProgress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="TitleLabelTextReview" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="TitleLabelTextStudy" xml:space="preserve">
+    <value>Study</value>
+  </data>
+  <data name="TitleLabelTextTest" xml:space="preserve">
+    <value>Test</value>
+  </data>
   <data name="ToolTipTextAddLanguage" xml:space="preserve">
     <value>Add New Language</value>
   </data>
