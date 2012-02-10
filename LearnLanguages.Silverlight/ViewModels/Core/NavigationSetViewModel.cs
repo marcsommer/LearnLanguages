@@ -15,6 +15,9 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public NavigationSetViewModel()
     {
+      _ShowItems = false;
+      _ViewModelVisibility = Visibility.Visible;
+      RefreshItemsVisibility();
     }
 
     private NavigationSetTitleViewModelBase _TitleControl;
@@ -96,8 +99,27 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    private Visibility _ItemsVisibility;
+    public Visibility ItemsVisibility
+    {
+      get { return _ItemsVisibility; }
+      set
+      {
+        if (value != _ItemsVisibility)
+        {
+          _ItemsVisibility = value;
+          NotifyOfPropertyChange(() => ItemsVisibility);
+        }
+      }
+    }
+
     private void RefreshItemsVisibility()
     {
+      if (ShowItems)
+        ItemsVisibility = Visibility.Visible;
+      else
+        ItemsVisibility = Visibility.Collapsed;
+
       foreach (var viewModelControl in Items)
       {
         if (ShowItems)

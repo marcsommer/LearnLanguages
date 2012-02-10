@@ -1,9 +1,12 @@
 ﻿using System;
+using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
+using System.Windows;
+using LearnLanguages.Common.ViewModelBases;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  public class AskUserExtraDataViewModel : IViewModelBase
+  public class AskUserExtraDataViewModel : ViewModelBase
   {
 
     public bool LoadFromUri(Uri uri)
@@ -18,5 +21,20 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       //
     }
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
   }
 }

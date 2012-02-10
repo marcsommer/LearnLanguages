@@ -3,7 +3,7 @@
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(ReviewNavigationSetTitleViewModel))]
-  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
   public class ReviewNavigationSetTitleViewModel : NavigationSetTitleViewModelBase
   {
     public override string GetLabelText()

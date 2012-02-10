@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="150" MinWidth="150" MaxWidth="150">
+    d:DesignHeight="300" d:DesignWidth="150" MinWidth="150">
   
   <Border BorderBrush="Aquamarine" BorderThickness="0">
     <ListBox x:Name="Items">

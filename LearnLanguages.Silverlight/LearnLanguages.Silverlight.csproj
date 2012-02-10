@@ -233,10 +233,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationSetTitles\NavigationSetView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Core\NavigationSetView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

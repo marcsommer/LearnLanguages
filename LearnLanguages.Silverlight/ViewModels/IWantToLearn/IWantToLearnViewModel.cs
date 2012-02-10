@@ -6,6 +6,7 @@ using LearnLanguages.Business.Security;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -57,7 +58,21 @@ namespace LearnLanguages.Silverlight.ViewModels
         Items.Insert(i, sortedItems[i]);
       }
     }
-    
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
     public void OnImportsSatisfied()
     {
       //var coreViewModelName = ViewModelBase.GetCoreViewModelName(typeof(IWantToLearnViewModel));

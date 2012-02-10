@@ -5,16 +5,16 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="150" MinWidth="150" MaxWidth="150">
+    d:DesignHeight="300" d:DesignWidth="150" MinWidth="150" >
   
   <Border Style="{StaticResource NavigationSetBorder}" >
     <StackPanel>
-      <ContentControl x:Name="TitleControl" />
-      <ListBox x:Name="Items">
+      <ContentControl x:Name="TitleControl" HorizontalContentAlignment="Stretch" />
+      <ListBox x:Name="Items" Visibility="{Binding Path=ItemsVisibility}">
         <ListBox.ItemContainerStyle>
           <Style TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Padding" Value="1" />
+            <Setter Property="Padding" Value="10,3,3,3" />
           </Style>
         </ListBox.ItemContainerStyle>
       </ListBox>

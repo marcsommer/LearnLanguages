@@ -84,6 +84,20 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
     #endregion
 
     #region Methods

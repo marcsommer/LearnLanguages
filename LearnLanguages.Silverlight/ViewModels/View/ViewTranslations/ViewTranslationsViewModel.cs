@@ -24,6 +24,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public ViewTranslationsViewModel()
     {
+      ViewModelVisibility = Visibility.Visible;
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
       TranslationList.GetAll((s, r) =>
@@ -111,6 +112,20 @@ namespace LearnLanguages.Silverlight.ViewModels
           _FilterText = value;
           PopulateViewModels(ModelList);
           NotifyOfPropertyChange(() => FilterText);
+        }
+      }
+    }
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
         }
       }
     }

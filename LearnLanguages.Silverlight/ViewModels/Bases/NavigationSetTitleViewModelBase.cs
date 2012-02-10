@@ -7,6 +7,11 @@ namespace LearnLanguages.Silverlight.ViewModels
   public abstract class NavigationSetTitleViewModelBase : ViewModelBase,
                                                           Interfaces.ICanExpand
   {
+    public NavigationSetTitleViewModelBase()
+    {
+      _IsExpanded = false;
+    }
+
     public string LabelText
     {
       get { return GetLabelText(); }
@@ -23,10 +28,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// <returns></returns>
     public virtual bool CanToggleExpandedImpl()
     {
-      if (IsExpanded)
-        return false;
-      else
-        return true;
+      return true;
     }
     public virtual void ToggleExpanded()
     {

@@ -18,6 +18,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public ViewPhrasesViewModel()
     {
+      ViewModelVisibility = Visibility.Visible;
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
       PhraseList.GetAll((s, r) =>
@@ -291,5 +292,20 @@ namespace LearnLanguages.Silverlight.ViewModels
       FinalizeDeleteVisibility = Visibility.Collapsed;
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
   }
 }

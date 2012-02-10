@@ -6,6 +6,7 @@ using LearnLanguages.Business.Security;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -13,6 +14,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class NavigationPanelViewModel : Conductor<IViewModelBase>.Collection.AllActive,
                                           IHandle<EventMessages.AuthenticationChangedEventMessage>,
+                                          IHandle<EventMessages.ExpandedChangedEventMessage>,
                                           IViewModelBase
   {
     public NavigationPanelViewModel()
@@ -78,6 +80,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       var adminNavigationSet = Services.Container.GetExportedValue<NavigationSetViewModel>();
       var adminTitle = Services.Container.GetExportedValue<AdminNavigationSetTitleViewModel>();
       adminNavigationSet.TitleControl = adminTitle;
+      adminNavigationSet.ShowItems = adminTitle.IsExpanded;
 
       //CREATE BUTTONS TO GO INTO NAVIGATION SET
       var authStatusNavButtonViewModel = 
@@ -104,24 +107,12 @@ namespace LearnLanguages.Silverlight.ViewModels
       AddProgressNavigationSet();
       AddChugNavigationSet();
 
-      var addLanguage = Services.Container.GetExportedValue<AddLanguageNavigationButtonViewModel>();
-      Items.Add(addLanguage);
-      var viewLanguages = Services.Container.GetExportedValue<ViewLanguagesNavigationButtonViewModel>();
-      Items.Add(viewLanguages);
-      var viewTranslations = Services.Container.GetExportedValue<ViewTranslationsNavigationButtonViewModel>();
-      Items.Add(viewTranslations);
-      var viewPhrases = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();
-      Items.Add(viewPhrases);
-      var addTranslation = Services.Container.GetExportedValue<AddTranslationNavigationButtonViewModel>();
-      Items.Add(addTranslation);
-      var addPhrase = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
-      Items.Add(addPhrase);
-      var study = Services.Container.GetExportedValue<StudyNavigationButtonViewModel>();
-      Items.Add(study);
-      var iWantToLearn = Services.Container.GetExportedValue<IWantToLearnNavigationButtonViewModel>();
-      Items.Add(iWantToLearn);
-      var addSong = Services.Container.GetExportedValue<AddSongNavigationButtonViewModel>();
-      Items.Add(addSong);
+      //var study = Services.Container.GetExportedValue<StudyNavigationButtonViewModel>();
+      //Items.Add(study);
+      //var iWantToLearn = Services.Container.GetExportedValue<IWantToLearnNavigationButtonViewModel>();
+      //Items.Add(iWantToLearn);
+      //var addSong = Services.Container.GetExportedValue<AddSongNavigationButtonViewModel>();
+      //Items.Add(addSong);
     }
 
     private void AddStudyNavigationSet()
@@ -131,32 +122,65 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void AddEditNavigationSet()
     {
-      throw new NotImplementedException();
+      //INITIALIZE NAVIGATION ITSELF
+      var editNavigationSet = Services.Container.GetExportedValue<NavigationSetViewModel>();
+      var editTitle = Services.Container.GetExportedValue<EditNavigationSetTitleViewModel>();
+      editNavigationSet.ShowItems = editTitle.IsExpanded;
+      editNavigationSet.TitleControl = editTitle;
+
+      //CREATE BUTTONS TO GO INTO NAVIGATION SET
+      var addLanguage = Services.Container.GetExportedValue<AddLanguageNavigationButtonViewModel>();
+      var viewLanguages = Services.Container.GetExportedValue<ViewLanguagesNavigationButtonViewModel>();
+      var viewTranslations = Services.Container.GetExportedValue<ViewTranslationsNavigationButtonViewModel>();
+      var viewPhrases = Services.Container.GetExportedValue<ViewPhrasesNavigationButtonViewModel>();
+      var addTranslation = Services.Container.GetExportedValue<AddTranslationNavigationButtonViewModel>();
+      var addPhrase = Services.Container.GetExportedValue<AddPhraseNavigationButtonViewModel>();
+      var addSong = Services.Container.GetExportedValue<AddSongNavigationButtonViewModel>();
+
+      //INSERT BUTTONS IN LIST ***IN THE ORDER IN WHICH YOU WANT THEM TO APPEAR***
+      List<ViewModelBase> orderedEditButtons = new List<ViewModelBase>();
+      orderedEditButtons.Insert(0, addSong);
+      orderedEditButtons.Insert(1, addPhrase);
+      orderedEditButtons.Insert(2, viewPhrases);
+      orderedEditButtons.Insert(3, addTranslation);
+      orderedEditButtons.Insert(4, viewTranslations);
+      orderedEditButtons.Insert(5, addLanguage);
+      orderedEditButtons.Insert(6, viewLanguages);
+
+      //ADD ORDERED LIST OF NAV BUTTONS TO NAVIGATION SET
+      editNavigationSet.AddControls(orderedEditButtons);
+
+      //ADD THE SET TO THE ITEMS
+      Items.Add(editNavigationSet);
     }
 
     private void AddTestNavigationSet()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     private void AddReviewNavigationSet()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     private void AddProgressNavigationSet()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     private void AddChugNavigationSet()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
     #endregion
 
     public void Handle(EventMessages.AuthenticationChangedEventMessage message)
+    {
+      PopulatePanel();
+    }
+    public void Handle(EventMessages.ExpandedChangedEventMessage message)
     {
       PopulatePanel();
     }
@@ -174,5 +198,19 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get { return bool.Parse(AppResources.ShowGridLines); }
     }
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
   }
 }
