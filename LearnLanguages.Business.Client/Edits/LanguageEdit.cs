@@ -490,6 +490,17 @@ namespace LearnLanguages.Business
     }
 
 #if !SILVERLIGHT
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void Child_Create()
+    {
+      using (BypassPropertyChecks)
+      {
+        Id = Guid.Empty;
+        Text = "";
+      }
+    }
+
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Fetch(LanguageDto dto)
     {

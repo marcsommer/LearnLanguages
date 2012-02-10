@@ -175,20 +175,34 @@ namespace LearnLanguages.Silverlight
     private PhraseEdit AutoTranslateText(Delegates.QuestionAnswerCallback callback, PhraseEdit question, PhraseEdit answer)
     {
       //USING THE BING/MS TRANSLATE API
-      //ASSUME QUESTION IS IN SPANISH, SO ANSWER IS IN ENGLISH
-      var questionLanguageText = AppResources.SpanishLanguageText;
-      var questionLanguageCode = AppResources.SpanishLanguageCode;
-      var answerLanguageText = AppResources.EnglishLanguageText;
-      var answerLanguageCode = AppResources.EnglishLanguageCode;
+      var questionLanguageText = question.Language.Text;
+      var questionLanguageCode = BingTranslateHelper.GetLanguageCode(questionLanguageText);
+      //if question is in English, then we translate into spanish.  
+      //if question is in foreign language, we translate into English
+      //this is just hard-coded for this study partner
+      string answerLanguageText = "";
 
-      //IF QUESTION IS IN ENGLISH, THEN ANSWER IS SPANISH
-      if (question.Language.Text == AppResources.EnglishLanguageText)
-      {
-        questionLanguageText = AppResources.EnglishLanguageText;
-        questionLanguageCode = AppResources.EnglishLanguageCode;
-        answerLanguageText = AppResources.SpanishLanguageText;
-        answerLanguageCode = AppResources.SpanishLanguageCode;
-      }
+      if (questionLanguageText == "English")
+        answerLanguageText = "Spanish";
+      else
+        answerLanguageText = "English";
+      var answerLanguageCode = BingTranslateHelper.GetLanguageCode(answerLanguageText);
+
+
+      //ASSUME QUESTION IS IN SPANISH, AND ANSWER IS IN ENGLISH
+      //var questionLanguageText = AppResources.SpanishLanguageText;
+      //var questionLanguageCode = AppResources.SpanishLanguageCode;
+      //var answerLanguageText = AppResources.EnglishLanguageText;
+      //var answerLanguageCode = AppResources.EnglishLanguageCode;
+
+      ////IF QUESTION IS IN ENGLISH, THEN ANSWER IS SPANISH
+      //if (question.Language.Text == AppResources.EnglishLanguageText)
+      //{
+      //  questionLanguageText = AppResources.EnglishLanguageText;
+      //  questionLanguageCode = AppResources.EnglishLanguageCode;
+      //  answerLanguageText = AppResources.SpanishLanguageText;
+      //  answerLanguageCode = AppResources.SpanishLanguageCode;
+      //}
 
       BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
       

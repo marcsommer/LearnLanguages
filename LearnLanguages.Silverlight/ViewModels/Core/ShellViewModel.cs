@@ -17,6 +17,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       ReloadNavigationPanel();
       Services.Container.SatisfyImportsOnce(this);
+      Title = AppResources.DefaultAppTitle;
     }
 
     /// <summary>
@@ -94,6 +95,20 @@ namespace LearnLanguages.Silverlight.ViewModels
     public override void OnImportsSatisfied()
     {
       //
+    }
+
+    private string _Title;
+    public string Title
+    {
+      get { return _Title; }
+      set
+      {
+        if (value != _Title)
+        {
+          _Title = value;
+          NotifyOfPropertyChange(() => Title);
+        }
+      }
     }
   }
 }

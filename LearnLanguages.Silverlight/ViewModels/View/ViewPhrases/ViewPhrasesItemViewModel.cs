@@ -77,7 +77,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     void _Languages_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-      if (!_SettingModel)
+      if (!_SettingModel && (Languages.SelectedItem != null))
       {
         Model.BeginEdit();
         Model.Language = Languages.SelectedItem.Model;

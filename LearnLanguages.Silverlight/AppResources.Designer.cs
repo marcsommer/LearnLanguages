@@ -97,6 +97,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn Languages!.
+        /// </summary>
+        internal static string DefaultAppTitle {
+            get {
+                return ResourceManager.GetString("DefaultAppTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string DefaultNewStudyDataNativeLanguageText {

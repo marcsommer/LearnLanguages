@@ -129,6 +129,7 @@
     <Compile Include="Study\StudyPartnerBase.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongViewModel.cs" />
+    <Compile Include="ViewModels\Core\NavigationSetViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongPhraseEditViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongViewModel.cs" />
@@ -206,7 +207,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\IWantToLearn\IWantToLearnASong\IWantToLearnASongPhraseEditView.xaml">
+    <Page Include="Views\IWantToLearn\IWantToLearnASong\IWantToLearnASongAddSongMultiLineTextEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

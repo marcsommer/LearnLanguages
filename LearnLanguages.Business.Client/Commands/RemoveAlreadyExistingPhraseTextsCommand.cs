@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Csla;
 using Csla.Serialization;
@@ -112,7 +113,8 @@ namespace LearnLanguages.Business
 
       if (PrunedPhraseTexts == null)
         PrunedPhraseTexts = new MobileList<string>();
-      foreach (var phraseText in OriginalPhraseTexts)
+      var noDuplicatesOriginalPhraseTexts = OriginalPhraseTexts.Distinct();
+      foreach (var phraseText in noDuplicatesOriginalPhraseTexts)
       {
         if (phrasesExist.ExistenceDictionary[phraseText] == false)
           PrunedPhraseTexts.Add(phraseText);

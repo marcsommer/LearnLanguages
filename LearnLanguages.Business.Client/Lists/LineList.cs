@@ -72,28 +72,29 @@ namespace LearnLanguages.Business
       using (var dalManager = DalFactory.GetDalManager())
       {
         var languageText = lineInfosCriteria.LanguageText;
-        var languageDal = dalManager.GetProvider<ILanguageDal>();
-        var languageResult = languageDal.Fetch(languageText);
-        LanguageEdit language = null;
-        if (!languageResult.IsSuccess)
-        {
-          var exception = languageResult.GetExceptionFromInfo();
-          if (exception == null)
-            throw new LanguageTextNotFoundException(languageText);
-          else if (exception.Message.Contains(LanguageTextNotFoundException.GetDefaultErrorMessage(languageText)))
-          {
-            //IF THE LANGUAGE TEXT DOES NOT EXIST, CREATE IT
-            //CAN'T CHECK FOR DATA EXCEPTION TYPE BECAUSE IT WILL BE A GENERAL CSLA DATAPORTAL EXCEPTION
-            language = LanguageEdit.NewLanguageEdit();
-            language.Text = languageText;
-            //language = language.Save();
-          }
-          else
-            throw new CreateFailedException(DataAccess.DalResources.ErrorMsgLanguageTextProblemWhileCreatingLineInfos);
-        }
+        var language = DataPortal.FetchChild<LanguageEdit>(languageText);
+        //var languageDal = dalManager.GetProvider<ILanguageDal>();
+        //var languageResult = languageDal.Fetch(languageText);
+        //LanguageEdit language = null;
+        //if (!languageResult.IsSuccess)
+        //{
+        //  var exception = languageResult.GetExceptionFromInfo();
+        //  if (exception == null)
+        //    throw new LanguageTextNotFoundException(languageText);
+        //  else if (exception.Message.Contains(LanguageTextNotFoundException.GetDefaultErrorMessage(languageText)))
+        //  {
+        //    //IF THE LANGUAGE TEXT DOES NOT EXIST, CREATE IT
+        //    //CAN'T CHECK FOR DATA EXCEPTION TYPE BECAUSE IT WILL BE A GENERAL CSLA DATAPORTAL EXCEPTION
+        //    language = LanguageEdit.NewLanguageEdit();
+        //    language.Text = languageText;
+        //    //language = language.Save();
+        //  }
+        //  else
+        //    throw new CreateFailedException(DataAccess.DalResources.ErrorMsgLanguageTextProblemWhileCreatingLineInfos);
+        //}
 
-        var languageDto = languageResult.Obj;
-        language = LanguageEdit.NewLanguageEdit(languageDto);
+        //var languageDto = languageResult.Obj;
+        //language = LanguageEdit.NewLanguageEdit(languageDto);
         //language.LoadFromDtoBypassPropertyChecks(languageDto);
 
         //WE NOW HAVE OUR LANGUAGEEDIT THAT WILL BE USED FOR ALL PHRASE TEXTS.

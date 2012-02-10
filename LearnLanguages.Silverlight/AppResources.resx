@@ -129,6 +129,9 @@
   <data name="ClientIdRegisteredWithAzureMarketplace" xml:space="preserve">
     <value>A8D01FD8-7937-4675-A098-2437E193F2EA</value>
   </data>
+  <data name="DefaultAppTitle" xml:space="preserve">
+    <value>Learn Languages!</value>
+  </data>
   <data name="DefaultNewStudyDataNativeLanguageText" xml:space="preserve">
     <value />
   </data>

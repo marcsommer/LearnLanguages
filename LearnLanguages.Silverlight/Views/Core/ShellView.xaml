@@ -8,7 +8,7 @@
            xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
            xmlns:local="clr-namespace:LearnLanguages.Silverlight"
            d:DesignWidth="640" d:DesignHeight="480"
-           Title="ShellView Page">
+           Title="Learn Languages Hard-Coded Title">
 
   <controls:DockPanel x:Name="LayoutRoot"
                       LastChildFill="True">
