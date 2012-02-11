@@ -66,6 +66,7 @@
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Exceptions\MultipleIdsNotFoundException.cs" />
     <Compile Include="Exceptions\LanguageTextNotFoundException.cs" />
+    <Compile Include="Exceptions\StudyDataNotFoundForUserException.cs" />
     <Compile Include="Exceptions\User\LoadUserDataException.cs" />
     <Compile Include="Exceptions\User\UsernameAndUserIdDoNotMatchException.cs" />
     <Compile Include="Exceptions\LanguageTextAlreadyExistsException.cs" />

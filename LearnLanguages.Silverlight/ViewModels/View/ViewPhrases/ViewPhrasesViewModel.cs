@@ -7,20 +7,23 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
+using System.ComponentModel;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(ViewPhrasesViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  //public class ViewPhrasesViewModel : ViewModelBase<PhraseList, PhraseEdit, PhraseDto>
   public class ViewPhrasesViewModel : Conductor<ViewPhrasesItemViewModel>.Collection.AllActive, 
                                       IViewModelBase
   {
     public ViewPhrasesViewModel()
     {
+      _ProgressValue = 1;
       ViewModelVisibility = Visibility.Visible;
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
+      _ProgressVisibility = Visibility.Collapsed;
+
       PhraseList.GetAll((s, r) =>
         {
           if (r.Error != null)
@@ -28,6 +31,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
           var allPhrases = r.Object;
           ModelList = allPhrases;
+          //AllPhrasesCache = allPhrases.ToList();
           PopulateViewModels(allPhrases);
           //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
           //Model.BeginSave((s2, r2) =>
@@ -39,33 +43,228 @@ namespace LearnLanguages.Silverlight.ViewModels
         });
     }
 
-    private void PopulateViewModels(PhraseList phrases)
+    private Visibility _ProgressVisibility;
+    public Visibility ProgressVisibility
     {
-      Items.Clear();
-      var filteredPhrases = FilterPhrases(phrases);
-      foreach (var phraseEdit in filteredPhrases)
+      get { return _ProgressVisibility; }
+      set
       {
-        var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
-        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
-        itemViewModel.Model = phraseEdit;
-        Items.Add(itemViewModel);
+        if (value != _ProgressVisibility)
+        {
+          _ProgressVisibility = value;
+          NotifyOfPropertyChange(() => ProgressVisibility);
+        }
       }
     }
 
+    private double _ProgressValue;
+    public double ProgressValue
+    {
+      get { return _ProgressValue; }
+      set
+      {
+        //if (value != _ProgressValue)
+        //{
+          _ProgressValue = value;
+          NotifyOfPropertyChange(() => ProgressValue);
+        //}
+      }
+    }
+
+    private double _ProgressMaximum;
+    public double ProgressMaximum
+    {
+      get { return _ProgressMaximum; }
+      set
+      {
+        //if (value != _ProgressMaximum)
+        //{
+          _ProgressMaximum = value;
+          NotifyOfPropertyChange(() => ProgressMaximum);
+        //}
+      }
+    }
+
+    public bool CanStopPopulating
+    {
+      get
+      {
+        //if abort is already flagged, then we're already trying to stop populating.
+        return (IsPopulating && !AbortIsFlagged);
+      }
+    }
+    public void StopPopulating()
+    {
+      AbortIsFlagged = true;
+    }
+
+    private void PopulateViewModels(PhraseList phrases)
+    {
+      if (IsPopulating && AbortIsFlagged)
+        return;
+
+      BackgroundWorker worker = new BackgroundWorker();
+      worker.DoWork += ((s, r) =>
+        {
+          //IsBusy = true;
+          IsPopulating = true;
+
+
+          Items.Clear();
+          var filteredPhrases = FilterPhrases(phrases);
+          
+          #region //Sort (not in use...too slow)
+
+          //#region Sort PhraseEdit by Text Comparison (Comparison<PhraseEdit> comparison = (a, b) =>)
+
+          //Comparison<PhraseEdit> comparison = (a, b) =>
+          //{
+          //  //WE'RE GOING TO TEST CHAR ORDER IN ALPHABET
+          //  string aText = a.Text.ToLower();
+          //  string bText = b.Text.ToLower();
+
+          //  //IF THEY'RE THE SAME TITLES IN LOWER CASE, THEN THEY ARE EQUAL
+          //  if (aText == bText)
+          //    return 0;
+
+          //  //ONLY NEED TO TEST CHARACTERS UP TO LENGTH
+          //  int shorterTitleLength = aText.Length;
+          //  bool aIsShorter = true;
+          //  if (bText.Length < shorterTitleLength)
+          //  {
+          //    shorterTitleLength = bText.Length;
+          //    aIsShorter = false;
+          //  }
+
+          //  int result = 0; //assume a and b are equal (though we know they aren't if we've reached this point)
+
+          //  for (int i = 0; i < shorterTitleLength; i++)
+          //  {
+          //    if (aText[i] < bText[i])
+          //    {
+          //      result = -1;
+          //      break;
+          //    }
+          //    else if (aText[i] > bText[i])
+          //    {
+          //      result = 1;
+          //      break;
+          //    }
+          //  }
+
+          //  //IF THEY ARE STILL EQUAL, THEN THE SHORTER PRECEDES THE LONGER
+          //  if (result == 0)
+          //  {
+          //    if (aIsShorter)
+          //      result = -1;
+          //    else
+          //      result = 1;
+          //  }
+
+          //  return result;
+          //};
+
+          //#endregion
+          //filteredPhrases.Sort(comparison);
+          #endregion
+
+          int counter = 0;
+          int iterationsBetweenComeUpForAir = 20;
+          int totalCount = filteredPhrases.Count();
+          ProgressMaximum = totalCount;
+
+          foreach (var phraseEdit in filteredPhrases)
+          {
+            var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
+            itemViewModel.PropertyChanged += 
+              new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
+            itemViewModel.Model = phraseEdit;
+            Items.Add(itemViewModel);
+            counter++;
+            ProgressValue = counter;
+            if (counter % iterationsBetweenComeUpForAir == 0)
+            {
+              if (AbortIsFlagged)
+              {
+                AbortIsFlagged = false;
+                ProgressValue = 0;
+                break;
+              }
+            }
+          }
+
+          //IsBusy = false;
+          IsPopulating = false;
+          //if (batch.Count > 0)
+            //Items.AddRange(batch);
+        });
+      
+      worker.RunWorkerAsync();
+    }
+
+    private bool _AbortIsFlagged;
+    public bool AbortIsFlagged
+    {
+      get { return _AbortIsFlagged; }
+      set
+      {
+        if (value != _AbortIsFlagged)
+        {
+          _AbortIsFlagged = value;
+          NotifyOfPropertyChange(() => AbortIsFlagged);
+          NotifyOfPropertyChange(() => CanStopPopulating);
+        }
+      }
+    }
+
+    //private List<PhraseEdit> FilterPhrases(PhraseList phrases)
     private IEnumerable<PhraseEdit> FilterPhrases(PhraseList phrases)
     {
-      if (string.IsNullOrEmpty(FilterLabel))
-        return phrases;
+      if (string.IsNullOrEmpty(FilterText))
+        return phrases;//.ToList();
 
       var results = from phrase in phrases
                     where phrase.Text.Contains(FilterText)
                     select phrase;
 
-      return results;
+      return results;//.ToList();
     }
 
+    private bool _IsBusy;
+    public bool IsBusy
+    {
+      get { return _IsBusy; }
+      set
+      {
+        if (value != _IsBusy)
+        {
+          _IsBusy = value;
+          NotifyOfPropertyChange(() => IsBusy);
+        }
+      }
+    }
 
-    private string _FilterLabel = AppResources.FilterLabel;
+    private bool _IsPopulating;
+    public bool IsPopulating
+    {
+      get { return _IsPopulating; }
+      set
+      {
+        if (value != _IsPopulating)
+        {
+          _IsPopulating = value;
+          NotifyOfPropertyChange(() => IsPopulating);
+          NotifyOfPropertyChange(() => CanStopPopulating);
+          NotifyOfPropertyChange(() => CanApplyFilter);
+          if (_IsPopulating)
+            ProgressVisibility = Visibility.Visible;
+          else
+            ProgressVisibility = Visibility.Collapsed;
+        }
+      }
+    }
+
+    private string _FilterLabel = ViewViewModelResources.LabelTextFilter;
     public string FilterLabel
     {
       get { return _FilterLabel; }
@@ -88,8 +287,22 @@ namespace LearnLanguages.Silverlight.ViewModels
         if (value != _FilterText)
         {
           _FilterText = value;
-          PopulateViewModels(ModelList);
+          //PopulateViewModels(ModelList);
           NotifyOfPropertyChange(() => FilterText);
+        }
+      }
+    }
+
+    private string _LabelTextApplyFilterButton = ViewViewModelResources.LabelTextApplyFilterButton;
+    public string LabelTextApplyFilterButton
+    {
+      get { return _LabelTextApplyFilterButton; }
+      set
+      {
+        if (value != _LabelTextApplyFilterButton)
+        {
+          _LabelTextApplyFilterButton = value;
+          NotifyOfPropertyChange(() => LabelTextApplyFilterButton);
         }
       }
     }
@@ -157,6 +370,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       //});
       NotifyOfPropertyChange(() => CanSave);
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+      NotifyOfPropertyChange(() => CanApplyFilter);
 
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
@@ -164,6 +378,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       NotifyOfPropertyChange(() => this.ModelList);
       NotifyOfPropertyChange(() => CanSave);
+      NotifyOfPropertyChange(() => CanApplyFilter);
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
 
@@ -307,5 +522,19 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    public bool CanApplyFilter
+    {
+      get
+      {
+        return (!IsPopulating &&
+                !AbortIsFlagged &&
+                 ModelList != null &&
+                 ModelList.Count > 0);
+      }
+    }
+    public void ApplyFilter()
+    {
+      PopulateViewModels(ModelList);
+    }
   }
 }

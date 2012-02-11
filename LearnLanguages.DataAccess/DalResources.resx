@@ -290,4 +290,8 @@
   <data name="MinLinesPerMultiLineText" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="ErrorMsgStudyDataNotFoundForUserException" xml:space="preserve">
+    <value>The StudyData cannot be found for current user with username ({0}).</value>
+    <comment>{0} = Username</comment>
+  </data>
 </root>

@@ -20,13 +20,25 @@
       <Border Grid.Row="0"
               Style="{StaticResource ViewSection}" 
               HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
+          <!--LABEL-->
           <TextBlock Text="{Binding Path=FilterLabel}" VerticalAlignment="Center"/>
+          <!--FILTER TEXT-->
           <TextBox x:Name="FilterText" MinWidth="100"/>
-
+          <!--APPLY FILTER-->
+          <Button x:Name="ApplyFilter" Content="{Binding Path=LabelTextApplyFilterButton}" Margin="3,1,0,1"/>
+          <!--PROGRESS-->
+          <StackPanel Orientation="Horizontal" Visibility="{Binding Path=ProgressVisibility}">
+            <Button x:Name="StopPopulating" Content="Stop Loading" Margin="3,1,0,1"  />
+            <ProgressBar x:Name="ProgressValue"
+                           Width="100"
+                           Minimum="0" 
+                           Maximum="{Binding Path=ProgressMaximum}"
+                           />
+          </StackPanel>
         </StackPanel>
       </Border>
-
+      
       <!--Items-->
       <Border Grid.Row="1"
               Style="{StaticResource ViewSection}" 

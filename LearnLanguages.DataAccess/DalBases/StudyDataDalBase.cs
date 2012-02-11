@@ -29,14 +29,48 @@ namespace LearnLanguages.DataAccess
       }
       return retResult;
     }
-    public Result<StudyDataDto> Fetch(Guid id)
+    //public Result<StudyDataDto> Fetch(Guid id)
+    //{
+    //  Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
+    //  try
+    //  {
+    //    CheckAuthentication();
+
+    //    var dto = FetchImpl(id);
+    //    retResult = Result<StudyDataDto>.Success(dto);
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    var wrappedEx = new Exceptions.FetchFailedException(ex);
+    //    retResult = Result<StudyDataDto>.FailureWithInfo(null, wrappedEx);
+    //  }
+    //  return retResult;
+    ////}
+    //public Result<ICollection<StudyDataDto>> Fetch(ICollection<Guid> ids)
+    //{
+    //  Result<ICollection<StudyDataDto>> retResult = Result<ICollection<StudyDataDto>>.Undefined(null);
+    //  try
+    //  {
+    //    CheckAuthentication();
+
+    //    var dtos = FetchImpl(ids);
+    //    retResult = Result<ICollection<StudyDataDto>>.Success(dtos);
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    var wrappedEx = new Exceptions.FetchFailedException(ex);
+    //    retResult = Result<ICollection<StudyDataDto>>.FailureWithInfo(null, wrappedEx);
+    //  }
+    //  return retResult;
+    //}
+    public Result<StudyDataDto> FetchForCurrentUser()
     {
       Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
       try
       {
         CheckAuthentication();
 
-        var dto = FetchImpl(id);
+        var dto = FetchForCurrentUserImpl();
         retResult = Result<StudyDataDto>.Success(dto);
       }
       catch (Exception ex)
@@ -46,20 +80,20 @@ namespace LearnLanguages.DataAccess
       }
       return retResult;
     }
-    public Result<ICollection<StudyDataDto>> Fetch(ICollection<Guid> ids)
+    public Result<bool> StudyDataExistsForCurrentUser()
     {
-      Result<ICollection<StudyDataDto>> retResult = Result<ICollection<StudyDataDto>>.Undefined(null);
+      Result<bool> retResult = Result<bool>.Undefined(false);
       try
       {
         CheckAuthentication();
 
-        var dtos = FetchImpl(ids);
-        retResult = Result<ICollection<StudyDataDto>>.Success(dtos);
+        var dto = StudyDataExistsForCurrentUserImpl();
+        retResult = Result<bool>.Success(dto);
       }
       catch (Exception ex)
       {
         var wrappedEx = new Exceptions.FetchFailedException(ex);
-        retResult = Result<ICollection<StudyDataDto>>.FailureWithInfo(null, wrappedEx);
+        retResult = Result<bool>.FailureWithInfo(false, wrappedEx);
       }
       return retResult;
     }
@@ -133,8 +167,10 @@ namespace LearnLanguages.DataAccess
     }
 
     protected abstract StudyDataDto NewImpl(object criteria);
-    protected abstract StudyDataDto FetchImpl(Guid id);
-    protected abstract ICollection<StudyDataDto> FetchImpl(ICollection<Guid> ids);
+    protected abstract StudyDataDto FetchForCurrentUserImpl();
+    protected abstract bool StudyDataExistsForCurrentUserImpl();
+    //protected abstract StudyDataDto FetchImpl(Guid id);
+    //protected abstract ICollection<StudyDataDto> FetchImpl(ICollection<Guid> ids);
     protected abstract StudyDataDto UpdateImpl(StudyDataDto dto);
     protected abstract StudyDataDto InsertImpl(StudyDataDto dto);
     protected abstract StudyDataDto DeleteImpl(Guid id);
@@ -146,16 +182,7 @@ namespace LearnLanguages.DataAccess
         throw new Exceptions.UserNotAuthenticatedException();
     }
 
-    public Result<bool> StudyDataExistsForCurrentUser()
-    {
-      //todo: left off here 2/10/2012
-      //need to make these and their Impl() counterparts in Mock provider.  then run program again.
-      throw new NotImplementedException();
-    }
-
-    public Result<StudyDataDto> FetchForCurrentUser()
-    {
-      throw new NotImplementedException();
-    }
+    
+    
   }
 }

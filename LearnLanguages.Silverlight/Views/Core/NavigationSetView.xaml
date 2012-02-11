@@ -14,7 +14,7 @@
         <ListBox.ItemContainerStyle>
           <Style TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Padding" Value="10,3,3,3" />
+            <Setter Property="Padding" Value="30,3,3,3" />
           </Style>
         </ListBox.ItemContainerStyle>
       </ListBox>

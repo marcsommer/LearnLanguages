@@ -71,6 +71,13 @@ namespace LearnLanguages.Silverlight
       _Container.SatisfyImportsOnce(instance);
     }
 
+    protected override void OnUnhandledException(object sender, System.Windows.ApplicationUnhandledExceptionEventArgs e)
+    {
+      System.Windows.MessageBox.Show("unhandled exception: " + e.ExceptionObject.Message);
+      e.Handled = true;
+      base.OnUnhandledException(sender, e);
+    }
+
     //private bool ShellModelSatisfied = false;
     //private bool NavigationControllerSatisfied = false;
 

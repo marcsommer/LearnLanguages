@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
+using System.ComponentModel;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -87,7 +88,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private string _FilterLabel = AppResources.FilterLabel;
+    private string _FilterLabel = ViewViewModelResources.LabelTextFilter;
     public string FilterLabel
     {
       get { return _FilterLabel; }
@@ -110,8 +111,64 @@ namespace LearnLanguages.Silverlight.ViewModels
         if (value != _FilterText)
         {
           _FilterText = value;
-          PopulateViewModels(ModelList);
+          //PopulateViewModels(ModelList);
           NotifyOfPropertyChange(() => FilterText);
+        }
+      }
+    }
+
+    private Visibility _ProgressVisibility = Visibility.Collapsed;
+    public Visibility ProgressVisibility
+    {
+      get { return _ProgressVisibility; }
+      set
+      {
+        if (value != _ProgressVisibility)
+        {
+          _ProgressVisibility = value;
+          NotifyOfPropertyChange(() => ProgressVisibility);
+        }
+      }
+    }
+
+    private double _ProgressValue;
+    public double ProgressValue
+    {
+      get { return _ProgressValue; }
+      set
+      {
+        //if (value != _ProgressValue)
+        //{
+        _ProgressValue = value;
+        NotifyOfPropertyChange(() => ProgressValue);
+        //}
+      }
+    }
+
+    private double _ProgressMaximum;
+    public double ProgressMaximum
+    {
+      get { return _ProgressMaximum; }
+      set
+      {
+        //if (value != _ProgressMaximum)
+        //{
+        _ProgressMaximum = value;
+        NotifyOfPropertyChange(() => ProgressMaximum);
+        //}
+      }
+    }
+
+    private string _LabelTextApplyFilterButton = ViewViewModelResources.LabelTextApplyFilterButton;
+    public string LabelTextApplyFilterButton
+    {
+      get { return _LabelTextApplyFilterButton; }
+      set
+      {
+        if (value != _LabelTextApplyFilterButton)
+        {
+          _LabelTextApplyFilterButton = value;
+          NotifyOfPropertyChange(() => LabelTextApplyFilterButton);
         }
       }
     }
@@ -126,6 +183,43 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _ViewModelVisibility = value;
           NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
+    private bool _IsPopulating;
+    public bool IsPopulating
+    {
+      get { return _IsPopulating; }
+      set
+      {
+        if (value != _IsPopulating)
+        {
+          _IsPopulating = value;
+          NotifyOfPropertyChange(() => IsPopulating);
+          NotifyOfPropertyChange(() => CanStopPopulating);
+          NotifyOfPropertyChange(() => CanApplyFilter);
+          if (_IsPopulating)
+            ProgressVisibility = Visibility.Visible;
+          else
+            ProgressVisibility = Visibility.Collapsed;
+        }
+      }
+    }
+
+
+
+    private bool _AbortIsFlagged;
+    public bool AbortIsFlagged
+    {
+      get { return _AbortIsFlagged; }
+      set
+      {
+        if (value != _AbortIsFlagged)
+        {
+          _AbortIsFlagged = value;
+          NotifyOfPropertyChange(() => AbortIsFlagged);
+          NotifyOfPropertyChange(() => CanStopPopulating);
         }
       }
     }
@@ -150,20 +244,54 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void PopulateViewModels(TranslationList allTranslations)
     {
-      //CLEAR OUR ITEMS (VIEWMODELS)
-      Items.Clear();
+      if (IsPopulating && AbortIsFlagged)
+        return;
 
-      //FILTER OUR TRANSLATIONS
-      var filteredTranslations = FilterTranslations(allTranslations);
+      BackgroundWorker worker = new BackgroundWorker();
+      worker.DoWork += ((s, r) =>
+        {
+          //IsBusy = true;
+          IsPopulating = true;
 
-      //POPULATE NEW VIEWMODELS WITH FILTERED RESULTS
-      foreach (var translationEdit in filteredTranslations)
-      {
-        var itemViewModel = Services.Container.GetExportedValue<ViewTranslationsItemViewModel>();
-        itemViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
-        itemViewModel.Model = translationEdit;
-        Items.Add(itemViewModel);
-      }
+          //CLEAR OUR ITEMS (VIEWMODELS)
+          Items.Clear();
+
+          //FILTER OUR TRANSLATIONS
+          var filteredTranslations = FilterTranslations(allTranslations);
+
+          //PREPARE FOR COMING UP FOR AIR IN TIGHT LOOP
+          int counter = 0;
+          int iterationsBetweenComeUpForAir = 20;
+          int totalCount = filteredTranslations.Count();
+          ProgressMaximum = totalCount;
+
+          //POPULATE NEW VIEWMODELS WITH FILTERED RESULTS IN TIGHT LOOP
+          foreach (var translationEdit in filteredTranslations)
+          {
+            var itemViewModel = Services.Container.GetExportedValue<ViewTranslationsItemViewModel>();
+            itemViewModel.PropertyChanged +=
+              new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
+            itemViewModel.Model = translationEdit;
+            Items.Add(itemViewModel);
+
+            //UPDATE COMING UP FOR AIR
+            counter++;
+            ProgressValue = counter;
+            if (counter % iterationsBetweenComeUpForAir == 0)
+            {
+              if (AbortIsFlagged)
+              {
+                AbortIsFlagged = false;
+                ProgressValue = 0;
+                break;
+              }
+            }
+          }
+
+          IsPopulating = false;
+        }); //END WORKER THREAD
+
+      worker.RunWorkerAsync();
     }
 
     protected virtual void HookInto(TranslationList modelList)
@@ -296,6 +424,34 @@ namespace LearnLanguages.Silverlight.ViewModels
       InitiateDeleteVisibility = Visibility.Visible;
       FinalizeDeleteVisibility = Visibility.Collapsed;
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+    }
+
+    public bool CanApplyFilter
+    {
+      get
+      {
+        return (!IsPopulating &&
+                !AbortIsFlagged &&
+                 ModelList != null &&
+                 ModelList.Count > 0);
+      }
+    }
+    public void ApplyFilter()
+    {
+      PopulateViewModels(ModelList);
+    }
+
+    public bool CanStopPopulating
+    {
+      get
+      {
+        //if abort is already flagged, then we're already trying to stop populating.
+        return (IsPopulating && !AbortIsFlagged);
+      }
+    }
+    public void StopPopulating()
+    {
+      AbortIsFlagged = true;
     }
 
     #endregion

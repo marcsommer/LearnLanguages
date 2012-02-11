@@ -241,6 +241,24 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string LabelTextApplyFilterButton {
+            get {
+                return ResourceManager.GetString("LabelTextApplyFilterButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter: .
+        /// </summary>
+        public static string LabelTextFilter {
+            get {
+                return ResourceManager.GetString("LabelTextFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to \r.
         /// </summary>
         public static string LineDelimiter {
@@ -255,6 +273,24 @@ namespace LearnLanguages.Silverlight {
         public static string MaxInstructionsWidth {
             get {
                 return ResourceManager.GetString("MaxInstructionsWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string NavButtonTextLogin {
+            get {
+                return ResourceManager.GetString("NavButtonTextLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string NavButtonTextLogout {
+            get {
+                return ResourceManager.GetString("NavButtonTextLogout", resourceCulture);
             }
         }
         

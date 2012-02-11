@@ -147,6 +147,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\SeedDataException.cs">
       <Link>Exceptions\SeedDataException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\StudyDataNotFoundForUserException.cs">
+      <Link>Exceptions\StudyDataNotFoundForUserException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\GetRolesFailedException.cs">
       <Link>Exceptions\User\GetRolesFailedException.cs</Link>
     </Compile>

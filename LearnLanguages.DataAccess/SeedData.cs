@@ -210,6 +210,7 @@ namespace LearnLanguages.DataAccess
     #endregion
     #region MultiLineText Data
     public string MultiLineTextTitle { get { return "This is my wonderful MultiLineTextTitle!"; } }
+    public string MultiLineTextMetadata { get { return "Type=Song"; } }
     #endregion
     #region User Data
     public Guid DefaultTestValidUserId = new Guid("D719AED8-A7E2-4A74-ABFD-4D78B328F491");
@@ -382,6 +383,7 @@ namespace LearnLanguages.DataAccess
         {
           Id = new Guid("2A3608BB-69C3-4680-8268-073F4B9E3270"),
           Title = MultiLineTextTitle,
+          AdditionalMetadata = MultiLineTextMetadata,
           LineIds = new List<Guid>()
           {
             IdLine0, 

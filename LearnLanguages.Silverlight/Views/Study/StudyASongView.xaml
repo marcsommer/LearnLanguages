@@ -9,11 +9,45 @@
   <Border Style="{StaticResource DebugBorder}">
     <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
-        <RowDefinition />
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="30" />
+        <RowDefinition Height="*" />
       </Grid.RowDefinitions>
-      <ListBox Grid.Row="0"
-               x:Name="ModelList_Items" 
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+
+      <!--SELECT SONG(S) INSTRUCTIONS-->
+      <TextBlock Grid.Row="0" Grid.Column="0" 
+                 Grid.ColumnSpan="2"
+                 Text="{Binding Path=InstructionsSelectSong}" 
+                 Visibility="{Binding Path=InstructionsVisibility}"/>
+      
+      <!--CHECKALL TOGGLE CHECKBOX-->
+      <CheckBox Grid.Row="1" Grid.Column="0"
+                IsChecked="{Binding Path=CheckAllToggleIsChecked, Mode=TwoWay}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+      
+      <!--Filter-->
+      <Border Grid.Row="1" Grid.Column="1"
+              Style="{StaticResource ViewSection}" 
+              HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+          <TextBlock Text="{Binding Path=FilterLabel}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          <TextBox x:Name="FilterText" MinWidth="100" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+
+        </StackPanel>
+      </Border>
+
+
+      <ListBox Grid.Row="2" Grid.Column="0"
+               Grid.ColumnSpan="2"
+               x:Name="Items" 
+               ItemContainerStyle="{StaticResource ListBoxItemStyle}"
                HorizontalContentAlignment="Stretch" />
+
     </Grid>
   </Border>
 </UserControl>

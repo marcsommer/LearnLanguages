@@ -187,15 +187,6 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter: .
-        /// </summary>
-        internal static string FilterLabel {
-            get {
-                return ResourceManager.GetString("FilterLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Login incorrect.  Please wait a moment and then try again..
         /// </summary>
         internal static string LoginFailedMessage {
@@ -237,24 +228,6 @@ namespace LearnLanguages.Silverlight {
         internal static string MinUsernameLength {
             get {
                 return ResourceManager.GetString("MinUsernameLength", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login.
-        /// </summary>
-        internal static string NavButtonTextLogin {
-            get {
-                return ResourceManager.GetString("NavButtonTextLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logout.
-        /// </summary>
-        internal static string NavButtonTextLogout {
-            get {
-                return ResourceManager.GetString("NavButtonTextLogout", resourceCulture);
             }
         }
         

@@ -160,12 +160,17 @@ namespace LearnLanguages.Business
     public void AddMetadata(string key, string value)
     {
       var entry = BuildMetadataEntry(key, value);
-      if (AdditionalMetadata.Contains(entry))
-        return;
       if (string.IsNullOrEmpty(AdditionalMetadata))
         AdditionalMetadata = entry;
       else
-        AdditionalMetadata += BusinessResources.MetadataSeparator + entry;
+      {
+        //is not null or empty
+        if (AdditionalMetadata.Contains(entry))
+          return;//already contains entry
+        else
+          //append
+          AdditionalMetadata += BusinessResources.MetadataSeparator + entry;
+      }
     }
 
     public override void LoadFromDtoBypassPropertyChecksImpl(MultiLineTextDto dto)
@@ -173,6 +178,8 @@ namespace LearnLanguages.Business
       using (BypassPropertyChecks)
       {
         LoadProperty<Guid>(IdProperty, dto.Id);
+        LoadProperty<string>(TitleProperty, dto.Title);
+        LoadProperty<string>(AdditionalMetadataProperty, dto.AdditionalMetadata);
         if (dto.LineIds != null && dto.LineIds.Count > 0)
         {
           //LineIds = dto.LineIds;
@@ -199,6 +206,8 @@ namespace LearnLanguages.Business
       MultiLineTextDto retDto = new MultiLineTextDto()
       {
         Id = this.Id,
+        Title = this.Title,
+        AdditionalMetadata = this.AdditionalMetadata,
         LineIds = _lineIds,
         UserId = this.UserId,
         Username = this.Username

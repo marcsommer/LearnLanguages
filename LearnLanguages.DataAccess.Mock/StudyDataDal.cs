@@ -186,39 +186,84 @@ namespace LearnLanguages.DataAccess.Mock
 
       return dto;
     }
-    protected override StudyDataDto FetchImpl(Guid id)
+    protected override StudyDataDto FetchForCurrentUserImpl()
     {
-      var results = from item in SeedData.Instance.StudyDatas
-                    where item.Id == id
-                    select item;
+      var currentUsername = Csla.ApplicationContext.User.Identity.Name;
+
+      var results = from studyData in SeedData.Instance.StudyDatas
+                    where studyData.Username == currentUsername
+                    select studyData;
+
+      StudyDataDto dto = null;
 
       if (results.Count() == 1)
-        return results.First();
+      {
+        dto = results.First();
+        return dto;
+      }
       else
       {
         if (results.Count() == 0)
-          throw new Exceptions.IdNotFoundException(id);
+          throw new Exceptions.StudyDataNotFoundForUserException(currentUsername);
         else
           throw new Exceptions.VeryBadException();
       }
+
     }
-    protected override ICollection<StudyDataDto> FetchImpl(ICollection<Guid> ids)
+    protected override bool StudyDataExistsForCurrentUserImpl()
     {
-      if (ids == null)
-        throw new ArgumentNullException("ids");
-      else if (ids.Count == 0)
-        throw new ArgumentOutOfRangeException("ids", "ids cannot be empty.");
+      var currentUsername = Csla.ApplicationContext.User.Identity.Name;
 
-      var retStudyDatas = new List<StudyDataDto>();
-
-      foreach (var id in ids)
+      var results = from studyData in SeedData.Instance.StudyDatas
+                    where studyData.Username == currentUsername
+                    select studyData;
+      
+      if (results.Count() == 1)
       {
-        var dto = FetchImpl(id);
-        retStudyDatas.Add(dto);
+        return true;
+      }
+      else
+      {
+        if (results.Count() == 0)
+          return false;
+        else
+          throw new Exceptions.VeryBadException();
       }
 
-      return retStudyDatas;
     }
+    //protected override StudyDataDto FetchImpl(Guid id)
+    //{
+    //  var results = from item in SeedData.Instance.StudyDatas
+    //                where item.Id == id
+    //                select item;
+
+    //  if (results.Count() == 1)
+    //    return results.First();
+    //  else
+    //  {
+    //    if (results.Count() == 0)
+    //      throw new Exceptions.IdNotFoundException(id);
+    //    else
+    //      throw new Exceptions.VeryBadException();
+    //  }
+    //}
+    //protected override ICollection<StudyDataDto> FetchImpl(ICollection<Guid> ids)
+    //{
+    //  if (ids == null)
+    //    throw new ArgumentNullException("ids");
+    //  else if (ids.Count == 0)
+    //    throw new ArgumentOutOfRangeException("ids", "ids cannot be empty.");
+
+    //  var retStudyDatas = new List<StudyDataDto>();
+
+    //  foreach (var id in ids)
+    //  {
+    //    var dto = FetchImpl(id);
+    //    retStudyDatas.Add(dto);
+    //  }
+
+    //  return retStudyDatas;
+    //}
     protected override StudyDataDto UpdateImpl(StudyDataDto dto)
     {
       var results = from item in SeedData.Instance.StudyDatas

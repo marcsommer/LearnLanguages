@@ -177,11 +177,23 @@
   <data name="LabelSongAdditionalMetadata" xml:space="preserve">
     <value>Song Info: </value>
   </data>
+  <data name="LabelTextApplyFilterButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="LabelTextFilter" xml:space="preserve">
+    <value>Filter: </value>
+  </data>
   <data name="LineDelimiter" xml:space="preserve">
     <value>\r</value>
   </data>
   <data name="MaxInstructionsWidth" xml:space="preserve">
     <value>400</value>
+  </data>
+  <data name="NavButtonTextLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="NavButtonTextLogout" xml:space="preserve">
+    <value>Logout</value>
   </data>
   <data name="NavigationLabelStudyASong" xml:space="preserve">
     <value>A Song</value>

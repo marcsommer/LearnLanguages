@@ -403,6 +403,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The StudyData cannot be found for current user with username ({0})..
+        /// </summary>
+        public static string ErrorMsgStudyDataNotFoundForUserException {
+            get {
+                return ResourceManager.GetString("ErrorMsgStudyDataNotFoundForUserException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Update operation failed..
         /// </summary>
         public static string ErrorMsgUpdateFailedException {

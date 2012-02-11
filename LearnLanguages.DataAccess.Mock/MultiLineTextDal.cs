@@ -323,7 +323,5 @@ namespace LearnLanguages.DataAccess.Mock
       else if (userCount != 1)
         throw new Exceptions.VeryBadException();
     }
-
-    
   }
 }

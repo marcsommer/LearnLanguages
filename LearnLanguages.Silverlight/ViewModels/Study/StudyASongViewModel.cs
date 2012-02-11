@@ -59,7 +59,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         StudyData = r.Object.StudyData;
 
         if (!r.Object.StudyDataAlreadyExisted)
-          AskUserForExtraData((s2, r2) =>
+          AskUserForExtraDataAsync((s2, r2) =>
           {
             if (r2.Error != null)
               throw r2.Error;
@@ -111,10 +111,76 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    private List<MultiLineTextEdit> _AllSongsCache;
+    public List<MultiLineTextEdit> AllSongsCache
+    {
+      get { return _AllSongsCache; }
+      set
+      {
+        if (value != _AllSongsCache)
+        {
+          _AllSongsCache = value;
+          NotifyOfPropertyChange(() => AllSongsCache);
+        }
+      }
+    }
+
+    private string _FilterText;
+    public string FilterText
+    {
+      get { return _FilterText; }
+      set
+      {
+        if (value != _FilterText)
+        {
+          _FilterText = value;
+          NotifyOfPropertyChange(() => FilterText);
+          PopulateItems();
+        }
+      }
+    }
+    
+    private bool _CheckAllToggleIsChecked;
+    public bool CheckAllToggleIsChecked
+    {
+      get { return _CheckAllToggleIsChecked; }
+      set
+      {
+        if (value != _CheckAllToggleIsChecked)
+        {
+          _CheckAllToggleIsChecked = value;
+          NotifyOfPropertyChange(() => CheckAllToggleIsChecked);
+          ToggleAllChecks();
+        }
+      }
+    }
+
+    public bool ShowGridLines
+    {
+      get { return bool.Parse(AppResources.ShowGridLines); }
+    }
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
     #endregion
 
     #region Methods
 
+    /// <summary>
+    /// Gets all songs in DB for this user, populates Items with viewmodels for each song.
+    /// </summary>
     private void SelectASong()
     {
       MultiLineTextList.GetAll((s, r) =>
@@ -174,28 +240,116 @@ namespace LearnLanguages.Silverlight.ViewModels
         #endregion
 
         var allMultiLineTexts = r.Object;
+
         var songs = (from multiLineText in allMultiLineTexts
                      where multiLineText.AdditionalMetadata.Contains(MultiLineTextEdit.MetadataEntrySong)
                      select multiLineText).ToList();
 
         songs.Sort(comparison);
 
-        for (int i = 0; i < songs.Count; i++)
-        {
-          //CREATE THE VIEWMODEL
-          var songItemViewModel = Services.Container.GetExportedValue<StudyASongItemViewModel>();
+        //CACHE ALL SONGS SO WE WON'T HAVE TO DOWNLOAD THEM AGAIN.  THIS IS ASSUMING MY CURRENT NAVIGATION
+        //STRUCTURE WHICH MEANS THAT YOU CAN'T ADD SONGS WITHOUT RECREATING THIS ENTIRE VIEWMODEL.
+        //THIS CACHE WILL BE USED FOR FILTERING.
 
-          //ASSIGN THE VIEWMODEL'S MODEL AS THE SONG
-          var song = songs[i];
-          songItemViewModel.Model = song;
+        AllSongsCache = songs;
 
-          //INSERT THE VIEWMODEL IN THE PROPER ORDER INTO OUR ITEMS COLLECTION
-          Items.Insert(i, songItemViewModel);
-        }
+        PopulateItems();
       });
     }
 
-    public void AskUserForExtraData(AsyncCallback<StudyDataEdit> callback)
+    private void PopulateItems()
+    {
+      Items.Clear();
+      #region Sort MLT by Title Comparison (Comparison<MultiLineTextEdit> comparison = (a, b) =>)
+
+        Comparison<MultiLineTextEdit> comparison = (a, b) =>
+        {
+          //WE'RE GOING TO TEST CHAR ORDER IN ALPHABET
+          string aTitle = a.Title.ToLower();
+          string bTitle = b.Title.ToLower();
+
+          //IF THEY'RE THE SAME TITLES IN LOWER CASE, THEN THEY ARE EQUAL
+          if (aTitle == bTitle)
+            return 0;
+
+          //ONLY NEED TO TEST CHARACTERS UP TO LENGTH
+          int shorterTitleLength = aTitle.Length;
+          bool aIsShorter = true;
+          if (bTitle.Length < shorterTitleLength)
+          {
+            shorterTitleLength = bTitle.Length;
+            aIsShorter = false;
+          }
+
+          int result = 0; //assume a and b are equal (though we know they aren't if we've reached this point)
+
+          for (int i = 0; i < shorterTitleLength; i++)
+          {
+            if (aTitle[i] < bTitle[i])
+            {
+              result = -1;
+              break;
+            }
+            else if (aTitle[i] > bTitle[i])
+            {
+              result = 1;
+              break;
+            }
+          }
+
+          //IF THEY ARE STILL EQUAL, THEN THE SHORTER PRECEDES THE LONGER
+          if (result == 0)
+          {
+            if (aIsShorter)
+              result = -1;
+            else
+              result = 1;
+          }
+
+          return result;
+        };
+
+        #endregion
+
+      List<MultiLineTextEdit> filteredSongs = FilterSongs(AllSongsCache);
+      filteredSongs.Sort(comparison);
+
+      for (int i = 0; i < filteredSongs.Count; i++)
+      {
+        //CREATE THE VIEWMODEL
+        var songItemViewModel = Services.Container.GetExportedValue<StudyASongItemViewModel>();
+
+        //ASSIGN THE VIEWMODEL'S MODEL AS THE SONG
+        var song = AllSongsCache[i];
+        songItemViewModel.Model = song;
+
+        //INSERT THE VIEWMODEL IN THE PROPER ORDER INTO OUR ITEMS COLLECTION
+        Items.Insert(i, songItemViewModel);
+      }
+    }
+
+    /// <summary>
+    /// Filters songs using FilterText property.  Does NOT sort results.
+    /// </summary>
+    /// <param name="songs">song list to apply filter to</param>
+    /// <returns>filtered song list (of type MultiLineTextEdit)</returns>
+    private List<MultiLineTextEdit> FilterSongs(List<MultiLineTextEdit> songs)
+    {
+      if (string.IsNullOrEmpty(FilterText))
+        return songs.ToList();
+          
+      var _filterText = FilterText;
+
+      var filteredResults = (from song in songs
+                             where (from line in song.Lines
+                                    where line.Phrase.Text.Contains(FilterText)
+                                    select line).Count() > 0
+                             select song).ToList();
+
+      return filteredResults;
+    }
+
+    public void AskUserForExtraDataAsync(AsyncCallback<StudyDataEdit> callback)
     {
       var askUserViewModel = Services.Container.GetExportedValue<AskUserExtraDataViewModel>();
       askUserViewModel.ShowModal(callback);
@@ -209,6 +363,18 @@ namespace LearnLanguages.Silverlight.ViewModels
         return "";
     }
 
+    private void ToggleAllChecks()
+    {
+      foreach (var viewModel in Items)
+      {
+        viewModel.IsChecked = CheckAllToggleIsChecked;
+      }
+    }
+
+    /// <summary>
+    /// Initializes ViewModel after navigated.
+    /// </summary>
+    /// <param name="message"></param>
     public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
     {
       //WE ARE LISTENING FOR A MESSAGE THAT SAYS WE WERE SUCCESSFULLY NAVIGATED TO (SHELLVIEW.MAIN == STUDYVIEWMODEL)
@@ -225,53 +391,15 @@ namespace LearnLanguages.Silverlight.ViewModels
       InitializeViewModel();
     }
 
-    #endregion
-
-    #region Events
-
-    #endregion
-
-    //private AskDoYouKnowThisViewModel _AskViewModel;
-    //public AskDoYouKnowThisViewModel AskViewModel
-    //{
-    //  get { return _AskViewModel; }
-    //  set
-    //  {
-    //    if (value != _AskViewModel)
-    //    {
-    //      _AskViewModel = value;
-    //      NotifyOfPropertyChange(() => AskViewModel);
-    //    }
-    //  }
-    //}
-
     public bool LoadFromUri(Uri uri)
     {
       return true;
     }
-
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(AppResources.ShowGridLines); }
-    }
-
-    private Visibility _ViewModelVisibility;
-    public Visibility ViewModelVisibility
-    {
-      get { return _ViewModelVisibility; }
-      set
-      {
-        if (value != _ViewModelVisibility)
-        {
-          _ViewModelVisibility = value;
-          NotifyOfPropertyChange(() => ViewModelVisibility);
-        }
-      }
-    }
-
     public void OnImportsSatisfied()
     {
       //
     }
+
+    #endregion
   }
 }
