@@ -89,6 +89,7 @@
     <Compile Include="Args\DeleteArgs.cs" />
     <Compile Include="Args\EditArgs.cs" />
     <Compile Include="Args\InitializeArgs.cs" />
+    <Compile Include="Args\ResultArgsOfT.cs" />
     <Compile Include="Args\SampleActionArgs.cs" />
     <Compile Include="Args\SaveArgs.cs" />
     <Compile Include="AsynchronousCallback.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="CslaBases\ReadOnlyBaseOfC.cs" />
     <Compile Include="CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs" />
     <Compile Include="CustomException.cs" />
+    <Compile Include="Delegates\AsyncCallbackOfT.cs" />
+    <Compile Include="Delegates\ExceptionCheckCallback.cs" />
     <Compile Include="EventArgs\ModelEventArgsOfT.cs" />
     <Compile Include="Exceptions\PartNotSatisfiedException.cs" />
     <Compile Include="Interfaces\IAsyncStub.cs" />

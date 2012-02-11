@@ -120,6 +120,21 @@
   <data name="DefaultNewStudyDataNativeLanguageText" xml:space="preserve">
     <value />
   </data>
+  <data name="MetadataEquals" xml:space="preserve">
+    <value>=</value>
+  </data>
+  <data name="MetadataKeyType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MetadataSeparator" xml:space="preserve">
+    <value>&amp;</value>
+  </data>
+  <data name="MetadataValueTypePoem" xml:space="preserve">
+    <value>Poem</value>
+  </data>
+  <data name="MetadataValueTypeSong" xml:space="preserve">
+    <value>Song</value>
+  </data>
   <data name="MinNativeLanguageTextLength" xml:space="preserve">
     <value>2</value>
   </data>

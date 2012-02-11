@@ -51,6 +51,10 @@ namespace LearnLanguages.Business
       DataPortal.BeginFetch<StudyDataEdit>(id, callback);
     }
 
+    //public static void GetStudyDataEdit(EventHandler<DataPortalResult<StudyDataEdit>> callback)
+    //{
+    //  DataPortal.BeginFetch<StudyDataEdit>(callback);
+    //}
 #endif
     #endregion
     #endregion
@@ -200,25 +204,77 @@ namespace LearnLanguages.Business
       }
     }
 
-    [Transactional(TransactionalTypes.TransactionScope)]
-    protected void DataPortal_Fetch(Guid id)
-    {
-      using (var dalManager = DalFactory.GetDalManager())
-      {
-        var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
-        Result<StudyDataDto> result = studyDataDal.Fetch(id);
-        if (!result.IsSuccess)
-        {
-          Exception error = result.GetExceptionFromInfo();
-          if (error != null)
-            throw error;
-          else
-            throw new FetchFailedException(result.Msg);
-        }
-        StudyDataDto dto = result.Obj;
-        LoadFromDtoBypassPropertyChecks(dto);
-      }
-    }
+    //[Transactional(TransactionalTypes.TransactionScope)]
+    //protected void DataPortal_Fetch(Guid id)
+    //{
+    //  using (var dalManager = DalFactory.GetDalManager())
+    //  {
+    //    var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
+    //    Result<StudyDataDto> result = studyDataDal.Fetch(id);
+    //    if (!result.IsSuccess)
+    //    {
+    //      Exception error = result.GetExceptionFromInfo();
+    //      if (error != null)
+    //        throw error;
+    //      else
+    //        throw new FetchFailedException(result.Msg);
+    //    }
+    //    StudyDataDto dto = result.Obj;
+    //    LoadFromDtoBypassPropertyChecks(dto);
+    //  }
+    //}
+    //[Transactional(TransactionalTypes.TransactionScope)]
+    //protected void DataPortal_Fetch()
+    //{
+    //  using (var dalManager = DalFactory.GetDalManager())
+    //  {
+    //    var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
+    //    Result<bool> resultExists = studyDataDal.StudyDataExistsForCurrentUser();
+    //    if (!resultExists.IsSuccess)
+    //    {
+    //      Exception error = resultExists.GetExceptionFromInfo();
+    //      if (error != null)
+    //        throw error;
+    //      else
+    //        throw new FetchFailedException(resultExists.Msg);
+    //    }
+    //    var userHasStudyData = resultExists.Obj;
+
+    //    //POPULATE OUR STUDY DATA DTO
+    //    StudyDataDto dto = null;
+
+    //    if (userHasStudyData)
+    //    {
+    //      //THE USER HAS STUDY DATA, SO FETCH IT
+    //      Result<StudyDataDto> resultFetch = studyDataDal.FetchForCurrentUser();
+    //      if (!resultFetch.IsSuccess)
+    //      {
+    //        Exception error = resultFetch.GetExceptionFromInfo();
+    //        if (error != null)
+    //          throw error;
+    //        else
+    //          throw new FetchFailedException(resultFetch.Msg);
+    //      }
+
+    //      dto = resultFetch.Obj;
+    //    }
+    //    else
+    //    {
+    //      //THE USER DOESN'T HAVE STUDY DATA
+    //      //SET PROPS ACCORDINGLY
+    //      dto = new StudyDataDto()
+    //      {
+    //        Id = Guid.Empty,
+    //        NativeLanguageText = "",
+    //        Username = Csla.ApplicationContext.User.Identity.Name
+    //      };
+    //    }
+
+    //    //OUR DTO IS NOW POPULATED
+    //    LoadFromDtoBypassPropertyChecks(dto);
+    //  }
+    //}
+
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Insert()
     {
@@ -342,19 +398,19 @@ namespace LearnLanguages.Business
       //}
     }
 
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(Guid id)
-    {
-      using (var dalManager = DalFactory.GetDalManager())
-      {
-        var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
-        var result = studyDataDal.Fetch(id);
-        if (result.IsError)
-          throw new FetchFailedException(result.Msg);
-        StudyDataDto dto = result.Obj;
-        LoadFromDtoBypassPropertyChecks(dto);
-      }
-    }
+    //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    //public void Child_Fetch(Guid id)
+    //{
+    //  using (var dalManager = DalFactory.GetDalManager())
+    //  {
+    //    var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
+    //    var result = studyDataDal.Fetch(id);
+    //    if (result.IsError)
+    //      throw new FetchFailedException(result.Msg);
+    //    StudyDataDto dto = result.Obj;
+    //    LoadFromDtoBypassPropertyChecks(dto);
+    //  }
+    //}
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()

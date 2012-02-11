@@ -60,7 +60,5 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
-
-    
   }
 }

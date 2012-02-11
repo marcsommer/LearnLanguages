@@ -6,7 +6,7 @@ using System.Windows;
 using LearnLanguages.Business;
 using System.ComponentModel;
 using System;
-using LearnLanguages.Delegates;
+using LearnLanguages.Common.Delegates;
 using System.Net;
 using System.Windows.Controls;
 
@@ -15,7 +15,6 @@ namespace LearnLanguages.Silverlight.ViewModels
   [Export(typeof(QuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class QuestionAnswerViewModel : ViewModelBase
-                                         
   {
     #region Ctors and Init
 

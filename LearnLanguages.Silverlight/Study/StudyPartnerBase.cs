@@ -3,6 +3,8 @@ using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using LearnLanguages.Business;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Silverlight
 {
@@ -47,7 +49,6 @@ namespace LearnLanguages.Silverlight
       StudyImpl();
     }
     protected abstract void StudyImpl();
-
     
     #endregion
 
@@ -57,11 +58,16 @@ namespace LearnLanguages.Silverlight
 
     #endregion
 
-    public void AskUserExtraData(object criteria, Delegates.StudyDataCallback callback)
+    public void AskUserExtraData(object criteria, AsyncCallback<StudyDataEdit> callback)
     {
       AskUserExtraDataImpl(criteria, callback);
     }
 
-    protected abstract void AskUserExtraDataImpl(object criteria, Delegates.StudyDataCallback callback);
+    protected abstract void AskUserExtraDataImpl(object criteria, AsyncCallback<StudyDataEdit> callback);
+
+    public void StudyMultiLineTexts(MultiLineTextList multiLineTexts, IEventAggregator eventAggregator)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

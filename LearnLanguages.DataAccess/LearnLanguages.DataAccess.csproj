@@ -90,7 +90,7 @@
     <Compile Include="Exceptions\Crud\UpdateFailedException.cs" />
     <Compile Include="Interfaces\IMultiLineTextDal.cs" />
     <Compile Include="Interfaces\ILineDal.cs" />
-    <Compile Include="Interfaces\ICycleStudyDataDal.cs" />
+    <Compile Include="Interfaces\IStudyDataDal.cs" />
     <Compile Include="Interfaces\ITranslationDal.cs" />
     <Compile Include="Interfaces\IDalManager.cs" />
     <Compile Include="Interfaces\ICustomIdentityDal.cs" />

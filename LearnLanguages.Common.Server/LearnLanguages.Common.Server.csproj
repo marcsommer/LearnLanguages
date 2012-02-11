@@ -88,6 +88,9 @@
     <Compile Include="..\LearnLanguages.Common\Args\InitializeArgs.cs">
       <Link>Args\InitializeArgs.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Args\ResultArgsOfT.cs">
+      <Link>Args\ResultArgsOfT.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Args\SampleActionArgs.cs">
       <Link>Args\SampleActionArgs.cs</Link>
     </Compile>
@@ -123,6 +126,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\CustomException.cs">
       <Link>CustomException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Delegates\AsyncCallbackOfT.cs">
+      <Link>Delegates\AsyncCallbackOfT.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\EventArgs\ModelEventArgsOfT.cs">
       <Link>EventArgs\ModelEventArgsOfT.cs</Link>

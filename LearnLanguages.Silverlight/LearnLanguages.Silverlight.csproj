@@ -94,11 +94,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Args\StudyDataArgs.cs" />
     <Compile Include="Args\QuestionAnswerArgs.cs" />
     <Compile Include="BingTranslateHelper.cs" />
-    <Compile Include="Delegates\StudyDataCallback.cs" />
-    <Compile Include="Delegates\ExceptionCheckCallback.cs" />
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
@@ -139,6 +136,7 @@
     <Compile Include="ViewModels\NavigationButtons\Add\AddSongNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnASongNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\Study\StudyASongNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationSetTitles\ChugNavigationSetTitleViewModel.cs" />
     <Compile Include="ViewModels\NavigationSetTitles\AdminNavigationSetTitleViewModel.cs" />
     <Compile Include="ViewModels\NavigationSetTitles\ProgressNavigationSetTitleViewModel.cs" />
@@ -154,13 +152,16 @@
     <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
     <Compile Include="ViewModels\Core\LoginFailedViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\Add\AddLanguageNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\StudyNavigationButtonViewModel.cs" />
+    <Compile Include="ViewModels\NavigationButtons\Study\StudyNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\View\ViewLanguagesNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\NavigationButtons\View\ViewTranslationsNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowViewModel.cs" />
     <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowResponseViewModel.cs" />
+    <Compile Include="EventMessages\NativeLanguageChangedEventMessage.cs" />
+    <Compile Include="ViewModels\Study\StudyASongItemViewModel.cs" />
+    <Compile Include="ViewModels\Study\SelectNativeLanguageViewModel.cs" />
+    <Compile Include="ViewModels\Study\StudyASongViewModel.cs" />
     <Compile Include="ViewModels\Study\QuestionAnswerViewModel.cs" />
-    <Compile Include="ViewModels\Study\StudyCompletedViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyViewModel.cs" />
     <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesItemViewModel.cs" />
     <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesViewModel.cs" />
@@ -205,6 +206,26 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NavigationButtons\StudyASongNavigationButtonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Study\StudyASongItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Study\StudyASongView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Study\AskUserExtraDataView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Study\SelectNativeLanguageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\NavigationSetTitles\AdminNavigationSetTitleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -286,10 +307,6 @@
     <None Include="Service References\BingTranslatorService\soap33.xsd" />
     <None Include="Service References\BingTranslatorService\SoapService2.wsdl" />
     <Page Include="Views\Study\QuestionAnswerView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Study\StudyCompletedView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

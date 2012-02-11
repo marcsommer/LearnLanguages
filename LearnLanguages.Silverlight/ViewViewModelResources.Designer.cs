@@ -142,6 +142,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most..
+        /// </summary>
+        public static string InstructionsSelectNativeLanguageSelectLanguage {
+            get {
+                return ResourceManager.GetString("InstructionsSelectNativeLanguageSelectLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string LabelAcceptPercentKnown {
@@ -196,7 +205,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to df.
+        ///   Looks up a localized string similar to Song Title: .
         /// </summary>
         public static string LabelAddSongSongTitle {
             get {
@@ -214,7 +223,16 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to sdfds.
+        ///   Looks up a localized string similar to Your Native Language: .
+        /// </summary>
+        public static string LabelSelectNativeLanguageLanguageText {
+            get {
+                return ResourceManager.GetString("LabelSelectNativeLanguageLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Song Info: .
         /// </summary>
         public static string LabelSongAdditionalMetadata {
             get {
@@ -237,6 +255,15 @@ namespace LearnLanguages.Silverlight {
         public static string MaxInstructionsWidth {
             get {
                 return ResourceManager.GetString("MaxInstructionsWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Song.
+        /// </summary>
+        public static string NavigationLabelStudyASong {
+            get {
+                return ResourceManager.GetString("NavigationLabelStudyASong", resourceCulture);
             }
         }
         

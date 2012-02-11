@@ -10,5 +10,10 @@ namespace LearnLanguages.History.Events
       : base(parent, child)
     {
     }
+
+    public static void Pub(PhraseEdit parent, PhraseEdit child)
+    {
+      Publish.The.HistoryEvent(new ParentPhraseSpawnedChildPhraseEvent(parent, child));
+    }
   }
 }

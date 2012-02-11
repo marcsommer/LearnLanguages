@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net;
-using LearnLanguages.Business;
 
-namespace LearnLanguages.Delegates
+namespace LearnLanguages.Common.Delegates
 {
   /// <summary>
   /// Callback that just sends exception data.

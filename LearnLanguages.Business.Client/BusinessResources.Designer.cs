@@ -70,6 +70,51 @@ namespace LearnLanguages.Business {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to =.
+        /// </summary>
+        public static string MetadataEquals {
+            get {
+                return ResourceManager.GetString("MetadataEquals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string MetadataKeyType {
+            get {
+                return ResourceManager.GetString("MetadataKeyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;.
+        /// </summary>
+        public static string MetadataSeparator {
+            get {
+                return ResourceManager.GetString("MetadataSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poem.
+        /// </summary>
+        public static string MetadataValueTypePoem {
+            get {
+                return ResourceManager.GetString("MetadataValueTypePoem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Song.
+        /// </summary>
+        public static string MetadataValueTypeSong {
+            get {
+                return ResourceManager.GetString("MetadataValueTypeSong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 2.
         /// </summary>
         public static string MinNativeLanguageTextLength {

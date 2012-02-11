@@ -117,7 +117,30 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void AddStudyNavigationSet()
     {
-      //throw new NotImplementedException();
+      //INITIALIZE NAVIGATION ITSELF
+      var studyNavigationSet = Services.Container.GetExportedValue<NavigationSetViewModel>();
+      var studyTitle = Services.Container.GetExportedValue<StudyNavigationSetTitleViewModel>();
+      studyNavigationSet.ShowItems = studyTitle.IsExpanded;
+      studyNavigationSet.TitleControl = studyTitle;
+
+      //CREATE BUTTONS TO GO INTO NAVIGATION SET
+      var studyASong = Services.Container.GetExportedValue<StudyASongNavigationButtonViewModel>();
+
+      //INSERT BUTTONS IN LIST ***IN THE ORDER IN WHICH YOU WANT THEM TO APPEAR***
+      List<ViewModelBase> orderedStudyButtons = new List<ViewModelBase>();
+      orderedStudyButtons.Insert(0, studyASong);
+      //orderedStudyButtons.Insert(1, addPhrase);
+      //orderedStudyButtons.Insert(2, viewPhrases);
+      //orderedStudyButtons.Insert(3, addTranslation);
+      //orderedStudyButtons.Insert(4, viewTranslations);
+      //orderedStudyButtons.Insert(5, addLanguage);
+      //orderedStudyButtons.Insert(6, viewLanguages);
+
+      //ADD ORDERED LIST OF NAV BUTTONS TO NAVIGATION SET
+      studyNavigationSet.AddControls(orderedStudyButtons);
+
+      //ADD THE SET TO THE ITEMS
+      Items.Add(studyNavigationSet);
     }
 
     private void AddEditNavigationSet()

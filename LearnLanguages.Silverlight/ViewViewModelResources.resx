@@ -144,6 +144,9 @@
   <data name="InstructionsSelectLanguage" xml:space="preserve">
     <value>Step 1: Select Language</value>
   </data>
+  <data name="InstructionsSelectNativeLanguageSelectLanguage" xml:space="preserve">
+    <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
+  </data>
   <data name="LabelAcceptPercentKnown" xml:space="preserve">
     <value>OK</value>
   </data>
@@ -163,19 +166,25 @@
     <value>Song Lyrics: </value>
   </data>
   <data name="LabelAddSongSongTitle" xml:space="preserve">
-    <value>df</value>
+    <value>Song Title: </value>
   </data>
   <data name="LabelAddSongText" xml:space="preserve">
     <value>Song Text: </value>
   </data>
+  <data name="LabelSelectNativeLanguageLanguageText" xml:space="preserve">
+    <value>Your Native Language: </value>
+  </data>
   <data name="LabelSongAdditionalMetadata" xml:space="preserve">
-    <value>sdfds</value>
+    <value>Song Info: </value>
   </data>
   <data name="LineDelimiter" xml:space="preserve">
     <value>\r</value>
   </data>
   <data name="MaxInstructionsWidth" xml:space="preserve">
     <value>400</value>
+  </data>
+  <data name="NavigationLabelStudyASong" xml:space="preserve">
+    <value>A Song</value>
   </data>
   <data name="RegExSplitPatternWords" xml:space="preserve">
     <value>\\W+</value>

@@ -8,8 +8,9 @@ namespace LearnLanguages.DataAccess
   public interface IStudyDataDal
   {
     Result<StudyDataDto> New(object criteria);
-    Result<StudyDataDto> Fetch(Guid id);
-    Result<ICollection<StudyDataDto>> Fetch(ICollection<Guid> ids);
+    //Result<StudyDataDto> Fetch(Guid id);
+    Result<bool> StudyDataExistsForCurrentUser();
+    Result<StudyDataDto> FetchForCurrentUser();
     Result<StudyDataDto> Update(StudyDataDto dto);
     /// <summary>
     /// Dal implementation is responsible for assigning new Id to dto

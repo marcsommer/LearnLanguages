@@ -116,6 +116,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesExistRetriever.cs">
       <Link>Retrievers\PhrasesExistRetriever.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\StudyDataRetriever.cs">
+      <Link>Retrievers\StudyDataRetriever.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationRetriever.cs">
       <Link>Retrievers\TranslationRetriever.cs</Link>
     </Compile>

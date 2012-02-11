@@ -3,11 +3,65 @@ using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
 using System.Windows;
 using LearnLanguages.Common.ViewModelBases;
+using System.ComponentModel.Composition;
+using LearnLanguages.Business;
+using LearnLanguages.DataAccess;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
-  public class AskUserExtraDataViewModel : ViewModelBase
+  [Export(typeof(AskUserExtraDataViewModel))]
+  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+  public class AskUserExtraDataViewModel : ViewModelBase<StudyDataEdit, StudyDataDto>,
+                                           IHandle<EventMessages.NativeLanguageChangedEventMessage>
   {
+    public AskUserExtraDataViewModel()
+    {
+      if (!bool.Parse(ViewViewModelResources.ShowInstructions))
+        InstructionsVisibility = Visibility.Collapsed;
+      else
+        InstructionsVisibility = Visibility.Visible;
+
+      StudyDataRetriever.CreateNew((s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          Model = r.Object.StudyData;
+        });
+    }
+
+    public string LabelNativeLanguageText { get { return ViewViewModelResources.LabelAddPhraseLanguageText; } }
+    public string InstructionsSelectNativeLanguageText { get { return ViewViewModelResources.InstructionsSelectLanguage; } }
+
+    private Visibility _InstructionsVisibility;
+    public Visibility InstructionsVisibility
+    {
+      get { return _InstructionsVisibility; }
+      set
+      {
+        if (value != _InstructionsVisibility)
+        {
+          _InstructionsVisibility = value;
+          NotifyOfPropertyChange(() => InstructionsVisibility);
+        }
+      }
+    }
+
+    public bool CanSelectLanguage
+    {
+      get
+      {
+        return true;
+      }
+    }
+    public void SelectLanguage()
+    {
+      var selectViewModel = Services.Container.GetExportedValue<SelectNativeLanguageViewModel>();
+      Services.WindowManager.ShowDialog(selectViewModel);
+    }
+
+    #region Base
 
     public bool LoadFromUri(Uri uri)
     {
@@ -36,5 +90,45 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    #endregion
+
+    public void Handle(EventMessages.NativeLanguageChangedEventMessage message)
+    {
+      Model.NativeLanguageText = message.NewNativeLanguageText;
+      NotifyOfPropertyChange(() => Model);
+      NotifyOfPropertyChange(() => CanSave);
+
+      if (!Model.IsSavable)
+        throw new Exception();
+
+      Model.BeginSave((s, r) =>
+        {
+          if (r.Error != null)
+          {
+            if (_Callback != null)
+            {
+              var result = new Common.Args.ResultArgs<StudyDataEdit>(r.Error);
+              _Callback(this, result);
+              _Callback = null;
+            }
+            else
+              throw r.Error;
+          }
+
+          if (_Callback != null)
+          {
+            var result = new Common.Args.ResultArgs<StudyDataEdit>(Model);
+            _Callback(this, result);
+            _Callback = null;
+          }
+        });
+    }
+
+    private AsyncCallback<StudyDataEdit> _Callback;
+    public void ShowModal(AsyncCallback<StudyDataEdit> callback)
+    {
+      _Callback = callback;
+      Services.WindowManager.ShowDialog(this);
+    }
   }
 }

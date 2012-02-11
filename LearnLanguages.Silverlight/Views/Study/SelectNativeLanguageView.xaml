@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="LearnLanguages.Silverlight.Views.SelectNativeLanguageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="400">
+    
+  <Border Style="{StaticResource DebugBorder}">
+    <Grid x:Name="LayoutRoot" Background="White">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="25" />
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <!--INSTRUCTIONS-->
+      <TextBlock Grid.Row="0"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 Text="{Binding Path=InstructionsSelectLanguage}" 
+                 Visibility="{Binding Path=InstructionsVisibility}"/>
+
+      <!--LABEL-->
+      <TextBlock Grid.Row="1"
+                 Grid.Column="0"
+                 Text="{Binding Path=LabelLanguageText}" />
+      
+      <!--LANGUAGE SELECTOR-->
+      <ContentControl Grid.Row="1"
+                      Grid.Column="1"
+                      x:Name="Languages"/>
+
+      <!--OK BUTTON-->
+      <Button Grid.Row="2"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              x:Name="Save" 
+              Content="OK" 
+              Width="75"
+              HorizontalAlignment="Center" />
+      
+    </Grid>
+  </Border>
+</UserControl>

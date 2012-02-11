@@ -12,6 +12,9 @@ using System.Collections.Generic;
 
 namespace LearnLanguages.Business
 {
+  /// <summary>
+  /// Song, Poem, Lyric Sheet, Scene Lines...Anything that has a list of ordered lines.
+  /// </summary>
   [Serializable]
   public class MultiLineTextEdit : Common.CslaBases.BusinessBase<MultiLineTextEdit, MultiLineTextDto>, IHaveId
   {
@@ -23,6 +26,7 @@ namespace LearnLanguages.Business
     #endregion
     
     #region Factory Methods
+
     #region Wpf Factory Methods
 #if !SILVERLIGHT
 
@@ -77,7 +81,7 @@ namespace LearnLanguages.Business
     #endregion
     #endregion
 
-    #region Business Properties & Methods
+    #region Business Properties
 
     //PHRASES
     //#region public ICollection<Guid> LineIds
@@ -144,6 +148,26 @@ namespace LearnLanguages.Business
     }
     #endregion
 
+    #endregion
+
+    #region Business Methods
+
+    /// <summary>
+    /// If AdditionalMetadata does not already contain key/value, then it adds it.
+    /// </summary>
+    /// <param name="key">Metadata key, e.g. "type" in "type=song"</param>
+    /// <param name="value">Metadata value, e.g. "song" in "type=song"</param>
+    public void AddMetadata(string key, string value)
+    {
+      var entry = BuildMetadataEntry(key, value);
+      if (AdditionalMetadata.Contains(entry))
+        return;
+      if (string.IsNullOrEmpty(AdditionalMetadata))
+        AdditionalMetadata = entry;
+      else
+        AdditionalMetadata += BusinessResources.MetadataSeparator + entry;
+    }
+
     public override void LoadFromDtoBypassPropertyChecksImpl(MultiLineTextDto dto)
     {
       using (BypassPropertyChecks)
@@ -172,12 +196,13 @@ namespace LearnLanguages.Business
           _lineIds.Add(line.Id);
         }
       }
-      MultiLineTextDto retDto = new MultiLineTextDto(){
-                                          Id = this.Id,
-                                          LineIds = _lineIds,
-                                          UserId = this.UserId,
-                                          Username = this.Username
-                                        };
+      MultiLineTextDto retDto = new MultiLineTextDto()
+      {
+        Id = this.Id,
+        LineIds = _lineIds,
+        UserId = this.UserId,
+        Username = this.Username
+      };
       return retDto;
     }
 
@@ -220,7 +245,7 @@ namespace LearnLanguages.Business
       Lines.AddedNew -= Lines_AddedNew;
       BusinessRules.CheckRules();
     }
-    private LineEdit _LineAdding; 
+    private LineEdit _LineAdding;
 
     private void Lines_AddedNew(object sender, Csla.Core.AddedNewEventArgs<LineEdit> e)
     {
@@ -234,6 +259,35 @@ namespace LearnLanguages.Business
     {
       base.OnChildChanged(e);
       BusinessRules.CheckRules(LinesProperty);
+    }
+
+    /// <summary>
+    /// Builds an entry using the key and value given.  
+    /// At time of writing, this is:
+    /// key + BusinessResources.MetadataEquals + value
+    /// </summary>
+    /// <param name="key">AdditionalMetadata key</param>
+    /// <param name="value">AdditionalMetadata value</param>
+    /// <returns>Properly formed AdditionalMetadata entry</returns>
+    public static string BuildMetadataEntry(string key, string value)
+    {
+      return key + BusinessResources.MetadataEquals + value;
+    }
+
+    public static string MetadataEntrySong
+    {
+      get
+      {
+        return BuildMetadataEntry(BusinessResources.MetadataKeyType, BusinessResources.MetadataValueTypeSong);
+      }
+    }
+
+    public static string MetadataEntryPoem
+    {
+      get
+      {
+        return BuildMetadataEntry(BusinessResources.MetadataKeyType, BusinessResources.MetadataValueTypePoem);
+      }
     }
 
     #endregion

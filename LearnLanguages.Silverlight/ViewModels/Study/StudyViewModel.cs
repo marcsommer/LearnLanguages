@@ -23,11 +23,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       Services.EventAggregator.Subscribe(this);
     }
 
-    private void HandleStudyCompleted(object sender, System.EventArgs e)
-    {
-      Navigation.Publish.NavigationRequest<StudyCompletedViewModel>(AppResources.BaseAddress);
-    }
-
     //private AskDoYouKnowThisViewModel _AskViewModel;
     //public AskDoYouKnowThisViewModel AskViewModel
     //{
@@ -50,25 +45,12 @@ namespace LearnLanguages.Silverlight.ViewModels
       {
         if (value != _StudyPartner)
         {
-          UnhookFrom(_StudyPartner);
           _StudyPartner = value;
-          HookInto(_StudyPartner);
           NotifyOfPropertyChange(() => StudyPartner);
         }
       }
     }
-
-    private void HookInto(IStudyPartner studyPartner)
-    {
-      studyPartner.StudyCompleted += HandleStudyCompleted;
-    }
-
-    private void UnhookFrom(IStudyPartner studyPartner)
-    {
-      if (studyPartner != null)
-        studyPartner.StudyCompleted -= HandleStudyCompleted;
-    }
-
+    
     public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
     {
       //WE ARE LISTENING FOR A MESSAGE THAT SAYS WE WERE SUCCESSFULLY NAVIGATED TO (SHELLVIEW.MAIN == STUDYVIEWMODEL)
@@ -82,7 +64,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       Services.EventAggregator.Unsubscribe(this);
 
       //START STUDYING
-      StudyPartner.Study(Services.EventAggregator);
+      //StudyPartner.Study(Services.EventAggregator);
     }
   }
 }

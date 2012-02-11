@@ -254,6 +254,13 @@ namespace LearnLanguages.Silverlight.ViewModels
                       Model.Title = ViewViewModelResources.AutoTitlePrefix + Model.Lines.GetLine(0).Phrase.Text;
                     #endregion
 
+                    #region ADD METADATA TYPEISSONG
+
+                    Model.AddMetadata(BusinessResources.MetadataKeyType, 
+                                      BusinessResources.MetadataValueTypeSong);
+
+                    #endregion
+
                     #region SAVE THE ACTUAL SONG MODEL
 
                     //NOW WE CAN USE THE BASE SAVE

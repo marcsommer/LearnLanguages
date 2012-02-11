@@ -49,7 +49,7 @@ namespace LearnLanguages.History
 
     private object _PublishLock = new object();
 
-    public void PublishEvent(Common.Interfaces.IHistoryEvent historyEvent)
+    public void HistoryEvent(Common.Interfaces.IHistoryEvent historyEvent)
     {
       lock (_PublishLock)
       {

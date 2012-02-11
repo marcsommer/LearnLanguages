@@ -145,5 +145,17 @@ namespace LearnLanguages.DataAccess
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
         throw new Exceptions.UserNotAuthenticatedException();
     }
+
+    public Result<bool> StudyDataExistsForCurrentUser()
+    {
+      //todo: left off here 2/10/2012
+      //need to make these and their Impl() counterparts in Mock provider.  then run program again.
+      throw new NotImplementedException();
+    }
+
+    public Result<StudyDataDto> FetchForCurrentUser()
+    {
+      throw new NotImplementedException();
+    }
   }
 }

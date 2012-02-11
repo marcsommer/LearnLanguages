@@ -55,38 +55,38 @@ namespace LearnLanguages.Business
     #region Data Portal methods (including child)
 
 #if !SILVERLIGHT
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public void DataPortal_Fetch(ICollection<Guid> StudyDataIds)
-    {
-      using (var dalManager = DalFactory.GetDalManager())
-      {
-        var StudyDataDal = dalManager.GetProvider<IStudyDataDal>();
+    //[EditorBrowsable(EditorBrowsableState.Never)]
+    //public void DataPortal_Fetch(ICollection<Guid> StudyDataIds)
+    //{
+    //  using (var dalManager = DalFactory.GetDalManager())
+    //  {
+    //    var StudyDataDal = dalManager.GetProvider<IStudyDataDal>();
 
-        Result<ICollection<StudyDataDto>> result = StudyDataDal.Fetch(StudyDataIds);
-        if (!result.IsSuccess || result.IsError)
-        {
-          if (result.Info != null)
-          {
-            var ex = result.GetExceptionFromInfo();
-            if (ex != null)
-              throw new FetchFailedException(ex.Message);
-            else
-              throw new FetchFailedException();
-          }
-          else
-            throw new FetchFailedException();
-        }
+    //    Result<ICollection<StudyDataDto>> result = StudyDataDal.Fetch(StudyDataIds);
+    //    if (!result.IsSuccess || result.IsError)
+    //    {
+    //      if (result.Info != null)
+    //      {
+    //        var ex = result.GetExceptionFromInfo();
+    //        if (ex != null)
+    //          throw new FetchFailedException(ex.Message);
+    //        else
+    //          throw new FetchFailedException();
+    //      }
+    //      else
+    //        throw new FetchFailedException();
+    //    }
 
-        //RESULT WAS SUCCESSFUL
-        var fetchedStudyDataDtos = result.Obj;
-        foreach (var StudyDataDto in fetchedStudyDataDtos)
-        {
-          //var StudyDataEdit = DataPortal.CreateChild<StudyDataEdit>(StudyDataDto);
-          var StudyDataEdit = DataPortal.FetchChild<StudyDataEdit>(StudyDataDto);
-          this.Add(StudyDataEdit);
-        }
-      }
-    }
+    //    //RESULT WAS SUCCESSFUL
+    //    var fetchedStudyDataDtos = result.Obj;
+    //    foreach (var StudyDataDto in fetchedStudyDataDtos)
+    //    {
+    //      //var StudyDataEdit = DataPortal.CreateChild<StudyDataEdit>(StudyDataDto);
+    //      var StudyDataEdit = DataPortal.FetchChild<StudyDataEdit>(StudyDataDto);
+    //      this.Add(StudyDataEdit);
+    //    }
+    //  }
+    //}
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void DataPortal_Fetch()

@@ -2,6 +2,6 @@
 {
   public interface IHistoryPublisher
   {
-    void PublishEvent(IHistoryEvent historyEvent);
+    void HistoryEvent(IHistoryEvent historyEvent);
   }
 }

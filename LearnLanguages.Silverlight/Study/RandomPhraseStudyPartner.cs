@@ -5,6 +5,8 @@ using Caliburn.Micro;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
 using LearnLanguages.Silverlight.Interfaces;
+using LearnLanguages.Common.Delegates;
+using LearnLanguages.Common.Args;
 
 namespace LearnLanguages.Silverlight
 {
@@ -251,9 +253,11 @@ namespace LearnLanguages.Silverlight
       return answer;
     }
 
-    protected override void AskUserExtraDataImpl(object criteria, Delegates.StudyDataCallback callback)
+    protected override void AskUserExtraDataImpl(object criteria, AsyncCallback<StudyDataEdit> callback)
     {
-      callback(this, new Args.StudyDataArgs());
+      //we don't do anything with asking user for extra data, 
+      //so this is just populated with an empty result args.
+      callback(this, new ResultArgs<StudyDataEdit>());
     }
 
     public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
