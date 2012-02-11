@@ -10,6 +10,7 @@ using LearnLanguages.DataAccess;
 using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
 using System.Windows;
+using System.ComponentModel;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -65,11 +66,12 @@ namespace LearnLanguages.Silverlight.ViewModels
               throw r2.Error;
 
             StudyData = r2.Object;
-            SelectASong();
+
+            StartPopulateAllSongs();
           });
         else
         {
-          SelectASong();
+          StartPopulateAllSongs();
         }
       });
     }
@@ -81,7 +83,6 @@ namespace LearnLanguages.Silverlight.ViewModels
     #endregion
 
     #region Properties
-
     private IStudyPartner _StudyPartner;
     [Import]
     public IStudyPartner StudyPartner
@@ -111,35 +112,78 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private List<MultiLineTextEdit> _AllSongsCache;
-    public List<MultiLineTextEdit> AllSongsCache
+    private MultiLineTextList _ModelList;
+    public MultiLineTextList ModelList
     {
-      get { return _AllSongsCache; }
+      get { return _ModelList; }
       set
       {
-        if (value != _AllSongsCache)
+        if (value != _ModelList)
         {
-          _AllSongsCache = value;
-          NotifyOfPropertyChange(() => AllSongsCache);
+          _ModelList = value;
+          NotifyOfPropertyChange(() => ModelList);
         }
       }
     }
 
-    private string _FilterText;
-    public string FilterText
+    private List<MultiLineTextEdit> _SortedModelListCache;
+    public List<MultiLineTextEdit> SortedModelListCache
     {
-      get { return _FilterText; }
+      get { return _SortedModelListCache; }
       set
       {
-        if (value != _FilterText)
+        if (value != _SortedModelListCache)
         {
-          _FilterText = value;
-          NotifyOfPropertyChange(() => FilterText);
-          PopulateItems();
+          _SortedModelListCache = value;
+          NotifyOfPropertyChange(() => SortedModelListCache);
         }
       }
     }
     
+    private string _InstructionsSelectSong = ViewViewModelResources.InstructionsStudyASongSelectSong;
+    public string InstructionsSelectSong
+    {
+      get { return _InstructionsSelectSong; }
+      set
+      {
+        if (value != _InstructionsSelectSong)
+        {
+          _InstructionsSelectSong = value;
+          NotifyOfPropertyChange(() => InstructionsSelectSong);
+        }
+      }
+    }
+
+    private string _LabelTextStudyASongGoButton;
+    public string LabelTextStudyASongGoButton
+    {
+      get { return _LabelTextStudyASongGoButton; }
+      set
+      {
+        if (value != _LabelTextStudyASongGoButton)
+        {
+          _LabelTextStudyASongGoButton = value;
+          NotifyOfPropertyChange(() => LabelTextStudyASongGoButton);
+        }
+      }
+    }
+
+    #region Flags
+
+    private bool _GoInProgress;
+    public bool GoInProgress
+    {
+      get { return _GoInProgress; }
+      set
+      {
+        if (value != _GoInProgress)
+        {
+          _GoInProgress = value;
+          NotifyOfPropertyChange(() => GoInProgress);
+        }
+      }
+    }
+
     private bool _CheckAllToggleIsChecked;
     public bool CheckAllToggleIsChecked
     {
@@ -155,6 +199,135 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    private bool _AbortIsFlagged;
+    public bool AbortIsFlagged
+    {
+      get { return _AbortIsFlagged; }
+      set
+      {
+        if (value != _AbortIsFlagged)
+        {
+          _AbortIsFlagged = value;
+          NotifyOfPropertyChange(() => AbortIsFlagged);
+          NotifyOfPropertyChange(() => CanStopPopulating);
+        }
+      }
+    }
+
+    private bool _IsPopulating;
+    public bool IsPopulating
+    {
+      get { return _IsPopulating; }
+      set
+      {
+        if (value != _IsPopulating)
+        {
+          _IsPopulating = value;
+          NotifyOfPropertyChange(() => IsPopulating);
+          NotifyOfPropertyChange(() => CanStopPopulating);
+          NotifyOfPropertyChange(() => CanApplyFilter);
+          if (_IsPopulating)
+            ProgressVisibility = Visibility.Visible;
+          else
+            ProgressVisibility = Visibility.Collapsed;
+        }
+      }
+    }
+
+    #endregion
+
+    #region Progress
+
+    private Visibility _ProgressVisibility;
+    public Visibility ProgressVisibility
+    {
+      get { return _ProgressVisibility; }
+      set
+      {
+        if (value != _ProgressVisibility)
+        {
+          _ProgressVisibility = value;
+          NotifyOfPropertyChange(() => ProgressVisibility);
+        }
+      }
+    }
+
+    private double _ProgressValue;
+    public double ProgressValue
+    {
+      get { return _ProgressValue; }
+      set
+      {
+        //if (value != _ProgressValue)
+        //{
+        _ProgressValue = value;
+        NotifyOfPropertyChange(() => ProgressValue);
+        //}
+      }
+    }
+
+    private double _ProgressMaximum;
+    public double ProgressMaximum
+    {
+      get { return _ProgressMaximum; }
+      set
+      {
+        //if (value != _ProgressMaximum)
+        //{
+        _ProgressMaximum = value;
+        NotifyOfPropertyChange(() => ProgressMaximum);
+        //}
+      }
+    }
+
+    #endregion
+
+    #region Filter
+    private string _FilterLabel = ViewViewModelResources.LabelTextFilter;
+    public string FilterLabel
+    {
+      get { return _FilterLabel; }
+      set
+      {
+        if (value != _FilterLabel)
+        {
+          _FilterLabel = value;
+          NotifyOfPropertyChange(() => FilterLabel);
+        }
+      }
+    }
+
+    private string _FilterText = "";
+    public string FilterText
+    {
+      get { return _FilterText; }
+      set
+      {
+        if (value != _FilterText)
+        {
+          _FilterText = value;
+          //PopulateViewModels(ModelList);
+          NotifyOfPropertyChange(() => FilterText);
+        }
+      }
+    }
+
+    private string _LabelTextApplyFilterButton = ViewViewModelResources.LabelTextApplyFilterButton;
+    public string LabelTextApplyFilterButton
+    {
+      get { return _LabelTextApplyFilterButton; }
+      set
+      {
+        if (value != _LabelTextApplyFilterButton)
+        {
+          _LabelTextApplyFilterButton = value;
+          NotifyOfPropertyChange(() => LabelTextApplyFilterButton);
+        }
+      }
+    }
+    #endregion
+
+    #region Base
     public bool ShowGridLines
     {
       get { return bool.Parse(AppResources.ShowGridLines); }
@@ -173,15 +346,15 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
-
+    #endregion
     #endregion
 
     #region Methods
 
     /// <summary>
-    /// Gets all songs in DB for this user, populates Items with viewmodels for each song.
+    /// Gets all songs in DB for this user, and calls PopulateItems.
     /// </summary>
-    private void SelectASong()
+    private void StartPopulateAllSongs()
     {
       MultiLineTextList.GetAll((s, r) =>
       {
@@ -240,6 +413,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         #endregion
 
         var allMultiLineTexts = r.Object;
+        ModelList = r.Object;
 
         var songs = (from multiLineText in allMultiLineTexts
                      where multiLineText.AdditionalMetadata.Contains(MultiLineTextEdit.MetadataEntrySong)
@@ -251,7 +425,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         //STRUCTURE WHICH MEANS THAT YOU CAN'T ADD SONGS WITHOUT RECREATING THIS ENTIRE VIEWMODEL.
         //THIS CACHE WILL BE USED FOR FILTERING.
 
-        AllSongsCache = songs;
+        SortedModelListCache = songs;
 
         PopulateItems();
       });
@@ -259,8 +433,17 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void PopulateItems()
     {
-      Items.Clear();
-      #region Sort MLT by Title Comparison (Comparison<MultiLineTextEdit> comparison = (a, b) =>)
+      if (IsPopulating && AbortIsFlagged)
+        return;
+
+      BackgroundWorker worker = new BackgroundWorker();
+      worker.DoWork += ((s, r) =>
+      {
+        //IsBusy = true;
+        IsPopulating = true;
+
+        Items.Clear();
+        #region Sort MLT by Title Comparison (Comparison<MultiLineTextEdit> comparison = (a, b) =>)
 
         Comparison<MultiLineTextEdit> comparison = (a, b) =>
         {
@@ -311,21 +494,45 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         #endregion
 
-      List<MultiLineTextEdit> filteredSongs = FilterSongs(AllSongsCache);
-      filteredSongs.Sort(comparison);
+        List<MultiLineTextEdit> filteredSongs = FilterSongs(SortedModelListCache);
+        filteredSongs.Sort(comparison);
 
-      for (int i = 0; i < filteredSongs.Count; i++)
-      {
-        //CREATE THE VIEWMODEL
-        var songItemViewModel = Services.Container.GetExportedValue<StudyASongItemViewModel>();
+        int counter = 0;
+        int iterationsBetweenComeUpForAir = 20;
+        int totalCount = filteredSongs.Count();
+        ProgressMaximum = totalCount;
 
-        //ASSIGN THE VIEWMODEL'S MODEL AS THE SONG
-        var song = AllSongsCache[i];
-        songItemViewModel.Model = song;
+        for (int i = 0; i < filteredSongs.Count; i++)
+        {
+          //CREATE THE VIEWMODEL
+          var songItemViewModel = Services.Container.GetExportedValue<StudyASongItemViewModel>();
 
-        //INSERT THE VIEWMODEL IN THE PROPER ORDER INTO OUR ITEMS COLLECTION
-        Items.Insert(i, songItemViewModel);
-      }
+          //ASSIGN THE VIEWMODEL'S MODEL AS THE SONG
+          var song = SortedModelListCache[i];
+          songItemViewModel.Model = song;
+
+          //INSERT THE VIEWMODEL IN THE PROPER ORDER INTO OUR ITEMS COLLECTION
+          Items.Insert(i, songItemViewModel);
+
+          //UPDATE/DO COME UP FOR AIR
+          counter++;
+          ProgressValue = counter;
+          if (counter % iterationsBetweenComeUpForAir == 0)
+          {
+            if (AbortIsFlagged)
+            {
+              AbortIsFlagged = false;
+              ProgressValue = 0;
+              break;
+            }
+          }
+        }
+
+        IsPopulating = false;
+      });
+
+      worker.RunWorkerAsync();
+
     }
 
     /// <summary>
@@ -398,6 +605,74 @@ namespace LearnLanguages.Silverlight.ViewModels
     public void OnImportsSatisfied()
     {
       //
+    }
+
+    #endregion
+
+    #region Commands
+
+    public bool CanGo
+    {
+      get
+      {
+        if (Items == null || Items.Count == 0)
+          return false;
+
+        bool anItemIsChecked = (from viewModel in Items
+                                where viewModel.IsChecked
+                                select viewModel).Count() > 0;
+
+        //WE CAN GO IF AN ITEM IS CHECKED AND WE ARE NOT ALREADY GOING
+        return anItemIsChecked &&
+               !GoInProgress;
+      }
+    }
+    public void Go()
+    {
+      var ids = new List<Guid>();
+      foreach (var songViewModel in Items)
+      {
+        ids.Add(songViewModel.Model.Id);
+      }
+
+      MultiLineTextList.NewMultiLineTextList(ids, (s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          var songs = r.Object;
+
+          StudyPartner.StudyMultiLineTexts(songs, Services.EventAggregator);
+        });
+    }
+
+    public bool CanStopPopulating
+    {
+      get
+      {
+        //if abort is already flagged, then we're already trying to stop populating.
+        return (IsPopulating && !AbortIsFlagged);
+      }
+    }
+    public void StopPopulating()
+    {
+      AbortIsFlagged = true;
+    }
+
+    public bool CanApplyFilter
+    {
+      get
+      {
+        return (!IsPopulating &&
+                !AbortIsFlagged &&
+                 SortedModelListCache != null &&
+                 SortedModelListCache.Count > 0);
+      }
+    }
+    public void ApplyFilter()
+    {
+      PopulateItems();
+      //PopulateItems(AllSongsCache);
     }
 
     #endregion

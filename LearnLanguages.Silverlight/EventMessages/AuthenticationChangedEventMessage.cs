@@ -15,5 +15,10 @@
       bool isInRole = Csla.ApplicationContext.User.IsInRole(role);
       return isInRole;
     }
+
+    public static void Publish()
+    {
+      Services.EventAggregator.Publish(new AuthenticationChangedEventMessage());
+    }
   }
 }

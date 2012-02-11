@@ -10,44 +10,74 @@
     <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="30" />
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*" />
+        <RowDefinition Height="55" />
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"/>
+        <!--<ColumnDefinition Width="Auto"/>-->
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
       <!--SELECT SONG(S) INSTRUCTIONS-->
-      <TextBlock Grid.Row="0" Grid.Column="0" 
-                 Grid.ColumnSpan="2"
-                 Text="{Binding Path=InstructionsSelectSong}" 
-                 Visibility="{Binding Path=InstructionsVisibility}"/>
+      <Border Grid.Row="0"
+              Style="{StaticResource InstructionsSection}" 
+              Visibility="{Binding Path=InstructionsVisibility}" >
+        <TextBlock Text="{Binding Path=InstructionsSelectSong}" />
+      </Border>
       
-      <!--CHECKALL TOGGLE CHECKBOX-->
-      <CheckBox Grid.Row="1" Grid.Column="0"
-                IsChecked="{Binding Path=CheckAllToggleIsChecked, Mode=TwoWay}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
-      
-      <!--Filter-->
-      <Border Grid.Row="1" Grid.Column="1"
+      <!--CHECKALL TOGGLE | FILTER | PROGRESS-->
+      <Border Grid.Row="1" 
               Style="{StaticResource ViewSection}" 
               HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-          <TextBlock Text="{Binding Path=FilterLabel}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-          <TextBox x:Name="FilterText" MinWidth="100" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+        
+        <StackPanel Orientation="Horizontal" >
+          
+          <!--CHECKALL TOGGLE CHECKBOX-->
+          <CheckBox IsChecked="{Binding Path=CheckAllToggleIsChecked, Mode=TwoWay}"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+      
+          <!--Filter-->
+          <TextBlock Text="{Binding Path=FilterLabel}" VerticalAlignment="Center"/>
+          <TextBox x:Name="FilterText" MinWidth="100"/>
 
+          <Button x:Name="ApplyFilter" Content="{Binding Path=LabelTextApplyFilterButton}" Margin="3,1,0,1"/>
+          <StackPanel Orientation="Horizontal" Visibility="{Binding Path=ProgressVisibility}">
+            <Button x:Name="StopPopulating" Content="Stop Loading" Margin="3,1,0,1"  />
+            <ProgressBar x:Name="ProgressValue"
+                           Width="100"
+                           Minimum="0" 
+                           Maximum="{Binding Path=ProgressMaximum}"
+                           />
+          </StackPanel>
         </StackPanel>
       </Border>
 
+      <!--ITEMS-->
+      <Border Grid.Row="2"
+              Style="{StaticResource ViewSection}" 
+              HorizontalAlignment="Stretch">
 
-      <ListBox Grid.Row="2" Grid.Column="0"
-               Grid.ColumnSpan="2"
-               x:Name="Items" 
-               ItemContainerStyle="{StaticResource ListBoxItemStyle}"
-               HorizontalContentAlignment="Stretch" />
+        <ListBox x:Name="Items" 
+                 ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                 HorizontalContentAlignment="Stretch" />
 
+      </Border>
+      
+      <!--BUTTONS-->
+      <Border Grid.Row="3"
+              Style="{StaticResource ViewSection}" >
+        <Button x:Name="Go"
+                Style="{StaticResource AwesomeButton}" 
+                Height="50"
+                Width="60"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Content="{Binding Path=LabelTextStudyASongGoButton}"/>
+      </Border>
+      
     </Grid>
   </Border>
 </UserControl>

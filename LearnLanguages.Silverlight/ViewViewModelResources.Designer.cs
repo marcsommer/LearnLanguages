@@ -61,7 +61,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1st Line: .
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string AutoTitlePrefix {
             get {
@@ -79,7 +79,16 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InstructionsAddSongEnterSongAdditionalMetadata.
+        ///   Looks up a localized string similar to Adding a song is extremely easy.  Just select the language the song is in, optionally put in the song title and additional info, and then enter the entire lyrics of the song.  Once you are done, click &quot;Save&quot;.  (Hint: You can also hold the mouse over any control for a tooltip on that control.).
+        /// </summary>
+        public static string InstructionsAddSong {
+            get {
+                return ResourceManager.GetString("InstructionsAddSong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Optional) Add additional info about the song here.  This is still under construction though!!.
         /// </summary>
         public static string InstructionsAddSongEnterSongAdditionalMetadata {
             get {
@@ -88,7 +97,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don&apos;t know these, it&apos;s okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them..
+        ///   Looks up a localized string similar to Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don&apos;t know these, it&apos;s okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them..
         /// </summary>
         public static string InstructionsAddSongEnterSongText {
             get {
@@ -97,7 +106,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InstructionsAddSongEnterSongTitle.
+        ///   Looks up a localized string similar to (Optional) Enter the song&apos;s title here.  If you do not provide one, then the first line will act as the song&apos;s title..
         /// </summary>
         public static string InstructionsAddSongEnterSongTitle {
             get {
@@ -106,7 +115,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step 1: Select the language of the song.  If it is not in the list, click &quot;Add Language&quot; first, then select the newly added language..
+        ///   Looks up a localized string similar to Select the language of the song.  If it is not in the list, click &quot;Add Language&quot; first, then select the newly added language..
         /// </summary>
         public static string InstructionsAddSongSelectLanguage {
             get {
@@ -124,7 +133,9 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step 2: Enter as much text as you want to learn, like an original poem, song lyrics, story, vocabulary list, etc.  We will divide this into smaller phrases and words as we go..
+        ///   Looks up a localized string similar to Enter as much text as you want to learn.  We will divide this into smaller phrases and words as we go.
+        ///
+        ///(If you want to add a song, however, &quot;Add Song&quot; is recommended for learning line order.).
         /// </summary>
         public static string InstructionsEnterPhrase {
             get {
@@ -133,7 +144,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step 1: Select Language.
+        ///   Looks up a localized string similar to Select Language.
         /// </summary>
         public static string InstructionsSelectLanguage {
             get {
@@ -147,6 +158,15 @@ namespace LearnLanguages.Silverlight {
         public static string InstructionsSelectNativeLanguageSelectLanguage {
             get {
                 return ResourceManager.GetString("InstructionsSelectNativeLanguageSelectLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the song(s) that you want to study...Once selected, press Go!.
+        /// </summary>
+        public static string InstructionsStudyASongSelectSong {
+            get {
+                return ResourceManager.GetString("InstructionsStudyASongSelectSong", resourceCulture);
             }
         }
         

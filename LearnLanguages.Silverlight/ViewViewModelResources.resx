@@ -118,34 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AutoTitlePrefix" xml:space="preserve">
-    <value>1st Line: </value>
+    <value />
   </data>
   <data name="DefaultPercentKnown" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="InstructionsAddSong" xml:space="preserve">
+    <value>Adding a song is extremely easy.  Just select the language the song is in, optionally put in the song title and additional info, and then enter the entire lyrics of the song.  Once you are done, click "Save".  (Hint: You can also hold the mouse over any control for a tooltip on that control.)</value>
+  </data>
   <data name="InstructionsAddSongEnterSongAdditionalMetadata" xml:space="preserve">
-    <value>InstructionsAddSongEnterSongAdditionalMetadata</value>
+    <value>(Optional) Add additional info about the song here.  This is still under construction though!!</value>
   </data>
   <data name="InstructionsAddSongEnterSongText" xml:space="preserve">
-    <value>Step 2: Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don't know these, it's okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them.</value>
+    <value>Enter the entire lyrics to the song, starting with the name of the song and artist on the first two lines.  If you don't know these, it's okay - no big.  Be sure to enter the lyrics line by line as you would want to learn them.</value>
   </data>
   <data name="InstructionsAddSongEnterSongTitle" xml:space="preserve">
-    <value>InstructionsAddSongEnterSongTitle</value>
+    <value>(Optional) Enter the song's title here.  If you do not provide one, then the first line will act as the song's title.</value>
   </data>
   <data name="InstructionsAddSongSelectLanguage" xml:space="preserve">
-    <value>Step 1: Select the language of the song.  If it is not in the list, click "Add Language" first, then select the newly added language.</value>
+    <value>Select the language of the song.  If it is not in the list, click "Add Language" first, then select the newly added language.</value>
   </data>
   <data name="InstructionsAskHowMuchDoYouKnowResponse" xml:space="preserve">
     <value>Select how much of this phrase do you know in the targeted language.  If you know it completely, select 100%.  If you don't know it at all, select 0%.  If you know somewhere in between, estimate to the best of your ability how much of the translation  you know in the targeted language.</value>
   </data>
   <data name="InstructionsEnterPhrase" xml:space="preserve">
-    <value>Step 2: Enter as much text as you want to learn, like an original poem, song lyrics, story, vocabulary list, etc.  We will divide this into smaller phrases and words as we go.</value>
+    <value>Enter as much text as you want to learn.  We will divide this into smaller phrases and words as we go.
+
+(If you want to add a song, however, "Add Song" is recommended for learning line order.)</value>
   </data>
   <data name="InstructionsSelectLanguage" xml:space="preserve">
-    <value>Step 1: Select Language</value>
+    <value>Select Language</value>
   </data>
   <data name="InstructionsSelectNativeLanguageSelectLanguage" xml:space="preserve">
     <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
+  </data>
+  <data name="InstructionsStudyASongSelectSong" xml:space="preserve">
+    <value>Select the song(s) that you want to study...Once selected, press Go!</value>
   </data>
   <data name="LabelAcceptPercentKnown" xml:space="preserve">
     <value>OK</value>

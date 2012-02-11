@@ -8,13 +8,24 @@
   <Application.Resources>
     <local:MefBootstrapper x:Key="bootstrapper" />
 
-    <Style x:Key="DebugBorder" TargetType="Border">
-      <Setter Property="BorderBrush" Value="Purple" />
+    <!--LARGE VIEW SECTION BORDER-->
+    <Style x:Key="LargeViewSection" TargetType="Border">
+      <Setter Property="BorderBrush" Value="DarkBlue" />
       <Setter Property="BorderThickness" Value="2" />
       <Setter Property="Margin" Value="2" />
       <Setter Property="Padding" Value="2" />
     </Style>
 
+
+    <!--DEBUG BORDER-->
+    <Style x:Key="DebugBorder" TargetType="Border">
+      <Setter Property="BorderBrush" Value="Purple" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Margin" Value="2" />
+      <Setter Property="Padding" Value="2" />
+    </Style>
+
+    <!--NAVIGATION BUTTON BORDER-->
     <Style x:Key="NavButtonBorder" TargetType="Border">
       <Setter Property="BorderBrush" Value="Green" />
       <Setter Property="BorderThickness" Value="1" />
@@ -22,15 +33,17 @@
       <Setter Property="Padding" Value="1" />
     </Style>
 
+    <!--NAVIGATION SET BORDER-->
     <Style x:Key="NavigationSetBorder" TargetType="Border">
-      <Setter Property="BorderBrush" Value="Purple" />
-      <Setter Property="BorderThickness" Value="2" />
+      <Setter Property="BorderBrush" Value="Silver" />
+      <Setter Property="BorderThickness" Value="1" />
       <Setter Property="Margin" Value="1" />
       <Setter Property="Padding" Value="1" />
       <Setter Property="HorizontalAlignment" Value="Stretch" />
       <Setter Property="VerticalAlignment" Value="Stretch" />
     </Style>
 
+    <!--VIEW SECTION BORDER-->
     <Style x:Key="ViewSection" TargetType="Border">
       <Setter Property="BorderBrush" Value="Blue" />
       <Setter Property="BorderThickness" Value="1" />
@@ -38,6 +51,7 @@
       <Setter Property="Padding" Value="1" />
     </Style>
 
+    <!--SUB VIEW SECTION BORDER-->
     <Style x:Key="SubViewSection" TargetType="Border">
       <Setter Property="BorderBrush" Value="LightBlue" />
       <Setter Property="BorderThickness" Value="1" />
@@ -45,6 +59,15 @@
       <Setter Property="Padding" Value="1" />
     </Style>
 
+    <!--INSTRUCTIONS SECTION BORDER-->
+    <Style x:Key="InstructionsSection" TargetType="Border">
+      <Setter Property="BorderBrush" Value="Orange" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Margin" Value="1" />
+      <Setter Property="Padding" Value="1" />
+    </Style>
+
+    <!--LISTBOX ITEM BORDER-->
     <Style x:Key="ListBoxItemBorder" TargetType="Border">
       <Setter Property="BorderBrush" Value="Orange" />
       <Setter Property="BorderThickness" Value="1" />
@@ -79,18 +102,8 @@
         </Setter.Value>
       </Setter>
     </Style>
-    
-    <Style TargetType="ComboBoxItem">
-      <Setter Property="Background">
-        <Setter.Value>
-          <RadialGradientBrush GradientOrigin="0.05,.31">
-            <GradientStop Offset="0.1" Color="White" />
-            <GradientStop Offset="1.5" Color="White" />
-          </RadialGradientBrush>
-        </Setter.Value>
-      </Setter>
-    </Style>
 
+    <!--DEFAULT COMBOBOX-->
     <Style TargetType="ComboBox">
       <Setter Property="Background">
         <Setter.Value>
@@ -102,6 +115,17 @@
       </Setter>
     </Style>
 
+    <!--DEFAULT COMBOBOX ITEM-->
+    <Style TargetType="ComboBoxItem">
+      <Setter Property="Background">
+        <Setter.Value>
+          <RadialGradientBrush GradientOrigin="0.05,.31">
+            <GradientStop Offset="0.1" Color="White" />
+            <GradientStop Offset="1.5" Color="White" />
+          </RadialGradientBrush>
+        </Setter.Value>
+      </Setter>
+    </Style>
 
     <Style x:Key="CoolButton" TargetType="Button">
       <Setter Property="Template">
@@ -172,6 +196,51 @@
       </Setter>
     </Style>
 
+    <!--AWESOME BUTTON..USING IN STUDY A SONG: GO BUTTON-->
+    <Style x:Key="AwesomeButton" TargetType="Button">
+      <Setter Property="Margin" Value="1" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <!--<Setter Property="Background">
+        <Setter.Value>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="Azure" Offset="0.2" />
+            <GradientStop Color="Orange" Offset="0.85" />
+            <GradientStop Color="Red" Offset="1.0" />
+          </LinearGradientBrush>
+        </Setter.Value>
+      </Setter>-->
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border>
+              <Grid>
+
+                <Ellipse Width="{TemplateBinding Width}" 
+                       Height="{TemplateBinding Height}" 
+                       StrokeThickness="5">
+
+                  <Ellipse.Fill>
+                    <RadialGradientBrush GradientOrigin="0.05,.31">
+                      <GradientStop Offset="0.1" Color="Green" />
+                      <GradientStop Offset="1.5" Color="DarkGreen" />
+                      <GradientStop Offset="1.1" Color="ForestGreen" />
+                    </RadialGradientBrush>
+                  </Ellipse.Fill>
+
+                </Ellipse>
+
+                <TextBlock Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+              </Grid>
+            </Border>
+
+          </ControlTemplate>
+
+        </Setter.Value>
+      </Setter>
+    </Style>
+    
     <Style x:Key="NavigationSetTitle" TargetType="Button">
       <Setter Property="Template">
         <Setter.Value>
@@ -210,10 +279,31 @@
         </Setter.Value>
       </Setter>
     </Style>
-
-
+    
     <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
       <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    </Style>
+
+    <!--DEFAULT TOOLTIP-->
+    <Style TargetType="ToolTip">
+      <Setter Property="ContentTemplate">
+        <Setter.Value>
+          <DataTemplate>
+            <TextBlock TextWrapping="Wrap" MaxWidth="450" Text="{Binding}" />
+          </DataTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    
+    <!--INSTRUCTIONS TEXTBLOCK STYLE-->
+    <Style x:Key="InstructionsText" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="Arial" />
+      <Setter Property="FontSize" Value="10" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="FontStyle" Value="Italic" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="ToolTipService.ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Text}" />
+      
     </Style>
   </Application.Resources>
 </Application>

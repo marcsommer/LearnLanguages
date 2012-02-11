@@ -6,8 +6,9 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
 
-  <Border Style="{StaticResource NavButtonBorder}" >
-    <Button x:Name="Navigate" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Style="{StaticResource CoolButton}"/>
+  <Border Style="{StaticResource NavigationSetBorder}">
+    <Border Style="{StaticResource NavButtonBorder}" >
+      <Button x:Name="Navigate" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Style="{StaticResource CoolButton}"/>
+    </Border>
   </Border>
-
 </UserControl>

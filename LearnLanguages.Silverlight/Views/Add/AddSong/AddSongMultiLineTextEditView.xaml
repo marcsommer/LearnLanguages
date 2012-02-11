@@ -23,13 +23,14 @@
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
       
+      <!--VIEW INSTRUCTIONS-->
+      <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+              Style="{StaticResource InstructionsSection}">
+        <TextBlock Text="{Binding Path=Instructions}" 
+                   Style="{StaticResource InstructionsText}" />
+      </Border>
+      
       <!--SONG LANGUAGE-->
-      <!--INSTRUCTIONS-->
-      <TextBlock Grid.Row="0"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="2"
-                 x:Name="InstructionsSelectLanguage" 
-                 Visibility="{Binding Path=InstructionsVisibility}"/>
       <!--LABEL-->
       <TextBlock Grid.Row="1" 
                  Grid.Column="0"
@@ -42,7 +43,8 @@
                       Margin="0,1,0,1" 
                       MinWidth="50"
                       TabIndex="0"
-                      HorizontalContentAlignment="Stretch"/>
+                      HorizontalContentAlignment="Stretch"
+                      ToolTipService.ToolTip="{Binding Path=InstructionsSelectLanguage}"/>
       
       <!--SONG TITLE-->
       <!--INSTRUCTIONS-->
@@ -54,20 +56,15 @@
       <!--LABEL-->
       <TextBlock Grid.Row="3"
                  Grid.Column="0"
-                 Text="{Binding Path=InstructionsEnterSongTitle}" />
+                 Text="{Binding Path=LabelSongTitle}" />
       <!--CONTROL-->
       <TextBox Grid.Row="3"
                Grid.Column="1"
-               x:Name="Model_Title" 
+               x:Name="Model_Title"
+               ToolTipService.ToolTip="{Binding Path=InstructionsEnterSongTitle}"
                TabIndex="1" />
       
       <!--SONG ADDITIONAL METADATA-->
-      <!--INSTRUCTIONS-->
-      <TextBlock Grid.Row="4"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="2"
-                 Text="{Binding Path=InstructionsEnterSongAdditionalMetadata}" 
-                 Visibility="{Binding Path=InstructionsVisibility}"/>
       <!--LABEL-->
       <TextBlock Grid.Row="5"
                  Grid.Column="0"
@@ -76,16 +73,10 @@
       <TextBox Grid.Row="5"
                Grid.Column="1"
                x:Name="Model_AdditionalMetadata"
-               TabIndex="2" />
+               TabIndex="2" 
+               ToolTipService.ToolTip="{Binding Path=InstructionsEnterSongAdditionalMetadata}"/>
 
       <!--SONG TEXT-->
-      <!--INSTRUCTIONS-->
-      <TextBlock Grid.Row="6"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="2"
-                 x:Name="InstructionsEnterSongText" 
-                 Margin="0,20,0,0"
-                 Visibility="{Binding Path=InstructionsVisibility}"/>
       <!--LABEL-->
       <TextBlock Grid.Row="7" 
                  Grid.Column="0" 
@@ -100,6 +91,7 @@
                MinHeight="100"
                VerticalAlignment="Stretch"
                VerticalContentAlignment="Stretch"
+               ToolTipService.ToolTip="{Binding Path=InstructionsEnterSongText}"
                TabIndex="3" TextWrapping="Wrap" AcceptsReturn="True" />
 
       <!--BUTTONS-->
@@ -109,7 +101,7 @@
               Grid.ColumnSpan="2"
               HorizontalAlignment="Center"
               Width="100"
-              Content="Save Phrase"
+              Content="Save Song"
               TabIndex="4"
               />
 

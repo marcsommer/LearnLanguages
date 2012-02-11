@@ -16,6 +16,8 @@ namespace LearnLanguages.Silverlight.ViewModels
   public class ViewPhrasesViewModel : Conductor<ViewPhrasesItemViewModel>.Collection.AllActive, 
                                       IViewModelBase
   {
+    #region Ctors and Init
+
     public ViewPhrasesViewModel()
     {
       _ProgressValue = 1;
@@ -25,181 +27,46 @@ namespace LearnLanguages.Silverlight.ViewModels
       _ProgressVisibility = Visibility.Collapsed;
 
       PhraseList.GetAll((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+      {
+        if (r.Error != null)
+          throw r.Error;
 
-          var allPhrases = r.Object;
-          ModelList = allPhrases;
-          //AllPhrasesCache = allPhrases.ToList();
-          PopulateViewModels(allPhrases);
-          //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
-          //Model.BeginSave((s2, r2) =>
-          //  {
-          //    if (r2.Error != null)
-          //      throw r2.Error;
-          //    Model = (PhraseList)r2.NewObject;
-          //  });
-        });
+        var allPhrases = r.Object;
+        ModelList = allPhrases;
+        //AllPhrasesCache = allPhrases.ToList();
+        PopulateItems(allPhrases);
+        //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
+        //Model.BeginSave((s2, r2) =>
+        //  {
+        //    if (r2.Error != null)
+        //      throw r2.Error;
+        //    Model = (PhraseList)r2.NewObject;
+        //  });
+      });
     }
 
-    private Visibility _ProgressVisibility;
-    public Visibility ProgressVisibility
+    #endregion
+
+    #region Fields
+
+    #endregion
+
+    #region Properties
+
+    private PhraseList _ModelList;
+    public PhraseList ModelList
     {
-      get { return _ProgressVisibility; }
+      get { return _ModelList; }
       set
       {
-        if (value != _ProgressVisibility)
+        if (value != _ModelList)
         {
-          _ProgressVisibility = value;
-          NotifyOfPropertyChange(() => ProgressVisibility);
+          UnhookFrom(_ModelList);
+          _ModelList = value;
+          HookInto(_ModelList);
+          NotifyOfPropertyChange(() => ModelList);
         }
       }
-    }
-
-    private double _ProgressValue;
-    public double ProgressValue
-    {
-      get { return _ProgressValue; }
-      set
-      {
-        //if (value != _ProgressValue)
-        //{
-          _ProgressValue = value;
-          NotifyOfPropertyChange(() => ProgressValue);
-        //}
-      }
-    }
-
-    private double _ProgressMaximum;
-    public double ProgressMaximum
-    {
-      get { return _ProgressMaximum; }
-      set
-      {
-        //if (value != _ProgressMaximum)
-        //{
-          _ProgressMaximum = value;
-          NotifyOfPropertyChange(() => ProgressMaximum);
-        //}
-      }
-    }
-
-    public bool CanStopPopulating
-    {
-      get
-      {
-        //if abort is already flagged, then we're already trying to stop populating.
-        return (IsPopulating && !AbortIsFlagged);
-      }
-    }
-    public void StopPopulating()
-    {
-      AbortIsFlagged = true;
-    }
-
-    private void PopulateViewModels(PhraseList phrases)
-    {
-      if (IsPopulating && AbortIsFlagged)
-        return;
-
-      BackgroundWorker worker = new BackgroundWorker();
-      worker.DoWork += ((s, r) =>
-        {
-          //IsBusy = true;
-          IsPopulating = true;
-
-
-          Items.Clear();
-          var filteredPhrases = FilterPhrases(phrases);
-          
-          #region //Sort (not in use...too slow)
-
-          //#region Sort PhraseEdit by Text Comparison (Comparison<PhraseEdit> comparison = (a, b) =>)
-
-          //Comparison<PhraseEdit> comparison = (a, b) =>
-          //{
-          //  //WE'RE GOING TO TEST CHAR ORDER IN ALPHABET
-          //  string aText = a.Text.ToLower();
-          //  string bText = b.Text.ToLower();
-
-          //  //IF THEY'RE THE SAME TITLES IN LOWER CASE, THEN THEY ARE EQUAL
-          //  if (aText == bText)
-          //    return 0;
-
-          //  //ONLY NEED TO TEST CHARACTERS UP TO LENGTH
-          //  int shorterTitleLength = aText.Length;
-          //  bool aIsShorter = true;
-          //  if (bText.Length < shorterTitleLength)
-          //  {
-          //    shorterTitleLength = bText.Length;
-          //    aIsShorter = false;
-          //  }
-
-          //  int result = 0; //assume a and b are equal (though we know they aren't if we've reached this point)
-
-          //  for (int i = 0; i < shorterTitleLength; i++)
-          //  {
-          //    if (aText[i] < bText[i])
-          //    {
-          //      result = -1;
-          //      break;
-          //    }
-          //    else if (aText[i] > bText[i])
-          //    {
-          //      result = 1;
-          //      break;
-          //    }
-          //  }
-
-          //  //IF THEY ARE STILL EQUAL, THEN THE SHORTER PRECEDES THE LONGER
-          //  if (result == 0)
-          //  {
-          //    if (aIsShorter)
-          //      result = -1;
-          //    else
-          //      result = 1;
-          //  }
-
-          //  return result;
-          //};
-
-          //#endregion
-          //filteredPhrases.Sort(comparison);
-          #endregion
-
-          int counter = 0;
-          int iterationsBetweenComeUpForAir = 20;
-          int totalCount = filteredPhrases.Count();
-          ProgressMaximum = totalCount;
-
-          foreach (var phraseEdit in filteredPhrases)
-          {
-            var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
-            itemViewModel.PropertyChanged += 
-              new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
-            itemViewModel.Model = phraseEdit;
-            Items.Add(itemViewModel);
-            counter++;
-            ProgressValue = counter;
-            if (counter % iterationsBetweenComeUpForAir == 0)
-            {
-              if (AbortIsFlagged)
-              {
-                AbortIsFlagged = false;
-                ProgressValue = 0;
-                break;
-              }
-            }
-          }
-
-          //IsBusy = false;
-          IsPopulating = false;
-          //if (batch.Count > 0)
-            //Items.AddRange(batch);
-        });
-      
-      worker.RunWorkerAsync();
     }
 
     private bool _AbortIsFlagged;
@@ -213,33 +80,6 @@ namespace LearnLanguages.Silverlight.ViewModels
           _AbortIsFlagged = value;
           NotifyOfPropertyChange(() => AbortIsFlagged);
           NotifyOfPropertyChange(() => CanStopPopulating);
-        }
-      }
-    }
-
-    //private List<PhraseEdit> FilterPhrases(PhraseList phrases)
-    private IEnumerable<PhraseEdit> FilterPhrases(PhraseList phrases)
-    {
-      if (string.IsNullOrEmpty(FilterText))
-        return phrases;//.ToList();
-
-      var results = from phrase in phrases
-                    where phrase.Text.Contains(FilterText)
-                    select phrase;
-
-      return results;//.ToList();
-    }
-
-    private bool _IsBusy;
-    public bool IsBusy
-    {
-      get { return _IsBusy; }
-      set
-      {
-        if (value != _IsBusy)
-        {
-          _IsBusy = value;
-          NotifyOfPropertyChange(() => IsBusy);
         }
       }
     }
@@ -264,6 +104,53 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    #region Progress
+
+    private Visibility _ProgressVisibility;
+    public Visibility ProgressVisibility
+    {
+      get { return _ProgressVisibility; }
+      set
+      {
+        if (value != _ProgressVisibility)
+        {
+          _ProgressVisibility = value;
+          NotifyOfPropertyChange(() => ProgressVisibility);
+        }
+      }
+    }
+
+    private double _ProgressValue;
+    public double ProgressValue
+    {
+      get { return _ProgressValue; }
+      set
+      {
+        //if (value != _ProgressValue)
+        //{
+        _ProgressValue = value;
+        NotifyOfPropertyChange(() => ProgressValue);
+        //}
+      }
+    }
+
+    private double _ProgressMaximum;
+    public double ProgressMaximum
+    {
+      get { return _ProgressMaximum; }
+      set
+      {
+        //if (value != _ProgressMaximum)
+        //{
+        _ProgressMaximum = value;
+        NotifyOfPropertyChange(() => ProgressMaximum);
+        //}
+      }
+    }
+
+    #endregion
+
+    #region Filter
     private string _FilterLabel = ViewViewModelResources.LabelTextFilter;
     public string FilterLabel
     {
@@ -306,43 +193,176 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
+    #endregion
 
-    void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    #region Delete
+    private Visibility _InitiateDeleteVisibility;
+    public Visibility InitiateDeleteVisibility
     {
-      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
-    }
-
-    public bool LoadFromUri(Uri uri)
-    {
-      return true;
-    }
-
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(AppResources.ShowGridLines); }
-    }
-
-    public void OnImportsSatisfied()
-    {
-      //LearnLanguages.Navigation.Publish.PartSatisfied("ViewPhrases");
-    }
-
-    private PhraseList _ModelList;
-    public PhraseList ModelList
-    {
-      get { return _ModelList; }
+      get { return _InitiateDeleteVisibility; }
       set
       {
-        if (value != _ModelList)
+        if (value != _InitiateDeleteVisibility)
         {
-          UnhookFrom(_ModelList);
-          _ModelList = value;
-          HookInto(_ModelList);
-          NotifyOfPropertyChange(() => ModelList);
+          _InitiateDeleteVisibility = value;
+          NotifyOfPropertyChange(() => InitiateDeleteVisibility);
         }
       }
     }
 
+    private Visibility _FinalizeDeleteVisibility;
+    public Visibility FinalizeDeleteVisibility
+    {
+      get { return _FinalizeDeleteVisibility; }
+      set
+      {
+        if (value != _FinalizeDeleteVisibility)
+        {
+          _FinalizeDeleteVisibility = value;
+          NotifyOfPropertyChange(() => FinalizeDeleteVisibility);
+        }
+      }
+    }
+    #endregion
+
+    private Visibility _ViewModelVisibility;
+    public Visibility ViewModelVisibility
+    {
+      get { return _ViewModelVisibility; }
+      set
+      {
+        if (value != _ViewModelVisibility)
+        {
+          _ViewModelVisibility = value;
+          NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
+    #endregion
+
+    #region Methods
+
+    private void PopulateItems(PhraseList phrases)
+    {
+      if (IsPopulating && AbortIsFlagged)
+        return;
+
+      BackgroundWorker worker = new BackgroundWorker();
+      worker.DoWork += ((s, r) =>
+      {
+        //IsBusy = true;
+        IsPopulating = true;
+
+
+        Items.Clear();
+        var filteredPhrases = FilterPhrases(phrases);
+
+        #region //Sort (not in use...too slow)
+
+        //#region Sort PhraseEdit by Text Comparison (Comparison<PhraseEdit> comparison = (a, b) =>)
+
+        //Comparison<PhraseEdit> comparison = (a, b) =>
+        //{
+        //  //WE'RE GOING TO TEST CHAR ORDER IN ALPHABET
+        //  string aText = a.Text.ToLower();
+        //  string bText = b.Text.ToLower();
+
+        //  //IF THEY'RE THE SAME TITLES IN LOWER CASE, THEN THEY ARE EQUAL
+        //  if (aText == bText)
+        //    return 0;
+
+        //  //ONLY NEED TO TEST CHARACTERS UP TO LENGTH
+        //  int shorterTitleLength = aText.Length;
+        //  bool aIsShorter = true;
+        //  if (bText.Length < shorterTitleLength)
+        //  {
+        //    shorterTitleLength = bText.Length;
+        //    aIsShorter = false;
+        //  }
+
+        //  int result = 0; //assume a and b are equal (though we know they aren't if we've reached this point)
+
+        //  for (int i = 0; i < shorterTitleLength; i++)
+        //  {
+        //    if (aText[i] < bText[i])
+        //    {
+        //      result = -1;
+        //      break;
+        //    }
+        //    else if (aText[i] > bText[i])
+        //    {
+        //      result = 1;
+        //      break;
+        //    }
+        //  }
+
+        //  //IF THEY ARE STILL EQUAL, THEN THE SHORTER PRECEDES THE LONGER
+        //  if (result == 0)
+        //  {
+        //    if (aIsShorter)
+        //      result = -1;
+        //    else
+        //      result = 1;
+        //  }
+
+        //  return result;
+        //};
+
+        //#endregion
+        //filteredPhrases.Sort(comparison);
+        #endregion
+
+        int counter = 0;
+        int iterationsBetweenComeUpForAir = 20;
+        int totalCount = filteredPhrases.Count();
+        ProgressMaximum = totalCount;
+
+        foreach (var phraseEdit in filteredPhrases)
+        {
+          var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
+          itemViewModel.PropertyChanged +=
+            new System.ComponentModel.PropertyChangedEventHandler(HandleItemViewModelChanged);
+          itemViewModel.Model = phraseEdit;
+          Items.Add(itemViewModel);
+          counter++;
+          ProgressValue = counter;
+          if (counter % iterationsBetweenComeUpForAir == 0)
+          {
+            if (AbortIsFlagged)
+            {
+              AbortIsFlagged = false;
+              ProgressValue = 0;
+              break;
+            }
+          }
+        }
+
+        //IsBusy = false;
+        IsPopulating = false;
+        //if (batch.Count > 0)
+        //Items.AddRange(batch);
+      });
+
+      worker.RunWorkerAsync();
+    }
+
+    private IEnumerable<PhraseEdit> FilterPhrases(PhraseList phrases)
+    {
+      if (string.IsNullOrEmpty(FilterText))
+        return phrases;//.ToList();
+
+      var results = from phrase in phrases
+                    where phrase.Text.Contains(FilterText)
+                    select phrase;
+
+      return results;//.ToList();
+    }
+
+    private void HandleItemViewModelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
+    }
     protected virtual void HookInto(PhraseList modelList)
     {
       if (modelList != null)
@@ -382,6 +402,25 @@ namespace LearnLanguages.Silverlight.ViewModels
       //NotifyOfPropertyChange(() => CanCancelEdit);
     }
 
+    #region Base
+    public bool LoadFromUri(Uri uri)
+    {
+      return true;
+    }
+    public bool ShowGridLines
+    {
+      get { return bool.Parse(AppResources.ShowGridLines); }
+    }
+    public void OnImportsSatisfied()
+    {
+      //LearnLanguages.Navigation.Publish.PartSatisfied("ViewPhrases");
+    }
+    #endregion
+
+    #endregion
+
+    #region Commands
+
     public bool CanSave
     {
       get
@@ -398,37 +437,39 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         ModelList = (PhraseList)r.NewObject;
         //propagate new PhraseEdits to their ViewModels
-        PopulateViewModels(ModelList);
+        PopulateItems(ModelList);
 
         NotifyOfPropertyChange(() => CanSave);
       });
     }
 
-    //public bool CanCancelEdit
-    //{
-    //  get
-    //  {
-    //    return (Model != null && Model.IsDirty);
-    //  }
-    //}
-    //public virtual void CancelEdit()
-    //{
-    //  foreach (var phraseEdit in Model)
-    //  {
-    //    if (phraseEdit.IsDirty)
-    //    {
-    //      var initialEditLevel = phraseEdit.GetEditLevel();
-    //      for (int i = 0; i < initialEditLevel; i++)
-    //      {
-    //        phraseEdit.CancelEdit();
-    //      }
-    //    }
-    //  }
-    //  //Model.CancelEdit();
-    //  NotifyOfPropertyChange(() => CanCancelEdit);
-    //  NotifyOfPropertyChange(() => CanSave);
-    //}
+    public bool CanStopPopulating
+    {
+      get
+      {
+        //if abort is already flagged, then we're already trying to stop populating.
+        return (IsPopulating && !AbortIsFlagged);
+      }
+    }
+    public void StopPopulating()
+    {
+      AbortIsFlagged = true;
+    }
 
+    public bool CanApplyFilter
+    {
+      get
+      {
+        return (!IsPopulating &&
+                !AbortIsFlagged &&
+                 ModelList != null &&
+                 ModelList.Count > 0);
+      }
+    }
+    public void ApplyFilter()
+    {
+      PopulateItems(ModelList);
+    }
 
     public bool CanInitiateDeleteChecked
     {
@@ -441,41 +482,11 @@ namespace LearnLanguages.Silverlight.ViewModels
         return somethingIsChecked;
       }
     }
-    
-    private Visibility _InitiateDeleteVisibility;
-    public Visibility InitiateDeleteVisibility
-    {
-      get { return _InitiateDeleteVisibility; }
-      set
-      {
-        if (value != _InitiateDeleteVisibility)
-        {
-          _InitiateDeleteVisibility = value;
-          NotifyOfPropertyChange(() => InitiateDeleteVisibility);
-        }
-      }
-    }
-
-    private Visibility _FinalizeDeleteVisibility;
-    public Visibility FinalizeDeleteVisibility
-    {
-      get { return _FinalizeDeleteVisibility; }
-      set
-      {
-        if (value != _FinalizeDeleteVisibility)
-        {
-          _FinalizeDeleteVisibility = value;
-          NotifyOfPropertyChange(() => FinalizeDeleteVisibility);
-        }
-      }
-    }
-
     public void InitiateDeleteChecked()
     {
       InitiateDeleteVisibility = Visibility.Collapsed;
       FinalizeDeleteVisibility = Visibility.Visible;
     }
-
     public void FinalizeDeleteChecked()
     {
       var checkedForDeletion = from viewModel in Items
@@ -495,7 +506,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       InitiateDeleteVisibility = Visibility.Visible;
       FinalizeDeleteVisibility = Visibility.Collapsed;
     }
-
     public void CancelDeleteChecked()
     {
       foreach (var phraseItemViewModel in Items)
@@ -508,33 +518,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       NotifyOfPropertyChange(() => CanInitiateDeleteChecked);
     }
 
-    private Visibility _ViewModelVisibility;
-    public Visibility ViewModelVisibility
-    {
-      get { return _ViewModelVisibility; }
-      set
-      {
-        if (value != _ViewModelVisibility)
-        {
-          _ViewModelVisibility = value;
-          NotifyOfPropertyChange(() => ViewModelVisibility);
-        }
-      }
-    }
 
-    public bool CanApplyFilter
-    {
-      get
-      {
-        return (!IsPopulating &&
-                !AbortIsFlagged &&
-                 ModelList != null &&
-                 ModelList.Count > 0);
-      }
-    }
-    public void ApplyFilter()
-    {
-      PopulateViewModels(ModelList);
-    }
+    #endregion
   }
 }

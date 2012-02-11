@@ -142,7 +142,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       //ADD THE SET TO THE ITEMS
       Items.Add(studyNavigationSet);
     }
-
     private void AddEditNavigationSet()
     {
       //INITIALIZE NAVIGATION ITSELF
@@ -176,22 +175,18 @@ namespace LearnLanguages.Silverlight.ViewModels
       //ADD THE SET TO THE ITEMS
       Items.Add(editNavigationSet);
     }
-
     private void AddTestNavigationSet()
     {
       //throw new NotImplementedException();
     }
-
     private void AddReviewNavigationSet()
     {
       //throw new NotImplementedException();
     }
-
     private void AddProgressNavigationSet()
     {
       //throw new NotImplementedException();
     }
-
     private void AddChugNavigationSet()
     {
       //throw new NotImplementedException();
@@ -234,6 +229,5 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
-
   }
 }

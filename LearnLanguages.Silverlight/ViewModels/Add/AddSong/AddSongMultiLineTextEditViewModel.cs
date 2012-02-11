@@ -64,6 +64,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public string LabelSongTitle { get { return ViewViewModelResources.LabelAddSongSongTitle; } }
     public string LabelSongAdditionalMetadata { get { return ViewViewModelResources.LabelSongAdditionalMetadata; } }
 
+    public string Instructions { get { return ViewViewModelResources.InstructionsAddSong; } }
+
     public string InstructionsSelectLanguage { get { return ViewViewModelResources.InstructionsAddSongSelectLanguage; } }
     public string InstructionsEnterSongText { get { return ViewViewModelResources.InstructionsAddSongEnterSongText; } }
     public string InstructionsEnterSongTitle { get { return ViewViewModelResources.InstructionsAddSongEnterSongTitle; } }

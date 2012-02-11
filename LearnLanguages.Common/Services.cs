@@ -15,6 +15,7 @@ namespace LearnLanguages
     private static CompositionContainer _Container;
     public static CompositionContainer Container { get { return _Container; } }
 
+
     private static IEventAggregator _EventAggregator;
     public static IEventAggregator EventAggregator
     {
