@@ -56,21 +56,26 @@
     <!--DEFAULT PROGRESS BAR-->
     <Style TargetType="ProgressBar">
       <!--<Setter Property="Foreground" Value="#FF027DB8"/>-->
-      <Setter Property="Foreground" Value="DarkBlue"/>
-      <Setter Property="Background" Value="#FFD2D5D8" />
+      <!--<Setter Property="Foreground" Value="DarkBlue"/>-->
+      <!--<Setter Property="Background" Value="#FFD2D5D8" />-->
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="Maximum" Value="100" />
       <Setter Property="IsTabStop" Value="False"/>
-      <Setter Property="BorderBrush">
-        <Setter.Value>
-          <LinearGradientBrush EndPoint=".5,1" StartPoint=".5,0">
+      <!--<Setter Property="BorderBrush">-->
+        <!--<Setter.Value>-->
+          <!--<LinearGradientBrush EndPoint=".5,1" StartPoint=".5,0">-->
             <!--<GradientStop Color="#FFAEB7BF" Offset="0"/>-->
-            <GradientStop Color="Silver" Offset="0"/>
+            <!--<GradientStop Color="Silver" Offset="0"/>-->
             <!--<GradientStop Color="#FF919EA7" Offset="0.35"/>-->
-            <GradientStop Color="Green" Offset="0.35"/>
-            <GradientStop Color="#FF7A8A99" Offset="0.35"/>
-            <GradientStop Color="#FF647480" Offset="1"/>
-          </LinearGradientBrush>
+            <!--<GradientStop Color="Green" Offset="0.35"/>-->
+            <!--<GradientStop Color="#FF7A8A99" Offset="0.35"/>-->
+            <!--<GradientStop Color="#FF647480" Offset="1"/>-->
+          <!--</LinearGradientBrush>-->
+        <!--</Setter.Value>-->
+      <!--</Setter>-->
+      <Setter Property="Foreground">
+        <Setter.Value>
+          <ImageBrush ImageSource="/LearnLanguages.Silverlight;component/Content/progress.png" />
         </Setter.Value>
       </Setter>
     </Style>

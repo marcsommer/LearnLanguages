@@ -466,6 +466,9 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Properties\OutOfBrowserSettings.xml" />
+    <Resource Include="Content\progress.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
