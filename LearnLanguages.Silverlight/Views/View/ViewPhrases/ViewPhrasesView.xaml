@@ -24,7 +24,7 @@
           <TextBlock Text="{Binding Path=FilterLabel}" VerticalAlignment="Center"/>
           <TextBox x:Name="FilterText" MinWidth="100"/>
           
-          <Button x:Name="ApplyFilter" Content="{Binding Path=LabelTextApplyFilterButton}" Margin="3,1,0,1"/>
+          <Button x:Name="ApplyFilter" Content="{Binding Path=ButtonLabelApplyFilter}" Margin="3,1,0,1"/>
             <StackPanel Orientation="Horizontal" Visibility="{Binding Path=ProgressVisibility}">
               <Button x:Name="StopPopulating" Content="Stop Loading" Margin="3,1,0,1"  />
               <ProgressBar x:Name="ProgressValue"

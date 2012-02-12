@@ -88,7 +88,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private string _FilterLabel = ViewViewModelResources.LabelTextFilter;
+    private string _FilterLabel = ViewViewModelResources.LabelFilter;
     public string FilterLabel
     {
       get { return _FilterLabel; }
@@ -159,16 +159,16 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private string _LabelTextApplyFilterButton = ViewViewModelResources.LabelTextApplyFilterButton;
-    public string LabelTextApplyFilterButton
+    private string _ButtonLabelApplyFilter = ViewViewModelResources.ButtonLabelApplyFilter;
+    public string ButtonLabelApplyFilter
     {
-      get { return _LabelTextApplyFilterButton; }
+      get { return _ButtonLabelApplyFilter; }
       set
       {
-        if (value != _LabelTextApplyFilterButton)
+        if (value != _ButtonLabelApplyFilter)
         {
-          _LabelTextApplyFilterButton = value;
-          NotifyOfPropertyChange(() => LabelTextApplyFilterButton);
+          _ButtonLabelApplyFilter = value;
+          NotifyOfPropertyChange(() => ButtonLabelApplyFilter);
         }
       }
     }
@@ -206,8 +206,6 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
-
-
 
     private bool _AbortIsFlagged;
     public bool AbortIsFlagged

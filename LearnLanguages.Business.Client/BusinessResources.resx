@@ -147,9 +147,14 @@
 {1} = Secondary Collection Property Name, e.g. PhraseIds</comment>
   </data>
   <data name="RuleInfoMinimumCount" xml:space="preserve">
-    <value>The minimum count of phrases in a valid translation is 2.</value>
+    <value>The minimum count of {0} is {1}.</value>
+    <comment>{0} = String of what you are counting
+{1} = Minimum count</comment>
   </data>
   <data name="SettingsStringSeparator" xml:space="preserve">
     <value>||</value>
+  </data>
+  <data name="SongMinimumLineCount" xml:space="preserve">
+    <value>2</value>
   </data>
 </root>

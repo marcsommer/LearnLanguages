@@ -142,7 +142,7 @@ namespace LearnLanguages.Business {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The minimum count of phrases in a valid translation is 2..
+        ///   Looks up a localized string similar to The minimum count of {0} is {1}..
         /// </summary>
         public static string RuleInfoMinimumCount {
             get {
@@ -156,6 +156,15 @@ namespace LearnLanguages.Business {
         public static string SettingsStringSeparator {
             get {
                 return ResourceManager.GetString("SettingsStringSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2.
+        /// </summary>
+        public static string SongMinimumLineCount {
+            get {
+                return ResourceManager.GetString("SongMinimumLineCount", resourceCulture);
             }
         }
     }

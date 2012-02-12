@@ -120,6 +120,12 @@
   <data name="AutoTitlePrefix" xml:space="preserve">
     <value />
   </data>
+  <data name="ButtonLabelApplyFilter" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="ButtonLabelStudyASongGo" xml:space="preserve">
+    <value>Go!</value>
+  </data>
   <data name="DefaultPercentKnown" xml:space="preserve">
     <value>0</value>
   </data>
@@ -141,6 +147,12 @@
   <data name="InstructionsAskHowMuchDoYouKnowResponse" xml:space="preserve">
     <value>Select how much of this phrase do you know in the targeted language.  If you know it completely, select 100%.  If you don't know it at all, select 0%.  If you know somewhere in between, estimate to the best of your ability how much of the translation  you know in the targeted language.</value>
   </data>
+  <data name="InstructionsAskUserExtraData" xml:space="preserve">
+    <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
+  </data>
+  <data name="InstructionsAskUserExtraDataSelectNativeLanguageText" xml:space="preserve">
+    <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
+  </data>
   <data name="InstructionsEnterPhrase" xml:space="preserve">
     <value>Enter as much text as you want to learn.  We will divide this into smaller phrases and words as we go.
 
@@ -148,9 +160,6 @@
   </data>
   <data name="InstructionsSelectLanguage" xml:space="preserve">
     <value>Select Language</value>
-  </data>
-  <data name="InstructionsSelectNativeLanguageSelectLanguage" xml:space="preserve">
-    <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
   </data>
   <data name="InstructionsStudyASongSelectSong" xml:space="preserve">
     <value>Select the song(s) that you want to study...Once selected, press Go!</value>
@@ -168,7 +177,7 @@
     <value>Phrase: </value>
   </data>
   <data name="LabelAddSongLanguage" xml:space="preserve">
-    <value>Language: </value>
+    <value>Song Language: </value>
   </data>
   <data name="LabelAddSongSongText" xml:space="preserve">
     <value>Song Lyrics: </value>
@@ -179,17 +188,17 @@
   <data name="LabelAddSongText" xml:space="preserve">
     <value>Song Text: </value>
   </data>
+  <data name="LabelAskUserExtraDataNativeLanguageText" xml:space="preserve">
+    <value>Your Native Language: </value>
+  </data>
+  <data name="LabelFilter" xml:space="preserve">
+    <value>Filter: </value>
+  </data>
   <data name="LabelSelectNativeLanguageLanguageText" xml:space="preserve">
     <value>Your Native Language: </value>
   </data>
   <data name="LabelSongAdditionalMetadata" xml:space="preserve">
     <value>Song Info: </value>
-  </data>
-  <data name="LabelTextApplyFilterButton" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="LabelTextFilter" xml:space="preserve">
-    <value>Filter: </value>
   </data>
   <data name="LineDelimiter" xml:space="preserve">
     <value>\r</value>

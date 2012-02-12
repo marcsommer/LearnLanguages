@@ -7,26 +7,44 @@
     d:DesignHeight="300" d:DesignWidth="400">
     
   <Border Style="{StaticResource DebugBorder}">
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Border Style="{StaticResource ViewSection}">
+
+      <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition Height="25"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="30"/>
       </Grid.RowDefinitions>
       
-      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <TextBlock Text="{Binding Path=LabelTextNativeLanguageText}" 
-                   Margin="5"/>
-        <TextBlock Text="{Binding Path=Model_NativeLanguageText}" 
-                   Margin="5"/>
-        <Button x:Name="SelectLanguage" 
-                Margin="5"/>
-      </StackPanel>
+        <!--INSTRUCTIONS-->
+        <Border Grid.Row="0"
+                Style="{StaticResource InstructionsSection}"
+                Visibility="{Binding Path=InstructionsVisibility}">
+          
+          <TextBlock Text="{Binding Path=Instructions}" 
+                     Style="{StaticResource InstructionsText}" />
+
+        </Border>
+        
+        <!--LANGUAGE SELECTOR-->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal">
+          <TextBlock Text="{Binding Path=LabelNativeLanguageText}" 
+                     Margin="5,0,5,0"/>
+          <!--<TextBlock Text="{Binding Path=Model_NativeLanguageText}" 
+                     Margin="5,0,5,0"/>-->
+          <ContentControl x:Name="Languages" 
+                          Margin="5,0,5,0"
+                          ToolTipService.ToolTip="{Binding Path=InstructionsSelectNativeLanguageText}"/>
+        </StackPanel>
       
-      <Button Grid.Row="1"
-              x:Name="Save" 
-              Content="Save"
-              Width="75"
-              HorizontalAlignment="Center" />
+        <!--SAVE BUTTON-->
+        <Button Grid.Row="2"
+                x:Name="Save" 
+                Content="Save"
+                Width="75"
+                HorizontalAlignment="Center" />
     </Grid>
+  </Border>
   </Border>
 </UserControl>

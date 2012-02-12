@@ -39,8 +39,8 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _NativeLanguage = value;
           NotifyOfPropertyChange(() => NativeLanguage);
-          if (_NativeLanguage != null && !string.IsNullOrEmpty(_NativeLanguage.Text))
-            EventMessages.NativeLanguageChangedEventMessage.Publish(_NativeLanguage.Text);
+          //if (_NativeLanguage != null && !string.IsNullOrEmpty(_NativeLanguage.Text))
+          //  EventMessages.NativeLanguageChangedEventMessage.Publish(_NativeLanguage.Text);
         }
       }
     }
@@ -97,17 +97,20 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public bool CanSave
+    public override bool CanSave
     {
       get
       {
-        return (NativeLanguage != null &&
+
+        return (base.CanSave &&
+                NativeLanguage != null &&
                 !string.IsNullOrEmpty(NativeLanguage.Text) &&
                 !HasBeenSaved);
       }
     }
-    public void Save()
+    public override void Save()
     {
+      HasBeenSaved = true;
       EventMessages.NativeLanguageChangedEventMessage.Publish(NativeLanguage.Text);
     }
 

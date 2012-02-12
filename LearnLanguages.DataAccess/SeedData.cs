@@ -404,7 +404,7 @@ namespace LearnLanguages.DataAccess
       };
       StudyDatas = new List<StudyDataDto>()
       {
-        dto
+        //dto
       };
     }
 

@@ -154,16 +154,16 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private string _LabelTextStudyASongGoButton;
-    public string LabelTextStudyASongGoButton
+    private string _ButtonLabelGo = ViewViewModelResources.ButtonLabelStudyASongGo;
+    public string ButtonLabelGo
     {
-      get { return _LabelTextStudyASongGoButton; }
+      get { return _ButtonLabelGo; }
       set
       {
-        if (value != _LabelTextStudyASongGoButton)
+        if (value != _ButtonLabelGo)
         {
-          _LabelTextStudyASongGoButton = value;
-          NotifyOfPropertyChange(() => LabelTextStudyASongGoButton);
+          _ButtonLabelGo = value;
+          NotifyOfPropertyChange(() => ButtonLabelGo);
         }
       }
     }
@@ -283,7 +283,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     #endregion
 
     #region Filter
-    private string _FilterLabel = ViewViewModelResources.LabelTextFilter;
+    private string _FilterLabel = ViewViewModelResources.LabelFilter;
     public string FilterLabel
     {
       get { return _FilterLabel; }
@@ -312,7 +312,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private string _LabelTextApplyFilterButton = ViewViewModelResources.LabelTextApplyFilterButton;
+    private string _LabelTextApplyFilterButton = ViewViewModelResources.ButtonLabelApplyFilter;
     public string LabelTextApplyFilterButton
     {
       get { return _LabelTextApplyFilterButton; }

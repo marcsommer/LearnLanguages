@@ -124,6 +124,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="LearnLanguagesExtensions.cs" />
     <Compile Include="Study\RandomPhraseStudyPartner.cs" />
     <Compile Include="Study\StudyPartnerBase.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowResponseViewModel.cs" />
     <Compile Include="EventMessages\NativeLanguageChangedEventMessage.cs" />
     <Compile Include="ViewModels\Study\StudyASongItemViewModel.cs" />
-    <Compile Include="ViewModels\Study\SelectNativeLanguageViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyASongViewModel.cs" />
     <Compile Include="ViewModels\Study\QuestionAnswerViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyViewModel.cs" />
@@ -219,10 +219,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Study\AskUserExtraDataView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Study\SelectNativeLanguageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -23,9 +23,15 @@ namespace LearnLanguages.Business.Rules
 
     protected override void Execute(RuleContext context)
     {
+      var whatWeAreCounting = context.InputPropertyValues[PrimaryProperty];
       var collection = (ICollection)(context.InputPropertyValues[PrimaryProperty]);
       if (collection.Count < _MinCount)
-        context.AddErrorResult(BusinessResources.RuleInfoMinimumCount);
+      {
+        var errorMsg = string.Format(BusinessResources.RuleInfoMinimumCount, 
+                                     PrimaryProperty.FriendlyName, 
+                                     _MinCount);
+        context.AddErrorResult(errorMsg);
+      }
       //var target = (TranslationEdit)context.Target;
       //if (target.Phrases.Count < _MinCount)
       //  context.AddInformationResult(BusinessResources.RuleInfoMinimumCount);

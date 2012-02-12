@@ -134,7 +134,9 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get
       {
+        int lineCount = SongText.ParseIntoLines().Count;
         if (string.IsNullOrEmpty(SongText) ||
+            lineCount < int.Parse(BusinessResources.SongMinimumLineCount) ||
             SongHasBeenSaved || //Song can only be saved once.  After this, we should be on a new screen.
             SongText.Length < 2 ||
             SongLanguage == null)
@@ -165,10 +167,12 @@ namespace LearnLanguages.Silverlight.ViewModels
         var songText = SongText;
         var languageText = SongLanguage.Text;
 
-        var lineDelimiter = ViewViewModelResources.LineDelimiter;
-        lineDelimiter = lineDelimiter.Replace("\\r", "\r");
-        lineDelimiter = lineDelimiter.Replace("\\n", "\n");
-        var lines = new List<string>(songText.Split(new string[] { lineDelimiter }, StringSplitOptions.RemoveEmptyEntries));
+        //var lineDelimiter = ViewViewModelResources.LineDelimiter;
+        //lineDelimiter = lineDelimiter.Replace("\\r", "\r");
+        //lineDelimiter = lineDelimiter.Replace("\\n", "\n");
+        //var lines = new List<string>(songText.Split(new string[] { lineDelimiter }, StringSplitOptions.RemoveEmptyEntries));
+
+        var lines = songText.ParseIntoLines(); //removes empty entries
 
         var splitIntoWordsPattern = ViewViewModelResources.RegExSplitPatternWords;
         splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");

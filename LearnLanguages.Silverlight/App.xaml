@@ -201,6 +201,7 @@
       <Setter Property="Margin" Value="1" />
       <Setter Property="FontSize" Value="11" />
       <Setter Property="FontWeight" Value="Medium" />
+      
       <!--<Setter Property="Background">
         <Setter.Value>
           <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -230,7 +231,11 @@
 
                 </Ellipse>
 
-                <TextBlock Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                  <TextBlock.Foreground>
+                    <SolidColorBrush Color="Yellow" />
+                  </TextBlock.Foreground>
+                </TextBlock>
 
               </Grid>
             </Border>

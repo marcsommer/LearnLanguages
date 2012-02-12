@@ -17,6 +17,8 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public AskUserExtraDataViewModel()
     {
+      Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
+      Languages.SelectedItemChanged += HandleLanguageChanged;
       if (!bool.Parse(ViewViewModelResources.ShowInstructions))
         InstructionsVisibility = Visibility.Collapsed;
       else
@@ -31,8 +33,37 @@ namespace LearnLanguages.Silverlight.ViewModels
         });
     }
 
-    public string LabelNativeLanguageText { get { return ViewViewModelResources.LabelAddPhraseLanguageText; } }
-    public string InstructionsSelectNativeLanguageText { get { return ViewViewModelResources.InstructionsSelectLanguage; } }
+    public string Instructions { get { return ViewViewModelResources.InstructionsAskUserExtraData; } }
+
+    #region Native Language
+
+    private LanguageSelectorViewModel _Languages;
+    public LanguageSelectorViewModel Languages
+    {
+      get { return _Languages; }
+      set
+      {
+        if (value != _Languages)
+        {
+          _Languages = value;
+          NotifyOfPropertyChange(() => Languages);
+        }
+      }
+    }
+
+    private void HandleLanguageChanged(object sender, EventArgs e)
+    {
+      if (sender != null)
+        Model.NativeLanguageText = ((LanguageEditViewModel)sender).Model.Text;
+    }
+
+    public string LabelNativeLanguageText { get { return ViewViewModelResources.LabelAskUserExtraDataNativeLanguageText; } }
+    public string InstructionsSelectNativeLanguageText 
+    {
+      get { return ViewViewModelResources.InstructionsAskUserExtraDataSelectNativeLanguageText; } 
+    }
+
+    #endregion
 
     private Visibility _InstructionsVisibility;
     public Visibility InstructionsVisibility
@@ -48,18 +79,18 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public bool CanSelectLanguage
-    {
-      get
-      {
-        return true;
-      }
-    }
-    public void SelectLanguage()
-    {
-      var selectViewModel = Services.Container.GetExportedValue<SelectNativeLanguageViewModel>();
-      Services.WindowManager.ShowDialog(selectViewModel);
-    }
+    //public bool CanSelectLanguage
+    //{
+    //  get
+    //  {
+    //    return true;
+    //  }
+    //}
+    //public void SelectLanguage()
+    //{
+    //  var selectViewModel = Services.Container.GetExportedValue<SelectNativeLanguageViewModel>();
+    //  Services.WindowManager.ShowDialog(selectViewModel);
+    //}
 
     #region Base
 
@@ -129,6 +160,29 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       _Callback = callback;
       Services.WindowManager.ShowDialog(this);
+    }
+
+    public override bool CanSave
+    {
+      get
+      {
+        return (base.CanSave &&
+                !string.IsNullOrEmpty(Model.NativeLanguageText));
+      }
+    }
+    public override void Save()
+    {
+      Model.BeginSave((s, r) =>
+      {
+        if (r.Error != null)
+          throw r.Error;
+        Model = (StudyDataEdit)r.NewObject;
+        EventMessages.NativeLanguageChangedEventMessage.Publish(Model.NativeLanguageText);
+        DispatchSavedEvent();
+        NotifyOfPropertyChange(() => CanSave);
+        if (_Callback != null)
+          _Callback(this, new Common.Args.ResultArgs<StudyDataEdit>(Model));
+      });
     }
   }
 }

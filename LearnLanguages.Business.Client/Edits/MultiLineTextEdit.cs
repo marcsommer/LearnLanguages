@@ -315,7 +315,9 @@ namespace LearnLanguages.Business
 
 
       //multiLineText must have 2 lineids to be valid
-      BusinessRules.AddRule(new Rules.CollectionMinimumCountBusinessRule(LinesProperty, 2));
+      BusinessRules.AddRule(
+        new Rules.CollectionMinimumCountBusinessRule(LinesProperty, 
+                                                     int.Parse(BusinessResources.SongMinimumLineCount)));
       //BusinessRules.AddRule(new CollectionCountsAreEqualBusinessRule(LinesProperty, LineIdsProperty));
     }
 

@@ -12,18 +12,15 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
-        <RowDefinition Height="25" />
+        <RowDefinition Height="30" />
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
       
-      <!--VIEW INSTRUCTIONS-->
+      <!--INSTRUCTIONS-->
       <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
               Style="{StaticResource InstructionsSection}">
         <TextBlock Text="{Binding Path=Instructions}" 
@@ -32,59 +29,47 @@
       
       <!--SONG LANGUAGE-->
       <!--LABEL-->
-      <TextBlock Grid.Row="1" 
-                 Grid.Column="0"
+      <TextBlock Grid.Row="1" Grid.Column="0"
                  Text="{Binding Path=LabelLanguageText}" 
                  VerticalAlignment="Center" />
       <!--CONTROL-->
-      <ContentControl Grid.Row="1"
-                      Grid.Column="1"
+      <ContentControl Grid.Row="1" Grid.Column="1"
                       x:Name="Languages" 
-                      Margin="0,1,0,1" 
+                      Margin="-3,2,1,2" 
                       MinWidth="50"
                       TabIndex="0"
                       HorizontalContentAlignment="Stretch"
                       ToolTipService.ToolTip="{Binding Path=InstructionsSelectLanguage}"/>
       
       <!--SONG TITLE-->
-      <!--INSTRUCTIONS-->
-      <TextBlock Grid.Row="2"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="2"
-                 Text="{Binding Path=InstructionsEnterSongTitle}" 
-                 Visibility="{Binding Path=InstructionsVisibility}"/>
       <!--LABEL-->
-      <TextBlock Grid.Row="3"
-                 Grid.Column="0"
+      <TextBlock Grid.Row="2" Grid.Column="0"
                  Text="{Binding Path=LabelSongTitle}" />
       <!--CONTROL-->
-      <TextBox Grid.Row="3"
-               Grid.Column="1"
+      <TextBox Grid.Row="2" Grid.Column="1"
+               Margin="1,2,1,2" 
                x:Name="Model_Title"
                ToolTipService.ToolTip="{Binding Path=InstructionsEnterSongTitle}"
                TabIndex="1" />
       
       <!--SONG ADDITIONAL METADATA-->
       <!--LABEL-->
-      <TextBlock Grid.Row="5"
-                 Grid.Column="0"
+      <TextBlock Grid.Row="3" Grid.Column="0"
                  Text="{Binding Path=LabelSongAdditionalMetadata}" />
       <!--CONTROL-->
-      <TextBox Grid.Row="5"
-               Grid.Column="1"
+      <TextBox Grid.Row="3" Grid.Column="1"
+               Margin="1,2,1,2" 
                x:Name="Model_AdditionalMetadata"
                TabIndex="2" 
                ToolTipService.ToolTip="{Binding Path=InstructionsEnterSongAdditionalMetadata}"/>
 
       <!--SONG TEXT-->
       <!--LABEL-->
-      <TextBlock Grid.Row="7" 
-                 Grid.Column="0" 
+      <TextBlock Grid.Row="4" Grid.Column="0" 
                  Text="{Binding Path=LabelSongText}" 
                  VerticalAlignment="Center"/>
       <!--CONTROL-->
-      <TextBox Grid.Row="7"
-               Grid.Column="1"
+      <TextBox Grid.Row="4" Grid.Column="1"
                x:Name="SongText" 
                Margin="1,2,1,2" 
                MinWidth="250"
@@ -95,10 +80,9 @@
                TabIndex="3" TextWrapping="Wrap" AcceptsReturn="True" />
 
       <!--BUTTONS-->
-      <Button x:Name="Save"
-              Grid.Row="8"
-              Grid.Column="0"
-              Grid.ColumnSpan="2"
+      <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+              x:Name="Save"
+              Margin="2"
               HorizontalAlignment="Center"
               Width="100"
               Content="Save Song"

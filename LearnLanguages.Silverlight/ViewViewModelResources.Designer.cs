@@ -70,6 +70,24 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string ButtonLabelApplyFilter {
+            get {
+                return ResourceManager.GetString("ButtonLabelApplyFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go!.
+        /// </summary>
+        public static string ButtonLabelStudyASongGo {
+            get {
+                return ResourceManager.GetString("ButtonLabelStudyASongGo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 0.
         /// </summary>
         public static string DefaultPercentKnown {
@@ -133,6 +151,24 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most..
+        /// </summary>
+        public static string InstructionsAskUserExtraData {
+            get {
+                return ResourceManager.GetString("InstructionsAskUserExtraData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most..
+        /// </summary>
+        public static string InstructionsAskUserExtraDataSelectNativeLanguageText {
+            get {
+                return ResourceManager.GetString("InstructionsAskUserExtraDataSelectNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter as much text as you want to learn.  We will divide this into smaller phrases and words as we go.
         ///
         ///(If you want to add a song, however, &quot;Add Song&quot; is recommended for learning line order.).
@@ -149,15 +185,6 @@ namespace LearnLanguages.Silverlight {
         public static string InstructionsSelectLanguage {
             get {
                 return ResourceManager.GetString("InstructionsSelectLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most..
-        /// </summary>
-        public static string InstructionsSelectNativeLanguageSelectLanguage {
-            get {
-                return ResourceManager.GetString("InstructionsSelectNativeLanguageSelectLanguage", resourceCulture);
             }
         }
         
@@ -207,7 +234,7 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language: .
+        ///   Looks up a localized string similar to Song Language: .
         /// </summary>
         public static string LabelAddSongLanguage {
             get {
@@ -245,6 +272,24 @@ namespace LearnLanguages.Silverlight {
         /// <summary>
         ///   Looks up a localized string similar to Your Native Language: .
         /// </summary>
+        public static string LabelAskUserExtraDataNativeLanguageText {
+            get {
+                return ResourceManager.GetString("LabelAskUserExtraDataNativeLanguageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter: .
+        /// </summary>
+        public static string LabelFilter {
+            get {
+                return ResourceManager.GetString("LabelFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Native Language: .
+        /// </summary>
         public static string LabelSelectNativeLanguageLanguageText {
             get {
                 return ResourceManager.GetString("LabelSelectNativeLanguageLanguageText", resourceCulture);
@@ -257,24 +302,6 @@ namespace LearnLanguages.Silverlight {
         public static string LabelSongAdditionalMetadata {
             get {
                 return ResourceManager.GetString("LabelSongAdditionalMetadata", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Search.
-        /// </summary>
-        public static string LabelTextApplyFilterButton {
-            get {
-                return ResourceManager.GetString("LabelTextApplyFilterButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Filter: .
-        /// </summary>
-        public static string LabelTextFilter {
-            get {
-                return ResourceManager.GetString("LabelTextFilter", resourceCulture);
             }
         }
         
