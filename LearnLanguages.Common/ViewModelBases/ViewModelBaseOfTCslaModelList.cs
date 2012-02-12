@@ -20,7 +20,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     where TCslaModelDto : class
   {
     private TCslaModelList _ModelList;
-    public TCslaModelList Model
+    public TCslaModelList ModelList
     {
       get { return _ModelList; }
       set
@@ -30,7 +30,7 @@ namespace LearnLanguages.Silverlight.ViewModels
           UnhookFrom(_ModelList);
           _ModelList = value;
           HookInto(_ModelList);
-          NotifyOfPropertyChange(() => Model);
+          NotifyOfPropertyChange(() => ModelList);
         }
       }
     }
@@ -53,13 +53,13 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     protected virtual void HandleChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
     {
-      NotifyOfPropertyChange(() => this.Model);
+      NotifyOfPropertyChange(() => this.ModelList);
       NotifyOfPropertyChange(() => CanSave);
       NotifyOfPropertyChange(() => CanCancelEdit);
     }
     protected virtual void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-      NotifyOfPropertyChange(() => this.Model);
+      NotifyOfPropertyChange(() => this.ModelList);
       NotifyOfPropertyChange(() => CanSave);
       NotifyOfPropertyChange(() => CanCancelEdit);
     }
@@ -68,17 +68,17 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get
       {
-        return (Model != null && Model.IsSavable);
+        return (ModelList != null && ModelList.IsSavable);
       }
     }
     public virtual void Save()
     {
-      Model.BeginSave((s, r) =>
+      ModelList.BeginSave((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
-          Model = (TCslaModelList)r.NewObject;
+          ModelList = (TCslaModelList)r.NewObject;
           NotifyOfPropertyChange(() => CanSave);
         });
     }
@@ -87,12 +87,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get
       {
-        return (Model != null && Model.IsDirty);
+        return (ModelList != null && ModelList.IsDirty);
       }
     }
     public virtual void CancelEdit()
     {
-      Model.CancelEdit();
+      ModelList.CancelEdit();
       NotifyOfPropertyChange(() => CanCancelEdit);
       NotifyOfPropertyChange(() => CanSave);
     }

@@ -100,6 +100,7 @@
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
     <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />
+    <Compile Include="Interfaces\IStudyMultiLineTexts.cs" />
     <Compile Include="Interfaces\ICanExpand.cs" />
     <Compile Include="EventMessages\LanguageEventMessage.cs" />
     <Compile Include="EventMessages\LanguageAddedEventMessage.cs" />
@@ -125,6 +126,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="LearnLanguagesExtensions.cs" />
+    <Compile Include="Study\DefaultMultiLineTextsOrderStudier.cs" />
+    <Compile Include="Study\DefaultMultiLineTextsMeaningStudier.cs" />
+    <Compile Include="Study\DefaultMultiLineTextsStudier.cs" />
+    <Compile Include="Study\DefaultStudyPartner.cs" />
     <Compile Include="Study\RandomPhraseStudyPartner.cs" />
     <Compile Include="Study\StudyPartnerBase.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
@@ -206,6 +211,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Study\StudyNotes.txt" />
     <Page Include="Views\NavigationButtons\StudyASongNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

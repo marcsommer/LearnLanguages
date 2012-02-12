@@ -5,9 +5,10 @@ using LearnLanguages.Business;
 
 namespace LearnLanguages.Silverlight.Interfaces
 {
-  public interface IStudyPartner : IStudyMultiLineTexts
+  public interface IStudyMultiLineTexts
   {
     //void StudyPhrases(PhraseList phrases, IEventAggregator eventAggregator);
+    void StudyMultiLineTexts(MultiLineTextList multiLineTexts, IEventAggregator eventAggregator);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);
     //void Chug(IEventAggregator eventAggregator);
     //void ShowProgress(IEventAggregator eventAggregator);

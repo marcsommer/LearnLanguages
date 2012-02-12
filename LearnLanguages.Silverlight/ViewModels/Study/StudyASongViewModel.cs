@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
 using System.Windows;
 using System.ComponentModel;
+using Csla.Core;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -75,10 +76,6 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       });
     }
-
-    #endregion
-
-    #region Fields
 
     #endregion
 
@@ -442,6 +439,11 @@ namespace LearnLanguages.Silverlight.ViewModels
         //IsBusy = true;
         IsPopulating = true;
 
+        if (Items.Count > 0)
+          foreach (var viewModel in Items)
+          {
+            UnhookFrom(viewModel);
+          }
         Items.Clear();
         #region Sort MLT by Title Comparison (Comparison<MultiLineTextEdit> comparison = (a, b) =>)
 
@@ -510,6 +512,7 @@ namespace LearnLanguages.Silverlight.ViewModels
           //ASSIGN THE VIEWMODEL'S MODEL AS THE SONG
           var song = SortedModelListCache[i];
           songItemViewModel.Model = song;
+          HookInto(songItemViewModel);
 
           //INSERT THE VIEWMODEL IN THE PROPER ORDER INTO OUR ITEMS COLLECTION
           Items.Insert(i, songItemViewModel);
@@ -533,6 +536,22 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       worker.RunWorkerAsync();
 
+    }
+
+    private void HookInto(StudyASongItemViewModel viewModel)
+    {
+      if (viewModel != null)
+        viewModel.PropertyChanged += songItemViewModel_PropertyChanged;
+    }
+
+    private void songItemViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanGo);
+    }
+
+    private void UnhookFrom(StudyASongItemViewModel viewModel)
+    {
+      viewModel.PropertyChanged -= songItemViewModel_PropertyChanged;
     }
 
     /// <summary>
@@ -629,7 +648,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     public void Go()
     {
-      var ids = new List<Guid>();
+      var ids = new MobileList<Guid>();
       foreach (var songViewModel in Items)
       {
         ids.Add(songViewModel.Model.Id);

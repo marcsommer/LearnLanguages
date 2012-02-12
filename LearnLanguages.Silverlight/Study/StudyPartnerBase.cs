@@ -12,7 +12,7 @@ namespace LearnLanguages.Silverlight
   /// Simple IStudyPartner base class.  You do NOT need to descend from this, it just provides some 
   /// very basic plumbing for events and checking for 
   /// </summary>
-  public abstract class StudyPartnerBase : PropertyChangedBase, IStudyPartner, IGetStudyData
+  public abstract class StudyPartnerBase : PropertyChangedBase, IStudyPartner
   {
     #region Properties 
 
@@ -58,12 +58,7 @@ namespace LearnLanguages.Silverlight
 
     #endregion
 
-    public void AskUserExtraData(object criteria, AsyncCallback<StudyDataEdit> callback)
-    {
-      AskUserExtraDataImpl(criteria, callback);
-    }
-
-    protected abstract void AskUserExtraDataImpl(object criteria, AsyncCallback<StudyDataEdit> callback);
+    
 
     public void StudyMultiLineTexts(MultiLineTextList multiLineTexts, IEventAggregator eventAggregator)
     {
