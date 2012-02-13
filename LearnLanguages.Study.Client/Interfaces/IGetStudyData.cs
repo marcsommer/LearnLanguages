@@ -1,10 +1,7 @@
-﻿using System;
-using System.Net;
-using LearnLanguages.Common;
-using LearnLanguages.Business;
+﻿using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 
-namespace LearnLanguages.Silverlight.Interfaces
+namespace LearnLanguages.Study.Interfaces
 {
   public interface IGetStudyData
   {

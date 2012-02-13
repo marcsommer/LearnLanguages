@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Navigation.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.History.Client", "LearnLanguages.History.Client\LearnLanguages.History.Client.csproj", "{DFC14799-1426-4266-A064-4B880612559F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Offer.Client", "LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj", "{98EE87B2-152D-48D8-B509-93EEB92059BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Study.Client", "LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj", "{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +101,14 @@ Global
 		{DFC14799-1426-4266-A064-4B880612559F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFC14799-1426-4266-A064-4B880612559F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFC14799-1426-4266-A064-4B880612559F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98EE87B2-152D-48D8-B509-93EEB92059BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98EE87B2-152D-48D8-B509-93EEB92059BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98EE87B2-152D-48D8-B509-93EEB92059BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98EE87B2-152D-48D8-B509-93EEB92059BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

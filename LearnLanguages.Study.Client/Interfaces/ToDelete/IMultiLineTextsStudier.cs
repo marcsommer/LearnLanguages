@@ -1,14 +1,12 @@
-﻿using System;
-using System.Net;
-using Caliburn.Micro;
-using LearnLanguages.Business;
+﻿using LearnLanguages.Business;
+using LearnLanguages.Common.Interfaces;
 
-namespace LearnLanguages.Silverlight.Interfaces
+namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyMultiLineTexts
+  public interface IMultiLineTextsStudier
   {
     //void StudyPhrases(PhraseList phrases, IEventAggregator eventAggregator);
-    void StudyMultiLineTexts(MultiLineTextList multiLineTexts, IEventAggregator eventAggregator);
+    void StudyMultiLineTexts(MultiLineTextList multiLineTexts, IOfferExchange offerExchange);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);
     //void Chug(IEventAggregator eventAggregator);
     //void ShowProgress(IEventAggregator eventAggregator);

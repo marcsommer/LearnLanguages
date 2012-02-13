@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
-using Caliburn.Micro;
+//using Caliburn.Micro;
 using LearnLanguages.Business;
 
-namespace LearnLanguages.Silverlight.Interfaces
+namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyPartner : IStudyMultiLineTexts
+  public interface IStudyPartner : IMultiLineTextsStudier
   {
     //void StudyPhrases(PhraseList phrases, IEventAggregator eventAggregator);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);
