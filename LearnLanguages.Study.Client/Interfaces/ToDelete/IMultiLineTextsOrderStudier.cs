@@ -3,7 +3,7 @@ using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IMultiLineTextsOrderStudier : IOrderStudier<MultiLineTextList>
+  public interface _IMultiLineTextsOrderStudier : IOrderStudier<MultiLineTextList>
   {
     //void StudyOrder(MultiLineTextList multiLineTexts, IOfferExchange offerExchange);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);

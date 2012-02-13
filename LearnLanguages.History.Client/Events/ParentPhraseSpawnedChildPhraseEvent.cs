@@ -13,7 +13,7 @@ namespace LearnLanguages.History.Events
 
     public static void Pub(PhraseEdit parent, PhraseEdit child)
     {
-      Publish.The.HistoryEvent(new ParentPhraseSpawnedChildPhraseEvent(parent, child));
+      History.Ton.PublishEvent(new ParentPhraseSpawnedChildPhraseEvent(parent, child));
     }
   }
 }

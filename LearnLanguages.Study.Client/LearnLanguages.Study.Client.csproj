@@ -77,6 +77,11 @@
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Interfaces\ToDelete\ITranslationStudier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudyResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StudyResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="_RandomPhraseStudyPartner.cs" />
     <Compile Include="Bases\StudyPartnerBase.cs" />
   </ItemGroup>
@@ -94,7 +99,12 @@
     <Content Include="StudyHeirarchy.txt" />
     <Content Include="StudyNotes.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="StudyResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StudyResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

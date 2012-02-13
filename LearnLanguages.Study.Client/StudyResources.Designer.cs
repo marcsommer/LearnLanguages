@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LearnLanguages.History {
+namespace LearnLanguages.Study {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace LearnLanguages.History {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class HistoryResources {
+    internal class StudyResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal HistoryResources() {
+        internal StudyResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace LearnLanguages.History {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.History.HistoryResources", typeof(HistoryResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Study.StudyResources", typeof(StudyResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,20 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 59FD150A-92BB-4130-A427-2AFF9434B748.
+        ///   Looks up a localized string similar to 5.
         /// </summary>
-        internal static string HistoryPublisherId {
+        internal static string DefaultMultiLineTextsStudierMeaningWeight {
             get {
-                return ResourceManager.GetString("HistoryPublisherId", resourceCulture);
+                return ResourceManager.GetString("DefaultMultiLineTextsStudierMeaningWeight", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ChildId.
+        ///   Looks up a localized string similar to 1.
         /// </summary>
-        internal static string Key_ChildId {
+        internal static string DefaultMultiLineTextsStudierOrderWeight {
             get {
-                return ResourceManager.GetString("Key_ChildId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ParentId.
-        /// </summary>
-        internal static string Key_ParentId {
-            get {
-                return ResourceManager.GetString("Key_ParentId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PhraseId.
-        /// </summary>
-        internal static string Key_PhraseId {
-            get {
-                return ResourceManager.GetString("Key_PhraseId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ReviewMethodId.
-        /// </summary>
-        internal static string Key_ReviewMethodId {
-            get {
-                return ResourceManager.GetString("Key_ReviewMethodId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PhraseCreatedFromScratch.
-        /// </summary>
-        internal static string TextPhraseCreatedFromScratch {
-            get {
-                return ResourceManager.GetString("TextPhraseCreatedFromScratch", resourceCulture);
+                return ResourceManager.GetString("DefaultMultiLineTextsStudierOrderWeight", resourceCulture);
             }
         }
     }

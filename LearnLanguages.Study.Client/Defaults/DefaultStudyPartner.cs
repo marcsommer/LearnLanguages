@@ -10,16 +10,29 @@ namespace LearnLanguages.Study
   [Export(typeof(IStudyPartner))]
   public class DefaultStudyPartner : StudyPartnerBase
   {
+    #region Ctors and Init
+
+    public DefaultStudyPartner()
+    {
+      MultiLineTextsStudier = new DefaultMultiLineTextsStudier();
+    }
+
+    #endregion
+
+    #region Properties
+
+    IMultiLineTextsStudier MultiLineTextsStudier { get; set; }
+
+    #endregion
+
+    #region Methods
 
     protected override void StudyMultiLineTextsImpl()
     {
-      //analyzes history events
-      //depending on history may ask user for info about MLT
-      //update percentage of order studying and meaning studying
-      //using percentage, select next studier implementor, either order or meaning
-      //initiate that studier's study method
-
-      throw new NotImplementedException();
+      //delegate the study call to the MLT studier
+      MultiLineTextsStudier.StudyMultiLineTexts(_MultiLineTexts, _OfferExchange);
     }
+    
+    #endregion
   }
 }

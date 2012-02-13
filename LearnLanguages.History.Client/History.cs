@@ -13,33 +13,35 @@ using System.ComponentModel.Composition;
 
 namespace LearnLanguages.History
 {
-  public class Publish : Common.Interfaces.IHistoryPublisher
+  public class History : Common.Interfaces.IHistoryPublisher, IPartImportsSatisfiedNotification
   {
-    public Publish()
+    public History()
     {
       EventAggregator = Services.EventAggregator;
     }
 
+    public Guid HistoryPublisherId { get { return Guid.Parse(HistoryResources.HistoryPublisherId); } }
+
     #region Singleton Pattern Members
-    private static volatile Publish _The;
+    private static volatile History _Ton;
     private static object _Lock = new object();
     /// <summary>
     /// Singleton instance.  Named "The" for esthetic reasons.
     /// </summary>
-    public static Publish The
+    public static History Ton
     {
       get
       {
-        if (_The == null)
+        if (_Ton == null)
         {
           lock (_Lock)
           {
-            if (_The == null)
-              _The = new Publish();
+            if (_Ton == null)
+              _Ton = new History();
           }
         }
 
-        return _The;
+        return _Ton;
       }
     }
     #endregion
@@ -49,12 +51,18 @@ namespace LearnLanguages.History
 
     private object _PublishLock = new object();
 
-    public void HistoryEvent(Common.Interfaces.IHistoryEvent historyEvent)
+    public void PublishEvent(Common.Interfaces.IHistoryEvent historyEvent)
     {
       lock (_PublishLock)
       {
         EventAggregator.Publish(historyEvent);
       }
+    }
+
+    public void OnImportsSatisfied()
+    {
+      if (EventAggregator != null)
+        EventAggregator.Subscribe(this);
     }
   }
 }
