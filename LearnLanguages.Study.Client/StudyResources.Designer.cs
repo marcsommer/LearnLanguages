@@ -61,6 +61,24 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 4.
+        /// </summary>
+        internal static string DefaultMeaningStudierActiveLinesCount {
+            get {
+                return ResourceManager.GetString("DefaultMeaningStudierActiveLinesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        internal static string DefaultMeaningStudierAggregateSize {
+            get {
+                return ResourceManager.GetString("DefaultMeaningStudierAggregateSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 5.
         /// </summary>
         internal static string DefaultMultiLineTextsStudierMeaningWeight {
@@ -75,6 +93,15 @@ namespace LearnLanguages.Study {
         internal static string DefaultMultiLineTextsStudierOrderWeight {
             get {
                 return ResourceManager.GetString("DefaultMultiLineTextsStudierOrderWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An empty phrase text was found in AggregatePhraseTexts.  This shouldn&apos;t happen..
+        /// </summary>
+        internal static string WarningMsgEmptyAggregatePhraseTextFound {
+            get {
+                return ResourceManager.GetString("WarningMsgEmptyAggregatePhraseTextFound", resourceCulture);
             }
         }
     }

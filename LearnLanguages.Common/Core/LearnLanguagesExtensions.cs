@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -26,9 +27,15 @@ namespace LearnLanguages.Common
       return words;
     }
 
-    public static int CountWords(this string str)
+    public static int CountWords(this string str, bool countDuplicates = true)
     {
-      return str.ParseIntoWords().Count;
+      var words = str.ParseIntoWords();
+      if (countDuplicates)
+        return words.Count;
+      else
+      {
+        return words.Distinct().Count();
+      }
     }
   }
 }

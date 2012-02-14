@@ -3,14 +3,22 @@ using System.Linq;
 using System.Collections.Generic;
 using LearnLanguages.Business;
 using LearnLanguages.Common;
+using LearnLanguages.Study.Interfaces;
 
 namespace LearnLanguages.Study
 {
-  public class LineAggregates
+  /// <summary>
+  /// Contains a single Line's information about its aggregate phrases.  It maintains its own 
+  /// knowledge of PhraseTexts "KnownPhraseTexts", and exposes methods for marking known/unknown,
+  /// asking if IsKnown(phraseText), and performing the actual aggregation.  This includes 
+  /// populating aggregate phrase texts with the OriginalAggregateSize, as well as aggregating
+  /// adjacent known phrase texts, according to its own knowledge.
+  /// </summary>
+  public class DefaultLineMeaningStudier : IMeaningStudier<LineEdit>
   {
     #region Ctors and Init
 
-    public LineAggregates(LineEdit line, int originalAggregateSize)
+    public DefaultLineMeaningStudier(LineEdit line, int originalAggregateSize)
     {
       if (line == null)
         throw new ArgumentNullException("line");
@@ -93,52 +101,36 @@ namespace LearnLanguages.Study
 
         if (!string.IsNullOrEmpty(aggregatePhraseText))
           AggregatePhraseTexts.Insert(i, aggregatePhraseText);
+
+        //remove any phrases that are empty.  this shouldn't happen, but we'll log it if we find one.
+        var count = AggregatePhraseTexts.Count;
+        //counting down from bottom of index because we will be removing items if needed.
+        for (int k = count - 1; k >= 0; k--)
+        {
+          if (string.IsNullOrEmpty(AggregatePhraseTexts[k]))
+          {
+            Services.Log(StudyResources.WarningMsgEmptyAggregatePhraseTextFound, 
+                         LogPriority.Medium, 
+                         LogCategory.Warning);
+            AggregatePhraseTexts.RemoveAt(k);
+          }
+        }
       }
     }
 
     /// <summary>
-    /// Searches within all KnownPhraseTexts for the given phraseText.  
-    /// Returns true if known, else false.
-    /// If you are asking about an aggregate phrase of which you know each of the pieces,
-    /// BUT we have NOT marked the entire aggregate phrase as known, this will return false.
-    /// Knowing the pieces is not necessarily knowing the whole.
-    /// </summary>
-    public bool IsKnown(string phraseText)
-    {
-      var isKnown = (from knownPhraseText in KnownPhraseTexts
-                     where knownPhraseText.Contains(phraseText)
-                     select knownPhraseText).Count() > 0;
-
-      return isKnown;
-    }
-
-    /// <summary>
-    /// Marks this phraseText internally as known.  This does not mark any outside knowledge base.
-    /// </summary>
-    public void MarkKnown(string phraseText)
-    {
-      if (!IsKnown(phraseText))
-        KnownPhraseTexts.Add(phraseText);
-    }
-
-    /// <summary>
-    /// Marks this phraseText internally as UNknown.  This does not mark any outside knowledge base.
-    /// </summary>
-    public void MarkUnknown(string phraseText)
-    {
-      if (IsKnown(phraseText))
-        KnownPhraseTexts.Remove(phraseText);
-    }
-
-    /// <summary>
     /// Using this object's internal knowledge base, this will combine adjacent known aggregates 
-    /// into their largest sizes possible.
+    /// into their largest sizes possible.  It will iterate through the phrase texts a maximum of
+    /// maxIterations.
     /// </summary>
-    public void AggregateAdjacentKnownPhraseTexts()
+    public void AggregateAdjacentKnownPhraseTexts(int maxIterations)
     {
+      //FIRST, GIVE US A FRESH START...I'M NOT ENTIRELY SURE THIS IS NECESSARY.
       PopulateAggregatePhraseTexts(OriginalAggregateSize);
 
-      var maxIterations = 100; //escape for our while loop
+      //SET UP A LOOP THAT ITERATES THROUGH THE LIST OF AGGREGATE PHRASES
+      //
+      //var maxIterations = 100; //escape for our while loop
       var iterations = 0;
       var stillLooking = true;
       while (stillLooking && (iterations < maxIterations))
@@ -152,7 +144,7 @@ namespace LearnLanguages.Study
         {
           var phraseA = AggregatePhraseTexts[i];
           var phraseB = AggregatePhraseTexts[i + 1];
-          if (IsKnown(phraseA) && IsKnown(phraseB))
+          if (IsPhraseKnown(phraseA) && IsPhraseKnown(phraseB))
           {
             var newAggregate = phraseA + " " + phraseB;
 
@@ -178,6 +170,77 @@ namespace LearnLanguages.Study
       }
     }
 
+    /// <summary>
+    /// Searches within all KnownPhraseTexts for the given phraseText.  
+    /// Returns true if known, else false.
+    /// If you are asking about an aggregate phrase of which you know each of the pieces,
+    /// BUT we have NOT marked the entire aggregate phrase as known, this will return false.
+    /// Knowing the pieces is not necessarily knowing the whole.
+    /// </summary>
+    public bool IsPhraseKnown(string phraseText)
+    {
+      var isKnown = (from knownPhraseText in KnownPhraseTexts
+                     where knownPhraseText.Contains(phraseText)
+                     select knownPhraseText).Count() > 0;
+
+      return isKnown;
+    }
+
+    /// <summary>
+    /// Marks this phraseText internally as known.  This does not mark any outside knowledge base.
+    /// </summary>
+    public void MarkPhraseKnown(string phraseText)
+    {
+      if (!IsPhraseKnown(phraseText))
+        KnownPhraseTexts.Add(phraseText);
+    }
+
+    /// <summary>
+    /// Marks this phraseText internally as UNknown.  This does not mark any outside knowledge base.
+    /// </summary>
+    public void MarkPhraseUnknown(string phraseText)
+    {
+      if (IsPhraseKnown(phraseText))
+        KnownPhraseTexts.Remove(phraseText);
+    }
+
+    /// <summary>
+    /// Calculates the PercentKnown of this line.
+    /// </summary>
+    /// <returns></returns>
+    public double GetLinePercentKnown()
+    {
+      var listKnown = new List<string>();
+      var listUnknown = new List<string>();
+      foreach (var phraseText in AggregatePhraseTexts)
+      {
+        var phraseTextDistinctWords = phraseText.ParseIntoWords().Distinct();
+        if (IsPhraseKnown(phraseText))
+          listKnown.AddRange(phraseTextDistinctWords);
+        else
+          listUnknown.AddRange(phraseTextDistinctWords);
+      }
+
+      int knownWordsCount = listKnown.Count;
+      int unknownWordsCount = listUnknown.Count;
+      int totalWordsCount = knownWordsCount + unknownWordsCount;
+      if (totalWordsCount == 0)
+        throw new Exception("knownWordsCount + unknownWordsCount == 0.  This means that we have an aggregate phrase of zero words in our LineAggregateInfo.  This shouldn't happen.");
+
+      double percentKnown = (double)knownWordsCount / (double)(totalWordsCount);
+      return percentKnown;
+    }
+
     #endregion
+
+    public void Study(LineEdit studyTarget, Common.Interfaces.IOfferExchange offerExchange)
+    {
+      throw new NotImplementedException();
+    }
+
+    public bool StudyAgain()
+    {
+      throw new NotImplementedException();
+    }
   }
 }

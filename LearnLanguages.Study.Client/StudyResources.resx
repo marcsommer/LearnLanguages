@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DefaultMeaningStudierActiveLinesCount" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="DefaultMeaningStudierAggregateSize" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="DefaultMultiLineTextsStudierMeaningWeight" xml:space="preserve">
     <value>5</value>
   </data>
   <data name="DefaultMultiLineTextsStudierOrderWeight" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="WarningMsgEmptyAggregatePhraseTextFound" xml:space="preserve">
+    <value>An empty phrase text was found in AggregatePhraseTexts.  This shouldn't happen.</value>
   </data>
 </root>

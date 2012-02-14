@@ -62,7 +62,10 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LineAggregates.cs" />
+    <Compile Include="Bases\LineMeaningStudierBase.cs" />
+    <Compile Include="Bases\SingleMultiLineTextMeaningStudierBase.cs" />
+    <Compile Include="Defaults\DefaultSingleMultiLineTextMeaningStudier.cs" />
+    <Compile Include="Defaults\DefaultLineMeaningStudier.cs" />
     <Compile Include="Bases\MultiLineTextsMeaningStudierBase.cs" />
     <Compile Include="Bases\MultiLineTextsOrderStudierBase.cs" />
     <Compile Include="Bases\MultiLineTextsStudierBase.cs" />
@@ -80,6 +83,7 @@
     <Compile Include="Interfaces\Core\IStudierOfT.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Interfaces\ToDelete\ITranslationStudier.cs" />
+    <Compile Include="MultiLineTextMeaningInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudyResources.Designer.cs">
       <AutoGen>True</AutoGen>
