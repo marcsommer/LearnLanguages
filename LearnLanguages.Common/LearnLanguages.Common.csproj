@@ -92,6 +92,7 @@
     <Compile Include="Args\ResultArgsOfT.cs" />
     <Compile Include="Args\SampleActionArgs.cs" />
     <Compile Include="Args\SaveArgs.cs" />
+    <Compile Include="Core\LearnLanguagesExtensions.cs" />
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />

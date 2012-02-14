@@ -40,7 +40,7 @@ namespace LearnLanguages.Study
 
     private void UpdatePercentKnowns()
     {
-      
+      //todo: update percent knowns using history
     }
 
     /// <summary>

@@ -12,6 +12,7 @@ using LearnLanguages.Common.Interfaces;
 using System.Windows;
 using System.ComponentModel;
 using Csla.Core;
+using LearnLanguages.Study.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -661,7 +662,9 @@ namespace LearnLanguages.Silverlight.ViewModels
 
           var songs = r.Object;
 
-          StudyPartner.StudyMultiLineTexts(songs, Services.EventAggregator);
+          throw new NotImplementedException();
+          //todo: restructure study call to reflect new architecture in study a song view model.
+          //StudyPartner.StudyMultiLineTexts(songs, Services.EventAggregator);
         });
     }
 

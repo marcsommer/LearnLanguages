@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace LearnLanguages
 {
   //HACK:  COMMONRESOURCES SHOULD BE IN RESX
@@ -82,6 +83,11 @@ namespace LearnLanguages
 
     #endregion
 
+    //need to check if this still works, so throwing exception
+    public static string LineDelimiter { get { throw new NotImplementedException(); return @"\r"; } }
+
+    //need to check if this still works, so throwing exception
+    public static string RegExSplitPatternWords { get { throw new NotImplementedException(); return @"\\W+"; } }
     
     public static string ShowGridLines { get { return false.ToString(); } }
   }

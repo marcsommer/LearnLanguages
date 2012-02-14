@@ -13,7 +13,7 @@ namespace LearnLanguages.Common.Args
        
     }
 
-    public DeleteArgs(Guid sampleId, LearnLanguages.Common.AsynchronousCallback callback)
+    public DeleteArgs(Guid sampleId, LearnLanguages.Common.Delegates.AsynchronousCallback callback)
     {
       this.SampleId = sampleId;
       this.Callback = callback;

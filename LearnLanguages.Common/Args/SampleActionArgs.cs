@@ -12,7 +12,7 @@ namespace LearnLanguages.Common.Args
 
     }
 
-    public SampleActionArgs(Guid sampleId, UserInterfaceInfo uiInfo, AsynchronousCallback callback)
+    public SampleActionArgs(Guid sampleId, UserInterfaceInfo uiInfo, Delegates.AsynchronousCallback callback)
     {
       this.SampleId = sampleId;
       this.UserInterfaceInfo = uiInfo;
@@ -21,6 +21,6 @@ namespace LearnLanguages.Common.Args
 
     public Guid SampleId { get; set; }
     public UserInterfaceInfo UserInterfaceInfo { get; set; }
-    public AsynchronousCallback Callback { get; set; }
+    public Delegates.AsynchronousCallback Callback { get; set; }
   }
 }

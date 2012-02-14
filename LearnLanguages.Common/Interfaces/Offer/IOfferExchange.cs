@@ -9,19 +9,19 @@ namespace LearnLanguages.Common.Interfaces
     /// Id for the individual object (singleton as of this writing) responsible for 
     /// handling offers.
     /// </summary>
-    public Guid OfferExchangeId { get; }
+    Guid OfferExchangeId { get; }
 
     /// <summary>
     /// Publish an offer to the exchange.
     /// </summary>
-    public void Publish(IOffer offer);
+    void Publish(IOffer offer);
 
     /// <summary>
     /// This is the event aggregator used for responses to offers.  These responses will include:
     /// AcceptOffer, DeclineOffer, and there is always the change of ignoring or timing out offers.
     /// That will be left up to the offerer.  
     /// </summary>
-    public IEventAggregator OfferResponseEventAggregator { get; }
+    IEventAggregator OfferResponseEventAggregator { get; }
 
     ///// <summary>
     ///// May be useful, will see.

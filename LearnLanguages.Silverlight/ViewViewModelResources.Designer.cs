@@ -306,15 +306,6 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \r.
-        /// </summary>
-        public static string LineDelimiter {
-            get {
-                return ResourceManager.GetString("LineDelimiter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 400.
         /// </summary>
         public static string MaxInstructionsWidth {
@@ -347,15 +338,6 @@ namespace LearnLanguages.Silverlight {
         public static string NavigationLabelStudyASong {
             get {
                 return ResourceManager.GetString("NavigationLabelStudyASong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to \\W+.
-        /// </summary>
-        public static string RegExSplitPatternWords {
-            get {
-                return ResourceManager.GetString("RegExSplitPatternWords", resourceCulture);
             }
         }
         

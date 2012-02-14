@@ -97,17 +97,32 @@
     <Compile Include="..\LearnLanguages.Common\Args\SaveArgs.cs">
       <Link>Args\SaveArgs.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\AsynchronousCallback.cs">
-      <Link>AsynchronousCallback.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\AsyncResultOfT.cs">
-      <Link>AsyncResultOfT.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\CommonResources.cs">
       <Link>CommonResources.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\ConsoleLogger.cs">
-      <Link>ConsoleLogger.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Core\AsyncResultOfT.cs">
+      <Link>Core\AsyncResultOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\CustomException.cs">
+      <Link>Core\CustomException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\MagicStringsList.cs">
+      <Link>Core\MagicStringsList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\ResultOfT.cs">
+      <Link>Core\ResultOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\SaltedHashedPassword.cs">
+      <Link>Core\SaltedHashedPassword.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\Services.cs">
+      <Link>Core\Services.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\Tuple.cs">
+      <Link>Core\Tuple.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\UserInterfaceInfo.cs">
+      <Link>Core\UserInterfaceInfo.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\CslaBases\BusinessBaseOfCAndCDto.cs">
       <Link>CslaBases\BusinessBaseOfCAndCDto.cs</Link>
@@ -124,71 +139,92 @@
     <Compile Include="..\LearnLanguages.Common\CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs">
       <Link>CslaBases\ReadOnlyListBaseOfLAndCAndCDto.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\CustomException.cs">
-      <Link>CustomException.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\Delegates\AsyncCallbackOfT.cs">
       <Link>Delegates\AsyncCallbackOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Delegates\AsynchronousCallback.cs">
+      <Link>Delegates\AsynchronousCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Delegates\ExceptionCheckCallback.cs">
+      <Link>Delegates\ExceptionCheckCallback.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\EventArgs\ModelEventArgsOfT.cs">
       <Link>EventArgs\ModelEventArgsOfT.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IAsyncStub.cs">
-      <Link>Interfaces\IAsyncStub.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Exceptions\PartNotSatisfiedException.cs">
+      <Link>Exceptions\PartNotSatisfiedException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\ICreateAsync.cs">
-      <Link>Interfaces\ICreateAsync.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Feedback\FeedbackOfT.cs">
+      <Link>Feedback\FeedbackOfT.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\ICreateChildAsync.cs">
-      <Link>Interfaces\ICreateChildAsync.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IAsyncStub.cs">
+      <Link>Interfaces\Async\IAsyncStub.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IDeleteAsync.cs">
-      <Link>Interfaces\IDeleteAsync.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\ICreateAsync.cs">
+      <Link>Interfaces\Async\ICreateAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IEditAsync.cs">
-      <Link>Interfaces\IEditAsync.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\ICreateChildAsync.cs">
+      <Link>Interfaces\Async\ICreateChildAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveId.cs">
-      <Link>Interfaces\IHaveId.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IDeleteAsync.cs">
+      <Link>Interfaces\Async\IDeleteAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveModelListOfTList.cs">
-      <Link>Interfaces\IHaveModelListOfTList.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IEditAsync.cs">
+      <Link>Interfaces\Async\IEditAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveModelOfT.cs">
-      <Link>Interfaces\IHaveModelOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IInitializeAsync.cs">
+      <Link>Interfaces\Async\IInitializeAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IHaveUri.cs">
-      <Link>Interfaces\IHaveUri.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\ISaveAsync.cs">
+      <Link>Interfaces\Async\ISaveAsync.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IInitializeAsync.cs">
-      <Link>Interfaces\IInitializeAsync.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IHaveId.cs">
+      <Link>Interfaces\Core\IHaveId.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\ILogger.cs">
-      <Link>Interfaces\ILogger.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IHaveModelListOfTList.cs">
+      <Link>Interfaces\Core\IHaveModelListOfTList.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\ISaveAsync.cs">
-      <Link>Interfaces\ISaveAsync.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IHaveModelOfT.cs">
+      <Link>Interfaces\Core\IHaveModelOfT.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\IViewModelBase.cs">
-      <Link>Interfaces\IViewModelBase.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IHaveUri.cs">
+      <Link>Interfaces\Core\IHaveUri.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\LogCategory.cs">
-      <Link>LogCategory.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Core\ILogger.cs">
+      <Link>Interfaces\Core\ILogger.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\LogPriority.cs">
-      <Link>LogPriority.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IViewModelBase.cs">
+      <Link>Interfaces\Core\IViewModelBase.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\MagicStringsList.cs">
-      <Link>MagicStringsList.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IFeedback.cs">
+      <Link>Interfaces\Feedback\IFeedback.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\ResultOfT.cs">
-      <Link>ResultOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IGetFeedback.cs">
+      <Link>Interfaces\Feedback\IGetFeedback.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\SaltedHashedPassword.cs">
-      <Link>SaltedHashedPassword.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IHaveFeedback.cs">
+      <Link>Interfaces\Feedback\IHaveFeedback.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Services.cs">
-      <Link>Services.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\History\IHistoryEvent.cs">
+      <Link>Interfaces\History\IHistoryEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\History\IHistoryPublisher.cs">
+      <Link>Interfaces\History\IHistoryPublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Offer\IOffer.cs">
+      <Link>Interfaces\Offer\IOffer.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Offer\IOfferExchange.cs">
+      <Link>Interfaces\Offer\IOfferExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Logging\ConsoleLogger.cs">
+      <Link>Logging\ConsoleLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Logging\LogCategory.cs">
+      <Link>Logging\LogCategory.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Logging\LogPriority.cs">
+      <Link>Logging\LogPriority.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Statuses\Status.cs">
       <Link>Statuses\Status.cs</Link>
@@ -234,15 +270,6 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Statuses\StatusUpdating.cs">
       <Link>Statuses\StatusUpdating.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Tuple.cs">
-      <Link>Tuple.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\UserInterfaceInfo.cs">
-      <Link>UserInterfaceInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\ViewInfoForContainer.cs">
-      <Link>ViewInfoForContainer.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\ViewModelBases\ViewModelBase.cs">
       <Link>ViewModelBases\ViewModelBase.cs</Link>

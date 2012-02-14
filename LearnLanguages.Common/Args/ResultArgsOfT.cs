@@ -3,7 +3,6 @@
 namespace LearnLanguages.Common.Args
 {
   public class ResultArgs<T>
-    where T : class, new()
   {
     public ResultArgs() { }
     public ResultArgs(T obj)

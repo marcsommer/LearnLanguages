@@ -200,9 +200,6 @@
   <data name="LabelSongAdditionalMetadata" xml:space="preserve">
     <value>Song Info: </value>
   </data>
-  <data name="LineDelimiter" xml:space="preserve">
-    <value>\r</value>
-  </data>
   <data name="MaxInstructionsWidth" xml:space="preserve">
     <value>400</value>
   </data>
@@ -214,9 +211,6 @@
   </data>
   <data name="NavigationLabelStudyASong" xml:space="preserve">
     <value>A Song</value>
-  </data>
-  <data name="RegExSplitPatternWords" xml:space="preserve">
-    <value>\\W+</value>
   </data>
   <data name="ShowInstructions" xml:space="preserve">
     <value>True</value>

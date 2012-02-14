@@ -2,10 +2,12 @@
 using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
+using LearnLanguages.Common;
 using LearnLanguages.Common.ViewModelBases;
 using System.Windows;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -174,9 +176,10 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         var lines = songText.ParseIntoLines(); //removes empty entries
 
-        var splitIntoWordsPattern = ViewViewModelResources.RegExSplitPatternWords;
-        splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");
-        var words = new List<string>(Regex.Split(songText, splitIntoWordsPattern));
+        //var splitIntoWordsPattern = CommonResources.RegExSplitPatternWords;
+        //splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");
+        //var words = new List<string>(Regex.Split(songText, splitIntoWordsPattern));
+        var words = songText.ParseIntoWords();
         var wordCount = words.Count;
         var escapeHelper = 0;
         while (words.Contains(""))

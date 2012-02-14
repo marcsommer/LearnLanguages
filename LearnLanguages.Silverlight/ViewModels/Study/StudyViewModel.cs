@@ -3,6 +3,7 @@ using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
 using System;
+using LearnLanguages.Study.Interfaces;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {

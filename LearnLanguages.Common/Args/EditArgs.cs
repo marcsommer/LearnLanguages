@@ -13,7 +13,7 @@ namespace LearnLanguages.Common.Args
        
     }
 
-    public EditArgs(Guid sampleId, UserInterfaceInfo uiInfo, LearnLanguages.Common.AsynchronousCallback callback)
+    public EditArgs(Guid sampleId, UserInterfaceInfo uiInfo, LearnLanguages.Common.Delegates.AsynchronousCallback callback)
       : base(sampleId, uiInfo, callback)
     {
 

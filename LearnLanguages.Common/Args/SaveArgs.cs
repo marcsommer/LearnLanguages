@@ -13,7 +13,7 @@ namespace LearnLanguages.Common.Args
        
     }
 
-    public SaveArgs(Guid sampleId, UserInterfaceInfo uiInfo, LearnLanguages.Common.AsynchronousCallback callback)
+    public SaveArgs(Guid sampleId, UserInterfaceInfo uiInfo, LearnLanguages.Common.Delegates.AsynchronousCallback callback)
       : base(sampleId, uiInfo, callback)
     {
 

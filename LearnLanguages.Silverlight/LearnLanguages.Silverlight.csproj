@@ -122,7 +122,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="LearnLanguagesExtensions.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongViewModel.cs" />
     <Compile Include="ViewModels\Bases\NavigationSetTitleViewModelBase.cs" />
@@ -489,6 +488,10 @@
     <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.Client.csproj">
       <Project>{1CEB7E12-3D55-4EE4-BFCD-1AAB6F64F024}</Project>
       <Name>LearnLanguages.Navigation.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj">
+      <Project>{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}</Project>
+      <Name>LearnLanguages.Study.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

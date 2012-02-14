@@ -13,7 +13,7 @@ namespace LearnLanguages.Common.Args
        
     }
 
-    public CreateChildArgs(Guid sampleId, UserInterfaceInfo uiInfo, LearnLanguages.Common.AsynchronousCallback callback)
+    public CreateChildArgs(Guid sampleId, UserInterfaceInfo uiInfo, LearnLanguages.Common.Delegates.AsynchronousCallback callback)
       : base(sampleId, uiInfo, callback)
     {
 
