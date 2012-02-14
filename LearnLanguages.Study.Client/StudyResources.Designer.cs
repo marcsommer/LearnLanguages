@@ -61,6 +61,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 100.
+        /// </summary>
+        internal static string DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts {
+            get {
+                return ResourceManager.GetString("DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4.
         /// </summary>
         internal static string DefaultMeaningStudierActiveLinesCount {
@@ -93,6 +102,15 @@ namespace LearnLanguages.Study {
         internal static string DefaultMultiLineTextsStudierOrderWeight {
             get {
                 return ResourceManager.GetString("DefaultMultiLineTextsStudierOrderWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meaning.
+        /// </summary>
+        internal static string StudyContextMeaning {
+            get {
+                return ResourceManager.GetString("StudyContextMeaning", resourceCulture);
             }
         }
         

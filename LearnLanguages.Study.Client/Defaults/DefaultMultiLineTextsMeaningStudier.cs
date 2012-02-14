@@ -14,7 +14,7 @@ namespace LearnLanguages.Study
   /// </summary>
   [Export(typeof(Interfaces.IMeaningStudier<MultiLineTextList>))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class DefaultMultiLineTextsMeaningStudier : MultiLineTextsMeaningStudierBase
+  public class DefaultMultiLineTextsMeaningStudier : StudierBase<MultiLineTextList>
   {
     public DefaultMultiLineTextsMeaningStudier()
     {

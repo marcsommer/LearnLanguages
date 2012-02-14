@@ -62,28 +62,22 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bases\LineMeaningStudierBase.cs" />
-    <Compile Include="Bases\SingleMultiLineTextMeaningStudierBase.cs" />
+    <Compile Include="Bases\StudierBaseOfT.cs" />
+    <Compile Include="Defaults\DefaultPhraseMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultSingleMultiLineTextMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultLineMeaningStudier.cs" />
-    <Compile Include="Bases\MultiLineTextsMeaningStudierBase.cs" />
-    <Compile Include="Bases\MultiLineTextsOrderStudierBase.cs" />
-    <Compile Include="Bases\MultiLineTextsStudierBase.cs" />
     <Compile Include="Defaults\DefaultMultiLineTextsMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultMultiLineTextsOrderStudier.cs" />
     <Compile Include="Defaults\DefaultMultiLineTextsStudier.cs" />
     <Compile Include="Defaults\DefaultStudyPartner.cs" />
-    <Compile Include="Interfaces\Core\IMeaningStudierOfT.cs" />
+    <Compile Include="Interfaces\Core\IStudyJobInfoOfT.cs" />
     <Compile Include="Interfaces\Core\IOrderStudierOfT.cs" />
-    <Compile Include="Interfaces\ToDelete\IMultiLineTextsOrderStudier.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
-    <Compile Include="Interfaces\ToDelete\ILineMeaningStudier.cs" />
-    <Compile Include="Interfaces\ToDelete\IMultiLineTextsStudier.cs" />
-    <Compile Include="Interfaces\ToDelete\IPhraseStudier.cs" />
-    <Compile Include="Interfaces\Core\IStudierOfT.cs" />
+    <Compile Include="Interfaces\Core\IStudierOfJAndT.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
-    <Compile Include="Interfaces\ToDelete\ITranslationStudier.cs" />
+    <Compile Include="Bases\StudyJobInfoBaseOfT.cs" />
     <Compile Include="MultiLineTextMeaningInfo.cs" />
+    <Compile Include="JobInfos\MeaningStudyJobInfoOfT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudyResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -113,6 +107,7 @@
       <LastGenOutput>StudyResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

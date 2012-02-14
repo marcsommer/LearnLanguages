@@ -8,76 +8,39 @@ using LearnLanguages.Study.Interfaces;
 namespace LearnLanguages.Study
 {
   /// <summary>
-  /// Contains a single Line's information about its aggregate phrases.  It maintains its own 
-  /// knowledge of PhraseTexts "KnownPhraseTexts", and exposes methods for marking known/unknown,
-  /// asking if IsKnown(phraseText), and performing the actual aggregation.  This includes 
-  /// populating aggregate phrase texts with the OriginalAggregateSize, as well as aggregating
-  /// adjacent known phrase texts, according to its own knowledge.
+  /// First implementation: "Dumb" studier.  This doesn't know anything about whether 
+  /// a phrase's history, it "simply" takes the phrase, produces an offer to show a Q & A about it.
+  /// Listens for the ViewModel to publish a Q & A response
   /// </summary>
-  public class DefaultLineMeaningStudier : StudierBase< LineEdit>
+  public class DefaultPhraseMeaningStudier : StudierBase<MeaningStudyJobInfo<PhraseEdit>, PhraseEdit>
   {
     #region Ctors and Init
-
-    public DefaultLineMeaningStudier()
+    public DefaultPhraseMeaningStudier()
     {
-      
+
     }
-
     #endregion
 
-    #region Properties
-
-    /// <summary>
-    /// This AggregateSize this object was created with.
-    /// </summary>
-    public int AggregateSize { get; private set; }
-
-    /// <summary>
-    /// The Phrase's order in the list is their order in the line.
-    /// </summary>
-    public List<string> AggregatePhraseTexts { get; private set; }
-
-    /// <summary>
-    /// Contains list of known phrase texts according to this object.  This does not reference
-    /// any outside source for knowledge.  It only is an internal reference.
-    /// </summary>
-    public List<string> KnownPhraseTexts { get; private set; }
-
-    #endregion
 
     #region Methods
 
-    public bool StudyAgain()
-    {
-      if (HasStudied)
-      {
-        StudyImpl();
-        return true;
-      }
-      else
-        return false;
-    }
+    //public bool StudyAgain()
+    //{
+    //  if (HasStudied)
+    //  {
+    //    StudyImpl();
+    //    return true;
+    //  }
+    //  else
+    //    return false;
+    //}
 
     protected override void StudyImpl()
     {
-      if (!HasStudied)
-      {
-        AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
-        AggregatePhraseTexts = new List<string>();
-        KnownPhraseTexts = new List<string>();
-        PopulateAggregatePhraseTexts(AggregateSize);
-      }
-      else
-      {
-        var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
-        AggregateAdjacentKnownPhraseTexts(maxIterations);
-      }
-      PopulateStudiers();
-    }
-
-    private void PopulateStudiers()
-    {
-      throw new NotImplementedException();
+      //FINALLY, THIS SHOULD ACTUALLY DO SOMETHING.  IT TAKES THE PHRASE THAT IT CONTAINS.
+      //IF IT IS IN THE NATIVE LANGUAGE, THEN IT JUST POPS UP A NATIVE LANGUAGE STUDY QUESTION.
+      //IF IT IS IN A DIFFERENT LANGUAGE, THEN IT POPS UP EITHER DIRECTION Q & A, 50% CHANCE.
+      //if (_StudyTarget.Language.Text ==
     }
 
     public override string GetStudyContext()
@@ -97,7 +60,7 @@ namespace LearnLanguages.Study
 
       AggregatePhraseTexts.Clear();
 
-      var lineText = _StudyTarget.Phrase.Text;
+      var lineText = Line.Phrase.Text;
       //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
       //We will end up with 20/2 = 10 aggregate phrases.  
       //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 
@@ -260,5 +223,7 @@ namespace LearnLanguages.Study
     }
 
     #endregion
+    
+    
   }
 }

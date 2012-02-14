@@ -31,5 +31,17 @@ namespace LearnLanguages.Study
     }
 
     protected abstract void StudyMultiLineTextsImpl();
+
+    //public bool HasStudied { get; protected set; }
+
+    //public virtual bool StudyAgain()
+    //{
+    //  if (_StudyTarget == null || _OfferExchange == null || !HasStudied)
+    //    return false;
+
+    //  Study(_StudyTarget, _OfferExchange);
+    //  return true;
+    //}
+
   }
 }

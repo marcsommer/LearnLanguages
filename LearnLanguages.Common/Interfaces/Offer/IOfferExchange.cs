@@ -11,6 +11,8 @@ namespace LearnLanguages.Common.Interfaces
     /// </summary>
     Guid OfferExchangeId { get; }
 
+    //todo: refactor offerexchangeId to just Id.
+
     /// <summary>
     /// Publish an offer to the exchange.
     /// </summary>

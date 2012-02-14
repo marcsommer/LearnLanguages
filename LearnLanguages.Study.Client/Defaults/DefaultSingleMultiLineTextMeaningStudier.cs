@@ -24,7 +24,8 @@ namespace LearnLanguages.Study
   /// a whole slew of other factors...perfect for a neural net to figure out.  Alas, for now it must 
   /// just be active lines.
   /// </summary>
-  public class DefaultSingleMultiLineTextMeaningStudier : SingleMultiLineTextMeaningStudierBase
+  public class DefaultSingleMultiLineTextMeaningStudier : 
+    StudierBase<MeaningStudyJobInfo<MultiLineTextEdit>, MultiLineTextEdit>
   {
     #region Ctors and Init
     
@@ -53,6 +54,12 @@ namespace LearnLanguages.Study
     /// (as in the second example of 3, where the last phrase is just "the moon" (2).
     /// </summary>
     public int AggregateSize { get; set; }
+
+    /// <summary>
+    /// How many lines to cycle through while studying.  Much like a buffer.  When a line is learned,
+    /// then it gets removed from the ActiveLines and a different line replaces it.
+    /// </summary>
+    public int ActiveLinesCount { get; set; }
 
     /// <summary>
     /// LineStudiers indexed by each's corresponding line number.
@@ -98,7 +105,7 @@ namespace LearnLanguages.Study
     protected virtual void PopulateLineStudiers()
     {
       _LineStudiers.Clear();
-      foreach (var line in _StudyTarget.Lines)
+      foreach (var line in _StudyJobInfo.StudyTarget.Lines)
       {
         var lineInfo = new DefaultLineMeaningStudier(line, AggregateSize);
         _LineStudiers.Add(line.LineNumber, lineInfo);
@@ -124,10 +131,11 @@ namespace LearnLanguages.Study
       return totalPercentKnownNormalized;
     }
 
-
+    public override string GetStudyContext()
+    {
+      return StudyResources.StudyContextMeaning;
+    }
     
     #endregion
-
-    public int ActiveLinesCount { get; set; }
   }
 }

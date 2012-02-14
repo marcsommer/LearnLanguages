@@ -9,7 +9,8 @@ namespace LearnLanguages.Study
   /// 
   /// </summary>
   [Export(typeof(IMultiLineTextsStudier))]
-  public class DefaultMultiLineTextsStudier : MultiLineTextsStudierBase
+  //public class DefaultMultiLineTextsStudier : MultiLineTextsStudierBase
+  public class DefaultMultiLineTextsStudier : StudierBase<MultiLineTextList>
   {
     public DefaultMultiLineTextsStudier()
     {
@@ -20,7 +21,7 @@ namespace LearnLanguages.Study
       //OrderWeight = double.Parse(StudyResources.DefaultMultiLineTextsStudierOrderWeight);
     }
 
-    protected override void StudyMultiLineTextsImpl()
+    protected override void StudyImpl()
     {
       //analyzes history events
       //for now, we will assume there is no history for the MLT, and thus we should focus on understanding
@@ -33,9 +34,9 @@ namespace LearnLanguages.Study
      
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
-        _MeaningStudier.Study(_MultiLineTexts, _OfferExchange);
+        _MeaningStudier.Study(_StudyTarget, _OfferExchange);
       else
-        _OrderStudier.Study(_MultiLineTexts, _OfferExchange);
+        _OrderStudier.Study(_StudyTarget, _OfferExchange);
     }
 
     private void UpdatePercentKnowns()
@@ -84,5 +85,6 @@ namespace LearnLanguages.Study
     //private double OrderWeight { get; set; }
     private double MeaningPercentKnown { get; set; }
     //private double OrderPercentKnown { get; set; }
+
   }
 }
