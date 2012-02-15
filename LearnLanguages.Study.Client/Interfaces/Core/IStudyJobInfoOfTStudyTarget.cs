@@ -5,13 +5,8 @@ using LearnLanguages.Business;
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyJobInfo<TStudyTarget> 
+  public interface IStudyJobInfo<TTarget> : IJobInfo<TTarget>
   {
-    Guid Id { get; }
-    TStudyTarget StudyTarget { get; }
     LanguageEdit Language { get; }
-    DateTime JobExpirationDate { get; }
-    IOfferExchange OfferExchange { get; }
-    double ExpectedPrecision { get; }
   }
 }

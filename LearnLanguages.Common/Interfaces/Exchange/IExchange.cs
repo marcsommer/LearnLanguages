@@ -3,27 +3,35 @@ using Caliburn.Micro;
 
 namespace LearnLanguages.Common.Interfaces
 {
-  public interface IOfferExchange
+  public interface IExchange
   {
     /// <summary>
     /// Id for the individual object (singleton as of this writing) responsible for 
     /// handling offers.
     /// </summary>
-    Guid OfferExchangeId { get; }
+    Guid ExchangeId { get; }
 
-    //todo: refactor offerexchangeId to just Id.
+    void Publish(IOpportunity opportunity);
 
     /// <summary>
     /// Publish an offer to the exchange.
     /// </summary>
     void Publish(IOffer offer);
 
+    void Publish(IOfferResponse offerResponse);
+
+    void SubscribeToOpportunities(object subscriber);
+    void UnsubscribeFromOpportunities(object subscriber);
+
+    void SubscribeToOffers(object subscriber);
+    void UnsubscribeFromOffers(object subscriber);
+
     /// <summary>
     /// This is the event aggregator used for responses to offers.  These responses will include:
     /// AcceptOffer, DeclineOffer, and there is always the change of ignoring or timing out offers.
     /// That will be left up to the offerer.  
     /// </summary>
-    IEventAggregator OfferResponseEventAggregator { get; }
+    //IEventAggregator OfferResponseEventAggregator { get; }
 
     ///// <summary>
     ///// May be useful, will see.

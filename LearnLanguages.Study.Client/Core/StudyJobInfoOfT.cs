@@ -11,17 +11,17 @@ namespace LearnLanguages.Study
     /// Creates a new StudyJobInfo object with the given "immutable" parameters.
     /// ExpectedPrecision defaults to 0, ie anything will do.
     /// </summary>
-    /// <param name="studyTarget"></param>
+    /// <param name="Target"></param>
     /// <param name="language"></param>
     /// <param name="offerExchange"></param>
     /// <param name="jobExpirationDate"></param>
     /// <param name="expectedPrecision"></param>
-    public StudyJobInfo(T studyTarget, LanguageEdit language, IOfferExchange offerExchange, 
+    public StudyJobInfo(T target, LanguageEdit language, IExchange offerExchange, 
       DateTime jobExpirationDate, double expectedPrecision)
     {
       Id = Guid.NewGuid();
       //OriginalJobId = Guid.Empty;
-      StudyTarget = studyTarget;
+      Target = target;
       Language = language;
       OfferExchange = offerExchange;
       JobExpirationDate = jobExpirationDate;
@@ -29,7 +29,7 @@ namespace LearnLanguages.Study
     }
 
     //public static StudyJobInfo<TNewTarget> StudyJobInfo<TNewTarget, TOriginalJob, TOriginalJobTarget>
-    //  (TOriginalJob originalJob, TNewTarget newStudyTarget, LanguageEdit language, DateTime jobExpirationDate)
+    //  (TOriginalJob originalJob, TNewTarget newTarget, LanguageEdit language, DateTime jobExpirationDate)
     //  where TOriginalJob : StudyJobInfo<TOriginalJobTarget>
     //{
     //  var job = new StudyJobInfo<T>(originalJob.stu, language, jobExpirationDate) 
@@ -62,10 +62,10 @@ namespace LearnLanguages.Study
     //  }
     //}
 
-    public T StudyTarget { get; private set; }
+    public T Target { get; private set; }
     public LanguageEdit Language { get; private set; }
     public DateTime JobExpirationDate { get; private set; }
-    public IOfferExchange OfferExchange { get; private set; }
+    public IExchange OfferExchange { get; private set; }
     public double ExpectedPrecision { get; private set;}
 
     public static DateTime NoExpirationDate

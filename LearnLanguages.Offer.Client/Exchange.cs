@@ -4,12 +4,12 @@ using Caliburn.Micro;
 
 namespace LearnLanguages.Offer.Client
 {
-  public class OfferExchange : IOfferExchange
+  public class Exchange : IExchange
   {
     #region Singleton Pattern Members
-    private static volatile OfferExchange _Ton;
+    private static volatile Exchange _Ton;
     private static object _Lock = new object();
-    public static OfferExchange Ton
+    public static Exchange Ton
     {
       get
       {
@@ -18,7 +18,7 @@ namespace LearnLanguages.Offer.Client
           lock (_Lock)
           {
             if (_Ton == null)
-              _Ton = new OfferExchange();
+              _Ton = new Exchange();
           }
         }
 
@@ -27,7 +27,7 @@ namespace LearnLanguages.Offer.Client
     }
     #endregion
 
-    public Guid OfferExchangeId
+    public Guid ExchangeId
     {
       get { return Guid.Parse(OfferResources.OfferExchangeId); }
     }

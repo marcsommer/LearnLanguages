@@ -11,15 +11,17 @@ namespace LearnLanguages.Study
     public StudierBase()
     {
       HasStudied = false;
+      Id = Guid.NewGuid();
     }
 
+    protected Guid Id { get; protected set; }
     protected J _StudyJobInfo { get; set; }
-    protected IOfferExchange _OfferExchange { get; set; }
+    protected IExchange _OfferExchange { get; set; }
 
-    public void Study(J studyJobInfo, IOfferExchange offerExchange)
+    public void Study(J studyJobInfo, IExchange offerExchange)
     {
       if (studyJobInfo == null)
-        throw new ArgumentNullException("studyTarget");
+        throw new ArgumentNullException("target");
       if (offerExchange == null)
         throw new ArgumentNullException("offerExchange");
 
@@ -27,7 +29,7 @@ namespace LearnLanguages.Study
       //then we haven't studied this before.
       //or the same reasoning for offer exchange
       if ( (_StudyJobInfo != null && (studyJobInfo.Id != _StudyJobInfo.Id)) ||
-           (_OfferExchange != null && (offerExchange.OfferExchangeId != _OfferExchange.OfferExchangeId)) )
+           (_OfferExchange != null && (offerExchange.ExchangeId != _OfferExchange.ExchangeId)) )
         HasStudied = false;
 
       _StudyJobInfo = studyJobInfo;

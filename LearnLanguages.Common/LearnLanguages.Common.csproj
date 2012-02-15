@@ -96,6 +96,9 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Interfaces\Exchange\IJobInfoOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
+    <Compile Include="Interfaces\Exchange\IOpportunity.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />
     <Compile Include="CslaBases\BusinessListBaseOfLAndCAndCDto.cs" />
@@ -120,8 +123,8 @@
     <Compile Include="Interfaces\Core\IHaveModelListOfTList.cs" />
     <Compile Include="Interfaces\Core\IHaveModelOfT.cs" />
     <Compile Include="Interfaces\Core\IHaveUri.cs" />
-    <Compile Include="Interfaces\Offer\IOffer.cs" />
-    <Compile Include="Interfaces\Offer\IOfferExchange.cs" />
+    <Compile Include="Interfaces\Exchange\IOffer.cs" />
+    <Compile Include="Interfaces\Exchange\IExchange.cs" />
     <Compile Include="Interfaces\History\IHistoryEvent.cs" />
     <Compile Include="Interfaces\History\IHistoryPublisher.cs" />
     <Compile Include="Interfaces\Async\IInitializeAsync.cs" />
@@ -135,6 +138,9 @@
     <Compile Include="Core\ResultOfT.cs" />
     <Compile Include="Core\SaltedHashedPassword.cs" />
     <Compile Include="Core\Services.cs" />
+    <Compile Include="Statuses\StatusOther.cs" />
+    <Compile Include="Statuses\StatusErrorEncountered.cs" />
+    <Compile Include="Statuses\StatusProgressed.cs" />
     <Compile Include="Statuses\Status.cs" />
     <Compile Include="Statuses\StatusAborted.cs" />
     <Compile Include="Statuses\StatusAborting.cs" />

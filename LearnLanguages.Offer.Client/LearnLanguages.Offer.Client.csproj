@@ -49,6 +49,7 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\dependencies\caliburn_silverlight\Caliburn.Micro.dll</HintPath>
     </Reference>
+    <Reference Include="Csla, Version=4.2.2.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -58,7 +59,8 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OfferExchange.cs" />
+    <Compile Include="SimpleOffer.cs" />
+    <Compile Include="Exchange.cs" />
     <Compile Include="OfferResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

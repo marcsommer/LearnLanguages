@@ -16,7 +16,7 @@ namespace LearnLanguages.Study
   /// </summary>
   public abstract class StudyPartnerBase : IStudyPartner
   {
-    protected IOfferExchange _OfferExchange { get; set; }
+    protected IExchange _OfferExchange { get; set; }
     protected MultiLineTextList _CurrentMultiLineTexts { get; set; }
     protected LanguageEdit _CurrentLanguage { get; set; }
 
@@ -49,11 +49,16 @@ namespace LearnLanguages.Study
     {
       //max date == indefinite time.
       var dateNoExpiration = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime;
-      var jobInfo = new otherStudyJobInfo<MultiLineTextList>(_CurrentMultiLineTexts, _CurrentLanguage, dateNoExpiration);
+      var jobInfo = new StudyJobInfo<MultiLineTextList>(_CurrentMultiLineTexts,
+                                                        _CurrentLanguage, 
+                                                        _OfferExchange, 
+                                                        dateNoExpiration, 
+                                                        double.Parse(StudyResources.DefaultKnowledgeThreshold));
 
       MultiLineTextsStudier.Study(jobInfo, _OfferExchange);
     }
 
     public IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; set; }
+
   }
 }

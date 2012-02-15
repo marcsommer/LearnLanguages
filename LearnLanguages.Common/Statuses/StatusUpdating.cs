@@ -7,7 +7,7 @@ namespace LearnLanguages.Statuses
 {
   public class StatusUpdating : Status
   {
-    public override string Value()
+    public override string GetMessage()
     {
       return CommonResources.StatusUpdating;
     }

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace LearnLanguages.Statuses
 {
-  public class StatusDeleting : Status
+  public class StatusProgressed : Status
   {
     public override string GetMessage()
     {
-      return CommonResources.StatusDeleting;
+      return CommonResources.StatusUpdated;
     }
   }
 }

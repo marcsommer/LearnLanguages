@@ -91,10 +91,10 @@ namespace LearnLanguages.Study
       if (nextStudier == null || nextLineNumber < 0)
         throw new Exception("todo: all lines are studied, publish completion event or something");
 
-      LineEdit nextLineEdit = _StudyJobInfo.StudyTarget.Lines[nextLineNumber];
+      LineEdit nextLineEdit = _StudyJobInfo.Target.Lines[nextLineNumber];
       if (nextLineEdit.LineNumber != nextLineNumber)
       {
-        var results = from line in _StudyJobInfo.StudyTarget.Lines
+        var results = from line in _StudyJobInfo.Target.Lines
                       where line.LineNumber == nextLineNumber
                       select line;
 
@@ -109,10 +109,6 @@ namespace LearnLanguages.Study
                                                                   _StudyJobInfo.ExpectedPrecision);
 
       nextStudier.Study(jobInfo, jobInfo.OfferExchange);
-      
-      //nextStudier.Study(
-        
-      //TODO: post Q & A offer to offer exchange.
     }
 
     private DefaultLineMeaningStudier ChooseNextLineStudier(out int nextLineNumber)
@@ -178,7 +174,7 @@ namespace LearnLanguages.Study
     protected virtual void PopulateLineStudiers()
     {
       _LineStudiers.Clear();
-      foreach (var line in _StudyJobInfo.StudyTarget.Lines)
+      foreach (var line in _StudyJobInfo.Target.Lines)
       {
         var lineStudier = new DefaultLineMeaningStudier();
 
@@ -192,7 +188,7 @@ namespace LearnLanguages.Study
     /// <returns></returns>
     public double GetPercentKnown()
     {
-      var lineCount = _StudyTarget.Lines.Count;
+      var lineCount = _Target.Lines.Count;
       double totalPercentKnownNonNormalized = 0.0d;
       double maxPercentKnownNonNormalized = 100 * lineCount;
       foreach (var lineInfo in _LineStudiers)

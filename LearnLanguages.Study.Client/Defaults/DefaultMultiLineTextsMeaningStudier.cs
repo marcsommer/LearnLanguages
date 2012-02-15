@@ -31,7 +31,7 @@ namespace LearnLanguages.Study
     protected override void StudyImpl()
     {
       var multiLineTextIndex = GetNextMultiLineTextIndex();
-      var currentMultiLineText = _StudyJobInfo.StudyTarget[multiLineTextIndex];
+      var currentMultiLineText = _StudyJobInfo.Target[multiLineTextIndex];
       var studier = _Studiers[currentMultiLineText];
 
       //OUR CURRENT JOB ENTAILS ALL MULTILINETEXTEDITS, SO WE NEED TO CREATE 
@@ -42,7 +42,8 @@ namespace LearnLanguages.Study
       var newJob = new StudyJobInfo<MultiLineTextEdit>(currentMultiLineText, 
                                                        originalJob.Language, 
                                                        _OfferExchange, 
-                                                       newExpirationDate);
+                                                       newExpirationDate,
+                                                       originalJob.ExpectedPrecision);
       //newJob.OriginalJobId = originalJob.Id;
       studier.Study(newJob, _OfferExchange);
     }
@@ -51,7 +52,7 @@ namespace LearnLanguages.Study
     {
       //cycle through the , and get the corresponding studier for this MLT.
       _CurrentMultiLineTextIndex++;
-      if (_CurrentMultiLineTextIndex > (_StudyJobInfo.StudyTarget.Count - 1))
+      if (_CurrentMultiLineTextIndex > (_StudyJobInfo.Target.Count - 1))
         _CurrentMultiLineTextIndex = 0;
 
       return _CurrentMultiLineTextIndex;

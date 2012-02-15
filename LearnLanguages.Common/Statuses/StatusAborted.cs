@@ -7,8 +7,7 @@ namespace LearnLanguages.Statuses
 {
   public class StatusAborted : Status
   {
-
-    public override string Value()
+    public override string GetMessage()
     {
       return CommonResources.StatusAborted;
     }

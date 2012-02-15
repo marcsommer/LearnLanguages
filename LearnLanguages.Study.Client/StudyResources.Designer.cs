@@ -61,6 +61,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1000.
+        /// </summary>
+        internal static string DefaultAmountDefaultPhraseMeaningStudier {
+            get {
+                return ResourceManager.GetString("DefaultAmountDefaultPhraseMeaningStudier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 85.
         /// </summary>
         internal static string DefaultKnowledgeThreshold {
@@ -120,6 +129,15 @@ namespace LearnLanguages.Study {
         internal static string DefaultOfferExchangeId {
             get {
                 return ResourceManager.GetString("DefaultOfferExchangeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exception was thrown during study.  See inner exception for details..
+        /// </summary>
+        internal static string ErrorMsgStudyException {
+            get {
+                return ResourceManager.GetString("ErrorMsgStudyException", resourceCulture);
             }
         }
         

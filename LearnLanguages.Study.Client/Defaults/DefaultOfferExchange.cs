@@ -5,14 +5,14 @@ using Caliburn.Micro;
 
 namespace LearnLanguages.Study.Bases
 {
-  public class DefaultOfferExchange : IOfferExchange
+  public class DefaultOfferExchange : IExchange
   {
     public DefaultOfferExchange(IEventAggregator eventAggregator)
     {
       EventAggregator = eventAggregator;
     }
 
-    public Guid OfferExchangeId
+    public Guid ExchangeId
     {
       get { return Guid.Parse(StudyResources.DefaultOfferExchangeId); }
     }

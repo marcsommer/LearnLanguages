@@ -9,6 +9,7 @@ namespace LearnLanguages.Common.Interfaces
   public interface IOffer
   {
     Guid Id { get; }
+    Guid OpportunityId { get; }
     Guid OriginatorId { get; }
     object Originator { get; }
     double Amount { get; }

@@ -71,6 +71,7 @@
     <Compile Include="Defaults\DefaultMultiLineTextsOrderStudier.cs" />
     <Compile Include="Defaults\DefaultMultiLineTextsStudier.cs" />
     <Compile Include="Defaults\DefaultStudyPartner.cs" />
+    <Compile Include="Exceptions\StudyException.cs" />
     <Compile Include="Interfaces\Core\IStudyJobInfoOfTStudyTarget.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
     <Compile Include="Interfaces\Core\IStudierOfTJobAndTStudyTarget.cs" />
@@ -94,6 +95,10 @@
     <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
       <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
       <Name>LearnLanguages.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
+      <Project>{98EE87B2-152D-48D8-B509-93EEB92059BE}</Project>
+      <Name>LearnLanguages.Offer.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

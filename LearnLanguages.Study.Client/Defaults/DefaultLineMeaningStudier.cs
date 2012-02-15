@@ -66,6 +66,7 @@ namespace LearnLanguages.Study
         AggregatePhraseTexts = new List<string>();
         KnownPhraseTexts = new List<string>();
         PopulateAggregatePhraseTexts(AggregateSize);
+        //no need to aggregate because we start from unknown state.
       }
       else
       {
@@ -92,7 +93,7 @@ namespace LearnLanguages.Study
 
       AggregatePhraseTexts.Clear();
 
-      var lineText = _StudyTarget.Phrase.Text;
+      var lineText = _Target.Phrase.Text;
       //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
       //We will end up with 20/2 = 10 aggregate phrases.  
       //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 

@@ -79,6 +79,9 @@ namespace LearnLanguages
     public static string StatusCanceling { get { return "Canceling"; } }
     public static string StatusAborted { get { return "Aborted"; } }
     public static string StatusAborting { get { return "Aborting"; } }
+    public static string StatusProgressed { get { return "Progressed"; } }
+    public static string StatusErrorEncountered { get { return "ErrorEncountered"; } }
+    public static string StatusOther { get { return "Other"; } }
 
 
     #endregion

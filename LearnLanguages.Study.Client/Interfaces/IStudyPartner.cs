@@ -8,7 +8,7 @@ namespace LearnLanguages.Study.Interfaces
 {
   public interface IStudyPartner //: IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList>
   {
-    void Study(MultiLineTextList multiLineTexts, IEventAggregator eventAggregator);
+    void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
     IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }
     //void StudyPhrases(PhraseList phrases, IEventAggregator eventAggregator);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);
