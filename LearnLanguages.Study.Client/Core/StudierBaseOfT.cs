@@ -14,7 +14,7 @@ namespace LearnLanguages.Study
       Id = Guid.NewGuid();
     }
 
-    protected Guid Id { get; protected set; }
+    public Guid Id { get; protected set; }
     protected J _StudyJobInfo { get; set; }
     protected IExchange _OfferExchange { get; set; }
 

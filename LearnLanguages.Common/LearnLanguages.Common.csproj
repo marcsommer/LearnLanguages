@@ -96,6 +96,10 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Interfaces\Exchange\IExchangeMessage.cs" />
+    <Compile Include="Interfaces\Exchange\IWorkStatusUpdate.cs" />
+    <Compile Include="Interfaces\Exchange\IOpportunityOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IJobInfo.cs" />
     <Compile Include="Interfaces\Exchange\IJobInfoOfT.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunity.cs" />

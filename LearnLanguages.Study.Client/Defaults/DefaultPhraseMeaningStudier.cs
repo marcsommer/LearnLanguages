@@ -61,7 +61,7 @@ namespace LearnLanguages.Study
           if (string.IsNullOrEmpty(phraseText))
             throw new StudyException("Attempted to study empty phrase text, _StudyJobInfo.Target.Text is null or empty.");
 
-          SimpleOffer offer = new SimpleOffer(Id, 
+          Offer offer = new Offer(Id, 
                                               this, 
                                               double.Parse(StudyResources.DefaultAmountDefaultPhraseMeaningStudier));
           _OfferExchange.Publish(offer);

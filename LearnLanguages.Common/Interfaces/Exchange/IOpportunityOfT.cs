@@ -3,8 +3,8 @@ using Csla.Core;
 
 namespace LearnLanguages.Common.Interfaces
 {
-  public interface IJobInfo<TTarget> : IJobInfo
+  public interface IOpportunity<T> : IOpportunity
   {
-    TTarget Target { get; }
+    IJobInfo<T> Target { get; }
   }
 }
