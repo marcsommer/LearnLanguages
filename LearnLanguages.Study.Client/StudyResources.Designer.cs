@@ -61,6 +61,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 85.
+        /// </summary>
+        internal static string DefaultKnowledgeThreshold {
+            get {
+                return ResourceManager.GetString("DefaultKnowledgeThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 100.
         /// </summary>
         internal static string DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts {
@@ -106,11 +115,38 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 92A7E7C6-8278-4142-A962-6616E2959D1C.
+        /// </summary>
+        internal static string DefaultOfferExchangeId {
+            get {
+                return ResourceManager.GetString("DefaultOfferExchangeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Meaning.
         /// </summary>
         internal static string StudyContextMeaning {
             get {
                 return ResourceManager.GetString("StudyContextMeaning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order.
+        /// </summary>
+        internal static string StudyContextOrder {
+            get {
+                return ResourceManager.GetString("StudyContextOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        internal static string StudyContextTotal {
+            get {
+                return ResourceManager.GetString("StudyContextTotal", resourceCulture);
             }
         }
         

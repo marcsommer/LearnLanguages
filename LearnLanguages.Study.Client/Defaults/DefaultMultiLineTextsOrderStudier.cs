@@ -7,8 +7,7 @@ namespace LearnLanguages.Study
   /// <summary>
   /// 
   /// </summary>
-  [Export(typeof(Interfaces.IOrderStudier<MultiLineTextEdit>))]
-  public class DefaultMultiLineTextsOrderStudier: MultiLineTextsOrderStudierBase
+  public class DefaultMultiLineTextsOrderStudier : StudierBase<StudyJobInfo<MultiLineTextList>, MultiLineTextList>
   {
     protected override void StudyImpl()
     {

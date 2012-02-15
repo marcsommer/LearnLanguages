@@ -12,7 +12,7 @@ namespace LearnLanguages.Study
   /// a phrase's history, it "simply" takes the phrase, produces an offer to show a Q & A about it.
   /// Listens for the ViewModel to publish a Q & A response
   /// </summary>
-  public class DefaultPhraseMeaningStudier : StudierBase<MeaningStudyJobInfo<PhraseEdit>, PhraseEdit>
+  public class DefaultPhraseMeaningStudier : StudierBase<StudyJobInfo<PhraseEdit>, PhraseEdit>
   {
     #region Ctors and Init
     public DefaultPhraseMeaningStudier()
@@ -41,11 +41,6 @@ namespace LearnLanguages.Study
       //IF IT IS IN THE NATIVE LANGUAGE, THEN IT JUST POPS UP A NATIVE LANGUAGE STUDY QUESTION.
       //IF IT IS IN A DIFFERENT LANGUAGE, THEN IT POPS UP EITHER DIRECTION Q & A, 50% CHANCE.
       //if (_StudyTarget.Language.Text ==
-    }
-
-    public override string GetStudyContext()
-    {
-      return StudyResources.StudyContextMeaning;
     }
 
     /// <summary>

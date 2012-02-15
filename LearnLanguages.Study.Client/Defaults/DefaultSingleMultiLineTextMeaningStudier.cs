@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using LearnLanguages.Business;
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.Interfaces;
@@ -25,7 +26,7 @@ namespace LearnLanguages.Study
   /// just be active lines.
   /// </summary>
   public class DefaultSingleMultiLineTextMeaningStudier : 
-    StudierBase<MeaningStudyJobInfo<MultiLineTextEdit>, MultiLineTextEdit>
+    StudierBase<StudyJobInfo<MultiLineTextEdit>, MultiLineTextEdit>
   {
     #region Ctors and Init
     
@@ -33,12 +34,14 @@ namespace LearnLanguages.Study
       : base()
     {
       _LineStudiers = new Dictionary<int, DefaultLineMeaningStudier>();
+      _LastActiveLineStudiedIndex = -1;
+      _KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
     }
 
     public DefaultSingleMultiLineTextMeaningStudier(int startingAggregateSize)
       : this()
     {
-      AggregateSize = startingAggregateSize;
+      _AggregateSize = startingAggregateSize;
     }
 
     #endregion
@@ -53,13 +56,17 @@ namespace LearnLanguages.Study
     /// will be something like 2 2 2 1 2 3 or something, but for now it's just this size or less 
     /// (as in the second example of 3, where the last phrase is just "the moon" (2).
     /// </summary>
-    public int AggregateSize { get; set; }
+    private int _AggregateSize { get; set; }
 
     /// <summary>
     /// How many lines to cycle through while studying.  Much like a buffer.  When a line is learned,
     /// then it gets removed from the ActiveLines and a different line replaces it.
     /// </summary>
-    public int ActiveLinesCount { get; set; }
+    private int _ActiveLinesCount { get; set; }
+
+    private int _LastActiveLineStudiedIndex { get; set; }
+
+    private double _KnowledgeThreshold { get; set; }
 
     /// <summary>
     /// LineStudiers indexed by each's corresponding line number.
@@ -79,27 +86,93 @@ namespace LearnLanguages.Study
 
       UpdateKnowledge();
       ChooseAggregateSize();
-      DefaultLineMeaningStudier nextStudier = ChooseNextLineStudier();
-      StartNextStudier();
+      var nextLineNumber = -1;
+      DefaultLineMeaningStudier nextStudier = ChooseNextLineStudier(out nextLineNumber);
+      if (nextStudier == null || nextLineNumber < 0)
+        throw new Exception("todo: all lines are studied, publish completion event or something");
+
+      LineEdit nextLineEdit = _StudyJobInfo.StudyTarget.Lines[nextLineNumber];
+      if (nextLineEdit.LineNumber != nextLineNumber)
+      {
+        var results = from line in _StudyJobInfo.StudyTarget.Lines
+                      where line.LineNumber == nextLineNumber
+                      select line;
+
+        nextLineEdit = results.FirstOrDefault();
+        if (nextLineEdit == null)
+          throw new Exception("cannot find line with corresponding line number");
+      }
+      StudyJobInfo<LineEdit> jobInfo = new StudyJobInfo<LineEdit>(nextLineEdit, 
+                                                                  _StudyJobInfo.Language, 
+                                                                  _StudyJobInfo.OfferExchange, 
+                                                                  _StudyJobInfo.JobExpirationDate, 
+                                                                  _StudyJobInfo.ExpectedPrecision);
+
+      nextStudier.Study(jobInfo, jobInfo.OfferExchange);
+      
+      //nextStudier.Study(
+        
       //TODO: post Q & A offer to offer exchange.
     }
 
-    private DefaultLineMeaningStudier ChooseNextLineStudier()
+    private DefaultLineMeaningStudier ChooseNextLineStudier(out int nextLineNumber)
     {
-      throw new NotImplementedException();
+      List<int> unknownLineNumbers = new List<int>();
+
+      foreach (var studier in _LineStudiers)
+      {
+        var studierLineNumber = studier.Key;
+        var studierPercentKnown = studier.Value.GetLinePercentKnown();
+        if (studierPercentKnown > _StudyJobInfo.ExpectedPrecision)
+        {
+          //line is known
+          continue;
+        }
+
+        //line is unknown
+        unknownLineNumbers.Add(studierLineNumber);
+        ////if line is lowest so far, then update lowestsofar to this line number
+        //if (studierLineNumber < lowestSoFar)
+        //  lowestSoFar = studierLineNumber;
+      }
+
+      //all lines are known if count == 0, so we have no studier to choose.
+      if (unknownLineNumbers.Count == 0)
+      {
+        nextLineNumber = -1;
+        return null;
+      }
+
+      //THIS IS DIFFICULT, BECAUSE WE'RE HANDLING INDEXES OF INDEXES.
+      //WE ARE LOOKING FOR THE LINE NUMBER OF THE NEXT STUDIER (THE INDEX FOR THAT STUDIER).
+      //THIS LINE NUMBER IS IN THE UNKNOWN_LINE_NUMBERS, WHICH WE REFERENCE BY USING _*THAT*_
+      //LINE NUMBER'S INDEX.  IF THAT INDEX IS GREATER THAN OUR ACTIVE LINE COUNT (WE CANNOT STUDY
+      //MORE THAN ACTIVE_LINE_COUNT LINES AT A TIME)
+      unknownLineNumbers.Sort();
+      var nextLineNumberIndex = _LastActiveLineStudiedIndex + 1;
+      if (nextLineNumberIndex > unknownLineNumbers.Count)
+        nextLineNumberIndex = 0;
+
+      nextLineNumber = unknownLineNumbers[nextLineNumberIndex];
+      var nextStudierToUse = _LineStudiers[nextLineNumber];
+
+      return nextStudierToUse;
     }
 
     private void UpdateKnowledge()
     {
-      //for now, this just sets the active lines
       //todo: MLTMeaning...dynamically set active lines count from either some sort of calculator class
-      ActiveLinesCount = int.Parse(StudyResources.DefaultMeaningStudierActiveLinesCount);
+      _ActiveLinesCount = int.Parse(StudyResources.DefaultMeaningStudierActiveLinesCount);
+
+      //todo: MLTMeaning...dynamically set knowledge threshold to user's specifications or other.
+      if (_StudyJobInfo != null)
+        _KnowledgeThreshold = _StudyJobInfo.ExpectedPrecision;
     }
 
     protected void ChooseAggregateSize()
     {
       //todo: MLTMeaning...dynamically choose aggregate size
-      AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
+      _AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
     }
 
     protected virtual void PopulateLineStudiers()
@@ -107,8 +180,9 @@ namespace LearnLanguages.Study
       _LineStudiers.Clear();
       foreach (var line in _StudyJobInfo.StudyTarget.Lines)
       {
-        var lineInfo = new DefaultLineMeaningStudier(line, AggregateSize);
-        _LineStudiers.Add(line.LineNumber, lineInfo);
+        var lineStudier = new DefaultLineMeaningStudier();
+
+        _LineStudiers.Add(line.LineNumber, lineStudier);
       }
     }
 
@@ -129,11 +203,6 @@ namespace LearnLanguages.Study
 
       var totalPercentKnownNormalized = totalPercentKnownNonNormalized / maxPercentKnownNonNormalized;
       return totalPercentKnownNormalized;
-    }
-
-    public override string GetStudyContext()
-    {
-      return StudyResources.StudyContextMeaning;
     }
     
     #endregion

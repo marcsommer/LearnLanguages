@@ -52,7 +52,5 @@ namespace LearnLanguages.Study
     /// Should take into account if HasStudied before.
     /// </summary>
     protected abstract void StudyImpl();
-
-    public abstract string GetStudyContext();
   }
 }

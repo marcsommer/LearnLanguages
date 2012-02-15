@@ -62,7 +62,8 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bases\StudierBaseOfT.cs" />
+    <Compile Include="Defaults\DefaultOfferExchange.cs" />
+    <Compile Include="Core\StudierBaseOfT.cs" />
     <Compile Include="Defaults\DefaultPhraseMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultSingleMultiLineTextMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultLineMeaningStudier.cs" />
@@ -70,14 +71,12 @@
     <Compile Include="Defaults\DefaultMultiLineTextsOrderStudier.cs" />
     <Compile Include="Defaults\DefaultMultiLineTextsStudier.cs" />
     <Compile Include="Defaults\DefaultStudyPartner.cs" />
-    <Compile Include="Interfaces\Core\IStudyJobInfoOfT.cs" />
-    <Compile Include="Interfaces\Core\IOrderStudierOfT.cs" />
+    <Compile Include="Interfaces\Core\IStudyJobInfoOfTStudyTarget.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
-    <Compile Include="Interfaces\Core\IStudierOfJAndT.cs" />
+    <Compile Include="Interfaces\Core\IStudierOfTJobAndTStudyTarget.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
-    <Compile Include="Bases\StudyJobInfoBaseOfT.cs" />
+    <Compile Include="Core\StudyJobInfoOfT.cs" />
     <Compile Include="MultiLineTextMeaningInfo.cs" />
-    <Compile Include="JobInfos\MeaningStudyJobInfoOfT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudyResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -85,7 +84,7 @@
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
     <Compile Include="_RandomPhraseStudyPartner.cs" />
-    <Compile Include="Bases\StudyPartnerBase.cs" />
+    <Compile Include="Core\StudyPartnerBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">

@@ -2,13 +2,13 @@
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudier<J, T> 
-    where J : IStudyJobInfo<T>
+  public interface IStudier<TJob, TStudyTarget> 
+    where TJob : IStudyJobInfo<TStudyTarget>
   {
     /// <summary>
     /// Performs a study iteration using the job info and the offerExchange given.
     /// </summary>
-    void Study(J studyJobInfo, IOfferExchange offerExchange);
+    void Study(TJob studyJobInfo, IOfferExchange offerExchange);
 
     /// <summary>
     /// If this studier cannot study again, if either because it has no valid studyJobInfo/offerExchange,
@@ -17,11 +17,5 @@ namespace LearnLanguages.Study.Interfaces
     /// offerExchange in the prerequisite Study(studyTarget, offerExchange) method.
     /// </summary>
     bool StudyAgain();
-
-    /// <summary>
-    /// Identifier for the studier's context for studying the study target.  Specifically with my 
-    /// current design, this is how you tell if a studier studies "Meaning" or "Order".
-    /// </summary>
-    string GetStudyContext();
   }
 }

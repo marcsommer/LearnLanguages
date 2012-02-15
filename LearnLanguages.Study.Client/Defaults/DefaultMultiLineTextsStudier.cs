@@ -5,12 +5,8 @@ using LearnLanguages.Business;
 
 namespace LearnLanguages.Study
 {
-  /// <summary>
-  /// 
-  /// </summary>
-  [Export(typeof(IMultiLineTextsStudier))]
-  //public class DefaultMultiLineTextsStudier : MultiLineTextsStudierBase
-  public class DefaultMultiLineTextsStudier : StudierBase<MultiLineTextList>
+
+  public class DefaultMultiLineTextsStudier : StudierBase<StudyJobInfo<MultiLineTextList>, MultiLineTextList>
   {
     public DefaultMultiLineTextsStudier()
     {
@@ -23,6 +19,9 @@ namespace LearnLanguages.Study
 
     protected override void StudyImpl()
     {
+      //THIS LAYER OF STUDY DECIDES ON WHAT IS IMPORTANT: MEANING OR ORDER, THEN DELEGATES STUDY TO
+      //THE CORRESPONDING STUDIER.
+
       //analyzes history events
       //for now, we will assume there is no history for the MLT, and thus we should focus on understanding
       //meaning of the song.
@@ -34,14 +33,17 @@ namespace LearnLanguages.Study
      
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
-        _MeaningStudier.Study(_StudyTarget, _OfferExchange);
+      {
+        _MeaningStudier.Study(_StudyJobInfo, _OfferExchange);
+      }
       else
-        _OrderStudier.Study(_StudyTarget, _OfferExchange);
+        _OrderStudier.Study(_StudyJobInfo, _OfferExchange);
     }
 
     private void UpdatePercentKnowns()
     {
       //todo: update percent knowns using history
+      MeaningPercentKnown = _MeaningStudier.GetPercentKnown();
     }
 
     /// <summary>
@@ -78,13 +80,12 @@ namespace LearnLanguages.Study
       return chooseMeaning;
     }
 
-    private IOrderStudier<MultiLineTextList> _OrderStudier { get; set; }
-    private IMeaningStudier<MultiLineTextList> _MeaningStudier { get; set; }
+    private DefaultMultiLineTextsOrderStudier _OrderStudier { get; set; }
+    private DefaultMultiLineTextsMeaningStudier _MeaningStudier { get; set; }
 
     //private double MeaningWeight { get; set; }
     //private double OrderWeight { get; set; }
     private double MeaningPercentKnown { get; set; }
     //private double OrderPercentKnown { get; set; }
-
   }
 }

@@ -2,11 +2,13 @@
 using System.Net;
 //using Caliburn.Micro;
 using LearnLanguages.Business;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study.Interfaces
 {
   public interface IStudyPartner //: IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList>
   {
+    void Study(MultiLineTextList multiLineTexts, IEventAggregator eventAggregator);
     IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }
     //void StudyPhrases(PhraseList phrases, IEventAggregator eventAggregator);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);
