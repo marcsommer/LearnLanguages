@@ -59,9 +59,10 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OfferResponse.cs" />
-    <Compile Include="Opportunity.cs" />
-    <Compile Include="Offer.cs" />
+    <Compile Include="Messages\Cancelation.cs" />
+    <Compile Include="Messages\OfferResponse.cs" />
+    <Compile Include="Messages\Opportunity.cs" />
+    <Compile Include="Messages\Offer.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="OfferResources.Designer.cs">
       <AutoGen>True</AutoGen>

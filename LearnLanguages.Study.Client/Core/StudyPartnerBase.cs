@@ -11,10 +11,7 @@ namespace LearnLanguages.Study
   /// </summary>
   public abstract class StudyPartnerBase : IStudyPartner
   {
-    protected MultiLineTextList _CurrentMultiLineTexts { get; set; }
-    protected LanguageEdit _CurrentLanguage { get; set; }
-
-    public virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language)
+    protected virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language)
     {
       _CurrentMultiLineTexts = multiLineTexts;
       _CurrentLanguage = language;
@@ -51,14 +48,16 @@ namespace LearnLanguages.Study
       ///IF WE GET ONE, WE POST A NEW JOB OURSELVES THAT SOMEONE ELSE IS GOING TO CONSUME.
       ///IF WE GET A REQUEST TO STOP OUR JOB, THEN WE WILL REPOST A SIMILAR REQUEST CONCERNING OUR INTERNAL
       ///JOB.  THEN WE PASS THE BUCK FOR THE ORIGINALLY POSTED STOP REQUEST.
-      ///WE ALSO ARE LISTENING FOR ANY MESSAGES ASKING TO STOP DOING THE JOB
-      ///WHEN WE GET ONE OF THESE, WE POST A CONFIRMATION THAT WE STOPPED
+      ///WE ARE ESSENTIALLY A ROUTER OF STUDY JOBS, CONVEYING MESSAGES TO MLTs-STUDIERS
 
       if (!(message.Category == StudyResources.CategoryStudy))
         return;
 
-      //we only know how to study multilinetextlists at the moment
-      if (!(message is Opportunity<MultiLineTextList>))
+      //we only know how to deal with study multilinetextlists at the moment
+      if (!(
+            message is Opportunity<MultiLineTextList> ||
+            message is Cancelation
+           ))
         return;
 
       var jobOpp = (Opportunity<MultiLineTextList>)message;
@@ -71,6 +70,19 @@ namespace LearnLanguages.Study
           (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
 
       DoImpl();
+    }
+
+    public void Handle(Opportunity<MultiLineTextList> message)
+    {
+      if (!(message.Category == StudyResources.CategoryStudy))
+        return;
+
+      //DISPATCH NEW MESSAGE MEANT TO HANDLE
+    }
+
+    public void Handle(Cancelation message)
+    {
+      throw new System.NotImplementedException();
     }
   }
 }

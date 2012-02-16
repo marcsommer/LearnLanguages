@@ -4,10 +4,12 @@ using System.Net;
 using LearnLanguages.Business;
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Offer;
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyPartner : IHandle<IOpportunity>
+  public interface IStudyPartner : IHandle<Opportunity<MultiLineTextList>>,
+                                   IHandle<Cancelation>
   {
     //void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
     //IDoAJob<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }

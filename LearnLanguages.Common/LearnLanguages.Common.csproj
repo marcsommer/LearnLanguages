@@ -96,6 +96,7 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Interfaces\Exchange\ICancelation.cs" />
     <Compile Include="Interfaces\Exchange\IDoOfTJobInfo.cs" />
     <Compile Include="Interfaces\Exchange\IExchangeMessage.cs" />
     <Compile Include="Interfaces\Exchange\IWorkStatusUpdate.cs" />
