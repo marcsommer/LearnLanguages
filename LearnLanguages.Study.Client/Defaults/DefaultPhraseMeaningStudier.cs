@@ -39,7 +39,7 @@ namespace LearnLanguages.Study
     //    return false;
     //}
 
-    protected override void StudyImpl()
+    protected override void DoImpl()
     {
       //FINALLY, THIS SHOULD ACTUALLY DO SOMETHING.  IT TAKES THE PHRASE THAT IT CONTAINS.
       //IF IT IS IN THE NATIVE LANGUAGE, THEN IT JUST POPS UP A NATIVE LANGUAGE STUDY QUESTION.
@@ -61,10 +61,7 @@ namespace LearnLanguages.Study
           if (string.IsNullOrEmpty(phraseText))
             throw new StudyException("Attempted to study empty phrase text, _StudyJobInfo.Target.Text is null or empty.");
 
-          Offer offer = new Offer(Id, 
-                                              this, 
-                                              double.Parse(StudyResources.DefaultAmountDefaultPhraseMeaningStudier));
-          _OfferExchange.Publish(offer);
+          //so now we have a phrase
         });
     }
 

@@ -2,11 +2,9 @@
 using System.Linq;
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
-using LearnLanguages.Silverlight.Interfaces;
 using Caliburn.Micro;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
-using LearnLanguages.DataAccess;
 using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
 using System.Windows;

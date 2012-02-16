@@ -9,7 +9,7 @@ namespace LearnLanguages.Study
   /// </summary>
   public class DefaultMultiLineTextsOrderStudier : StudierBase<StudyJobInfo<MultiLineTextList>, MultiLineTextList>
   {
-    protected override void StudyImpl()
+    protected override void DoImpl()
     {
       throw new NotImplementedException();
     }

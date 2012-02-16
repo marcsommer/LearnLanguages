@@ -61,6 +61,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Study.
+        /// </summary>
+        internal static string CategoryStudy {
+            get {
+                return ResourceManager.GetString("CategoryStudy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1000.
         /// </summary>
         internal static string DefaultAmountDefaultPhraseMeaningStudier {

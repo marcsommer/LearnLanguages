@@ -1,12 +1,7 @@
-﻿using System;
-using Caliburn.Micro;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using LearnLanguages.Business;
-using LearnLanguages.Common.Delegates;
-using LearnLanguages.Common.Interfaces;
-using LearnLanguages.Study.Bases;
+﻿using LearnLanguages.Business;
 using LearnLanguages.Study.Interfaces;
+using LearnLanguages.Offer;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Study
 {
@@ -16,49 +11,66 @@ namespace LearnLanguages.Study
   /// </summary>
   public abstract class StudyPartnerBase : IStudyPartner
   {
-    protected IExchange _OfferExchange { get; set; }
     protected MultiLineTextList _CurrentMultiLineTexts { get; set; }
     protected LanguageEdit _CurrentLanguage { get; set; }
 
-    public virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator)
+    public virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language)
     {
-      if (_OfferExchange == null)
-      {
-        SetOfferExchange(eventAggregator);
-      }
-
       _CurrentMultiLineTexts = multiLineTexts;
       _CurrentLanguage = language;
 
       if (MultiLineTextsStudier == null)
         MultiLineTextsStudier = 
-          (IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
+          (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
 
-      StudyImpl();
-    }
-
-    private void SetOfferExchange(IEventAggregator eventAggregator)
-    {
-      _OfferExchange = new DefaultOfferExchange(new EventAggregator());
+      DoImpl();
     }
 
     /// <summary>
     /// Default behavior is to study the current MLTs, current language, for an indefinite period of time.
     /// </summary>
-    protected virtual void StudyImpl()
+    protected virtual void DoImpl()
     {
       //max date == indefinite time.
       var dateNoExpiration = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime;
       var jobInfo = new StudyJobInfo<MultiLineTextList>(_CurrentMultiLineTexts,
                                                         _CurrentLanguage, 
-                                                        _OfferExchange, 
                                                         dateNoExpiration, 
                                                         double.Parse(StudyResources.DefaultKnowledgeThreshold));
 
-      MultiLineTextsStudier.Study(jobInfo, _OfferExchange);
+      MultiLineTextsStudier.Do(jobInfo);
     }
 
-    public IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; set; }
+    public IDo<IJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; set; }
 
+
+    public void Handle(Common.Interfaces.IOpportunity message)
+    {
+      ///OKAY, HERE IS THE DEAL:
+      ///WE LISTEN FOR JOB OPPORTUNITIES IN THE STUDY CATEGORY
+      ///IF WE GET ONE, WE POST A NEW JOB OURSELVES THAT SOMEONE ELSE IS GOING TO CONSUME.
+      ///IF WE GET A REQUEST TO STOP OUR JOB, THEN WE WILL REPOST A SIMILAR REQUEST CONCERNING OUR INTERNAL
+      ///JOB.  THEN WE PASS THE BUCK FOR THE ORIGINALLY POSTED STOP REQUEST.
+      ///WE ALSO ARE LISTENING FOR ANY MESSAGES ASKING TO STOP DOING THE JOB
+      ///WHEN WE GET ONE OF THESE, WE POST A CONFIRMATION THAT WE STOPPED
+
+      if (!(message.Category == StudyResources.CategoryStudy))
+        return;
+
+      //we only know how to study multilinetextlists at the moment
+      if (!(message is Opportunity<MultiLineTextList>))
+        return;
+
+      var jobOpp = (Opportunity<MultiLineTextList>)message;
+
+        _CurrentMultiLineTexts = multiLineTexts;
+      _CurrentLanguage = language;
+
+      if (MultiLineTextsStudier == null)
+        MultiLineTextsStudier =
+          (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
+
+      DoImpl();
+    }
   }
 }

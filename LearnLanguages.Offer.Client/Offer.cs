@@ -2,7 +2,7 @@
 using LearnLanguages.Common.Interfaces;
 using Csla.Serialization;
 
-namespace LearnLanguages.Offer.Client
+namespace LearnLanguages.Offer
 {
   [Serializable]
   public class Offer : IOffer
@@ -14,13 +14,16 @@ namespace LearnLanguages.Offer.Client
     {
     }
 
-    public Offer(Guid opportunityId, Guid publisherId, object publisher, double amount)
+    public Offer(Guid opportunityId, Guid publisherId, object publisher, double amount,
+      string category, object information)
     {
       Id = Guid.NewGuid();
       OpportunityId = opportunityId;
       PublisherId = publisherId;
       Publisher = publisher;
       Amount = amount;
+      Category = category;
+      Information = information;
     }
 
     /// <summary>
@@ -43,5 +46,13 @@ namespace LearnLanguages.Offer.Client
     /// Amount offered to do this work.
     /// </summary>
     public double Amount { get; private set; }
+    /// <summary>
+    /// Any additional information about the offer.
+    /// </summary>
+    public object Information { get; private set; }
+    /// <summary>
+    /// Category of the offer.  E.g. Study
+    /// </summary>
+    public string Category { get; private set; }
   }
 }

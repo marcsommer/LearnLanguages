@@ -51,14 +51,14 @@ namespace LearnLanguages.Study
     {
       if (HasStudied)
       {
-        StudyImpl();
+        DoImpl();
         return true;
       }
       else
         return false;
     }
 
-    protected override void StudyImpl()
+    protected override void DoImpl()
     {
       if (!HasStudied)
       {

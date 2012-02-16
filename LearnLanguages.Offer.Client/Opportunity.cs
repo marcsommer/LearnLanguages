@@ -2,7 +2,7 @@
 using LearnLanguages.Common.Interfaces;
 using Csla.Serialization;
 
-namespace LearnLanguages.Offer.Client
+namespace LearnLanguages.Offer
 {
   [Serializable]
   public class Opportunity<TTarget> : IOpportunity<TTarget>
@@ -50,5 +50,9 @@ namespace LearnLanguages.Offer.Client
     /// or specifications about the Target, or who knows what.  It is wide open for implementation.
     /// </summary>
     public object Information { get { return Target; } }
+    /// <summary>
+    /// Category of the opportunity.  E.g. Study, Test, Review, etc.
+    /// </summary>
+    public string Category { get; private set; }
   }
 }

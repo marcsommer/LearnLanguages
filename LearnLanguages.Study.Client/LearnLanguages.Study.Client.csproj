@@ -62,7 +62,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Defaults\DefaultOfferExchange.cs" />
+    <Compile Include="Core\StudyJobCriteria.cs" />
     <Compile Include="Core\StudierBaseOfT.cs" />
     <Compile Include="Defaults\DefaultPhraseMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultSingleMultiLineTextMeaningStudier.cs" />
@@ -74,7 +74,6 @@
     <Compile Include="Exceptions\StudyException.cs" />
     <Compile Include="Interfaces\Core\IStudyJobInfoOfTStudyTarget.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
-    <Compile Include="Interfaces\Core\IStudierOfTJobAndTStudyTarget.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Core\StudyJobInfoOfT.cs" />
     <Compile Include="MultiLineTextMeaningInfo.cs" />

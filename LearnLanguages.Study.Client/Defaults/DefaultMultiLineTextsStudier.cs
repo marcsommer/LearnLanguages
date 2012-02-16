@@ -17,7 +17,7 @@ namespace LearnLanguages.Study
       //OrderWeight = double.Parse(StudyResources.DefaultMultiLineTextsStudierOrderWeight);
     }
 
-    protected override void StudyImpl()
+    protected override void DoImpl()
     {
       //THIS LAYER OF STUDY DECIDES ON WHAT IS IMPORTANT: MEANING OR ORDER, THEN DELEGATES STUDY TO
       //THE CORRESPONDING STUDIER.
@@ -34,10 +34,10 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
-        _MeaningStudier.Study(_StudyJobInfo, _OfferExchange);
+        _MeaningStudier.Do(_StudyJobInfo, _OfferExchange);
       }
       else
-        _OrderStudier.Study(_StudyJobInfo, _OfferExchange);
+        _OrderStudier.Do(_StudyJobInfo, _OfferExchange);
     }
 
     private void UpdatePercentKnowns()

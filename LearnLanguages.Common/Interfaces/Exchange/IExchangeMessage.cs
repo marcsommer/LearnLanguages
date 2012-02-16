@@ -8,5 +8,6 @@ namespace LearnLanguages.Common.Interfaces
     Guid PublisherId { get; }
     object Publisher { get; }
     object Information { get; }
+    string Category { get; }
   }
 }

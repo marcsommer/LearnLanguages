@@ -77,7 +77,7 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    protected override void StudyImpl()
+    protected override void DoImpl()
     {
       if (!HasStudied)
       {
@@ -102,13 +102,15 @@ namespace LearnLanguages.Study
         if (nextLineEdit == null)
           throw new Exception("cannot find line with corresponding line number");
       }
-      StudyJobInfo<LineEdit> jobInfo = new StudyJobInfo<LineEdit>(nextLineEdit, 
-                                                                  _StudyJobInfo.Language, 
-                                                                  _StudyJobInfo.OfferExchange, 
-                                                                  _StudyJobInfo.JobExpirationDate, 
-                                                                  _StudyJobInfo.ExpectedPrecision);
 
-      nextStudier.Study(jobInfo, jobInfo.OfferExchange);
+      var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
+
+      StudyJobInfo<LineEdit> jobInfo = new StudyJobInfo<LineEdit>(nextLineEdit, 
+                                                                  jobCriteria.Language, 
+                                                                  _StudyJobInfo.ExpirationDate, 
+                                                                  jobCriteria.ExpectedPrecision);
+
+      nextStudier.Do(jobInfo);
     }
 
     private DefaultLineMeaningStudier ChooseNextLineStudier(out int nextLineNumber)
@@ -119,7 +121,8 @@ namespace LearnLanguages.Study
       {
         var studierLineNumber = studier.Key;
         var studierPercentKnown = studier.Value.GetLinePercentKnown();
-        if (studierPercentKnown > _StudyJobInfo.ExpectedPrecision)
+        var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
+        if (studierPercentKnown > jobCriteria.ExpectedPrecision)
         {
           //line is known
           continue;
@@ -162,7 +165,10 @@ namespace LearnLanguages.Study
 
       //todo: MLTMeaning...dynamically set knowledge threshold to user's specifications or other.
       if (_StudyJobInfo != null)
-        _KnowledgeThreshold = _StudyJobInfo.ExpectedPrecision;
+      {
+        var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
+        _KnowledgeThreshold = jobCriteria.ExpectedPrecision;
+      }
     }
 
     protected void ChooseAggregateSize()
@@ -188,7 +194,7 @@ namespace LearnLanguages.Study
     /// <returns></returns>
     public double GetPercentKnown()
     {
-      var lineCount = _Target.Lines.Count;
+      var lineCount = _StudyJobInfo.Target.Lines.Count;
       double totalPercentKnownNonNormalized = 0.0d;
       double maxPercentKnownNonNormalized = 100 * lineCount;
       foreach (var lineInfo in _LineStudiers)

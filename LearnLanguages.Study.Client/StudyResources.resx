@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CategoryStudy" xml:space="preserve">
+    <value>Study</value>
+  </data>
   <data name="DefaultAmountDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>1000</value>
   </data>

@@ -3,13 +3,14 @@ using System.Net;
 //using Caliburn.Micro;
 using LearnLanguages.Business;
 using Caliburn.Micro;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyPartner //: IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList>
+  public interface IStudyPartner : IHandle<IOpportunity>
   {
-    void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
-    IStudier<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }
+    //void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
+    //IDoAJob<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }
     //void StudyPhrases(PhraseList phrases, IEventAggregator eventAggregator);
     //void StudyTranslations(TranslationList translations, IEventAggregator eventAggregator);
     //void Chug(IEventAggregator eventAggregator);

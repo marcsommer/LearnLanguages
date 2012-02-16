@@ -28,7 +28,7 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    protected override void StudyImpl()
+    protected override void DoImpl()
     {
       var multiLineTextIndex = GetNextMultiLineTextIndex();
       var currentMultiLineText = _StudyJobInfo.Target[multiLineTextIndex];
@@ -45,7 +45,7 @@ namespace LearnLanguages.Study
                                                        newExpirationDate,
                                                        originalJob.ExpectedPrecision);
       //newJob.OriginalJobId = originalJob.Id;
-      studier.Study(newJob, _OfferExchange);
+      studier.Do(newJob, _OfferExchange);
     }
 
     private int GetNextMultiLineTextIndex()

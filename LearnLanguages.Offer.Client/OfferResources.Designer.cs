@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LearnLanguages.Offer.Client {
+namespace LearnLanguages.Offer {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace LearnLanguages.Offer.Client {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Offer.Client.OfferResources", typeof(OfferResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Offer.OfferResources", typeof(OfferResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
