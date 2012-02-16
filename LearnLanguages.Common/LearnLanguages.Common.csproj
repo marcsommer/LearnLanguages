@@ -84,19 +84,12 @@
     <Compile Include="..\dependencies\csla_contrib\ScreenWithSubject.cs">
       <Link>CslaContrib\ScreenWithSubject.cs</Link>
     </Compile>
-    <Compile Include="Args\CreateArgs.cs" />
-    <Compile Include="Args\CreateChildArgs.cs" />
-    <Compile Include="Args\DeleteArgs.cs" />
-    <Compile Include="Args\EditArgs.cs" />
-    <Compile Include="Args\InitializeArgs.cs" />
-    <Compile Include="Args\ResultArgsOfT.cs" />
-    <Compile Include="Args\SampleActionArgs.cs" />
-    <Compile Include="Args\SaveArgs.cs" />
+    <Compile Include="Core\ResultArgsOfT.cs" />
     <Compile Include="Core\LearnLanguagesExtensions.cs" />
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
-    <Compile Include="Interfaces\Exchange\IWorkStatusUpdateOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IStatusUpdateOfT.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
     <Compile Include="Interfaces\Exchange\IOffer.cs" />
     <Compile Include="Interfaces\Exchange\IConglomerateMessage.cs" />
@@ -104,7 +97,7 @@
     <Compile Include="Interfaces\Exchange\IDoOfTJobInfo.cs" />
     <Compile Include="Interfaces\Exchange\IExchangeMessage.cs" />
     <Compile Include="Interfaces\Exchange\IHaveConglomerateId.cs" />
-    <Compile Include="Interfaces\Exchange\IWorkStatusUpdate.cs" />
+    <Compile Include="Interfaces\Exchange\IStatusUpdate.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunityOfT.cs" />
     <Compile Include="Interfaces\Exchange\IJobInfo.cs" />
     <Compile Include="Interfaces\Exchange\IJobInfoOfT.cs" />
@@ -122,11 +115,6 @@
     <Compile Include="EventArgs\ModelEventArgsOfT.cs" />
     <Compile Include="Exceptions\PartNotSatisfiedException.cs" />
     <Compile Include="Feedback\FeedbackOfT.cs" />
-    <Compile Include="Interfaces\Async\IAsyncStub.cs" />
-    <Compile Include="Interfaces\Async\ICreateAsync.cs" />
-    <Compile Include="Interfaces\Async\ICreateChildAsync.cs" />
-    <Compile Include="Interfaces\Async\IDeleteAsync.cs" />
-    <Compile Include="Interfaces\Async\IEditAsync.cs" />
     <Compile Include="Interfaces\Feedback\IFeedback.cs" />
     <Compile Include="Interfaces\Feedback\IGetFeedback.cs" />
     <Compile Include="Interfaces\Feedback\IHaveFeedback.cs" />
@@ -138,9 +126,7 @@
     <Compile Include="Interfaces\Exchange\IExchange.cs" />
     <Compile Include="Interfaces\History\IHistoryEvent.cs" />
     <Compile Include="Interfaces\History\IHistoryPublisher.cs" />
-    <Compile Include="Interfaces\Async\IInitializeAsync.cs" />
     <Compile Include="Interfaces\Core\ILogger.cs" />
-    <Compile Include="Interfaces\Async\ISaveAsync.cs" />
     <Compile Include="Interfaces\Core\IViewModelBase.cs" />
     <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="Logging\LogPriority.cs" />
@@ -149,24 +135,6 @@
     <Compile Include="Core\ResultOfT.cs" />
     <Compile Include="Core\SaltedHashedPassword.cs" />
     <Compile Include="Core\Services.cs" />
-    <Compile Include="Statuses\StatusOther.cs" />
-    <Compile Include="Statuses\StatusErrorEncountered.cs" />
-    <Compile Include="Statuses\StatusProgressed.cs" />
-    <Compile Include="Statuses\Status.cs" />
-    <Compile Include="Statuses\StatusAborted.cs" />
-    <Compile Include="Statuses\StatusAborting.cs" />
-    <Compile Include="Statuses\StatusAdded.cs" />
-    <Compile Include="Statuses\StatusAdding.cs" />
-    <Compile Include="Statuses\StatusCanceled.cs" />
-    <Compile Include="Statuses\StatusCanceling.cs" />
-    <Compile Include="Statuses\StatusCompleted.cs" />
-    <Compile Include="Statuses\StatusDeleted.cs" />
-    <Compile Include="Statuses\StatusDeleting.cs" />
-    <Compile Include="Statuses\StatusInitialized.cs" />
-    <Compile Include="Statuses\StatusStarted.cs" />
-    <Compile Include="Statuses\StatusUnspecified.cs" />
-    <Compile Include="Statuses\StatusUpdated.cs" />
-    <Compile Include="Statuses\StatusUpdating.cs" />
     <Compile Include="Core\Tuple.cs" />
     <Compile Include="Core\UserInterfaceInfo.cs" />
     <Compile Include="ViewModelBases\ViewModelBase.cs" />

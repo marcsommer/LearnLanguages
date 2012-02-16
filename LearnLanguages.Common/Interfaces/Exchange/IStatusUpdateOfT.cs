@@ -2,11 +2,11 @@
 
 namespace LearnLanguages.Common.Interfaces
 {
-  public interface IWorkStatusUpdate<T> : IWorkStatusUpdate
+  public interface IStatusUpdate<T> : IStatusUpdate
   {
     IOpportunity<T> Opportunity { get; }
     IOffer<T> Offer { get; }
-    IOfferResponse<T> OfferResponse { get; }
+    IOfferResponse<T> AcceptanceOfferResponse { get; }
     IJobInfo<T> JobInfo { get; }
   }
 }

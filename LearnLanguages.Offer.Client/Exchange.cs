@@ -73,7 +73,7 @@ namespace LearnLanguages.Offer
     {
       throw new NotImplementedException();
     }
-    public void Publish(IWorkStatusUpdate workStatusUpdate)
+    public void Publish(IStatusUpdate workStatusUpdate)
     {
       throw new NotImplementedException();
     }

@@ -11,5 +11,5 @@ namespace LearnLanguages.Common.Delegates
   /// <typeparam name="T"></typeparam>
   /// <param name="sender"></param>
   /// <param name="result"></param>
-  public delegate void AsyncCallback<T>(object sender, Args.ResultArgs<T> result) where T : class, new();
+  public delegate void AsyncCallback<T>(object sender, ResultArgs<T> result) where T : class, new();
 }

@@ -5,7 +5,7 @@ using LearnLanguages.Business;
 using LearnLanguages.Common;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Common.Interfaces;
-using LearnLanguages.Offer.Client;
+using LearnLanguages.Offer;
 
 namespace LearnLanguages.Study
 {

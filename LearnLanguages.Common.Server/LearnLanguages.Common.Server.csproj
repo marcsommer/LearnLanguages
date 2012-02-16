@@ -73,30 +73,6 @@
     <Compile Include="..\dependencies\csla_contrib\ScreenWithSubject.cs">
       <Link>CslaContrib\ScreenWithSubject.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\CreateArgs.cs">
-      <Link>Args\CreateArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\CreateChildArgs.cs">
-      <Link>Args\CreateChildArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\DeleteArgs.cs">
-      <Link>Args\DeleteArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\EditArgs.cs">
-      <Link>Args\EditArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\InitializeArgs.cs">
-      <Link>Args\InitializeArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\ResultArgsOfT.cs">
-      <Link>Args\ResultArgsOfT.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\SampleActionArgs.cs">
-      <Link>Args\SampleActionArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Args\SaveArgs.cs">
-      <Link>Args\SaveArgs.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\CommonResources.cs">
       <Link>CommonResources.cs</Link>
     </Compile>
@@ -108,6 +84,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Core\MagicStringsList.cs">
       <Link>Core\MagicStringsList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\ResultArgsOfT.cs">
+      <Link>Core\ResultArgsOfT.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Core\ResultOfT.cs">
       <Link>Core\ResultOfT.cs</Link>
@@ -157,27 +136,6 @@
     <Compile Include="..\LearnLanguages.Common\Feedback\FeedbackOfT.cs">
       <Link>Feedback\FeedbackOfT.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IAsyncStub.cs">
-      <Link>Interfaces\Async\IAsyncStub.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\ICreateAsync.cs">
-      <Link>Interfaces\Async\ICreateAsync.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\ICreateChildAsync.cs">
-      <Link>Interfaces\Async\ICreateChildAsync.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IDeleteAsync.cs">
-      <Link>Interfaces\Async\IDeleteAsync.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IEditAsync.cs">
-      <Link>Interfaces\Async\IEditAsync.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\IInitializeAsync.cs">
-      <Link>Interfaces\Async\IInitializeAsync.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Async\ISaveAsync.cs">
-      <Link>Interfaces\Async\ISaveAsync.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IHaveId.cs">
       <Link>Interfaces\Core\IHaveId.cs</Link>
     </Compile>
@@ -196,6 +154,54 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\Core\IViewModelBase.cs">
       <Link>Interfaces\Core\IViewModelBase.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\ICancelation.cs">
+      <Link>Interfaces\Exchange\ICancelation.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IConglomerateMessage.cs">
+      <Link>Interfaces\Exchange\IConglomerateMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IDoOfTJobInfo.cs">
+      <Link>Interfaces\Exchange\IDoOfTJobInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IExchange.cs">
+      <Link>Interfaces\Exchange\IExchange.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IExchangeMessage.cs">
+      <Link>Interfaces\Exchange\IExchangeMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IHaveConglomerateId.cs">
+      <Link>Interfaces\Exchange\IHaveConglomerateId.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IJobInfo.cs">
+      <Link>Interfaces\Exchange\IJobInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IJobInfoOfT.cs">
+      <Link>Interfaces\Exchange\IJobInfoOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOffer.cs">
+      <Link>Interfaces\Exchange\IOffer.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferOfT.cs">
+      <Link>Interfaces\Exchange\IOfferOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferResponse.cs">
+      <Link>Interfaces\Exchange\IOfferResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferResponseOfT.cs">
+      <Link>Interfaces\Exchange\IOfferResponseOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOpportunity.cs">
+      <Link>Interfaces\Exchange\IOpportunity.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOpportunityOfT.cs">
+      <Link>Interfaces\Exchange\IOpportunityOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IStatusUpdate.cs">
+      <Link>Interfaces\Exchange\IStatusUpdate.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IStatusUpdateOfT.cs">
+      <Link>Interfaces\Exchange\IStatusUpdateOfT.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IFeedback.cs">
       <Link>Interfaces\Feedback\IFeedback.cs</Link>
     </Compile>
@@ -211,12 +217,6 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\History\IHistoryPublisher.cs">
       <Link>Interfaces\History\IHistoryPublisher.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Offer\IOffer.cs">
-      <Link>Interfaces\Offer\IOffer.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Offer\IOfferExchange.cs">
-      <Link>Interfaces\Offer\IOfferExchange.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\Logging\ConsoleLogger.cs">
       <Link>Logging\ConsoleLogger.cs</Link>
     </Compile>
@@ -225,51 +225,6 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Logging\LogPriority.cs">
       <Link>Logging\LogPriority.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\Status.cs">
-      <Link>Statuses\Status.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAborted.cs">
-      <Link>Statuses\StatusAborted.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAborting.cs">
-      <Link>Statuses\StatusAborting.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAdded.cs">
-      <Link>Statuses\StatusAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusAdding.cs">
-      <Link>Statuses\StatusAdding.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusCanceled.cs">
-      <Link>Statuses\StatusCanceled.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusCanceling.cs">
-      <Link>Statuses\StatusCanceling.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusCompleted.cs">
-      <Link>Statuses\StatusCompleted.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusDeleted.cs">
-      <Link>Statuses\StatusDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusDeleting.cs">
-      <Link>Statuses\StatusDeleting.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusInitialized.cs">
-      <Link>Statuses\StatusInitialized.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusStarted.cs">
-      <Link>Statuses\StatusStarted.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusUnspecified.cs">
-      <Link>Statuses\StatusUnspecified.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusUpdated.cs">
-      <Link>Statuses\StatusUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Statuses\StatusUpdating.cs">
-      <Link>Statuses\StatusUpdating.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\ViewModelBases\ViewModelBase.cs">
       <Link>ViewModelBases\ViewModelBase.cs</Link>

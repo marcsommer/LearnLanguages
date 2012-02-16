@@ -1,6 +1,5 @@
 ﻿using System;
 using Caliburn.Micro;
-using LearnLanguages.Statuses;
 
 namespace LearnLanguages.Common.Interfaces
 {
@@ -11,7 +10,7 @@ namespace LearnLanguages.Common.Interfaces
     void Publish(IOpportunity opportunity);
     void Publish(IOffer offer);
     void Publish(IOfferResponse offerResponse);
-    void Publish(IWorkStatusUpdate workStatusUpdate);
+    void Publish(IStatusUpdate workStatusUpdate);
 
     void SubscribeToOpportunities(object subscriber);
     void UnsubscribeFromOpportunities(object subscriber);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LearnLanguages.Common.Args
+namespace LearnLanguages.Common
 {
   public class ResultArgs<T>
   {

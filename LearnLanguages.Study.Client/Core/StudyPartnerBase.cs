@@ -115,7 +115,19 @@ namespace LearnLanguages.Study
       var jobInfo = message.Offer.Opportunity.JobInfo;
       _CurrentOffer = message.Offer;
       //PUBLISH STARTED UPDATE
-      var startedUpdate = new IWorkStatusUpdate
+      var startedUpdate =
+        new StatusUpdate<MultiLineTextList>(CommonResources.StatusStarted,
+                                            _CurrentOffer.Opportunity,
+                                            _CurrentOffer,
+                                            message,
+                                            jobInfo,
+                                            Id,
+                                            this,
+                                            StudyResources.CategoryStudy,
+                                            null);
+      Exchange.Ton.Publish(startedUpdate);
+
+      //DELEGATE JOB TO MLTs STUDIER
       _Studier.Do(jobInfo);
     }
 

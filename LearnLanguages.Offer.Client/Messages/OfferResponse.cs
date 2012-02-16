@@ -15,7 +15,7 @@ namespace LearnLanguages.Offer
       
     }
 
-    public OfferResponse(Offer<T> offer, Guid publisherId, object publisher, 
+    public OfferResponse(IOffer<T> offer, Guid publisherId, object publisher, 
       string response, string category, object information)
     {
       Id = Guid.NewGuid();
@@ -28,7 +28,7 @@ namespace LearnLanguages.Offer
     }
 
     public Guid Id { get; private set; }
-    public Offer<T> Offer { get; private set; }
+    public IOffer<T> Offer { get; private set; }
     public Guid PublisherId { get; private set; }
     public object Publisher { get; private set; }
     public string Response { get; private set; }

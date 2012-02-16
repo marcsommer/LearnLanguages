@@ -34,10 +34,10 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
-        _MeaningStudier.Do(_StudyJobInfo, _OfferExchange);
+        _MeaningStudier.Do(_StudyJobInfo);
       }
       else
-        _OrderStudier.Do(_StudyJobInfo, _OfferExchange);
+        _OrderStudier.Do(_StudyJobInfo);
     }
 
     private void UpdatePercentKnowns()
