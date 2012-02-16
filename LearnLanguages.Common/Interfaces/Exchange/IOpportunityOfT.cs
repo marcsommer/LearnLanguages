@@ -5,6 +5,6 @@ namespace LearnLanguages.Common.Interfaces
 {
   public interface IOpportunity<T> : IOpportunity
   {
-    IJobInfo<T> Target { get; }
+    IJobInfo<T> JobInfo { get; }
   }
 }

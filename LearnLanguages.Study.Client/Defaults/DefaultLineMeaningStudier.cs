@@ -49,7 +49,7 @@ namespace LearnLanguages.Study
 
     public bool StudyAgain()
     {
-      if (HasStudied)
+      if (HasDoneThisBefore)
       {
         DoImpl();
         return true;
@@ -60,7 +60,7 @@ namespace LearnLanguages.Study
 
     protected override void DoImpl()
     {
-      if (!HasStudied)
+      if (!HasDoneThisBefore)
       {
         AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
         AggregatePhraseTexts = new List<string>();

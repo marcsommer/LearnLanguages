@@ -96,9 +96,11 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Interfaces\Exchange\IConglomerateMessage.cs" />
     <Compile Include="Interfaces\Exchange\ICancelation.cs" />
     <Compile Include="Interfaces\Exchange\IDoOfTJobInfo.cs" />
     <Compile Include="Interfaces\Exchange\IExchangeMessage.cs" />
+    <Compile Include="Interfaces\Exchange\IHaveConglomerateId.cs" />
     <Compile Include="Interfaces\Exchange\IWorkStatusUpdate.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunityOfT.cs" />
     <Compile Include="Interfaces\Exchange\IJobInfo.cs" />

@@ -77,6 +77,10 @@ namespace LearnLanguages.Offer
     {
       throw new NotImplementedException();
     }
+    public void Publish(ICancelation cancelation)
+    {
+      _EventAggregator.Publish(cancelation);
+    }
 
     public void SubscribeToOpportunities(object subscriber)
     {
@@ -110,6 +114,15 @@ namespace LearnLanguages.Offer
       _EventAggregator.Subscribe(subscriber);
     }
     public void UnsubscribeFromWorkStatusUpdates(object subscriber)
+    {
+      _EventAggregator.Unsubscribe(subscriber);
+    }
+
+    public void SubscribeToCancelations(object subscriber)
+    {
+      _EventAggregator.Subscribe(subscriber);
+    }
+    public void UnsubscribeFromCancelations(object subscriber)
     {
       _EventAggregator.Unsubscribe(subscriber);
     }

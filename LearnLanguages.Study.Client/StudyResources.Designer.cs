@@ -22,7 +22,7 @@ namespace LearnLanguages.Study {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StudyResources {
+    public class StudyResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LearnLanguages.Study {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Study.StudyResources", typeof(StudyResources).Assembly);
@@ -51,7 +51,7 @@ namespace LearnLanguages.Study {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,16 +63,25 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to Study.
         /// </summary>
-        internal static string CategoryStudy {
+        public static string CategoryStudy {
             get {
                 return ResourceManager.GetString("CategoryStudy", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 10000.
+        /// </summary>
+        public static string DefaultAmountDefaultMultiLineTextsStudier {
+            get {
+                return ResourceManager.GetString("DefaultAmountDefaultMultiLineTextsStudier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1000.
         /// </summary>
-        internal static string DefaultAmountDefaultPhraseMeaningStudier {
+        public static string DefaultAmountDefaultPhraseMeaningStudier {
             get {
                 return ResourceManager.GetString("DefaultAmountDefaultPhraseMeaningStudier", resourceCulture);
             }
@@ -81,7 +90,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 85.
         /// </summary>
-        internal static string DefaultKnowledgeThreshold {
+        public static string DefaultKnowledgeThreshold {
             get {
                 return ResourceManager.GetString("DefaultKnowledgeThreshold", resourceCulture);
             }
@@ -90,7 +99,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 100.
         /// </summary>
-        internal static string DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts {
+        public static string DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts {
             get {
                 return ResourceManager.GetString("DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts", resourceCulture);
             }
@@ -99,7 +108,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 4.
         /// </summary>
-        internal static string DefaultMeaningStudierActiveLinesCount {
+        public static string DefaultMeaningStudierActiveLinesCount {
             get {
                 return ResourceManager.GetString("DefaultMeaningStudierActiveLinesCount", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 3.
         /// </summary>
-        internal static string DefaultMeaningStudierAggregateSize {
+        public static string DefaultMeaningStudierAggregateSize {
             get {
                 return ResourceManager.GetString("DefaultMeaningStudierAggregateSize", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 5.
         /// </summary>
-        internal static string DefaultMultiLineTextsStudierMeaningWeight {
+        public static string DefaultMultiLineTextsStudierMeaningWeight {
             get {
                 return ResourceManager.GetString("DefaultMultiLineTextsStudierMeaningWeight", resourceCulture);
             }
@@ -126,7 +135,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 1.
         /// </summary>
-        internal static string DefaultMultiLineTextsStudierOrderWeight {
+        public static string DefaultMultiLineTextsStudierOrderWeight {
             get {
                 return ResourceManager.GetString("DefaultMultiLineTextsStudierOrderWeight", resourceCulture);
             }
@@ -135,7 +144,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to 92A7E7C6-8278-4142-A962-6616E2959D1C.
         /// </summary>
-        internal static string DefaultOfferExchangeId {
+        public static string DefaultOfferExchangeId {
             get {
                 return ResourceManager.GetString("DefaultOfferExchangeId", resourceCulture);
             }
@@ -144,7 +153,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to An exception was thrown during study.  See inner exception for details..
         /// </summary>
-        internal static string ErrorMsgStudyException {
+        public static string ErrorMsgStudyException {
             get {
                 return ResourceManager.GetString("ErrorMsgStudyException", resourceCulture);
             }
@@ -153,7 +162,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to Meaning.
         /// </summary>
-        internal static string StudyContextMeaning {
+        public static string StudyContextMeaning {
             get {
                 return ResourceManager.GetString("StudyContextMeaning", resourceCulture);
             }
@@ -162,7 +171,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to Order.
         /// </summary>
-        internal static string StudyContextOrder {
+        public static string StudyContextOrder {
             get {
                 return ResourceManager.GetString("StudyContextOrder", resourceCulture);
             }
@@ -171,7 +180,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
-        internal static string StudyContextTotal {
+        public static string StudyContextTotal {
             get {
                 return ResourceManager.GetString("StudyContextTotal", resourceCulture);
             }
@@ -180,7 +189,7 @@ namespace LearnLanguages.Study {
         /// <summary>
         ///   Looks up a localized string similar to An empty phrase text was found in AggregatePhraseTexts.  This shouldn&apos;t happen..
         /// </summary>
-        internal static string WarningMsgEmptyAggregatePhraseTextFound {
+        public static string WarningMsgEmptyAggregatePhraseTextFound {
             get {
                 return ResourceManager.GetString("WarningMsgEmptyAggregatePhraseTextFound", resourceCulture);
             }

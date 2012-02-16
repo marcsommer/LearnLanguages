@@ -3,15 +3,17 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Business;
 using LearnLanguages.Offer;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study
 {
-  public abstract class StudierBase<J, T> : IDo<J, T>
-    where J : IStudyJobInfo<T>
+  public abstract class StudierBase<J, T> : IDo<J, T>//,
+                                            //IHandle<Opportunity<T>>
+    where J : IJobInfo<T>
   {
     public StudierBase()
     {
-      HasStudied = false;
+      HasDoneThisBefore = false;
       Id = Guid.NewGuid();
     }
 
@@ -23,24 +25,26 @@ namespace LearnLanguages.Study
       if (studyJobInfo == null)
         throw new ArgumentNullException("target");
 
-      //if our old study target isn't empty and the new study target isn't the same one
-      //then we haven't studied this before.
-      //or the same reasoning for offer exchange
-      if (_StudyJobInfo != null && 
-          studyJobInfo.Id != _StudyJobInfo.Id)
-        HasStudied = false;
-
       _StudyJobInfo = studyJobInfo;
 
       DoImpl();
-      HasStudied = true;
+      HasDoneThisBefore = true;
     }
 
-    public bool HasStudied { get; protected set; }
+    public bool HasDoneThisBefore { get; protected set; }
 
     /// <summary>
     /// Should take into account if HasStudied before.
     /// </summary>
     protected abstract void DoImpl();
+
+
+    public void PleaseStopDoing(Guid jobInfoId)
+    {
+      //if (_StudyJobInfo.Id == jobInfoId)
+      //  AbortJob();
+    }
+
+    //public abstract void Handle(Opportunity<T> message);
   }
 }

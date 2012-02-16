@@ -16,13 +16,16 @@ namespace LearnLanguages.Offer
     /// <summary>
     /// Use this ctor.  Do not use default ctor.
     /// </summary>
-    public Opportunity(Guid opportunityId, Guid publisherId, object publisher, IJobInfo<TTarget> target)
+    public Opportunity(Guid publisherId, object publisher, IJobInfo<TTarget> jobInfo, 
+      string category)
     {
       Id = Guid.NewGuid();
-      OpportunityId = opportunityId;
+      OpportunityId = Guid.NewGuid();
       PublisherId = publisherId;
       Publisher = publisher;
-      Target = target;
+      JobInfo = jobInfo;
+      Category = category;
+      //Information = information;
     }
 
     /// <summary>
@@ -44,12 +47,12 @@ namespace LearnLanguages.Offer
     /// <summary>
     /// Target for this opportunity.
     /// </summary>
-    public IJobInfo<TTarget> Target { get; private set; }
+    public IJobInfo<TTarget> JobInfo { get; private set; }
     /// <summary>
     /// Information about this opportunity.  This can include anything from configuration of the Target, advice,
     /// or specifications about the Target, or who knows what.  It is wide open for implementation.
     /// </summary>
-    public object Information { get { return Target; } }
+    public object Information { get { return JobInfo; } }
     /// <summary>
     /// Category of the opportunity.  E.g. Study, Test, Review, etc.
     /// </summary>

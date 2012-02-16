@@ -3,6 +3,8 @@ using LearnLanguages.Business;
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
+using Caliburn.Micro;
+using LearnLanguages.Offer;
 
 namespace LearnLanguages.Study
 {
@@ -81,5 +83,15 @@ namespace LearnLanguages.Study
     }
     
     #endregion
+
+    public void Handle(Opportunity<MultiLineTextList> message)
+    {
+      if (message.Category != StudyResources.CategoryStudy ||
+          !(message.JobInfo is StudyJobInfo<MultiLineTextList>))
+        return;
+
+      var studyJobInfo = (StudyJobInfo<MultiLineTextList>)message.JobInfo;
+    }
+
   }
 }

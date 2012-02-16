@@ -2,6 +2,7 @@
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Interfaces;
+using System;
 
 namespace LearnLanguages.Study
 {
@@ -11,17 +12,28 @@ namespace LearnLanguages.Study
   /// </summary>
   public abstract class StudyPartnerBase : IStudyPartner
   {
-    protected virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language)
+    public StudyPartnerBase()
     {
-      _CurrentMultiLineTexts = multiLineTexts;
-      _CurrentLanguage = language;
-
-      if (MultiLineTextsStudier == null)
-        MultiLineTextsStudier = 
-          (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
-
-      DoImpl();
+      Id = Guid.NewGuid();
+      Exchange.Ton.SubscribeToOpportunities(this);
+      Exchange.Ton.SubscribeToOfferResponses(this);
+      Exchange.Ton.SubscribeToCancelations(this);
     }
+
+    public Guid Id { get; protected set; }
+    public Guid ConglomerateId { get; protected set; }
+
+    //protected virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language)
+    //{
+    //  _CurrentMultiLineTexts = multiLineTexts;
+    //  _CurrentLanguage = language;
+
+    //  if (MultiLineTextsStudier == null)
+    //    MultiLineTextsStudier = 
+    //      (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
+
+    //  DoImpl();
+    //}
 
     /// <summary>
     /// Default behavior is to study the current MLTs, current language, for an indefinite period of time.
@@ -41,48 +53,50 @@ namespace LearnLanguages.Study
     public IDo<IJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; set; }
 
 
-    public void Handle(Common.Interfaces.IOpportunity message)
-    {
-      ///OKAY, HERE IS THE DEAL:
-      ///WE LISTEN FOR JOB OPPORTUNITIES IN THE STUDY CATEGORY
-      ///IF WE GET ONE, WE POST A NEW JOB OURSELVES THAT SOMEONE ELSE IS GOING TO CONSUME.
-      ///IF WE GET A REQUEST TO STOP OUR JOB, THEN WE WILL REPOST A SIMILAR REQUEST CONCERNING OUR INTERNAL
-      ///JOB.  THEN WE PASS THE BUCK FOR THE ORIGINALLY POSTED STOP REQUEST.
-      ///WE ARE ESSENTIALLY A ROUTER OF STUDY JOBS, CONVEYING MESSAGES TO MLTs-STUDIERS
-
-      if (!(message.Category == StudyResources.CategoryStudy))
-        return;
-
-      //we only know how to deal with study multilinetextlists at the moment
-      if (!(
-            message is Opportunity<MultiLineTextList> ||
-            message is Cancelation
-           ))
-        return;
-
-      var jobOpp = (Opportunity<MultiLineTextList>)message;
-
-        _CurrentMultiLineTexts = multiLineTexts;
-      _CurrentLanguage = language;
-
-      if (MultiLineTextsStudier == null)
-        MultiLineTextsStudier =
-          (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
-
-      DoImpl();
-    }
-
     public void Handle(Opportunity<MultiLineTextList> message)
     {
-      if (!(message.Category == StudyResources.CategoryStudy))
+      if (message.Category != StudyResources.CategoryStudy)
         return;
 
-      //DISPATCH NEW MESSAGE MEANT TO HANDLE
+      if (!(message.JobInfo is StudyJobInfo<MultiLineTextList>))
+        return;
+
+      StudyJobInfo<MultiLineTextList> studyJobInfo = (StudyJobInfo<MultiLineTextList>)message.JobInfo;
+
+      if (!(studyJobInfo.Criteria is StudyJobCriteria))
+        return;
+      
+      //Make an offer for the job.
+      var offer = new Offer.Offer(message.OpportunityId, 
+                                  this.Id, 
+                                  this, 
+                                  double.Parse(StudyResources.DefaultAmountDefaultMultiLineTextsStudier),
+                                  StudyResources.CategoryStudy, 
+                                  null);
+      Exchange.Ton.Publish(offer);
+        
+      MultiLineTextsStudier = 
+        (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
+    }
+
+    public void Handle(OfferResponse message)
+    {
+      throw new System.NotImplementedException();
     }
 
     public void Handle(Cancelation message)
     {
       throw new System.NotImplementedException();
+    }
+
+    /// <summary>
+    /// "Default" conglomerate messaging system.  This studier can keep in contact with the other default
+    /// studiers through this message stream.
+    /// </summary>
+    /// <param name="message"></param>
+    public void Handle(ConglomerateMessage message)
+    {
+      throw new NotImplementedException();
     }
   }
 }

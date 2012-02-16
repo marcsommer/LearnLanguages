@@ -8,8 +8,12 @@ using LearnLanguages.Offer;
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyPartner : IHandle<Opportunity<MultiLineTextList>>,
-                                   IHandle<Cancelation>
+  public interface IStudyPartner : IHaveId,
+                                   IHaveConglomerateId,
+                                   IHandle<Opportunity<MultiLineTextList>>,
+                                   IHandle<OfferResponse>,
+                                   IHandle<Cancelation>,
+                                   IHandle<ConglomerateMessage>
   {
     //void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
     //IDoAJob<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }

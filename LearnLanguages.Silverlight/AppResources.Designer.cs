@@ -106,6 +106,15 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 90.
+        /// </summary>
+        internal static string DefaultExpectedPrecision {
+            get {
+                return ResourceManager.GetString("DefaultExpectedPrecision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string DefaultNewStudyDataNativeLanguageText {

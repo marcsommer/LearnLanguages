@@ -11,6 +11,8 @@ using System.Windows;
 using System.ComponentModel;
 using Csla.Core;
 using LearnLanguages.Study.Interfaces;
+using LearnLanguages.Offer;
+using LearnLanguages.Study;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -28,12 +30,15 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class StudyASongViewModel : Conductor<StudyASongItemViewModel>.Collection.AllActive,
                                      IHandle<Navigation.EventMessages.NavigatedEventMessage>,
-                                     IViewModelBase
+                                     IViewModelBase,
+                                     IHaveId,
+                                     IHandle<Offer.Offer>
   {
     #region Ctors and Init
 
     public StudyASongViewModel()
     {
+      Id = Guid.NewGuid();
       //_AskViewModel = Services.Container.GetExportedValue<AskDoYouKnowThisViewModel>();
       if (_StudyPartner == null)
         Services.Container.SatisfyImportsOnce(this);
@@ -79,6 +84,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     #endregion
 
     #region Properties
+    public Guid Id { get; private set; }
+
     private IStudyPartner _StudyPartner;
     [Import]
     public IStudyPartner StudyPartner
@@ -660,9 +667,33 @@ namespace LearnLanguages.Silverlight.ViewModels
 
           var songs = r.Object;
 
-          throw new NotImplementedException();
-          //todo: restructure study call to reflect new architecture in study a song view model.
-          //StudyPartner.StudyMultiLineTexts(songs, Services.EventAggregator);
+
+          LanguageEdit.GetLanguageEdit(GetNativeLanguageText(), (s2, r2) =>
+            {
+              if (r2.Error != null)
+                throw r2.Error;
+              var nativeLanguage = r2.Object;
+              var noExpirationDate = StudyJobInfo<MultiLineTextList>.NoExpirationDate;
+              var precision = double.Parse(AppResources.DefaultExpectedPrecision);
+
+              //CREATE JOB INFO 
+              var studyJobInfo = new StudyJobInfo<MultiLineTextList>(songs, 
+                                                                     nativeLanguage, 
+                                                                     noExpirationDate, 
+                                                                     precision);
+              //CREATE OPPORTUNITY
+              var opportunity = new Opportunity<MultiLineTextList>(Id, 
+                                                                   this, 
+                                                                   studyJobInfo, 
+                                                                   StudyResources.CategoryStudy);
+              
+              //PUBLISH THE OPPORTUNITY
+              Exchange.Ton.Publish(opportunity);
+
+              //NOW, WE WAIT UNTIL WE HEAR A HANDLE(OFFER) MESSAGE.
+              //TODO: TIMEOUT FOR OPPORTUNITY, BOTH EXPIRATION DATE AND WAITING FOR OFFER TIMEOUT
+            });
+          
         });
     }
 
@@ -696,5 +727,16 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     #endregion
+
+    private List<Opportunity<MultiLineTextList>> OpenOpportunities { get; set; }
+    private List<Opportunity<MultiLineTextList>> WorkingOpportunities { get; set; }
+    private List<Opportunity<MultiLineTextList>> FinishedOpportunities { get; set; }
+
+    public void Handle(Offer.Offer message)
+    {
+      if (message.Category != StudyResources.CategoryStudy)
+        return;
+
+    }
   }
 }

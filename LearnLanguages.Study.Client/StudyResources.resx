@@ -120,6 +120,9 @@
   <data name="CategoryStudy" xml:space="preserve">
     <value>Study</value>
   </data>
+  <data name="DefaultAmountDefaultMultiLineTextsStudier" xml:space="preserve">
+    <value>10000</value>
+  </data>
   <data name="DefaultAmountDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>1000</value>
   </data>

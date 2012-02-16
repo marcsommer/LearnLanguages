@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messages\Cancelation.cs" />
+    <Compile Include="Messages\ConglomerateMessage.cs" />
     <Compile Include="Messages\OfferResponse.cs" />
     <Compile Include="Messages\Opportunity.cs" />
     <Compile Include="Messages\Offer.cs" />
