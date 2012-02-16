@@ -20,7 +20,7 @@ namespace LearnLanguages.Offer
       string category)
     {
       Id = Guid.NewGuid();
-      OpportunityId = Guid.NewGuid();
+      //OpportunityId = Guid.NewGuid();
       PublisherId = publisherId;
       Publisher = publisher;
       JobInfo = jobInfo;
@@ -32,10 +32,10 @@ namespace LearnLanguages.Offer
     /// Id of this offer.
     /// </summary>
     public Guid Id { get; private set; }
-    /// <summary>
-    /// Opportunity that this offer pertains to.
-    /// </summary>
-    public Guid OpportunityId { get; private set; }
+    ///// <summary>
+    ///// Opportunity that this offer pertains to.
+    ///// </summary>
+    //public Guid OpportunityId { get; private set; }
     /// <summary>
     /// Id of the publisher of this offer.
     /// </summary>

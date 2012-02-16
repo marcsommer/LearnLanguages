@@ -3,9 +3,8 @@ using Csla.Core;
 
 namespace LearnLanguages.Common.Interfaces
 {
-  public interface IWorkStatusUpdate
+  public interface IWorkStatusUpdate : IExchangeMessage
   {
-    Guid JobId { get; }
     Statuses.Status Status { get; }
   }
 }

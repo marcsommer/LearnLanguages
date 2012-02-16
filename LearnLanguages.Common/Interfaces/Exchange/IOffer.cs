@@ -1,10 +1,7 @@
 ﻿using System;
+using Csla.Core;
 
 namespace LearnLanguages.Common.Interfaces
 {
-  public interface IOffer : IExchangeMessage
-  {
-    Guid OpportunityId { get; }
-    double Amount { get; }
-  }
+  public interface IOffer : IExchangeMessage { }
 }

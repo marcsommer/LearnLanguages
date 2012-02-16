@@ -22,7 +22,7 @@ namespace LearnLanguages.Offer {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class OfferResources {
+    public class OfferResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LearnLanguages.Offer {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Offer.OfferResources", typeof(OfferResources).Assembly);
@@ -51,7 +51,7 @@ namespace LearnLanguages.Offer {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,9 +63,27 @@ namespace LearnLanguages.Offer {
         /// <summary>
         ///   Looks up a localized string similar to 6E8F338F-6921-4F7B-A41A-E4F862E36E46.
         /// </summary>
-        internal static string OfferExchangeId {
+        public static string OfferExchangeId {
             get {
                 return ResourceManager.GetString("OfferExchangeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string OfferResponseAccept {
+            get {
+                return ResourceManager.GetString("OfferResponseAccept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deny.
+        /// </summary>
+        public static string OfferResponseDeny {
+            get {
+                return ResourceManager.GetString("OfferResponseDeny", resourceCulture);
             }
         }
     }

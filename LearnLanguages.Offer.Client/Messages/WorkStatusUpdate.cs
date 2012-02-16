@@ -5,16 +5,16 @@ using Csla.Serialization;
 namespace LearnLanguages.Offer
 {
   [Serializable]
-  public class Offer<T> : IOffer<T>
+  public class WorkStatusUpdate<T> : IWorkStatusUpdate<T>
   {
     /// <summary>
     /// For serialization, do not use.
     /// </summary>
-    public Offer()
+    public WorkStatusUpdate()
     {
     }
 
-    public Offer(IOpportunity<T> opportunity, Guid publisherId, object publisher, double amount,
+    public WorkStatusUpdate(IOpportunity<T> opportunity, Guid publisherId, object publisher, double amount,
       string category, object information)
     {
       Id = Guid.NewGuid();
@@ -54,5 +54,28 @@ namespace LearnLanguages.Offer
     /// Category of the offer.  E.g. Study
     /// </summary>
     public string Category { get; private set; }
+
+
+
+
+    public IOffer<T> Offer
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public IOfferResponse<T> OfferResponse
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public IJobInfo<T> JobInfo
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public Statuses.Status Status
+    {
+      get { throw new NotImplementedException(); }
+    }
   }
 }

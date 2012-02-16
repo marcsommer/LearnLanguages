@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Messages\Cancelation.cs" />
     <Compile Include="Messages\ConglomerateMessage.cs" />
+    <Compile Include="Messages\WorkStatusUpdate.cs" />
     <Compile Include="Messages\OfferResponse.cs" />
     <Compile Include="Messages\Opportunity.cs" />
     <Compile Include="Messages\Offer.cs" />
@@ -80,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="OfferResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OfferResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

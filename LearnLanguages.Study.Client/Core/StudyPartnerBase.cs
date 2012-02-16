@@ -1,8 +1,10 @@
-﻿using LearnLanguages.Business;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using LearnLanguages.Business;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Interfaces;
-using System;
 
 namespace LearnLanguages.Study
 {
@@ -15,6 +17,12 @@ namespace LearnLanguages.Study
     public StudyPartnerBase()
     {
       Id = Guid.NewGuid();
+      _Studier =
+        (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
+      _OpenOffers = new List<Offer<MultiLineTextList>>();
+      _DeniedOffers = new List<Offer<MultiLineTextList>>();
+      _CurrentOffer = null;
+
       Exchange.Ton.SubscribeToOpportunities(this);
       Exchange.Ton.SubscribeToOfferResponses(this);
       Exchange.Ton.SubscribeToCancelations(this);
@@ -23,65 +31,92 @@ namespace LearnLanguages.Study
     public Guid Id { get; protected set; }
     public Guid ConglomerateId { get; protected set; }
 
-    //protected virtual void Study(MultiLineTextList multiLineTexts, LanguageEdit language)
-    //{
-    //  _CurrentMultiLineTexts = multiLineTexts;
-    //  _CurrentLanguage = language;
+    protected IDo<IJobInfo<MultiLineTextList>, MultiLineTextList> _Studier { get; set; }
+    protected List<Offer<MultiLineTextList>> _OpenOffers { get; set; }
+    protected List<Offer<MultiLineTextList>> _DeniedOffers { get; set; }
+    protected Offer<MultiLineTextList> _CurrentOffer { get; set; }
 
-    //  if (MultiLineTextsStudier == null)
-    //    MultiLineTextsStudier = 
-    //      (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
-
-    //  DoImpl();
-    //}
-
-    /// <summary>
-    /// Default behavior is to study the current MLTs, current language, for an indefinite period of time.
-    /// </summary>
-    protected virtual void DoImpl()
+    protected void AbortCurrent()
     {
-      //max date == indefinite time.
-      var dateNoExpiration = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime;
-      var jobInfo = new StudyJobInfo<MultiLineTextList>(_CurrentMultiLineTexts,
-                                                        _CurrentLanguage, 
-                                                        dateNoExpiration, 
-                                                        double.Parse(StudyResources.DefaultKnowledgeThreshold));
+      if (_CurrentOffer == null)
+        return;
 
-      MultiLineTextsStudier.Do(jobInfo);
+      _Studier.PleaseStopDoing(_CurrentOffer.Opportunity.JobInfo.Id);
+      _CurrentOffer = null;
     }
-
-    public IDo<IJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; set; }
-
 
     public void Handle(Opportunity<MultiLineTextList> message)
     {
+      //WE ONLY CARE ABOUT STUDY OPPORTUNITIES
       if (message.Category != StudyResources.CategoryStudy)
         return;
 
+      //WE ONLY CARE IF THE JOB INFO IS A STUDY JOB INFO<MLT>
       if (!(message.JobInfo is StudyJobInfo<MultiLineTextList>))
         return;
 
+      //WE ONLY CARE IF WE UNDERSTAND THE STUDYJOBINFO.CRITERIA
       StudyJobInfo<MultiLineTextList> studyJobInfo = (StudyJobInfo<MultiLineTextList>)message.JobInfo;
-
       if (!(studyJobInfo.Criteria is StudyJobCriteria))
         return;
-      
-      //Make an offer for the job.
-      var offer = new Offer.Offer(message.OpportunityId, 
+
+      //WE HAVE A GENUINE OPPORTUNITY WE WOULD BE INTERESTED IN
+      //MAKE THE OFFER FOR THE JOB
+      var offer = new Offer.Offer(message.Id, 
                                   this.Id, 
                                   this, 
                                   double.Parse(StudyResources.DefaultAmountDefaultMultiLineTextsStudier),
                                   StudyResources.CategoryStudy, 
                                   null);
+
+      //FIRST ADD THIS OFFER TO OUR LIST OF OFFERS
+      _OpenOffers.Add(offer);
+
+      //PUBLISH THE OFFER
       Exchange.Ton.Publish(offer);
-        
-      MultiLineTextsStudier = 
-        (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
     }
 
-    public void Handle(OfferResponse message)
+    public void Handle(OfferResponse<MultiLineTextList> message)
     {
-      throw new System.NotImplementedException();
+      //WE ONLY CARE ABOUT OFFERS IN THE STUDY CATEGORY
+      if (message.Category != StudyResources.CategoryStudy)
+        return;
+
+      //WE ONLY CARE ABOUT RESPONSES TO OFFERS THAT WE MADE
+      var results = (from offer in _OpenOffers
+                     where offer.Id == message.Offer.Id
+                     select offer);
+
+      if (results.Count() != 1)
+        return;
+
+      var pertinentOffer = results.First();
+
+      if (message.Response == OfferResources.OfferResponseDeny)
+      {
+        _OpenOffers.Remove(pertinentOffer);
+        _DeniedOffers.Add(pertinentOffer);
+        return;
+      }
+      else if (message.Response != OfferResources.OfferResponseAccept)
+      {
+        //INVALID OFFER RESPONSE THAT WE DON'T KNOW HOW TO HANDLE
+        _OpenOffers.Remove(pertinentOffer);
+        var msg = string.Format(StudyResources.WarningMsgUnknownOfferResponseResponse, message.Response);
+        Services.Log(msg, LogPriority.High, LogCategory.Warning);
+        return;
+      }
+       
+      //WE HAVE AN ACCEPT RESPONSE WITH AN OPPORTUNITY THAT WE CARE ABOUT
+      //WHATEVER OPPORTUNITY WE ARE WORKING ON, THE NEW ONE SUPERCEDES IT
+      if (_CurrentOffer != null)
+        AbortCurrent();
+
+      var jobInfo = message.Offer.Opportunity.JobInfo;
+      _CurrentOffer = message.Offer;
+      //PUBLISH STARTED UPDATE
+      var startedUpdate = new IWorkStatusUpdate
+      _Studier.Do(jobInfo);
     }
 
     public void Handle(Cancelation message)

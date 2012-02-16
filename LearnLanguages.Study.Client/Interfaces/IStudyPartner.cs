@@ -11,7 +11,7 @@ namespace LearnLanguages.Study.Interfaces
   public interface IStudyPartner : IHaveId,
                                    IHaveConglomerateId,
                                    IHandle<Opportunity<MultiLineTextList>>,
-                                   IHandle<OfferResponse>,
+                                   IHandle<OfferResponse<MultiLineTextList>>,
                                    IHandle<Cancelation>,
                                    IHandle<ConglomerateMessage>
   {

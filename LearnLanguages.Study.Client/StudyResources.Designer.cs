@@ -194,5 +194,14 @@ namespace LearnLanguages.Study {
                 return ResourceManager.GetString("WarningMsgEmptyAggregatePhraseTextFound", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unknown offer response ({0}) was given..
+        /// </summary>
+        public static string WarningMsgUnknownOfferResponseResponse {
+            get {
+                return ResourceManager.GetString("WarningMsgUnknownOfferResponseResponse", resourceCulture);
+            }
+        }
     }
 }

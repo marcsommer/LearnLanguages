@@ -32,7 +32,7 @@ namespace LearnLanguages.Silverlight.ViewModels
                                      IHandle<Navigation.EventMessages.NavigatedEventMessage>,
                                      IViewModelBase,
                                      IHaveId,
-                                     IHandle<Offer.Offer>
+                                     IHandle<Offer<MultiLineTextList>>
   {
     #region Ctors and Init
 
@@ -728,15 +728,74 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #endregion
 
-    private List<Opportunity<MultiLineTextList>> OpenOpportunities { get; set; }
-    private List<Opportunity<MultiLineTextList>> WorkingOpportunities { get; set; }
-    private List<Opportunity<MultiLineTextList>> FinishedOpportunities { get; set; }
+    /// <summary>
+    /// These opportunities have been published but still need to either be implemented
+    /// or canceled.  At first, I assume this will be only one or zero entries.
+    /// </summary>
+    private List<Opportunity<MultiLineTextList>> FutureOpportunities { get; set; }
+    /// <summary>
+    /// These opportunities have had offers offered and accepted, and as far 
+    /// as we know they are still in progress.  They may be complete but no complete
+    /// status update has occured.
+    /// </summary>
+    private List<Opportunity<MultiLineTextList>> CurrentOpportunities { get; set; }
+    /// <summary>
+    /// These opportunities have been either completed or canceled.
+    /// </summary>
+    private List<Opportunity<MultiLineTextList>> PastOpportunities { get; set; }
 
-    public void Handle(Offer.Offer message)
+    public void Handle(Offer<MultiLineTextList> message)
     {
+      //WE ONLY CARE ABOUT OFFERS IN THE STUDY CATEGORY
       if (message.Category != StudyResources.CategoryStudy)
         return;
+      
+      //WE ONLY CARE ABOUT OFFERS PERTAINING TO OUR FUTURE AND PAST OPPORTUNITIES
+      var resultsFuture = (from opportunity in FutureOpportunities
+                           where opportunity.Id == message.Opportunity.Id
+                           select opportunity);
+      if (resultsFuture.Count() != 1)
+      {
+        //NO OPEN FUTURE OPPORTUNITIES, NOW CHECK OUR PAST
+        var resultsOther = (from opportunity in PastOpportunities
+                            where opportunity.Id == message.Opportunity.Id
+                            select opportunity).Concat
+                              (from opportunity in CurrentOpportunities
+                               where opportunity.Id == message.Opportunity.Id
+                               select opportunity);
+      
+        if (resultsOther.Count() >= 1)
+        {
+          //WE HAVE THIS IN THE PAST OR CURRENT, SO THIS OPPORTUNITY HAS ALREADY BEEN/IS ALREADY BEING 
+          //HANDLED, SO WE WILL DENY THIS OFFER
+          var denyResponse = OfferResources.OfferResponseDeny;
+          var denyOfferResponse = new OfferResponse<MultiLineTextList>(message, Id, this, denyResponse, 
+            StudyResources.CategoryStudy, null);
 
+          //PUBLISH DENY OFFER RESPONSE
+          Exchange.Ton.Publish(denyOfferResponse);
+        }
+        else
+          //NOT IN FUTURE OR PAST, SO DOESN'T PERTAIN TO US
+          return;
+      }
+      
+      //THIS PERTAINS TO A FUTURE OPPORTUNITY, SO WE WILL EXAMINE THIS FURTHER
+      //FOR NOW, THIS MEANS THAT WHATEVER THE OFFER IS, WE WILL ACCEPT IT.
+      //IN THE POSSIBLY NEAR FUTURE, WE WILL HAVE TO CONSIDER IF SOMEONE ELSE
+      //HAS SOMETHING MORE IMPORTANT TO DO
+      var pertinentOpportunity = resultsFuture.First();
+
+      var acceptResponse = OfferResources.OfferResponseAccept;
+      var acceptOfferResponse = new OfferResponse<MultiLineTextList>(message, Id, this, acceptResponse,
+        StudyResources.CategoryStudy, null);
+
+      //BEFORE PUBLISHING, MOVE OPPORTUNITY TO CURRENT OPPORTUNITIES.
+      FutureOpportunities.Remove(pertinentOpportunity);
+      CurrentOpportunities.Add(pertinentOpportunity);
+
+      //PUBLISH ACCEPT OFFER RESPONSE
+      Exchange.Ton.Publish(acceptOfferResponse);
     }
   }
 }

@@ -120,4 +120,10 @@
   <data name="OfferExchangeId" xml:space="preserve">
     <value>6E8F338F-6921-4F7B-A41A-E4F862E36E46</value>
   </data>
+  <data name="OfferResponseAccept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="OfferResponseDeny" xml:space="preserve">
+    <value>Deny</value>
+  </data>
 </root>

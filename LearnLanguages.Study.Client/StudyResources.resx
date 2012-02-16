@@ -162,4 +162,8 @@
   <data name="WarningMsgEmptyAggregatePhraseTextFound" xml:space="preserve">
     <value>An empty phrase text was found in AggregatePhraseTexts.  This shouldn't happen.</value>
   </data>
+  <data name="WarningMsgUnknownOfferResponseResponse" xml:space="preserve">
+    <value>An unknown offer response ({0}) was given.</value>
+    <comment>{0} = OfferResponse.Response</comment>
+  </data>
 </root>
