@@ -5,6 +5,8 @@ using LearnLanguages.Business;
 using LearnLanguages.Common;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Offer;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study
 {
@@ -16,7 +18,8 @@ namespace LearnLanguages.Study
   /// adjacent known phrase texts, according to its own knowledge.
   /// </summary>
   public class DefaultLineMeaningStudier : 
-    StudierBase<StudyJobInfo<LineEdit, IViewModelBase>, LineEdit, IViewModelBase>
+    StudierBase<StudyJobInfo<LineEdit, IViewModelBase>, LineEdit, IViewModelBase>,
+    IHandle<IStatusUpdate<PhraseEdit, IViewModelBase>>
   {
     #region Ctors and Init
 
@@ -120,9 +123,12 @@ namespace LearnLanguages.Study
             //BUT I WANT TO BE SURE THIS IS INCREMENTED BEFORE THE STUDIER DOES ANYTHING.
             _LastStudiedIndex++;
 
-            //INVOKE THE STUDIER TO DO THE JOB, THIS DOES NOT USE THE EXCHANGE.
+            //INVOKE THE STUDIER TO DO THE JOB, THIS DOES NOT USE THE EXCHANGE...BUT!!
+            //BUT THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE.
             var studier = _Studiers[indexToStudy];
             studier.Do(studyJobInfo);
+
+            //THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE, SO GOTO HANDLE<JOB<PHRASEEDIT, IVIEWMODEL>...
           });
       }
     }
@@ -327,5 +333,27 @@ namespace LearnLanguages.Study
     }
 
     #endregion
+
+    public void Handle(IStatusUpdate<PhraseEdit, IViewModelBase> message)
+    {
+      if (message.Category != StudyResources.CategoryStudy)
+        return;
+      //TODO: CHECK TO SEE IF THIS IS ONE OF THIS OBJECT'S UPDATES.  RIGHT NOW THEY ALL WILL BE, BUT THIS OBJECT SHOULD TRACK ITS OPEN JOBS.
+
+      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
+
+      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
+      if (message.Status == CommonResources.StatusCompleted && message.JobInfo.Product != null)
+      {
+        _StudyJobInfo.Product = message.JobInfo.Product;
+      }
+      
+      //CREATE THE BUBBLING UP UPDATE
+      var statusUpdate = new StatusUpdate<LineEdit, IViewModelBase>(message.Status, null, null, 
+        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
+        
+      //PUBLISH TO BUBBLE UP
+      Exchange.Ton.Publish(statusUpdate);
+    }
   }
 }

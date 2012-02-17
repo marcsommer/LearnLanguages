@@ -4,6 +4,7 @@ using LearnLanguages.Business;
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study
 {
@@ -26,7 +27,8 @@ namespace LearnLanguages.Study
   /// just be active lines.
   /// </summary>
   public class DefaultSingleMultiLineTextMeaningStudier :
-    StudierBase<StudyJobInfo<MultiLineTextEdit, IViewModelBase>, MultiLineTextEdit, IViewModelBase>
+    StudierBase<StudyJobInfo<MultiLineTextEdit, IViewModelBase>, MultiLineTextEdit, IViewModelBase>,
+    IHandle<IStatusUpdate<LineEdit, IViewModelBase>>
   {
     #region Ctors and Init
     
@@ -208,5 +210,11 @@ namespace LearnLanguages.Study
     }
     
     #endregion
+
+    public void Handle(IStatusUpdate<LineEdit, IViewModelBase> message)
+    {
+      //todo: left off here: implement this and bubble up status update
+      throw new NotImplementedException();
+    }
   }
 }

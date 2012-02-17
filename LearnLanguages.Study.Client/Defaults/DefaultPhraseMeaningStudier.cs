@@ -79,7 +79,28 @@ namespace LearnLanguages.Study
           if (languagesAreDifferent)
           {
             //DO A TRANSLATION Q & A
+            var qaViewModel = new ViewModels.QuestionAnswerViewModel();
+            qaViewModel.Question = phraseEdit;
+            qaViewModel.Answer = phraseEdit;
+            qaViewModel.AskQuestion(phraseEdit, phraseEdit, 5000, (e) =>
+              {
+                if (e != null)
+                  throw e;
+              });
+            _StudyJobInfo.Product = qaViewModel;
 
+            var completedUpdate =
+              new StatusUpdate<PhraseEdit, IViewModelBase>(CommonResources.StatusCompleted,
+                                                                  null,
+                                                                  null,
+                                                                  null,
+                                                                  _StudyJobInfo,
+                                                                  Id,
+                                                                  this,
+                                                                  StudyResources.CategoryStudy,
+                                                                  null);
+
+            Exchange.Ton.Publish(completedUpdate);
           }
           else
           {
