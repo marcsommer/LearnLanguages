@@ -138,7 +138,7 @@ namespace LearnLanguages.Silverlight.ViewModels
           {
             if (_Callback != null)
             {
-              var result = new Common.Args.ResultArgs<StudyDataEdit>(r.Error);
+              var result = new Common.ResultArgs<StudyDataEdit>(r.Error);
               _Callback(this, result);
               _Callback = null;
             }
@@ -148,7 +148,7 @@ namespace LearnLanguages.Silverlight.ViewModels
 
           if (_Callback != null)
           {
-            var result = new Common.Args.ResultArgs<StudyDataEdit>(Model);
+            var result = new Common.ResultArgs<StudyDataEdit>(Model);
             _Callback(this, result);
             _Callback = null;
           }
@@ -181,7 +181,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         DispatchSavedEvent();
         NotifyOfPropertyChange(() => CanSave);
         if (_Callback != null)
-          _Callback(this, new Common.Args.ResultArgs<StudyDataEdit>(Model));
+          _Callback(this, new Common.ResultArgs<StudyDataEdit>(Model));
       });
     }
   }

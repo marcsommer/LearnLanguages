@@ -34,7 +34,7 @@ namespace LearnLanguages.Study
     protected IDo<IJobInfo<MultiLineTextList>, MultiLineTextList> _Studier { get; set; }
     protected List<Offer<MultiLineTextList>> _OpenOffers { get; set; }
     protected List<Offer<MultiLineTextList>> _DeniedOffers { get; set; }
-    protected Offer<MultiLineTextList> _CurrentOffer { get; set; }
+    protected IOffer<MultiLineTextList> _CurrentOffer { get; set; }
 
     protected void AbortCurrent()
     {
@@ -62,12 +62,12 @@ namespace LearnLanguages.Study
 
       //WE HAVE A GENUINE OPPORTUNITY WE WOULD BE INTERESTED IN
       //MAKE THE OFFER FOR THE JOB
-      var offer = new Offer.Offer(message.Id, 
-                                  this.Id, 
-                                  this, 
-                                  double.Parse(StudyResources.DefaultAmountDefaultMultiLineTextsStudier),
-                                  StudyResources.CategoryStudy, 
-                                  null);
+      var offer = new Offer<MultiLineTextList>(message, 
+                                               this.Id,
+                                               this, 
+                                               double.Parse(StudyResources.DefaultAmountDefaultMultiLineTextsStudier),
+                                               StudyResources.CategoryStudy, 
+                                               null);
 
       //FIRST ADD THIS OFFER TO OUR LIST OF OFFERS
       _OpenOffers.Add(offer);

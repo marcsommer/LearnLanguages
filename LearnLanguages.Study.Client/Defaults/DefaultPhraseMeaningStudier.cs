@@ -25,6 +25,12 @@ namespace LearnLanguages.Study
     }
     #endregion
 
+    #region Properties
+
+    public string PhraseText { get; set; }
+    //public LanguageEdit Language { get; set; }
+
+    #endregion
 
     #region Methods
 
@@ -57,11 +63,26 @@ namespace LearnLanguages.Study
           if (_StudyJobInfo.Target == null)
             throw new StudyException("No PhraseEdit to study, _StudyJobInfo.Target == null.");
 
-          var phraseText = _StudyJobInfo.Target.Text;
+          var phraseEdit = _StudyJobInfo.Target;
+          var phraseText = phraseEdit.Text;
           if (string.IsNullOrEmpty(phraseText))
             throw new StudyException("Attempted to study empty phrase text, _StudyJobInfo.Target.Text is null or empty.");
 
-          //so now we have a phrase
+          var languageText = phraseEdit.Language.Text;
+
+          //WE HAVE A PHRASEEDIT WITH A LANGUAGE AND WE HAVE OUR NATIVE LANGUAGE.
+          //IF THE TWO LANGUAGES ARE DIFFERENT, THEN WE CREATE A TRANSLATION Q & A.
+          //IF THE TWO LANGUAGES ARE THE SAME, THEN WE CREATE A STUDY NATIVE LANGUAGE PHRASE Q & A.
+
+          bool languagesAreDifferent = (languageText != nativeLanguageText);
+          if (languagesAreDifferent)
+          {
+            //DO A TRANSLATION Q & A
+          }
+          else
+          {
+            //DO A NATIVE LANGUAGE Q & A
+          }
         });
     }
 

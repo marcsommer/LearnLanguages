@@ -20,12 +20,17 @@ namespace LearnLanguages.Study
 
     public DefaultLineMeaningStudier()
     {
-      
+      _Studiers = new Dictionary<int, DefaultPhraseMeaningStudier>();
     }
 
     #endregion
 
     #region Properties
+
+    /// <summary>
+    /// Dictionary of phrase meaning studiers, indexed by their position in this line.
+    /// </summary>
+    private Dictionary<int, DefaultPhraseMeaningStudier> _Studiers { get; set; }
 
     /// <summary>
     /// This AggregateSize this object was created with.
@@ -43,42 +48,103 @@ namespace LearnLanguages.Study
     /// </summary>
     public List<string> KnownPhraseTexts { get; private set; }
 
+    /// <summary>
+    /// The index of the last studied phrase in AggregatePhraseTexts
+    /// </summary>
+    private int _LastStudiedIndex { get; set; }
     #endregion
 
     #region Methods
 
-    public bool StudyAgain()
-    {
-      if (HasDoneThisBefore)
-      {
-        DoImpl();
-        return true;
-      }
-      else
-        return false;
-    }
+    //public bool StudyAgain()
+    //{
+    //  if (IsNotFirstRun)
+    //  {
+    //    DoImpl();
+    //    return true;
+    //  }
+    //  else
+    //    return false;
+    //}
 
     protected override void DoImpl()
     {
-      if (!HasDoneThisBefore)
+      if (!IsNotFirstRun) //IS FIRST RUN...ALREADY TODOING REFACTOR
       {
         AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
         AggregatePhraseTexts = new List<string>();
         KnownPhraseTexts = new List<string>();
         PopulateAggregatePhraseTexts(AggregateSize);
-        //no need to aggregate because we start from unknown state.
+        //CURRENTLY NO NEED TO AGGREGATE BECAUSE WE START FROM UNKNOWN STATE.
+        //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
+        //IF THAT IS HOW WE HAVE IT SET UP
+        PopulateStudiersWithUnknownAggregatePhraseTexts();
       }
       else
       {
-        var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
-        AggregateAdjacentKnownPhraseTexts(maxIterations);
+        //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT AT AGGREGATE PHRASE TEXTS LIST, THEN WE
+        //HAVE COMPLETED ONE ITERATION THROUGH OUR PHRASE TEXTS.  
+        if (_LastStudiedIndex >= AggregatePhraseTexts.Count)
+        {
+          //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
+          //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
+          var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
+          AggregateAdjacentKnownPhraseTexts(maxIterations);
+          PopulateStudiersWithUnknownAggregatePhraseTexts();
+          if (_Studiers.Count == 0)
+            throw new Exception("todo: figure out how to communicate that this line is 100% known/what to do");
+        }
+       
+        //WE NOW HAVE OUR STUDIERS.  GET OUR INDEX TO STUDY, POPULATE THAT STUDIER, AND DO IT.
+        var indexToStudy = _LastStudiedIndex + 1;
+        var phraseText = _Studiers[indexToStudy].PhraseText;
+        var language = this._StudyJobInfo.Target.Phrase.Language;
+        
+        PhraseEdit.NewPhraseEdit(language.Text, (s, r) =>
+          {
+            if (r.Error != null)
+              throw r.Error;
+
+            var phrase = r.Object;
+            var criteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
+
+
+            //CREATE THE JOB INFO
+            var studyJobInfo = new StudyJobInfo<PhraseEdit>(phrase, 
+                                                            criteria.Language, 
+                                                            _StudyJobInfo.ExpirationDate, 
+                                                            criteria.ExpectedPrecision);
+            //I'M INCREMENTING THIS BEFORE EXECUTION.  PROBABLY CAN DO THIS AFTERWARDS, 
+            //BUT I WANT TO BE SURE THIS IS INCREMENTED BEFORE THE STUDIER DOES ANYTHING.
+            _LastStudiedIndex++;
+
+            //INVOKE THE STUDIER TO DO THE JOB, THIS DOES NOT USE THE EXCHANGE.
+            var studier = _Studiers[indexToStudy];
+            studier.Do(studyJobInfo);
+          });
       }
-      PopulateStudiers();
     }
 
-    private void PopulateStudiers()
+    private void PopulateStudiersWithUnknownAggregatePhraseTexts()
     {
-      throw new NotImplementedException();
+      _Studiers.Clear();
+      _LastStudiedIndex = -1;
+
+      //unknownRelativeOrder: unknown in that our phrase is unknown.  Relative order means
+      //the order/position of this phrase relative to the other _unknown_ phrases.
+      var unknownRelativeOrder = -1;
+      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+      {
+        var phraseText = AggregatePhraseTexts[i];
+        if (IsPhraseKnown(phraseText))
+          continue;
+
+        var studier = new DefaultPhraseMeaningStudier();
+        //studier.PhraseText = phraseText;
+        //studier.Language = _StudyJobInfo.Target.Phrase.Language;
+        unknownRelativeOrder++;
+        _Studiers.Add(unknownRelativeOrder, studier);
+      }
     }
 
     /// <summary>
@@ -93,7 +159,7 @@ namespace LearnLanguages.Study
 
       AggregatePhraseTexts.Clear();
 
-      var lineText = _Target.Phrase.Text;
+      var lineText = _StudyJobInfo.Target.Phrase.Text;
       //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
       //We will end up with 20/2 = 10 aggregate phrases.  
       //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 

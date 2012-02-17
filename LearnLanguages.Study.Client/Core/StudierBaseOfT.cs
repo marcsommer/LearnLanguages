@@ -1,24 +1,42 @@
 ﻿using System;
 using LearnLanguages.Common.Interfaces;
-using LearnLanguages.Study.Interfaces;
-using LearnLanguages.Business;
-using LearnLanguages.Offer;
-using Caliburn.Micro;
 
 namespace LearnLanguages.Study
 {
-  public abstract class StudierBase<J, T> : IDo<J, T>//,
-                                            //IHandle<Opportunity<T>>
+  public abstract class StudierBase<J, T> : IDo<J, T>
     where J : IJobInfo<T>
   {
     public StudierBase()
     {
-      HasDoneThisBefore = false;
+      IsNotFirstRun = false;
       Id = Guid.NewGuid();
     }
 
     public Guid Id { get; protected set; }
+   
     protected J _StudyJobInfo { get; set; }
+    /// <summary>
+    /// Todo: change IsNotFirstRun bad name, need to refactor to IsFirstRun and change logic.
+    /// </summary>
+    public bool IsNotFirstRun { get; protected set; }
+    protected object _AbortLock = new object();
+    protected bool _AbortHasBeenFlagged
+    {
+      get
+      {
+        lock (_AbortLock)
+        {
+          return _AbortHasBeenFlagged;
+        }
+      }
+      set
+      {
+        lock (_AbortLock)
+        {
+          _AbortHasBeenFlagged = value;
+        }
+      }
+    }
 
     public void Do(J studyJobInfo)
     {
@@ -28,23 +46,16 @@ namespace LearnLanguages.Study
       _StudyJobInfo = studyJobInfo;
 
       DoImpl();
-      HasDoneThisBefore = true;
+      IsNotFirstRun = true;
     }
-
-    public bool HasDoneThisBefore { get; protected set; }
-
     /// <summary>
-    /// Should take into account if HasStudied before.
+    /// Should take into account if HasDoneThisBefore.
     /// </summary>
     protected abstract void DoImpl();
-
-
-    public void PleaseStopDoing(Guid jobInfoId)
+    public virtual void PleaseStopDoing(Guid jobInfoId)
     {
-      //if (_StudyJobInfo.Id == jobInfoId)
-      //  AbortJob();
+      if (_StudyJobInfo.Id == jobInfoId)
+        _AbortHasBeenFlagged = true;
     }
-
-    //public abstract void Handle(Opportunity<T> message);
   }
 }

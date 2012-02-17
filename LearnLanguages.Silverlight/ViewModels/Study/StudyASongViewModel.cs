@@ -796,6 +796,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       //PUBLISH ACCEPT OFFER RESPONSE
       Exchange.Ton.Publish(acceptOfferResponse);
+
+
     }
   }
 }

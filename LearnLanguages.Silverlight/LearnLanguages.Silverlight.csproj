@@ -154,6 +154,7 @@
     <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowViewModel.cs" />
     <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowResponseViewModel.cs" />
     <Compile Include="EventMessages\NativeLanguageChangedEventMessage.cs" />
+    <Compile Include="ViewModels\Study\StudyAPhraseViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyASongItemViewModel.cs" />
     <Compile Include="ViewModels\Study\StudyASongViewModel.cs" />
     <Compile Include="ViewModels\Study\QuestionAnswerViewModel.cs" />

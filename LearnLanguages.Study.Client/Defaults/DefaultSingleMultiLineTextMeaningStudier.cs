@@ -79,7 +79,7 @@ namespace LearnLanguages.Study
 
     protected override void DoImpl()
     {
-      if (!HasDoneThisBefore)
+      if (!IsNotFirstRun)
       {
         PopulateLineStudiers();
       }

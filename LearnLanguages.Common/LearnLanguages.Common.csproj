@@ -89,6 +89,8 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Interfaces\Exchange\IOpportunityCompleted.cs" />
+    <Compile Include="Interfaces\Exchange\IOpportunityCompletedOfT.cs" />
     <Compile Include="Interfaces\Exchange\IStatusUpdateOfT.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
     <Compile Include="Interfaces\Exchange\IOffer.cs" />

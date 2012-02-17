@@ -41,13 +41,17 @@ namespace LearnLanguages.Study
       var originalJob = _StudyJobInfo;
       var newExpirationDate = 
         System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime;
+
+      var studyJobCriteria = (StudyJobCriteria)originalJob.Criteria;
       var newJob = new StudyJobInfo<MultiLineTextEdit>(currentMultiLineText, 
-                                                       originalJob.Language, 
-                                                       _OfferExchange, 
+                                                       studyJobCriteria.Language, 
                                                        newExpirationDate,
-                                                       originalJob.ExpectedPrecision);
+                                                       studyJobCriteria.ExpectedPrecision);
       //newJob.OriginalJobId = originalJob.Id;
-      studier.Do(newJob, _OfferExchange);
+
+      //NOTICE THAT THIS IS **NOT** PUBLISHED ON THE EXCHANGE.  YES IT IS A JOB INFO,
+      //NO IT DOES NOT HAVE TO BE PUBLISHED.
+      studier.Do(newJob);
     }
 
     private int GetNextMultiLineTextIndex()
@@ -83,15 +87,5 @@ namespace LearnLanguages.Study
     }
     
     #endregion
-
-    public void Handle(Opportunity<MultiLineTextList> message)
-    {
-      if (message.Category != StudyResources.CategoryStudy ||
-          !(message.JobInfo is StudyJobInfo<MultiLineTextList>))
-        return;
-
-      var studyJobInfo = (StudyJobInfo<MultiLineTextList>)message.JobInfo;
-    }
-
   }
 }
