@@ -151,6 +151,42 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The answer is null..
+        /// </summary>
+        public static string ErrorMsgAnswerIsNull {
+            get {
+                return ResourceManager.GetString("ErrorMsgAnswerIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The language is null..
+        /// </summary>
+        public static string ErrorMsgLanguageIsNull {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Language.Text is null or empty..
+        /// </summary>
+        public static string ErrorMsgLanguageTextIsNullOrEmpty {
+            get {
+                return ResourceManager.GetString("ErrorMsgLanguageTextIsNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The question is null..
+        /// </summary>
+        public static string ErrorMsgQuestionIsNull {
+            get {
+                return ResourceManager.GetString("ErrorMsgQuestionIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exception was thrown during study.  See inner exception for details..
         /// </summary>
         public static string ErrorMsgStudyException {

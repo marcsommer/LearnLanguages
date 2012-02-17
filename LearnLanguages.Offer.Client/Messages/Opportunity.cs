@@ -5,7 +5,7 @@ using Csla.Serialization;
 namespace LearnLanguages.Offer
 {
   [Serializable]
-  public class Opportunity<TTarget> : IOpportunity<TTarget>
+  public class Opportunity<TTarget, TProduct> : IOpportunity<TTarget, TProduct>
   {
     /// <summary>
     /// For serialization, do not use.
@@ -16,7 +16,7 @@ namespace LearnLanguages.Offer
     /// <summary>
     /// Use this ctor.  Do not use default ctor.
     /// </summary>
-    public Opportunity(Guid publisherId, object publisher, IJobInfo<TTarget> jobInfo, 
+    public Opportunity(Guid publisherId, object publisher, IJobInfo<TTarget, TProduct> jobInfo, 
       string category)
     {
       Id = Guid.NewGuid();
@@ -47,7 +47,7 @@ namespace LearnLanguages.Offer
     /// <summary>
     /// Target for this opportunity.
     /// </summary>
-    public IJobInfo<TTarget> JobInfo { get; private set; }
+    public IJobInfo<TTarget, TProduct> JobInfo { get; private set; }
     /// <summary>
     /// Information about this opportunity.  This can include anything from configuration of the Target, advice,
     /// or specifications about the Target, or who knows what.  It is wide open for implementation.

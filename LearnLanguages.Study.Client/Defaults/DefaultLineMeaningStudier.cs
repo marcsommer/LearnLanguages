@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LearnLanguages.Business;
 using LearnLanguages.Common;
 using LearnLanguages.Study.Interfaces;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Study
 {
@@ -14,7 +15,8 @@ namespace LearnLanguages.Study
   /// populating aggregate phrase texts with the OriginalAggregateSize, as well as aggregating
   /// adjacent known phrase texts, according to its own knowledge.
   /// </summary>
-  public class DefaultLineMeaningStudier : StudierBase<StudyJobInfo<LineEdit>, LineEdit>
+  public class DefaultLineMeaningStudier : 
+    StudierBase<StudyJobInfo<LineEdit, IViewModelBase>, LineEdit, IViewModelBase>
   {
     #region Ctors and Init
 
@@ -110,10 +112,10 @@ namespace LearnLanguages.Study
 
 
             //CREATE THE JOB INFO
-            var studyJobInfo = new StudyJobInfo<PhraseEdit>(phrase, 
-                                                            criteria.Language, 
-                                                            _StudyJobInfo.ExpirationDate, 
-                                                            criteria.ExpectedPrecision);
+            var studyJobInfo = new StudyJobInfo<PhraseEdit, IViewModelBase>(phrase, 
+                                                                            criteria.Language, 
+                                                                            _StudyJobInfo.ExpirationDate, 
+                                                                            criteria.ExpectedPrecision);
             //I'M INCREMENTING THIS BEFORE EXECUTION.  PROBABLY CAN DO THIS AFTERWARDS, 
             //BUT I WANT TO BE SURE THIS IS INCREMENTED BEFORE THE STUDIER DOES ANYTHING.
             _LastStudiedIndex++;

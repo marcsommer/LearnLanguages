@@ -3,8 +3,8 @@ using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Study
 {
-  public abstract class StudierBase<J, T> : IDo<J, T>
-    where J : IJobInfo<T>
+  public abstract class StudierBase<J, T, P> : IDo<J, T, P>
+    where J : IJobInfo<T, P>
   {
     public StudierBase()
     {

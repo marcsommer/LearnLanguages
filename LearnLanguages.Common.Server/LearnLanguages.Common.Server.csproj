@@ -175,32 +175,32 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IJobInfo.cs">
       <Link>Interfaces\Exchange\IJobInfo.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IJobInfoOfT.cs">
-      <Link>Interfaces\Exchange\IJobInfoOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IJobInfoOfTTargetAndTProduct.cs">
+      <Link>Interfaces\Exchange\IJobInfoOfTTargetAndTProduct.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOffer.cs">
       <Link>Interfaces\Exchange\IOffer.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferOfT.cs">
-      <Link>Interfaces\Exchange\IOfferOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferOfTTargetAndTProduct.cs">
+      <Link>Interfaces\Exchange\IOfferOfTTargetAndTProduct.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferResponse.cs">
       <Link>Interfaces\Exchange\IOfferResponse.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferResponseOfT.cs">
-      <Link>Interfaces\Exchange\IOfferResponseOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOfferResponseOfTTargetAndTProduct.cs">
+      <Link>Interfaces\Exchange\IOfferResponseOfTTargetAndTProduct.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOpportunity.cs">
       <Link>Interfaces\Exchange\IOpportunity.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOpportunityOfT.cs">
-      <Link>Interfaces\Exchange\IOpportunityOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IOpportunityOfTTargetAndTProduct.cs">
+      <Link>Interfaces\Exchange\IOpportunityOfTTargetAndTProduct.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IStatusUpdate.cs">
       <Link>Interfaces\Exchange\IStatusUpdate.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IStatusUpdateOfT.cs">
-      <Link>Interfaces\Exchange\IStatusUpdateOfT.cs</Link>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Exchange\IStatusUpdateOfTTargetAndTProduct.cs">
+      <Link>Interfaces\Exchange\IStatusUpdateOfTTargetAndTProduct.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IFeedback.cs">
       <Link>Interfaces\Feedback\IFeedback.cs</Link>

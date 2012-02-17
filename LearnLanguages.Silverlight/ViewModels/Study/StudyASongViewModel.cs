@@ -32,7 +32,8 @@ namespace LearnLanguages.Silverlight.ViewModels
                                      IHandle<Navigation.EventMessages.NavigatedEventMessage>,
                                      IViewModelBase,
                                      IHaveId,
-                                     IHandle<Offer<MultiLineTextList>>
+                                     IHandle<Offer<MultiLineTextList, IViewModelBase>>, 
+                                     IHandle<StatusUpdate<MultiLineTextList, IViewModelBase>>
   {
     #region Ctors and Init
 
@@ -673,16 +674,16 @@ namespace LearnLanguages.Silverlight.ViewModels
               if (r2.Error != null)
                 throw r2.Error;
               var nativeLanguage = r2.Object;
-              var noExpirationDate = StudyJobInfo<MultiLineTextList>.NoExpirationDate;
+              var noExpirationDate = StudyJobInfo<MultiLineTextList, IViewModelBase>.NoExpirationDate;
               var precision = double.Parse(AppResources.DefaultExpectedPrecision);
 
               //CREATE JOB INFO 
-              var studyJobInfo = new StudyJobInfo<MultiLineTextList>(songs, 
+              var studyJobInfo = new StudyJobInfo<MultiLineTextList, IViewModelBase>(songs, 
                                                                      nativeLanguage, 
                                                                      noExpirationDate, 
                                                                      precision);
               //CREATE OPPORTUNITY
-              var opportunity = new Opportunity<MultiLineTextList>(Id, 
+              var opportunity = new Opportunity<MultiLineTextList, IViewModelBase>(Id, 
                                                                    this, 
                                                                    studyJobInfo, 
                                                                    StudyResources.CategoryStudy);
@@ -732,19 +733,19 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// These opportunities have been published but still need to either be implemented
     /// or canceled.  At first, I assume this will be only one or zero entries.
     /// </summary>
-    private List<Opportunity<MultiLineTextList>> FutureOpportunities { get; set; }
+    private List<Opportunity<MultiLineTextList, IViewModelBase>> FutureOpportunities { get; set; }
     /// <summary>
     /// These opportunities have had offers offered and accepted, and as far 
     /// as we know they are still in progress.  They may be complete but no complete
     /// status update has occured.
     /// </summary>
-    private List<Opportunity<MultiLineTextList>> CurrentOpportunities { get; set; }
+    private List<Opportunity<MultiLineTextList, IViewModelBase>> CurrentOpportunities { get; set; }
     /// <summary>
     /// These opportunities have been either completed or canceled.
     /// </summary>
-    private List<Opportunity<MultiLineTextList>> PastOpportunities { get; set; }
+    private List<Opportunity<MultiLineTextList, IViewModelBase>> PastOpportunities { get; set; }
 
-    public void Handle(Offer<MultiLineTextList> message)
+    public void Handle(Offer<MultiLineTextList, IViewModelBase> message)
     {
       //WE ONLY CARE ABOUT OFFERS IN THE STUDY CATEGORY
       if (message.Category != StudyResources.CategoryStudy)
@@ -769,7 +770,7 @@ namespace LearnLanguages.Silverlight.ViewModels
           //WE HAVE THIS IN THE PAST OR CURRENT, SO THIS OPPORTUNITY HAS ALREADY BEEN/IS ALREADY BEING 
           //HANDLED, SO WE WILL DENY THIS OFFER
           var denyResponse = OfferResources.OfferResponseDeny;
-          var denyOfferResponse = new OfferResponse<MultiLineTextList>(message, Id, this, denyResponse, 
+          var denyOfferResponse = new OfferResponse<MultiLineTextList, IViewModelBase>(message, Id, this, denyResponse, 
             StudyResources.CategoryStudy, null);
 
           //PUBLISH DENY OFFER RESPONSE
@@ -787,7 +788,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       var pertinentOpportunity = resultsFuture.First();
 
       var acceptResponse = OfferResources.OfferResponseAccept;
-      var acceptOfferResponse = new OfferResponse<MultiLineTextList>(message, Id, this, acceptResponse,
+      var acceptOfferResponse = new OfferResponse<MultiLineTextList, IViewModelBase>(message, Id, this, acceptResponse,
         StudyResources.CategoryStudy, null);
 
       //BEFORE PUBLISHING, MOVE OPPORTUNITY TO CURRENT OPPORTUNITIES.
@@ -796,8 +797,11 @@ namespace LearnLanguages.Silverlight.ViewModels
 
       //PUBLISH ACCEPT OFFER RESPONSE
       Exchange.Ton.Publish(acceptOfferResponse);
+    }
 
-
+    public void Handle(StatusUpdate<MultiLineTextList, IViewModelBase> message)
+    {
+      throw new NotImplementedException();
     }
   }
 }

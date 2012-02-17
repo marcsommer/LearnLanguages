@@ -2,8 +2,8 @@
 
 namespace LearnLanguages.Common.Interfaces
 {
-  public interface IDo<TJobInfo, TTarget>
-    where TJobInfo : IJobInfo<TTarget>
+  public interface IDo<TJobInfo, TTarget, TProduct>
+    where TJobInfo : IJobInfo<TTarget, TProduct>
   {
     /// <summary>
     /// Id unique to this studier's configuration.  For now, this is just a random Guid.

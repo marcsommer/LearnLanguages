@@ -83,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\QuestionAnswerViewModel.cs" />
     <Compile Include="_RandomPhraseStudyPartner.cs" />
     <Compile Include="Core\StudyPartnerBase.cs" />
   </ItemGroup>

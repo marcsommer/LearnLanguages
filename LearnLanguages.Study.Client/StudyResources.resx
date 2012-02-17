@@ -147,6 +147,18 @@
   <data name="DefaultOfferExchangeId" xml:space="preserve">
     <value>92A7E7C6-8278-4142-A962-6616E2959D1C</value>
   </data>
+  <data name="ErrorMsgAnswerIsNull" xml:space="preserve">
+    <value>The answer is null.</value>
+  </data>
+  <data name="ErrorMsgLanguageIsNull" xml:space="preserve">
+    <value>The language is null.</value>
+  </data>
+  <data name="ErrorMsgLanguageTextIsNullOrEmpty" xml:space="preserve">
+    <value>The Language.Text is null or empty.</value>
+  </data>
+  <data name="ErrorMsgQuestionIsNull" xml:space="preserve">
+    <value>The question is null.</value>
+  </data>
   <data name="ErrorMsgStudyException" xml:space="preserve">
     <value>An exception was thrown during study.  See inner exception for details.</value>
   </data>

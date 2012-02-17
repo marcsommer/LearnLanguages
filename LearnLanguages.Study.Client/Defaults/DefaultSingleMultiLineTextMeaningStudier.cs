@@ -25,8 +25,8 @@ namespace LearnLanguages.Study
   /// a whole slew of other factors...perfect for a neural net to figure out.  Alas, for now it must 
   /// just be active lines.
   /// </summary>
-  public class DefaultSingleMultiLineTextMeaningStudier : 
-    StudierBase<StudyJobInfo<MultiLineTextEdit>, MultiLineTextEdit>
+  public class DefaultSingleMultiLineTextMeaningStudier :
+    StudierBase<StudyJobInfo<MultiLineTextEdit, IViewModelBase>, MultiLineTextEdit, IViewModelBase>
   {
     #region Ctors and Init
     
@@ -105,10 +105,10 @@ namespace LearnLanguages.Study
 
       var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
 
-      StudyJobInfo<LineEdit> jobInfo = new StudyJobInfo<LineEdit>(nextLineEdit, 
-                                                                  jobCriteria.Language, 
-                                                                  _StudyJobInfo.ExpirationDate, 
-                                                                  jobCriteria.ExpectedPrecision);
+      var jobInfo = new StudyJobInfo<LineEdit, IViewModelBase>(nextLineEdit, 
+                                                               jobCriteria.Language, 
+                                                               _StudyJobInfo.ExpirationDate, 
+                                                               jobCriteria.ExpectedPrecision);
 
       nextStudier.Do(jobInfo);
     }

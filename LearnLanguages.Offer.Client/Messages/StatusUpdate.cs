@@ -5,7 +5,7 @@ using Csla.Serialization;
 namespace LearnLanguages.Offer
 {
   [Serializable]
-  public class StatusUpdate<T> : IStatusUpdate<T>
+  public class StatusUpdate<TTarget, TProduct> : IStatusUpdate<TTarget, TProduct>
   {
     /// <summary>
     /// For serialization, do not use.
@@ -21,11 +21,11 @@ namespace LearnLanguages.Offer
     /// Same goes for offer, offer response, and job.  So, set these to null depending on who you do
     /// and don't want to hear the message.
     /// </summary>
-    public StatusUpdate(string status, 
-                        IOpportunity<T> opportunity, 
-                        IOffer<T> offer,
-                        IOfferResponse<T> acceptanceOfferResponse,
-                        IJobInfo<T> jobInfo,
+    public StatusUpdate(string status,
+                        IOpportunity<TTarget, TProduct> opportunity,
+                        IOffer<TTarget, TProduct> offer,
+                        IOfferResponse<TTarget, TProduct> acceptanceOfferResponse,
+                        IJobInfo<TTarget, TProduct> jobInfo,
                         Guid publisherId, 
                         object publisher, 
                         string category, 
@@ -56,21 +56,21 @@ namespace LearnLanguages.Offer
     /// <summary>
     /// Opportunity that this update pertains to.
     /// </summary>
-    public IOpportunity<T> Opportunity { get; private set; }
+    public IOpportunity<TTarget, TProduct> Opportunity { get; private set; }
     /// <summary>
     /// Offer that this update pertains to.
     /// </summary>
-    public IOffer<T> Offer { get; private set; }
+    public IOffer<TTarget, TProduct> Offer { get; private set; }
     /// <summary>
     /// The OfferResponse that accepted the job that this update pertains to.  I don't know if this is necessary.
     /// I'm keeping this around because of the thought of a "work permit" or some such.  A complete record...
     /// still a vague notion.
     /// </summary>
-    public IOfferResponse<T> AcceptanceOfferResponse { get; private set; }
+    public IOfferResponse<TTarget, TProduct> AcceptanceOfferResponse { get; private set; }
     /// <summary>
     /// JobInfo that this update pertains to.
     /// </summary>
-    public IJobInfo<T> JobInfo { get; private set; }
+    public IJobInfo<TTarget, TProduct> JobInfo { get; private set; }
 
     /// <summary>
     /// Id of the publisher of this update.

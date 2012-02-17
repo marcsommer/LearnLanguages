@@ -2,11 +2,13 @@
 using System.ComponentModel.Composition;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Business;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.Study
 {
 
-  public class DefaultMultiLineTextsStudier : StudierBase<StudyJobInfo<MultiLineTextList>, MultiLineTextList>
+  public class DefaultMultiLineTextsStudier :
+    StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>
   {
     public DefaultMultiLineTextsStudier()
     {

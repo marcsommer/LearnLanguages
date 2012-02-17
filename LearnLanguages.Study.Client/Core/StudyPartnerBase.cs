@@ -18,9 +18,10 @@ namespace LearnLanguages.Study
     {
       Id = Guid.NewGuid();
       _Studier =
-        (IDo<IJobInfo<MultiLineTextList>, MultiLineTextList>)(new DefaultMultiLineTextsStudier());
-      _OpenOffers = new List<Offer<MultiLineTextList>>();
-      _DeniedOffers = new List<Offer<MultiLineTextList>>();
+        (IDo<IJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>)
+        (new DefaultMultiLineTextsStudier());
+      _OpenOffers = new List<IOffer<MultiLineTextList, IViewModelBase>>();
+      _DeniedOffers = new List<IOffer<MultiLineTextList, IViewModelBase>>();
       _CurrentOffer = null;
 
       Exchange.Ton.SubscribeToOpportunities(this);
@@ -31,10 +32,10 @@ namespace LearnLanguages.Study
     public Guid Id { get; protected set; }
     public Guid ConglomerateId { get; protected set; }
 
-    protected IDo<IJobInfo<MultiLineTextList>, MultiLineTextList> _Studier { get; set; }
-    protected List<Offer<MultiLineTextList>> _OpenOffers { get; set; }
-    protected List<Offer<MultiLineTextList>> _DeniedOffers { get; set; }
-    protected IOffer<MultiLineTextList> _CurrentOffer { get; set; }
+    protected IDo<IJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase> _Studier { get; set; }
+    protected List<IOffer<MultiLineTextList, IViewModelBase>> _OpenOffers { get; set; }
+    protected List<IOffer<MultiLineTextList, IViewModelBase>> _DeniedOffers { get; set; }
+    protected IOffer<MultiLineTextList, IViewModelBase> _CurrentOffer { get; set; }
 
     protected void AbortCurrent()
     {
@@ -45,24 +46,24 @@ namespace LearnLanguages.Study
       _CurrentOffer = null;
     }
 
-    public void Handle(Opportunity<MultiLineTextList> message)
+    public void Handle(Opportunity<MultiLineTextList, IViewModelBase> message)
     {
       //WE ONLY CARE ABOUT STUDY OPPORTUNITIES
       if (message.Category != StudyResources.CategoryStudy)
         return;
 
       //WE ONLY CARE IF THE JOB INFO IS A STUDY JOB INFO<MLT>
-      if (!(message.JobInfo is StudyJobInfo<MultiLineTextList>))
+      if (!(message.JobInfo is StudyJobInfo<MultiLineTextList, IViewModelBase>))
         return;
 
       //WE ONLY CARE IF WE UNDERSTAND THE STUDYJOBINFO.CRITERIA
-      StudyJobInfo<MultiLineTextList> studyJobInfo = (StudyJobInfo<MultiLineTextList>)message.JobInfo;
+      var studyJobInfo = (StudyJobInfo<MultiLineTextList, IViewModelBase>)message.JobInfo;
       if (!(studyJobInfo.Criteria is StudyJobCriteria))
         return;
 
       //WE HAVE A GENUINE OPPORTUNITY WE WOULD BE INTERESTED IN
       //MAKE THE OFFER FOR THE JOB
-      var offer = new Offer<MultiLineTextList>(message, 
+      var offer = new Offer<MultiLineTextList, IViewModelBase>(message, 
                                                this.Id,
                                                this, 
                                                double.Parse(StudyResources.DefaultAmountDefaultMultiLineTextsStudier),
@@ -76,7 +77,7 @@ namespace LearnLanguages.Study
       Exchange.Ton.Publish(offer);
     }
 
-    public void Handle(OfferResponse<MultiLineTextList> message)
+    public void Handle(OfferResponse<MultiLineTextList, IViewModelBase> message)
     {
       //WE ONLY CARE ABOUT OFFERS IN THE STUDY CATEGORY
       if (message.Category != StudyResources.CategoryStudy)
@@ -116,15 +117,15 @@ namespace LearnLanguages.Study
       _CurrentOffer = message.Offer;
       //PUBLISH STARTED UPDATE
       var startedUpdate =
-        new StatusUpdate<MultiLineTextList>(CommonResources.StatusStarted,
-                                            _CurrentOffer.Opportunity,
-                                            _CurrentOffer,
-                                            message,
-                                            jobInfo,
-                                            Id,
-                                            this,
-                                            StudyResources.CategoryStudy,
-                                            null);
+        new StatusUpdate<MultiLineTextList, IViewModelBase>(CommonResources.StatusStarted,
+                                                            _CurrentOffer.Opportunity,
+                                                            _CurrentOffer,
+                                                            message,
+                                                            jobInfo,
+                                                            Id,
+                                                            this,
+                                                            StudyResources.CategoryStudy,
+                                                            null);
       Exchange.Ton.Publish(startedUpdate);
 
       //DELEGATE JOB TO MLTs STUDIER

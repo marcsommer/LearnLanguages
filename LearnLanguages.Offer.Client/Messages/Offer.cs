@@ -5,7 +5,7 @@ using Csla.Serialization;
 namespace LearnLanguages.Offer
 {
   [Serializable]
-  public class Offer<T> : IOffer<T>
+  public class Offer<TTarget, TProduct> : IOffer<TTarget, TProduct>
   {
     /// <summary>
     /// For serialization, do not use.
@@ -14,7 +14,7 @@ namespace LearnLanguages.Offer
     {
     }
 
-    public Offer(IOpportunity<T> opportunity, Guid publisherId, object publisher, double amount,
+    public Offer(IOpportunity<TTarget, TProduct> opportunity, Guid publisherId, object publisher, double amount,
       string category, object information)
     {
       Id = Guid.NewGuid();
@@ -33,7 +33,7 @@ namespace LearnLanguages.Offer
     /// <summary>
     /// Opportunity that this offer pertains to.
     /// </summary>
-    public IOpportunity<T> Opportunity { get; private set; }
+    public IOpportunity<TTarget, TProduct> Opportunity { get; private set; }
     /// <summary>
     /// Id of the publisher of this offer.
     /// </summary>

@@ -89,9 +89,7 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
-    <Compile Include="Interfaces\Exchange\IOpportunityCompleted.cs" />
-    <Compile Include="Interfaces\Exchange\IOpportunityCompletedOfT.cs" />
-    <Compile Include="Interfaces\Exchange\IStatusUpdateOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IStatusUpdateOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
     <Compile Include="Interfaces\Exchange\IOffer.cs" />
     <Compile Include="Interfaces\Exchange\IConglomerateMessage.cs" />
@@ -100,10 +98,10 @@
     <Compile Include="Interfaces\Exchange\IExchangeMessage.cs" />
     <Compile Include="Interfaces\Exchange\IHaveConglomerateId.cs" />
     <Compile Include="Interfaces\Exchange\IStatusUpdate.cs" />
-    <Compile Include="Interfaces\Exchange\IOpportunityOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IOpportunityOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IJobInfo.cs" />
-    <Compile Include="Interfaces\Exchange\IJobInfoOfT.cs" />
-    <Compile Include="Interfaces\Exchange\IOfferResponseOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IJobInfoOfTTargetAndTProduct.cs" />
+    <Compile Include="Interfaces\Exchange\IOfferResponseOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunity.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />
@@ -124,7 +122,7 @@
     <Compile Include="Interfaces\Core\IHaveModelListOfTList.cs" />
     <Compile Include="Interfaces\Core\IHaveModelOfT.cs" />
     <Compile Include="Interfaces\Core\IHaveUri.cs" />
-    <Compile Include="Interfaces\Exchange\IOfferOfT.cs" />
+    <Compile Include="Interfaces\Exchange\IOfferOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IExchange.cs" />
     <Compile Include="Interfaces\History\IHistoryEvent.cs" />
     <Compile Include="Interfaces\History\IHistoryPublisher.cs" />

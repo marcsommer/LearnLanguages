@@ -16,7 +16,8 @@ namespace LearnLanguages.Study
   /// a phrase's history, it "simply" takes the phrase, produces an offer to show a Q & A about it.
   /// Listens for the ViewModel to publish a Q & A response
   /// </summary>
-  public class DefaultPhraseMeaningStudier : StudierBase<StudyJobInfo<PhraseEdit>, PhraseEdit>
+  public class DefaultPhraseMeaningStudier : 
+    StudierBase<StudyJobInfo<PhraseEdit, IViewModelBase>, PhraseEdit, IViewModelBase>
   {
     #region Ctors and Init
     public DefaultPhraseMeaningStudier()
@@ -78,6 +79,7 @@ namespace LearnLanguages.Study
           if (languagesAreDifferent)
           {
             //DO A TRANSLATION Q & A
+
           }
           else
           {

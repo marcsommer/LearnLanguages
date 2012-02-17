@@ -14,7 +14,8 @@ namespace LearnLanguages.Study
   /// adjust priorities to different MLTs, depending on priority of user, and how strongly we want to study 
   /// a certain MLT, due to its projected 'memory trace health' or whatever the paradigm we are using.
   /// </summary>
-  public class DefaultMultiLineTextsMeaningStudier : StudierBase<StudyJobInfo<MultiLineTextList>, MultiLineTextList>
+  public class DefaultMultiLineTextsMeaningStudier :
+    StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>
   {
     public DefaultMultiLineTextsMeaningStudier()
     {
@@ -43,7 +44,7 @@ namespace LearnLanguages.Study
         System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime;
 
       var studyJobCriteria = (StudyJobCriteria)originalJob.Criteria;
-      var newJob = new StudyJobInfo<MultiLineTextEdit>(currentMultiLineText, 
+      var newJob = new StudyJobInfo<MultiLineTextEdit, IViewModelBase>(currentMultiLineText, 
                                                        studyJobCriteria.Language, 
                                                        newExpirationDate,
                                                        studyJobCriteria.ExpectedPrecision);
