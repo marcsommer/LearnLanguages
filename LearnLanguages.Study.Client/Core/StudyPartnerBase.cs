@@ -128,6 +128,7 @@ namespace LearnLanguages.Study
       _CurrentOffer = message.Offer;
 
       //PUBLISH STARTED UPDATE
+      
       var startedUpdate =
         new StatusUpdate<MultiLineTextList, IViewModelBase>(CommonResources.StatusStarted,
                                                             _CurrentOffer.Opportunity,

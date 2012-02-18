@@ -41,6 +41,7 @@ namespace LearnLanguages.Offer
       Publisher = publisher;
       Category = category;
       Information = information;
+      //var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
     }
 
     /// <summary>

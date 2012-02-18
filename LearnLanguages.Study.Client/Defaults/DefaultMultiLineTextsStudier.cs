@@ -110,9 +110,16 @@ namespace LearnLanguages.Study
       if (message.Category != StudyResources.CategoryStudy)
         return;
 
-      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      if (message.PublisherId == Id)
+      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY MLT MEANING STUDIERS
+      if (
+           (message.Publisher != null) &&
+           !(message.Publisher is DefaultMultiLineTextsMeaningStudier)
+         )
         return;
+
+      ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      //if (message.PublisherId == Id)
+      //  return;
 
       //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
 

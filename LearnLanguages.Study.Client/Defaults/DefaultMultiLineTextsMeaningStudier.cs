@@ -21,7 +21,7 @@ namespace LearnLanguages.Study
   {
     public DefaultMultiLineTextsMeaningStudier()
     {
-      _Studiers = new Dictionary<MultiLineTextEdit, DefaultSingleMultiLineTextMeaningStudier>();
+      _Studiers = new Dictionary<Guid, DefaultSingleMultiLineTextMeaningStudier>();
       Exchange.Ton.SubscribeToStatusUpdates(this);
     }
 
@@ -30,7 +30,7 @@ namespace LearnLanguages.Study
     /// <summary>
     /// Collection of Studiers, indexed by the MLT that they study.
     /// </summary>
-    private Dictionary<MultiLineTextEdit, DefaultSingleMultiLineTextMeaningStudier> _Studiers { get; set; }
+    private Dictionary<Guid, DefaultSingleMultiLineTextMeaningStudier> _Studiers { get; set; }
 
     #region Methods
 
@@ -47,7 +47,7 @@ namespace LearnLanguages.Study
         InitializeForThisJob();
       var multiLineTextIndex = GetNextMultiLineTextIndex();
       var currentMultiLineText = _StudyJobInfo.Target[multiLineTextIndex];
-      var studier = _Studiers[currentMultiLineText];
+      var studier = _Studiers[currentMultiLineText.Id];
 
       //OUR CURRENT JOB ENTAILS ALL MULTILINETEXTEDITS, SO WE NEED TO CREATE 
       //A NEW JOB WITH ONLY THE ONE IN PARTICULAR WE CARE ABOUT.
@@ -76,7 +76,7 @@ namespace LearnLanguages.Study
       foreach (var multiLineTextEdit in newJobMultiLineTextList)
       {
         var studier = new DefaultSingleMultiLineTextMeaningStudier();
-        _Studiers.Add(multiLineTextEdit, studier);
+        _Studiers.Add(multiLineTextEdit.Id, studier);
       }
     }
 
@@ -99,7 +99,12 @@ namespace LearnLanguages.Study
       double totalPercentKnownNonNormalized = 0.0d;
       foreach (var studier in _Studiers)
       {
-        var studierLineCount = studier.Key.Lines.Count;
+        var multiLineTextId = studier.Key;
+        var results = from mlt in _StudyJobInfo.Target
+                      where mlt.Id == multiLineTextId
+                      select mlt;
+        var studierLineCount = results.First().Lines.Count;
+        //var studierLineCount = studier.Key.Lines.Count;
         totalLineCount += studierLineCount;
 
         var studierPercentKnown = studier.Value.GetPercentKnown();
@@ -124,9 +129,16 @@ namespace LearnLanguages.Study
       if (message.Category != StudyResources.CategoryStudy)
         return;
 
-      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      if (message.PublisherId == Id)
+      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY SINGLE MLT MEANING STUDIERS
+      if (
+           (message.Publisher != null) &&
+           !(message.Publisher is DefaultSingleMultiLineTextMeaningStudier)
+         )
         return;
+
+      ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      //if (message.PublisherId == Id)
+      //  return;
 
       //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
 

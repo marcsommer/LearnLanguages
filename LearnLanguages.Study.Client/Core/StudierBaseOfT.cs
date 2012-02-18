@@ -20,20 +20,21 @@ namespace LearnLanguages.Study
     /// </summary>
     public bool IsNotFirstRun { get; protected set; }
     protected object _AbortLock = new object();
+    protected bool _abortHasBeenFlagged = false;
     protected bool _AbortHasBeenFlagged
     {
       get
       {
         lock (_AbortLock)
         {
-          return _AbortHasBeenFlagged;
+          return _abortHasBeenFlagged;
         }
       }
       set
       {
         lock (_AbortLock)
         {
-          _AbortHasBeenFlagged = value;
+          _abortHasBeenFlagged = value;
         }
       }
     }

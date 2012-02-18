@@ -97,6 +97,10 @@
       <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
       <Name>LearnLanguages.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
+      <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
+      <Name>LearnLanguages.DataAccess.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
       <Project>{98EE87B2-152D-48D8-B509-93EEB92059BE}</Project>
       <Name>LearnLanguages.Offer.Client</Name>

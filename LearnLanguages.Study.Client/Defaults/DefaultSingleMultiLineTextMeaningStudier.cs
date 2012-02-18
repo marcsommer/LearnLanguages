@@ -219,6 +219,13 @@ namespace LearnLanguages.Study
       if (message.Category != StudyResources.CategoryStudy)
         return;
 
+      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY LINE MEANING STUDIERS
+      if (
+           (message.Publisher != null) &&
+           !(message.Publisher is DefaultLineMeaningStudier)
+         )
+        return;
+
       //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
       if (message.PublisherId == Id)
         return;

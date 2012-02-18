@@ -90,7 +90,7 @@ namespace LearnLanguages.Study
       {
         //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT AT AGGREGATE PHRASE TEXTS LIST, THEN WE
         //HAVE COMPLETED ONE ITERATION THROUGH OUR PHRASE TEXTS.  
-        if (_LastStudiedIndex >= AggregatePhraseTexts.Count)
+        if (_LastStudiedIndex >= (AggregatePhraseTexts.Count - 1))
         {
           //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
           //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
@@ -343,9 +343,17 @@ namespace LearnLanguages.Study
       if (message.Category != StudyResources.CategoryStudy)
         return;
 
-      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      if (message.PublisherId == Id)
+      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY PHRASE MEANING STUDIERS
+      if (
+           (message.Publisher != null) && 
+           !(message.Publisher is DefaultPhraseMeaningStudier)
+         )
         return;
+
+      ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      //if (message.PublisherId == Id)
+      //  return;
+
 
       //TODO: CHECK TO SEE IF THIS IS ONE OF THIS OBJECT'S UPDATES.  RIGHT NOW THEY ALL WILL BE, BUT THIS OBJECT SHOULD TRACK ITS OPEN JOBS.
 
