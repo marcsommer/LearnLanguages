@@ -137,7 +137,7 @@ namespace LearnLanguages.Business
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    protected void Child_Fetch(ICollection<Guid> multiLineTextIds)
+    protected void DataPortal_Fetch(ICollection<Guid> multiLineTextIds)
     {
       Items.Clear();
       foreach (var id in multiLineTextIds)

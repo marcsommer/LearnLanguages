@@ -87,10 +87,10 @@ namespace LearnLanguages
     #endregion
 
     //need to check if this still works, so throwing exception
-    public static string LineDelimiter { get { throw new NotImplementedException(); return @"\r"; } }
+    public static string LineDelimiter { get { return @"\r"; } }
 
     //need to check if this still works, so throwing exception
-    public static string RegExSplitPatternWords { get { throw new NotImplementedException(); return @"\\W+"; } }
+    public static string RegExSplitPatternWords { get { return @"\\W+"; } }
     
     public static string ShowGridLines { get { return false.ToString(); } }
   }

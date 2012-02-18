@@ -8,13 +8,13 @@ using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study.ViewModels
 {
-  [Export(typeof(QuestionAnswerViewModel))]
+  [Export(typeof(StudyQuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class QuestionAnswerViewModel : ViewModelBase
+  public class StudyQuestionAnswerViewModel : ViewModelBase
   {
     #region Ctors and Init
 
-    public QuestionAnswerViewModel()
+    public StudyQuestionAnswerViewModel()
     {
       Services.EventAggregator.Subscribe(this);
     }

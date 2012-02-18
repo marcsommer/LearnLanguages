@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
 using Caliburn.Micro;
+using LearnLanguages.Offer;
 
 namespace LearnLanguages.Study
 {
@@ -38,6 +39,7 @@ namespace LearnLanguages.Study
       _LineStudiers = new Dictionary<int, DefaultLineMeaningStudier>();
       _LastActiveLineStudiedIndex = -1;
       _KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
+      Exchange.Ton.SubscribeToStatusUpdates(this);
     }
 
     public DefaultSingleMultiLineTextMeaningStudier(int startingAggregateSize)
@@ -213,8 +215,30 @@ namespace LearnLanguages.Study
 
     public void Handle(IStatusUpdate<LineEdit, IViewModelBase> message)
     {
-      //todo: left off here: implement this and bubble up status update
-      throw new NotImplementedException();
+      //WE ONLY CARE ABOUT STUDY MESSAGES
+      if (message.Category != StudyResources.CategoryStudy)
+        return;
+
+      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      if (message.PublisherId == Id)
+        return;
+
+      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
+
+      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
+      if (message.Status == CommonResources.StatusCompleted && 
+          message.JobInfo != null &&
+          message.JobInfo.Product != null)
+      {
+        _StudyJobInfo.Product = message.JobInfo.Product;
+      }
+
+      //CREATE THE BUBBLING UP UPDATE
+      var statusUpdate = new StatusUpdate<MultiLineTextEdit, IViewModelBase>(message.Status, null, null,
+        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
+
+      //PUBLISH TO BUBBLE UP
+      Exchange.Ton.Publish(statusUpdate);
     }
   }
 }

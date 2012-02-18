@@ -57,6 +57,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
@@ -83,7 +84,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\QuestionAnswerViewModel.cs" />
+    <Compile Include="ViewModels\StudyQuestionAnswerViewModel.cs" />
     <Compile Include="_RandomPhraseStudyPartner.cs" />
     <Compile Include="Core\StudyPartnerBase.cs" />
   </ItemGroup>
@@ -104,6 +105,10 @@
   <ItemGroup>
     <Content Include="StudyHeirarchy.txt" />
     <Content Include="StudyNotes.txt" />
+    <Page Include="Views\StudyQuestionAnswerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="StudyResources.resx">

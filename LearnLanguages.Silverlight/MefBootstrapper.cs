@@ -19,13 +19,15 @@ namespace LearnLanguages.Silverlight
     private DebugEventMessageListener _Listener;
 #endif
 
+
+
     protected override void Configure()
     {
       //CREATE ASSEMBLY CATALOGS FOR COMPOSITION OF APPLICATION (WPF)
       AssemblyCatalog catThis = new AssemblyCatalog(typeof(MefBootstrapper).Assembly);
-      //AssemblyCatalog catStudy = new AssemblyCatalog(typeof(RandomPhraseStudyPartner).Assembly);
-      //AggregateCatalog catAll = new AggregateCatalog(catThis, catStudy);
-      AggregateCatalog catAll = new AggregateCatalog(catThis);
+      AssemblyCatalog catStudy = new AssemblyCatalog(typeof(Study.DefaultStudyPartner).Assembly);
+      AggregateCatalog catAll = new AggregateCatalog(catThis, catStudy);
+      //AggregateCatalog catAll = new AggregateCatalog(catThis);
 
       //NEW UP CONTAINER WITH CATALOGS
       _Container = new CompositionContainer(catAll);
@@ -51,6 +53,14 @@ namespace LearnLanguages.Silverlight
       Services.EventAggregator.Subscribe(this);
       _Listener = new DebugEventMessageListener();
 #endif
+    }
+    protected override IEnumerable<System.Reflection.Assembly> SelectAssemblies()
+    {
+      var assemblies = new List<System.Reflection.Assembly>();
+      assemblies.Add(typeof(Study.DefaultStudyPartner).Assembly);
+      assemblies.AddRange(base.SelectAssemblies());
+
+      return assemblies;
     }
     protected override object GetInstance(Type serviceType, string key)
     {

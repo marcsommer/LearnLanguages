@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using LearnLanguages.Business;
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.Interfaces;
@@ -15,11 +16,13 @@ namespace LearnLanguages.Study
   /// a certain MLT, due to its projected 'memory trace health' or whatever the paradigm we are using.
   /// </summary>
   public class DefaultMultiLineTextsMeaningStudier :
-    StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>
+    StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>,
+    IHandle<IStatusUpdate<MultiLineTextEdit, IViewModelBase>>
   {
     public DefaultMultiLineTextsMeaningStudier()
     {
       _Studiers = new Dictionary<MultiLineTextEdit, DefaultSingleMultiLineTextMeaningStudier>();
+      Exchange.Ton.SubscribeToStatusUpdates(this);
     }
 
     private int _CurrentMultiLineTextIndex = -1;
@@ -33,6 +36,15 @@ namespace LearnLanguages.Study
 
     protected override void DoImpl()
     {
+      //I KEEP FORGETTING...EACH OF THESE STUDIERS USE CREATED FOR ONE TARGET ONLY, SO
+      //THERE IS NO CHANCE OF DO-ING MULTIPLE TARGETS.  THE PATTERN IS:  CREATE STUDIER,
+      //CALL DO, THROW AWAY WHEN DONE.  IT NEVER REUSES STUDIERS.
+      //SO...
+      //WE DON'T NEED FIRST TO DETERMINE IF WE HAVE DONE THE CURRENT JOB'S MULTILINETEXTS BEFORE.
+      //IF SO, THEN WE DEDUCE THIS IS A CONTINUATION OF STUDYING THEM.
+      //if (!IsContinuationOfPreviousStudyTarget())
+      if (!IsNotFirstRun)
+        InitializeForThisJob();
       var multiLineTextIndex = GetNextMultiLineTextIndex();
       var currentMultiLineText = _StudyJobInfo.Target[multiLineTextIndex];
       var studier = _Studiers[currentMultiLineText];
@@ -55,6 +67,19 @@ namespace LearnLanguages.Study
       studier.Do(newJob);
     }
 
+    private void InitializeForThisJob()
+    {
+      _Studiers.Clear();
+
+ 	    //CREATE STUDIER FOR EACH MULTILINETEXT IN MULTILINETEXTS TARGET
+      var newJobMultiLineTextList = _StudyJobInfo.Target;
+      foreach (var multiLineTextEdit in newJobMultiLineTextList)
+      {
+        var studier = new DefaultSingleMultiLineTextMeaningStudier();
+        _Studiers.Add(multiLineTextEdit, studier);
+      }
+    }
+
     private int GetNextMultiLineTextIndex()
     {
       //cycle through the , and get the corresponding studier for this MLT.
@@ -67,6 +92,9 @@ namespace LearnLanguages.Study
 
     public double GetPercentKnown()
     {
+      if (_Studiers.Count == 0)
+        return 0.0d;
+
       var totalLineCount = 0;
       double totalPercentKnownNonNormalized = 0.0d;
       foreach (var studier in _Studiers)
@@ -82,11 +110,38 @@ namespace LearnLanguages.Study
         //totalPercentKnownNonNormalized = (.5 * 10) + (.25 * 1000) = 255
         //totalPercentKnownNonNormalized = 255 / 1010 = .252475
       }
+
       var totalPercentKnownNormalized = totalPercentKnownNonNormalized / totalLineCount;
 
       return totalPercentKnownNormalized;
     }
     
     #endregion
+
+    public void Handle(IStatusUpdate<MultiLineTextEdit, IViewModelBase> message)
+    {
+      //WE ONLY CARE ABOUT STUDY MESSAGES
+      if (message.Category != StudyResources.CategoryStudy)
+        return;
+
+      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      if (message.PublisherId == Id)
+        return;
+
+      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
+
+      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
+      if (message.Status == CommonResources.StatusCompleted && message.JobInfo.Product != null)
+      {
+        _StudyJobInfo.Product = message.JobInfo.Product;
+      }
+
+      //CREATE THE BUBBLING UP UPDATE
+      var statusUpdate = new StatusUpdate<MultiLineTextList, IViewModelBase>(message.Status, null, null,
+        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
+
+      //PUBLISH TO BUBBLE UP
+      Exchange.Ton.Publish(statusUpdate);
+    }
   }
 }

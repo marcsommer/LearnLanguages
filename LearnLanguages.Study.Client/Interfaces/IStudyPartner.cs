@@ -10,10 +10,11 @@ namespace LearnLanguages.Study.Interfaces
 {
   public interface IStudyPartner : IHaveId,
                                    IHaveConglomerateId,
-                                   IHandle<Opportunity<MultiLineTextList, IViewModelBase>>,
-                                   IHandle<OfferResponse<MultiLineTextList, IViewModelBase>>,
-                                   IHandle<Cancelation>,
-                                   IHandle<ConglomerateMessage>
+                                   IHandle<IOpportunity<MultiLineTextList, IViewModelBase>>,
+                                   IHandle<IOfferResponse<MultiLineTextList, IViewModelBase>>,
+                                   IHandle<IStatusUpdate<MultiLineTextList, IViewModelBase>>,
+                                   IHandle<ICancelation>,
+                                   IHandle<IConglomerateMessage>
   {
     //void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
     //IDoAJob<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }

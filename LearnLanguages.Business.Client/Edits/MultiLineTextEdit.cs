@@ -506,6 +506,27 @@ namespace LearnLanguages.Business
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public void Child_Fetch(Guid id)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var multiLineTextDal = dalManager.GetProvider<IMultiLineTextDal>();
+        Result<MultiLineTextDto> result = multiLineTextDal.Fetch(id);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(result.Msg);
+        }
+        MultiLineTextDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
+
+
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()
     {   
       using (var dalManager = DalFactory.GetDalManager())

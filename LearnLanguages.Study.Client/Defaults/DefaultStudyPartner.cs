@@ -11,5 +11,6 @@ namespace LearnLanguages.Study
   public class DefaultStudyPartner : StudyPartnerBase
   {
     //uses default study partner base behavior for delegation at the moment.
+
   }
 }

@@ -63,19 +63,19 @@ namespace LearnLanguages.Offer
 
     public void Publish(IOpportunity opportunity)
     {
-      throw new NotImplementedException();
+      _EventAggregator.Publish(opportunity);
     }
     public void Publish(IOffer offer)
     {
-      throw new NotImplementedException();
+      _EventAggregator.Publish(offer);
     }
     public void Publish(IOfferResponse offerResponse)
     {
-      throw new NotImplementedException();
+      _EventAggregator.Publish(offerResponse);
     }
     public void Publish(IStatusUpdate workStatusUpdate)
     {
-      throw new NotImplementedException();
+      _EventAggregator.Publish(workStatusUpdate);
     }
     public void Publish(ICancelation cancelation)
     {
@@ -109,11 +109,11 @@ namespace LearnLanguages.Offer
       _EventAggregator.Unsubscribe(subscriber);
     }
 
-    public void SubscribeToWorkStatusUpdates(object subscriber)
+    public void SubscribeToStatusUpdates(object subscriber)
     {
       _EventAggregator.Subscribe(subscriber);
     }
-    public void UnsubscribeFromWorkStatusUpdates(object subscriber)
+    public void UnsubscribeFromStatusUpdates(object subscriber)
     {
       _EventAggregator.Unsubscribe(subscriber);
     }

@@ -32,8 +32,8 @@ namespace LearnLanguages.Silverlight.ViewModels
                                      IHandle<Navigation.EventMessages.NavigatedEventMessage>,
                                      IViewModelBase,
                                      IHaveId,
-                                     IHandle<Offer<MultiLineTextList, IViewModelBase>>, 
-                                     IHandle<StatusUpdate<MultiLineTextList, IViewModelBase>>
+                                     IHandle<IOffer<MultiLineTextList, IViewModelBase>>, 
+                                     IHandle<IStatusUpdate<MultiLineTextList, IViewModelBase>>
   {
     #region Ctors and Init
 
@@ -47,7 +47,13 @@ namespace LearnLanguages.Silverlight.ViewModels
       if (_StudyPartner == null)
         throw new Common.Exceptions.PartNotSatisfiedException("StudyPartner");
 
+      PastOpportunities = new List<IOpportunity<MultiLineTextList, IViewModelBase>>();
+      CurrentOpportunities = new List<IOpportunity<MultiLineTextList, IViewModelBase>>();
+      FutureOpportunities = new List<IOpportunity<MultiLineTextList, IViewModelBase>>();
+
       Services.EventAggregator.Subscribe(this);
+      Exchange.Ton.SubscribeToOffers(this);
+      Exchange.Ton.SubscribeToStatusUpdates(this);
       //THE NEXT INIT STUFF HAPPEN AS HANDLE(NAVIGATED MESSAGE)
     }
     
@@ -140,6 +146,20 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _SortedModelListCache = value;
           NotifyOfPropertyChange(() => SortedModelListCache);
+        }
+      }
+    }
+
+    private IViewModelBase _CurrentPrompt;
+    public IViewModelBase CurrentPrompt
+    {
+      get { return _CurrentPrompt; }
+      set
+      {
+        if (value != _CurrentPrompt)
+        {
+          _CurrentPrompt = value;
+          NotifyOfPropertyChange(() => CurrentPrompt);
         }
       }
     }
@@ -617,10 +637,6 @@ namespace LearnLanguages.Silverlight.ViewModels
         return;
 
       //WE HAVE BEEN SUCCESSFULLY NAVIGATED TO.
-
-      //SINCE THIS IS A NONSHARED COMPOSABLE PART, WE ONLY CARE ABOUT NAVIGATED MESSAGE ONCE, SO UNSUBSCRIBE
-      Services.EventAggregator.Unsubscribe(this);
-
       InitializeViewModel();
     }
 
@@ -658,7 +674,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       var ids = new MobileList<Guid>();
       foreach (var songViewModel in Items)
       {
-        ids.Add(songViewModel.Model.Id);
+        if (songViewModel.IsChecked)
+          ids.Add(songViewModel.Model.Id);
       }
 
       MultiLineTextList.NewMultiLineTextList(ids, (s, r) =>
@@ -688,6 +705,9 @@ namespace LearnLanguages.Silverlight.ViewModels
                                                                    studyJobInfo, 
                                                                    StudyResources.CategoryStudy);
               
+              //ADD OPPORTUNITY TO OUR FUTURE OPPORTUNITIES
+              FutureOpportunities.Add(opportunity);
+
               //PUBLISH THE OPPORTUNITY
               Exchange.Ton.Publish(opportunity);
 
@@ -730,27 +750,30 @@ namespace LearnLanguages.Silverlight.ViewModels
     #endregion
 
     /// <summary>
-    /// These opportunities have been published but still need to either be implemented
-    /// or canceled.  At first, I assume this will be only one or zero entries.
+    /// These opportunities have been either completed or canceled.
     /// </summary>
-    private List<Opportunity<MultiLineTextList, IViewModelBase>> FutureOpportunities { get; set; }
+    private List<IOpportunity<MultiLineTextList, IViewModelBase>> PastOpportunities { get; set; }
     /// <summary>
     /// These opportunities have had offers offered and accepted, and as far 
     /// as we know they are still in progress.  They may be complete but no complete
     /// status update has occured.
     /// </summary>
-    private List<Opportunity<MultiLineTextList, IViewModelBase>> CurrentOpportunities { get; set; }
+    private List<IOpportunity<MultiLineTextList, IViewModelBase>> CurrentOpportunities { get; set; }
     /// <summary>
-    /// These opportunities have been either completed or canceled.
+    /// These opportunities have been published but still need to either be implemented
+    /// or canceled.  At first, I assume this will be only one or zero entries.
     /// </summary>
-    private List<Opportunity<MultiLineTextList, IViewModelBase>> PastOpportunities { get; set; }
+    private List<IOpportunity<MultiLineTextList, IViewModelBase>> FutureOpportunities { get; set; }
 
-    public void Handle(Offer<MultiLineTextList, IViewModelBase> message)
+    public void Handle(IOffer<MultiLineTextList, IViewModelBase> message)
     {
       //WE ONLY CARE ABOUT OFFERS IN THE STUDY CATEGORY
       if (message.Category != StudyResources.CategoryStudy)
         return;
-      
+      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      if (message.PublisherId == Id)
+        return;
+
       //WE ONLY CARE ABOUT OFFERS PERTAINING TO OUR FUTURE AND PAST OPPORTUNITIES
       var resultsFuture = (from opportunity in FutureOpportunities
                            where opportunity.Id == message.Opportunity.Id
@@ -799,9 +822,37 @@ namespace LearnLanguages.Silverlight.ViewModels
       Exchange.Ton.Publish(acceptOfferResponse);
     }
 
-    public void Handle(StatusUpdate<MultiLineTextList, IViewModelBase> message)
+    public void Handle(IStatusUpdate<MultiLineTextList, IViewModelBase> message)
     {
-      throw new NotImplementedException();
+      //WE ONLY CARE ABOUT STUDY UPDATES
+      if (message.Category != StudyResources.CategoryStudy)
+        return;
+
+      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      if (message.PublisherId == Id)
+        return;
+
+      //WE ONLY CARE ABOUT UPDATES TO OUR CURRENT OPPORTUNITIES
+      if (message.Opportunity == null || !CurrentOpportunities.Contains(message.Opportunity))
+        return;
+
+      //THIS IS ONE OF THIS OBJECT'S UPDATES
+
+      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
+      if (message.Status == CommonResources.StatusCompleted)
+      {
+        if (message.JobInfo.Product == null)
+          throw new StudyException("StatusCompleted posted but JobInfo.Product == null...Where is the product?");
+
+        //WE HAVE A PRODUCT OF TYPE IVIEWMODELBASE THAT HAS BEEN CREATED FOR US VIA THE EXCHANGE!
+        var productViewModel = message.JobInfo.Product;
+
+        //MOVE THE OPPORTUNITY TO PAST OPPORTUNITIES
+        CurrentOpportunities.Remove(message.Opportunity);
+        PastOpportunities.Add(message.Opportunity);
+
+        CurrentPrompt = productViewModel;
+      }
     }
   }
 }

@@ -26,6 +26,7 @@ namespace LearnLanguages.Study
     public DefaultLineMeaningStudier()
     {
       _Studiers = new Dictionary<int, DefaultPhraseMeaningStudier>();
+      Exchange.Ton.SubscribeToStatusUpdates(this);
     }
 
     #endregion
@@ -99,38 +100,41 @@ namespace LearnLanguages.Study
           if (_Studiers.Count == 0)
             throw new Exception("todo: figure out how to communicate that this line is 100% known/what to do");
         }
-       
-        //WE NOW HAVE OUR STUDIERS.  GET OUR INDEX TO STUDY, POPULATE THAT STUDIER, AND DO IT.
-        var indexToStudy = _LastStudiedIndex + 1;
-        var phraseText = _Studiers[indexToStudy].PhraseText;
-        var language = this._StudyJobInfo.Target.Phrase.Language;
-        
-        PhraseEdit.NewPhraseEdit(language.Text, (s, r) =>
-          {
-            if (r.Error != null)
-              throw r.Error;
-
-            var phrase = r.Object;
-            var criteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
-
-
-            //CREATE THE JOB INFO
-            var studyJobInfo = new StudyJobInfo<PhraseEdit, IViewModelBase>(phrase, 
-                                                                            criteria.Language, 
-                                                                            _StudyJobInfo.ExpirationDate, 
-                                                                            criteria.ExpectedPrecision);
-            //I'M INCREMENTING THIS BEFORE EXECUTION.  PROBABLY CAN DO THIS AFTERWARDS, 
-            //BUT I WANT TO BE SURE THIS IS INCREMENTED BEFORE THE STUDIER DOES ANYTHING.
-            _LastStudiedIndex++;
-
-            //INVOKE THE STUDIER TO DO THE JOB, THIS DOES NOT USE THE EXCHANGE...BUT!!
-            //BUT THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE.
-            var studier = _Studiers[indexToStudy];
-            studier.Do(studyJobInfo);
-
-            //THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE, SO GOTO HANDLE<JOB<PHRASEEDIT, IVIEWMODEL>...
-          });
       }
+
+      //WE NOW HAVE OUR STUDIERS.  GET OUR INDEX TO STUDY, POPULATE THAT STUDIER, AND DO IT.
+      var indexToStudy = _LastStudiedIndex + 1;
+      //var phraseText = _Studiers[indexToStudy].PhraseText;
+      var phraseText = AggregatePhraseTexts[indexToStudy];
+      var language = this._StudyJobInfo.Target.Phrase.Language;
+        
+      PhraseEdit.NewPhraseEdit(language.Text, (s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          var phrase = r.Object;
+          phrase.Text = phraseText;
+          var criteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
+
+
+          //CREATE THE JOB INFO
+          var studyJobInfo = new StudyJobInfo<PhraseEdit, IViewModelBase>(phrase, 
+                                                                          criteria.Language, 
+                                                                          _StudyJobInfo.ExpirationDate, 
+                                                                          criteria.ExpectedPrecision);
+          //I'M INCREMENTING THIS BEFORE EXECUTION.  PROBABLY CAN DO THIS AFTERWARDS, 
+          //BUT I WANT TO BE SURE THIS IS INCREMENTED BEFORE THE STUDIER DOES ANYTHING.
+          _LastStudiedIndex++;
+
+          //INVOKE THE STUDIER TO DO THE JOB, THIS DOES NOT USE THE EXCHANGE...BUT!!
+          //BUT THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE.
+          var studier = _Studiers[indexToStudy];
+          studier.Do(studyJobInfo);
+
+          //THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE, SO GOTO HANDLE<JOB<PHRASEEDIT, IVIEWMODEL>...
+        });
+      
     }
 
     private void PopulateStudiersWithUnknownAggregatePhraseTexts()
@@ -338,12 +342,19 @@ namespace LearnLanguages.Study
     {
       if (message.Category != StudyResources.CategoryStudy)
         return;
+
+      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+      if (message.PublisherId == Id)
+        return;
+
       //TODO: CHECK TO SEE IF THIS IS ONE OF THIS OBJECT'S UPDATES.  RIGHT NOW THEY ALL WILL BE, BUT THIS OBJECT SHOULD TRACK ITS OPEN JOBS.
 
       //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
 
       //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
-      if (message.Status == CommonResources.StatusCompleted && message.JobInfo.Product != null)
+      if (message.Status == CommonResources.StatusCompleted && 
+          message.JobInfo.Product != null &&
+          _StudyJobInfo != null)
       {
         _StudyJobInfo.Product = message.JobInfo.Product;
       }

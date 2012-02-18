@@ -21,7 +21,7 @@ namespace LearnLanguages.Common.Interfaces
     void SubscribeToOfferResponses(object subscriber);
     void UnsubscribeFromOfferResponses(object subscriber);
 
-    void SubscribeToWorkStatusUpdates(object subscriber);
-    void UnsubscribeFromWorkStatusUpdates(object subscriber);
+    void SubscribeToStatusUpdates(object subscriber);
+    void UnsubscribeFromStatusUpdates(object subscriber);
   }
 }
