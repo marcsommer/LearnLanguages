@@ -5,31 +5,28 @@ using LearnLanguages.Business;
 using LearnLanguages.Common.Interfaces;
 using Caliburn.Micro;
 using LearnLanguages.Offer;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study
 {
 
-  public class DefaultMultiLineTextsStudier :
-    StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>,
-    IHandle<IStatusUpdate<MultiLineTextEdit, IViewModelBase>>
+  public class DefaultMultiLineTextsStudier //:
+    //StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>
+    //IHandle<IStatusUpdate<MultiLineTextEdit, IViewModelBase>>
   {
-    public DefaultMultiLineTextsStudier()
+    public void SetTarget(MultiLineTextList multiLineTexts)
     {
-      ////Initialize our weights.  These affect the probability of choosing Meaning vs. Order practice.
-      ////If we don't know the meaning of something, then we are not likely to remember it and it would be 
-      ////useless to study the order often times, so it should have a higher priority over order.
-      //MeaningWeight = double.Parse(StudyResources.DefaultMultiLineTextsStudierMeaningWeight);
-      //OrderWeight = double.Parse(StudyResources.DefaultMultiLineTextsStudierOrderWeight);
       _MeaningStudier = new DefaultMultiLineTextsMeaningStudier();
-      Exchange.Ton.SubscribeToStatusUpdates(this);
+      _OrderStudier = new DefaultMultiLineTextsOrderStudier();
     }
 
-    protected override void DoImpl()
+    public void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
+
       //THIS LAYER OF STUDY DECIDES ON WHAT IS IMPORTANT: MEANING OR ORDER, THEN DELEGATES STUDY TO
       //THE CORRESPONDING STUDIER.
 
-      //analyzes history events
+      //todo: analyze history events
       //for now, we will assume there is no history for the MLT, and thus we should focus on understanding
       //meaning of the song.
       //depending on history may ask user for info about MLT
@@ -41,13 +38,14 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
+        
         _MeaningStudier.Do(_StudyJobInfo);
         //_MeaningStudier.Do((StudyJobInfo<MultiLineTextList, IViewModelBase>)_StudyJobInfo);
       }
       else
       {
         //TODO: IMPLEMENT ORDER STUDIER DO AND REFERENCE THIS IN DEFAULT MLTS STUDIER
-        _MeaningStudier.Do(_StudyJobInfo);
+        //_MeaningStudier.Do(_StudyJobInfo);
 //        _OrderStudier.Do(_StudyJobInfo);
         //_OrderStudier.Do((StudyJobInfo<MultiLineTextList, IViewModelBase>)_StudyJobInfo);
       }
@@ -104,37 +102,37 @@ namespace LearnLanguages.Study
     private double MeaningPercentKnown { get; set; }
     //private double OrderPercentKnown { get; set; }
 
-    public void Handle(IStatusUpdate<MultiLineTextEdit, IViewModelBase> message)
-    {
-      //WE ONLY CARE ABOUT STUDY MESSAGES
-      if (message.Category != StudyResources.CategoryStudy)
-        return;
+    //public void Handle(IStatusUpdate<MultiLineTextEdit, IViewModelBase> message)
+    //{
+    //  //WE ONLY CARE ABOUT STUDY MESSAGES
+    //  if (message.Category != StudyResources.CategoryStudy)
+    //    return;
 
-      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY MLT MEANING STUDIERS
-      if (
-           (message.Publisher != null) &&
-           !(message.Publisher is DefaultMultiLineTextsMeaningStudier)
-         )
-        return;
+    //  //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY MLT MEANING STUDIERS
+    //  if (
+    //       (message.Publisher != null) &&
+    //       !(message.Publisher is DefaultMultiLineTextsMeaningStudier)
+    //     )
+    //    return;
 
-      ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      //if (message.PublisherId == Id)
-      //  return;
+    //  ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
+    //  //if (message.PublisherId == Id)
+    //  //  return;
 
-      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
+    //  //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
 
-      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
-      if (message.Status == CommonResources.StatusCompleted && message.JobInfo.Product != null)
-      {
-        _StudyJobInfo.Product = message.JobInfo.Product;
-      }
+    //  //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
+    //  if (message.Status == CommonResources.StatusCompleted && message.JobInfo.Product != null)
+    //  {
+    //    //_StudyJobInfo.Product = message.JobInfo.Product;
+    //  }
 
-      //CREATE THE BUBBLING UP UPDATE
-      var statusUpdate = new StatusUpdate<MultiLineTextList, IViewModelBase>(message.Status, null, null,
-        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
+    //  //CREATE THE BUBBLING UP UPDATE
+    //  var statusUpdate = new StatusUpdate<MultiLineTextList, IViewModelBase>(message.Status, null, null,
+    //    //null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
 
-      //PUBLISH TO BUBBLE UP
-      Exchange.Ton.Publish(statusUpdate);
-    }
+    //  //PUBLISH TO BUBBLE UP
+    //  Exchange.Ton.Publish(statusUpdate);
+    //}
   }
 }

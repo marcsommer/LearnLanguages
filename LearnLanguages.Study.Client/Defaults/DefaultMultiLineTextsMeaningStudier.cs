@@ -6,6 +6,7 @@ using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
 using Caliburn.Micro;
 using LearnLanguages.Offer;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study
 {
@@ -15,9 +16,7 @@ namespace LearnLanguages.Study
   /// adjust priorities to different MLTs, depending on priority of user, and how strongly we want to study 
   /// a certain MLT, due to its projected 'memory trace health' or whatever the paradigm we are using.
   /// </summary>
-  public class DefaultMultiLineTextsMeaningStudier :
-    StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>,
-    IHandle<IStatusUpdate<MultiLineTextEdit, IViewModelBase>>
+  public class DefaultMultiLineTextsMeaningStudier 
   {
     public DefaultMultiLineTextsMeaningStudier()
     {
@@ -34,15 +33,8 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    protected override void DoImpl()
+    public void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
-      //I KEEP FORGETTING...EACH OF THESE STUDIERS USE CREATED FOR ONE TARGET ONLY, SO
-      //THERE IS NO CHANCE OF DO-ING MULTIPLE TARGETS.  THE PATTERN IS:  CREATE STUDIER,
-      //CALL DO, THROW AWAY WHEN DONE.  IT NEVER REUSES STUDIERS.
-      //SO...
-      //WE DON'T NEED FIRST TO DETERMINE IF WE HAVE DONE THE CURRENT JOB'S MULTILINETEXTS BEFORE.
-      //IF SO, THEN WE DEDUCE THIS IS A CONTINUATION OF STUDYING THEM.
-      //if (!IsContinuationOfPreviousStudyTarget())
       if (!IsNotFirstRun)
         InitializeForThisJob();
       var multiLineTextIndex = GetNextMultiLineTextIndex();

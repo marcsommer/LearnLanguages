@@ -12,7 +12,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using LearnLanguages.Common.ViewModelBases;
 
-namespace LearnLanguages.Silverlight.ViewModels
+namespace LearnLanguages.Common.ViewModels
 {
   public abstract class ViewModelBase<TCslaModelList, TCslaModel, TCslaModelDto> : ViewModelBase
     where TCslaModelList : Common.CslaBases.BusinessListBase<TCslaModelList, TCslaModel, TCslaModelDto>

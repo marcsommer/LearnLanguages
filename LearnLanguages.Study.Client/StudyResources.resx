@@ -147,6 +147,12 @@
   <data name="DefaultOfferExchangeId" xml:space="preserve">
     <value>92A7E7C6-8278-4142-A962-6616E2959D1C</value>
   </data>
+  <data name="DefaultStudyHeartbeatTimeMilliseconds" xml:space="preserve">
+    <value>1000</value>
+  </data>
+  <data name="DefaultStudyTitle" xml:space="preserve">
+    <value>Study Ya ya ya!</value>
+  </data>
   <data name="ErrorMsgAnswerIsNull" xml:space="preserve">
     <value>The answer is null.</value>
   </data>

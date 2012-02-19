@@ -151,6 +151,24 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1000.
+        /// </summary>
+        public static string DefaultStudyHeartbeatTimeMilliseconds {
+            get {
+                return ResourceManager.GetString("DefaultStudyHeartbeatTimeMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study Ya ya ya!.
+        /// </summary>
+        public static string DefaultStudyTitle {
+            get {
+                return ResourceManager.GetString("DefaultStudyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The answer is null..
         /// </summary>
         public static string ErrorMsgAnswerIsNull {

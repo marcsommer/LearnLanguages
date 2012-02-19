@@ -63,8 +63,10 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\StudyJobCriteria.cs" />
     <Compile Include="Core\StudierBaseOfT.cs" />
+    <Compile Include="Core\StudyItemViewModelArgs.cs" />
+    <Compile Include="Core\StudyJobCriteria.cs" />
+    <Compile Include="Core\StudierBaseOfJAndTAndP.cs" />
     <Compile Include="Defaults\DefaultPhraseMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultSingleMultiLineTextMeaningStudier.cs" />
     <Compile Include="Defaults\DefaultLineMeaningStudier.cs" />
@@ -72,7 +74,9 @@
     <Compile Include="Defaults\DefaultMultiLineTextsOrderStudier.cs" />
     <Compile Include="Defaults\DefaultMultiLineTextsStudier.cs" />
     <Compile Include="Defaults\DefaultStudyPartner.cs" />
+    <Compile Include="EventMessages\StudyItemCompletedEventMessage.cs" />
     <Compile Include="Exceptions\StudyException.cs" />
+    <Compile Include="Interfaces\IStudyItemViewModelBase.cs" />
     <Compile Include="Interfaces\Core\IStudyJobInfoOfTStudyTarget.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
@@ -84,6 +88,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\StudySessionCompleteViewModel.cs" />
+    <Compile Include="ViewModels\DefaultStudyMultiLineTextsViewModel.cs" />
     <Compile Include="ViewModels\StudyQuestionAnswerViewModel.cs" />
     <Compile Include="_RandomPhraseStudyPartner.cs" />
     <Compile Include="Core\StudyPartnerBase.cs" />
@@ -109,6 +115,14 @@
   <ItemGroup>
     <Content Include="StudyHeirarchy.txt" />
     <Content Include="StudyNotes.txt" />
+    <Page Include="Views\StudySessionCompleteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DefaultStudyMultiLineTextsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\StudyQuestionAnswerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
