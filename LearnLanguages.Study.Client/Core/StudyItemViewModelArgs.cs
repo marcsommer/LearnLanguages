@@ -18,7 +18,6 @@ namespace LearnLanguages.Study
     public StudyItemViewModelArgs(IStudyItemViewModelBase viewModel)
     {
       ViewModel = viewModel;
-      Error = error;
     }
 
     public IStudyItemViewModelBase ViewModel { get; private set; }

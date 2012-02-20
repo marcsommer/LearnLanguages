@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Core\StudierBaseOfT.cs" />
     <Compile Include="Core\StudyItemViewModelArgs.cs" />
+    <Compile Include="Core\StudyItemViewModelBase.cs" />
     <Compile Include="Core\StudyJobCriteria.cs" />
     <Compile Include="Core\StudierBaseOfJAndTAndP.cs" />
     <Compile Include="Defaults\DefaultPhraseMeaningStudier.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="EventMessages\StudyItemCompletedEventMessage.cs" />
     <Compile Include="Exceptions\StudyException.cs" />
     <Compile Include="Interfaces\IStudyItemViewModelBase.cs" />
-    <Compile Include="Interfaces\Core\IStudyJobInfoOfTStudyTarget.cs" />
+    <Compile Include="Interfaces\IStudyJobInfoOfTStudyTarget.cs" />
     <Compile Include="Interfaces\IGetStudyData.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Core\StudyJobInfoOfT.cs" />

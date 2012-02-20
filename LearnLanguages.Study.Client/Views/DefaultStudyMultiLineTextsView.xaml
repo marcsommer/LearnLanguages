@@ -7,10 +7,9 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
     
-  <Border Style="{StaticResource DebugBorder}">
+  <Border Style="{StaticResource DebugBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
-        <RowDefinition />
         <RowDefinition />
       </Grid.RowDefinitions>
       <Grid.Resources>
@@ -32,8 +31,12 @@
                                         Style="{StaticResource HeaderStyle}">
           <toolkit:HeaderedContentControl.Content>
 
-            <TextBlock Text="hello, this is the default study multilinetextsview" />
-            
+            <!--<TextBlock Text="hello, this is the default study multilinetextsview" />-->
+            <ContentControl x:Name="StudyItemViewModel" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"/>
 
           </toolkit:HeaderedContentControl.Content>
         </toolkit:HeaderedContentControl>

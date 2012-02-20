@@ -44,7 +44,7 @@
             <toolkit:BusyIndicator IsBusy="{Binding Path=HidingAnswer}">
 
               <TextBlock x:Name="Answer_Text" Visibility="{Binding Path=AnswerVisibility}" Style="{StaticResource QAContentStyle}"/>
-
+              <!--<TextBlock Text="this is the answer here" />-->
             </toolkit:BusyIndicator>
           </toolkit:HeaderedContentControl.Content>
         </toolkit:HeaderedContentControl>

@@ -169,6 +169,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 5000.
+        /// </summary>
+        public static string DefaultThinkAboutAnswerTime {
+            get {
+                return ResourceManager.GetString("DefaultThinkAboutAnswerTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The answer is null..
         /// </summary>
         public static string ErrorMsgAnswerIsNull {

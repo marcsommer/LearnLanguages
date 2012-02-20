@@ -27,9 +27,7 @@ namespace LearnLanguages.Study
   /// a whole slew of other factors...perfect for a neural net to figure out.  Alas, for now it must 
   /// just be active lines.
   /// </summary>
-  public class DefaultSingleMultiLineTextMeaningStudier :
-    StudierBase<StudyJobInfo<MultiLineTextEdit, IViewModelBase>, MultiLineTextEdit, IViewModelBase>,
-    IHandle<IStatusUpdate<LineEdit, IViewModelBase>>
+  public class DefaultSingleMultiLineTextMeaningStudier : StudierBase<MultiLineTextEdit>
   {
     #region Ctors and Init
     
@@ -39,7 +37,6 @@ namespace LearnLanguages.Study
       _LineStudiers = new Dictionary<int, DefaultLineMeaningStudier>();
       _LastActiveLineStudiedIndex = -1;
       _KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
-      Exchange.Ton.SubscribeToStatusUpdates(this);
     }
 
     public DefaultSingleMultiLineTextMeaningStudier(int startingAggregateSize)
@@ -81,42 +78,6 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    protected override void DoImpl()
-    {
-      if (!IsNotFirstRun)
-      {
-        PopulateLineStudiers();
-      }
-
-      UpdateKnowledge();
-      ChooseAggregateSize();
-      var nextLineNumber = -1;
-      DefaultLineMeaningStudier nextStudier = ChooseNextLineStudier(out nextLineNumber);
-      if (nextStudier == null || nextLineNumber < 0)
-        throw new Exception("todo: all lines are studied, publish completion event or something");
-
-      LineEdit nextLineEdit = _StudyJobInfo.Target.Lines[nextLineNumber];
-      if (nextLineEdit.LineNumber != nextLineNumber)
-      {
-        var results = from line in _StudyJobInfo.Target.Lines
-                      where line.LineNumber == nextLineNumber
-                      select line;
-
-        nextLineEdit = results.FirstOrDefault();
-        if (nextLineEdit == null)
-          throw new Exception("cannot find line with corresponding line number");
-      }
-
-      var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
-
-      var jobInfo = new StudyJobInfo<LineEdit, IViewModelBase>(nextLineEdit, 
-                                                               jobCriteria.Language, 
-                                                               _StudyJobInfo.ExpirationDate, 
-                                                               jobCriteria.ExpectedPrecision);
-
-      nextStudier.Do(jobInfo);
-    }
-
     private DefaultLineMeaningStudier ChooseNextLineStudier(out int nextLineNumber)
     {
       List<int> unknownLineNumbers = new List<int>();
@@ -124,9 +85,8 @@ namespace LearnLanguages.Study
       foreach (var studier in _LineStudiers)
       {
         var studierLineNumber = studier.Key;
-        var studierPercentKnown = studier.Value.GetLinePercentKnown();
-        var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
-        if (studierPercentKnown > jobCriteria.ExpectedPrecision)
+        var studierPercentKnown = studier.Value.GetPercentKnown();
+        if (studierPercentKnown > this._KnowledgeThreshold)
         {
           //line is known
           continue;
@@ -168,11 +128,7 @@ namespace LearnLanguages.Study
       _ActiveLinesCount = int.Parse(StudyResources.DefaultMeaningStudierActiveLinesCount);
 
       //todo: MLTMeaning...dynamically set knowledge threshold to user's specifications or other.
-      if (_StudyJobInfo != null)
-      {
-        var jobCriteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
-        _KnowledgeThreshold = jobCriteria.ExpectedPrecision;
-      }
+      _KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
     }
 
     protected void ChooseAggregateSize()
@@ -184,10 +140,10 @@ namespace LearnLanguages.Study
     protected virtual void PopulateLineStudiers()
     {
       _LineStudiers.Clear();
-      foreach (var line in _StudyJobInfo.Target.Lines)
+      foreach (var line in _Target.Lines)
       {
         var lineStudier = new DefaultLineMeaningStudier();
-
+        lineStudier.InitializeForNewStudySession(line);
         _LineStudiers.Add(line.LineNumber, lineStudier);
       }
     }
@@ -198,12 +154,12 @@ namespace LearnLanguages.Study
     /// <returns></returns>
     public double GetPercentKnown()
     {
-      var lineCount = _StudyJobInfo.Target.Lines.Count;
+      var lineCount = _Target.Lines.Count;
       double totalPercentKnownNonNormalized = 0.0d;
       double maxPercentKnownNonNormalized = 100 * lineCount;
       foreach (var lineInfo in _LineStudiers)
       {
-        var linePercentKnown = lineInfo.Value.GetLinePercentKnown();
+        var linePercentKnown = lineInfo.Value.GetPercentKnown();
         totalPercentKnownNonNormalized += linePercentKnown;
       }
 
@@ -213,39 +169,34 @@ namespace LearnLanguages.Study
     
     #endregion
 
-    public void Handle(IStatusUpdate<LineEdit, IViewModelBase> message)
+    public override void InitializeForNewStudySession(MultiLineTextEdit target)
     {
-      //WE ONLY CARE ABOUT STUDY MESSAGES
-      if (message.Category != StudyResources.CategoryStudy)
-        return;
+      _Target = target;
+      PopulateLineStudiers();
+    }
 
-      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY LINE MEANING STUDIERS
-      if (
-           (message.Publisher != null) &&
-           !(message.Publisher is DefaultLineMeaningStudier)
-         )
-        return;
+    public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
+    {
+      UpdateKnowledge();
+      ChooseAggregateSize();
+      var nextLineNumber = -1;
+      DefaultLineMeaningStudier nextStudier = ChooseNextLineStudier(out nextLineNumber);
+      if (nextStudier == null || nextLineNumber < 0)
+        throw new Exception("todo: all lines are studied, publish completion event or something");
 
-      //WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      if (message.PublisherId == Id)
-        return;
-
-      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
-
-      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
-      if (message.Status == CommonResources.StatusCompleted && 
-          message.JobInfo != null &&
-          message.JobInfo.Product != null)
+      LineEdit nextLineEdit = _Target.Lines[nextLineNumber];
+      if (nextLineEdit.LineNumber != nextLineNumber)
       {
-        _StudyJobInfo.Product = message.JobInfo.Product;
+        var results = from line in _Target.Lines
+                      where line.LineNumber == nextLineNumber
+                      select line;
+
+        nextLineEdit = results.FirstOrDefault();
+        if (nextLineEdit == null)
+          throw new Exception("cannot find line with corresponding line number");
       }
 
-      //CREATE THE BUBBLING UP UPDATE
-      var statusUpdate = new StatusUpdate<MultiLineTextEdit, IViewModelBase>(message.Status, null, null,
-        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
-
-      //PUBLISH TO BUBBLE UP
-      Exchange.Ton.Publish(statusUpdate);
+      nextStudier.GetNextStudyItemViewModel(callback);
     }
   }
 }

@@ -10,19 +10,19 @@ using LearnLanguages.Common.Delegates;
 namespace LearnLanguages.Study
 {
 
-  public class DefaultMultiLineTextsStudier //:
-    //StudierBase<StudyJobInfo<MultiLineTextList, IViewModelBase>, MultiLineTextList, IViewModelBase>
-    //IHandle<IStatusUpdate<MultiLineTextEdit, IViewModelBase>>
+  public class DefaultMultiLineTextsStudier : StudierBase<MultiLineTextList> //:
   {
-    public void SetTarget(MultiLineTextList multiLineTexts)
+    public override void InitializeForNewStudySession(MultiLineTextList target)
     {
       _MeaningStudier = new DefaultMultiLineTextsMeaningStudier();
+      _MeaningStudier.InitializeForNewStudySession(target);
       _OrderStudier = new DefaultMultiLineTextsOrderStudier();
+      //_OrderStudier.InitializeForNewStudySession(target);
+      _Target = target;
     }
 
-    public void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
+    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
-
       //THIS LAYER OF STUDY DECIDES ON WHAT IS IMPORTANT: MEANING OR ORDER, THEN DELEGATES STUDY TO
       //THE CORRESPONDING STUDIER.
 
@@ -38,16 +38,12 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
-        
-        _MeaningStudier.Do(_StudyJobInfo);
-        //_MeaningStudier.Do((StudyJobInfo<MultiLineTextList, IViewModelBase>)_StudyJobInfo);
+        _MeaningStudier.GetNextStudyItemViewModel(callback);
       }
       else
       {
         //TODO: IMPLEMENT ORDER STUDIER DO AND REFERENCE THIS IN DEFAULT MLTS STUDIER
-        //_MeaningStudier.Do(_StudyJobInfo);
-//        _OrderStudier.Do(_StudyJobInfo);
-        //_OrderStudier.Do((StudyJobInfo<MultiLineTextList, IViewModelBase>)_StudyJobInfo);
+        _MeaningStudier.GetNextStudyItemViewModel(callback);//only because this is the only impl i have going.  this DES NOT GO HERE!!!!!!!!!!!!!!!!!!!!
       }
     }
 
@@ -134,5 +130,6 @@ namespace LearnLanguages.Study
     //  //PUBLISH TO BUBBLE UP
     //  Exchange.Ton.Publish(statusUpdate);
     //}
+
   }
 }

@@ -7,6 +7,7 @@ using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Offer;
 using Caliburn.Micro;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study
 {
@@ -17,9 +18,7 @@ namespace LearnLanguages.Study
   /// populating aggregate phrase texts with the OriginalAggregateSize, as well as aggregating
   /// adjacent known phrase texts, according to its own knowledge.
   /// </summary>
-  public class DefaultLineMeaningStudier : 
-    StudierBase<StudyJobInfo<LineEdit, IViewModelBase>, LineEdit, IViewModelBase>,
-    IHandle<IStatusUpdate<PhraseEdit, IViewModelBase>>
+  public class DefaultLineMeaningStudier : StudierBase<LineEdit>
   {
     #region Ctors and Init
 
@@ -58,105 +57,137 @@ namespace LearnLanguages.Study
     /// The index of the last studied phrase in AggregatePhraseTexts
     /// </summary>
     private int _LastStudiedIndex { get; set; }
+
+    private object _IsReadyLock = new object();
+    private bool _isReady = false;
+    protected bool _IsReady
+    {
+      get
+      {
+        lock (_IsReadyLock)
+        {
+          return _isReady;
+        }
+      }
+      set
+      {
+        lock (_IsReadyLock)
+        {
+          _isReady = value;
+        }
+      }
+    }
+
     #endregion
 
     #region Methods
 
-    //public bool StudyAgain()
-    //{
-    //  if (IsNotFirstRun)
-    //  {
-    //    DoImpl();
-    //    return true;
-    //  }
-    //  else
-    //    return false;
-    //}
-
-    protected override void DoImpl()
+    public override void InitializeForNewStudySession(LineEdit target)
     {
-      if (!IsNotFirstRun) //IS FIRST RUN...ALREADY TODOING REFACTOR
+      _IsReady = false;
+      _Target = target;
+      AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
+      AggregatePhraseTexts = new List<string>();
+      KnownPhraseTexts = new List<string>();
+      PopulateAggregatePhraseTexts(AggregateSize);
+      //CURRENTLY NO NEED TO AGGREGATE BECAUSE WE START FROM UNKNOWN STATE.
+      //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
+      //IF THAT IS HOW WE HAVE IT SET UP
+      PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
       {
-        AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
-        AggregatePhraseTexts = new List<string>();
-        KnownPhraseTexts = new List<string>();
-        PopulateAggregatePhraseTexts(AggregateSize);
-        //CURRENTLY NO NEED TO AGGREGATE BECAUSE WE START FROM UNKNOWN STATE.
-        //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
-        //IF THAT IS HOW WE HAVE IT SET UP
-        PopulateStudiersWithUnknownAggregatePhraseTexts();
+        if (e != null)
+          throw e;
+
+        _IsReady = true;
+      });
+    }
+
+    public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
+    {
+
+      //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT AT AGGREGATE PHRASE TEXTS LIST, THEN WE
+      //HAVE COMPLETED ONE ITERATION THROUGH OUR PHRASE TEXTS.  
+      if (_LastStudiedIndex >= (AggregatePhraseTexts.Count - 1))
+      {
+        //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
+        //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
+        var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
+        AggregateAdjacentKnownPhraseTexts(maxIterations);
+        PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
+        {
+          if (_Studiers.Count == 0)
+            throw new Exception("todo: figure out how to communicate that this line is 100% known/what to do");
+
+          //WE NOW HAVE COMPLETELY NEW STUDIERS, ALREADY INITIALIZED, SO WE JUST NEED TO RUN 
+          //THE FIRST STUDIER AND UPDATE OUR LAST STUDIED INDEX
+          _Studiers[0].GetNextStudyItemViewModel(callback);
+          _LastStudiedIndex = 0;
+        });
       }
       else
       {
-        //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT AT AGGREGATE PHRASE TEXTS LIST, THEN WE
-        //HAVE COMPLETED ONE ITERATION THROUGH OUR PHRASE TEXTS.  
-        if (_LastStudiedIndex >= (AggregatePhraseTexts.Count - 1))
+        //WE ARE CONTINUING A STUDY CYCLE, SO RUN THE NEXT ONE AND UPDATE OUR LAST STUDIED INDEX.
+        var indexToStudy = _LastStudiedIndex + 1;
+        int totalTimeSlept = 0;
+        while (!_IsReady)
         {
-          //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
-          //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
-          var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
-          AggregateAdjacentKnownPhraseTexts(maxIterations);
-          PopulateStudiersWithUnknownAggregatePhraseTexts();
-          if (_Studiers.Count == 0)
-            throw new Exception("todo: figure out how to communicate that this line is 100% known/what to do");
+          System.Threading.Thread.Sleep(10);//Hack: Thread.Sleep hack to make this work for right now.
+          totalTimeSlept += 10;
+          if (totalTimeSlept > 5000)
+            throw new Exception();
         }
+        _Studiers[indexToStudy].GetNextStudyItemViewModel(callback);
+        _LastStudiedIndex++;
       }
-
-      //WE NOW HAVE OUR STUDIERS.  GET OUR INDEX TO STUDY, POPULATE THAT STUDIER, AND DO IT.
-      var indexToStudy = _LastStudiedIndex + 1;
-      //var phraseText = _Studiers[indexToStudy].PhraseText;
-      var phraseText = AggregatePhraseTexts[indexToStudy];
-      var language = this._StudyJobInfo.Target.Phrase.Language;
-        
-      PhraseEdit.NewPhraseEdit(language.Text, (s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          var phrase = r.Object;
-          phrase.Text = phraseText;
-          var criteria = (StudyJobCriteria)_StudyJobInfo.Criteria;
-
-
-          //CREATE THE JOB INFO
-          var studyJobInfo = new StudyJobInfo<PhraseEdit, IViewModelBase>(phrase, 
-                                                                          criteria.Language, 
-                                                                          _StudyJobInfo.ExpirationDate, 
-                                                                          criteria.ExpectedPrecision);
-          //I'M INCREMENTING THIS BEFORE EXECUTION.  PROBABLY CAN DO THIS AFTERWARDS, 
-          //BUT I WANT TO BE SURE THIS IS INCREMENTED BEFORE THE STUDIER DOES ANYTHING.
-          _LastStudiedIndex++;
-
-          //INVOKE THE STUDIER TO DO THE JOB, THIS DOES NOT USE THE EXCHANGE...BUT!!
-          //BUT THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE.
-          var studier = _Studiers[indexToStudy];
-          studier.Do(studyJobInfo);
-
-          //THIS DOES LISTEN FOR COMPLETION USING THE EXCHANGE, SO GOTO HANDLE<JOB<PHRASEEDIT, IVIEWMODEL>...
-        });
-      
     }
 
-    private void PopulateStudiersWithUnknownAggregatePhraseTexts()
+    private void PopulateStudiersWithUnknownAggregatePhraseTexts(ExceptionCheckCallback callback)
     {
       _Studiers.Clear();
       _LastStudiedIndex = -1;
 
-      //unknownRelativeOrder: unknown in that our phrase is unknown.  Relative order means
-      //the order/position of this phrase relative to the other _unknown_ phrases.
-      var unknownRelativeOrder = -1;
-      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
-      {
-        var phraseText = AggregatePhraseTexts[i];
-        if (IsPhraseKnown(phraseText))
-          continue;
+      var phraseTextsCriteria = 
+        new Business.Criteria.PhraseTextsCriteria(_Target.Phrase.Language.Text, AggregatePhraseTexts);
+      PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
 
-        var studier = new DefaultPhraseMeaningStudier();
-        //studier.PhraseText = phraseText;
-        //studier.Language = _StudyJobInfo.Target.Phrase.Language;
-        unknownRelativeOrder++;
-        _Studiers.Add(unknownRelativeOrder, studier);
-      }
+          var phraseList = r.Object;
+          List<PhraseEdit> unknownPhraseEdits = new List<PhraseEdit>();
+          for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+          {
+            var results = from phrase in phraseList
+                          where phrase.Text == AggregatePhraseTexts[i]
+                          select phrase;
+            unknownPhraseEdits.Insert(i, results.First());
+          }
+
+          //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS
+          //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS
+          //EACH PHRASE EDIT IS THE SAME INDEX AS ITS PHRASETEXT COUNTERPART.
+
+          //UNKNOWNRELATIVEORDER: UNKNOWN IN THAT OUR PHRASE IS UNKNOWN.  RELATIVE ORDER MEANS
+          //THE ORDER/POSITION OF THIS PHRASE RELATIVE TO THE OTHER _UNKNOWN_ PHRASES.
+          var unknownRelativeOrder = -1;
+          for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+          {
+            var phraseText = AggregatePhraseTexts[i];
+            if (IsPhraseKnown(phraseText))
+              continue;
+
+            //PHRASE IS UNKNOWN, SO INC OUR RELATIVE ORDER AND ADD THE STUDIER TO STUDIERS, INITIALIZING EACH STUDIER.
+            unknownRelativeOrder++;
+            var studier = new DefaultPhraseMeaningStudier();
+            studier.InitializeForNewStudySession(unknownPhraseEdits[i]);
+            _Studiers.Add(unknownRelativeOrder, studier);
+
+            //PROCESS IS COMPLETE WITH NO ERRORS
+            callback(null);
+          }
+        });
+
+      
     }
 
     /// <summary>
@@ -171,7 +202,7 @@ namespace LearnLanguages.Study
 
       AggregatePhraseTexts.Clear();
 
-      var lineText = _StudyJobInfo.Target.Phrase.Text;
+      var lineText = _Target.Phrase.Text;
       //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
       //We will end up with 20/2 = 10 aggregate phrases.  
       //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 
@@ -257,17 +288,17 @@ namespace LearnLanguages.Study
           }
         }
 
-        //if we found a new aggregate, then we may yet find more in another iteration, 
-        //so we are still looking.
+        //IF WE FOUND A NEW AGGREGATE, THEN WE MAY YET FIND MORE IN ANOTHER ITERATION, 
+        //SO WE ARE STILL LOOKING.
         if (foundNewAggregate)
           stillLooking = true;
         else
-          //if we didn't find a new aggregate, then we searched the entire list
-          //of aggregate phrase texts and no adjacent phrase texts were known.
-          //so, we have aggregated as much as we can, and we are no longer looking.
+          //IF WE DIDN'T FIND A NEW AGGREGATE, THEN WE SEARCHED THE ENTIRE LIST
+          //OF AGGREGATE PHRASE TEXTS AND NO ADJACENT PHRASE TEXTS WERE KNOWN.
+          //SO, WE HAVE AGGREGATED AS MUCH AS WE CAN, AND WE ARE NO LONGER LOOKING.
           stillLooking = false;
 
-        //iteration counter for escaping out of this while loop.
+        //ITERATION COUNTER FOR ESCAPING OUT OF THIS WHILE LOOP.
         iterations++;
       }
     }
@@ -310,9 +341,9 @@ namespace LearnLanguages.Study
     /// Calculates the PercentKnown of this line.
     /// </summary>
     /// <returns></returns>
-    public double GetLinePercentKnown()
+    public double GetPercentKnown()
     {
-      if (_StudyJobInfo == null)
+      if (_Target == null)
         return 0;
 
       var listKnown = new List<string>();
@@ -337,42 +368,5 @@ namespace LearnLanguages.Study
     }
 
     #endregion
-
-    public void Handle(IStatusUpdate<PhraseEdit, IViewModelBase> message)
-    {
-      if (message.Category != StudyResources.CategoryStudy)
-        return;
-
-      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY PHRASE MEANING STUDIERS
-      if (
-           (message.Publisher != null) && 
-           !(message.Publisher is DefaultPhraseMeaningStudier)
-         )
-        return;
-
-      ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      //if (message.PublisherId == Id)
-      //  return;
-
-
-      //TODO: CHECK TO SEE IF THIS IS ONE OF THIS OBJECT'S UPDATES.  RIGHT NOW THEY ALL WILL BE, BUT THIS OBJECT SHOULD TRACK ITS OPEN JOBS.
-
-      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
-
-      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
-      if (message.Status == CommonResources.StatusCompleted && 
-          message.JobInfo.Product != null &&
-          _StudyJobInfo != null)
-      {
-        _StudyJobInfo.Product = message.JobInfo.Product;
-      }
-      
-      //CREATE THE BUBBLING UP UPDATE
-      var statusUpdate = new StatusUpdate<LineEdit, IViewModelBase>(message.Status, null, null, 
-        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
-        
-      //PUBLISH TO BUBBLE UP
-      Exchange.Ton.Publish(statusUpdate);
-    }
   }
 }

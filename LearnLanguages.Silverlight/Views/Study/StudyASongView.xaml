@@ -80,7 +80,10 @@
                 Content="{Binding Path=ButtonLabelGo}"/>
       </Border>
       
-      <ContentControl Grid.Row="4" x:Name="CurrentPrompt" />
+      <ContentControl Grid.Row="4" x:Name="CurrentPrompt" 
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+
+                      />
       
     </Grid>
   </Border>

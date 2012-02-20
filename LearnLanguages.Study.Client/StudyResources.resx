@@ -153,6 +153,9 @@
   <data name="DefaultStudyTitle" xml:space="preserve">
     <value>Study Ya ya ya!</value>
   </data>
+  <data name="DefaultThinkAboutAnswerTime" xml:space="preserve">
+    <value>5000</value>
+  </data>
   <data name="ErrorMsgAnswerIsNull" xml:space="preserve">
     <value>The answer is null.</value>
   </data>

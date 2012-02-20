@@ -10,7 +10,7 @@ namespace LearnLanguages.Study.ViewModels
 {
   [Export(typeof(StudyQuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class StudyQuestionAnswerViewModel : ViewModelBase
+  public class StudyQuestionAnswerViewModel : StudyItemViewModelBase
   {
     #region Ctors and Init
 
@@ -128,6 +128,20 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+    private int _QuestionDurationInMilliseconds;
+    public int QuestionDurationInMilliseconds
+    {
+      get { return _QuestionDurationInMilliseconds; }
+      set
+      {
+        if (value != _QuestionDurationInMilliseconds)
+        {
+          _QuestionDurationInMilliseconds = value;
+          NotifyOfPropertyChange(() => QuestionDurationInMilliseconds);
+        }
+      }
+    }
+
     #endregion
 
     #region Methods
@@ -162,8 +176,9 @@ namespace LearnLanguages.Study.ViewModels
           {
 
             System.Threading.Thread.Sleep(questionDurationInMilliseconds);
-            if (AnswerVisibility == Visibility.Collapsed)
-              ShowAnswer();
+            //if (AnswerVisibility == Visibility.Collapsed)
+              
+            ShowAnswer();
             callback(null);
           }
           catch (Exception ex)
@@ -180,14 +195,41 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+    public void Initialize(PhraseEdit question, PhraseEdit answer, int questionDurationInMilliseconds)
+    {
+      Question = question;
+      Answer = answer;
+      QuestionDurationInMilliseconds = questionDurationInMilliseconds;
+    }
 
-    
+    public override void Show(ExceptionCheckCallback callback)
+    {
+      ViewModelVisibility = Visibility.Visible;
+      AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
+        {
+          if (e != null)
+          {
+            callback(e);
+          }
+          else
+          {
+            //wait for alotted time for user to think about answer.
+            System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultThinkAboutAnswerTime));
+            callback(null);
+          }
+        });
+    }
 
+    public override void Abort()
+    {
+      HideAnswer();
+      ViewModelVisibility = Visibility.Collapsed;
+    }
     
     private void HideAnswer()
     {
       HidingAnswer = true;
-      AnswerVisibility = Visibility.Collapsed;
+      AnswerVisibility = Visibility.Visible;
     }
 
     public bool CanShowAnswer

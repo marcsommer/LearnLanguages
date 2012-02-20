@@ -14,13 +14,13 @@ namespace LearnLanguages.Study
   /// 
   /// </summary>
   [Export(typeof(IStudyPartner))]
-  public class DefaultStudyPartner : StudyPartnerBase, 
-                                     IHandle<EventMessages.StudyItemCompletedEventMessage>
+  public class DefaultStudyPartner : StudyPartnerBase
   {
     public DefaultStudyPartner()
     {
       _Studier = new DefaultMultiLineTextsStudier();
       _ViewModel = new ViewModels.DefaultStudyMultiLineTextsViewModel();
+      _StudyHeartbeat = new BackgroundWorker();
     }
 
     protected DefaultMultiLineTextsStudier _Studier { get; set; }
@@ -271,9 +271,14 @@ namespace LearnLanguages.Study
 
     private void BeginStudying(MultiLineTextList multiLineTexts)
     {
-      InitializeForNewStudySession(multiLineTexts);
-      _StudyHeartbeat.RunWorkerAsync();
+      if (!_StudyHeartbeat.IsBusy)
+      {
+        InitializeForNewStudySession(multiLineTexts);
+        _StudyHeartbeat.RunWorkerAsync();
+      }
     }
+
+    private bool _IsStudying { get; set; }
 
     private void StudyNextItem()
     {
@@ -281,7 +286,7 @@ namespace LearnLanguages.Study
       //BUT THIS TIMEOUT MECHANISM NEEDS TO BE THE RESPONSIBILITY OF A LOWER LEARNER THAT KNOWS
       //MORE ABOUT THE ITEM BEING STUDIED.  AND THIS TIMEOUT IS REALLY A TYPE OF FEEDBACK, SO 
       //WE REALLY JUST WANT A CALLBACK WITH FEEDBACK.
-
+      _IsStudying = true;
       _Studier.GetNextStudyItemViewModel((s, r) =>
         {
           if (r.Error != null)
@@ -309,6 +314,8 @@ namespace LearnLanguages.Study
 
             //OUR VIEW MODEL IS DONE SHOWING.
             _ViewModel.StudyItemViewModel = null;
+            _IsStudying = false;
+            _AbortIsFlagged = false;
           });
 
         });
@@ -320,13 +327,15 @@ namespace LearnLanguages.Study
     /// </summary>
     private void InitializeForNewStudySession(MultiLineTextList multiLineTexts)
     {
+      _AbortIsFlagged = false;
+
       //INITIALIZE STUDIER
-      _Studier.SetTarget(multiLineTexts);
+      _Studier.InitializeForNewStudySession(multiLineTexts);
 
       //INITIALIZE STUDY HEARTBEAT
       _StudyHeartbeat.DoWork += (s, r) =>
         {
-          while (_ViewModel != null && !_AbortIsFlagged && !r.Cancel)
+          while (_ViewModel != null && !_AbortIsFlagged && !r.Cancel && !_IsStudying)
           {
             if (_ViewModel.StudyItemViewModel == null)
             {
@@ -334,8 +343,6 @@ namespace LearnLanguages.Study
             }
             System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
           }
-
-          _ViewModel.StudyItemViewModel = null;
         };
     }
   }

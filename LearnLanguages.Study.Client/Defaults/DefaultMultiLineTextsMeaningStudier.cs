@@ -16,12 +16,11 @@ namespace LearnLanguages.Study
   /// adjust priorities to different MLTs, depending on priority of user, and how strongly we want to study 
   /// a certain MLT, due to its projected 'memory trace health' or whatever the paradigm we are using.
   /// </summary>
-  public class DefaultMultiLineTextsMeaningStudier 
+  public class DefaultMultiLineTextsMeaningStudier : StudierBase<MultiLineTextList>
   {
     public DefaultMultiLineTextsMeaningStudier()
     {
       _Studiers = new Dictionary<Guid, DefaultSingleMultiLineTextMeaningStudier>();
-      Exchange.Ton.SubscribeToStatusUpdates(this);
     }
 
     private int _CurrentMultiLineTextIndex = -1;
@@ -33,50 +32,22 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
+    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
-      if (!IsNotFirstRun)
-        InitializeForThisJob();
+      //WE ARE CYCLING THROUGH ALL OF THE MLTS, SO GET NEXT MLT TO STUDY INDEX
       var multiLineTextIndex = GetNextMultiLineTextIndex();
-      var currentMultiLineText = _StudyJobInfo.Target[multiLineTextIndex];
+      var currentMultiLineText = _Target[multiLineTextIndex];
       var studier = _Studiers[currentMultiLineText.Id];
 
-      //OUR CURRENT JOB ENTAILS ALL MULTILINETEXTEDITS, SO WE NEED TO CREATE 
-      //A NEW JOB WITH ONLY THE ONE IN PARTICULAR WE CARE ABOUT.
-      var originalJob = _StudyJobInfo;
-      var newExpirationDate = 
-        System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime;
-
-      var studyJobCriteria = (StudyJobCriteria)originalJob.Criteria;
-      var newJob = new StudyJobInfo<MultiLineTextEdit, IViewModelBase>(currentMultiLineText, 
-                                                       studyJobCriteria.Language, 
-                                                       newExpirationDate,
-                                                       studyJobCriteria.ExpectedPrecision);
-      //newJob.OriginalJobId = originalJob.Id;
-
-      //NOTICE THAT THIS IS **NOT** PUBLISHED ON THE EXCHANGE.  YES IT IS A JOB INFO,
-      //NO IT DOES NOT HAVE TO BE PUBLISHED.
-      studier.Do(newJob);
-    }
-
-    private void InitializeForThisJob()
-    {
-      _Studiers.Clear();
-
- 	    //CREATE STUDIER FOR EACH MULTILINETEXT IN MULTILINETEXTS TARGET
-      var newJobMultiLineTextList = _StudyJobInfo.Target;
-      foreach (var multiLineTextEdit in newJobMultiLineTextList)
-      {
-        var studier = new DefaultSingleMultiLineTextMeaningStudier();
-        _Studiers.Add(multiLineTextEdit.Id, studier);
-      }
+      //WE HAVE ALREADY INITIALIZED EACH STUDIER, SO NOW JUST DELEGATE THE WORK TO THE STUDIER
+      studier.GetNextStudyItemViewModel(callback);
     }
 
     private int GetNextMultiLineTextIndex()
     {
       //cycle through the , and get the corresponding studier for this MLT.
       _CurrentMultiLineTextIndex++;
-      if (_CurrentMultiLineTextIndex > (_StudyJobInfo.Target.Count - 1))
+      if (_CurrentMultiLineTextIndex > (_Target.Count - 1))
         _CurrentMultiLineTextIndex = 0;
 
       return _CurrentMultiLineTextIndex;
@@ -92,7 +63,7 @@ namespace LearnLanguages.Study
       foreach (var studier in _Studiers)
       {
         var multiLineTextId = studier.Key;
-        var results = from mlt in _StudyJobInfo.Target
+        var results = from mlt in _Target
                       where mlt.Id == multiLineTextId
                       select mlt;
         var studierLineCount = results.First().Lines.Count;
@@ -115,37 +86,19 @@ namespace LearnLanguages.Study
     
     #endregion
 
-    public void Handle(IStatusUpdate<MultiLineTextEdit, IViewModelBase> message)
+    public override void InitializeForNewStudySession(MultiLineTextList target)
     {
-      //WE ONLY CARE ABOUT STUDY MESSAGES
-      if (message.Category != StudyResources.CategoryStudy)
-        return;
+      _Target = target;
+      _Studiers.Clear();
 
-      //WE ONLY CARE ABOUT MESSAGES PUBLISHED BY SINGLE MLT MEANING STUDIERS
-      if (
-           (message.Publisher != null) &&
-           !(message.Publisher is DefaultSingleMultiLineTextMeaningStudier)
-         )
-        return;
-
-      ////WE DON'T CARE ABOUT MESSAGES WE PUBLISH OURSELVES
-      //if (message.PublisherId == Id)
-      //  return;
-
-      //THIS IS ONE OF THIS OBJECT'S UPDATES, SO BUBBLE IT BACK UP WITH THIS JOB'S INFO
-
-      //IF THIS IS A COMPLETED STATUS UPDATE, THEN PRODUCT SHOULD BE SET.  SO, BUBBLE THIS ASPECT UP.
-      if (message.Status == CommonResources.StatusCompleted && message.JobInfo.Product != null)
+      //CREATE STUDIER FOR EACH MULTILINETEXT IN MULTILINETEXTS TARGET
+      var newJobMultiLineTextList = _Target;
+      foreach (var multiLineTextEdit in newJobMultiLineTextList)
       {
-        _StudyJobInfo.Product = message.JobInfo.Product;
+        var studier = new DefaultSingleMultiLineTextMeaningStudier();
+        studier.InitializeForNewStudySession(multiLineTextEdit);
+        _Studiers.Add(multiLineTextEdit.Id, studier);
       }
-
-      //CREATE THE BUBBLING UP UPDATE
-      var statusUpdate = new StatusUpdate<MultiLineTextList, IViewModelBase>(message.Status, null, null,
-        null, _StudyJobInfo, Id, this, StudyResources.CategoryStudy, null);
-
-      //PUBLISH TO BUBBLE UP
-      Exchange.Ton.Publish(statusUpdate);
     }
   }
 }
