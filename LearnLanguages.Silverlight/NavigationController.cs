@@ -37,7 +37,7 @@ namespace LearnLanguages.Silverlight
     {
       if (message.IsAuthenticated)
         //Navigation.Publish.NavigationRequest<AuthenticationStatusViewModel>(AppResources.BaseAddress);
-        Navigation.Publish.NavigationRequest<StudyViewModel>(AppResources.BaseAddress);
+        Navigation.Publish.NavigationRequest<HomeViewModel>(AppResources.BaseAddress);
       else
         Navigation.Publish.NavigationRequest<LoginViewModel>(AppResources.BaseAddress);
     }

@@ -20,7 +20,6 @@ namespace LearnLanguages.Study
     {
       _Studier = new DefaultMultiLineTextsStudier();
       _ViewModel = new ViewModels.DefaultStudyMultiLineTextsViewModel();
-      _StudyHeartbeat = new BackgroundWorker();
     }
 
     protected DefaultMultiLineTextsStudier _Studier { get; set; }
@@ -50,45 +49,6 @@ namespace LearnLanguages.Study
       }
     }
     #endregion
-
-    /// <summary>
-    /// This checks for study status every interval.  If it can, will call
-    /// StudyNextItem();
-    /// </summary>
-    protected BackgroundWorker _StudyHeartbeat { get; set; }
-
-    protected volatile object _AbortLock = new object();
-    protected bool _abortIsFlagged = false;
-    protected bool _AbortIsFlagged
-    {
-      get
-      {
-        lock (_AbortLock)
-        {
-          return _abortIsFlagged;
-        }
-      }
-      set
-      {
-        lock (_AbortLock)
-        {
-          _abortIsFlagged = value;
-        }
-      }
-    }
-
-    /// <summary>
-    /// This sets the _AbortIsFlagged, and sets _CurrentOffer to null;
-    /// </summary>
-    protected override void AbortCurrent()
-    {
-      if (_CurrentOffer == null)
-        return;
-
-      _AbortIsFlagged = true;
-
-      _CurrentOffer = null;
-    }
 
     /// <summary>
     /// Analyze opportunities published on Exchange.
@@ -166,10 +126,10 @@ namespace LearnLanguages.Study
         return;
       }
 
-      //WE HAVE AN ACCEPT RESPONSE WITH AN OPPORTUNITY THAT WE CARE ABOUT
-      //WHATEVER OPPORTUNITY WE ARE WORKING ON, THE NEW ONE SUPERCEDES IT
-      if (_CurrentOffer != null)
-        AbortCurrent();
+      ////WE HAVE AN ACCEPT RESPONSE WITH AN OPPORTUNITY THAT WE CARE ABOUT
+      ////WHATEVER OPPORTUNITY WE ARE WORKING ON, THE NEW ONE SUPERCEDES IT
+      //if (_CurrentOffer != null)
+      //  AbortCurrent();
 
       //WE HAVE ALREADY CHECKED THIS TYPE CAST BEFORE MAKING OUR OFFER, IT SHOULD NOT HAVE CHANGED. 
       var jobInfo = (StudyJobInfo<MultiLineTextList, IViewModelBase>)message.Offer.Opportunity.JobInfo;
@@ -271,10 +231,9 @@ namespace LearnLanguages.Study
 
     private void BeginStudying(MultiLineTextList multiLineTexts)
     {
-      if (!_StudyHeartbeat.IsBusy)
+      if (!_IsStudying)
       {
         InitializeForNewStudySession(multiLineTexts);
-        _StudyHeartbeat.RunWorkerAsync();
       }
     }
 
@@ -282,19 +241,15 @@ namespace LearnLanguages.Study
 
     private void StudyNextItem()
     {
-      //NEED TO STUDY EITHER UNTIL FEEDBACK IS PICKED, OR A PREDETERMINED TIMEOUT IS ACHIEVED.
-      //BUT THIS TIMEOUT MECHANISM NEEDS TO BE THE RESPONSIBILITY OF A LOWER LEARNER THAT KNOWS
-      //MORE ABOUT THE ITEM BEING STUDIED.  AND THIS TIMEOUT IS REALLY A TYPE OF FEEDBACK, SO 
-      //WE REALLY JUST WANT A CALLBACK WITH FEEDBACK.
       _IsStudying = true;
       _Studier.GetNextStudyItemViewModel((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
-          //HACK: ROUNDABOUT BECAUSE MY CALLBACK GENERIC CAN'T CONTAIN AN INTERFACE, SO I CAN'T HAVE ISTUDYITEMVIEWMODELBASE
+          //HACK: MY CALLBACK GENERIC CAN'T CONTAIN AN INTERFACE, SO I CAN'T HAVE ISTUDYITEMVIEWMODELBASE
           //AS THE RESULTING OBJECT, SO I MADE A ARGS OBJECT WRAPPER.  I'M SURE THERE IS A BETTER SOLUTION,
-          //BUT I AM BEAT ON THIS STUDIER SHIT.  I JUST WANT IT DONE.
+          //BUT I NEED TO MOVE ON.
           var result = r.Object;
           var studyItemViewModel = result.ViewModel;
           if (studyItemViewModel != null)
@@ -315,7 +270,6 @@ namespace LearnLanguages.Study
             //OUR VIEW MODEL IS DONE SHOWING.
             _ViewModel.StudyItemViewModel = null;
             _IsStudying = false;
-            _AbortIsFlagged = false;
           });
 
         });
@@ -327,23 +281,21 @@ namespace LearnLanguages.Study
     /// </summary>
     private void InitializeForNewStudySession(MultiLineTextList multiLineTexts)
     {
-      _AbortIsFlagged = false;
-
       //INITIALIZE STUDIER
       _Studier.InitializeForNewStudySession(multiLineTexts);
 
       //INITIALIZE STUDY HEARTBEAT
-      _StudyHeartbeat.DoWork += (s, r) =>
-        {
-          while (_ViewModel != null && !_AbortIsFlagged && !r.Cancel && !_IsStudying)
-          {
-            if (_ViewModel.StudyItemViewModel == null)
-            {
-              StudyNextItem();
-            }
-            System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
-          }
-        };
+      //_StudyHeartbeat.DoWork += (s, r) =>
+      //  {
+      //    while (_ViewModel != null && !_AbortIsFlagged && !r.Cancel)
+      //    {
+      //      if (!_IsStudying && _ViewModel.StudyItemViewModel == null)
+      //      {
+      //        StudyNextItem();
+      //      }
+      //      System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
+      //    }
+      //  };
     }
   }
 }

@@ -223,6 +223,87 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You know this item completely. (95%-100%).
+        /// </summary>
+        public static string InstructionsSelectFeedbackAll {
+            get {
+                return ResourceManager.GetString("InstructionsSelectFeedbackAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You know the majority of this item.  (50%-95%).
+        /// </summary>
+        public static string InstructionsSelectFeedbackMost {
+            get {
+                return ResourceManager.GetString("InstructionsSelectFeedbackMost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You hardly know this item at all.  (0%-5%).
+        /// </summary>
+        public static string InstructionsSelectFeedbackNone {
+            get {
+                return ResourceManager.GetString("InstructionsSelectFeedbackNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the amount of knowledge you have of the given item.  Approximate to the best of your ability!.
+        /// </summary>
+        public static string InstructionsSelectFeedbackNoneSomeMostAll {
+            get {
+                return ResourceManager.GetString("InstructionsSelectFeedbackNoneSomeMostAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You know a little, or even perhaps, a decent amount of this item. (5%-50%).
+        /// </summary>
+        public static string InstructionsSelectFeedbackSome {
+            get {
+                return ResourceManager.GetString("InstructionsSelectFeedbackSome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100.
+        /// </summary>
+        public static string PercentKnownAll {
+            get {
+                return ResourceManager.GetString("PercentKnownAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 75.
+        /// </summary>
+        public static string PercentKnownMost {
+            get {
+                return ResourceManager.GetString("PercentKnownMost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        public static string PercentKnownNone {
+            get {
+                return ResourceManager.GetString("PercentKnownNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 25.
+        /// </summary>
+        public static string PercentKnownSome {
+            get {
+                return ResourceManager.GetString("PercentKnownSome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Meaning.
         /// </summary>
         public static string StudyContextMeaning {

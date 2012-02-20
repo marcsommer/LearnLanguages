@@ -7,13 +7,21 @@
     d:DesignHeight="300" d:DesignWidth="400">
     
   <Border Style="{StaticResource DebugBorder}">
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Border Style="{StaticResource ViewSection}">
+      <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
         <RowDefinition />
       </Grid.RowDefinitions>
-      <ContentControl Grid.Row="0"
-                      x:Name="AskViewModel" 
-                      HorizontalContentAlignment="Stretch" />
+
+        <!--STUDY SCREEN-->
+        <ContentControl Grid.Row="0" 
+                      x:Name="StudyScreen" 
+                      HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch" 
+                      HorizontalContentAlignment="Stretch" 
+                      VerticalContentAlignment="Stretch" />
+
     </Grid>
+    </Border>
   </Border>
 </UserControl>

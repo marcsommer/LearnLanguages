@@ -89,6 +89,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\PercentKnownFeedbackViewModel.cs" />
     <Compile Include="ViewModels\StudySessionCompleteViewModel.cs" />
     <Compile Include="ViewModels\DefaultStudyMultiLineTextsViewModel.cs" />
     <Compile Include="ViewModels\StudyQuestionAnswerViewModel.cs" />
@@ -116,6 +117,10 @@
   <ItemGroup>
     <Content Include="StudyHeirarchy.txt" />
     <Content Include="StudyNotes.txt" />
+    <Page Include="Views\PercentKnownFeedbackView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\StudySessionCompleteView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

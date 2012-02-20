@@ -229,7 +229,7 @@ namespace LearnLanguages.Study.ViewModels
     private void HideAnswer()
     {
       HidingAnswer = true;
-      AnswerVisibility = Visibility.Visible;
+      AnswerVisibility = Visibility.Collapsed;
     }
 
     public bool CanShowAnswer

@@ -34,8 +34,6 @@ namespace LearnLanguages.Study
     protected List<IOffer<MultiLineTextList, IViewModelBase>> _DeniedOffers { get; set; }
     protected IOffer<MultiLineTextList, IViewModelBase> _CurrentOffer { get; set; }
 
-    protected abstract void AbortCurrent();
-
     /// <summary>
     /// Analyze opportunities published on Exchange.
     /// </summary>

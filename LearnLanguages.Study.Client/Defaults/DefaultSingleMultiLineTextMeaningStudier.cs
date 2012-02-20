@@ -113,7 +113,7 @@ namespace LearnLanguages.Study
       //MORE THAN ACTIVE_LINE_COUNT LINES AT A TIME)
       unknownLineNumbers.Sort();
       var nextLineNumberIndex = _LastActiveLineStudiedIndex + 1;
-      if (nextLineNumberIndex > unknownLineNumbers.Count)
+      if (nextLineNumberIndex >= unknownLineNumbers.Count)
         nextLineNumberIndex = 0;
 
       nextLineNumber = unknownLineNumbers[nextLineNumberIndex];
@@ -173,6 +173,7 @@ namespace LearnLanguages.Study
     {
       _Target = target;
       PopulateLineStudiers();
+      _LastActiveLineStudiedIndex = -1;
     }
 
     public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
@@ -197,6 +198,7 @@ namespace LearnLanguages.Study
       }
 
       nextStudier.GetNextStudyItemViewModel(callback);
+      _LastActiveLineStudiedIndex = nextLineEdit.LineNumber;
     }
   }
 }

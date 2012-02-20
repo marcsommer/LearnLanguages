@@ -1,10 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.Windows;
-using LearnLanguages.Common.ViewModelBases;
+﻿using System.ComponentModel.Composition;
 using LearnLanguages.Business;
-using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common.ViewModels;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Common.Interfaces;

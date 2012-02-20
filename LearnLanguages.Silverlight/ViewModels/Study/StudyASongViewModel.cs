@@ -150,20 +150,6 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private IViewModelBase _CurrentPrompt;
-    public IViewModelBase CurrentPrompt
-    {
-      get { return _CurrentPrompt; }
-      set
-      {
-        if (value != _CurrentPrompt)
-        {
-          _CurrentPrompt = value;
-          NotifyOfPropertyChange(() => CurrentPrompt);
-        }
-      }
-    }
-    
     private string _InstructionsSelectSong = ViewViewModelResources.InstructionsStudyASongSelectSong;
     public string InstructionsSelectSong
     {
@@ -371,6 +357,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
     #endregion
+
     #endregion
 
     #region Methods
@@ -851,7 +838,12 @@ namespace LearnLanguages.Silverlight.ViewModels
         CurrentOpportunities.Remove(message.Opportunity);
         PastOpportunities.Add(message.Opportunity);
 
-        CurrentPrompt = productViewModel;
+        //GET THE STUDY VIEWMODEL THAT WILL HOUSE OUR CREATED IVIEWMODELBASE
+        var studyViewModel = Services.Container.GetExportedValue<StudyViewModel>();
+        studyViewModel.StudyScreen = productViewModel;
+
+        //NAVIGATE TO THE STUDY VIEWMODEL TO BEGIN STUDYING
+        Navigation.Publish.NavigationRequest<StudyViewModel>(AppResources.BaseAddress);
       }
     }
   }

@@ -171,6 +171,33 @@
   <data name="ErrorMsgStudyException" xml:space="preserve">
     <value>An exception was thrown during study.  See inner exception for details.</value>
   </data>
+  <data name="InstructionsSelectFeedbackAll" xml:space="preserve">
+    <value>You know this item completely. (95%-100%)</value>
+  </data>
+  <data name="InstructionsSelectFeedbackMost" xml:space="preserve">
+    <value>You know the majority of this item.  (50%-95%)</value>
+  </data>
+  <data name="InstructionsSelectFeedbackNone" xml:space="preserve">
+    <value>You hardly know this item at all.  (0%-5%)</value>
+  </data>
+  <data name="InstructionsSelectFeedbackNoneSomeMostAll" xml:space="preserve">
+    <value>Select the amount of knowledge you have of the given item.  Approximate to the best of your ability!</value>
+  </data>
+  <data name="InstructionsSelectFeedbackSome" xml:space="preserve">
+    <value>You know a little, or even perhaps, a decent amount of this item. (5%-50%)</value>
+  </data>
+  <data name="PercentKnownAll" xml:space="preserve">
+    <value>100</value>
+  </data>
+  <data name="PercentKnownMost" xml:space="preserve">
+    <value>75</value>
+  </data>
+  <data name="PercentKnownNone" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="PercentKnownSome" xml:space="preserve">
+    <value>25</value>
+  </data>
   <data name="StudyContextMeaning" xml:space="preserve">
     <value>Meaning</value>
   </data>
