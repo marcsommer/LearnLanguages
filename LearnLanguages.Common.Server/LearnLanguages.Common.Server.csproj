@@ -205,6 +205,9 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IFeedback.cs">
       <Link>Interfaces\Feedback\IFeedback.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IFeedbackViewModelBase.cs">
+      <Link>Interfaces\Feedback\IFeedbackViewModelBase.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IGetFeedback.cs">
       <Link>Interfaces\Feedback\IGetFeedback.cs</Link>
     </Compile>

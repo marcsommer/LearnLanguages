@@ -171,6 +171,9 @@
   <data name="ErrorMsgStudyException" xml:space="preserve">
     <value>An exception was thrown during study.  See inner exception for details.</value>
   </data>
+  <data name="InstructionsDefaultStudyPartner" xml:space="preserve">
+    <value>To continue learning, click Next.  Choose your feedback.  More instructions here.....</value>
+  </data>
   <data name="InstructionsSelectFeedbackAll" xml:space="preserve">
     <value>You know this item completely. (95%-100%)</value>
   </data>

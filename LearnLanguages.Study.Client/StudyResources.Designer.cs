@@ -223,6 +223,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To continue learning, click Next.  Choose your feedback.  More instructions here......
+        /// </summary>
+        public static string InstructionsDefaultStudyPartner {
+            get {
+                return ResourceManager.GetString("InstructionsDefaultStudyPartner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You know this item completely. (95%-100%).
         /// </summary>
         public static string InstructionsSelectFeedbackAll {

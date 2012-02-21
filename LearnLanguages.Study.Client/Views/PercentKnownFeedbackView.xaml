@@ -8,8 +8,8 @@
     d:DesignHeight="300" d:DesignWidth="400">
     
   <Border Style="{StaticResource DebugBorder}">
-    <Border Style="{StaticResource ViewSection}">
-      <Grid x:Name="LayoutRoot" Background="White">
+    <Border Style="{StaticResource ViewSection}" >
+      <Grid x:Name="LayoutRoot" Background="White" >
       <Grid.RowDefinitions>
         <RowDefinition />
       </Grid.RowDefinitions>
@@ -37,19 +37,24 @@
         </Border>
         
         <!--BUTTONS-->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="30">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Height="30">
           <StackPanel.Resources>
             <Style TargetType="Button">
               <Setter Property="Width" Value="40" />
               <Setter Property="Margin" Value="5,1,5,1" />
+              <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled}" />
             </Style>
           </StackPanel.Resources>
+          
           <Button x:Name="None" Content="None" />
           <Button x:Name="Some" Content="Some" />
           <Button x:Name="Most" Content="Most" />
           <Button x:Name="All" Content="All" />
+
         </StackPanel>
-        
 
       </Grid>
     </Border>

@@ -15,7 +15,7 @@ namespace LearnLanguages.Study.ViewModels
   /// </summary>
   [Export(typeof(PercentKnownFeedbackViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class PercentKnownFeedbackViewModel : ViewModelBase
+  public class PercentKnownFeedbackViewModel : FeedbackViewModelBase
   {
     #region Ctors and Init
 

@@ -104,6 +104,7 @@
     <Compile Include="Interfaces\Exchange\IJobInfoOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponseOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunity.cs" />
+    <Compile Include="Interfaces\Feedback\IFeedbackViewModelBase.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />
     <Compile Include="CslaBases\BusinessListBaseOfLAndCAndCDto.cs" />

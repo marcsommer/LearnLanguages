@@ -50,6 +50,8 @@ namespace LearnLanguages.Study
     }
     #endregion
 
+    protected IFeedbackViewModelBase _FeedbackViewModel { get; set; }
+
     /// <summary>
     /// Analyze opportunities published on Exchange.
     /// </summary>
@@ -242,6 +244,7 @@ namespace LearnLanguages.Study
     private void StudyNextItem()
     {
       _IsStudying = true;
+      _FeedbackViewModel.IsEnabled = false;
       _Studier.GetNextStudyItemViewModel((s, r) =>
         {
           if (r.Error != null)
@@ -249,11 +252,13 @@ namespace LearnLanguages.Study
 
           //HACK: MY CALLBACK GENERIC CAN'T CONTAIN AN INTERFACE, SO I CAN'T HAVE ISTUDYITEMVIEWMODELBASE
           //AS THE RESULTING OBJECT, SO I MADE A ARGS OBJECT WRAPPER.  I'M SURE THERE IS A BETTER SOLUTION,
-          //BUT I NEED TO MOVE ON.
+          //BUT I NEED TO MOVE ON...I FORGOT, I HAVE RESULTARGS<IINTERFACE>...ARGH.  SHOULD FIX THIS SOMETIME.
           var result = r.Object;
           var studyItemViewModel = result.ViewModel;
           if (studyItemViewModel != null)
+          {
             _ViewModel.StudyItemViewModel = studyItemViewModel;
+          }
           else
             _ViewModel.StudyItemViewModel =
               Services.Container.GetExportedValue<ViewModels.StudySessionCompleteViewModel>();
@@ -267,9 +272,13 @@ namespace LearnLanguages.Study
             if (e != null)
               throw e;
 
-            //OUR VIEW MODEL IS DONE SHOWING.
-            _ViewModel.StudyItemViewModel = null;
-            _IsStudying = false;
+            //OUR VIEW MODEL IS DONE SHOWING.  ENABLE FEEDBACK AND GET FEEDBACK.
+            _FeedbackViewModel.IsEnabled = true;
+            _FeedbackViewModel.GetFeedbackAsync((s2, r2) =>
+              {
+                _ViewModel.StudyItemViewModel = null;
+                _IsStudying = false;
+              });
           });
 
         });
