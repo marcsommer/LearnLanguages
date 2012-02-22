@@ -97,7 +97,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 10000.
+        ///   Looks up a localized string similar to 300000.
         /// </summary>
         public static string DefaultFeedbackTimeoutMilliseconds {
             get {

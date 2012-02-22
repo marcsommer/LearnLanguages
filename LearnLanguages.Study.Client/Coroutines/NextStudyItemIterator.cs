@@ -3,6 +3,7 @@ using System.Net;
 using LearnLanguages.Common.Delegates;
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Study.Interfaces;
 
 namespace LearnLanguages.Study
 {
@@ -16,7 +17,7 @@ namespace LearnLanguages.Study
 
     public StudierBase<T> Studier { get; set; }
     public T Target { get; set; }
-    public IViewModelBase Product { get; set; }
+    public IStudyItemViewModelBase Product { get; set; }
 
     public event EventHandler<ResultCompletionEventArgs> Completed;
 

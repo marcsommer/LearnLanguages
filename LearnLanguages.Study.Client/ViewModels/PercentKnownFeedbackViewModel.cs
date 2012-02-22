@@ -121,6 +121,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
       DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
+      IsEnabled = true;
       bool feedbackIsProvided = false;
       do
       {
@@ -129,6 +130,7 @@ namespace LearnLanguages.Study.ViewModels
         feedbackIsProvided = feedbackValue != -1;
       }
       while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
+      IsEnabled = false;
 
       return Feedback;
     }
@@ -138,6 +140,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       try
       {
+        IsEnabled = true;
         TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
         DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
         bool feedbackIsProvided = false;
@@ -149,10 +152,12 @@ namespace LearnLanguages.Study.ViewModels
         }
         while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
 
+        IsEnabled = false;
         callback(this, new ResultArgs<IFeedback>(Feedback));
       }
       catch (Exception ex) 
       {
+        IsEnabled = false;
         callback(this, new ResultArgs<IFeedback>(ex));
       }
     }

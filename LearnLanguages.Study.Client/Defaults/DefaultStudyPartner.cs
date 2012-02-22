@@ -9,6 +9,7 @@ using Caliburn.Micro;
 using System.ComponentModel;
 using LearnLanguages.Common.Delegates;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Study
 {
@@ -23,6 +24,7 @@ namespace LearnLanguages.Study
       _Studier = new DefaultMultiLineTextsStudier();
       _ViewModel = new ViewModels.DefaultStudyPartnerViewModel();
       _FeedbackViewModel = new ViewModels.PercentKnownFeedbackViewModel();
+      _FeedbackViewModel.IsEnabled = false;
       _ViewModel.FeedbackViewModel = _FeedbackViewModel;
       _FeedbackTimedOut = false;
     }
@@ -161,7 +163,6 @@ namespace LearnLanguages.Study
                                                             null);
       Exchange.Ton.Publish(completedUpdate);
 
-      //Begin studying the multilinetexts
       StartNewStudySession(jobInfo.Target);
     }
     /// <summary>
@@ -250,22 +251,64 @@ namespace LearnLanguages.Study
       ///3) SHOW STUDYITEMVIEWMODEL.
       ///4) WHEN SHOW IS DONE, ENABLE FEEDBACK VIEWMODEL.
       ///5) WHEN FEEDBACK IS PROVIDED, GO TO #2.
-      InitializeForNewStudySession(multiLineTexts, (e) =>
+      _Studier.InitializeForNewStudySession(multiLineTexts, (e) =>
         {
-          Study();
+
+          //THIS STUDY THREAD EXECUTES ONE ITERATION OF STUDY.  ASSIGNS VIEWMODEL, SHOWS, GETS FEEDBACK.
+          BackgroundWorker studyThread = new BackgroundWorker();
+          
+          #region Study Thread DoWork
+          studyThread.DoWork += (s3, r3) =>
+            {
+              _IsStudying = true;
+
+              _Studier.GetNextStudyItemViewModel((s, r) =>
+              {
+                if (r.Error != null)
+                  throw r.Error;
+
+                var studyItemViewModel = r.Object.ViewModel;
+                _ViewModel.StudyItemViewModel = studyItemViewModel;
+                _ViewModel.FeedbackViewModel = new ViewModels.PercentKnownFeedbackViewModel();
+                _ViewModel.FeedbackViewModel.IsEnabled = false;
+
+                if (studyItemViewModel == null)
+                  return;
+
+                studyItemViewModel.Show((e2) =>
+                {
+                  if (e2 != null)
+                    throw e2;
+
+                  //IS DONE SHOWING, SO GET FEEDBACK
+                  int timeout = int.Parse(StudyResources.DefaultFeedbackTimeoutMilliseconds);
+                  _ViewModel.FeedbackViewModel.GetFeedbackAsync(timeout, (s2, r2) =>
+                  {
+                    if (r2.Error != null)
+                      throw r2.Error;
+
+                    _IsStudying = false;
+                  });
+                });
+              });
+
+              while (_IsStudying)
+                Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
+            };
+          #endregion
+          #region Study Thread Completed
+          studyThread.RunWorkerCompleted += (s4, r4) =>
+            {
+              if (r4.Error != null)
+                throw r4.Error;
+
+              studyThread.RunWorkerAsync();
+            };
+          #endregion
+
+          studyThread.RunWorkerAsync();
         });
-
-      yield return new InitializeStudier<MultiLineTextList>(_Studier, multiLineTexts);
-      do
-      {
-        var nextStudyItemIterator = new NextStudyItemIterator<MultiLineTextList>(_Studier, multiLineTexts);
-        yield return nextStudyItemIterator;
-
-        var viewModelProduct = nextStudyItemIterator.Product;
-        _ViewModel.StudyItemViewModel = viewModelProduct;
-        
-      }
-      while (_NextStudyViewModel != null);
+     
     }
 
     private void Study()

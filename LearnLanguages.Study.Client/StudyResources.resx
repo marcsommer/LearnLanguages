@@ -131,7 +131,7 @@
     <comment>ms to sleep while waiting to get feedback.  should be less than feedback timeout!!!</comment>
   </data>
   <data name="DefaultFeedbackTimeoutMilliseconds" xml:space="preserve">
-    <value>10000</value>
+    <value>300000</value>
     <comment>5 minutes = 300,000
 debug=10 seconds (10000)</comment>
   </data>
