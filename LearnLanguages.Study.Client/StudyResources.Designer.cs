@@ -142,6 +142,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 333.
+        /// </summary>
+        public static string DefaultMillisecondsTimePerWordInQuestion {
+            get {
+                return ResourceManager.GetString("DefaultMillisecondsTimePerWordInQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 5.
         /// </summary>
         public static string DefaultMultiLineTextsStudierMeaningWeight {

@@ -11,7 +11,8 @@
     <Border Style="{StaticResource ViewSection}" >
       <Grid x:Name="LayoutRoot" Background="White" >
       <Grid.RowDefinitions>
-        <RowDefinition />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Grid.Resources>
         <Style TargetType="toolkit:HeaderedContentControl" x:Key="QAHeaderStyle">
@@ -37,7 +38,8 @@
         </Border>
         
         <!--BUTTONS-->
-        <StackPanel Orientation="Horizontal"
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center"
                     Height="30">

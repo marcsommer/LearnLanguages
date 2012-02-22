@@ -147,6 +147,10 @@ debug=10 seconds (10000)</comment>
   <data name="DefaultMeaningStudierAggregateSize" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="DefaultMillisecondsTimePerWordInQuestion" xml:space="preserve">
+    <value>333</value>
+    <comment>1/3 of a second per word.</comment>
+  </data>
   <data name="DefaultMultiLineTextsStudierMeaningWeight" xml:space="preserve">
     <value>5</value>
   </data>

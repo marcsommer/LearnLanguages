@@ -63,10 +63,6 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coroutines\AscertainFeedback.cs" />
-    <Compile Include="Coroutines\ShowStudyItemViewModel.cs" />
-    <Compile Include="Coroutines\NextStudyItemIterator.cs" />
-    <Compile Include="Coroutines\InitializeStudier.cs" />
     <Compile Include="Core\FeedbackViewModelBase.cs" />
     <Compile Include="Core\StudierBaseOfT.cs" />
     <Compile Include="Core\StudyItemViewModelArgs.cs" />
@@ -94,6 +90,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Creators\StudyItemCreator.cs" />
     <Compile Include="ViewModels\DefaultStudyPartnerViewModel.cs" />
     <Compile Include="ViewModels\PercentKnownFeedbackViewModel.cs" />
     <Compile Include="ViewModels\StudySessionCompleteViewModel.cs" />

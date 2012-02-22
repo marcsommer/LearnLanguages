@@ -10,7 +10,9 @@
   <Border Style="{StaticResource DebugBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid x:Name="LayoutRoot" Background="White">
       <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
         <RowDefinition />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Grid.Resources>
         <Style TargetType="toolkit:HeaderedContentControl" x:Key="HeaderStyle">
@@ -33,7 +35,7 @@
       </Border>
 
       <!--STUDY CONTAINER-->
-      <Border Grid.Row="0" Style="{StaticResource ViewSection}">
+      <Border Grid.Row="1" Style="{StaticResource ViewSection}">
         <toolkit:HeaderedContentControl Header="{Binding Path=StudyTitle}" 
                                         Style="{StaticResource HeaderStyle}">
           <toolkit:HeaderedContentControl.Content>
@@ -50,7 +52,8 @@
       </Border>
 
       <!--FEEDBACK-->
-      <Border Grid.Row="1" Style="{StaticResource ViewSection}">
+      <Border Grid.Row="2" 
+              Style="{StaticResource ViewSection}">
         <ContentControl x:Name="FeedbackViewModel" 
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch"
