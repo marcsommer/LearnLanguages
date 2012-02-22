@@ -6,6 +6,7 @@ using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
 using Caliburn.Micro;
 using LearnLanguages.Offer;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study
 {
@@ -137,14 +138,29 @@ namespace LearnLanguages.Study
       _AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
     }
 
-    protected virtual void PopulateLineStudiers()
+    protected virtual void PopulateLineStudiers(ExceptionCheckCallback completedCallback)
     {
       _LineStudiers.Clear();
       foreach (var line in _Target.Lines)
       {
         var lineStudier = new DefaultLineMeaningStudier();
-        lineStudier.InitializeForNewStudySession(line);
         _LineStudiers.Add(line.LineNumber, lineStudier);
+      }
+
+      //WE NOW HAVE LINE STUDIERS POPULATED WITH UNINITIALIZED LINE STUDIERS.
+      //WE WILL NOW INITIALIZE EACH LINE STUDIER
+      int linesInitializedCount = 0;
+      foreach (var lineStudierEntry in _LineStudiers)
+      {
+        var line = _Target.Lines[lineStudierEntry.Key];
+        lineStudierEntry.Value.InitializeForNewStudySession(line, (e) =>
+          {
+            linesInitializedCount++;
+
+            //IF WE HAVE INITIALIZED ALL OF OUR LINES, THEN OUR INITIALIZATION POPULATION IS COMPLETE
+            if (linesInitializedCount == _Target.Lines.Count)
+              completedCallback(null);
+          });
       }
     }
 
@@ -169,14 +185,22 @@ namespace LearnLanguages.Study
     
     #endregion
 
-    public override void InitializeForNewStudySession(MultiLineTextEdit target)
+    public override void InitializeForNewStudySession(MultiLineTextEdit target, 
+                                                      ExceptionCheckCallback completedCallback)
     {
       _Target = target;
-      PopulateLineStudiers();
       _LastActiveLineStudiedIndex = -1;
+      //EXECUTES CALLBACK WHEN POPULATE IS COMPLETED
+      PopulateLineStudiers((e) =>
+        {
+          if (e != null)
+            throw e;
+
+          completedCallback(null);
+        });
     }
 
-    public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
+    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
       UpdateKnowledge();
       ChooseAggregateSize();
@@ -197,7 +221,13 @@ namespace LearnLanguages.Study
           throw new Exception("cannot find line with corresponding line number");
       }
 
-      nextStudier.GetNextStudyItemViewModel(callback);
+      nextStudier.GetNextStudyItemViewModel((s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+
+          callback(this, r);
+        });
       _LastActiveLineStudiedIndex = nextLineEdit.LineNumber;
     }
   }

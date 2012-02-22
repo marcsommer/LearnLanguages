@@ -12,13 +12,21 @@ namespace LearnLanguages.Study
 
   public class DefaultMultiLineTextsStudier : StudierBase<MultiLineTextList> //:
   {
-    public override void InitializeForNewStudySession(MultiLineTextList target)
+    public override void InitializeForNewStudySession(MultiLineTextList target, 
+                                                      ExceptionCheckCallback completedCallback)
     {
-      _MeaningStudier = new DefaultMultiLineTextsMeaningStudier();
-      _MeaningStudier.InitializeForNewStudySession(target);
-      _OrderStudier = new DefaultMultiLineTextsOrderStudier();
-      //_OrderStudier.InitializeForNewStudySession(target);
       _Target = target;
+      _MeaningStudier = new DefaultMultiLineTextsMeaningStudier();
+      _MeaningStudier.InitializeForNewStudySession(target, (e) =>
+        {
+          if (e != null)
+            throw e;
+
+          _OrderStudier = new DefaultMultiLineTextsOrderStudier();
+          //_OrderStudier.InitializeForNewStudySession(target, completedCallback);
+          //WHEN ORDER STUDIER IS IMPLEMENTED, THIS MUST BE CHANGED TO MAKE THIS CALLBACK WITHIN INITIALIZE
+          completedCallback(null);
+        });
     }
 
     public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)

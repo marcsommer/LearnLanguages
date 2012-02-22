@@ -88,6 +88,24 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 200.
+        /// </summary>
+        public static string DefaultFeedbackCheckIntervalMilliseconds {
+            get {
+                return ResourceManager.GetString("DefaultFeedbackCheckIntervalMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 10000.
+        /// </summary>
+        public static string DefaultFeedbackTimeoutMilliseconds {
+            get {
+                return ResourceManager.GetString("DefaultFeedbackTimeoutMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 85.
         /// </summary>
         public static string DefaultKnowledgeThreshold {

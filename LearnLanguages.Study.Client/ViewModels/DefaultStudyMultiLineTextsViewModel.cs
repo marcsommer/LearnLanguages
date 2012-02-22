@@ -52,12 +52,6 @@ namespace LearnLanguages.Study.ViewModels
 
     #endregion
 
-    #region Methods
-
-    
-
-    #endregion
-
     #region Commands
 
     public bool CanGo

@@ -2,7 +2,7 @@
 
 namespace LearnLanguages.Common
 {
-  public class ResultArgs<T>
+  public class ResultArgs<T> : System.EventArgs
   {
     public ResultArgs() { }
     public ResultArgs(T obj)

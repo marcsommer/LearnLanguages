@@ -1,10 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
-using LearnLanguages.Common.ViewModelBases;
-using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.Common.Feedback;
+using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -21,6 +21,8 @@ namespace LearnLanguages.Study.ViewModels
 
     public PercentKnownFeedbackViewModel()
     {
+      Feedback = new Feedback<double>();
+      SetFeedback(-1);
     }
 
     #endregion
@@ -111,42 +113,73 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    private double _PercentKnown = -1;
-    public double PercentKnown
-    {
-      get { return _PercentKnown; }
-      set
-      {
-        if (value != _PercentKnown)
-        {
-          _PercentKnown = value;
-          NotifyOfPropertyChange(() => PercentKnown);
-        }
-      }
-    }
-
     #endregion
 
     #region Methods
 
+    public override IFeedback GetFeedback(int timeoutMilliseconds)
+    {
+      TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
+      DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
+      bool feedbackIsProvided = false;
+      do
+      {
+        System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
+        var feedbackValue = ((Feedback<double>)Feedback).Value;
+        feedbackIsProvided = feedbackValue != -1;
+      }
+      while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
+
+      return Feedback;
+    }
+
+    public override void GetFeedbackAsync(int timeoutMilliseconds,
+                                          AsyncCallback<IFeedback> callback)
+    {
+      try
+      {
+        TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
+        DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
+        bool feedbackIsProvided = false;
+        do
+        {
+          var feedbackValue = ((Feedback<double>)Feedback).Value;
+          feedbackIsProvided = feedbackValue != -1;
+          System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
+        }
+        while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
+
+        callback(this, new ResultArgs<IFeedback>(Feedback));
+      }
+      catch (Exception ex) 
+      {
+        callback(this, new ResultArgs<IFeedback>(ex));
+      }
+    }
+
+    private void SetFeedback(double feedbackValue)
+    {
+      ((Feedback<double>)Feedback).Value = feedbackValue;
+    }
+
     public void None()
     {
-      PercentKnown = double.Parse(StudyResources.PercentKnownNone);
+      SetFeedback(double.Parse(StudyResources.PercentKnownNone));
     }
 
     public void Some()
     {
-      PercentKnown = double.Parse(StudyResources.PercentKnownSome);
+      SetFeedback(double.Parse(StudyResources.PercentKnownSome));
     }
 
     public void Most()
     {
-      PercentKnown = double.Parse(StudyResources.PercentKnownMost);
+      SetFeedback(double.Parse(StudyResources.PercentKnownMost));
     }
 
     public void All()
     {
-      PercentKnown = double.Parse(StudyResources.PercentKnownAll);
+      SetFeedback(double.Parse(StudyResources.PercentKnownAll));
     }
 
     #endregion

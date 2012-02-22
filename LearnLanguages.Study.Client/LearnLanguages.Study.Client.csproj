@@ -63,6 +63,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coroutines\NextStudyItemIterator.cs" />
+    <Compile Include="Coroutines\InitializeDefaultStudyPartner.cs" />
+    <Compile Include="Coroutines\InitializeStudier.cs" />
     <Compile Include="Core\FeedbackViewModelBase.cs" />
     <Compile Include="Core\StudierBaseOfT.cs" />
     <Compile Include="Core\StudyItemViewModelArgs.cs" />

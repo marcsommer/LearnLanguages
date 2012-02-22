@@ -809,6 +809,11 @@ namespace LearnLanguages.Silverlight.ViewModels
       Exchange.Ton.Publish(acceptOfferResponse);
     }
 
+    /// <summary>
+    /// If completed event, this shows the StudyViewModel populated with the produced IViewModelBase
+    /// produced by the study partner.
+    /// </summary>
+    /// <param name="message"></param>
     public void Handle(IStatusUpdate<MultiLineTextList, IViewModelBase> message)
     {
       //WE ONLY CARE ABOUT STUDY UPDATES

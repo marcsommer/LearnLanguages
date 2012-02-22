@@ -126,6 +126,15 @@
   <data name="DefaultAmountDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>1000</value>
   </data>
+  <data name="DefaultFeedbackCheckIntervalMilliseconds" xml:space="preserve">
+    <value>200</value>
+    <comment>ms to sleep while waiting to get feedback.  should be less than feedback timeout!!!</comment>
+  </data>
+  <data name="DefaultFeedbackTimeoutMilliseconds" xml:space="preserve">
+    <value>10000</value>
+    <comment>5 minutes = 300,000
+debug=10 seconds (10000)</comment>
+  </data>
   <data name="DefaultKnowledgeThreshold" xml:space="preserve">
     <value>85</value>
   </data>

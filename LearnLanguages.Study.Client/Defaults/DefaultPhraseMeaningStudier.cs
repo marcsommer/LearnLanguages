@@ -6,6 +6,7 @@ using LearnLanguages.Common;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Offer;
+using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study
 {
@@ -27,9 +28,10 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public override void InitializeForNewStudySession(PhraseEdit target)
+    public override void InitializeForNewStudySession(PhraseEdit target, ExceptionCheckCallback completedCallback)
     {
       _Target = target;
+      completedCallback(null);
     }
 
     public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)

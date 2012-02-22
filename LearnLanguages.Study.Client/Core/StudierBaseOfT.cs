@@ -8,7 +8,7 @@ namespace LearnLanguages.Study
   {
     //public abstract void SetTarget(T target);
     protected T _Target { get; set; }
-    public abstract void InitializeForNewStudySession(T target);
+    public abstract void InitializeForNewStudySession(T target, ExceptionCheckCallback completedCallback);
     public abstract void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback);
   }
 }

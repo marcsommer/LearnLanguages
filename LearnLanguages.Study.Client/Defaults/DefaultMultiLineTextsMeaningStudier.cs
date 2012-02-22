@@ -86,18 +86,28 @@ namespace LearnLanguages.Study
     
     #endregion
 
-    public override void InitializeForNewStudySession(MultiLineTextList target)
+    public override void InitializeForNewStudySession(MultiLineTextList target, 
+                                                      ExceptionCheckCallback completedCallback)
     {
       _Target = target;
       _Studiers.Clear();
+      int initializedCount = 0;
 
       //CREATE STUDIER FOR EACH MULTILINETEXT IN MULTILINETEXTS TARGET
       var newJobMultiLineTextList = _Target;
       foreach (var multiLineTextEdit in newJobMultiLineTextList)
       {
         var studier = new DefaultSingleMultiLineTextMeaningStudier();
-        studier.InitializeForNewStudySession(multiLineTextEdit);
-        _Studiers.Add(multiLineTextEdit.Id, studier);
+        studier.InitializeForNewStudySession(multiLineTextEdit, (e) =>
+          {
+            if (e != null)
+              throw e;
+
+            _Studiers.Add(multiLineTextEdit.Id, studier);
+            initializedCount++;
+            if (initializedCount == newJobMultiLineTextList.Count)
+              completedCallback(null);
+          });
       }
     }
   }

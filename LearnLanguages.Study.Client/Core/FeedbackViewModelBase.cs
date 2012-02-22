@@ -2,18 +2,43 @@
 using System.Net;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Common.Delegates;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study
 {
   public abstract class FeedbackViewModelBase : ViewModelBase, IFeedbackViewModelBase
   {
-    public abstract void Show(Common.Delegates.ExceptionCheckCallback callback);
-    public abstract void Abort();
+    public abstract IFeedback GetFeedback(int timeoutMilliseconds);
+    public abstract void GetFeedbackAsync(int timeoutMilliseconds, 
+                                          AsyncCallback<IFeedback> callback);
 
-    public abstract IFeedback GetFeedback();
-    public abstract void GetFeedbackAsync(Common.Delegates.AsyncCallback<Common.ResultArgs<IFeedback>> callback);
+    private IFeedback _Feedback;
+    public IFeedback Feedback
+    {
+      get { return _Feedback; }
+      set
+      {
+        if (value != _Feedback)
+        {
+          _Feedback = value;
+          NotifyOfPropertyChange(() => Feedback);
+        }
+      }
+    }
 
-    public IFeedback Feedback { get; }
-    public bool IsEnabled { get; set; }
+    private bool _IsEnabled;
+    public bool IsEnabled
+    {
+      get { return _IsEnabled; }
+      set
+      {
+        if (value != _IsEnabled)
+        {
+          _IsEnabled = value;
+          NotifyOfPropertyChange(() => IsEnabled);
+        }
+      }
+    }
   }
 }

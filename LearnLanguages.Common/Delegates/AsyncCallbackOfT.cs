@@ -8,8 +8,5 @@ namespace LearnLanguages.Common.Delegates
   /// E.g. AsyncCallback{PhraseEdit} if you want a result populated with a PhraseEdit or
   /// an Error (exception).
   /// </summary>
-  /// <typeparam name="T"></typeparam>
-  /// <param name="sender"></param>
-  /// <param name="result"></param>
-  public delegate void AsyncCallback<T>(object sender, ResultArgs<T> result) where T : class, new();
+  public delegate void AsyncCallback<T>(object sender, ResultArgs<T> result);// where T : class, new();
 }

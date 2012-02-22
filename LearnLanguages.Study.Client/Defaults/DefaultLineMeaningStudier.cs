@@ -82,29 +82,8 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public override void InitializeForNewStudySession(LineEdit target)
-    {
-      _IsReady = false;
-      _Target = target;
-      AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
-      AggregatePhraseTexts = new List<string>();
-      KnownPhraseTexts = new List<string>();
-      PopulateAggregatePhraseTexts(AggregateSize);
-      //CURRENTLY NO NEED TO AGGREGATE BECAUSE WE START FROM UNKNOWN STATE.
-      //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
-      //IF THAT IS HOW WE HAVE IT SET UP
-      PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
-      {
-        if (e != null)
-          throw e;
-
-        _IsReady = true;
-      });
-    }
-
     public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
     {
-
       //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT AT AGGREGATE PHRASE TEXTS LIST, THEN WE
       //HAVE COMPLETED ONE ITERATION THROUGH OUR PHRASE TEXTS.  
       if (_LastStudiedIndex >= (AggregatePhraseTexts.Count - 1))
@@ -128,16 +107,14 @@ namespace LearnLanguages.Study
       {
         //WE ARE CONTINUING A STUDY CYCLE, SO RUN THE NEXT ONE AND UPDATE OUR LAST STUDIED INDEX.
         var indexToStudy = _LastStudiedIndex + 1;
-        int totalTimeSlept = 0;
-        while (!_IsReady)
-        {
-          System.Threading.Thread.Sleep(10);//Hack: Thread.Sleep hack to make this work for right now.
-          totalTimeSlept += 10;
-          if (totalTimeSlept > 5000)
-            throw new Exception();
-        }
-        _Studiers[indexToStudy].GetNextStudyItemViewModel(callback);
-        _LastStudiedIndex++;
+        _Studiers[indexToStudy].GetNextStudyItemViewModel((s, r) =>
+          {
+            if (r.Error != null)
+              throw r.Error;
+
+            _LastStudiedIndex++;
+            callback(this, r);
+          });
       }
     }
 
@@ -163,13 +140,23 @@ namespace LearnLanguages.Study
             unknownPhraseEdits.Insert(i, results.First());
           }
 
-          //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS
-          //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS
+          //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS.
+          //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS.
           //EACH PHRASE EDIT IS THE SAME INDEX AS ITS PHRASETEXT COUNTERPART.
+
+          //WE NEED TO FIND THE COUNT OF UNKNOWN TEXTS FIRST, TO INCREMENT OUR COUNTER FOR ASYNC FUNCTIONALITY.
+          int unknownCount = 0;
+          for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+          {
+            var phraseText = AggregatePhraseTexts[i];
+            if (!IsPhraseKnown(phraseText))
+              unknownCount++;
+          }
 
           //UNKNOWNRELATIVEORDER: UNKNOWN IN THAT OUR PHRASE IS UNKNOWN.  RELATIVE ORDER MEANS
           //THE ORDER/POSITION OF THIS PHRASE RELATIVE TO THE OTHER _UNKNOWN_ PHRASES.
           var unknownRelativeOrder = -1;
+          int initializedCount = 0;
           for (int i = 0; i < AggregatePhraseTexts.Count; i++)
           {
             var phraseText = AggregatePhraseTexts[i];
@@ -179,11 +166,18 @@ namespace LearnLanguages.Study
             //PHRASE IS UNKNOWN, SO INC OUR RELATIVE ORDER AND ADD THE STUDIER TO STUDIERS, INITIALIZING EACH STUDIER.
             unknownRelativeOrder++;
             var studier = new DefaultPhraseMeaningStudier();
-            studier.InitializeForNewStudySession(unknownPhraseEdits[i]);
-            _Studiers.Add(unknownRelativeOrder, studier);
+            studier.InitializeForNewStudySession(unknownPhraseEdits[i], (e) =>
+              {
+                if (e != null)
+                  throw e;
 
-            //PROCESS IS COMPLETE WITH NO ERRORS
-            callback(null);
+                _Studiers.Add(unknownRelativeOrder, studier);
+                initializedCount++;
+                //IF WE HAVE INITIALIZED ALL OF OUR UNKNOWN PHRASES, THEN WE ARE DONE AND CAN CALL CALLBACK.
+                if (initializedCount == unknownCount)
+                  callback(null);
+              });
+
           }
         });
 
@@ -368,5 +362,26 @@ namespace LearnLanguages.Study
     }
 
     #endregion
+
+    public override void InitializeForNewStudySession(LineEdit target, ExceptionCheckCallback completedCallback)
+    {
+      _IsReady = false;
+      _Target = target;
+      AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
+      AggregatePhraseTexts = new List<string>();
+      KnownPhraseTexts = new List<string>();
+      PopulateAggregatePhraseTexts(AggregateSize);
+      //CURRENTLY NO NEED TO AGGREGATE ADJACENT KNOWN PHRASE TEXTS BECAUSE WE START FROM UNKNOWN STATE.
+      //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
+      //AggregateAdjacentKnownPhraseTexts(
+      //  int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
+      PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
+        {
+          if (e != null)
+            throw e;
+
+          completedCallback(null);
+        });
+    }
   }
 }

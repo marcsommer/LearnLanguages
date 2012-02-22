@@ -7,6 +7,8 @@ using LearnLanguages.Business;
 using LearnLanguages.Offer;
 using Caliburn.Micro;
 using System.ComponentModel;
+using LearnLanguages.Common.Delegates;
+using System.Threading;
 
 namespace LearnLanguages.Study
 {
@@ -19,19 +21,23 @@ namespace LearnLanguages.Study
     public DefaultStudyPartner()
     {
       _Studier = new DefaultMultiLineTextsStudier();
-      _ViewModel = new ViewModels.DefaultStudyMultiLineTextsViewModel();
+      _ViewModel = new ViewModels.DefaultStudyPartnerViewModel();
+      _FeedbackViewModel = new ViewModels.PercentKnownFeedbackViewModel();
+      _ViewModel.FeedbackViewModel = _FeedbackViewModel;
+      _FeedbackTimedOut = false;
     }
 
     protected DefaultMultiLineTextsStudier _Studier { get; set; }
+    protected bool _FeedbackTimedOut { get; set; }
 
     #region protected DefaultStudyMultiLineTextsViewModel _ViewModel
     protected volatile object _ViewModelLock = new object();
-    protected ViewModels.DefaultStudyMultiLineTextsViewModel _viewModel = null;
+    protected ViewModels.DefaultStudyPartnerViewModel _viewModel = null;
     /// <summary>
     /// This is the ViewModel that gets returned to the opportunity as the jobInfo.Product.
     /// This will house study item view models.
     /// </summary>
-    protected ViewModels.DefaultStudyMultiLineTextsViewModel _ViewModel
+    protected ViewModels.DefaultStudyPartnerViewModel _ViewModel
     {
       get
       {
@@ -115,6 +121,7 @@ namespace LearnLanguages.Study
 
       if (message.Response == OfferResources.OfferResponseDeny)
       {
+        //DENIED OFFER RESPONSE
         _OpenOffers.Remove(pertinentOffer);
         _DeniedOffers.Add(pertinentOffer);
         return;
@@ -155,7 +162,7 @@ namespace LearnLanguages.Study
       Exchange.Ton.Publish(completedUpdate);
 
       //Begin studying the multilinetexts
-      BeginStudying(jobInfo.Target);
+      StartNewStudySession(jobInfo.Target);
     }
     /// <summary>
     /// Handles cancelation messages.
@@ -231,21 +238,47 @@ namespace LearnLanguages.Study
       Exchange.Ton.Publish(statusUpdate);
     }
 
-    private void BeginStudying(MultiLineTextList multiLineTexts)
+    private void StartNewStudySession(MultiLineTextList multiLineTexts)
     {
-      if (!_IsStudying)
+      ///OKAY, SO AT THIS POINT, WE HAVE DONE OUR WORK THROUGH THE EXCHANGE.  
+      ///THE CALLER HAS A REFERENCE TO OUR _VIEWMODEL PROPERTY.  WE HAVE CONTROL
+      ///OF THE STUDY PROCESS THROUGH THIS _VIEWMODEL PROPERTY.  WE USE TWO SUB VIEWMODELS
+      ///AT THIS POINT: STUDYITEM VIEWMODEL, AND FEEDBACK VIEWMODEL.  WE WILL IGNORE TIMEOUTS
+      ///TO SIMPLIFY THINGS.  WE JUST NEED TO DO A FEW THINGS:
+      ///1) INITIALIZE STUDY SESSION (INITIALIZE STUDIERS FOR OUR MLT LIST)
+      ///2) GET NEXT/ ASSIGN _VIEWMODEL.STUDYITEMVIEWMODEL AND _VIEWMODEL.FEEDBACKVIEWMODEL.
+      ///3) SHOW STUDYITEMVIEWMODEL.
+      ///4) WHEN SHOW IS DONE, ENABLE FEEDBACK VIEWMODEL.
+      ///5) WHEN FEEDBACK IS PROVIDED, GO TO #2.
+      InitializeForNewStudySession(multiLineTexts, (e) =>
+        {
+          Study();
+        });
+
+      yield return new InitializeStudier<MultiLineTextList>(_Studier, multiLineTexts);
+      do
       {
-        InitializeForNewStudySession(multiLineTexts);
+        var nextStudyItemIterator = new NextStudyItemIterator<MultiLineTextList>(_Studier, multiLineTexts);
+        yield return nextStudyItemIterator;
+
+        var viewModelProduct = nextStudyItemIterator.Product;
+        _ViewModel.StudyItemViewModel = viewModelProduct;
+        
       }
+      while (_NextStudyViewModel != null);
     }
 
-    private bool _IsStudying { get; set; }
-
-    private void StudyNextItem()
+    private void Study()
     {
-      _IsStudying = true;
+      _IsStudying = false;
+
+      //DISABLE FEEDBACK UNTIL OUR ITEM IS DONE SHOWING.
       _FeedbackViewModel.IsEnabled = false;
-      _Studier.GetNextStudyItemViewModel((s, r) =>
+
+      if (!_IsStudying)
+      {
+        _IsStudying = true;
+        _Studier.GetNextStudyItemViewModel((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
@@ -274,24 +307,45 @@ namespace LearnLanguages.Study
 
             //OUR VIEW MODEL IS DONE SHOWING.  ENABLE FEEDBACK AND GET FEEDBACK.
             _FeedbackViewModel.IsEnabled = true;
-            _FeedbackViewModel.GetFeedbackAsync((s2, r2) =>
+            _FeedbackViewModel.GetFeedbackAsync(int.Parse(StudyResources.DefaultFeedbackTimeoutMilliseconds),
+              (s2, r2) =>
               {
+                if (r2.Error != null)
+                  throw r2.Error;
+
+                //OUR FEEDBACK HAS BEEN PROVIDED.  WE ONLY CARE IF FEEDBACK IS NULL.  THIS MEANS THAT
+                //TIMEOUT OCCURRED, AND THEREFORE WE SHOULD NOT STUDY AGAIN.
+                _FeedbackTimedOut = r2.Object == null;
                 _ViewModel.StudyItemViewModel = null;
                 _IsStudying = false;
               });
           });
 
         });
+      }
+      else
+      {
+        Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
+      }
     }
+
+    private bool _IsStudying { get; set; }
 
     /// <summary>
     /// Initializes _Studier, _ViewModel, and whatever else needs to be initialized when starting 
     /// to study a new MultiLineTextList (new opportunity published).
     /// </summary>
-    private void InitializeForNewStudySession(MultiLineTextList multiLineTexts)
+    private void InitializeForNewStudySession(MultiLineTextList multiLineTexts, 
+                                              ExceptionCheckCallback completedCallback)
     {
       //INITIALIZE STUDIER
-      _Studier.InitializeForNewStudySession(multiLineTexts);
+      _Studier.InitializeForNewStudySession(multiLineTexts, (e) =>
+        {
+          if (e != null)
+            throw e;
+
+          completedCallback(null);
+        });
 
       //INITIALIZE STUDY HEARTBEAT
       //_StudyHeartbeat.DoWork += (s, r) =>

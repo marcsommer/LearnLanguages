@@ -8,8 +8,10 @@ using LearnLanguages.Offer;
 
 namespace LearnLanguages.Study.Interfaces
 {
+  /// <summary>
+  /// This has the behavior necessary for a study partner who communicates using the exchange.
+  /// </summary>
   public interface IStudyPartner : IHaveId,
-                                   IHaveConglomerateId,
                                    IHandle<IOpportunity<MultiLineTextList, IViewModelBase>>,
                                    IHandle<IOfferResponse<MultiLineTextList, IViewModelBase>>,
                                    IHandle<IStatusUpdate<MultiLineTextList, IViewModelBase>>,

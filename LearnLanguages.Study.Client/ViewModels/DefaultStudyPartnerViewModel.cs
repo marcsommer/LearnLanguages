@@ -15,7 +15,7 @@ namespace LearnLanguages.Study.ViewModels
 
     public DefaultStudyPartnerViewModel()
     {
-
+      
     }
 
     #endregion
