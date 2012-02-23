@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net;
+using System.Linq;
 
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Business;
@@ -57,12 +57,42 @@ namespace LearnLanguages.Study
 
       var languageText = phrase.Language.Text;
 
-      bool languagesAreDifferent = (languageText != nativeLanguageText);
-      if (languagesAreDifferent)
+      bool phraseIsInForeignLanguage = (languageText != nativeLanguageText);
+      if (phraseIsInForeignLanguage)
       {
         //DO A TRANSLATION Q & A
-        //WE NEED TO FIND A TRANSLATION FOR THIS PHRASE.
+        //WE NEED TO FIND A TRANSLATION FOR THIS FOREIGN LANGUAGE PHRASE.
+        PhraseEdit translatedPhrase = null;
+
         //FIRST LOOK IN DB.  IF NOT, THEN AUTO TRANSLATE.
+        var searchCriteria = new Business.Criteria.TranslationSearchCriteria(phrase, nativeLanguageText);
+        TranslationSearchRetriever.CreateNew(searchCriteria, (s, r) =>
+          {
+            if (r.Error != null)
+              throw r.Error;
+
+            var retriever = r.Object;
+            var foundTranslation = retriever.Translation;
+            if (foundTranslation != null)
+            {
+              //FOUND TRANSLATION IN DATABASE.  USE THIS AS THE SECOND PHRASE.
+              translatedPhrase = (from p in foundTranslation.Phrases
+                                  where p.Language.Text == nativeLanguageText
+                                  select p).First();
+            }
+            else
+            {
+              #region NO TRANSLATION FOUND, WILL NEED TO AUTO TRANSLATE
+
+              AutoTranslate(phrase, nativeLanguageText, (s2, r2) =>
+                {
+
+                });
+
+              #endregion
+            }
+
+          });
 
 
 
@@ -194,6 +224,11 @@ namespace LearnLanguages.Study
     //  #endregion
     //}
 
+    private void AutoTranslate(PhraseEdit phrase, 
+                               string targetLanguageText, 
+                               AsyncCallback<PhraseEdit> callback)
+    {
 
+    }
   }
 }

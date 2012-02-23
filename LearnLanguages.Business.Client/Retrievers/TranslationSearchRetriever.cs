@@ -30,10 +30,17 @@ namespace LearnLanguages.Business
     /// </summary>
     /// <param name="phrasesCriteria">collection of PhraseEdits, do not have to be marked as children.</param>
     /// <param name="callback">callback executed once translation is completely populated</param>
-    public static void CreateNew(Criteria.PhraseCriteria phrase,
+    public static void CreateNew(Criteria.TranslationSearchCriteria criteria,
       EventHandler<DataPortalResult<TranslationSearchRetriever>> callback)
     {
-      DataPortal.BeginCreate<TranslationSearchRetriever>(phrase, callback);
+      if (criteria == null)
+        throw new ArgumentNullException("criteria");
+      if (criteria.Phrase == null)
+        throw new ArgumentException("criteria.Phrase == null");
+      if (string.IsNullOrEmpty(criteria.TargetLanguageText))
+        throw new ArgumentException("criteria.TargetLanguageText is null or empty");
+
+      DataPortal.BeginCreate<TranslationSearchRetriever>(criteria, callback);
     }
 
     #endregion
@@ -59,7 +66,7 @@ namespace LearnLanguages.Business
     #region DP_XYZ
 
 #if !SILVERLIGHT
-    public void DataPortal_Create(Criteria.PhraseCriteria criteria)
+    public void DataPortal_Create(Criteria.TranslationSearchCriteria criteria)
     {
       RetrieverId = Guid.NewGuid();
       Translation = TranslationEdit.NewTranslationEdit();
@@ -86,21 +93,45 @@ namespace LearnLanguages.Business
                                  phraseDto.LanguageId == criteria.Phrase.LanguageId
                            select phraseDto).FirstOrDefault();
 
+        //ASSUME NO TRANSLATION
+        Translation = null;
 
         //IF WE HAVEN'T FOUND A PHRASE, THEN WE WON'T FIND A TRANSLATION.
         if (foundPhraseDto == null)
-        {
-          Translation = null;
           return;
-        }
 
         //WE FOUND A PHRASE, BUT WE STILL NEED TO LOOK FOR TRANSLATION FOR THAT PHRASE.
         var phraseEdit = DataPortal.Fetch<PhraseEdit>(foundPhraseDto.Id);
-        var translations = TranslationList.GetAllTranslationsContainingPhraseById(phraseEdit);
+        var translationsContainingPhrase = TranslationList.GetAllTranslationsContainingPhraseById(phraseEdit);
 
-        //IF WE FOUND ONE, THIS SETS TRANSLATION TO THE FIRST TRANSLATION FOUND.  
-        //OTHERWISE, TRANSLATION SET TO NULL.
-        Translation = translations.FirstOrDefault();
+        if (translationsContainingPhrase.Count == 0)
+          return;
+
+        //WE FOUND TRANSLATIONS WITH THAT PHRASE, BUT WE NEED THE ONES IN THE TARGET LANGUAGE ONLY
+        var translationsInTargetLanguage = (from translation in translationsContainingPhrase
+                                            where (from phrase in translation.Phrases
+                                                   where phrase.Language.Text == criteria.TargetLanguageText
+                                                   select phrase).Count() > 0
+                                            select translation);
+        if (translationsInTargetLanguage.Count() == 0)
+          return;
+
+
+        //WE FOUND TRANSLATIONS IN THE TARGET LANGUAGE, AND WE MUST NOW CHECK AGAINST CONTEXT (IF PROVIDED)
+        if (!string.IsNullOrEmpty(criteria.ContextText))
+        {
+          //CONTEXT TEXT HAS BEEN PROVIDED
+          Translation = (from t in translationsInTargetLanguage
+                         where t.ContextPhrase != null &&
+                               t.ContextPhrase.Text == criteria.ContextText
+                         select t).FirstOrDefault();
+        }
+        else
+        {
+          //CONTEXT TEXT HAS NOT BEEN PROVIDED
+          //IF WE FOUND ONE, THIS SETS TRANSLATION TO THE FIRST TRANSLATION FOUND.  
+          Translation = translationsInTargetLanguage.First();
+        }
       }
     }
 

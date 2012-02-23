@@ -81,6 +81,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseTextsCriteria.cs">
       <Link>Criteria\PhraseTextsCriteria.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\TranslationSearchCriteria.cs">
+      <Link>Criteria\TranslationSearchCriteria.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Edits\LanguageEdit.cs">
       <Link>Edits\LanguageEdit.cs</Link>
     </Compile>

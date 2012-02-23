@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\RemoveAlreadyExistingPhraseTextsCommand.cs" />
+    <Compile Include="Criteria\TranslationSearchCriteria.cs" />
     <Compile Include="Criteria\LineInfosCriteria.cs" />
     <Compile Include="Criteria\PhraseTextsCriteria.cs" />
     <Compile Include="Criteria\ListOfPhrasesCriteria.cs" />
