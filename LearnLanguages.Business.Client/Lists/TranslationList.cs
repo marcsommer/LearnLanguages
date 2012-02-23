@@ -33,6 +33,18 @@ namespace LearnLanguages.Business
     }
 
 #if !SILVERLIGHT
+
+    /// <summary>
+    /// Gets all of the translations that contain the given phrase, using that phrase's id.  This in 
+    /// contrast to searching through all translations' texts and matching up the phrase.text or regex, etc.
+    /// </summary>
+    public TranslationList GetAllTranslationsContainingPhraseById(PhraseEdit phrase)
+    {
+      var criteria = new Criteria.PhraseCriteria(phrase);
+      return DataPortal.Fetch<TranslationList>(criteria);
+    }
+
+    
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected void DataPortal_Fetch(ICollection<Guid> translationIds)
     {

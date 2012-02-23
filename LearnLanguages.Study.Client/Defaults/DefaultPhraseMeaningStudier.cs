@@ -63,21 +63,6 @@ namespace LearnLanguages.Study
         //IF THE TWO LANGUAGES ARE DIFFERENT, THEN WE CREATE A TRANSLATION Q & A.
         //IF THE TWO LANGUAGES ARE THE SAME, THEN WE CREATE A STUDY NATIVE LANGUAGE PHRASE Q & A.
 
-        bool languagesAreDifferent = (languageText != nativeLanguageText);
-        if (languagesAreDifferent)
-        {
-          //DO A TRANSLATION Q & A
-          var qaViewModel = new ViewModels.StudyQuestionAnswerViewModel();
-          qaViewModel.Initialize(phraseEdit, phraseEdit, 1000); //debug...need to populate answer.
-          StudyItemViewModelArgs returnArgs = new StudyItemViewModelArgs(qaViewModel);
-
-          //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
-          callback(this, new ResultArgs<StudyItemViewModelArgs>(returnArgs));
-        }
-        else
-        {
-          //DO A NATIVE LANGUAGE Q & A
-        }
       });
     }
 

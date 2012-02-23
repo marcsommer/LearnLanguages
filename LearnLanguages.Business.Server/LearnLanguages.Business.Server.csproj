@@ -123,6 +123,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationRetriever.cs">
       <Link>Retrievers\TranslationRetriever.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationSearchRetriever.cs">
+      <Link>Retrievers\TranslationSearchRetriever.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Security\CustomIdentity.cs">
       <Link>Security\CustomIdentity.cs</Link>
     </Compile>

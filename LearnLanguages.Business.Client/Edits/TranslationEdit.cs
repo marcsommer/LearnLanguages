@@ -75,6 +75,8 @@ namespace LearnLanguages.Business
       DataPortal.BeginFetch<TranslationEdit>(id, callback);
     }
 
+    
+
 #endif
     #endregion
     #endregion
@@ -278,7 +280,6 @@ namespace LearnLanguages.Business
         var dummy = this;
       }
     }
-    [Transactional(TransactionalTypes.TransactionScope)]
     protected void DataPortal_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())

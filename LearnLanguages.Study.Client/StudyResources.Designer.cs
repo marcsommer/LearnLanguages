@@ -340,6 +340,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database.
+        /// </summary>
+        public static string SourceNameDatabase {
+            get {
+                return ResourceManager.GetString("SourceNameDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Meaning.
         /// </summary>
         public static string StudyContextMeaning {

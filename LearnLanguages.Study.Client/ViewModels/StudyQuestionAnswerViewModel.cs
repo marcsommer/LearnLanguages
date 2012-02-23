@@ -153,7 +153,7 @@ namespace LearnLanguages.Study.ViewModels
     /// <param name="answer">Answer PhraseEdit</param>
     /// <param name="questionDurationInMilliseconds"></param>
     /// <param name="callback"></param>
-    public void AskQuestion(PhraseEdit question,
+    protected void AskQuestion(PhraseEdit question,
                             PhraseEdit answer,
                             int questionDurationInMilliseconds,
                             ExceptionCheckCallback callback)

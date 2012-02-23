@@ -214,6 +214,9 @@ debug=10 seconds (10000)</comment>
   <data name="PercentKnownSome" xml:space="preserve">
     <value>25</value>
   </data>
+  <data name="SourceNameDatabase" xml:space="preserve">
+    <value>Database</value>
+  </data>
   <data name="StudyContextMeaning" xml:space="preserve">
     <value>Meaning</value>
   </data>
