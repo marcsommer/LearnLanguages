@@ -60,6 +60,15 @@
     <Compile Include="..\LearnLanguages.Business.Client\Commands\RemoveAlreadyExistingPhraseTextsCommand.cs">
       <Link>Commands\RemoveAlreadyExistingPhraseTextsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Creators\BlankPhraseCreator.cs">
+      <Link>Creators\BlankPhraseCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Creators\BlankTranslationCreator.cs">
+      <Link>Creators\BlankTranslationCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Creators\TranslationCreator.cs">
+      <Link>Creators\TranslationCreator.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\LineInfosCriteria.cs">
       <Link>Criteria\LineInfosCriteria.cs</Link>
     </Compile>
@@ -108,20 +117,11 @@
     <Compile Include="..\LearnLanguages.Business.Client\Lists\TranslationList.cs">
       <Link>Lists\TranslationList.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\BlankPhraseRetriever.cs">
-      <Link>Retrievers\BlankPhraseRetriever.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\BlankTranslationRetriever.cs">
-      <Link>Retrievers\BlankTranslationRetriever.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesExistRetriever.cs">
       <Link>Retrievers\PhrasesExistRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\StudyDataRetriever.cs">
       <Link>Retrievers\StudyDataRetriever.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationRetriever.cs">
-      <Link>Retrievers\TranslationRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationSearchRetriever.cs">
       <Link>Retrievers\TranslationSearchRetriever.cs</Link>

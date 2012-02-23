@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 02/07/2012 17:57:59
+-- Date Created: 02/23/2012 12:24:54
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -59,6 +59,15 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_UserDataLanguageData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[LanguageDatas] DROP CONSTRAINT [FK_UserDataLanguageData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataLineData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LineDatas] DROP CONSTRAINT [FK_UserDataLineData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PhraseDataLineData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LineDatas] DROP CONSTRAINT [FK_PhraseDataLineData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ContextPhraseDataTranslationData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[TranslationDatas] DROP CONSTRAINT [FK_ContextPhraseDataTranslationData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -78,6 +87,9 @@ IF OBJECT_ID(N'[dbo].[RoleDatas]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[TranslationDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[TranslationDatas];
+GO
+IF OBJECT_ID(N'[dbo].[LineDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LineDatas];
 GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
@@ -133,7 +145,8 @@ GO
 -- Creating table 'TranslationDatas'
 CREATE TABLE [dbo].[TranslationDatas] (
     [Id] uniqueidentifier  NOT NULL,
-    [UserDataId] uniqueidentifier  NOT NULL
+    [UserDataId] uniqueidentifier  NOT NULL,
+    [ContextPhraseDataId] uniqueidentifier  NULL
 );
 GO
 
@@ -444,6 +457,20 @@ ADD CONSTRAINT [FK_PhraseDataLineData]
 CREATE INDEX [IX_FK_PhraseDataLineData]
 ON [dbo].[LineDatas]
     ([PhraseDataId]);
+GO
+
+-- Creating foreign key on [ContextPhraseDataId] in table 'TranslationDatas'
+ALTER TABLE [dbo].[TranslationDatas]
+ADD CONSTRAINT [FK_ContextPhraseDataTranslationData]
+    FOREIGN KEY ([ContextPhraseDataId])
+    REFERENCES [dbo].[PhraseDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ContextPhraseDataTranslationData'
+CREATE INDEX [IX_FK_ContextPhraseDataTranslationData]
+ON [dbo].[TranslationDatas]
+    ([ContextPhraseDataId]);
 GO
 
 -- --------------------------------------------------

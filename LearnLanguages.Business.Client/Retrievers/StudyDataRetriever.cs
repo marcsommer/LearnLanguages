@@ -8,7 +8,9 @@ using LearnLanguages.DataAccess.Exceptions;
 namespace LearnLanguages.Business
 {
   /// <summary>
-  /// This class creates a new translation, loads it with given phrases.  
+  /// This class gets a study data for the current user.  If it does not exist, it creates a new 
+  /// study data, filled with defaults, and returns that.  It flags this with the bool 
+  /// StudyDataAlreadyExisted property.
   /// </summary>
   [Serializable]
   public class StudyDataRetriever : Common.CslaBases.ReadOnlyBase<StudyDataRetriever>

@@ -10,7 +10,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public AddTranslationViewModel()
     {
-      BlankTranslationRetriever.CreateNew((s, r) =>
+      BlankTranslationCreator.CreateNew((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;

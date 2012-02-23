@@ -9,13 +9,13 @@ namespace LearnLanguages.Business
   /// This class creates a new translation, loads it with two blank phrases, each with the default language.
   /// </summary>
   [Serializable]
-  public class BlankTranslationRetriever : Common.CslaBases.ReadOnlyBase<BlankTranslationRetriever>
+  public class BlankTranslationCreator : Common.CslaBases.ReadOnlyBase<BlankTranslationCreator>
   {
     #region Factory Methods
 
-    public static void CreateNew(EventHandler<DataPortalResult<BlankTranslationRetriever>> callback)
+    public static void CreateNew(EventHandler<DataPortalResult<BlankTranslationCreator>> callback)
     {
-      DataPortal.BeginCreate<BlankTranslationRetriever>(callback);
+      DataPortal.BeginCreate<BlankTranslationCreator>(callback);
     }
 
     #endregion

@@ -5,7 +5,6 @@ using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common;
-using LearnLanguages.Study.Creators;
 
 namespace LearnLanguages.Study
 {
@@ -77,112 +76,112 @@ namespace LearnLanguages.Study
       }
     }
 
-    protected void GetTranslation(PhraseEdit phrase, 
-                                  string targetLanguageText, 
-                                  AsyncCallback<GetTranslationArgs> callback)
-    {
-      #region Check for translation in DB
+    //protected void GetTranslation(PhraseEdit phrase, 
+    //                              string targetLanguageText, 
+    //                              AsyncCallback<GetTranslationArgs> callback)
+    //{
+    //  #region Check for translation in DB
 
-      TranslationEdit.GetTranslationEdit(new Business.Criteria.PhraseCriteria(phrase), (s, r) =>
-        {
-          if (r.Error != null)
-            callback(this, new ResultArgs<GetTranslationArgs>(r.Error));
+    //  //TranslationEdit.GetTranslationEdit(new Business.Criteria.PhraseCriteria(phrase), (s, r) =>
+    //  //  {
+    //  //    if (r.Error != null)
+    //  //      callback(this, new ResultArgs<GetTranslationArgs>(r.Error));
 
-        });
+    //  //  });
 
-      #endregion
-
-
+    //  #endregion
 
 
 
 
-      #region Initialize
 
-      //_ShowingQuestion = true;
-      PhraseEdit question = null;
-      PhraseEdit answer = null;
-      TranslationEdit qaTranslation = null;
 
-      #region 1. CHOOSE RANDOM PHRASE
-      TranslationEdit.
-      PhraseList.GetAll((s, r) =>
-      {
-        if (r.Error != null)
-        {
-          //callback(null, null, r.Error);
-          callback(this, new ResultArgs<GetTranslationArgs>(r.Error));
-          return;
-        }
-        _Phrases = r.Object;
+    //  #region Initialize
 
-        Random random = new Random(DateTime.Now.Millisecond +
-                                   DateTime.Now.Second +
-                                   DateTime.Now.Month +
-                                   (int)(Mouse.Position.X * 1000));
+    //  //_ShowingQuestion = true;
+    //  PhraseEdit question = null;
+    //  PhraseEdit answer = null;
+    //  TranslationEdit qaTranslation = null;
 
-        var randomIndex = random.Next(0, _Phrases.Count);
-        question = _Phrases[randomIndex];
+    //  #region 1. CHOOSE RANDOM PHRASE
+    //  TranslationEdit.
+    //  PhraseList.GetAll((s, r) =>
+    //  {
+    //    if (r.Error != null)
+    //    {
+    //      //callback(null, null, r.Error);
+    //      callback(this, new ResultArgs<GetTranslationArgs>(r.Error));
+    //      return;
+    //    }
+    //    _Phrases = r.Object;
 
-        #region 2. GET TRANSLATION FOR THAT PHRASE, IF WE DON'T HAVE ONE THEN CREATE TRANSLATION.
+    //    Random random = new Random(DateTime.Now.Millisecond +
+    //                               DateTime.Now.Second +
+    //                               DateTime.Now.Month +
+    //                               (int)(Mouse.Position.X * 1000));
 
-        TranslationList.GetAllTranslationsContainingPhraseById(question, (s2, r2) =>
-        {
-          if (r2.Error != null)
-          {
-            callback(this, new Args.QuestionAnswerArgs(r2.Error));
-            //callback(null, null, r2.Error);
-            return;
-          }
-          //throw r2.Error;
+    //    var randomIndex = random.Next(0, _Phrases.Count);
+    //    question = _Phrases[randomIndex];
 
-          #region 3a. FOUND EXISTING TRANSLATION.  SET QUESTION AND ANSWER, AND CALL CALLBACK
-          //IF WE HAVE FOUND ONE OR MORE TRANSLATIONS, THEN PICK ONE OF THEM AT RANDOM
-          var foundTranslations = r2.Object;
-          if (foundTranslations.Count > 0)
-          {
-            randomIndex = random.Next(0, foundTranslations.Count);
-            qaTranslation = foundTranslations[randomIndex];
-            //PICK ONE OF THE TRANSLATION'S OTHER LANGUAGES THAN THE QUESTION
-            answer = null;
-            foreach (var phrase in qaTranslation.Phrases)
-            {
-              if (phrase.Text != question.Text)
-              {
-                answer = phrase;
-                break;
-              }
-            }
-            if (answer == null)
-            {
-              var ex = new Exception("translation located, but all texts are equal");
-              callback(this, new Args.QuestionAnswerArgs(ex));
-              //callback(null, null, ex);
-              return;
-            }
-            //WE HAVE BOTH QUESTION AND ANSWER SO INITIATE CALLBACK
-            callback(this, new Args.QuestionAnswerArgs(question, answer));
-            //callback(question, answer, null);
-            return;
-          }
-          #endregion
+    //    #region 2. GET TRANSLATION FOR THAT PHRASE, IF WE DON'T HAVE ONE THEN CREATE TRANSLATION.
 
-          #region 3b. NO EXISTING TRANSLATION, SO AUTO TRANSLATE WITH BING AND CREATE NEW ANSWER PHRASE
-          else
-          {
-            AutoTranslateText(callback, question, answer);
-          }
-          #endregion
+    //    TranslationList.GetAllTranslationsContainingPhraseById(question, (s2, r2) =>
+    //    {
+    //      if (r2.Error != null)
+    //      {
+    //        callback(this, new Args.QuestionAnswerArgs(r2.Error));
+    //        //callback(null, null, r2.Error);
+    //        return;
+    //      }
+    //      //throw r2.Error;
 
-        });
+    //      #region 3a. FOUND EXISTING TRANSLATION.  SET QUESTION AND ANSWER, AND CALL CALLBACK
+    //      //IF WE HAVE FOUND ONE OR MORE TRANSLATIONS, THEN PICK ONE OF THEM AT RANDOM
+    //      var foundTranslations = r2.Object;
+    //      if (foundTranslations.Count > 0)
+    //      {
+    //        randomIndex = random.Next(0, foundTranslations.Count);
+    //        qaTranslation = foundTranslations[randomIndex];
+    //        //PICK ONE OF THE TRANSLATION'S OTHER LANGUAGES THAN THE QUESTION
+    //        answer = null;
+    //        foreach (var phrase in qaTranslation.Phrases)
+    //        {
+    //          if (phrase.Text != question.Text)
+    //          {
+    //            answer = phrase;
+    //            break;
+    //          }
+    //        }
+    //        if (answer == null)
+    //        {
+    //          var ex = new Exception("translation located, but all texts are equal");
+    //          callback(this, new Args.QuestionAnswerArgs(ex));
+    //          //callback(null, null, ex);
+    //          return;
+    //        }
+    //        //WE HAVE BOTH QUESTION AND ANSWER SO INITIATE CALLBACK
+    //        callback(this, new Args.QuestionAnswerArgs(question, answer));
+    //        //callback(question, answer, null);
+    //        return;
+    //      }
+    //      #endregion
 
-        #endregion
-      });
+    //      #region 3b. NO EXISTING TRANSLATION, SO AUTO TRANSLATE WITH BING AND CREATE NEW ANSWER PHRASE
+    //      else
+    //      {
+    //        AutoTranslateText(callback, question, answer);
+    //      }
+    //      #endregion
 
-      #endregion
+    //    });
 
-      #endregion
-    }
+    //    #endregion
+    //  });
+
+    //  #endregion
+
+    //  #endregion
+    //}
 
 
   }

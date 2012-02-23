@@ -19,10 +19,10 @@ namespace LearnLanguages.Silverlight.Tests
     {
       var isCreated = false;
 
-      BlankTranslationRetriever retriever = null;
+      BlankTranslationCreator retriever = null;
       TranslationEdit blankTranslation = null;
 
-      BlankTranslationRetriever.CreateNew((s, r) =>
+      BlankTranslationCreator.CreateNew((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;

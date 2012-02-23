@@ -1,15 +1,13 @@
 ﻿using System;
-using Csla;
 using System.ComponentModel;
+using System.Collections.Generic;
+using Csla;
 using Csla.Serialization;
 using Csla.DataPortalClient;
 using LearnLanguages.Common.Interfaces;
-#if !SILVERLIGHT
 using LearnLanguages.DataAccess.Exceptions;
-#endif
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
-using System.Collections.Generic;
 
 
 namespace LearnLanguages.Business
@@ -83,16 +81,6 @@ namespace LearnLanguages.Business
 
     #region Business Properties & Methods
 
-    //PHRASES
-    //#region public ICollection<Guid> PhraseIds
-    //public static readonly PropertyInfo<ICollection<Guid>> PhraseIdsProperty =
-    //  RegisterProperty<ICollection<Guid>>(c => c.PhraseIds);
-    //public ICollection<Guid> PhraseIds
-    //{
-    //  get { return GetProperty(PhraseIdsProperty); }
-    //  set { SetProperty(PhraseIdsProperty, value); }
-    //}
-    //#endregion
     #region public PhraseList Phrases (child)
     public static readonly PropertyInfo<PhraseList> PhrasesProperty = 
       RegisterProperty<PhraseList>(c => c.Phrases, RelationshipTypes.Child);
@@ -102,7 +90,17 @@ namespace LearnLanguages.Business
       set { LoadProperty(PhrasesProperty, value); }
     }
     #endregion
-        
+
+    #region public PhraseEdit ContextPhrase (child)
+    public static readonly PropertyInfo<PhraseEdit> ContextPhraseProperty = 
+      RegisterProperty<PhraseEdit>(c => c.ContextPhrase, RelationshipTypes.Child);
+    public PhraseEdit ContextPhrase
+    {
+      get { return GetProperty(ContextPhraseProperty); }
+      set { SetProperty(ContextPhraseProperty, value); }
+    }
+    #endregion
+
     //USER
     #region public Guid UserId
     public static readonly PropertyInfo<Guid> UserIdProperty = RegisterProperty<Guid>(c => c.UserId);
@@ -140,6 +138,8 @@ namespace LearnLanguages.Business
           //PhraseIds = dto.PhraseIds;
           Phrases = DataPortal.FetchChild<PhraseList>(dto.PhraseIds);
         }
+        if (dto.ContextPhraseId != Guid.Empty)
+          ContextPhrase = DataPortal.FetchChild<PhraseEdit>(dto.ContextPhraseId);
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
@@ -158,10 +158,15 @@ namespace LearnLanguages.Business
           _phraseIds.Add(p.Id);
         }
       }
+      var contextPhraseId = Guid.Empty;
+      if (ContextPhrase != null)
+        contextPhraseId = ContextPhrase.Id;
+
       TranslationDto retDto = new TranslationDto(){
                                           Id = this.Id,
                                           //PhraseIds = this.PhraseIds,
                                           PhraseIds = _phraseIds,
+                                          ContextPhraseId = contextPhraseId,
                                           UserId = this.UserId,
                                           Username = this.Username
                                         };
@@ -185,6 +190,7 @@ namespace LearnLanguages.Business
       {
         Id = Guid.NewGuid();
         Phrases = null;
+        ContextPhrase = null;
         UserId = Guid.Empty;
         Username = DalResources.DefaultNewTranslationUsername;
       }
@@ -221,6 +227,7 @@ namespace LearnLanguages.Business
     {
       base.OnChildChanged(e);
       BusinessRules.CheckRules(PhrasesProperty);
+      BusinessRules.CheckRules(ContextPhraseProperty);
     }
 
     #endregion

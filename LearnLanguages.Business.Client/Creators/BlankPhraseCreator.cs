@@ -9,13 +9,13 @@ namespace LearnLanguages.Business
   /// This class creates a new phrase, loads it with the default language.
   /// </summary>
   [Serializable]
-  public class BlankPhraseRetriever : Common.CslaBases.ReadOnlyBase<BlankPhraseRetriever>
+  public class BlankPhraseCreator : Common.CslaBases.ReadOnlyBase<BlankPhraseCreator>
   {
     #region Factory Methods
 
-    public static void CreateNew(EventHandler<DataPortalResult<BlankPhraseRetriever>> callback)
+    public static void CreateNew(EventHandler<DataPortalResult<BlankPhraseCreator>> callback)
     {
-      DataPortal.BeginCreate<BlankPhraseRetriever>(callback);
+      DataPortal.BeginCreate<BlankPhraseCreator>(callback);
     }
 
     #endregion

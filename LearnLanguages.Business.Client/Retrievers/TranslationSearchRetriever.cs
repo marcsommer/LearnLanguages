@@ -89,22 +89,22 @@ namespace LearnLanguages.Business
           return;
         }
 
-        TranslationList.GetAllTranslationsContainingPhraseById(foundPhrase
+        //TranslationList.GetAllTranslationsContainingPhraseById(foundPhrase
       }
 
       //FILL TRANSLATION.PHRASES WITH EMPTY PHRASES
-      for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
-      {
-        Translation.Phrases.AddNew();
-      }
+      //for (int i = 0; i < criteria.Phrase.`Phrases.Count; i++)
+      //{
+      //  Translation.Phrases.AddNew();
+      //}
 
-      for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
-      {
-        var sourcePhrase = phrasesCriteria.Phrases[i];
-        var targetPhrase = Translation.Phrases[i];
-        var dto = sourcePhrase.CreateDto();
-        targetPhrase.LoadFromDtoBypassPropertyChecks(dto);
-      }
+      //for (int i = 0; i < criteria.Phrases.Count; i++)
+      //{
+      //  var sourcePhrase = criteria.Phrases[i];
+      //  var targetPhrase = Translation.Phrases[i];
+      //  var dto = sourcePhrase.CreateDto();
+      //  targetPhrase.LoadFromDtoBypassPropertyChecks(dto);
+      //}
     }
 
 #endif

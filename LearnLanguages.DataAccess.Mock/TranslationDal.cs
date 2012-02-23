@@ -313,6 +313,18 @@ namespace LearnLanguages.DataAccess.Mock
           throw new Exceptions.VeryBadException();
       }
 
+      //CONTEXT PHRASE ID IS VALID
+      if (dto.ContextPhraseId != Guid.Empty)
+      {
+        var contextPhraseIdCount = (from phrase in SeedData.Instance.Phrases
+                                    where phrase.Id == dto.ContextPhraseId
+                                    select phrase).Count();
+        if (contextPhraseIdCount == 0)
+          throw new Exceptions.IdNotFoundException(dto.ContextPhraseId);
+        else if (contextPhraseIdCount != 1)
+          throw new Exceptions.VeryBadException();
+      }
+
       //USER IS VALID
       var userCount = (from user in SeedData.Instance.Users
                        where user.Id == dto.UserId &&

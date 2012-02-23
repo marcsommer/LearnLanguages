@@ -20,6 +20,8 @@ namespace LearnLanguages.DataAccess.Ef
       TranslationDto newTranslationDto = new TranslationDto()
       {
         Id = Guid.NewGuid(),
+        PhraseIds = null,
+        ContextPhraseId = Guid.Empty,
         UserId = currentUserId,
         Username = currentUsername,
       };

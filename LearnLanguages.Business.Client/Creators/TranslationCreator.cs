@@ -9,7 +9,7 @@ namespace LearnLanguages.Business
   /// This class creates a new translation, loads it with given phrases.  
   /// </summary>
   [Serializable]
-  public class TranslationRetriever : Common.CslaBases.ReadOnlyBase<TranslationRetriever>
+  public class TranslationCreator : Common.CslaBases.ReadOnlyBase<TranslationCreator>
   {
     #region Factory Methods
 
@@ -19,9 +19,9 @@ namespace LearnLanguages.Business
     /// </summary>
     /// <param name="phrasesCriteria">collection of PhraseEdits, do not have to be marked as children.</param>
     /// <param name="callback">callback executed once translation is completely populated</param>
-    public static void CreateNew(Criteria.ListOfPhrasesCriteria phrasesCriteria, EventHandler<DataPortalResult<TranslationRetriever>> callback)
+    public static void CreateNew(Criteria.ListOfPhrasesCriteria phrasesCriteria, EventHandler<DataPortalResult<TranslationCreator>> callback)
     {
-      DataPortal.BeginCreate<TranslationRetriever>(phrasesCriteria, callback);
+      DataPortal.BeginCreate<TranslationCreator>(phrasesCriteria, callback);
     }
 
     #endregion
