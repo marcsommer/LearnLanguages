@@ -123,9 +123,6 @@
   <data name="BaseAddress" xml:space="preserve">
     <value>http://localhost:50094/</value>
   </data>
-  <data name="BingAppId" xml:space="preserve">
-    <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
-  </data>
   <data name="ClientIdRegisteredWithAzureMarketplace" xml:space="preserve">
     <value>A8D01FD8-7937-4675-A098-2437E193F2EA</value>
   </data>

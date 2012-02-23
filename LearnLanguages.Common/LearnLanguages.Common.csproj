@@ -140,6 +140,7 @@
     <Compile Include="Core\Services.cs" />
     <Compile Include="Core\Tuple.cs" />
     <Compile Include="Core\UserInterfaceInfo.cs" />
+    <Compile Include="Translation\BingTranslateHelper.cs" />
     <Compile Include="ViewModelBases\ViewModelBase.cs" />
     <Compile Include="ViewModelBases\ViewModelBaseOfTCslaModel.cs" />
     <Compile Include="ViewModelBases\ViewModelBaseOfTCslaModelList.cs" />

@@ -79,15 +79,6 @@ namespace LearnLanguages.Silverlight {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A71DCFCC34133403B25C909D017FE0B140799549.
-        /// </summary>
-        internal static string BingAppId {
-            get {
-                return ResourceManager.GetString("BingAppId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A8D01FD8-7937-4675-A098-2437E193F2EA.
         /// </summary>
         internal static string ClientIdRegisteredWithAzureMarketplace {

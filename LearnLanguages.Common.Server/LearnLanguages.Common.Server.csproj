@@ -232,6 +232,9 @@
     <Compile Include="..\LearnLanguages.Common\Logging\LogPriority.cs">
       <Link>Logging\LogPriority.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Translation\BingTranslateHelper.cs">
+      <Link>Translation\BingTranslateHelper.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\ViewModelBases\ViewModelBase.cs">
       <Link>ViewModelBases\ViewModelBase.cs</Link>
     </Compile>

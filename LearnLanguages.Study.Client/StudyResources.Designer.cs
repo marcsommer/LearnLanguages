@@ -61,6 +61,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A71DCFCC34133403B25C909D017FE0B140799549.
+        /// </summary>
+        public static string BingAppId {
+            get {
+                return ResourceManager.GetString("BingAppId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Study.
         /// </summary>
         public static string CategoryStudy {

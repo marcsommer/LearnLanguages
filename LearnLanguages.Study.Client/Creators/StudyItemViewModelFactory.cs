@@ -5,6 +5,7 @@ using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common;
+using LearnLanguages.Common.Translation;
 
 namespace LearnLanguages.Study
 {
@@ -44,7 +45,7 @@ namespace LearnLanguages.Study
     /// </summary>
     public void Procure(PhraseEdit phrase, 
                         string nativeLanguageText, 
-                        AsyncCallback<IStudyItemViewModelBase> callback)
+                        AsyncCallback<StudyItemViewModelBase> callback)
     {
       //FOR NOW, THIS WILL JUST CREATE ONE TYPE OF STUDY ITEM VIEW MODEL: STUDY QUESTION ANSWER VIEWMODEL.
       //IT WILL SHOW THE QUESTION AND HIDE THE ANSWER FOR VARIOUS AMOUNTS OF TIME, DEPENDING ON QUESTION
@@ -57,6 +58,9 @@ namespace LearnLanguages.Study
 
       var languageText = phrase.Language.Text;
 
+      //IF THE TARGET LANGUAGE IS DIFFERENT FROM THE PHRASE LANGUAGE, THEN WE CREATE A TRANSLATION Q & A.
+      //IF THE TWO LANGUAGES ARE THE SAME, THEN WE CREATE A STUDY NATIVE LANGUAGE PHRASE Q & A.
+        
       bool phraseIsInForeignLanguage = (languageText != nativeLanguageText);
       if (phraseIsInForeignLanguage)
       {
@@ -64,171 +68,157 @@ namespace LearnLanguages.Study
         //WE NEED TO FIND A TRANSLATION FOR THIS FOREIGN LANGUAGE PHRASE.
         PhraseEdit translatedPhrase = null;
 
-        //FIRST LOOK IN DB.  IF NOT, THEN AUTO TRANSLATE.
-        var searchCriteria = new Business.Criteria.TranslationSearchCriteria(phrase, nativeLanguageText);
-        TranslationSearchRetriever.CreateNew(searchCriteria, (s, r) =>
+        GetTranslatedPhrase(phrase, nativeLanguageText, (s, r) =>
           {
             if (r.Error != null)
-              throw r.Error;
-
-            var retriever = r.Object;
-            var foundTranslation = retriever.Translation;
-            if (foundTranslation != null)
             {
-              //FOUND TRANSLATION IN DATABASE.  USE THIS AS THE SECOND PHRASE.
-              translatedPhrase = (from p in foundTranslation.Phrases
-                                  where p.Language.Text == nativeLanguageText
-                                  select p).First();
-            }
-            else
-            {
-              #region NO TRANSLATION FOUND, WILL NEED TO AUTO TRANSLATE
-
-              AutoTranslate(phrase, nativeLanguageText, (s2, r2) =>
-                {
-
-                });
-
-              #endregion
+              callback(this, new ResultArgs<StudyItemViewModelBase>(r.Error));
+              return;
             }
 
+            translatedPhrase = r.Object;
+
+            try
+            {
+              //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
+              var timedQA = new ViewModels.StudyTimedQuestionAnswerViewModel();
+              var manualQA = new ViewModels.StudyManualQuestionAnswerViewModel();
+
+              //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
+              StudyItemViewModelBase dummy = null;
+              var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
+
+              //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
+              PhraseEdit answer = null;
+              var question = RandomPicker.Ton.PickOne(phrase, translatedPhrase, out answer);
+
+              //INITIALIZE VIEWMODEL WITH Q & A
+              if (qaViewModel is ViewModels.StudyTimedQuestionAnswerViewModel)
+                ((ViewModels.StudyTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
+              else
+                ((ViewModels.StudyManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
+
+              //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
+              callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
+            }
+            catch (Exception ex)
+            {
+              callback(this, new ResultArgs<StudyItemViewModelBase>(ex));
+            }
           });
 
-
-
-        //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
-        var timedQA = new ViewModels.StudyTimedQuestionAnswerViewModel();
-        var manualQA = new ViewModels.StudyManualQuestionAnswerViewModel();
-        var qaViewModel = RandomPicker.Ton.PickOne<IStudyItemViewModelBase>(timedQA, manualQA);
-
-        if (qaViewModel is ViewModels.StudyTimedQuestionAnswerViewModel)
-          ((ViewModels.StudyTimedQuestionAnswerViewModel)qaViewModel).Initialize(phrase, phrase);
-        else
-          ((ViewModels.StudyManualQuestionAnswerViewModel)qaViewModel).Initialize(phrase, phrase);
-
-        StudyItemViewModelArgs returnArgs = new StudyItemViewModelArgs(qaViewModel);
-
-        //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
-        //callback(this, new ResultArgs<StudyItemViewModelArgs>(returnArgs));
       }
       else
       {
         //DO A NATIVE LANGUAGE Q & A
+        throw new NotImplementedException();
       }
     }
 
-    //protected void GetTranslation(PhraseEdit phrase, 
-    //                              string targetLanguageText, 
-    //                              AsyncCallback<GetTranslationArgs> callback)
-    //{
-    //  #region Check for translation in DB
-
-    //  //TranslationEdit.GetTranslationEdit(new Business.Criteria.PhraseCriteria(phrase), (s, r) =>
-    //  //  {
-    //  //    if (r.Error != null)
-    //  //      callback(this, new ResultArgs<GetTranslationArgs>(r.Error));
-
-    //  //  });
-
-    //  #endregion
-
-
-
-
-
-
-    //  #region Initialize
-
-    //  //_ShowingQuestion = true;
-    //  PhraseEdit question = null;
-    //  PhraseEdit answer = null;
-    //  TranslationEdit qaTranslation = null;
-
-    //  #region 1. CHOOSE RANDOM PHRASE
-    //  TranslationEdit.
-    //  PhraseList.GetAll((s, r) =>
-    //  {
-    //    if (r.Error != null)
-    //    {
-    //      //callback(null, null, r.Error);
-    //      callback(this, new ResultArgs<GetTranslationArgs>(r.Error));
-    //      return;
-    //    }
-    //    _Phrases = r.Object;
-
-    //    Random random = new Random(DateTime.Now.Millisecond +
-    //                               DateTime.Now.Second +
-    //                               DateTime.Now.Month +
-    //                               (int)(Mouse.Position.X * 1000));
-
-    //    var randomIndex = random.Next(0, _Phrases.Count);
-    //    question = _Phrases[randomIndex];
-
-    //    #region 2. GET TRANSLATION FOR THAT PHRASE, IF WE DON'T HAVE ONE THEN CREATE TRANSLATION.
-
-    //    TranslationList.GetAllTranslationsContainingPhraseById(question, (s2, r2) =>
-    //    {
-    //      if (r2.Error != null)
-    //      {
-    //        callback(this, new Args.QuestionAnswerArgs(r2.Error));
-    //        //callback(null, null, r2.Error);
-    //        return;
-    //      }
-    //      //throw r2.Error;
-
-    //      #region 3a. FOUND EXISTING TRANSLATION.  SET QUESTION AND ANSWER, AND CALL CALLBACK
-    //      //IF WE HAVE FOUND ONE OR MORE TRANSLATIONS, THEN PICK ONE OF THEM AT RANDOM
-    //      var foundTranslations = r2.Object;
-    //      if (foundTranslations.Count > 0)
-    //      {
-    //        randomIndex = random.Next(0, foundTranslations.Count);
-    //        qaTranslation = foundTranslations[randomIndex];
-    //        //PICK ONE OF THE TRANSLATION'S OTHER LANGUAGES THAN THE QUESTION
-    //        answer = null;
-    //        foreach (var phrase in qaTranslation.Phrases)
-    //        {
-    //          if (phrase.Text != question.Text)
-    //          {
-    //            answer = phrase;
-    //            break;
-    //          }
-    //        }
-    //        if (answer == null)
-    //        {
-    //          var ex = new Exception("translation located, but all texts are equal");
-    //          callback(this, new Args.QuestionAnswerArgs(ex));
-    //          //callback(null, null, ex);
-    //          return;
-    //        }
-    //        //WE HAVE BOTH QUESTION AND ANSWER SO INITIATE CALLBACK
-    //        callback(this, new Args.QuestionAnswerArgs(question, answer));
-    //        //callback(question, answer, null);
-    //        return;
-    //      }
-    //      #endregion
-
-    //      #region 3b. NO EXISTING TRANSLATION, SO AUTO TRANSLATE WITH BING AND CREATE NEW ANSWER PHRASE
-    //      else
-    //      {
-    //        AutoTranslateText(callback, question, answer);
-    //      }
-    //      #endregion
-
-    //    });
-
-    //    #endregion
-    //  });
-
-    //  #endregion
-
-    //  #endregion
-    //}
-
-    private void AutoTranslate(PhraseEdit phrase, 
-                               string targetLanguageText, 
+    /// <summary>
+    /// Uses auto translation service (as of writing, this is BingTranslatorService) to translate phrase
+    /// into another phrase, which is returned in the callback.
+    /// </summary>
+    private void AutoTranslate(PhraseEdit untranslatedPhrase,
+                               string targetLanguageText,
                                AsyncCallback<PhraseEdit> callback)
     {
+      BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
 
+      client.TranslateCompleted += (s, r) =>
+      {
+        if (r.Error != null)
+        {
+          callback(this, new ResultArgs<PhraseEdit>(r.Error));
+          return;
+        }
+
+        var translatedText = r.Result;
+        PhraseEdit.NewPhraseEdit(targetLanguageText, (s2, r2) =>
+          {
+            if (r2.Error != null)
+            {
+              callback(this, new ResultArgs<PhraseEdit>(r.Error));
+              return;
+            }
+
+            var translatedPhrase = r2.Object;
+            translatedPhrase.Text = translatedText;
+            callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+            return;
+          });
+      };
+
+      var untranslatedPhraseLanguageCode = BingTranslateHelper.GetLanguageCode(untranslatedPhrase.Language.Text);
+      var targetLanguageCode = BingTranslateHelper.GetLanguageCode(targetLanguageText);
+
+      try
+      {
+        client.TranslateAsync(StudyResources.BingAppId,
+                              untranslatedPhrase.Text,
+                              untranslatedPhraseLanguageCode,
+                              targetLanguageCode,
+                              @"text/plain", //this as opposed to "text/html"
+                              "general"); //only supported category is "general"
+        //GOTO ABOVE TRANSLATECOMPLETED HANDLER
+      }
+      catch (Exception ex)
+      {
+        callback(this, new ResultArgs<PhraseEdit>(ex));
+      }
+    }
+
+    /// <summary>
+    /// First searches DB for translated phrase.  If not found there, uses AutoTranslate.
+    /// </summary>
+    private void GetTranslatedPhrase(PhraseEdit phrase, 
+                                     string targetLanguageText, 
+                                     AsyncCallback<PhraseEdit> callback)
+    {
+      //THIS IS THE PHRASE WE'RE LOOKING FOR
+      PhraseEdit translatedPhrase = null;
+
+      //FIRST LOOK IN DB.  IF NOT, THEN AUTO TRANSLATE.
+      var searchCriteria = new Business.Criteria.TranslationSearchCriteria(phrase, targetLanguageText);
+      TranslationSearchRetriever.CreateNew(searchCriteria, (s, r) =>
+      {
+        if (r.Error != null)
+        {
+          callback(this, new ResultArgs<PhraseEdit>(r.Error));
+          return;
+        }
+
+        var retriever = r.Object;
+        var foundTranslation = retriever.Translation;
+        if (foundTranslation != null)
+        {
+          //FOUND TRANSLATED PHRASE IN DATABASE.
+          translatedPhrase = (from p in foundTranslation.Phrases
+                              where p.Language.Text == targetLanguageText
+                              select p).First();
+          callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+          return;
+        }
+        else
+        {
+          //NO TRANSLATION FOUND IN DB, WILL NEED TO AUTO TRANSLATE
+          AutoTranslate(phrase, targetLanguageText, (s2, r2) =>
+          {
+            if (r2.Error != null)
+            {
+              callback(this, new ResultArgs<PhraseEdit>(r2.Error));
+              return;
+            }
+
+            //GOT TRANSLATED PHRASE VIA AUTOTRANSLATE
+            translatedPhrase = r2.Object;
+            callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+            return;
+          });
+        }
+      });
     }
   }
+
+
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LearnLanguages.Silverlight
+namespace LearnLanguages.Common.Translation
 {
   public static class BingTranslateHelper
   {

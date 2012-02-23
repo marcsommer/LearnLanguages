@@ -42,7 +42,10 @@ namespace LearnLanguages.Study
       StudyDataRetriever.CreateNew((s, r) =>
       {
         if (r.Error != null)
-          throw r.Error;
+        {
+          callback(this, new ResultArgs<StudyItemViewModelArgs>(r.Error));
+          return;
+        }
 
         var retriever = r.Object;
         var nativeLanguageText = retriever.StudyData.NativeLanguageText;
@@ -59,10 +62,20 @@ namespace LearnLanguages.Study
 
         var languageText = phraseEdit.Language.Text;
 
-        //WE HAVE A PHRASEEDIT WITH A LANGUAGE AND WE HAVE OUR NATIVE LANGUAGE.
-        //IF THE TWO LANGUAGES ARE DIFFERENT, THEN WE CREATE A TRANSLATION Q & A.
-        //IF THE TWO LANGUAGES ARE THE SAME, THEN WE CREATE A STUDY NATIVE LANGUAGE PHRASE Q & A.
+        //WE HAVE A PHRASEEDIT WITH A LANGUAGE AND WE HAVE OUR NATIVE LANGUAGE, 
+        //SO WE HAVE ENOUGH TO PROCURE A VIEW MODEL NOW.
+        StudyItemViewModelFactory.Ton.Procure(phraseEdit, nativeLanguageText, (s2, r2) =>
+          {
+            if (r2.Error != null)
+            {
+              callback(this, new ResultArgs<StudyItemViewModelArgs>(r2.Error));
+              return;
+            }
 
+            var studyItemViewModel = r2.Object;
+            var result = new StudyItemViewModelArgs(studyItemViewModel);
+            callback(this, new ResultArgs<StudyItemViewModelArgs>(result));
+          });
       });
     }
 

@@ -37,7 +37,7 @@ namespace LearnLanguages.Common
       Randomizer = new Random(DateTime.Now.Second + DateTime.Now.Millisecond + DateTime.Now.Hour);
     }
 
-    public T PickOne<T>(T aObject, T bObject, double aWeight = 0.5d, double bWeight = 0.5d)
+    public T PickOne<T>(T aObject, T bObject, out T loser, double aWeight = 0.5d, double bWeight = 0.5d)
     {
       if (aObject == null)
         throw new ArgumentNullException("aObject");
@@ -51,13 +51,21 @@ namespace LearnLanguages.Common
       double probabilityA = aWeight / (aWeight + bWeight);
       var randomDouble = Randomizer.NextDouble();
       if (randomDouble < probabilityA)
+      {
+        loser = bObject;
         return aObject;
+      }
       else
+      {
+        loser = aObject;
         return bObject;
+      }
     }
-    public object PickOne(object aObject, object bObject, double aWeight = 0.5d, double bWeight = 0.5d)
+    public object PickOne(object aObject, object bObject, out object loser, double aWeight = 0.5d, 
+      double bWeight = 0.5d)
     {
-      return PickOne<object>(aObject, bObject, aWeight, bWeight);
+      return PickOne<object>(aObject, bObject, out loser, aWeight, bWeight);
     }
+    
   }
 }
