@@ -85,6 +85,9 @@
     <Compile Include="..\LearnLanguages.Common\Core\MagicStringsList.cs">
       <Link>Core\MagicStringsList.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Core\RandomPicker.cs">
+      <Link>Core\RandomPicker.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Core\ResultArgsOfT.cs">
       <Link>Core\ResultArgsOfT.cs</Link>
     </Compile>

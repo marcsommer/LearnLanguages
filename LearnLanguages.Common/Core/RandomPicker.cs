@@ -1,0 +1,63 @@
+﻿using System;
+
+namespace LearnLanguages.Common
+{
+  public class RandomPicker
+  {
+    public RandomPicker()
+    {
+      NewRandomizer();
+    }
+
+    private Random Randomizer { get; set; }
+
+    #region Singleton Pattern Members
+    private static volatile RandomPicker _Ton;
+    private static object _Lock = new object();
+    public static RandomPicker Ton
+    {
+      get
+      {
+        if (_Ton == null)
+        {
+          lock (_Lock)
+          {
+            if (_Ton == null)
+              _Ton = new RandomPicker();
+          }
+        }
+
+        return _Ton;
+      }
+    }
+    #endregion
+
+    public void NewRandomizer()
+    {
+      Randomizer = new Random(DateTime.Now.Second + DateTime.Now.Millisecond + DateTime.Now.Hour);
+    }
+
+    public T PickOne<T>(T aObject, T bObject, double aWeight = 0.5d, double bWeight = 0.5d)
+    {
+      if (aObject == null)
+        throw new ArgumentNullException("aObject");
+      if (bObject == null)
+        throw new ArgumentNullException("bObject");
+      if (aWeight < 0)
+        throw new ArgumentException("aWeight");
+      if (bWeight < 0)
+        throw new ArgumentException("bWeight");
+
+      double probabilityA = aWeight / (aWeight + bWeight);
+      var randomDouble = Randomizer.NextDouble();
+      if (randomDouble < probabilityA)
+        return aObject;
+      else
+        return bObject;
+    }
+    public object PickOne(object aObject, object bObject, double aWeight = 0.5d, double bWeight = 0.5d)
+    {
+      return PickOne<object>(aObject, bObject, aWeight, bWeight);
+    }
+  }
+}

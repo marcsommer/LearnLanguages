@@ -16,9 +16,11 @@ namespace LearnLanguages.Business
       DataPortal.BeginFetch<TranslationList>(callback);
     }
 
+    
     /// <summary>
     /// Gets all of the translations that contain the given phrase, using that phrase's id.  This in 
     /// contrast to searching through all translations' texts and matching up the phrase.text or regex, etc.
+    /// THIS DOES NOT THROW AN EXCEPTION IF THE PHRASE IS NOT FOUND.
     /// </summary>
     public static void GetAllTranslationsContainingPhraseById(PhraseEdit phrase, 
       EventHandler<DataPortalResult<TranslationList>> callback)
@@ -37,8 +39,9 @@ namespace LearnLanguages.Business
     /// <summary>
     /// Gets all of the translations that contain the given phrase, using that phrase's id.  This in 
     /// contrast to searching through all translations' texts and matching up the phrase.text or regex, etc.
+    /// THIS DOES NOT THROW AN EXCEPTION IF THE PHRASE IS NOT FOUND.
     /// </summary>
-    public TranslationList GetAllTranslationsContainingPhraseById(PhraseEdit phrase)
+    public static TranslationList GetAllTranslationsContainingPhraseById(PhraseEdit phrase)
     {
       var criteria = new Criteria.PhraseCriteria(phrase);
       return DataPortal.Fetch<TranslationList>(criteria);

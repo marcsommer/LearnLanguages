@@ -53,9 +53,7 @@ namespace LearnLanguages.Study
       //TRANSLATION VIEW MODELS BASED ON HOW SUCCESSFUL THEY ARE.  WE CAN ALSO HAVE DIFFERENT CONFIGURATIONS
       //OF VARIETIES BE SELECTED HERE.
 
-      ViewModels.StudyQuestionAnswerViewModel viewModel = new ViewModels.StudyQuestionAnswerViewModel();
-      var words = phrase.Text.ParseIntoWords();
-      var duration = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+      ViewModels.StudyTimedQuestionAnswerViewModel viewModel = new ViewModels.StudyTimedQuestionAnswerViewModel();
 
       var languageText = phrase.Language.Text;
 
@@ -63,8 +61,21 @@ namespace LearnLanguages.Study
       if (languagesAreDifferent)
       {
         //DO A TRANSLATION Q & A
-        var qaViewModel = new ViewModels.StudyQuestionAnswerViewModel();
-        qaViewModel.Initialize(phrase, phrase, 1000); //debug...need to populate answer.
+        //WE NEED TO FIND A TRANSLATION FOR THIS PHRASE.
+        //FIRST LOOK IN DB.  IF NOT, THEN AUTO TRANSLATE.
+
+
+
+        //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
+        var timedQA = new ViewModels.StudyTimedQuestionAnswerViewModel();
+        var manualQA = new ViewModels.StudyManualQuestionAnswerViewModel();
+        var qaViewModel = RandomPicker.Ton.PickOne<IStudyItemViewModelBase>(timedQA, manualQA);
+
+        if (qaViewModel is ViewModels.StudyTimedQuestionAnswerViewModel)
+          ((ViewModels.StudyTimedQuestionAnswerViewModel)qaViewModel).Initialize(phrase, phrase);
+        else
+          ((ViewModels.StudyManualQuestionAnswerViewModel)qaViewModel).Initialize(phrase, phrase);
+
         StudyItemViewModelArgs returnArgs = new StudyItemViewModelArgs(qaViewModel);
 
         //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.

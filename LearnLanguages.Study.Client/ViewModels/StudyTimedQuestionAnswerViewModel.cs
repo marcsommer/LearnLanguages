@@ -2,19 +2,20 @@
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
+using LearnLanguages.Common;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study.ViewModels
 {
-  [Export(typeof(StudyQuestionAnswerViewModel))]
+  [Export(typeof(StudyTimedQuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class StudyQuestionAnswerViewModel : StudyItemViewModelBase
+  public class StudyTimedQuestionAnswerViewModel : StudyItemViewModelBase
   {
     #region Ctors and Init
 
-    public StudyQuestionAnswerViewModel()
+    public StudyTimedQuestionAnswerViewModel()
     {
       Services.EventAggregator.Subscribe(this);
     }
@@ -195,11 +196,13 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    public void Initialize(PhraseEdit question, PhraseEdit answer, int questionDurationInMilliseconds)
+    public void Initialize(PhraseEdit question, PhraseEdit answer)
     {
       Question = question;
       Answer = answer;
-      QuestionDurationInMilliseconds = questionDurationInMilliseconds;
+      var words = question.Text.ParseIntoWords();
+      var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+      QuestionDurationInMilliseconds = durationMilliseconds;
     }
 
     public override void Show(ExceptionCheckCallback callback)

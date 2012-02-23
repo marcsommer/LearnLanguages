@@ -16,6 +16,8 @@ namespace LearnLanguages.Business
   /// This does NOT search through all translations looking for containment of the phrase.  So, if you 
   /// search for "the", it will look for the translation that contains the phrase.Text=="the".  It will
   /// not return a translation such that it has a Phrase.Text="the quick brown fox".
+  /// Right now, this is very slow.  It downloads a list of all phrases, and searches through them manually.
+  /// It also does some other non-optimal things.
   /// </summary>
   [Serializable]
   public class TranslationSearchRetriever : Common.CslaBases.ReadOnlyBase<TranslationSearchRetriever>
@@ -76,40 +78,34 @@ namespace LearnLanguages.Business
         }
 
         var allPhraseDtos = result.Obj;
+
+
         //WE HAVE A LIST OF ALL THE PHRASES.  NOW SEARCH THROUGH FOR OUR PHRASE.
-        var foundPhrase = (from phraseDto in allPhraseDtos
+        var foundPhraseDto = (from phraseDto in allPhraseDtos
                            where phraseDto.Text == criteria.Phrase.Text &&
                                  phraseDto.LanguageId == criteria.Phrase.LanguageId
                            select phraseDto).FirstOrDefault();
 
+
         //IF WE HAVEN'T FOUND A PHRASE, THEN WE WON'T FIND A TRANSLATION.
-        if (foundPhrase == null)
+        if (foundPhraseDto == null)
         {
           Translation = null;
           return;
         }
 
-        //TranslationList.GetAllTranslationsContainingPhraseById(foundPhrase
+        //WE FOUND A PHRASE, BUT WE STILL NEED TO LOOK FOR TRANSLATION FOR THAT PHRASE.
+        var phraseEdit = DataPortal.Fetch<PhraseEdit>(foundPhraseDto.Id);
+        var translations = TranslationList.GetAllTranslationsContainingPhraseById(phraseEdit);
+
+        //IF WE FOUND ONE, THIS SETS TRANSLATION TO THE FIRST TRANSLATION FOUND.  
+        //OTHERWISE, TRANSLATION SET TO NULL.
+        Translation = translations.FirstOrDefault();
       }
-
-      //FILL TRANSLATION.PHRASES WITH EMPTY PHRASES
-      //for (int i = 0; i < criteria.Phrase.`Phrases.Count; i++)
-      //{
-      //  Translation.Phrases.AddNew();
-      //}
-
-      //for (int i = 0; i < criteria.Phrases.Count; i++)
-      //{
-      //  var sourcePhrase = criteria.Phrases[i];
-      //  var targetPhrase = Translation.Phrases[i];
-      //  var dto = sourcePhrase.CreateDto();
-      //  targetPhrase.LoadFromDtoBypassPropertyChecks(dto);
-      //}
     }
 
 #endif
 
     #endregion
-
   }
 }
