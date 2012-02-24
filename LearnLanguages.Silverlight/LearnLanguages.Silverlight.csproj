@@ -116,11 +116,6 @@
     <Compile Include="NavigationController.cs" />
     <Compile Include="NavigationSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\BingTranslatorService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongViewModel.cs" />
     <Compile Include="ViewModels\Bases\NavigationSetTitleViewModelBase.cs" />
@@ -290,18 +285,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <None Include="Service References\BingTranslatorService\LearnLanguages.Silverlight.BingTranslatorService.GetTranslationsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\BingTranslatorService\LearnLanguages.Silverlight.BingTranslatorService.TranslateArrayResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\BingTranslatorService\soap1.wsdl" />
-    <None Include="Service References\BingTranslatorService\soap3.xsd" />
-    <None Include="Service References\BingTranslatorService\soap31.xsd" />
-    <None Include="Service References\BingTranslatorService\soap32.xsd" />
-    <None Include="Service References\BingTranslatorService\soap33.xsd" />
-    <None Include="Service References\BingTranslatorService\SoapService2.wsdl" />
     <Page Include="Views\Study\QuestionAnswerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -455,12 +438,6 @@
       <SubType>Designer</SubType>
     </Page>
     <None Include="Properties\AppManifest.xml" />
-    <None Include="Service References\BingTranslatorService\configuration91.svcinfo" />
-    <None Include="Service References\BingTranslatorService\configuration.svcinfo" />
-    <None Include="Service References\BingTranslatorService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Properties\OutOfBrowserSettings.xml" />
     <Resource Include="Content\progress.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -512,12 +489,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ViewViewModelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\BingTranslatorService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Feedback\" />

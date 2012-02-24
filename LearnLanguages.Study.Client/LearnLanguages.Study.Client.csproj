@@ -127,6 +127,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\StudyManualQuestionAnswerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <None Include="Service References\BingTranslatorService\configuration91.svcinfo" />
     <None Include="Service References\BingTranslatorService\configuration.svcinfo" />
     <None Include="Service References\BingTranslatorService\LearnLanguages.Study.BingTranslatorService.GetTranslationsResponse.datasource">
@@ -157,7 +161,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\StudyQuestionAnswerView.xaml">
+    <Page Include="Views\StudyTimedQuestionAnswerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -92,7 +92,19 @@ namespace LearnLanguages.Study.ViewModels
         {
           _AnswerVisibility = value;
           NotifyOfPropertyChange(() => AnswerVisibility);
+          NotifyOfPropertyChange(() => ShowAnswerButtonVisibility);
         }
+      }
+    }
+
+    public Visibility ShowAnswerButtonVisibility
+    {
+      get
+      {
+        if (AnswerVisibility == Visibility.Collapsed)
+          return Visibility.Visible;
+        else
+          return Visibility.Collapsed;
       }
     }
 
@@ -128,6 +140,7 @@ namespace LearnLanguages.Study.ViewModels
         return Answer.Language.Text;
       }
     }
+    public string ShowAnswerButtonLabel { get { return StudyResources.ButtonLabelShowAnswer; } }
 
     private ExceptionCheckCallback _CompletedCallback { get; set; }
 

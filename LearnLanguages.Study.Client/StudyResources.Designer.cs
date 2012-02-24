@@ -70,6 +70,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Answer.
+        /// </summary>
+        public static string ButtonLabelShowAnswer {
+            get {
+                return ResourceManager.GetString("ButtonLabelShowAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Study.
         /// </summary>
         public static string CategoryStudy {
