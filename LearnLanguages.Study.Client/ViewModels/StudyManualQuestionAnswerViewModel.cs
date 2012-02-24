@@ -108,6 +108,20 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+    //private Visibility _NextButtonVisibility = Visibility.Collapsed;
+    //public Visibility NextButtonVisibility
+    //{
+    //  get { return _NextButtonVisibility; }
+    //  set
+    //  {
+    //    if (value != _NextButtonVisibility)
+    //    {
+    //      _NextButtonVisibility = value;
+    //      NotifyOfPropertyChange(() => NextButtonVisibility);
+    //    }
+    //  }
+    //}
+
     public string QuestionHeader
     {
       get
@@ -156,6 +170,7 @@ namespace LearnLanguages.Study.ViewModels
 
     public override void Show(ExceptionCheckCallback callback)
     {
+      _CompletedCallback = callback;
       HideAnswer();
     }
 
@@ -176,6 +191,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       AnswerVisibility = Visibility.Visible;
       HidingAnswer = false;
+      _CompletedCallback(null);
     }
 
     public bool CanNext

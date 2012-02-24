@@ -342,8 +342,9 @@ namespace LearnLanguages.Study
 
       var listKnown = new List<string>();
       var listUnknown = new List<string>();
-      foreach (var phraseText in AggregatePhraseTexts)
+      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
       {
+        var phraseText = AggregatePhraseTexts[i];
         var phraseTextDistinctWords = phraseText.ParseIntoWords().Distinct();
         if (IsPhraseKnown(phraseText))
           listKnown.AddRange(phraseTextDistinctWords);
