@@ -77,11 +77,11 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="ClientBin\LearnLanguages.Silverlight.xap" />
     <Content Include="_clientaccesspolicy.xml" />
     <Content Include="ClientBin\LearnLanguages.CompressedProxy.xap" />
     <Content Include="ClientBin\LearnLanguages.DataAccess.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.Tests.xap" />
-    <Content Include="ClientBin\LearnLanguages.Silverlight.xap" />
     <Content Include="LearnLanguages.Silverlight.csproj">
       <SubType>Designer</SubType>
     </Content>

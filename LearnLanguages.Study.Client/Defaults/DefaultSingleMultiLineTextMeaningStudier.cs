@@ -79,7 +79,7 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    private DefaultLineMeaningStudier ChooseNextLineStudier(out int nextLineNumber)
+    private DefaultLineMeaningStudier  ChooseNextLineStudier(out int nextLineNumber)
     {
       List<int> unknownLineNumbers = new List<int>();
 
@@ -114,7 +114,8 @@ namespace LearnLanguages.Study
       //MORE THAN ACTIVE_LINE_COUNT LINES AT A TIME)
       unknownLineNumbers.Sort();
       var nextLineNumberIndex = _LastActiveLineStudiedIndex + 1;
-      if (nextLineNumberIndex >= unknownLineNumbers.Count)
+      if (nextLineNumberIndex >= unknownLineNumbers.Count ||
+          nextLineNumberIndex >= _ActiveLinesCount)
         nextLineNumberIndex = 0;
 
       nextLineNumber = unknownLineNumbers[nextLineNumberIndex];

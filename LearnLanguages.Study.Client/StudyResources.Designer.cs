@@ -160,7 +160,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 333.
+        ///   Looks up a localized string similar to 500.
         /// </summary>
         public static string DefaultMillisecondsTimePerWordInQuestion {
             get {
@@ -214,7 +214,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 5000.
+        ///   Looks up a localized string similar to 0.
         /// </summary>
         public static string DefaultThinkAboutAnswerTime {
             get {

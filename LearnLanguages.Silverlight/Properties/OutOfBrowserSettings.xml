@@ -1,4 +1,4 @@
-<OutOfBrowserSettings ShortName="LearnLanguages.Silverlight Application" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
+<OutOfBrowserSettings ShortName="Learn Languages!" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
   <OutOfBrowserSettings.Blurb>LearnLanguages.Silverlight Application on your desktop; at home, at work or on the go.</OutOfBrowserSettings.Blurb>
   <OutOfBrowserSettings.WindowSettings>
     <WindowSettings Title="LearnLanguages.Silverlight Application" />
