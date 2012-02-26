@@ -114,6 +114,9 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+    private DateTime _FeedbackAsked { get; set; }
+    private DateTime _FeedbackGiven { get; set; }
+
     #endregion
 
     #region Methods
@@ -124,6 +127,7 @@ namespace LearnLanguages.Study.ViewModels
       DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
       IsEnabled = true;
       bool feedbackIsProvided = false;
+      _FeedbackAsked = DateTime.UtcNow;
       do
       {
         System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
@@ -133,6 +137,8 @@ namespace LearnLanguages.Study.ViewModels
       while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
       IsEnabled = false;
 
+      _FeedbackGiven = DateTime.UtcNow;
+      PublishFeedback();
       return Feedback;
     }
 
@@ -152,6 +158,7 @@ namespace LearnLanguages.Study.ViewModels
             TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
             DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
             bool feedbackIsProvided = false;
+            _FeedbackAsked = DateTime.UtcNow;
             do
             {
               //DO THIS WHILE WE ARE WAITING FOR FEEDBACK FROM A CONTROL OR A TIMEOUT
@@ -172,11 +179,24 @@ namespace LearnLanguages.Study.ViewModels
         {
           //RUNS ON THE MAIN THREAD
           //var threadIdCompleted = System.Threading.Thread.CurrentThread.ManagedThreadId;
+          _FeedbackGiven = DateTime.UtcNow;
+          PublishFeedback();
           IsEnabled = false;
           callback(this, new ResultArgs<IFeedback>(Feedback));
         };
 
       worker.RunWorkerAsync();
+    }
+
+    private void PublishFeedback()
+    {
+      if (Feedback == null)
+        return;
+
+      var duration = _FeedbackGiven - _FeedbackAsked;
+      var feedbackAsDouble = ((Feedback<double>)Feedback).Value;
+      History.HistoryPublisher.Ton.PublishEvent(
+        new History.Events.FeedbackAsDoubleGivenEvent(feedbackAsDouble, duration));
     }
 
     private void SetFeedback(double feedbackValue)

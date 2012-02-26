@@ -61,6 +61,24 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EEE32EE6-6411-49BB-8A27-DD1C472E21B9.
+        /// </summary>
+        public static string AdvisorIdPhrasePercentKnownStudyAdvisor {
+            get {
+                return ResourceManager.GetString("AdvisorIdPhrasePercentKnownStudyAdvisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the percent known of this phrase?.
+        /// </summary>
+        public static string AdvisorQuestionWhatIsPhrasePercentKnown {
+            get {
+                return ResourceManager.GetString("AdvisorQuestionWhatIsPhrasePercentKnown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A71DCFCC34133403B25C909D017FE0B140799549.
         /// </summary>
         public static string BingAppId {
@@ -354,6 +372,24 @@ namespace LearnLanguages.Study {
         public static string PercentKnownSome {
             get {
                 return ResourceManager.GetString("PercentKnownSome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E5F6AF74-2F9D-4067-921B-009DE109759D.
+        /// </summary>
+        public static string ReviewMethodIdManualQA {
+            get {
+                return ResourceManager.GetString("ReviewMethodIdManualQA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C7061A4F-43A1-4F31-B40D-4B6F5B8020A7.
+        /// </summary>
+        public static string ReviewMethodIdTimedQA {
+            get {
+                return ResourceManager.GetString("ReviewMethodIdTimedQA", resourceCulture);
             }
         }
         

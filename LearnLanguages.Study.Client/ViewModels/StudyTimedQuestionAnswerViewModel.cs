@@ -203,10 +203,12 @@ namespace LearnLanguages.Study.ViewModels
       var words = question.Text.ParseIntoWords();
       var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
       QuestionDurationInMilliseconds = durationMilliseconds;
+      HideAnswer();
     }
 
     public override void Show(ExceptionCheckCallback callback)
     {
+      _DateTimeQuestionShown = DateTime.UtcNow;
       ViewModelVisibility = Visibility.Visible;
       AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
         {
@@ -216,7 +218,7 @@ namespace LearnLanguages.Study.ViewModels
           }
           else
           {
-            //wait for alotted time for user to think about answer.
+            //WAIT FOR ALOTTED TIME FOR USER TO THINK ABOUT ANSWER.
             System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultThinkAboutAnswerTime));
             callback(null);
           }
@@ -246,6 +248,15 @@ namespace LearnLanguages.Study.ViewModels
     {
       AnswerVisibility = Visibility.Visible;
       HidingAnswer = false;
+      _DateTimeAnswerShown = DateTime.UtcNow;
+      var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
+      History.HistoryPublisher.Ton.PublishEvent(
+        new History.Events.PhraseReviewedEvent(Question, ReviewMethodId, duration));
+    }
+
+    protected override Guid GetReviewMethodId()
+    {
+      return Guid.Parse(StudyResources.ReviewMethodIdTimedQA);
     }
 
     #endregion

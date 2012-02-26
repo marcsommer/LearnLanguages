@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AdvisorIdPhrasePercentKnownStudyAdvisor" xml:space="preserve">
+    <value>EEE32EE6-6411-49BB-8A27-DD1C472E21B9</value>
+  </data>
+  <data name="AdvisorQuestionWhatIsPhrasePercentKnown" xml:space="preserve">
+    <value>What is the percent known of this phrase?</value>
+  </data>
   <data name="BingAppId" xml:space="preserve">
     <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
   </data>
@@ -219,6 +225,12 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="PercentKnownSome" xml:space="preserve">
     <value>25</value>
+  </data>
+  <data name="ReviewMethodIdManualQA" xml:space="preserve">
+    <value>E5F6AF74-2F9D-4067-921B-009DE109759D</value>
+  </data>
+  <data name="ReviewMethodIdTimedQA" xml:space="preserve">
+    <value>C7061A4F-43A1-4F31-B40D-4B6F5B8020A7</value>
   </data>
   <data name="SourceNameDatabase" xml:space="preserve">
     <value>Database</value>

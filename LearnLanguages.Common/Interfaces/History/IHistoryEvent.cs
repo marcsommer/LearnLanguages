@@ -11,7 +11,7 @@ namespace LearnLanguages.Common.Interfaces
     /// <summary>
     /// Id of this HistoryEvent being published
     /// </summary>
-    Guid HistoryEventId { get; }
+    Guid Id { get; }
     /// <summary>
     /// Should be Publisher's time stamp when event is created, but this is not guaranteed.
     /// </summary>

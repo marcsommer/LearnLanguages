@@ -3,7 +3,7 @@ namespace LearnLanguages.Common.Interfaces
 {
   public interface IHistoryPublisher
   {
-    Guid HistoryPublisherId { get; }
+    Guid Id { get; }
     void PublishEvent(IHistoryEvent historyEvent);
   }
 }

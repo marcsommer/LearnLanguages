@@ -84,12 +84,13 @@
     <Compile Include="..\dependencies\csla_contrib\ScreenWithSubject.cs">
       <Link>CslaContrib\ScreenWithSubject.cs</Link>
     </Compile>
+    <Compile Include="Core\QuestionArgs.cs" />
     <Compile Include="Core\RandomPicker.cs" />
-    <Compile Include="Core\ResultArgsOfT.cs" />
+    <Compile Include="EventArgs\ResultArgsOfT.cs" />
     <Compile Include="Core\LearnLanguagesExtensions.cs" />
     <Compile Include="Delegates\AsynchronousCallback.cs" />
-    <Compile Include="Core\AsyncResultOfT.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Interfaces\Core\IAdvisor.cs" />
     <Compile Include="Interfaces\Core\IInitialize.cs" />
     <Compile Include="Interfaces\Exchange\IStatusUpdateOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Interfaces\Exchange\IOfferResponseOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunity.cs" />
     <Compile Include="Interfaces\Feedback\IFeedbackViewModelBase.cs" />
+    <Compile Include="Interfaces\History\IStudyReviewMethod.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />
     <Compile Include="CslaBases\BusinessListBaseOfLAndCAndCDto.cs" />

@@ -123,6 +123,12 @@
   <data name="Key_ChildId" xml:space="preserve">
     <value>ChildId</value>
   </data>
+  <data name="Key_FeedbackAsDouble" xml:space="preserve">
+    <value>FeedbackAsDouble</value>
+  </data>
+  <data name="Key_LineId" xml:space="preserve">
+    <value>LineId</value>
+  </data>
   <data name="Key_ParentId" xml:space="preserve">
     <value>ParentId</value>
   </data>

@@ -62,8 +62,12 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bases\FeedbackEventBase.cs" />
+    <Compile Include="Bases\SingleLineEventBase.cs" />
     <Compile Include="Bases\ParentPhraseChildPhraseEventBase.cs" />
     <Compile Include="Bases\SinglePhraseEventBase.cs" />
+    <Compile Include="Events\FeedbackAsDoubleGivenEvent.cs" />
+    <Compile Include="Events\LineReviewedEvent.cs" />
     <Compile Include="Events\PhraseViewedOnScreenEvent.cs" />
     <Compile Include="Events\ParentPhraseSpawnedChildPhraseEvent.cs" />
     <Compile Include="Events\PhraseCreatedFromScratchEvent.cs" />

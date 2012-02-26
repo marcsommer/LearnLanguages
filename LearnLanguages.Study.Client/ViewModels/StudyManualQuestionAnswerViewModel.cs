@@ -5,6 +5,8 @@ using System.Windows;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.History;
+using LearnLanguages.History.Events;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -63,7 +65,7 @@ namespace LearnLanguages.Study.ViewModels
         {
           _HidingAnswer = value;
           NotifyOfPropertyChange(() => HidingAnswer);
-          NotifyOfPropertyChange(() => CanNext);
+          //NotifyOfPropertyChange(() => CanNext);
         }
       }
     }
@@ -158,6 +160,7 @@ namespace LearnLanguages.Study.ViewModels
 
     private ExceptionCheckCallback _CompletedCallback { get; set; }
 
+
     #endregion
 
     #region Methods
@@ -166,12 +169,13 @@ namespace LearnLanguages.Study.ViewModels
     {
       Question = question;
       Answer = answer;
+      HideAnswer();
     }
 
     public override void Show(ExceptionCheckCallback callback)
     {
       _CompletedCallback = callback;
-      HideAnswer();
+      _DateTimeQuestionShown = DateTime.UtcNow;
     }
 
     private void HideAnswer()
@@ -191,20 +195,23 @@ namespace LearnLanguages.Study.ViewModels
     {
       AnswerVisibility = Visibility.Visible;
       HidingAnswer = false;
+      _DateTimeAnswerShown = DateTime.UtcNow;
+      var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
+      HistoryPublisher.Ton.PublishEvent(new PhraseReviewedEvent(Question, ReviewMethodId, duration));
       _CompletedCallback(null);
     }
 
-    public bool CanNext
-    {
-      get
-      {
-        return (_CompletedCallback != null && !HidingAnswer);
-      }
-    }
-    public void Next()
-    {
-      _CompletedCallback(null);
-    }
+    //public bool CanNext
+    //{
+    //  get
+    //  {
+    //    return (_CompletedCallback != null && !HidingAnswer);
+    //  }
+    //}
+    //public void Next()
+    //{
+    //  _CompletedCallback(null);
+    //}
 
     #endregion
 
@@ -213,6 +220,11 @@ namespace LearnLanguages.Study.ViewModels
       ShowAnswer();
       if (_CompletedCallback != null)
         _CompletedCallback(null);
+    }
+
+    protected override Guid GetReviewMethodId()
+    {
+      return Guid.Parse(StudyResources.ReviewMethodIdManualQA);
     }
   }
 }

@@ -1,25 +1,20 @@
 ﻿using System;
 using Caliburn.Micro;
-using System.ComponentModel.Composition;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.History
 {
-  public class History : Common.Interfaces.IHistoryPublisher, IPartImportsSatisfiedNotification
+  public class HistoryPublisher : IHistoryPublisher
   {
-    public History()
-    {
-      EventAggregator = Services.EventAggregator;
-    }
-
-    public Guid HistoryPublisherId { get { return Guid.Parse(HistoryResources.HistoryPublisherId); } }
+    public Guid Id { get { return Guid.Parse(HistoryResources.HistoryPublisherId); } }
 
     #region Singleton Pattern Members
-    private static volatile History _Ton;
+    private static volatile HistoryPublisher _Ton;
     private static object _Lock = new object();
     /// <summary>
     /// Singleton instance.  Named "The" for esthetic reasons.
     /// </summary>
-    public static History Ton
+    public static HistoryPublisher Ton
     {
       get
       {
@@ -28,7 +23,7 @@ namespace LearnLanguages.History
           lock (_Lock)
           {
             if (_Ton == null)
-              _Ton = new History();
+              _Ton = new HistoryPublisher();
           }
         }
 
@@ -37,23 +32,32 @@ namespace LearnLanguages.History
     }
     #endregion
 
-    [Import]
-    public IEventAggregator EventAggregator { get; set; }
-
-    private object _PublishLock = new object();
-
-    public void PublishEvent(Common.Interfaces.IHistoryEvent historyEvent)
+    #region protected static IEventAggregator _EventAggregator
+    private static volatile IEventAggregator _eventAggregator = new EventAggregator();
+    private static object _EventAggregatorLock = new object();
+    protected static IEventAggregator _EventAggregator 
     {
-      lock (_PublishLock)
+      get
       {
-        EventAggregator.Publish(historyEvent);
+        lock (_EventAggregatorLock)
+        {
+          return _eventAggregator;
+        }
       }
     }
+    #endregion
 
-    public void OnImportsSatisfied()
+    public void PublishEvent(IHistoryEvent historyEvent)
     {
-      if (EventAggregator != null)
-        EventAggregator.Subscribe(this);
+      _EventAggregator.Publish(historyEvent);
+    }
+    public void Subscribe(object subscriber)
+    {
+      _EventAggregator.Subscribe(subscriber);
+    }
+    public void Unsubscribe(object subscriber)
+    {
+      _EventAggregator.Unsubscribe(subscriber);
     }
   }
 }

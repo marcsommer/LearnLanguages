@@ -13,7 +13,7 @@ namespace LearnLanguages.History.Bases
     /// </summary>
     public HistoryEventBase()
     {
-      HistoryEventId = Guid.NewGuid();
+      Id = Guid.NewGuid();
       TimeStamp = DateTime.UtcNow;
     }
 
@@ -42,24 +42,13 @@ namespace LearnLanguages.History.Bases
       if (details != null && details.Length > 0)
       {
         foreach (var detail in details)
-        {
-          if (detail.Value is Guid)
-            Ids.Add(detail.Key, (Guid)detail.Value);
-          else if (detail.Value is string)
-            Strings.Add(detail.Key, (string)detail.Value);
-          else if (detail.Value is int)
-            Ints.Add(detail.Key, (int)detail.Value);
-          else if (detail.Value is double)
-            Doubles.Add(detail.Key, (double)detail.Value);
-          else
-            Strings.Add(detail.Key, detail.Value.ToString());
-        }
+          AddDetail(detail.Key, detail.Value);
       }
     }
 
-    public Guid HistoryEventId { get; protected set; }
+    public Guid Id { get; protected set; }
 
-    public DateTime TimeStamp { get; protected set; }
+    public DateTime TimeStamp { get; private set; }
     public TimeSpan Duration { get; protected set; }
 
     /// <summary>
@@ -70,6 +59,20 @@ namespace LearnLanguages.History.Bases
     protected virtual string GetText()
     {
       return this.GetType().FullName;
+    }
+
+    public virtual void AddDetail(string key, object value)
+    {
+      if (value is Guid)
+        Ids.Add(key, (Guid)value);
+      else if (value is string)
+        Strings.Add(key, (string)value);
+      else if (value is int)
+        Ints.Add(key, (int)value);
+      else if (value is double)
+        Doubles.Add(key, (double)value);
+      else
+        Strings.Add(key, value.ToString());
     }
 
     public MobileDictionary<string, Guid> Ids { get; protected set; }

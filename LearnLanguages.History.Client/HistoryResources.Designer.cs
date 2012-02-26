@@ -79,6 +79,24 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FeedbackAsDouble.
+        /// </summary>
+        internal static string Key_FeedbackAsDouble {
+            get {
+                return ResourceManager.GetString("Key_FeedbackAsDouble", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LineId.
+        /// </summary>
+        internal static string Key_LineId {
+            get {
+                return ResourceManager.GetString("Key_LineId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ParentId.
         /// </summary>
         internal static string Key_ParentId {

@@ -9,7 +9,7 @@ using LearnLanguages.Common.Delegates;
 
 namespace LearnLanguages.Study.Interfaces
 {
-  public interface IStudyItemViewModelBase : IViewModelBase
+  public interface IStudyItemViewModelBase : IViewModelBase, IStudyReviewMethod
   {
     void Show(ExceptionCheckCallback callback);
     void Abort();
