@@ -63,7 +63,7 @@
     <Compile Include="Criteria\LineInfosCriteria.cs" />
     <Compile Include="Criteria\PhraseTextsCriteria.cs" />
     <Compile Include="Criteria\ListOfPhrasesCriteria.cs" />
-    <Compile Include="Edits\PhraseHistoryEventEdit.cs" />
+    <Compile Include="Edits\DefaultStudyAdvisorKnowledgeBeliefEdit.cs" />
     <Compile Include="Edits\MultiLineTextEdit.cs" />
     <Compile Include="Edits\LineEdit.cs" />
     <Compile Include="Edits\StudyDataEdit.cs" />

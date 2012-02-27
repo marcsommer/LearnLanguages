@@ -91,6 +91,8 @@ namespace LearnLanguages
 
     //need to check if this still works, so throwing exception
     public static string RegExSplitPatternWords { get { return @"\\W+"; } }
+
+    public static char[] SplitWordsDelimiters = { ' ', '\\', '/', ':', ';', '<', '>', ',', '.', '\n', '\r', '?', '[', ']', '{', '}', '|', '~', '`', '!', '#', '$', '%', '^', '&', '*', '(', ')', '+', '=', '"', '@' };
     
     public static string ShowGridLines { get { return false.ToString(); } }
   }

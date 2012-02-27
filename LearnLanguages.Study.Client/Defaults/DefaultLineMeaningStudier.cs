@@ -8,6 +8,7 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Offer;
 using Caliburn.Micro;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.Study.Advisors;
 
 namespace LearnLanguages.Study
 {
@@ -77,6 +78,8 @@ namespace LearnLanguages.Study
         }
       }
     }
+
+    PhrasePercentKnownAdvisor
 
     #endregion
 
