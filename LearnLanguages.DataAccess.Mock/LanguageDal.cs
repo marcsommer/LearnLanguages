@@ -175,7 +175,6 @@ namespace LearnLanguages.DataAccess.Mock
       var dto = new LanguageDto() { Id = Guid.NewGuid() };
       return dto;
     }
-
     protected override LanguageDto FetchImpl(Guid id)
     {
       LanguageDto retLanguageDto = null;
@@ -197,7 +196,6 @@ namespace LearnLanguages.DataAccess.Mock
 
       return retLanguageDto;
     }
-
     protected override LanguageDto FetchImpl(string languageText)
     {
       LanguageDto retLanguageDto = null;
@@ -219,7 +217,6 @@ namespace LearnLanguages.DataAccess.Mock
 
       return retLanguageDto;
     }
-
     protected override ICollection<LanguageDto> FetchImpl(ICollection<Guid> ids)
     {
       List<LanguageDto> retLanguageDtos = null;
@@ -262,7 +259,6 @@ namespace LearnLanguages.DataAccess.Mock
 
       return retLanguageDtos;
     }
-
     protected override LanguageDto UpdateImpl(LanguageDto dto)
     {
       LanguageDto retLanguageDto = null;
@@ -294,7 +290,6 @@ namespace LearnLanguages.DataAccess.Mock
 
       return retLanguageDto;
     }
-
     protected override LanguageDto InsertImpl(LanguageDto dto)
     {
       LanguageDto retResult = null;
@@ -321,7 +316,6 @@ namespace LearnLanguages.DataAccess.Mock
       
       return retResult;
     }
-
     protected override LanguageDto DeleteImpl(Guid id)
     {
       LanguageDto retResult = null;
@@ -347,7 +341,6 @@ namespace LearnLanguages.DataAccess.Mock
       
       return retResult;
     }
-
     protected override ICollection<LanguageDto> GetAllImpl()
     {
       var allDtos = new List<LanguageDto>(SeedData.Instance.Languages);

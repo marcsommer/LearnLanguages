@@ -56,14 +56,6 @@ namespace LearnLanguages.Business.Security
     }
     #endregion
 
-    public static readonly PropertyInfo<string> NativeLanguageTextProperty = 
-      RegisterProperty<string>(c => c.NativeLanguageText);
-    public string NativeLanguageText
-    {
-      get { return GetProperty(NativeLanguageTextProperty); }
-      private set { LoadProperty(NativeLanguageTextProperty, value); }
-    }
-
     /// <summary>
     /// If current user is not authenticated, throws a UserNotAuthenticatedException.
     /// </summary>
@@ -102,7 +94,6 @@ namespace LearnLanguages.Business.Security
         Name = userDto.Username;
         Salt = userDto.Salt;
         UserId = userDto.Id;
-        NativeLanguageText = userDto.NativeLanguageText;
         
         //ROLES
         var resultRoles = dal.GetRoles(Name);

@@ -120,6 +120,12 @@
   <data name="DefaultNewStudyDataNativeLanguageText" xml:space="preserve">
     <value />
   </data>
+  <data name="DefaultPhraseBeliefStrength" xml:space="preserve">
+    <value>1.0</value>
+  </data>
+  <data name="DefaultPhraseBeliefText" xml:space="preserve">
+    <value />
+  </data>
   <data name="MetadataEquals" xml:space="preserve">
     <value>=</value>
   </data>

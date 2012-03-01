@@ -76,9 +76,6 @@
     <Compile Include="..\LearnLanguages.Common\CommonResources.cs">
       <Link>CommonResources.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Common\Core\AsyncResultOfT.cs">
-      <Link>Core\AsyncResultOfT.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Common\Core\CustomException.cs">
       <Link>Core\CustomException.cs</Link>
     </Compile>
@@ -87,9 +84,6 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Core\RandomPicker.cs">
       <Link>Core\RandomPicker.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Common\Core\ResultArgsOfT.cs">
-      <Link>Core\ResultArgsOfT.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Core\ResultOfT.cs">
       <Link>Core\ResultOfT.cs</Link>
@@ -132,6 +126,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Common\EventArgs\ModelEventArgsOfT.cs">
       <Link>EventArgs\ModelEventArgsOfT.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\EventArgs\ResultArgsOfT.cs">
+      <Link>EventArgs\ResultArgsOfT.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Exceptions\PartNotSatisfiedException.cs">
       <Link>Exceptions\PartNotSatisfiedException.cs</Link>

@@ -284,6 +284,15 @@ namespace LearnLanguages.DataAccess.Mock
 
         dto.Id = Guid.NewGuid();
         SeedData.Instance.Lines.Add(dto);
+
+        //ADD LINE.ID TO USER
+        var resultsUser = from u in SeedData.Instance.Users
+                          where u.Id == dto.UserId
+                          select u;
+
+        var user = resultsUser.First();
+        user.LineIds.Add(dto.Id);
+        
         return dto;
       }
       else

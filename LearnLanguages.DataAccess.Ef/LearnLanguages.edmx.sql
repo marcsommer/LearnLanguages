@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 02/23/2012 12:24:54
+-- Date Created: 02/29/2012 20:02:13
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -68,6 +68,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ContextPhraseDataTranslationData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TranslationDatas] DROP CONSTRAINT [FK_ContextPhraseDataTranslationData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas] DROP CONSTRAINT [FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -90,6 +93,9 @@ IF OBJECT_ID(N'[dbo].[TranslationDatas]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[LineDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[LineDatas];
+GO
+IF OBJECT_ID(N'[dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas];
 GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
@@ -159,6 +165,14 @@ CREATE TABLE [dbo].[LineDatas] (
 );
 GO
 
+-- Creating table 'DefaultStudyAdvisorKnowledgeBeliefDatas'
+CREATE TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas] (
+    [Id] uniqueidentifier  NOT NULL,
+    [ExpirationDate] datetime  NOT NULL,
+    [PhraseDataId] uniqueidentifier  NOT NULL
+);
+GO
+
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
     [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
@@ -224,6 +238,12 @@ GO
 -- Creating primary key on [Id] in table 'LineDatas'
 ALTER TABLE [dbo].[LineDatas]
 ADD CONSTRAINT [PK_LineDatas]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'DefaultStudyAdvisorKnowledgeBeliefDatas'
+ALTER TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]
+ADD CONSTRAINT [PK_DefaultStudyAdvisorKnowledgeBeliefDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -471,6 +491,20 @@ ADD CONSTRAINT [FK_ContextPhraseDataTranslationData]
 CREATE INDEX [IX_FK_ContextPhraseDataTranslationData]
 ON [dbo].[TranslationDatas]
     ([ContextPhraseDataId]);
+GO
+
+-- Creating foreign key on [PhraseDataId] in table 'DefaultStudyAdvisorKnowledgeBeliefDatas'
+ALTER TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]
+ADD CONSTRAINT [FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData]
+    FOREIGN KEY ([PhraseDataId])
+    REFERENCES [dbo].[PhraseDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData'
+CREATE INDEX [IX_FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData]
+ON [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]
+    ([PhraseDataId]);
 GO
 
 -- --------------------------------------------------

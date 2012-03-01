@@ -183,7 +183,6 @@ namespace LearnLanguages.Silverlight.Tests
     
     [TestMethod]
     [Asynchronous]
-    [Tag("current")]
     public void GET_ALL_EDIT_SAVE()
     {
       var isLoaded = false;

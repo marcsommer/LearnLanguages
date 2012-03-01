@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DalBases\PhraseBeliefDalBase.cs" />
     <Compile Include="DalBases\MultiLineTextDalBase.cs" />
     <Compile Include="DalBases\LineDalBase.cs" />
     <Compile Include="DalBases\StudyDataDalBase.cs" />
@@ -58,7 +59,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Dtos\DefaultStudyAdvisorKnowledgeBeliefDto.cs" />
+    <Compile Include="Dtos\PhraseBeliefDto.cs" />
     <Compile Include="Dtos\MultiLineTextDto.cs" />
     <Compile Include="Dtos\LineDto.cs" />
     <Compile Include="Dtos\StudyDataDto.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Exceptions\Crud\InsertFailedException.cs" />
     <Compile Include="Exceptions\MultipleItemsFoundDataAccessException.cs" />
     <Compile Include="Exceptions\Crud\UpdateFailedException.cs" />
+    <Compile Include="Interfaces\IPhraseBeliefDal.cs" />
     <Compile Include="Interfaces\IMultiLineTextDal.cs" />
     <Compile Include="Interfaces\ILineDal.cs" />
     <Compile Include="Interfaces\IStudyDataDal.cs" />

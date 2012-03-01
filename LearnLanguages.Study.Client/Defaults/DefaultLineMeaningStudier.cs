@@ -79,8 +79,6 @@ namespace LearnLanguages.Study
       }
     }
 
-    PhrasePercentKnownAdvisor
-
     #endregion
 
     #region Methods

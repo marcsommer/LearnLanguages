@@ -78,9 +78,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DalResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Dtos\DefaultStudyAdvisorKnowledgeBeliefDto.cs">
-      <Link>Dtos\DefaultStudyAdvisorKnowledgeBeliefDto.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\LanguageDto.cs">
       <Link>Dtos\LanguageDto.cs</Link>
     </Compile>
@@ -89,6 +86,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\MultiLineTextDto.cs">
       <Link>Dtos\MultiLineTextDto.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Dtos\PhraseBeliefDto.cs">
+      <Link>Dtos\PhraseBeliefDto.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Dtos\PhraseDto.cs">
       <Link>Dtos\PhraseDto.cs</Link>

@@ -21,12 +21,12 @@ namespace LearnLanguages.Common
 
     public static List<string> ParseIntoWords(this string str)
     {
-      //var splitIntoWordsPattern = CommonResources.RegExSplitPatternWords;
-      //splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");
-      var delimiters = CommonResources.SplitWordsDelimiters;
+      var delimiterString = CommonResources.SplitWordsDelimiterString;
+      delimiterString = delimiterString.Replace("\\r", "\r");
+      delimiterString = delimiterString.Replace("\\n", "\n");
+
+      var delimiters = delimiterString.ToCharArray();
       var words = str.Split(delimiters).ToList();
-      //todo: Have a real programmer split words properly using regex with regional considerations, so foreign languages will work properly.
-      //var words = new List<string>(Regex.Split(str, splitIntoWordsPattern));
       return words;
     }
 

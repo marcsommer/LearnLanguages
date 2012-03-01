@@ -50,6 +50,7 @@ namespace LearnLanguages.DataAccess
       InitializeLanguages();
       InitializePhrases();
       InitializeLines();
+      InitializePhraseBeliefs();
       InitializeTranslations();
       InitializeUsers();
       InitializeRoles();
@@ -180,6 +181,17 @@ namespace LearnLanguages.DataAccess
       }
     }
     #endregion
+    #region PhraseBelief Data
+    public Guid IdPhraseBeliefAny
+    {
+      get
+      {
+        var results = (from belief in PhraseBeliefs
+                       select belief);
+        return results.First().Id;
+      }
+    }
+    #endregion
     #region Translation Data
     public TranslationDto HelloTranslationDto
     {
@@ -241,6 +253,7 @@ namespace LearnLanguages.DataAccess
     public List<LanguageDto> Languages { get; private set; }
     public List<PhraseDto> Phrases { get; private set; }
     public List<LineDto> Lines { get; private set; }
+    public List<PhraseBeliefDto> PhraseBeliefs { get; private set; }
     public List<TranslationDto> Translations { get; private set; }
     public List<UserDto> Users { get; private set; }
     public List<RoleDto> Roles { get; private set; }
@@ -332,6 +345,22 @@ namespace LearnLanguages.DataAccess
         }
       };
     }
+    private void InitializePhraseBeliefs()
+    {
+      PhraseBeliefs = new List<PhraseBeliefDto>()
+      {
+        new PhraseBeliefDto()
+        {
+          Id = new Guid("E1059635-09FF-4ACB-9F9F-08CF3EB84D6A"),
+          Date = DateTime.UtcNow,
+          Text = "This is some belief here.",
+          Strength = 1.2d,
+          PhraseId = IdHello, 
+          UserId = DefaultTestValidUserId,
+          Username = TestValidUsername
+        },
+      };
+    }
     private void InitializeTranslations()
     {
       Translations = new List<TranslationDto>()
@@ -357,11 +386,11 @@ namespace LearnLanguages.DataAccess
         {
           Id = DefaultTestValidUserId,
           Username = TestValidUsername,
-          NativeLanguageText = EnglishText,
           Salt = TestSalt,
           SaltedHashedPasswordValue = TestSaltedHashedPassword,
           PhraseIds = new List<Guid>() { IdHello, IdDog, IdHola, IdLongPhrase },
           LineIds = new List<Guid>() { IdLine0, IdLine1 },
+          PhraseBeliefIds = new List<Guid>() { IdHello },
           TranslationIds = new List<Guid>() { IdHelloTranslation },
           RoleIds = new List<Guid>() { AdminRoleId, UserRoleId }
         }

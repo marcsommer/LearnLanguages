@@ -89,7 +89,6 @@ namespace LearnLanguages.DataAccess.Ef
         var userData = context.UserDatas.CreateObject();
         userData.Id = userDto.Id;
         userData.Username = userDto.Username;
-        userData.NativeLanguageText = userDto.NativeLanguageText;
         userData.Salt = userDto.Salt;
         userData.SaltedHashedPasswordValue = userDto.SaltedHashedPasswordValue;
         
