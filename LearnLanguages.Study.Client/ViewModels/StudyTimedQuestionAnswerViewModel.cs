@@ -251,7 +251,7 @@ namespace LearnLanguages.Study.ViewModels
       _DateTimeAnswerShown = DateTime.UtcNow;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
       History.HistoryPublisher.Ton.PublishEvent(
-        new History.Events.PhraseReviewedEvent(Question, ReviewMethodId, duration));
+        new History.Events.ReviewedPhraseEvent(Question, ReviewMethodId, duration));
     }
 
     protected override Guid GetReviewMethodId()

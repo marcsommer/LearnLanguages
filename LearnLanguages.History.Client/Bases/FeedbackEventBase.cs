@@ -27,6 +27,19 @@ namespace LearnLanguages.History.Bases
 
     }
 
+    /// <summary>
+    /// If you know the target of the feedback, then you can use this overload
+    /// with the targetId, targetType.
+    /// </summary>
+    public FeedbackEventBase(Guid targetId, string targetType, double feedback, TimeSpan duration)
+      : base(targetId, 
+             targetType, 
+             duration, 
+             new KeyValuePair<string, object>(HistoryResources.Key_FeedbackAsDouble, feedback))
+    {
+      
+    }
+
     //public FeedbackEventBase(IFeedback Feedback, TimeSpan duration)
     //  : base(duration,
     //         new KeyValuePair<string, object>(HistoryResources.Key_FeedbackId, Feedback.Id))

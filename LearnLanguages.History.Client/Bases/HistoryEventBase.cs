@@ -37,6 +37,24 @@ namespace LearnLanguages.History.Bases
       AddDetails(details);
     }
 
+    /// <summary>
+    /// This should be most common.  Use this when you have a specific item that the event
+    /// pertains to.  This can be used in multiple events to link them together to form
+    /// something similar to a saga, or a long-running process.
+    /// For common types, use HistoryResources.Key_TargetTypePhrase/Line/MultiLineText as the 
+    /// targetType string.
+    /// </summary>
+    public HistoryEventBase(Guid targetId, 
+                            string targetType, 
+                            TimeSpan duration, 
+                            params KeyValuePair<string, object>[] details)
+      : this(duration, details)
+    {
+      AddDetail(HistoryResources.Key_TargetId, targetId);
+      AddDetail(HistoryResources.Key_TargetType, targetType);
+    }
+
+
     protected void AddDetails(KeyValuePair<string, object>[] details)
     {
       if (details != null && details.Length > 0)
@@ -73,6 +91,43 @@ namespace LearnLanguages.History.Bases
         Doubles.Add(key, (double)value);
       else
         Strings.Add(key, value.ToString());
+    }
+    public virtual bool TryGetDetail(string key, out object detail)
+    {
+      if (string.IsNullOrEmpty(key))
+        throw new ArgumentNullException("key");
+
+      bool containsDetail = false;
+      detail = null;
+      if (Ids.ContainsKey(key))
+      {
+        containsDetail = true;
+        detail = Ids[key];
+      }
+      else if (Strings.ContainsKey(key))
+      {
+        containsDetail = true;
+        detail = Strings[key];
+      }
+      else if (Ints.ContainsKey(key))
+      {
+        containsDetail = true;
+        detail = Ints[key];
+      }
+      else if (Doubles.ContainsKey(key))
+      {
+        containsDetail = true;
+        detail = Doubles[key];
+      }
+
+      return containsDetail;
+    }
+    public virtual object GetDetail(string key)
+    {
+      object detail = null;
+      if (!TryGetDetail(key, out detail))
+        throw new ArgumentException("key");
+      return detail;
     }
 
     public MobileDictionary<string, Guid> Ids { get; protected set; }

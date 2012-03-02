@@ -66,18 +66,25 @@
     <Compile Include="Bases\SingleLineEventBase.cs" />
     <Compile Include="Bases\ParentPhraseChildPhraseEventBase.cs" />
     <Compile Include="Bases\SinglePhraseEventBase.cs" />
-    <Compile Include="Events\FeedbackAsDoubleGivenEvent.cs" />
-    <Compile Include="Events\LineReviewedEvent.cs" />
-    <Compile Include="Events\PhraseViewedOnScreenEvent.cs" />
-    <Compile Include="Events\ParentPhraseSpawnedChildPhraseEvent.cs" />
-    <Compile Include="Events\PhraseCreatedFromScratchEvent.cs" />
-    <Compile Include="Events\PhraseReviewedEvent.cs" />
+    <Compile Include="CompoundEventMakers\CompoundEventMakerBase.cs" />
+    <Compile Include="CompoundEventMakers\PhraseReviewedCompoundEventMaker.cs" />
+    <Compile Include="Events\Compound\ReviewedPhraseEvent.cs" />
+    <Compile Include="Events\Compound\ReviewingPhraseEvent.cs" />
+    <Compile Include="Events\Simple\ViewingPhrasePartOfLineOnScreenEvent.cs" />
+    <Compile Include="Events\Simple\ViewedPhrasePartOfLineOnScreenEvent.cs" />
+    <Compile Include="Events\Simple\ViewedPhraseOnScreenEvent.cs" />
+    <Compile Include="Events\Simple\FeedbackAsDoubleGivenEvent.cs" />
+    <Compile Include="Events\Compound\LineReviewedEvent.cs" />
+    <Compile Include="Events\Simple\ViewingPhraseOnScreenEvent.cs" />
+    <Compile Include="Events\Simple\ParentPhraseSpawnedChildPhraseEvent.cs" />
+    <Compile Include="Events\Simple\PhraseCreatedFromScratchEvent.cs" />
+    <Compile Include="HistoryException.cs" />
     <Compile Include="HistoryResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HistoryResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="History.cs" />
+    <Compile Include="HistoryPublisher.cs" />
     <Compile Include="Bases\HistoryEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -101,6 +108,7 @@
       <LastGenOutput>HistoryResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

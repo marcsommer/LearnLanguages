@@ -197,7 +197,7 @@ namespace LearnLanguages.Study.ViewModels
       HidingAnswer = false;
       _DateTimeAnswerShown = DateTime.UtcNow;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
-      HistoryPublisher.Ton.PublishEvent(new PhraseReviewedEvent(Question, ReviewMethodId, duration));
+      HistoryPublisher.Ton.PublishEvent(new ReviewedPhraseEvent(Question, ReviewMethodId, duration));
       _CompletedCallback(null);
     }
 
