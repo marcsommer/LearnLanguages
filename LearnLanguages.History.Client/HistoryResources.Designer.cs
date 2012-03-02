@@ -124,6 +124,24 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LineNumber.
+        /// </summary>
+        internal static string Key_LineNumber {
+            get {
+                return ResourceManager.GetString("Key_LineNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LineText.
+        /// </summary>
+        internal static string Key_LineText {
+            get {
+                return ResourceManager.GetString("Key_LineText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ParentId.
         /// </summary>
         internal static string Key_ParentId {

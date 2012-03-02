@@ -51,11 +51,11 @@ namespace LearnLanguages.History
     {
       _EventAggregator.Publish(historyEvent);
     }
-    public void Subscribe(object subscriber)
+    public void SubscribeToEvents(object subscriber)
     {
       _EventAggregator.Subscribe(subscriber);
     }
-    public void Unsubscribe(object subscriber)
+    public void UnsubscribeFromEvents(object subscriber)
     {
       _EventAggregator.Unsubscribe(subscriber);
     }

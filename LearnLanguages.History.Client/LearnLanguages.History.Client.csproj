@@ -67,7 +67,9 @@
     <Compile Include="Bases\ParentPhraseChildPhraseEventBase.cs" />
     <Compile Include="Bases\SinglePhraseEventBase.cs" />
     <Compile Include="CompoundEventMakers\CompoundEventMakerBase.cs" />
+    <Compile Include="CompoundEventMakers\LineReviewedCompoundEventMaker.cs" />
     <Compile Include="CompoundEventMakers\PhraseReviewedCompoundEventMaker.cs" />
+    <Compile Include="Events\Compound\ReviewingLineEvent.cs" />
     <Compile Include="Events\Compound\ReviewedPhraseEvent.cs" />
     <Compile Include="Events\Compound\ReviewingPhraseEvent.cs" />
     <Compile Include="Events\Simple\ViewingPhrasePartOfLineOnScreenEvent.cs" />
