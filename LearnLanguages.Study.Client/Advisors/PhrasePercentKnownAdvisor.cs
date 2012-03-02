@@ -3,10 +3,11 @@ using LearnLanguages.Common;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Business;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study.Advisors
 {
-  public class PhrasePercentKnownAdvisor : IAdvisor
+  public class PhrasePercentKnownAdvisor : IAdvisor, IHandle<History.Events.LineReviewedEvent>
   {
     public Guid Id { get { return Guid.Parse(StudyResources.AdvisorIdPhrasePercentKnownStudyAdvisor); } }
     public bool AskAdvice(QuestionArgs question, AsyncCallback<object> answer)
@@ -23,6 +24,11 @@ namespace LearnLanguages.Study.Advisors
       ///2) Analyze history events to project how much we think the user knows for this phrase.
 
       return true;
+    }
+
+    public void Handle(History.Events.LineReviewedEvent message)
+    {
+      throw new NotImplementedException();
     }
   }
 }

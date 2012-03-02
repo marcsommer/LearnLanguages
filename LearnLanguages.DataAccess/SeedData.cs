@@ -352,7 +352,7 @@ namespace LearnLanguages.DataAccess
         new PhraseBeliefDto()
         {
           Id = new Guid("E1059635-09FF-4ACB-9F9F-08CF3EB84D6A"),
-          Date = DateTime.UtcNow,
+          Date = DateTime.Now,
           Text = "This is some belief here.",
           Strength = 1.2d,
           PhraseId = IdHello, 

@@ -124,20 +124,20 @@ namespace LearnLanguages.Study.ViewModels
     public override IFeedback GetFeedback(int timeoutMilliseconds)
     {
       TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
-      DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
+      DateTime timeoutDateTime = DateTime.Now + timeoutTimeSpan;
       IsEnabled = true;
       bool feedbackIsProvided = false;
-      _FeedbackAsked = DateTime.UtcNow;
+      _FeedbackAsked = DateTime.Now;
       do
       {
         System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
         var feedbackValue = ((Feedback<double>)Feedback).Value;
         feedbackIsProvided = feedbackValue != -1;
       }
-      while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
+      while (DateTime.Now < timeoutDateTime && !feedbackIsProvided);
       IsEnabled = false;
 
-      _FeedbackGiven = DateTime.UtcNow;
+      _FeedbackGiven = DateTime.Now;
       PublishFeedback();
       return Feedback;
     }
@@ -156,9 +156,9 @@ namespace LearnLanguages.Study.ViewModels
           {
             //var threadIdDoWork = System.Threading.Thread.CurrentThread.ManagedThreadId;
             TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
-            DateTime timeoutDateTime = DateTime.UtcNow + timeoutTimeSpan;
+            DateTime timeoutDateTime = DateTime.Now + timeoutTimeSpan;
             bool feedbackIsProvided = false;
-            _FeedbackAsked = DateTime.UtcNow;
+            _FeedbackAsked = DateTime.Now;
             do
             {
               //DO THIS WHILE WE ARE WAITING FOR FEEDBACK FROM A CONTROL OR A TIMEOUT
@@ -166,7 +166,7 @@ namespace LearnLanguages.Study.ViewModels
               feedbackIsProvided = feedbackValue != -1;
               System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
             }
-            while (DateTime.UtcNow < timeoutDateTime && !feedbackIsProvided);
+            while (DateTime.Now < timeoutDateTime && !feedbackIsProvided);
 
           }
           catch (Exception ex)
@@ -179,7 +179,7 @@ namespace LearnLanguages.Study.ViewModels
         {
           //RUNS ON THE MAIN THREAD
           //var threadIdCompleted = System.Threading.Thread.CurrentThread.ManagedThreadId;
-          _FeedbackGiven = DateTime.UtcNow;
+          _FeedbackGiven = DateTime.Now;
           PublishFeedback();
           IsEnabled = false;
           callback(this, new ResultArgs<IFeedback>(Feedback));

@@ -197,7 +197,7 @@ namespace LearnLanguages.Business
       {
         Id = Guid.NewGuid();
         //LanguageId = LanguageEdit.GetLanguageEdit
-        Date = DateTime.UtcNow + TimeSpan.FromDays(1.0d);//defaults to tomorrow
+        Date = DateTime.Now + TimeSpan.FromDays(1.0d);//defaults to tomorrow
         Text = BusinessResources.DefaultPhraseBeliefText;
         Strength = double.Parse(BusinessResources.DefaultPhraseBeliefStrength);
         PhraseId = Guid.Empty;

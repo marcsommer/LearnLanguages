@@ -175,7 +175,7 @@ namespace LearnLanguages.Study.ViewModels
     public override void Show(ExceptionCheckCallback callback)
     {
       _CompletedCallback = callback;
-      _DateTimeQuestionShown = DateTime.UtcNow;
+      _DateTimeQuestionShown = DateTime.Now;
     }
 
     private void HideAnswer()
@@ -195,7 +195,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       AnswerVisibility = Visibility.Visible;
       HidingAnswer = false;
-      _DateTimeAnswerShown = DateTime.UtcNow;
+      _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
       HistoryPublisher.Ton.PublishEvent(new ReviewedPhraseEvent(Question, ReviewMethodId, duration));
       _CompletedCallback(null);

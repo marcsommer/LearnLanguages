@@ -285,7 +285,7 @@ namespace LearnLanguages.Silverlight.Tests
 
         //EDIT
         newPhraseBeliefEdit.Date = DateTime.Now - TimeSpan.FromDays(1);
-        newPhraseBeliefEdit.Date = DateTime.UtcNow - TimeSpan.FromDays(1);
+        newPhraseBeliefEdit.Date = DateTime.Now - TimeSpan.FromDays(1);
         newPhraseBeliefEdit.Text = "TestPhraseBelief.Text edited in NEW_EDIT_BEGINSAVE_GET test";
         newPhraseBeliefEdit.Strength = 2.0d;
         newPhraseBeliefEdit.Phrase = _TestPhraseEdit;
@@ -379,7 +379,7 @@ namespace LearnLanguages.Silverlight.Tests
         isNewed = true;
 
         //EDIT
-        newPhraseBeliefEdit.Date = DateTime.UtcNow - TimeSpan.FromDays(7);
+        newPhraseBeliefEdit.Date = DateTime.Now - TimeSpan.FromDays(7);
         newPhraseBeliefEdit.Text = "TestPhraseBelief.Text edited in NEW_EDIT_BEGINSAVE_GET_DELETE_GET test";
         newPhraseBeliefEdit.Strength = 3.0d;
         newPhraseBeliefEdit.Phrase = _TestPhraseEdit;

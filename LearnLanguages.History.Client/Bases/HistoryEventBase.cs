@@ -14,7 +14,7 @@ namespace LearnLanguages.History.Bases
     public HistoryEventBase()
     {
       Id = Guid.NewGuid();
-      TimeStamp = DateTime.UtcNow;
+      TimeStamp = DateTime.Now;
     }
 
     /// <summary>
