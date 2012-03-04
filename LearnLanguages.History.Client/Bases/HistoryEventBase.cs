@@ -130,6 +130,11 @@ namespace LearnLanguages.History.Bases
       return detail;
     }
 
+    public virtual T GetDetail<T>(string key)
+    {
+      return (T)GetDetail(key);
+    }
+
     public MobileDictionary<string, Guid> Ids { get; protected set; }
     public MobileDictionary<string, string> Strings { get; protected set; }
     public MobileDictionary<string, int> Ints { get; protected set; }

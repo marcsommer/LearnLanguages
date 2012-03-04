@@ -9,7 +9,7 @@ namespace LearnLanguages.DataAccess.Mock
   public class CustomIdentityDal : ICustomIdentityDal
   {
     //private Guid _TestValidUserId = new Guid("89991D3B-0435-4167-8691-455D3D5000BC");
-    private Guid _TestValidUserId = SeedData.Instance.DefaultTestValidUserId;
+    private Guid _TestValidUserId = SeedData.Ton.DefaultTestValidUserId;
     private string _TestValidUsername = "user";
     private static Guid _TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
     private RoleDto _TestRole = new RoleDto()
@@ -31,7 +31,7 @@ namespace LearnLanguages.DataAccess.Mock
     {
       //if (username != _TestValidUsername)
       //  throw new GeneralDataAccessException("GetUser(username) not found");
-      var results = from u in SeedData.Instance.Users
+      var results = from u in SeedData.Ton.Users
                     where u.Username == username
                     select u;
 
@@ -44,10 +44,10 @@ namespace LearnLanguages.DataAccess.Mock
 
       //UserDto dto = new UserDto()
       //{
-      //  Id = SeedData.Instance.DefaultTestValidUserId,//_TestValidUserId,
-      //  Salt = SeedData.Instance.TestSalt, //_TestSalt
-      //  SaltedHashedPasswordValue = SeedData.Instance.TestSaltedHashedPassword,// _TestSaltedHashedPassword,
-      //  Username = SeedData.Instance.TestValidUsername//_TestValidUsername
+      //  Id = SeedData.Ton.DefaultTestValidUserId,//_TestValidUserId,
+      //  Salt = SeedData.Ton.TestSalt, //_TestSalt
+      //  SaltedHashedPasswordValue = SeedData.Ton.TestSaltedHashedPassword,// _TestSaltedHashedPassword,
+      //  Username = SeedData.Ton.TestValidUsername//_TestValidUsername
       //};
       //return Result<UserDto>.Success(dto);
     }
@@ -58,7 +58,7 @@ namespace LearnLanguages.DataAccess.Mock
       {
         var roleDtos = new List<RoleDto>();
 
-        var userResults = (from user in SeedData.Instance.Users
+        var userResults = (from user in SeedData.Ton.Users
                            where user.Username == username
                            select user);
 
@@ -67,7 +67,7 @@ namespace LearnLanguages.DataAccess.Mock
           var roleIds = userResults.First().RoleIds;
           foreach (var roleId in roleIds)
           {
-            var roleResults = (from role in SeedData.Instance.Roles
+            var roleResults = (from role in SeedData.Ton.Roles
                                where role.Id == roleId
                                select role);
             if (roleResults.Count() == 1)

@@ -15,7 +15,7 @@ namespace LearnLanguages.DataAccess.Mock
     //    var dto = new MultiLineTextDto() 
     //    { 
     //      Id = Guid.NewGuid(),
-    //      LanguageId = SeedData.Instance.DefaultLanguageId
+    //      LanguageId = SeedData.Ton.DefaultLanguageId
     //    };
     //    retResult = Result<MultiLineTextDto>.Success(dto);
     //  }
@@ -30,7 +30,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.MultiLineTexts
+    //    var results = from item in SeedData.Ton.MultiLineTexts
     //                  where item.Id == id
     //                  select item;
 
@@ -56,16 +56,16 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.MultiLineTexts
+    //    var results = from item in SeedData.Ton.MultiLineTexts
     //                  where item.Id == dto.Id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var MultiLineTextToUpdate = results.First();
-    //      SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToUpdate);
+    //      SeedData.Ton.MultiLineTexts.Remove(MultiLineTextToUpdate);
     //      dto.Id = Guid.NewGuid();
-    //      SeedData.Instance.MultiLineTexts.Add(dto);
+    //      SeedData.Ton.MultiLineTexts.Add(dto);
     //      retResult = Result<MultiLineTextDto>.Success(dto);
     //    }
     //    else
@@ -88,7 +88,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.MultiLineTexts
+    //    var results = from item in SeedData.Ton.MultiLineTexts
     //                  where item.Id == dto.Id
     //                  select item;
 
@@ -96,14 +96,14 @@ namespace LearnLanguages.DataAccess.Mock
     //    {
     //      dto.Id = Guid.NewGuid();
     //      //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-    //      if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
+    //      if (dto.LanguageId == Guid.Empty || !SeedData.Ton.ContainsLanguageId(dto.LanguageId))
     //      {
     //        //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
     //        //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
     //        //MultiLineTextDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
     //        throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
     //      }
-    //      SeedData.Instance.MultiLineTexts.Add(dto);
+    //      SeedData.Ton.MultiLineTexts.Add(dto);
     //      retResult = Result<MultiLineTextDto>.Success(dto);
     //    }
     //    else
@@ -126,14 +126,14 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.MultiLineTexts
+    //    var results = from item in SeedData.Ton.MultiLineTexts
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var MultiLineTextToRemove = results.First();
-    //      SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToRemove);
+    //      SeedData.Ton.MultiLineTexts.Remove(MultiLineTextToRemove);
     //      retResult = Result<MultiLineTextDto>.Success(MultiLineTextToRemove);
     //    }
     //    else
@@ -156,7 +156,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<ICollection<MultiLineTextDto>> retResult = Result<ICollection<MultiLineTextDto>>.Undefined(null);
     //  try
     //  {
-    //    var allDtos = new List<MultiLineTextDto>(SeedData.Instance.MultiLineTexts);
+    //    var allDtos = new List<MultiLineTextDto>(SeedData.Ton.MultiLineTexts);
     //    retResult = Result<ICollection<MultiLineTextDto>>.Success(allDtos);
     //  }
     //  catch (Exception ex)
@@ -171,14 +171,14 @@ namespace LearnLanguages.DataAccess.Mock
       var dto = new MultiLineTextDto()
       {
         Id = Guid.NewGuid(),
-        UserId = SeedData.Instance.GetTestValidUserDto().Id,
-        Username = SeedData.Instance.TestValidUsername
+        UserId = SeedData.Ton.GetTestValidUserDto().Id,
+        Username = SeedData.Ton.TestValidUsername
       };
       return dto;
     }
     protected override MultiLineTextDto FetchImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.MultiLineTexts
+      var results = from item in SeedData.Ton.MultiLineTexts
                     where item.Id == id
                     select item;
 
@@ -211,7 +211,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<MultiLineTextDto> FetchByIdImpl(Guid lineId)
     {
-      var results = from multiLineText in SeedData.Instance.MultiLineTexts
+      var results = from multiLineText in SeedData.Ton.MultiLineTexts
                     where multiLineText.LineIds.Contains(lineId)
                     select multiLineText;
 
@@ -219,7 +219,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override MultiLineTextDto UpdateImpl(MultiLineTextDto dto)
     {
-      var results = from item in SeedData.Instance.MultiLineTexts
+      var results = from item in SeedData.Ton.MultiLineTexts
                     where item.Id == dto.Id
                     select item;
 
@@ -228,9 +228,9 @@ namespace LearnLanguages.DataAccess.Mock
         CheckValidity(dto);
         CheckReferentialIntegrity(dto);
         var MultiLineTextToUpdate = results.First();
-        SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToUpdate);
+        SeedData.Ton.MultiLineTexts.Remove(MultiLineTextToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.MultiLineTexts.Add(dto);
+        SeedData.Ton.MultiLineTexts.Add(dto);
         return dto;
       }
       else
@@ -243,7 +243,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override MultiLineTextDto InsertImpl(MultiLineTextDto dto)
     {
-      var results = from item in SeedData.Instance.MultiLineTexts
+      var results = from item in SeedData.Ton.MultiLineTexts
                     where item.Id == dto.Id
                     select item;
 
@@ -251,7 +251,7 @@ namespace LearnLanguages.DataAccess.Mock
       {
         CheckValidity(dto);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.MultiLineTexts.Add(dto);
+        SeedData.Ton.MultiLineTexts.Add(dto);
         return dto;
       }
       else
@@ -264,14 +264,14 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override MultiLineTextDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.MultiLineTexts
+      var results = from item in SeedData.Ton.MultiLineTexts
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
         var MultiLineTextToRemove = results.First();
-        SeedData.Instance.MultiLineTexts.Remove(MultiLineTextToRemove);
+        SeedData.Ton.MultiLineTexts.Remove(MultiLineTextToRemove);
         return MultiLineTextToRemove;
       }
       else
@@ -284,7 +284,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<MultiLineTextDto> GetAllImpl()
     {
-      var allDtos = new List<MultiLineTextDto>(SeedData.Instance.MultiLineTexts);
+      var allDtos = new List<MultiLineTextDto>(SeedData.Ton.MultiLineTexts);
       return allDtos;
     }
 
@@ -301,7 +301,7 @@ namespace LearnLanguages.DataAccess.Mock
       //LINE IDS ARE VALID
       foreach (var id in dto.LineIds)
       {
-        var count = (from p in SeedData.Instance.Lines
+        var count = (from p in SeedData.Ton.Lines
                      where p.Id == id
                      select p).Count();
 
@@ -314,7 +314,7 @@ namespace LearnLanguages.DataAccess.Mock
       }
 
       //USER IS VALID
-      var userCount = (from user in SeedData.Instance.Users
+      var userCount = (from user in SeedData.Ton.Users
                        where user.Id == dto.UserId &&
                              user.Username == dto.Username
                        select user).Count();

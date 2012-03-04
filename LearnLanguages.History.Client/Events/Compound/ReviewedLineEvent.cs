@@ -5,16 +5,27 @@ using System.Collections.Generic;
 
 namespace LearnLanguages.History.Events
 {
+  /// <summary>
+  /// DETAILS: LINE ID
+  /// REVIEWMETHODID
+  /// LINETEXT
+  /// LINENUMBER
+  /// PHRASEID
+  /// LANGUAGEID
+  /// LANGUAGETEXT
+  /// FEEDBACKASDOUBLE
+  /// DURATION
+  /// </summary>
   [Serializable]
-  public class LineReviewedEvent : Bases.SingleLineEventBase
+  public class ReviewedLineEvent : Bases.SingleLineEventBase
   {
-    public LineReviewedEvent()
+    public ReviewedLineEvent()
       : base()
     {
 
     }
 
-    public LineReviewedEvent(Guid lineId, Guid reviewMethodId, string lineText, int lineNumber, Guid phraseId,
+    public ReviewedLineEvent(Guid lineId, Guid reviewMethodId, string lineText, int lineNumber, Guid phraseId,
       Guid languageId, string languageText, double feedbackAsDouble, TimeSpan duration)
       : base(lineId, lineText, lineNumber, phraseId, languageId, languageText, duration)
     {

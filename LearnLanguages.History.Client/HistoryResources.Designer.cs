@@ -22,7 +22,7 @@ namespace LearnLanguages.History {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class HistoryResources {
+    public class HistoryResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LearnLanguages.History {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.History.HistoryResources", typeof(HistoryResources).Assembly);
@@ -51,7 +51,7 @@ namespace LearnLanguages.History {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to An event has occurred in the incorrect order.  E.g. Feedback has been given before an event to produce feedback has occurred..
         /// </summary>
-        internal static string ErrorMsgSagaMessageIncorrectOrder {
+        public static string ErrorMsgSagaMessageIncorrectOrder {
             get {
                 return ResourceManager.GetString("ErrorMsgSagaMessageIncorrectOrder", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to 59FD150A-92BB-4130-A427-2AFF9434B748.
         /// </summary>
-        internal static string HistoryPublisherId {
+        public static string HistoryPublisherId {
             get {
                 return ResourceManager.GetString("HistoryPublisherId", resourceCulture);
             }
@@ -81,16 +81,25 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to ChildId.
         /// </summary>
-        internal static string Key_ChildId {
+        public static string Key_ChildId {
             get {
                 return ResourceManager.GetString("Key_ChildId", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DurationInMilliseconds.
+        /// </summary>
+        public static string Key_DurationInMilliseconds {
+            get {
+                return ResourceManager.GetString("Key_DurationInMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FeedbackAsDouble.
         /// </summary>
-        internal static string Key_FeedbackAsDouble {
+        public static string Key_FeedbackAsDouble {
             get {
                 return ResourceManager.GetString("Key_FeedbackAsDouble", resourceCulture);
             }
@@ -99,7 +108,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to LanguageId.
         /// </summary>
-        internal static string Key_LanguageId {
+        public static string Key_LanguageId {
             get {
                 return ResourceManager.GetString("Key_LanguageId", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to LanguageText.
         /// </summary>
-        internal static string Key_LanguageText {
+        public static string Key_LanguageText {
             get {
                 return ResourceManager.GetString("Key_LanguageText", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to LineId.
         /// </summary>
-        internal static string Key_LineId {
+        public static string Key_LineId {
             get {
                 return ResourceManager.GetString("Key_LineId", resourceCulture);
             }
@@ -126,7 +135,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to LineNumber.
         /// </summary>
-        internal static string Key_LineNumber {
+        public static string Key_LineNumber {
             get {
                 return ResourceManager.GetString("Key_LineNumber", resourceCulture);
             }
@@ -135,7 +144,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to LineText.
         /// </summary>
-        internal static string Key_LineText {
+        public static string Key_LineText {
             get {
                 return ResourceManager.GetString("Key_LineText", resourceCulture);
             }
@@ -144,7 +153,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to ParentId.
         /// </summary>
-        internal static string Key_ParentId {
+        public static string Key_ParentId {
             get {
                 return ResourceManager.GetString("Key_ParentId", resourceCulture);
             }
@@ -153,7 +162,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to PhraseId.
         /// </summary>
-        internal static string Key_PhraseId {
+        public static string Key_PhraseId {
             get {
                 return ResourceManager.GetString("Key_PhraseId", resourceCulture);
             }
@@ -162,7 +171,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to PhraseText.
         /// </summary>
-        internal static string Key_PhraseText {
+        public static string Key_PhraseText {
             get {
                 return ResourceManager.GetString("Key_PhraseText", resourceCulture);
             }
@@ -171,7 +180,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to ReviewMethodId.
         /// </summary>
-        internal static string Key_ReviewMethodId {
+        public static string Key_ReviewMethodId {
             get {
                 return ResourceManager.GetString("Key_ReviewMethodId", resourceCulture);
             }
@@ -180,7 +189,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to TargetId.
         /// </summary>
-        internal static string Key_TargetId {
+        public static string Key_TargetId {
             get {
                 return ResourceManager.GetString("Key_TargetId", resourceCulture);
             }
@@ -189,7 +198,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to TargetType.
         /// </summary>
-        internal static string Key_TargetType {
+        public static string Key_TargetType {
             get {
                 return ResourceManager.GetString("Key_TargetType", resourceCulture);
             }
@@ -198,7 +207,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to Line.
         /// </summary>
-        internal static string Key_TargetTypeLine {
+        public static string Key_TargetTypeLine {
             get {
                 return ResourceManager.GetString("Key_TargetTypeLine", resourceCulture);
             }
@@ -207,7 +216,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to MultiLineText.
         /// </summary>
-        internal static string Key_TargetTypeMultiLineText {
+        public static string Key_TargetTypeMultiLineText {
             get {
                 return ResourceManager.GetString("Key_TargetTypeMultiLineText", resourceCulture);
             }
@@ -216,7 +225,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to Phrase.
         /// </summary>
-        internal static string Key_TargetTypePhrase {
+        public static string Key_TargetTypePhrase {
             get {
                 return ResourceManager.GetString("Key_TargetTypePhrase", resourceCulture);
             }
@@ -225,7 +234,7 @@ namespace LearnLanguages.History {
         /// <summary>
         ///   Looks up a localized string similar to PhraseCreatedFromScratch.
         /// </summary>
-        internal static string TextPhraseCreatedFromScratch {
+        public static string TextPhraseCreatedFromScratch {
             get {
                 return ResourceManager.GetString("TextPhraseCreatedFromScratch", resourceCulture);
             }

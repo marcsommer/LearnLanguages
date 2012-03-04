@@ -95,8 +95,31 @@ namespace LearnLanguages.Study
         AggregateAdjacentKnownPhraseTexts(maxIterations);
         PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
         {
+          //todo: go through all async code and make sure exceptions get relayed to callbacks instead of being thrown.
+          if (e != null)
+            callback(this, new ResultArgs<StudyItemViewModelArgs>(e));
+
           if (_Studiers.Count == 0)
-            throw new Exception("todo: figure out how to communicate that this line is 100% known/what to do");
+          {
+            //WE KNOW OUR ENTIRE LINE, SO POPULATE STUDIERS WITH A SINGLE PHRASE STUDIER WITH OUR LINE.PHRASE
+            var studier = new DefaultPhraseMeaningStudier();
+            studier.InitializeForNewStudySession(_Target.Phrase, (e2) =>
+            {
+              if (e2 != null)
+                callback(this, new ResultArgs<StudyItemViewModelArgs>(e2));
+
+              _Studiers.Add(0, studier);
+              _Studiers[0].GetNextStudyItemViewModel((s2, r2) =>
+                {
+                  if (r2.Error != null)
+                    callback(this, new ResultArgs<StudyItemViewModelArgs>(r2.Error));
+
+                  r2.Object.ViewModel.Shown += new EventHandler(ViewModelShownWhenStudyingAnEntireLine);
+                });
+              _LastStudiedIndex = 0;
+            });
+            
+          }
 
           //WE NOW HAVE COMPLETELY NEW STUDIERS, ALREADY INITIALIZED, SO WE JUST NEED TO RUN 
           //THE FIRST STUDIER AND UPDATE OUR LAST STUDIED INDEX
@@ -111,12 +134,26 @@ namespace LearnLanguages.Study
         _Studiers[indexToStudy].GetNextStudyItemViewModel((s, r) =>
           {
             if (r.Error != null)
-              throw r.Error;
+              callback(this, new ResultArgs<StudyItemViewModelArgs>(r.Error));
 
+            r.Object.ViewModel.Shown += ViewModelShownWhenStudyingAnEntireLine;
             _LastStudiedIndex++;
             callback(this, r);
           });
       }
+    }
+
+    /// <summary>
+    /// When the viewmodel is shown, we know we are the entity that started it.  We should
+    /// publish an event saying we are studying an entire line.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ViewModelShownWhenStudyingAnEntireLine(object sender, EventArgs e)
+    {
+      var viewModel = (IStudyItemViewModelBase)sender;
+      var reviewMethodId = viewModel.ReviewMethodId;
+      var reviewingLineEvent = new History.Events.ReviewingLineEvent(_Target, reviewMethodId);
     }
 
     private void PopulateStudiersWithUnknownAggregatePhraseTexts(ExceptionCheckCallback callback)
@@ -128,57 +165,64 @@ namespace LearnLanguages.Study
         new Business.Criteria.PhraseTextsCriteria(_Target.Phrase.Language.Text, AggregatePhraseTexts);
       PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
         {
-          if (r.Error != null)
-            throw r.Error;
-
-          var phraseList = r.Object;
-          List<PhraseEdit> unknownPhraseEdits = new List<PhraseEdit>();
-          for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+          try
           {
-            var results = from phrase in phraseList
-                          where phrase.Text == AggregatePhraseTexts[i]
-                          select phrase;
-            unknownPhraseEdits.Insert(i, results.First());
+            if (r.Error != null)
+              throw r.Error;
+
+            var phraseList = r.Object;
+            List<PhraseEdit> unknownPhraseEdits = new List<PhraseEdit>();
+            for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+            {
+              var results = from phrase in phraseList
+                            where phrase.Text == AggregatePhraseTexts[i]
+                            select phrase;
+              unknownPhraseEdits.Insert(i, results.First());
+            }
+
+            //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS.
+            //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS.
+            //EACH PHRASE EDIT IS THE SAME INDEX AS ITS PHRASETEXT COUNTERPART.
+
+            //WE NEED TO FIND THE COUNT OF UNKNOWN TEXTS FIRST, TO INCREMENT OUR COUNTER FOR ASYNC FUNCTIONALITY.
+            int unknownCount = 0;
+            for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+            {
+              var phraseText = AggregatePhraseTexts[i];
+              if (!IsPhraseKnown(phraseText))
+                unknownCount++;
+            }
+
+            //UNKNOWNRELATIVEORDER: UNKNOWN IN THAT OUR PHRASE IS UNKNOWN.  RELATIVE ORDER MEANS
+            //THE ORDER/POSITION OF THIS PHRASE RELATIVE TO THE OTHER _UNKNOWN_ PHRASES.
+            var unknownRelativeOrder = -1;
+            int initializedCount = 0;
+            for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+            {
+              var phraseText = AggregatePhraseTexts[i];
+              if (IsPhraseKnown(phraseText))
+                continue;
+
+              //PHRASE IS UNKNOWN, SO INC OUR RELATIVE ORDER AND ADD THE STUDIER TO STUDIERS, INITIALIZING EACH STUDIER.
+              unknownRelativeOrder++;
+              var studier = new DefaultPhraseMeaningStudier();
+              studier.InitializeForNewStudySession(unknownPhraseEdits[i], (e) =>
+                {
+                  if (e != null)
+                    throw e;
+
+                  _Studiers.Add(unknownRelativeOrder, studier);
+                  initializedCount++;
+                  //IF WE HAVE INITIALIZED ALL OF OUR UNKNOWN PHRASES, THEN WE ARE DONE AND CAN CALL CALLBACK.
+                  if (initializedCount == unknownCount)
+                    callback(null);
+                });
+
+            }
           }
-
-          //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS.
-          //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS.
-          //EACH PHRASE EDIT IS THE SAME INDEX AS ITS PHRASETEXT COUNTERPART.
-
-          //WE NEED TO FIND THE COUNT OF UNKNOWN TEXTS FIRST, TO INCREMENT OUR COUNTER FOR ASYNC FUNCTIONALITY.
-          int unknownCount = 0;
-          for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+          catch (Exception ex)
           {
-            var phraseText = AggregatePhraseTexts[i];
-            if (!IsPhraseKnown(phraseText))
-              unknownCount++;
-          }
-
-          //UNKNOWNRELATIVEORDER: UNKNOWN IN THAT OUR PHRASE IS UNKNOWN.  RELATIVE ORDER MEANS
-          //THE ORDER/POSITION OF THIS PHRASE RELATIVE TO THE OTHER _UNKNOWN_ PHRASES.
-          var unknownRelativeOrder = -1;
-          int initializedCount = 0;
-          for (int i = 0; i < AggregatePhraseTexts.Count; i++)
-          {
-            var phraseText = AggregatePhraseTexts[i];
-            if (IsPhraseKnown(phraseText))
-              continue;
-
-            //PHRASE IS UNKNOWN, SO INC OUR RELATIVE ORDER AND ADD THE STUDIER TO STUDIERS, INITIALIZING EACH STUDIER.
-            unknownRelativeOrder++;
-            var studier = new DefaultPhraseMeaningStudier();
-            studier.InitializeForNewStudySession(unknownPhraseEdits[i], (e) =>
-              {
-                if (e != null)
-                  throw e;
-
-                _Studiers.Add(unknownRelativeOrder, studier);
-                initializedCount++;
-                //IF WE HAVE INITIALIZED ALL OF OUR UNKNOWN PHRASES, THEN WE ARE DONE AND CAN CALL CALLBACK.
-                if (initializedCount == unknownCount)
-                  callback(null);
-              });
-
+            callback(ex);
           }
         });
 

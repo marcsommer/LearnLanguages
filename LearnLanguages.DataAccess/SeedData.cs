@@ -13,22 +13,22 @@ namespace LearnLanguages.DataAccess
     }
 
     #region Singleton Pattern Members
-    private static volatile SeedData _Instance;
+    private static volatile SeedData _Ton;
     private static object _Lock = new object();
-    public static SeedData Instance
+    public static SeedData Ton
     {
       get
       {
-        if (_Instance == null)
+        if (_Ton == null)
         {
           lock (_Lock)
           {
-            if (_Instance == null)
-              _Instance = new SeedData();
+            if (_Ton == null)
+              _Ton = new SeedData();
           }
         }
 
-        return _Instance;
+        return _Ton;
       }
     }
     #endregion
@@ -352,7 +352,7 @@ namespace LearnLanguages.DataAccess
         new PhraseBeliefDto()
         {
           Id = new Guid("E1059635-09FF-4ACB-9F9F-08CF3EB84D6A"),
-          Date = DateTime.Now,
+          TimeStamp = DateTime.Now,
           Text = "This is some belief here.",
           Strength = 1.2d,
           PhraseId = IdHello, 

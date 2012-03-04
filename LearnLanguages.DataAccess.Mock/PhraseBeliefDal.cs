@@ -17,7 +17,7 @@ namespace LearnLanguages.DataAccess.Mock
         throw new ArgumentException("criteria expected to be null");
       
       var username = Csla.ApplicationContext.User.Identity.Name;
-      var userId = (from u in SeedData.Instance.Users
+      var userId = (from u in SeedData.Ton.Users
                     where u.Username == username
                     select u.Id).FirstOrDefault();
       if (userId == Guid.Empty)
@@ -38,7 +38,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseBeliefDto FetchImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.PhraseBeliefs
+      var results = from item in SeedData.Ton.PhraseBeliefs
                     where item.Id == id
                     select item;
 
@@ -57,7 +57,7 @@ namespace LearnLanguages.DataAccess.Mock
       if (phraseId == Guid.Empty)
         throw new ArgumentException("phraseId");
 
-      var results = from item in SeedData.Instance.PhraseBeliefs
+      var results = from item in SeedData.Ton.PhraseBeliefs
                     where item.PhraseId == phraseId
                     select item;
 
@@ -69,7 +69,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseBeliefDto UpdateImpl(PhraseBeliefDto dto)
     {
-      var results = from item in SeedData.Instance.PhraseBeliefs
+      var results = from item in SeedData.Ton.PhraseBeliefs
                     where item.Id == dto.Id
                     select item;
 
@@ -78,9 +78,9 @@ namespace LearnLanguages.DataAccess.Mock
         CheckContraints(dto);
 
         var phraseBeliefToUpdate = results.First();
-        SeedData.Instance.PhraseBeliefs.Remove(phraseBeliefToUpdate);
+        SeedData.Ton.PhraseBeliefs.Remove(phraseBeliefToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.PhraseBeliefs.Add(dto);
+        SeedData.Ton.PhraseBeliefs.Add(dto);
         UpdateReferences(phraseBeliefToUpdate, dto);
         return dto;
       }
@@ -95,7 +95,7 @@ namespace LearnLanguages.DataAccess.Mock
     protected override PhraseBeliefDto InsertImpl(PhraseBeliefDto dto)
     {
       //MAKE SURE ID ISN'T ALREADY IN DB
-      var results = from item in SeedData.Instance.PhraseBeliefs
+      var results = from item in SeedData.Ton.PhraseBeliefs
                     where item.Id == dto.Id
                     select item;
 
@@ -104,10 +104,10 @@ namespace LearnLanguages.DataAccess.Mock
         CheckContraints(dto);
 
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.PhraseBeliefs.Add(dto);
+        SeedData.Ton.PhraseBeliefs.Add(dto);
 
         //ADD PHRASEBELIEF.ID TO USER
-        var resultsUser = from u in SeedData.Instance.Users
+        var resultsUser = from u in SeedData.Ton.Users
                           where u.Id == dto.UserId
                           select u;
 
@@ -126,14 +126,14 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseBeliefDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.PhraseBeliefs
+      var results = from item in SeedData.Ton.PhraseBeliefs
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
         var phraseBeliefToRemove = results.First();
-        SeedData.Instance.PhraseBeliefs.Remove(phraseBeliefToRemove);
+        SeedData.Ton.PhraseBeliefs.Remove(phraseBeliefToRemove);
         return phraseBeliefToRemove;
       }
       else
@@ -146,25 +146,25 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<PhraseBeliefDto> GetAllImpl()
     {
-      var allDtos = new List<PhraseBeliefDto>(SeedData.Instance.PhraseBeliefs);
+      var allDtos = new List<PhraseBeliefDto>(SeedData.Ton.PhraseBeliefs);
       return allDtos;
     }
 
     private void CheckContraints(PhraseBeliefDto dto)
     {
       //REFERENTIAL INTEGRITY
-      if (dto.PhraseId == Guid.Empty || !SeedData.Instance.ContainsPhraseId(dto.PhraseId))
+      if (dto.PhraseId == Guid.Empty || !SeedData.Ton.ContainsPhraseId(dto.PhraseId))
         throw new Exceptions.IdNotFoundException(dto.PhraseId);
-      if (dto.UserId == Guid.Empty || !SeedData.Instance.ContainsUserId(dto.UserId))
+      if (dto.UserId == Guid.Empty || !SeedData.Ton.ContainsUserId(dto.UserId))
         throw new Exceptions.IdNotFoundException(dto.UserId);
       if (string.IsNullOrEmpty(dto.Username) ||
-         !(SeedData.Instance.GetUsername(dto.UserId) == dto.Username))
+         !(SeedData.Ton.GetUsername(dto.UserId) == dto.Username))
         throw new ArgumentException("dto.Username");
     }
     private void UpdateReferences(PhraseBeliefDto oldPhraseBelief, PhraseBeliefDto newPhraseBelief)
     {
       ////UPDATE USERS WHO REFERENCE THIS LINE
-      var referencedUsers = from u in SeedData.Instance.Users
+      var referencedUsers = from u in SeedData.Ton.Users
                             where u.PhraseBeliefIds.Contains(oldPhraseBelief.Id)
                             select u;
 
@@ -175,7 +175,7 @@ namespace LearnLanguages.DataAccess.Mock
       }
 
       ////UPDATE TRANSLATIONS WHO REFERENCE THIS PHRASE
-      //var referencedTranslations = from t in SeedData.Instance.Translations
+      //var referencedTranslations = from t in SeedData.Ton.Translations
       //                             where t.PhraseBeliefIds.Contains(oldPhraseBelief.Id)
       //                             select t;
 

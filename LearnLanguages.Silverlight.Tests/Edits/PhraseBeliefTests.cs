@@ -35,7 +35,7 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueTestComplete();
     }
 
-    //  //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
+    //  //WE NEED TO UPDATE THE CLIENT SeedData.Ton IDS.  
     //  var phraseBeliefsCorrected = false;
     //  Exception error = new Exception();
     //  Exception errorPhraseBeliefList = new Exception();
@@ -51,16 +51,16 @@ namespace LearnLanguages.Silverlight.Tests
 
     //    allLanguages = r.Object;
     //    _ServerEnglishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.EnglishText
+    //                          where language.Text == SeedData.Ton.EnglishText
     //                          select language).First();
 
-    //    SeedData.Instance.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
+    //    SeedData.Ton.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
 
     //    _ServerSpanishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.SpanishText
+    //                          where language.Text == SeedData.Ton.SpanishText
     //                          select language).First();
 
-    //    SeedData.Instance.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
+    //    SeedData.Ton.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
 
     //    #endregion
 
@@ -75,15 +75,15 @@ namespace LearnLanguages.Silverlight.Tests
     //        allPhraseBeliefs = r2.Object;
 
     //        var serverHelloPhraseBeliefQuery = (from phraseBelief in allPhraseBeliefs
-    //                                 where phraseBelief.Text == SeedData.Instance.HelloText && 
-    //                                       phraseBelief.Language.Text == SeedData.Instance.EnglishText
+    //                                 where phraseBelief.Text == SeedData.Ton.HelloText && 
+    //                                       phraseBelief.Language.Text == SeedData.Ton.EnglishText
     //                                 select phraseBelief);
     //        PhraseBeliefEdit serverHelloPhraseBelief = null;
     //        if (serverHelloPhraseBeliefQuery.Count() == 0) //we don't have the hello phraseBelief in the db, so put it there
     //        {
     //          var phraseBelief = allPhraseBeliefs[0];
     //          phraseBelief.BeginEdit();
-    //          phraseBelief.Text = SeedData.Instance.HelloText;
+    //          phraseBelief.Text = SeedData.Ton.HelloText;
     //          phraseBelief.Language = _ServerEnglishLang;
     //          phraseBelief.ApplyEdit();
     //          serverHelloPhraseBelief = phraseBelief;
@@ -93,15 +93,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //        var serverHolaPhraseBeliefQuery = (from phraseBelief in allPhraseBeliefs
-    //                                      where phraseBelief.Text == SeedData.Instance.HolaText &&
-    //                                            phraseBelief.Language.Text == SeedData.Instance.EnglishText
+    //                                      where phraseBelief.Text == SeedData.Ton.HolaText &&
+    //                                            phraseBelief.Language.Text == SeedData.Ton.EnglishText
     //                                      select phraseBelief);
     //        PhraseBeliefEdit serverHolaPhraseBelief = null;
     //        if (serverHolaPhraseBeliefQuery.Count() == 0) //we don't have the Hola phraseBelief in the db, so put it there
     //        {
     //          var phraseBelief = allPhraseBeliefs[1];
     //          phraseBelief.BeginEdit();
-    //          phraseBelief.Text = SeedData.Instance.HolaText;
+    //          phraseBelief.Text = SeedData.Ton.HolaText;
     //          phraseBelief.Language = _ServerSpanishLang;
     //          phraseBelief.ApplyEdit();
     //          serverHolaPhraseBelief = phraseBelief;
@@ -110,15 +110,15 @@ namespace LearnLanguages.Silverlight.Tests
     //          serverHolaPhraseBelief = serverHolaPhraseBeliefQuery.First();
 
     //        var serverLongPhraseBeliefQuery = (from phraseBelief in allPhraseBeliefs
-    //                                     where phraseBelief.Text == SeedData.Instance.LongText &&
-    //                                           phraseBelief.Language.Text == SeedData.Instance.EnglishText
+    //                                     where phraseBelief.Text == SeedData.Ton.LongText &&
+    //                                           phraseBelief.Language.Text == SeedData.Ton.EnglishText
     //                                     select phraseBelief);
     //        PhraseBeliefEdit serverLongPhraseBelief = null;
     //        if (serverLongPhraseBeliefQuery.Count() == 0) //we don't have the Long phraseBelief in the db, so put it there
     //        {
     //          var phraseBelief = allPhraseBeliefs[2];
     //          phraseBelief.BeginEdit();
-    //          phraseBelief.Text = SeedData.Instance.LongText;
+    //          phraseBelief.Text = SeedData.Ton.LongText;
     //          phraseBelief.Language = _ServerEnglishLang;
     //          phraseBelief.ApplyEdit();
     //          serverLongPhraseBelief = phraseBelief;
@@ -128,15 +128,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //        var serverDogPhraseBeliefQuery = (from phraseBelief in allPhraseBeliefs
-    //                                     where phraseBelief.Text == SeedData.Instance.DogText &&
-    //                                           phraseBelief.Language.Text == SeedData.Instance.EnglishText
+    //                                     where phraseBelief.Text == SeedData.Ton.DogText &&
+    //                                           phraseBelief.Language.Text == SeedData.Ton.EnglishText
     //                                     select phraseBelief);
     //        PhraseBeliefEdit serverDogPhraseBelief = null;
     //        if (serverDogPhraseBeliefQuery.Count() == 0) //we don't have the Dog phraseBelief in the db, so put it there
     //        {
     //          var phraseBelief = allPhraseBeliefs[3];
     //          phraseBelief.BeginEdit();
-    //          phraseBelief.Text = SeedData.Instance.DogText;
+    //          phraseBelief.Text = SeedData.Ton.DogText;
     //          phraseBelief.Language = _ServerSpanishLang;
     //          phraseBelief.ApplyEdit();
     //          serverDogPhraseBelief = phraseBelief;
@@ -145,17 +145,17 @@ namespace LearnLanguages.Silverlight.Tests
     //          serverDogPhraseBelief = serverDogPhraseBeliefQuery.First();
 
     //        var validUserId = serverHelloPhraseBelief.UserId;
-    //        SeedData.Instance.GetTestValidUserDto().Id = validUserId;
+    //        SeedData.Ton.GetTestValidUserDto().Id = validUserId;
 
-    //        SeedData.Instance.HelloPhraseBeliefDto.Id = serverHelloPhraseBelief.Id;
-    //        SeedData.Instance.HolaPhraseBeliefDto.Id = serverHolaPhraseBelief.Id;
-    //        SeedData.Instance.LongPhraseBeliefDto.Id = serverLongPhraseBelief.Id;
-    //        SeedData.Instance.DogPhraseBeliefDto.Id = serverDogPhraseBelief.Id;
+    //        SeedData.Ton.HelloPhraseBeliefDto.Id = serverHelloPhraseBelief.Id;
+    //        SeedData.Ton.HolaPhraseBeliefDto.Id = serverHolaPhraseBelief.Id;
+    //        SeedData.Ton.LongPhraseBeliefDto.Id = serverLongPhraseBelief.Id;
+    //        SeedData.Ton.DogPhraseBeliefDto.Id = serverDogPhraseBelief.Id;
 
-    //        SeedData.Instance.HelloPhraseBeliefDto.UserId = serverHelloPhraseBelief.UserId;
-    //        SeedData.Instance.HolaPhraseBeliefDto.UserId = serverHolaPhraseBelief.UserId;
-    //        SeedData.Instance.LongPhraseBeliefDto.UserId = serverLongPhraseBelief.UserId;
-    //        SeedData.Instance.DogPhraseBeliefDto.UserId = serverDogPhraseBelief.UserId;
+    //        SeedData.Ton.HelloPhraseBeliefDto.UserId = serverHelloPhraseBelief.UserId;
+    //        SeedData.Ton.HolaPhraseBeliefDto.UserId = serverHolaPhraseBelief.UserId;
+    //        SeedData.Ton.LongPhraseBeliefDto.UserId = serverLongPhraseBelief.UserId;
+    //        SeedData.Ton.DogPhraseBeliefDto.UserId = serverDogPhraseBelief.UserId;
 
     //        phraseBeliefsCorrected = true;
     //      });
@@ -165,8 +165,8 @@ namespace LearnLanguages.Silverlight.Tests
     //  EnqueueConditional(() => phraseBeliefsCorrected);
     //  EnqueueCallback(() => { Assert.IsNull(error); },
     //                  () => { Assert.IsNotNull(allLanguages); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.EnglishId); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.SpanishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.EnglishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.SpanishId); },
     //                  () => { Assert.IsTrue(allLanguages.Count > 0); });
     //  EnqueueTestComplete();
     //}
@@ -284,17 +284,17 @@ namespace LearnLanguages.Silverlight.Tests
         isNewed = true;
 
         //EDIT
-        newPhraseBeliefEdit.Date = DateTime.Now - TimeSpan.FromDays(1);
-        newPhraseBeliefEdit.Date = DateTime.Now - TimeSpan.FromDays(1);
+        newPhraseBeliefEdit.TimeStamp = DateTime.Now - TimeSpan.FromDays(1);
+        newPhraseBeliefEdit.TimeStamp = DateTime.Now - TimeSpan.FromDays(1);
         newPhraseBeliefEdit.Text = "TestPhraseBelief.Text edited in NEW_EDIT_BEGINSAVE_GET test";
         newPhraseBeliefEdit.Strength = 2.0d;
         newPhraseBeliefEdit.Phrase = _TestPhraseEdit;
         //newPhraseBeliefEdit.Phrase.Language = _ServerEnglishLang;
         //newPhraseBeliefEdit.PhraseBeliefNumber = 0;
-        //Assert.AreEqual(SeedData.Instance.TestValidUsername, newPhraseBeliefEdit.Username);
+        //Assert.AreEqual(SeedData.Ton.TestValidUsername, newPhraseBeliefEdit.Username);
 
-        //newPhraseBeliefEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
-        //newPhraseBeliefEdit.Username = SeedData.Instance.TestValidUsername;
+        //newPhraseBeliefEdit.UserId = SeedData.Ton.GetTestValidUserDto().Id;
+        //newPhraseBeliefEdit.Username = SeedData.Ton.TestValidUsername;
         isEdited = true;
 
         //SAVE
@@ -379,11 +379,11 @@ namespace LearnLanguages.Silverlight.Tests
         isNewed = true;
 
         //EDIT
-        newPhraseBeliefEdit.Date = DateTime.Now - TimeSpan.FromDays(7);
+        newPhraseBeliefEdit.TimeStamp = DateTime.Now - TimeSpan.FromDays(7);
         newPhraseBeliefEdit.Text = "TestPhraseBelief.Text edited in NEW_EDIT_BEGINSAVE_GET_DELETE_GET test";
         newPhraseBeliefEdit.Strength = 3.0d;
         newPhraseBeliefEdit.Phrase = _TestPhraseEdit;
-        Assert.AreEqual(SeedData.Instance.TestValidUsername, newPhraseBeliefEdit.Username);
+        Assert.AreEqual(SeedData.Ton.TestValidUsername, newPhraseBeliefEdit.Username);
 
         //SAVE
         newPhraseBeliefEdit.BeginSave((s2, r2) =>

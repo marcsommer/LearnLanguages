@@ -15,7 +15,7 @@ namespace LearnLanguages.DataAccess.Mock
     //    var dto = new TranslationDto() 
     //    { 
     //      Id = Guid.NewGuid(),
-    //      LanguageId = SeedData.Instance.DefaultLanguageId
+    //      LanguageId = SeedData.Ton.DefaultLanguageId
     //    };
     //    retResult = Result<TranslationDto>.Success(dto);
     //  }
@@ -30,7 +30,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Ton.Translations
     //                  where item.Id == id
     //                  select item;
 
@@ -56,16 +56,16 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Ton.Translations
     //                  where item.Id == dto.Id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var TranslationToUpdate = results.First();
-    //      SeedData.Instance.Translations.Remove(TranslationToUpdate);
+    //      SeedData.Ton.Translations.Remove(TranslationToUpdate);
     //      dto.Id = Guid.NewGuid();
-    //      SeedData.Instance.Translations.Add(dto);
+    //      SeedData.Ton.Translations.Add(dto);
     //      retResult = Result<TranslationDto>.Success(dto);
     //    }
     //    else
@@ -88,7 +88,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Ton.Translations
     //                  where item.Id == dto.Id
     //                  select item;
 
@@ -96,14 +96,14 @@ namespace LearnLanguages.DataAccess.Mock
     //    {
     //      dto.Id = Guid.NewGuid();
     //      //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-    //      if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
+    //      if (dto.LanguageId == Guid.Empty || !SeedData.Ton.ContainsLanguageId(dto.LanguageId))
     //      {
     //        //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
     //        //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
     //        //TranslationDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
     //        throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
     //      }
-    //      SeedData.Instance.Translations.Add(dto);
+    //      SeedData.Ton.Translations.Add(dto);
     //      retResult = Result<TranslationDto>.Success(dto);
     //    }
     //    else
@@ -126,14 +126,14 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<TranslationDto> retResult = Result<TranslationDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Translations
+    //    var results = from item in SeedData.Ton.Translations
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var TranslationToRemove = results.First();
-    //      SeedData.Instance.Translations.Remove(TranslationToRemove);
+    //      SeedData.Ton.Translations.Remove(TranslationToRemove);
     //      retResult = Result<TranslationDto>.Success(TranslationToRemove);
     //    }
     //    else
@@ -156,7 +156,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<ICollection<TranslationDto>> retResult = Result<ICollection<TranslationDto>>.Undefined(null);
     //  try
     //  {
-    //    var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
+    //    var allDtos = new List<TranslationDto>(SeedData.Ton.Translations);
     //    retResult = Result<ICollection<TranslationDto>>.Success(allDtos);
     //  }
     //  catch (Exception ex)
@@ -171,14 +171,14 @@ namespace LearnLanguages.DataAccess.Mock
       var dto = new TranslationDto()
       {
         Id = Guid.NewGuid(),
-        UserId = SeedData.Instance.GetTestValidUserDto().Id,
-        Username = SeedData.Instance.TestValidUsername
+        UserId = SeedData.Ton.GetTestValidUserDto().Id,
+        Username = SeedData.Ton.TestValidUsername
       };
       return dto;
     }
     protected override TranslationDto FetchImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Ton.Translations
                     where item.Id == id
                     select item;
 
@@ -211,7 +211,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<TranslationDto> FetchByIdImpl(Guid phraseId)
     {
-      var results = from translation in SeedData.Instance.Translations
+      var results = from translation in SeedData.Ton.Translations
                     where translation.PhraseIds.Contains(phraseId)
                     select translation;
 
@@ -219,7 +219,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override TranslationDto UpdateImpl(TranslationDto dto)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Ton.Translations
                     where item.Id == dto.Id
                     select item;
 
@@ -228,9 +228,9 @@ namespace LearnLanguages.DataAccess.Mock
         CheckValidity(dto);
         CheckReferentialIntegrity(dto);
         var TranslationToUpdate = results.First();
-        SeedData.Instance.Translations.Remove(TranslationToUpdate);
+        SeedData.Ton.Translations.Remove(TranslationToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Translations.Add(dto);
+        SeedData.Ton.Translations.Add(dto);
         return dto;
       }
       else
@@ -243,7 +243,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override TranslationDto InsertImpl(TranslationDto dto)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Ton.Translations
                     where item.Id == dto.Id
                     select item;
 
@@ -251,7 +251,7 @@ namespace LearnLanguages.DataAccess.Mock
       {
         CheckValidity(dto);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Translations.Add(dto);
+        SeedData.Ton.Translations.Add(dto);
         return dto;
       }
       else
@@ -264,14 +264,14 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override TranslationDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Translations
+      var results = from item in SeedData.Ton.Translations
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
         var TranslationToRemove = results.First();
-        SeedData.Instance.Translations.Remove(TranslationToRemove);
+        SeedData.Ton.Translations.Remove(TranslationToRemove);
         return TranslationToRemove;
       }
       else
@@ -284,7 +284,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<TranslationDto> GetAllImpl()
     {
-      var allDtos = new List<TranslationDto>(SeedData.Instance.Translations);
+      var allDtos = new List<TranslationDto>(SeedData.Ton.Translations);
       return allDtos;
     }
 
@@ -301,7 +301,7 @@ namespace LearnLanguages.DataAccess.Mock
       //PHRASE IDS ARE VALID
       foreach (var id in dto.PhraseIds)
       {
-        var count = (from p in SeedData.Instance.Phrases
+        var count = (from p in SeedData.Ton.Phrases
                      where p.Id == id
                      select p).Count();
 
@@ -316,7 +316,7 @@ namespace LearnLanguages.DataAccess.Mock
       //CONTEXT PHRASE ID IS VALID
       if (dto.ContextPhraseId != Guid.Empty)
       {
-        var contextPhraseIdCount = (from phrase in SeedData.Instance.Phrases
+        var contextPhraseIdCount = (from phrase in SeedData.Ton.Phrases
                                     where phrase.Id == dto.ContextPhraseId
                                     select phrase).Count();
         if (contextPhraseIdCount == 0)
@@ -326,7 +326,7 @@ namespace LearnLanguages.DataAccess.Mock
       }
 
       //USER IS VALID
-      var userCount = (from user in SeedData.Instance.Users
+      var userCount = (from user in SeedData.Ton.Users
                        where user.Id == dto.UserId &&
                              user.Username == dto.Username
                        select user).Count();

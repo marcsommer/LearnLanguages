@@ -26,7 +26,7 @@ namespace LearnLanguages.Silverlight.Tests
     public void InitializeAllTesting()
     {
       bool loggedIn = false;
-      CustomPrincipal.BeginLogin(SeedData.Instance.TestValidUsername, SeedData.Instance.TestValidPassword, (e) =>
+      CustomPrincipal.BeginLogin(SeedData.Ton.TestValidUsername, SeedData.Ton.TestValidPassword, (e) =>
         {
           if (e != null)
             throw e;

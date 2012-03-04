@@ -16,7 +16,7 @@ namespace LearnLanguages.DataAccess.Mock
     //    var dto = new LineDto() 
     //    { 
     //      Id = Guid.NewGuid(),
-    //      LanguageId = SeedData.Instance.DefaultLanguageId
+    //      LanguageId = SeedData.Ton.DefaultLanguageId
     //    };
     //    retResult = Result<LineDto>.Success(dto);
     //  }
@@ -31,7 +31,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<LineDto> retResult = Result<LineDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Lines
+    //    var results = from item in SeedData.Ton.Lines
     //                  where item.Id == id
     //                  select item;
 
@@ -57,16 +57,16 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<LineDto> retResult = Result<LineDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Lines
+    //    var results = from item in SeedData.Ton.Lines
     //                  where item.Id == dto.Id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var LineToUpdate = results.First();
-    //      SeedData.Instance.Lines.Remove(LineToUpdate);
+    //      SeedData.Ton.Lines.Remove(LineToUpdate);
     //      dto.Id = Guid.NewGuid();
-    //      SeedData.Instance.Lines.Add(dto);
+    //      SeedData.Ton.Lines.Add(dto);
     //      retResult = Result<LineDto>.Success(dto);
     //    }
     //    else
@@ -89,7 +89,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<LineDto> retResult = Result<LineDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Lines
+    //    var results = from item in SeedData.Ton.Lines
     //                  where item.Id == dto.Id
     //                  select item;
 
@@ -97,14 +97,14 @@ namespace LearnLanguages.DataAccess.Mock
     //    {
     //      dto.Id = Guid.NewGuid();
     //      //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-    //      if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
+    //      if (dto.LanguageId == Guid.Empty || !SeedData.Ton.ContainsLanguageId(dto.LanguageId))
     //      {
     //        //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
     //        //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
     //        //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
     //        throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
     //      }
-    //      SeedData.Instance.Lines.Add(dto);
+    //      SeedData.Ton.Lines.Add(dto);
     //      retResult = Result<LineDto>.Success(dto);
     //    }
     //    else
@@ -127,14 +127,14 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<LineDto> retResult = Result<LineDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.Lines
+    //    var results = from item in SeedData.Ton.Lines
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var LineToRemove = results.First();
-    //      SeedData.Instance.Lines.Remove(LineToRemove);
+    //      SeedData.Ton.Lines.Remove(LineToRemove);
     //      retResult = Result<LineDto>.Success(LineToRemove);
     //    }
     //    else
@@ -157,7 +157,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<ICollection<LineDto>> retResult = Result<ICollection<LineDto>>.Undefined(null);
     //  try
     //  {
-    //    var allDtos = new List<LineDto>(SeedData.Instance.Lines);
+    //    var allDtos = new List<LineDto>(SeedData.Ton.Lines);
     //    retResult = Result<ICollection<LineDto>>.Success(allDtos);
     //  }
     //  catch (Exception ex)
@@ -174,7 +174,7 @@ namespace LearnLanguages.DataAccess.Mock
       //if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
       //  throw new Exceptions.UserNotAuthenticatedException();
 
-      //var languageId = SeedData.Instance.DefaultLanguageId;
+      //var languageId = SeedData.Ton.DefaultLanguageId;
 
       if (criteria != null)
         throw new ArgumentException("criteria expected to be null");
@@ -182,7 +182,7 @@ namespace LearnLanguages.DataAccess.Mock
       //{
       //  //IF WE HAVE A STRING PARAM, THEN IT IS LANGUAGETEXT, SO GET THE LANGUAGE ID FROM THAT
       //  var languageText = (string)criteria;
-      //  var languageResults = (from language in SeedData.Instance.Languages
+      //  var languageResults = (from language in SeedData.Ton.Languages
       //                         where language.Text == languageText
       //                         select language);
       //  if (languageResults.Count() == 1)
@@ -197,7 +197,7 @@ namespace LearnLanguages.DataAccess.Mock
       //}
 
       var username = Csla.ApplicationContext.User.Identity.Name;
-      var userId = (from u in SeedData.Instance.Users
+      var userId = (from u in SeedData.Ton.Users
                     where u.Username == username
                     select u.Id).FirstOrDefault();
       if (userId == Guid.Empty)
@@ -216,7 +216,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override LineDto FetchImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Lines
+      var results = from item in SeedData.Ton.Lines
                     where item.Id == id
                     select item;
 
@@ -249,7 +249,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override LineDto UpdateImpl(LineDto dto)
     {
-      var results = from item in SeedData.Instance.Lines
+      var results = from item in SeedData.Ton.Lines
                     where item.Id == dto.Id
                     select item;
 
@@ -258,9 +258,9 @@ namespace LearnLanguages.DataAccess.Mock
         CheckContraints(dto);
 
         var lineToUpdate = results.First();
-        SeedData.Instance.Lines.Remove(lineToUpdate);
+        SeedData.Ton.Lines.Remove(lineToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Lines.Add(dto);
+        SeedData.Ton.Lines.Add(dto);
         UpdateReferences(lineToUpdate, dto);
         return dto;
       }
@@ -274,7 +274,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override LineDto InsertImpl(LineDto dto)
     {
-      var results = from item in SeedData.Instance.Lines
+      var results = from item in SeedData.Ton.Lines
                     where item.Id == dto.Id
                     select item;
 
@@ -283,10 +283,10 @@ namespace LearnLanguages.DataAccess.Mock
         CheckContraints(dto);
 
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Lines.Add(dto);
+        SeedData.Ton.Lines.Add(dto);
 
         //ADD LINE.ID TO USER
-        var resultsUser = from u in SeedData.Instance.Users
+        var resultsUser = from u in SeedData.Ton.Users
                           where u.Id == dto.UserId
                           select u;
 
@@ -305,14 +305,14 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override LineDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.Lines
+      var results = from item in SeedData.Ton.Lines
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
         var LineToRemove = results.First();
-        SeedData.Instance.Lines.Remove(LineToRemove);
+        SeedData.Ton.Lines.Remove(LineToRemove);
         return LineToRemove;
       }
       else
@@ -325,25 +325,25 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<LineDto> GetAllImpl()
     {
-      var allDtos = new List<LineDto>(SeedData.Instance.Lines);
+      var allDtos = new List<LineDto>(SeedData.Ton.Lines);
       return allDtos;
     }
 
     private void CheckContraints(LineDto dto)
     {
       //REFERENTIAL INTEGRITY
-      if (dto.PhraseId == Guid.Empty || !SeedData.Instance.ContainsPhraseId(dto.PhraseId))
+      if (dto.PhraseId == Guid.Empty || !SeedData.Ton.ContainsPhraseId(dto.PhraseId))
         throw new Exceptions.IdNotFoundException(dto.PhraseId);
-      if (dto.UserId == Guid.Empty || !SeedData.Instance.ContainsUserId(dto.UserId))
+      if (dto.UserId == Guid.Empty || !SeedData.Ton.ContainsUserId(dto.UserId))
         throw new Exceptions.IdNotFoundException(dto.UserId);
       if (string.IsNullOrEmpty(dto.Username) ||
-         !(SeedData.Instance.GetUsername(dto.UserId) == dto.Username))
+         !(SeedData.Ton.GetUsername(dto.UserId) == dto.Username))
         throw new ArgumentException("dto.Username");
     }
     private void UpdateReferences(LineDto oldLine, LineDto newLine)
     {
       ////UPDATE USERS WHO REFERENCE THIS LINE
-      var referencedUsers = from u in SeedData.Instance.Users
+      var referencedUsers = from u in SeedData.Ton.Users
                             where u.LineIds.Contains(oldLine.Id)
                             select u;
 
@@ -354,7 +354,7 @@ namespace LearnLanguages.DataAccess.Mock
       }
 
       ////UPDATE TRANSLATIONS WHO REFERENCE THIS PHRASE
-      //var referencedTranslations = from t in SeedData.Instance.Translations
+      //var referencedTranslations = from t in SeedData.Ton.Translations
       //                             where t.LineIds.Contains(oldLine.Id)
       //                             select t;
 

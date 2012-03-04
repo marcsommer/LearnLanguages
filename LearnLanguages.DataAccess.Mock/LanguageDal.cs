@@ -26,7 +26,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in SeedData.Instance.Languages
+        var results = from item in SeedData.Ton.Languages
                       where item.Id == id
                       select item;
 
@@ -52,16 +52,16 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in SeedData.Instance.Languages
+        var results = from item in SeedData.Ton.Languages
                       where item.Id == dto.Id
                       select item;
 
         if (results.Count() == 1)
         {
           var languageToUpdate = results.First();
-          SeedData.Instance.Languages.Remove(languageToUpdate);
+          SeedData.Ton.Languages.Remove(languageToUpdate);
           dto.Id = Guid.NewGuid();
-          SeedData.Instance.Languages.Add(dto);
+          SeedData.Ton.Languages.Add(dto);
           //UPDATE PHRASES WHO REFERENCE THIS LANGUAGE
           UpdateReferences(languageToUpdate, dto);
 
@@ -87,14 +87,14 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in SeedData.Instance.Languages
+        var results = from item in SeedData.Ton.Languages
                       where item.Id == dto.Id
                       select item;
 
         if (results.Count() == 0)
         {
           dto.Id = Guid.NewGuid();
-          SeedData.Instance.Languages.Add(dto);
+          SeedData.Ton.Languages.Add(dto);
           retResult = Result<LanguageDto>.Success(dto);
         }
         else
@@ -117,14 +117,14 @@ namespace LearnLanguages.DataAccess.Mock
       Result<LanguageDto> retResult = Result<LanguageDto>.Undefined(null);
       try
       {
-        var results = from item in SeedData.Instance.Languages
+        var results = from item in SeedData.Ton.Languages
                       where item.Id == id
                       select item;
 
         if (results.Count() == 1)
         {
           var languageToRemove = results.First();
-          SeedData.Instance.Languages.Remove(languageToRemove);
+          SeedData.Ton.Languages.Remove(languageToRemove);
           retResult = Result<LanguageDto>.Success(languageToRemove);
         }
         else
@@ -147,7 +147,7 @@ namespace LearnLanguages.DataAccess.Mock
       Result<ICollection<LanguageDto>> retResult = Result<ICollection<LanguageDto>>.Undefined(null);
       try
       {
-        var allDtos = new List<LanguageDto>(SeedData.Instance.Languages);
+        var allDtos = new List<LanguageDto>(SeedData.Ton.Languages);
         retResult = Result<ICollection<LanguageDto>>.Success(allDtos);
       }
       catch (Exception ex)
@@ -160,7 +160,7 @@ namespace LearnLanguages.DataAccess.Mock
     private void UpdateReferences(LanguageDto oldLanguageDto, LanguageDto newLanguageDto)
     {
       //UPDATE PHRASES
-      var referencedPhrases = from p in SeedData.Instance.Phrases
+      var referencedPhrases = from p in SeedData.Ton.Phrases
                               where p.LanguageId == oldLanguageDto.Id
                               select p;
 
@@ -178,7 +178,7 @@ namespace LearnLanguages.DataAccess.Mock
     protected override LanguageDto FetchImpl(Guid id)
     {
       LanguageDto retLanguageDto = null;
-      var results = from item in SeedData.Instance.Languages
+      var results = from item in SeedData.Ton.Languages
                     where item.Id == id
                     select item;
 
@@ -199,7 +199,7 @@ namespace LearnLanguages.DataAccess.Mock
     protected override LanguageDto FetchImpl(string languageText)
     {
       LanguageDto retLanguageDto = null;
-      var results = from item in SeedData.Instance.Languages
+      var results = from item in SeedData.Ton.Languages
                     where item.Text == languageText
                     select item;
 
@@ -221,7 +221,7 @@ namespace LearnLanguages.DataAccess.Mock
     {
       List<LanguageDto> retLanguageDtos = null;
 
-      var results = (from item in SeedData.Instance.Languages
+      var results = (from item in SeedData.Ton.Languages
                      where ids.Contains(item.Id)
                      select item).ToList();
 
@@ -262,16 +262,16 @@ namespace LearnLanguages.DataAccess.Mock
     protected override LanguageDto UpdateImpl(LanguageDto dto)
     {
       LanguageDto retLanguageDto = null;
-      var results = from item in SeedData.Instance.Languages
+      var results = from item in SeedData.Ton.Languages
                     where item.Id == dto.Id
                     select item;
 
       if (results.Count() == 1)
       {
         var languageToUpdate = results.First();
-        SeedData.Instance.Languages.Remove(languageToUpdate);
+        SeedData.Ton.Languages.Remove(languageToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Languages.Add(dto);
+        SeedData.Ton.Languages.Add(dto);
         //UPDATE PHRASES WHO REFERENCE THIS LANGUAGE
         UpdateReferences(languageToUpdate, dto);
 
@@ -293,14 +293,14 @@ namespace LearnLanguages.DataAccess.Mock
     protected override LanguageDto InsertImpl(LanguageDto dto)
     {
       LanguageDto retResult = null;
-      var results = from item in SeedData.Instance.Languages
+      var results = from item in SeedData.Ton.Languages
                     where item.Id == dto.Id
                     select item;
 
       if (results.Count() == 0)
       {
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.Languages.Add(dto);
+        SeedData.Ton.Languages.Add(dto);
         retResult = dto;
       }
       else
@@ -319,14 +319,14 @@ namespace LearnLanguages.DataAccess.Mock
     protected override LanguageDto DeleteImpl(Guid id)
     {
       LanguageDto retResult = null;
-      var results = from item in SeedData.Instance.Languages
+      var results = from item in SeedData.Ton.Languages
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
         var languageToRemove = results.First();
-        SeedData.Instance.Languages.Remove(languageToRemove);
+        SeedData.Ton.Languages.Remove(languageToRemove);
         retResult = languageToRemove;
       }
       else
@@ -343,7 +343,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<LanguageDto> GetAllImpl()
     {
-      var allDtos = new List<LanguageDto>(SeedData.Instance.Languages);
+      var allDtos = new List<LanguageDto>(SeedData.Ton.Languages);
       return allDtos;
     }
   }

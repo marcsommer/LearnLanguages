@@ -21,7 +21,7 @@ namespace LearnLanguages.Silverlight.Tests
     //public void InitializeMultiLineTextTests()
     //{
 
-    //  //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
+    //  //WE NEED TO UPDATE THE CLIENT SeedData.Ton IDS.  
     //  var isLoaded = false;
     //  var multiLineTextsCorrected = false;
     //  Exception error = new Exception();
@@ -38,16 +38,16 @@ namespace LearnLanguages.Silverlight.Tests
 
     //    allLanguages = r.Object;
     //    _ServerEnglishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.EnglishText
+    //                          where language.Text == SeedData.Ton.EnglishText
     //                          select language).First();
 
-    //    SeedData.Instance.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
+    //    SeedData.Ton.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
 
     //    _ServerSpanishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.SpanishText
+    //                          where language.Text == SeedData.Ton.SpanishText
     //                          select language).First();
 
-    //    SeedData.Instance.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
+    //    SeedData.Ton.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
 
     //    #endregion
 
@@ -62,15 +62,15 @@ namespace LearnLanguages.Silverlight.Tests
     //        allMultiLineTexts = r2.Object;
 
     //        var serverHelloMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                           where multiLineText.Text == SeedData.Instance.HelloText &&
-    //                                                 multiLineText.Language.Text == SeedData.Instance.EnglishText
+    //                                           where multiLineText.Text == SeedData.Ton.HelloText &&
+    //                                                 multiLineText.Language.Text == SeedData.Ton.EnglishText
     //                                           select multiLineText);
     //        MultiLineTextEdit serverHelloMultiLineText = null;
     //        if (serverHelloMultiLineTextQuery.Count() == 0) //we don't have the hello multiLineText in the db, so put it there
     //        {
     //          var multiLineText = allMultiLineTexts[0];
     //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Instance.HelloText;
+    //          multiLineText.Text = SeedData.Ton.HelloText;
     //          multiLineText.Language = _ServerEnglishLang;
     //          multiLineText.ApplyEdit();
     //          serverHelloMultiLineText = multiLineText;
@@ -80,15 +80,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //        var serverHolaMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                          where multiLineText.Text == SeedData.Instance.HolaText &&
-    //                                                multiLineText.Language.Text == SeedData.Instance.EnglishText
+    //                                          where multiLineText.Text == SeedData.Ton.HolaText &&
+    //                                                multiLineText.Language.Text == SeedData.Ton.EnglishText
     //                                          select multiLineText);
     //        MultiLineTextEdit serverHolaMultiLineText = null;
     //        if (serverHolaMultiLineTextQuery.Count() == 0) //we don't have the Hola multiLineText in the db, so put it there
     //        {
     //          var multiLineText = allMultiLineTexts[1];
     //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Instance.HolaText;
+    //          multiLineText.Text = SeedData.Ton.HolaText;
     //          multiLineText.Language = _ServerSpanishLang;
     //          multiLineText.ApplyEdit();
     //          serverHolaMultiLineText = multiLineText;
@@ -97,15 +97,15 @@ namespace LearnLanguages.Silverlight.Tests
     //          serverHolaMultiLineText = serverHolaMultiLineTextQuery.First();
 
     //        var serverLongMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                          where multiLineText.Text == SeedData.Instance.LongText &&
-    //                                                multiLineText.Language.Text == SeedData.Instance.EnglishText
+    //                                          where multiLineText.Text == SeedData.Ton.LongText &&
+    //                                                multiLineText.Language.Text == SeedData.Ton.EnglishText
     //                                          select multiLineText);
     //        MultiLineTextEdit serverLongMultiLineText = null;
     //        if (serverLongMultiLineTextQuery.Count() == 0) //we don't have the Long multiLineText in the db, so put it there
     //        {
     //          var multiLineText = allMultiLineTexts[2];
     //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Instance.LongText;
+    //          multiLineText.Text = SeedData.Ton.LongText;
     //          multiLineText.Language = _ServerEnglishLang;
     //          multiLineText.ApplyEdit();
     //          serverLongMultiLineText = multiLineText;
@@ -115,15 +115,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //        var serverDogMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                         where multiLineText.Text == SeedData.Instance.DogText &&
-    //                                               multiLineText.Language.Text == SeedData.Instance.EnglishText
+    //                                         where multiLineText.Text == SeedData.Ton.DogText &&
+    //                                               multiLineText.Language.Text == SeedData.Ton.EnglishText
     //                                         select multiLineText);
     //        MultiLineTextEdit serverDogMultiLineText = null;
     //        if (serverDogMultiLineTextQuery.Count() == 0) //we don't have the Dog multiLineText in the db, so put it there
     //        {
     //          var multiLineText = allMultiLineTexts[3];
     //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Instance.DogText;
+    //          multiLineText.Text = SeedData.Ton.DogText;
     //          multiLineText.Language = _ServerSpanishLang;
     //          multiLineText.ApplyEdit();
     //          serverDogMultiLineText = multiLineText;
@@ -132,17 +132,17 @@ namespace LearnLanguages.Silverlight.Tests
     //          serverDogMultiLineText = serverDogMultiLineTextQuery.First();
 
     //        var validUserId = serverHelloMultiLineText.UserId;
-    //        SeedData.Instance.GetTestValidUserDto().Id = validUserId;
+    //        SeedData.Ton.GetTestValidUserDto().Id = validUserId;
 
-    //        SeedData.Instance.HelloMultiLineTextDto.Id = serverHelloMultiLineText.Id;
-    //        SeedData.Instance.HolaMultiLineTextDto.Id = serverHolaMultiLineText.Id;
-    //        SeedData.Instance.LongMultiLineTextDto.Id = serverLongMultiLineText.Id;
-    //        SeedData.Instance.DogMultiLineTextDto.Id = serverDogMultiLineText.Id;
+    //        SeedData.Ton.HelloMultiLineTextDto.Id = serverHelloMultiLineText.Id;
+    //        SeedData.Ton.HolaMultiLineTextDto.Id = serverHolaMultiLineText.Id;
+    //        SeedData.Ton.LongMultiLineTextDto.Id = serverLongMultiLineText.Id;
+    //        SeedData.Ton.DogMultiLineTextDto.Id = serverDogMultiLineText.Id;
 
-    //        SeedData.Instance.HelloMultiLineTextDto.UserId = serverHelloMultiLineText.UserId;
-    //        SeedData.Instance.HolaMultiLineTextDto.UserId = serverHolaMultiLineText.UserId;
-    //        SeedData.Instance.LongMultiLineTextDto.UserId = serverLongMultiLineText.UserId;
-    //        SeedData.Instance.DogMultiLineTextDto.UserId = serverDogMultiLineText.UserId;
+    //        SeedData.Ton.HelloMultiLineTextDto.UserId = serverHelloMultiLineText.UserId;
+    //        SeedData.Ton.HolaMultiLineTextDto.UserId = serverHolaMultiLineText.UserId;
+    //        SeedData.Ton.LongMultiLineTextDto.UserId = serverLongMultiLineText.UserId;
+    //        SeedData.Ton.DogMultiLineTextDto.UserId = serverDogMultiLineText.UserId;
 
     //        multiLineTextsCorrected = true;
     //      });
@@ -152,8 +152,8 @@ namespace LearnLanguages.Silverlight.Tests
     //  EnqueueConditional(() => multiLineTextsCorrected);
     //  EnqueueCallback(() => { Assert.IsNull(error); },
     //                  () => { Assert.IsNotNull(allLanguages); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.EnglishId); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.SpanishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.EnglishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.SpanishId); },
     //                  () => { Assert.IsTrue(allLanguages.Count > 0); });
     //  EnqueueTestComplete();
     //}
@@ -260,18 +260,18 @@ namespace LearnLanguages.Silverlight.Tests
                 lineA = r5.NewObject;
                 lineA.Id = Guid.NewGuid();
                 lineA.Phrase.Text = lineAText;
-                lineA.Phrase.LanguageId = SeedData.Instance.EnglishId;
+                lineA.Phrase.LanguageId = SeedData.Ton.EnglishId;
                 //lineA.Username = Csla.ApplicationContext.User.Identity.Name;
-                //lineA.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+                //lineA.UserId = SeedData.Ton.GetTestValidUserDto().Id;
               }
               else
               {
                 lineB = r5.NewObject;
                 lineB.Id = Guid.NewGuid();
                 lineB.Phrase.Text = lineBText;
-                lineB.Phrase.LanguageId = SeedData.Instance.SpanishId;
+                lineB.Phrase.LanguageId = SeedData.Ton.SpanishId;
                 //lineB.Username = Csla.ApplicationContext.User.Identity.Name;
-                //lineB.UserId = SeedData.Instance.GetTestValidUserDto().Id;
+                //lineB.UserId = SeedData.Ton.GetTestValidUserDto().Id;
               }
             };
 
@@ -352,8 +352,8 @@ namespace LearnLanguages.Silverlight.Tests
     //    isNewed = true;
 
     //    //EDIT
-    //    newMultiLineTextEdit.UserId = SeedData.Instance.GetTestValidUserDto().Id;
-    //    newMultiLineTextEdit.Username = SeedData.Instance.TestValidUsername;
+    //    newMultiLineTextEdit.UserId = SeedData.Ton.GetTestValidUserDto().Id;
+    //    newMultiLineTextEdit.Username = SeedData.Ton.TestValidUsername;
     //    LineEdit.NewLineEdit((sNewLineA, rNewLineA) =>
     //    {
     //      if (rNewLineA.Error != null)
@@ -361,7 +361,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     //      lineA = rNewLineA.Object;
     //      lineA.Text = "Test Line A Text.  This is line A in English.";
-    //      lineA.LanguageId = SeedData.Instance.EnglishId;
+    //      lineA.LanguageId = SeedData.Ton.EnglishId;
     //      newMultiLineTextEdit.AddLine(lineA);
 
     //      LineEdit.NewLineEdit((sNewLineB, rNewLineB) =>
@@ -371,7 +371,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     //        lineB = rNewLineB.Object;
     //        lineB.Text = "Test Line B Text.  This is line B in Spanish.";
-    //        lineB.LanguageId = SeedData.Instance.SpanishId;
+    //        lineB.LanguageId = SeedData.Ton.SpanishId;
     //        newMultiLineTextEdit.AddLine(lineB);
 
     //        isEdited = true;

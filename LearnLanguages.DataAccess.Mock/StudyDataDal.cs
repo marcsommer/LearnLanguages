@@ -16,7 +16,7 @@ namespace LearnLanguages.DataAccess.Mock
     //    var dto = new StudyDataDto() 
     //    { 
     //      Id = Guid.NewGuid(),
-    //      LanguageId = SeedData.Instance.DefaultLanguageId
+    //      LanguageId = SeedData.Ton.DefaultLanguageId
     //    };
     //    retResult = Result<StudyDataDto>.Success(dto);
     //  }
@@ -31,7 +31,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.StudyDatas
+    //    var results = from item in SeedData.Ton.StudyDatas
     //                  where item.Id == id
     //                  select item;
 
@@ -57,16 +57,16 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.StudyDatas
+    //    var results = from item in SeedData.Ton.StudyDatas
     //                  where item.Id == dto.Id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var StudyDataToUpdate = results.First();
-    //      SeedData.Instance.StudyDatas.Remove(StudyDataToUpdate);
+    //      SeedData.Ton.StudyDatas.Remove(StudyDataToUpdate);
     //      dto.Id = Guid.NewGuid();
-    //      SeedData.Instance.StudyDatas.Add(dto);
+    //      SeedData.Ton.StudyDatas.Add(dto);
     //      retResult = Result<StudyDataDto>.Success(dto);
     //    }
     //    else
@@ -89,7 +89,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.StudyDatas
+    //    var results = from item in SeedData.Ton.StudyDatas
     //                  where item.Id == dto.Id
     //                  select item;
 
@@ -97,14 +97,14 @@ namespace LearnLanguages.DataAccess.Mock
     //    {
     //      dto.Id = Guid.NewGuid();
     //      //MIMIC LANGUAGEID REQUIRED CONSTRAINT IN DB
-    //      if (dto.LanguageId == Guid.Empty || !SeedData.Instance.ContainsLanguageId(dto.LanguageId))
+    //      if (dto.LanguageId == Guid.Empty || !SeedData.Ton.ContainsLanguageId(dto.LanguageId))
     //      {
     //        //I'VE RESTRUCTURED HOW TO DO EXCEPTIONHANDLING, SO THIS IS NOT QUITE HOW IT SHOULD BE DONE.
     //        //THIS SHOULD BE AN INSERTIMPL METHOD, AND IT SHOULD THROW ITS OWN EXCEPTION THAT IS WRAPPED IN THE 
     //        //PHRASEDALBASE CLASS IN AN INSERTFAILEDEXCEPTION.
     //        throw new Exceptions.InsertFailedException(string.Format(DalResources.ErrorMsgIdNotFoundException, dto.LanguageId));
     //      }
-    //      SeedData.Instance.StudyDatas.Add(dto);
+    //      SeedData.Ton.StudyDatas.Add(dto);
     //      retResult = Result<StudyDataDto>.Success(dto);
     //    }
     //    else
@@ -127,14 +127,14 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
     //  try
     //  {
-    //    var results = from item in SeedData.Instance.StudyDatas
+    //    var results = from item in SeedData.Ton.StudyDatas
     //                  where item.Id == id
     //                  select item;
 
     //    if (results.Count() == 1)
     //    {
     //      var StudyDataToRemove = results.First();
-    //      SeedData.Instance.StudyDatas.Remove(StudyDataToRemove);
+    //      SeedData.Ton.StudyDatas.Remove(StudyDataToRemove);
     //      retResult = Result<StudyDataDto>.Success(StudyDataToRemove);
     //    }
     //    else
@@ -157,7 +157,7 @@ namespace LearnLanguages.DataAccess.Mock
     //  Result<ICollection<StudyDataDto>> retResult = Result<ICollection<StudyDataDto>>.Undefined(null);
     //  try
     //  {
-    //    var allDtos = new List<StudyDataDto>(SeedData.Instance.StudyDatas);
+    //    var allDtos = new List<StudyDataDto>(SeedData.Ton.StudyDatas);
     //    retResult = Result<ICollection<StudyDataDto>>.Success(allDtos);
     //  }
     //  catch (Exception ex)
@@ -190,7 +190,7 @@ namespace LearnLanguages.DataAccess.Mock
     {
       var currentUsername = Csla.ApplicationContext.User.Identity.Name;
 
-      var results = from studyData in SeedData.Instance.StudyDatas
+      var results = from studyData in SeedData.Ton.StudyDatas
                     where studyData.Username == currentUsername
                     select studyData;
 
@@ -214,7 +214,7 @@ namespace LearnLanguages.DataAccess.Mock
     {
       var currentUsername = Csla.ApplicationContext.User.Identity.Name;
 
-      var results = from studyData in SeedData.Instance.StudyDatas
+      var results = from studyData in SeedData.Ton.StudyDatas
                     where studyData.Username == currentUsername
                     select studyData;
       
@@ -233,7 +233,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     //protected override StudyDataDto FetchImpl(Guid id)
     //{
-    //  var results = from item in SeedData.Instance.StudyDatas
+    //  var results = from item in SeedData.Ton.StudyDatas
     //                where item.Id == id
     //                select item;
 
@@ -266,7 +266,7 @@ namespace LearnLanguages.DataAccess.Mock
     //}
     protected override StudyDataDto UpdateImpl(StudyDataDto dto)
     {
-      var results = from item in SeedData.Instance.StudyDatas
+      var results = from item in SeedData.Ton.StudyDatas
                     where item.Id == dto.Id
                     select item;
 
@@ -275,9 +275,9 @@ namespace LearnLanguages.DataAccess.Mock
         CheckContraints(dto);
 
         var studyDataToUpdate = results.First();
-        SeedData.Instance.StudyDatas.Remove(studyDataToUpdate);
+        SeedData.Ton.StudyDatas.Remove(studyDataToUpdate);
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.StudyDatas.Add(dto);
+        SeedData.Ton.StudyDatas.Add(dto);
         return dto;
       }
       else
@@ -290,7 +290,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override StudyDataDto InsertImpl(StudyDataDto dto)
     {
-      var results = from item in SeedData.Instance.StudyDatas
+      var results = from item in SeedData.Ton.StudyDatas
                     where item.Id == dto.Id
                     select item;
 
@@ -299,7 +299,7 @@ namespace LearnLanguages.DataAccess.Mock
         CheckContraints(dto);
 
         dto.Id = Guid.NewGuid();
-        SeedData.Instance.StudyDatas.Add(dto);
+        SeedData.Ton.StudyDatas.Add(dto);
         return dto;
       }
       else
@@ -312,14 +312,14 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override StudyDataDto DeleteImpl(Guid id)
     {
-      var results = from item in SeedData.Instance.StudyDatas
+      var results = from item in SeedData.Ton.StudyDatas
                     where item.Id == id
                     select item;
 
       if (results.Count() == 1)
       {
         var studyDataToRemove = results.First();
-        SeedData.Instance.StudyDatas.Remove(studyDataToRemove);
+        SeedData.Ton.StudyDatas.Remove(studyDataToRemove);
         return studyDataToRemove;
       }
       else
@@ -332,7 +332,7 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<StudyDataDto> GetAllImpl()
     {
-      var allDtos = new List<StudyDataDto>(SeedData.Instance.StudyDatas);
+      var allDtos = new List<StudyDataDto>(SeedData.Ton.StudyDatas);
       return allDtos;
     }
 

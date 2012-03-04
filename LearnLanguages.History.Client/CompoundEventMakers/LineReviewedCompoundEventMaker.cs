@@ -151,7 +151,7 @@ namespace LearnLanguages.History.CompoundEventMakers
         throw new HistoryException();
 
         //DISPATCH THE REVIEWED LINE COMPOUND EVENT
-        var reviewedLineEvent = new Events.LineReviewedEvent(_LineId, _ReviewMethodId, _LineText, _LineNumber, 
+        var reviewedLineEvent = new Events.ReviewedLineEvent(_LineId, _ReviewMethodId, _LineText, _LineNumber, 
           _PhraseId, _LanguageId, _LanguageText, _FeedbackAsDouble, _ReviewedPhraseDuration);
         HistoryPublisher.Ton.PublishEvent(reviewedLineEvent);   
     }

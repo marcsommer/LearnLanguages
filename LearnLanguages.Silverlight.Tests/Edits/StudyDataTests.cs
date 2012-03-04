@@ -18,7 +18,7 @@ namespace LearnLanguages.Silverlight.Tests
     //public void InitializeStudyDataTests()
     //{
 
-    //  //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
+    //  //WE NEED TO UPDATE THE CLIENT SeedData.Ton IDS.  
     //  var isLoaded = false;
     //  var StudyDatasCorrected = false;
     //  Exception error = new Exception();
@@ -35,16 +35,16 @@ namespace LearnLanguages.Silverlight.Tests
 
     //    allLanguages = r.Object;
     //    _ServerEnglishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.EnglishText
+    //                          where language.Text == SeedData.Ton.EnglishText
     //                          select language).First();
 
-    //    SeedData.Instance.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
+    //    SeedData.Ton.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
 
     //    _ServerSpanishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.SpanishText
+    //                          where language.Text == SeedData.Ton.SpanishText
     //                          select language).First();
 
-    //    SeedData.Instance.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
+    //    SeedData.Ton.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
 
     //    #endregion
 
@@ -59,15 +59,15 @@ namespace LearnLanguages.Silverlight.Tests
     //        allStudyDatas = r2.Object;
 
     //        var serverHelloStudyDataQuery = (from StudyData in allStudyDatas
-    //                                 where StudyData.Text == SeedData.Instance.HelloText && 
-    //                                       StudyData.Language.Text == SeedData.Instance.EnglishText
+    //                                 where StudyData.Text == SeedData.Ton.HelloText && 
+    //                                       StudyData.Language.Text == SeedData.Ton.EnglishText
     //                                 select StudyData);
     //        StudyDataEdit serverHelloStudyData = null;
     //        if (serverHelloStudyDataQuery.Count() == 0) //we don't have the hello StudyData in the db, so put it there
     //        {
     //          var StudyData = allStudyDatas[0];
     //          StudyData.BeginEdit();
-    //          StudyData.Text = SeedData.Instance.HelloText;
+    //          StudyData.Text = SeedData.Ton.HelloText;
     //          StudyData.Language = _ServerEnglishLang;
     //          StudyData.ApplyEdit();
     //          serverHelloStudyData = StudyData;
@@ -77,15 +77,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //        var serverHolaStudyDataQuery = (from StudyData in allStudyDatas
-    //                                      where StudyData.Text == SeedData.Instance.HolaText &&
-    //                                            StudyData.Language.Text == SeedData.Instance.EnglishText
+    //                                      where StudyData.Text == SeedData.Ton.HolaText &&
+    //                                            StudyData.Language.Text == SeedData.Ton.EnglishText
     //                                      select StudyData);
     //        StudyDataEdit serverHolaStudyData = null;
     //        if (serverHolaStudyDataQuery.Count() == 0) //we don't have the Hola StudyData in the db, so put it there
     //        {
     //          var StudyData = allStudyDatas[1];
     //          StudyData.BeginEdit();
-    //          StudyData.Text = SeedData.Instance.HolaText;
+    //          StudyData.Text = SeedData.Ton.HolaText;
     //          StudyData.Language = _ServerSpanishLang;
     //          StudyData.ApplyEdit();
     //          serverHolaStudyData = StudyData;
@@ -94,15 +94,15 @@ namespace LearnLanguages.Silverlight.Tests
     //          serverHolaStudyData = serverHolaStudyDataQuery.First();
 
     //        var serverLongStudyDataQuery = (from StudyData in allStudyDatas
-    //                                     where StudyData.Text == SeedData.Instance.LongText &&
-    //                                           StudyData.Language.Text == SeedData.Instance.EnglishText
+    //                                     where StudyData.Text == SeedData.Ton.LongText &&
+    //                                           StudyData.Language.Text == SeedData.Ton.EnglishText
     //                                     select StudyData);
     //        StudyDataEdit serverLongStudyData = null;
     //        if (serverLongStudyDataQuery.Count() == 0) //we don't have the Long StudyData in the db, so put it there
     //        {
     //          var StudyData = allStudyDatas[2];
     //          StudyData.BeginEdit();
-    //          StudyData.Text = SeedData.Instance.LongText;
+    //          StudyData.Text = SeedData.Ton.LongText;
     //          StudyData.Language = _ServerEnglishLang;
     //          StudyData.ApplyEdit();
     //          serverLongStudyData = StudyData;
@@ -112,15 +112,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //        var serverDogStudyDataQuery = (from StudyData in allStudyDatas
-    //                                     where StudyData.Text == SeedData.Instance.DogText &&
-    //                                           StudyData.Language.Text == SeedData.Instance.EnglishText
+    //                                     where StudyData.Text == SeedData.Ton.DogText &&
+    //                                           StudyData.Language.Text == SeedData.Ton.EnglishText
     //                                     select StudyData);
     //        StudyDataEdit serverDogStudyData = null;
     //        if (serverDogStudyDataQuery.Count() == 0) //we don't have the Dog StudyData in the db, so put it there
     //        {
     //          var StudyData = allStudyDatas[3];
     //          StudyData.BeginEdit();
-    //          StudyData.Text = SeedData.Instance.DogText;
+    //          StudyData.Text = SeedData.Ton.DogText;
     //          StudyData.Language = _ServerSpanishLang;
     //          StudyData.ApplyEdit();
     //          serverDogStudyData = StudyData;
@@ -129,17 +129,17 @@ namespace LearnLanguages.Silverlight.Tests
     //          serverDogStudyData = serverDogStudyDataQuery.First();
 
     //        var validUserId = serverHelloStudyData.UserId;
-    //        SeedData.Instance.GetTestValidUserDto().Id = validUserId;
+    //        SeedData.Ton.GetTestValidUserDto().Id = validUserId;
 
-    //        SeedData.Instance.HelloStudyDataDto.Id = serverHelloStudyData.Id;
-    //        SeedData.Instance.HolaStudyDataDto.Id = serverHolaStudyData.Id;
-    //        SeedData.Instance.LongStudyDataDto.Id = serverLongStudyData.Id;
-    //        SeedData.Instance.DogStudyDataDto.Id = serverDogStudyData.Id;
+    //        SeedData.Ton.HelloStudyDataDto.Id = serverHelloStudyData.Id;
+    //        SeedData.Ton.HolaStudyDataDto.Id = serverHolaStudyData.Id;
+    //        SeedData.Ton.LongStudyDataDto.Id = serverLongStudyData.Id;
+    //        SeedData.Ton.DogStudyDataDto.Id = serverDogStudyData.Id;
 
-    //        SeedData.Instance.HelloStudyDataDto.UserId = serverHelloStudyData.UserId;
-    //        SeedData.Instance.HolaStudyDataDto.UserId = serverHolaStudyData.UserId;
-    //        SeedData.Instance.LongStudyDataDto.UserId = serverLongStudyData.UserId;
-    //        SeedData.Instance.DogStudyDataDto.UserId = serverDogStudyData.UserId;
+    //        SeedData.Ton.HelloStudyDataDto.UserId = serverHelloStudyData.UserId;
+    //        SeedData.Ton.HolaStudyDataDto.UserId = serverHolaStudyData.UserId;
+    //        SeedData.Ton.LongStudyDataDto.UserId = serverLongStudyData.UserId;
+    //        SeedData.Ton.DogStudyDataDto.UserId = serverDogStudyData.UserId;
 
     //        StudyDatasCorrected = true;
     //      });
@@ -149,8 +149,8 @@ namespace LearnLanguages.Silverlight.Tests
     //  EnqueueConditional(() => StudyDatasCorrected);
     //  EnqueueCallback(() => { Assert.IsNull(error); },
     //                  () => { Assert.IsNotNull(allLanguages); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.EnglishId); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.SpanishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.EnglishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.SpanishId); },
     //                  () => { Assert.IsTrue(allLanguages.Count > 0); });
     //  EnqueueTestComplete();
     //}
@@ -270,7 +270,7 @@ namespace LearnLanguages.Silverlight.Tests
 
         //EDIT
         newStudyDataEdit.NativeLanguageText = "Spanish";
-        //newStudyDataEdit.Username = SeedData.Instance.TestValidUsername;
+        //newStudyDataEdit.Username = SeedData.Ton.TestValidUsername;
         isEdited = true;
 
         //SAVE
@@ -353,7 +353,7 @@ namespace LearnLanguages.Silverlight.Tests
 
         //EDIT
         newStudyDataEdit.NativeLanguageText = "Spanish";
-        newStudyDataEdit.Username = SeedData.Instance.TestValidUsername;
+        newStudyDataEdit.Username = SeedData.Ton.TestValidUsername;
 
         //SAVE
         newStudyDataEdit.BeginSave((s2, r2) =>

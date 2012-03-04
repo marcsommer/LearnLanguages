@@ -20,7 +20,7 @@ namespace LearnLanguages.Silverlight.Tests
     //public void InitializeLineTests()
     //{
 
-    //  //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
+    //  //WE NEED TO UPDATE THE CLIENT SeedData.Ton IDS.  
     //  var isLoaded = false;
     //  var linesCorrected = false;
     //  Exception error = new Exception();
@@ -37,16 +37,16 @@ namespace LearnLanguages.Silverlight.Tests
 
     //    allLanguages = r.Object;
     //    _ServerEnglishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.EnglishText
+    //                          where language.Text == SeedData.Ton.EnglishText
     //                          select language).First();
 
-    //    SeedData.Instance.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
+    //    SeedData.Ton.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
 
     //    _ServerSpanishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Instance.SpanishText
+    //                          where language.Text == SeedData.Ton.SpanishText
     //                          select language).First();
 
-    //    SeedData.Instance.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
+    //    SeedData.Ton.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
 
     //    #endregion
 
@@ -61,15 +61,15 @@ namespace LearnLanguages.Silverlight.Tests
     //      allLines = r2.Object;
 
     //      var serverHelloLineQuery = (from line in allLines
-    //                                    where line.Text == SeedData.Instance.HelloText &&
-    //                                          line.Language.Text == SeedData.Instance.EnglishText
+    //                                    where line.Text == SeedData.Ton.HelloText &&
+    //                                          line.Language.Text == SeedData.Ton.EnglishText
     //                                    select line);
     //      LineEdit serverHelloLine = null;
     //      if (serverHelloLineQuery.Count() == 0) //we don't have the hello line in the db, so put it there
     //      {
     //        var line = allLines[0];
     //        line.BeginEdit();
-    //        line.Text = SeedData.Instance.HelloText;
+    //        line.Text = SeedData.Ton.HelloText;
     //        line.Language = _ServerEnglishLang;
     //        line.ApplyEdit();
     //        serverHelloLine = line;
@@ -79,15 +79,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //      var serverHolaLineQuery = (from line in allLines
-    //                                   where line.Text == SeedData.Instance.HolaText &&
-    //                                         line.Language.Text == SeedData.Instance.EnglishText
+    //                                   where line.Text == SeedData.Ton.HolaText &&
+    //                                         line.Language.Text == SeedData.Ton.EnglishText
     //                                   select line);
     //      LineEdit serverHolaLine = null;
     //      if (serverHolaLineQuery.Count() == 0) //we don't have the Hola line in the db, so put it there
     //      {
     //        var line = allLines[1];
     //        line.BeginEdit();
-    //        line.Text = SeedData.Instance.HolaText;
+    //        line.Text = SeedData.Ton.HolaText;
     //        line.Language = _ServerSpanishLang;
     //        line.ApplyEdit();
     //        serverHolaLine = line;
@@ -96,15 +96,15 @@ namespace LearnLanguages.Silverlight.Tests
     //        serverHolaLine = serverHolaLineQuery.First();
 
     //      var serverLongLineQuery = (from line in allLines
-    //                                   where line.Text == SeedData.Instance.LongText &&
-    //                                         line.Language.Text == SeedData.Instance.EnglishText
+    //                                   where line.Text == SeedData.Ton.LongText &&
+    //                                         line.Language.Text == SeedData.Ton.EnglishText
     //                                   select line);
     //      LineEdit serverLongLine = null;
     //      if (serverLongLineQuery.Count() == 0) //we don't have the Long line in the db, so put it there
     //      {
     //        var line = allLines[2];
     //        line.BeginEdit();
-    //        line.Text = SeedData.Instance.LongText;
+    //        line.Text = SeedData.Ton.LongText;
     //        line.Language = _ServerEnglishLang;
     //        line.ApplyEdit();
     //        serverLongLine = line;
@@ -114,15 +114,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
     //      var serverDogLineQuery = (from line in allLines
-    //                                  where line.Text == SeedData.Instance.DogText &&
-    //                                        line.Language.Text == SeedData.Instance.EnglishText
+    //                                  where line.Text == SeedData.Ton.DogText &&
+    //                                        line.Language.Text == SeedData.Ton.EnglishText
     //                                  select line);
     //      LineEdit serverDogLine = null;
     //      if (serverDogLineQuery.Count() == 0) //we don't have the Dog line in the db, so put it there
     //      {
     //        var line = allLines[3];
     //        line.BeginEdit();
-    //        line.Text = SeedData.Instance.DogText;
+    //        line.Text = SeedData.Ton.DogText;
     //        line.Language = _ServerSpanishLang;
     //        line.ApplyEdit();
     //        serverDogLine = line;
@@ -131,17 +131,17 @@ namespace LearnLanguages.Silverlight.Tests
     //        serverDogLine = serverDogLineQuery.First();
 
     //      var validUserId = serverHelloLine.UserId;
-    //      SeedData.Instance.GetTestValidUserDto().Id = validUserId;
+    //      SeedData.Ton.GetTestValidUserDto().Id = validUserId;
 
-    //      SeedData.Instance.HelloLineDto.Id = serverHelloLine.Id;
-    //      SeedData.Instance.HolaLineDto.Id = serverHolaLine.Id;
-    //      SeedData.Instance.LongLineDto.Id = serverLongLine.Id;
-    //      SeedData.Instance.DogLineDto.Id = serverDogLine.Id;
+    //      SeedData.Ton.HelloLineDto.Id = serverHelloLine.Id;
+    //      SeedData.Ton.HolaLineDto.Id = serverHolaLine.Id;
+    //      SeedData.Ton.LongLineDto.Id = serverLongLine.Id;
+    //      SeedData.Ton.DogLineDto.Id = serverDogLine.Id;
 
-    //      SeedData.Instance.HelloLineDto.UserId = serverHelloLine.UserId;
-    //      SeedData.Instance.HolaLineDto.UserId = serverHolaLine.UserId;
-    //      SeedData.Instance.LongLineDto.UserId = serverLongLine.UserId;
-    //      SeedData.Instance.DogLineDto.UserId = serverDogLine.UserId;
+    //      SeedData.Ton.HelloLineDto.UserId = serverHelloLine.UserId;
+    //      SeedData.Ton.HolaLineDto.UserId = serverHolaLine.UserId;
+    //      SeedData.Ton.LongLineDto.UserId = serverLongLine.UserId;
+    //      SeedData.Ton.DogLineDto.UserId = serverDogLine.UserId;
 
     //      linesCorrected = true;
     //    });
@@ -151,8 +151,8 @@ namespace LearnLanguages.Silverlight.Tests
     //  EnqueueConditional(() => linesCorrected);
     //  EnqueueCallback(() => { Assert.IsNull(error); },
     //                  () => { Assert.IsNotNull(allLanguages); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.EnglishId); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.SpanishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.EnglishId); },
+    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.SpanishId); },
     //                  () => { Assert.IsTrue(allLanguages.Count > 0); });
     //  EnqueueTestComplete();
     //}

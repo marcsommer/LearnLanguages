@@ -12,6 +12,6 @@ namespace LearnLanguages.Common.Interfaces
     /// <summary>
     /// Can this advisor answer this type of question.  if Yes, return answer async.
     /// </summary>
-    bool AskAdvice(QuestionArgs question, AsyncCallback<object> answer);
+    bool AskAdvice(QuestionArgs questionArgs, AsyncCallback<object> answerCallback);
   }
 }

@@ -174,8 +174,8 @@ namespace LearnLanguages.Study.ViewModels
 
     public override void Show(ExceptionCheckCallback callback)
     {
-      _CompletedCallback = callback;
       _DateTimeQuestionShown = DateTime.Now;
+      base.Show(callback);
     }
 
     private void HideAnswer()

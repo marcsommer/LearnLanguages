@@ -13,5 +13,6 @@ namespace LearnLanguages.Study.Interfaces
   {
     void Show(ExceptionCheckCallback callback);
     void Abort();
+    event EventHandler Shown;
   }
 }

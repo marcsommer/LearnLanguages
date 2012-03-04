@@ -8,8 +8,8 @@ using System.Linq;
 
 namespace LearnLanguages.Silverlight.Tests
 {
-  //THE SEEDDATA INSTANCE IS NOT UPDATED ON THE CLIENT.  WE CANNOT TEST AGAINST SEEDDATA.INSTANCE IDS
-  //BECAUSE THESE IDS WERE NOT UPDATED WHEN THE DB WAS SEEDED, THE SEEDDATA.INSTANCE ON THE SERVER 
+  //THE SEEDDATA INSTANCE IS NOT UPDATED ON THE CLIENT.  WE CANNOT TEST AGAINST SeedData.Ton IDS
+  //BECAUSE THESE IDS WERE NOT UPDATED WHEN THE DB WAS SEEDED, THE SeedData.Ton ON THE SERVER 
   //WAS UPDATED.  THE RELATIONSHIPS SHOULD BE VALID HOWEVER.
   [TestClass]
   [Tag("language")]
@@ -33,11 +33,11 @@ namespace LearnLanguages.Silverlight.Tests
 
           allLanguages = r.Object;
           _EnglishId = (from language in allLanguages
-                        where language.Text == SeedData.Instance.EnglishText
+                        where language.Text == SeedData.Ton.EnglishText
                         select language.Id).First();
 
           _SpanishId = (from language in allLanguages
-                        where language.Text == SeedData.Instance.SpanishText
+                        where language.Text == SeedData.Ton.SpanishText
                         select language.Id).First();
 
           isLoaded = true;
@@ -317,14 +317,14 @@ namespace LearnLanguages.Silverlight.Tests
             isLoaded = true;
 
             var englishResults = from lang in allLanguages
-                                 where lang.Text == SeedData.Instance.EnglishText
+                                 where lang.Text == SeedData.Ton.EnglishText
                                  select lang;
             countEnglish = englishResults.Count();
             var englishLang = englishResults.First();
             englishId = englishLang.Id;
 
             var spanishResults = from lang in allLanguages
-                                 where lang.Text == SeedData.Instance.SpanishText
+                                 where lang.Text == SeedData.Ton.SpanishText
                                  select lang;
             countSpanish = spanishResults.Count();
             var spanishLang = spanishResults.First();

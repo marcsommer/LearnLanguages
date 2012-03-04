@@ -1,13 +1,16 @@
 ﻿using System;
 using Caliburn.Micro;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.History.Bases
 {
   /// <summary>
   /// Records history events if should handle message.
   /// </summary>
-  public abstract class HistoryRecorderBase<T> : IHandle<T>
+  public abstract class HistoryRecorderBase<TMessage> : IHandle<TMessage>, IHaveId
   {
+    public Guid Id { get; protected set; }
+
     protected bool _IsEnabled = false;
     /// <summary>
     /// Changing this affects whether this subscribes to HistoryPublisher events.
@@ -31,13 +34,13 @@ namespace LearnLanguages.History.Bases
       }
     }
 
-    public void Handle(T message)
+    public void Handle(TMessage message)
     {
       if (ShouldRecord(message))
         Record(message);
     }
 
-    protected abstract bool ShouldRecord(T message);
-    protected abstract void Record(T message);
+    protected abstract bool ShouldRecord(TMessage message);
+    protected abstract void Record(TMessage message);
   }
 }

@@ -210,6 +210,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       _DateTimeQuestionShown = DateTime.Now;
       ViewModelVisibility = Visibility.Visible;
+      DispatchShown();
       AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
         {
           if (e != null)

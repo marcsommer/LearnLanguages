@@ -138,6 +138,9 @@
   <data name="DefaultAmountDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>1000</value>
   </data>
+  <data name="DefaultBeliefStrength" xml:space="preserve">
+    <value>1.0</value>
+  </data>
   <data name="DefaultFeedbackCheckIntervalMilliseconds" xml:space="preserve">
     <value>200</value>
     <comment>ms to sleep while waiting to get feedback.  should be less than feedback timeout!!!</comment>
@@ -172,6 +175,9 @@ debug=10 seconds (10000)</comment>
   <data name="DefaultOfferExchangeId" xml:space="preserve">
     <value>92A7E7C6-8278-4142-A962-6616E2959D1C</value>
   </data>
+  <data name="DefaultPhraseReviewedRecorderId" xml:space="preserve">
+    <value>8FA20DFF-0C65-4BC0-B4AC-38B72AB03CD7</value>
+  </data>
   <data name="DefaultStudyHeartbeatTimeMilliseconds" xml:space="preserve">
     <value>1000</value>
   </data>
@@ -180,6 +186,9 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="DefaultThinkAboutAnswerTime" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="DefaultWordInPhraseReviewedRecorderId" xml:space="preserve">
+    <value>73A27EAD-A83E-4FBA-B400-679A1AC58AC7</value>
   </data>
   <data name="ErrorMsgAnswerIsNull" xml:space="preserve">
     <value>The answer is null.</value>

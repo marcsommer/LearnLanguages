@@ -12,6 +12,10 @@ using LearnLanguages.Common.CslaBases;
 
 namespace LearnLanguages.Business
 {
+  /// <summary>
+  /// Contains information about a belief targeted at a phrase.  The Text property gives ability
+  /// to add details of belief.
+  /// </summary>
   [Serializable]
   public class PhraseBeliefEdit : BusinessBase<PhraseBeliefEdit, PhraseBeliefDto>, 
                                   IHaveId
@@ -48,6 +52,12 @@ namespace LearnLanguages.Business
       DataPortal.BeginCreate<PhraseBeliefEdit>(callback);
     }
 
+    public static void NewPhraseBeliefEdit(Guid phraseId, EventHandler<DataPortalResult<PhraseBeliefEdit>> callback)
+    {
+      //DataPortal.BeginCreate<PhraseBeliefEdit>(callback, DataPortal.ProxyModes.LocalOnly);
+      DataPortal.BeginCreate<PhraseBeliefEdit>(phraseId, callback);
+    }
+
     public static void GetPhraseBeliefEdit(Guid id, EventHandler<DataPortalResult<PhraseBeliefEdit>> callback)
     {
       DataPortal.BeginFetch<PhraseBeliefEdit>(id, callback);
@@ -60,12 +70,12 @@ namespace LearnLanguages.Business
     #region Business Properties & Methods
 
     //SCALAR
-    #region public DateTime Date
-    public static readonly PropertyInfo<DateTime> DateProperty = RegisterProperty<DateTime>(c => c.Date);
-    public DateTime Date
+    #region public DateTime TimeStamp
+    public static readonly PropertyInfo<DateTime> TimeStampProperty = RegisterProperty<DateTime>(c => c.TimeStamp);
+    public DateTime TimeStamp
     {
-      get { return GetProperty(DateProperty); }
-      set { SetProperty(DateProperty, value); }
+      get { return GetProperty(TimeStampProperty); }
+      set { SetProperty(TimeStampProperty, value); }
     }
     #endregion
     #region public string Text
@@ -82,6 +92,22 @@ namespace LearnLanguages.Business
     {
       get { return GetProperty(StrengthProperty); }
       set { SetProperty(StrengthProperty, value); }
+    }
+    #endregion
+    #region public Guid BelieverId
+    public static readonly PropertyInfo<Guid> BelieverIdProperty = RegisterProperty<Guid>(c => c.BelieverId);
+    public Guid BelieverId
+    {
+      get { return GetProperty(BelieverIdProperty); }
+      set { SetProperty(BelieverIdProperty, value); }
+    }
+    #endregion
+    #region Guid ReviewMethodId
+    public static readonly PropertyInfo<Guid> ReviewMethodIdProperty = RegisterProperty<Guid>(c => c.ReviewMethodId);
+    public Guid ReviewMethodId
+    {
+      get { return GetProperty(ReviewMethodIdProperty); }
+      set { SetProperty(ReviewMethodIdProperty, value); }
     }
     #endregion
 
@@ -150,8 +176,10 @@ namespace LearnLanguages.Business
 
         //SCALAR
         LoadProperty<string>(TextProperty, dto.Text);
-        LoadProperty<DateTime>(DateProperty, dto.Date);
+        LoadProperty<DateTime>(TimeStampProperty, dto.TimeStamp);
         LoadProperty<double>(StrengthProperty, dto.Strength);
+        LoadProperty<Guid>(BelieverIdProperty, dto.BelieverId);
+        LoadProperty<Guid>(ReviewMethodIdProperty, dto.ReviewMethodId);
 
         //PHRASE
         LoadProperty<Guid>(PhraseIdProperty, dto.PhraseId);
@@ -169,9 +197,11 @@ namespace LearnLanguages.Business
     {
       PhraseBeliefDto retDto = new PhraseBeliefDto(){
                                           Id = this.Id,
-                                          Date = this.Date,
+                                          TimeStamp = this.TimeStamp,
                                           Text = this.Text,
                                           Strength = this.Strength,
+                                          BelieverId = this.BelieverId,
+                                          ReviewMethodId = this.ReviewMethodId,
                                           PhraseId = this.PhraseId,
                                           UserId = this.UserId,
                                           Username = this.Username
@@ -197,7 +227,7 @@ namespace LearnLanguages.Business
       {
         Id = Guid.NewGuid();
         //LanguageId = LanguageEdit.GetLanguageEdit
-        Date = DateTime.Now + TimeSpan.FromDays(1.0d);//defaults to tomorrow
+        TimeStamp = DateTime.Now + TimeSpan.FromDays(1.0d);//defaults to tomorrow
         Text = BusinessResources.DefaultPhraseBeliefText;
         Strength = double.Parse(BusinessResources.DefaultPhraseBeliefStrength);
         PhraseId = Guid.Empty;
@@ -257,7 +287,6 @@ namespace LearnLanguages.Business
     #region Wpf DP_XYZ
 #if !SILVERLIGHT
 
-    [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Create()
     {
       using (var dalManager = DalFactory.GetDalManager())
@@ -277,6 +306,28 @@ namespace LearnLanguages.Business
 
         //PHRASE CHILD
         Phrase = DataPortal.CreateChild<PhraseEdit>();
+      }
+    }
+
+    protected void DataPortal_Create(Guid phraseId)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var beliefDal = dalManager.GetProvider<IPhraseBeliefDal>();
+        var result = beliefDal.New(null);
+        if (!result.IsSuccess)
+        {
+          Exception error = result.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new CreateFailedException(result.Msg);
+        }
+        PhraseBeliefDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+
+        //PHRASE CHILD
+        Phrase = DataPortal.FetchChild<PhraseEdit>(phraseId);
       }
     }
     //[Transactional(TransactionalTypes.TransactionScope)]

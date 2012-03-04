@@ -20,7 +20,7 @@ namespace LearnLanguages.Silverlight.Tests
     public void InitializePhraseTests()
     {
 
-      //WE NEED TO UPDATE THE CLIENT SEEDDATA.INSTANCE IDS.  
+      //WE NEED TO UPDATE THE CLIENT SeedData.Ton IDS.  
       var isLoaded = false;
       var phrasesCorrected = false;
       Exception error = new Exception();
@@ -37,16 +37,16 @@ namespace LearnLanguages.Silverlight.Tests
 
         allLanguages = r.Object;
         _ServerEnglishLang = (from language in allLanguages
-                              where language.Text == SeedData.Instance.EnglishText
+                              where language.Text == SeedData.Ton.EnglishText
                               select language).First();
 
-        SeedData.Instance.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
+        SeedData.Ton.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
 
         _ServerSpanishLang = (from language in allLanguages
-                              where language.Text == SeedData.Instance.SpanishText
+                              where language.Text == SeedData.Ton.SpanishText
                               select language).First();
 
-        SeedData.Instance.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
+        SeedData.Ton.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
 
         #endregion
 
@@ -61,15 +61,15 @@ namespace LearnLanguages.Silverlight.Tests
           allPhrases = r2.Object;
 
           var serverHelloPhraseQuery = (from phrase in allPhrases
-                                        where phrase.Text == SeedData.Instance.HelloText &&
-                                              phrase.Language.Text == SeedData.Instance.EnglishText
+                                        where phrase.Text == SeedData.Ton.HelloText &&
+                                              phrase.Language.Text == SeedData.Ton.EnglishText
                                         select phrase);
           PhraseEdit serverHelloPhrase = null;
           if (serverHelloPhraseQuery.Count() == 0) //we don't have the hello phrase in the db, so put it there
           {
             var phrase = allPhrases[0];
             phrase.BeginEdit();
-            phrase.Text = SeedData.Instance.HelloText;
+            phrase.Text = SeedData.Ton.HelloText;
             phrase.Language = _ServerEnglishLang;
             phrase.ApplyEdit();
             serverHelloPhrase = phrase;
@@ -79,15 +79,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
           var serverHolaPhraseQuery = (from phrase in allPhrases
-                                       where phrase.Text == SeedData.Instance.HolaText &&
-                                             phrase.Language.Text == SeedData.Instance.EnglishText
+                                       where phrase.Text == SeedData.Ton.HolaText &&
+                                             phrase.Language.Text == SeedData.Ton.EnglishText
                                        select phrase);
           PhraseEdit serverHolaPhrase = null;
           if (serverHolaPhraseQuery.Count() == 0) //we don't have the Hola phrase in the db, so put it there
           {
             var phrase = allPhrases[1];
             phrase.BeginEdit();
-            phrase.Text = SeedData.Instance.HolaText;
+            phrase.Text = SeedData.Ton.HolaText;
             phrase.Language = _ServerSpanishLang;
             phrase.ApplyEdit();
             serverHolaPhrase = phrase;
@@ -96,15 +96,15 @@ namespace LearnLanguages.Silverlight.Tests
             serverHolaPhrase = serverHolaPhraseQuery.First();
 
           var serverLongPhraseQuery = (from phrase in allPhrases
-                                       where phrase.Text == SeedData.Instance.LongText &&
-                                             phrase.Language.Text == SeedData.Instance.EnglishText
+                                       where phrase.Text == SeedData.Ton.LongText &&
+                                             phrase.Language.Text == SeedData.Ton.EnglishText
                                        select phrase);
           PhraseEdit serverLongPhrase = null;
           if (serverLongPhraseQuery.Count() == 0) //we don't have the Long phrase in the db, so put it there
           {
             var phrase = allPhrases[2];
             phrase.BeginEdit();
-            phrase.Text = SeedData.Instance.LongText;
+            phrase.Text = SeedData.Ton.LongText;
             phrase.Language = _ServerEnglishLang;
             phrase.ApplyEdit();
             serverLongPhrase = phrase;
@@ -114,15 +114,15 @@ namespace LearnLanguages.Silverlight.Tests
 
 
           var serverDogPhraseQuery = (from phrase in allPhrases
-                                      where phrase.Text == SeedData.Instance.DogText &&
-                                            phrase.Language.Text == SeedData.Instance.EnglishText
+                                      where phrase.Text == SeedData.Ton.DogText &&
+                                            phrase.Language.Text == SeedData.Ton.EnglishText
                                       select phrase);
           PhraseEdit serverDogPhrase = null;
           if (serverDogPhraseQuery.Count() == 0) //we don't have the Dog phrase in the db, so put it there
           {
             var phrase = allPhrases[3];
             phrase.BeginEdit();
-            phrase.Text = SeedData.Instance.DogText;
+            phrase.Text = SeedData.Ton.DogText;
             phrase.Language = _ServerSpanishLang;
             phrase.ApplyEdit();
             serverDogPhrase = phrase;
@@ -131,17 +131,17 @@ namespace LearnLanguages.Silverlight.Tests
             serverDogPhrase = serverDogPhraseQuery.First();
 
           var validUserId = serverHelloPhrase.UserId;
-          SeedData.Instance.GetTestValidUserDto().Id = validUserId;
+          SeedData.Ton.GetTestValidUserDto().Id = validUserId;
 
-          SeedData.Instance.HelloPhraseDto.Id = serverHelloPhrase.Id;
-          SeedData.Instance.HolaPhraseDto.Id = serverHolaPhrase.Id;
-          SeedData.Instance.LongPhraseDto.Id = serverLongPhrase.Id;
-          SeedData.Instance.DogPhraseDto.Id = serverDogPhrase.Id;
+          SeedData.Ton.HelloPhraseDto.Id = serverHelloPhrase.Id;
+          SeedData.Ton.HolaPhraseDto.Id = serverHolaPhrase.Id;
+          SeedData.Ton.LongPhraseDto.Id = serverLongPhrase.Id;
+          SeedData.Ton.DogPhraseDto.Id = serverDogPhrase.Id;
 
-          SeedData.Instance.HelloPhraseDto.UserId = serverHelloPhrase.UserId;
-          SeedData.Instance.HolaPhraseDto.UserId = serverHolaPhrase.UserId;
-          SeedData.Instance.LongPhraseDto.UserId = serverLongPhrase.UserId;
-          SeedData.Instance.DogPhraseDto.UserId = serverDogPhrase.UserId;
+          SeedData.Ton.HelloPhraseDto.UserId = serverHelloPhrase.UserId;
+          SeedData.Ton.HolaPhraseDto.UserId = serverHolaPhrase.UserId;
+          SeedData.Ton.LongPhraseDto.UserId = serverLongPhrase.UserId;
+          SeedData.Ton.DogPhraseDto.UserId = serverDogPhrase.UserId;
 
           phrasesCorrected = true;
         });
@@ -151,8 +151,8 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueConditional(() => phrasesCorrected);
       EnqueueCallback(() => { Assert.IsNull(error); },
                       () => { Assert.IsNotNull(allLanguages); },
-                      () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.EnglishId); },
-                      () => { Assert.AreNotEqual(Guid.Empty, SeedData.Instance.SpanishId); },
+                      () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.EnglishId); },
+                      () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.SpanishId); },
                       () => { Assert.IsTrue(allLanguages.Count > 0); });
       EnqueueTestComplete();
     }
@@ -362,7 +362,7 @@ namespace LearnLanguages.Silverlight.Tests
         allPhrases.ApplyEdit();
 
         //just checking to see if removing from phraselist and apply edit deletes phrase from db.  it does.
-        //PhraseEdit.GetPhraseEdit(SeedData.Instance.IdHello, (s3, r3) =>
+        //PhraseEdit.GetPhraseEdit(SeedData.Ton.IdHello, (s3, r3) =>
         //{
         //  if (r3.Error != null)
         //    throw r3.Error;
@@ -392,7 +392,7 @@ namespace LearnLanguages.Silverlight.Tests
             throw saveError;
 
           //just checking to see if removing and applyingedit to allPhrases list deletes the item from db.  it looks like it does.
-          //PhraseEdit.GetPhraseEdit(SeedData.Instance.IdHello, (s3, r3) =>
+          //PhraseEdit.GetPhraseEdit(SeedData.Ton.IdHello, (s3, r3) =>
           //{
           //  if (r3.Error != null)
           //    throw r3.Error;
