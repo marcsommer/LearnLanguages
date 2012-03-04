@@ -122,8 +122,6 @@ namespace LearnLanguages.Study.Defaults
       }
 
       #endregion
-
-      
     }
 
     private static AutoResetEvent _AutoResetEvent = new AutoResetEvent(false);

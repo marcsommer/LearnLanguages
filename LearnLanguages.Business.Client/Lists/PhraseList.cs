@@ -24,9 +24,10 @@ namespace LearnLanguages.Business
       DataPortal.BeginFetch<PhraseList>(phraseIds, callback);
     }
 
-    public static void NewPhraseList(Criteria.PhraseTextsCriteria phraseTexts, EventHandler<DataPortalResult<PhraseList>> callback)
+    public static void NewPhraseList(Criteria.PhraseTextsCriteria phraseTextsCriteria,
+      EventHandler<DataPortalResult<PhraseList>> callback)
     {
-      DataPortal.BeginCreate<PhraseList>(phraseTexts, callback);
+      DataPortal.BeginCreate<PhraseList>(phraseTextsCriteria, callback);
     }
 
     public static PhraseList NewPhraseList()
