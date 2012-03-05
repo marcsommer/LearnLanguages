@@ -9,23 +9,23 @@ using Caliburn.Micro;
 using Csla.Core;
 using System.Threading;
 
-namespace LearnLanguages.Study.Advisors
+namespace LearnLanguages.Study
 {
   /// <summary>
   /// This advisor expects a question StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown with 
   /// State == PhraseEdit, answer is type double between 0.0 and 1.0.
   /// </summary>
-  public class PhrasePercentKnownAdvisor : IAdvisor, IHandle<History.Events.ReviewedLineEvent>
+  public class DefaultPhrasePercentKnownAdvisor : IAdvisor, IHandle<History.Events.ReviewedLineEvent>
   {
-    public PhrasePercentKnownAdvisor()
+    public DefaultPhrasePercentKnownAdvisor()
     {
-      Cache = new MobileDictionary<PhraseEdit, double>();
+      Cache = new MobileDictionary<PhraseTextLanguageTextPair, double>();
     }
 
     #region Singleton Pattern Members
-    private static volatile PhrasePercentKnownAdvisor _Ton;
+    private static volatile DefaultPhrasePercentKnownAdvisor _Ton;
     private static object _Lock = new object();
-    public static PhrasePercentKnownAdvisor Ton
+    public static DefaultPhrasePercentKnownAdvisor Ton
     {
       get
       {
@@ -34,7 +34,7 @@ namespace LearnLanguages.Study.Advisors
           lock (_Lock)
           {
             if (_Ton == null)
-              _Ton = new PhrasePercentKnownAdvisor();
+              _Ton = new DefaultPhrasePercentKnownAdvisor();
           }
         }
 
@@ -72,19 +72,11 @@ namespace LearnLanguages.Study.Advisors
 
     private void GetPercentKnown(PhraseEdit phrase, AsyncCallback<double> callback)
     {
-      ///TODO: COME UP WITH ANSWER
-      ///1) First, check cache.  This will be the most up-to-date that we care about.
-      ///2) Get all history events related to this phrase.  This includes:
-      ///   -if this phrase exists in db, check for beliefs about phrase.  If have any, then use those.  otherwise,
-      ///   -check for a phrase that contains this phrase
-      ///   -composition of individual words
-      ///2) Analyze history events to project how much we think the user knows for this phrase.
-      
       #region CHECK CACHE
 
       var results = from entry in Cache
-                    where entry.Key.Text == phrase.Text &&
-                          entry.Key.Language.Text == phrase.Language.Text
+                    where entry.Key.PhraseText == phrase.Text &&
+                          entry.Key.LanguageText == phrase.Language.Text
                     select entry;
 
       if (results.Count() == 1)
@@ -102,7 +94,7 @@ namespace LearnLanguages.Study.Advisors
 
       #endregion
       
-      #region CHECK FOR ANY BELIEFS ABOUT PHRASE.
+      #region CHECK BELIEFS IN DB
 
         PhraseBeliefList.GetBeliefsAboutPhrase(phrase.Id, (s, r) =>
           {
@@ -199,7 +191,7 @@ namespace LearnLanguages.Study.Advisors
               AutoResetEvent autoResetEvent = (AutoResetEvent)state;
             
               #region PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
-              PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
+              DefaultPhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
                 {
                   if (r2.Error != null)
                   {
@@ -249,16 +241,81 @@ namespace LearnLanguages.Study.Advisors
     private int _CountWordsKnown { get; set; }
 
 
-    private void GetPercentKnownAboutPhraseWithBeliefs(PhraseEdit phrase, PhraseBeliefList beliefs, AsyncCallback<double> callback)
+    private void GetPercentKnownAboutPhraseWithBeliefs(PhraseEdit phrase, 
+                                                       PhraseBeliefList beliefs, 
+                                                       AsyncCallback<double> callback)
     {
-      throw new NotImplementedException();
+      try
+      {
+        if (beliefs.Count < 2)
+          throw new ArgumentException("beliefs.Count < 2");
+
+        ///FOR NOW, THIS JUST GETS THE MOST RECENT BELIEF AND GOES WITH THE STRENGTH OF THAT BELIEF.
+        ///THIS IS ABSOLUTELY NOT HOW IT SHOULD BE BUT THAT IS WHY WE HAVE A "DEFAULT" ADVISOR AND
+        ///EXTENSIBILITY FOR THIS.
+
+        var results = from belief in beliefs
+                      orderby belief.TimeStamp
+                      select belief;
+
+        var mostRecentBelief = results.First();
+        var percentKnown = mostRecentBelief.Strength;
+        callback(this, new ResultArgs<double>(percentKnown));
+        return;
+      }
+      catch (Exception ex)
+      {
+        callback(this, new ResultArgs<double>(ex));
+        return;
+      }
     }
 
     public void Handle(History.Events.ReviewedLineEvent message)
     {
-      throw new NotImplementedException();
+      //THIS MESSAGE IS GOING TO BE RECORDED BY A DIFFERENT RECORDER OBJECT, BUT 
+      //WE WANT TO PUT IT INTO OUR CACHE FOR QUICK ADVISING
+
+      //LINETEXT
+      string lineText = "";
+      var messageHasLineText = message.TryGetDetail<string>(History.HistoryResources.Key_LineText, out lineText);
+      if (!messageHasLineText)
+        return;
+      
+      //LANGUAGE TEXT
+      string languageText = "";
+      var messageHasLanguageText = 
+        message.TryGetDetail<string>(History.HistoryResources.Key_LanguageText, out languageText);
+      if (!messageHasLanguageText)
+        return;
+
+      //FEEDBACK
+      double feedbackAsDouble = -1;
+      var messageHasFeedbackAsDouble = 
+        message.TryGetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble, out feedbackAsDouble);
+      if (!messageHasFeedbackAsDouble)
+        return;
+
+      //ADD/REPLACE ENTRY
+      var keyPhraseInfo = new PhraseTextLanguageTextPair(lineText, languageText);
+      var containsLinePhrase = Cache.ContainsKey(keyPhraseInfo);
+      if (!containsLinePhrase)
+        Cache.Add(keyPhraseInfo, feedbackAsDouble);
+      else
+        Cache[keyPhraseInfo] = feedbackAsDouble;
     }
 
-    private MobileDictionary<PhraseEdit, double> Cache { get; set; }
+    private class PhraseTextLanguageTextPair
+    {
+      public PhraseTextLanguageTextPair(string phraseText, string languageText)
+      {
+        PhraseText = phraseText;
+        LanguageText = languageText;
+      }
+
+      public string PhraseText { get; set; }
+      public string LanguageText { get; set; }
+    }
+
+    private MobileDictionary<PhraseTextLanguageTextPair, double> Cache { get; set; }
   }
 }

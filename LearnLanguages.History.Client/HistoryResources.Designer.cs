@@ -79,6 +79,24 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to true.
+        /// </summary>
+        public static string IsEnabledReviewedLineCompoundEventMaker {
+            get {
+                return ResourceManager.GetString("IsEnabledReviewedLineCompoundEventMaker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to true.
+        /// </summary>
+        public static string IsEnabledReviewedPhraseCompoundEventMaker {
+            get {
+                return ResourceManager.GetString("IsEnabledReviewedPhraseCompoundEventMaker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ChildId.
         /// </summary>
         public static string Key_ChildId {

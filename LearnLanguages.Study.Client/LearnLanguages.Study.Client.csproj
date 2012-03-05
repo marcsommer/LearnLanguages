@@ -65,7 +65,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Advisors\PhrasePercentKnownAdvisor.cs" />
+    <Compile Include="Defaults\Advisors\DefaultPhrasePercentKnownAdvisor.cs" />
     <Compile Include="Core\FeedbackViewModelBase.cs" />
     <Compile Include="Core\StudierBaseOfT.cs" />
     <Compile Include="Core\StudyItemViewModelArgs.cs" />

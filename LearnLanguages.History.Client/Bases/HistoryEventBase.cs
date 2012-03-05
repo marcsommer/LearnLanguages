@@ -134,6 +134,27 @@ namespace LearnLanguages.History.Bases
     {
       return (T)GetDetail(key);
     }
+    public virtual bool TryGetDetail<T>(string key, out T detail)
+    {
+      detail = default(T);
+      try
+      {
+        object detailUncasted = null;
+        var hasDetailUncasted = TryGetDetail(key, out detailUncasted);
+        if (!hasDetailUncasted)
+          return false;
+
+        if (!(detailUncasted is T))
+          return false;
+
+        detail = (T)detailUncasted;
+        return true;
+      }
+      catch (Exception ex)
+      {
+        return false;
+      }
+    }
 
     public MobileDictionary<string, Guid> Ids { get; protected set; }
     public MobileDictionary<string, string> Strings { get; protected set; }

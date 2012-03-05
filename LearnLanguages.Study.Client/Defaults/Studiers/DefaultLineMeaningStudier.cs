@@ -8,7 +8,6 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Offer;
 using Caliburn.Micro;
 using LearnLanguages.Common.Delegates;
-using LearnLanguages.Study.Advisors;
 
 namespace LearnLanguages.Study
 {
@@ -19,7 +18,7 @@ namespace LearnLanguages.Study
   /// populating aggregate phrase texts with the OriginalAggregateSize, as well as aggregating
   /// adjacent known phrase texts, according to its own knowledge.
   /// </summary>
-  public class DefaultLineMeaningStudier : StudierBase<LineEdit>
+  public class DefaultLineMeaningStudier : StudierBase<LineEdit>, IHandle<History.Events.ReviewedPhraseEvent>
   {
     #region Ctors and Init
 
@@ -27,6 +26,7 @@ namespace LearnLanguages.Study
     {
       _Studiers = new Dictionary<int, DefaultPhraseMeaningStudier>();
       Exchange.Ton.SubscribeToStatusUpdates(this);
+      History.HistoryPublisher.Ton.SubscribeToEvents(this);
     }
 
     #endregion
@@ -53,6 +53,8 @@ namespace LearnLanguages.Study
     /// any outside source for knowledge.  It only is an internal reference.
     /// </summary>
     public List<string> KnownPhraseTexts { get; private set; }
+
+    public double KnowledgeThreshold { get; private set; }
 
     /// <summary>
     /// The index of the last studied phrase in AggregatePhraseTexts
@@ -351,11 +353,22 @@ namespace LearnLanguages.Study
     /// </summary>
     private bool IsPhraseKnown(string phraseText)
     {
-      var isKnown = (from knownPhraseText in KnownPhraseTexts
-                     where knownPhraseText.Contains(phraseText)
-                     select knownPhraseText).Count() > 0;
+      //FIRST CHECKS FOR ENTIRE PHRASE, THEN CONTAINMENT IN ANOTHER PHRASE.
 
-      return isKnown;
+      //ENTIRE PHRASE
+      var isWholeTextKnown = (from knownPhraseText in KnownPhraseTexts
+                              where knownPhraseText == phraseText
+                              select knownPhraseText).Count() > 0;
+
+      if (isWholeTextKnown)
+        return true;
+
+      //CONTAINED IN ANOTHER PHRASE
+      var isKnownInAnotherPhrase = (from knownPhraseText in KnownPhraseTexts
+                                    where knownPhraseText.Contains(phraseText)
+                                    select knownPhraseText).Count() > 0;
+
+      return isKnownInAnotherPhrase;
     }
 
     /// <summary>
@@ -414,6 +427,7 @@ namespace LearnLanguages.Study
       _IsReady = false;
       _Target = target;
       AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
+      KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
       AggregatePhraseTexts = new List<string>();
       KnownPhraseTexts = new List<string>();
       PopulateAggregatePhraseTexts(AggregateSize);
@@ -428,6 +442,17 @@ namespace LearnLanguages.Study
 
           completedCallback(null);
         });
+    }
+
+    public void Handle(History.Events.ReviewedPhraseEvent message)
+    {
+      string phraseText = message.GetDetail<string>(History.HistoryResources.Key_PhraseText);
+      double feedbackAsDouble = message.GetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble);
+
+      if (feedbackAsDouble > KnowledgeThreshold)
+        MarkPhraseKnown(phraseText);
+      else
+        MarkPhraseUnknown(phraseText);
     }
   }
 }

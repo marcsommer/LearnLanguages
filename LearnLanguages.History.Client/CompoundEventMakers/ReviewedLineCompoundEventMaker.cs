@@ -9,13 +9,16 @@ namespace LearnLanguages.History.CompoundEventMakers
   /// event called "ReviewedLineEvent".  This event contains the phraseId, languageId of that phrase, 
   /// timespan duration of review, and feedback (as type double) given.  
   /// </summary>
-  public class LineReviewedCompoundEventMaker : CompoundEventMakerBase, 
-                                                  IHandle<Events.ReviewingLineEvent>,
-                                                  IHandle<Events.ReviewedPhraseEvent>
+  public class ReviewedLineCompoundEventMaker : CompoundEventMakerBase, 
+                                                IHandle<Events.ReviewingLineEvent>,
+                                                IHandle<Events.ReviewedPhraseEvent>
   {
-    public LineReviewedCompoundEventMaker()
+    public ReviewedLineCompoundEventMaker()
     {
       EventsAreSynchronous = true;
+      var isEnabled = bool.Parse(HistoryResources.IsEnabledReviewedLineCompoundEventMaker);
+      if (isEnabled)
+        Enable();
     }
 
     /// <summary>

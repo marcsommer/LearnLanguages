@@ -151,7 +151,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 85.
+        ///   Looks up a localized string similar to .85.
         /// </summary>
         public static string DefaultKnowledgeThreshold {
             get {
@@ -367,7 +367,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 100.
+        ///   Looks up a localized string similar to 1.0.
         /// </summary>
         public static string PercentKnownAll {
             get {
@@ -376,7 +376,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 75.
+        ///   Looks up a localized string similar to .75.
         /// </summary>
         public static string PercentKnownMost {
             get {
@@ -385,7 +385,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.
+        ///   Looks up a localized string similar to .01.
         /// </summary>
         public static string PercentKnownNone {
             get {
@@ -394,7 +394,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 25.
+        ///   Looks up a localized string similar to .25.
         /// </summary>
         public static string PercentKnownSome {
             get {
