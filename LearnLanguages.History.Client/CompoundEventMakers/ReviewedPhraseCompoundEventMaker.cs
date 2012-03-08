@@ -17,24 +17,11 @@ namespace LearnLanguages.History.CompoundEventMakers
   {
     public ReviewedPhraseCompoundEventMaker()
     {
-      EventsAreSynchronous = true;
       var isEnabled = bool.Parse(HistoryResources.IsEnabledReviewedPhraseCompoundEventMaker);
       if (isEnabled)
         Enable();
+      Reset();
     }
-
-    /// <summary>
-    /// If events are synchronous, this resets every time an event is handled out of order.  
-    /// This defaults to true.
-    /// 
-    /// E.g. If we hear a Viewing event for a phrase part of line, then hear feedback, *WITHOUT*
-    /// hearing an intermediate event for viewed that phrase, then we assume something wrong happened
-    /// and we reset anew.  
-    /// E.g. #2: If we hear a Viewing event for a phrase, then hear another Viewing event
-    /// for a different phrase, we reset for the most recent Viewing event, assigning state to the more
-    /// recent phrase.
-    /// </summary>
-    public bool EventsAreSynchronous { get; set; }
 
     #region State
 
@@ -53,7 +40,8 @@ namespace LearnLanguages.History.CompoundEventMakers
     private DateTime _FeedbackTimestamp { get; set; }
 
     #endregion
-    
+
+    private bool _IsReset { get; set; }
     protected override void Reset()
     {
       _ReviewingEventHandled = false;
@@ -64,56 +52,40 @@ namespace LearnLanguages.History.CompoundEventMakers
       _FeedbackTimestamp = DateTime.MinValue;
       _ViewingTimestamp = DateTime.MinValue;
       _ViewedTimestamp = DateTime.MinValue;
+      _IsReset = true;
     }
+
+    #region Saga Events
 
     #region #1 Reviewing Phrase
     public void Handle(Events.ReviewingPhraseEvent message)
     {
-      if (EventsAreSynchronous)
-      {
-        Reset();
-        _ReviewingEventHandled = true;
-      }
-      else
-      {
-        //EVENTS ARE ASYNCHRONOUS, I.E. EVENTS CAN RUN IN PARALLEL.  THIS AINT IMPLEMENTED YET.
-        throw new NotImplementedException();
-      }
+      Reset();
+      _IsReset = false;
+      _ReviewingEventHandled = true;
+      _ReviewMethodId = message.GetDetail<Guid>(HistoryResources.Key_ReviewMethodId);
     }
     #endregion
 
     #region #2 Phrase Viewing
     /// <summary>
-    /// THIS OCCURS AT THE START OF SHOWING THE PHRASE.  IT ALWAYS RESETS THIS COMPOUND EVENT MAKER
-    /// IF EVENTS ARE SYNCHRONOUS, BECAUSE THIS IS THE FIRST MESSAGE THAT WE LISTEN FOR.
+    /// THIS OCCURS AT THE START OF SHOWING THE PHRASE.
     /// </summary>
     public void Handle(Events.ViewingPhraseOnScreenEvent message)
     {
-      if (EventsAreSynchronous)
+      if (!_ReviewingEventHandled)
       {
-        if (!_ReviewingEventHandled)
-        {
-          //EITHER WE HAVE SKIPPED A PREVIOUS MESSAGE, THERE IS AN ERROR AND WE WILL 
-          //RESET FOR A NEW SAGA.
-          Reset();
-          Services.Log(HistoryResources.ErrorMsgSagaMessageIncorrectOrder, LogPriority.Medium, LogCategory.Warning);
-          return;
-        }
-
-        var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
-        var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
-
-        _PhraseId = phraseId;
-        _LanguageId = languageId;
-
-        _ViewingEventHandled = true;
-        _ViewingTimestamp = DateTime.Now;
+        return;
       }
-      else
-      {
-        //EVENTS ARE ASYNCHRONOUS, I.E. EVENTS CAN RUN IN PARALLEL.  THIS AINT IMPLEMENTED YET.
-        throw new NotImplementedException();
-      }
+
+      var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
+      var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
+
+      _PhraseId = phraseId;
+      _LanguageId = languageId;
+
+      _ViewingEventHandled = true;
+      _ViewingTimestamp = DateTime.Now;
     }
     #endregion
 
@@ -124,32 +96,19 @@ namespace LearnLanguages.History.CompoundEventMakers
     /// </summary>
     public void Handle(Events.ViewedPhraseOnScreenEvent message)
     {
-      if (EventsAreSynchronous)
-      {
-        var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
-        var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
+      var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
+      var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
 
-        if (_ViewingEventHandled &&
-            phraseId == _PhraseId &&
-            languageId == _LanguageId)
-        {
-          _ViewedEventHandled = true;
-          _ViewedTimestamp = DateTime.Now;
-        }
-        else
-        {
-          //EITHER WE HAVE SKIPPED OUR FIRST MESSAGE, OR THE PHRASEID IS WRONG
-          //OR THE LANGUAGE ID IS WRONG.  IN ANY CASE, THERE IS AN ERROR AND WE WILL 
-          //RESET FOR A NEW SAGA.
-          Reset();
-          Services.Log(HistoryResources.ErrorMsgSagaMessageIncorrectOrder, LogPriority.Medium, LogCategory.Warning);
-          return;
-        }
+      if (_ViewingEventHandled &&
+          phraseId == _PhraseId &&
+          languageId == _LanguageId)
+      {
+        _ViewedEventHandled = true;
+        _ViewedTimestamp = DateTime.Now;
       }
       else
       {
-        //EVENTS ARE ASYNCHRONOUS, I.E. EVENTS CAN RUN IN PARALLEL.  THIS AINT IMPLEMENTED YET.
-        throw new NotImplementedException();
+        return;
       }
     }
     #endregion
@@ -157,30 +116,20 @@ namespace LearnLanguages.History.CompoundEventMakers
     #region #4 Feedback Given (dispatches compound event if successful)
     public void Handle(Events.FeedbackAsDoubleGivenEvent message)
     {
-      if (EventsAreSynchronous)
+      if (!_ViewingEventHandled || !_ViewedEventHandled)
       {
-        if (!_ViewingEventHandled || !_ViewedEventHandled)
-        {
-          //EITHER FIRST OR SECOND STEPS HAVE BEEN SKIPPED, AND WE ARE SYNCHRONOUS, 
-          //SO THIS IS AN ERROR AND THE FEEDBACK IS MOOT.
-          Reset();
-          Services.Log(HistoryResources.ErrorMsgSagaMessageIncorrectOrder, LogPriority.Medium, LogCategory.Warning);
-          return;
-        }
-
-        var feedback = (double)message.GetDetail(HistoryResources.Key_FeedbackAsDouble);
-
-        _FeedbackGivenEventHandled = true;
-        _FeedbackTimestamp = DateTime.Now;
-
-        DispatchCompoundEvent();
+        return;
       }
-      else
-      {
-        //EVENTS ARE ASYNCHRONOUS, I.E. EVENTS CAN RUN IN PARALLEL.  THIS AINT IMPLEMENTED YET.
-        throw new NotImplementedException();
-      }
+
+      var feedback = (double)message.GetDetail(HistoryResources.Key_FeedbackAsDouble);
+
+      _FeedbackGivenEventHandled = true;
+      _FeedbackTimestamp = DateTime.Now;
+
+      DispatchCompoundEvent();
     }
+    #endregion
+
     #endregion
 
     private void DispatchCompoundEvent()
@@ -195,6 +144,12 @@ namespace LearnLanguages.History.CompoundEventMakers
       var duration = _ViewedTimestamp - _ViewingTimestamp;
       var reviewedEvent = new Events.ReviewedPhraseEvent(_PhraseId, _LanguageId, _ReviewMethodId, duration);
       HistoryPublisher.Ton.PublishEvent(reviewedEvent);
+    }
+
+    public override void Enable()
+    {
+      Reset();
+      base.Enable();
     }
   }
 }

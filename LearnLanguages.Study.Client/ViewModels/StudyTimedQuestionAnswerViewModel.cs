@@ -211,6 +211,8 @@ namespace LearnLanguages.Study.ViewModels
       _DateTimeQuestionShown = DateTime.Now;
       ViewModelVisibility = Visibility.Visible;
       DispatchShown();
+      var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Question);
+      History.HistoryPublisher.Ton.PublishEvent(eventViewing);
       AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
         {
           if (e != null)
@@ -252,7 +254,7 @@ namespace LearnLanguages.Study.ViewModels
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
       History.HistoryPublisher.Ton.PublishEvent(
-        new History.Events.ReviewedPhraseEvent(Question, ReviewMethodId, duration));
+        new History.Events.ViewedPhraseOnScreenEvent(Question, duration));
     }
 
     protected override Guid GetReviewMethodId()

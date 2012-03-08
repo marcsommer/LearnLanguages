@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using Caliburn.Micro;
+using Csla.Core;
+using LearnLanguages.Business;
 
 namespace LearnLanguages.History.CompoundEventMakers
 {
@@ -10,29 +14,17 @@ namespace LearnLanguages.History.CompoundEventMakers
   /// timespan duration of review, and feedback (as type double) given.  
   /// </summary>
   public class ReviewedLineCompoundEventMaker : CompoundEventMakerBase, 
-                                                IHandle<Events.ReviewingLineEvent>,
-                                                IHandle<Events.ReviewedPhraseEvent>
+                                                IHandle<Events.ReviewingPhraseEvent>,
+                                                IHandle<Events.ReviewedPhraseEvent>, 
+                                                IHandle<Events.ActivatedLineEvent>
   {
     public ReviewedLineCompoundEventMaker()
     {
-      EventsAreSynchronous = true;
       var isEnabled = bool.Parse(HistoryResources.IsEnabledReviewedLineCompoundEventMaker);
       if (isEnabled)
         Enable();
+      _ActiveLines = new MobileList<HistoryLineInfo>();
     }
-
-    /// <summary>
-    /// If events are synchronous, this resets every time an event is handled out of order.  
-    /// This defaults to true.
-    /// 
-    /// E.g. If we hear a Viewing event for a phrase part of line, then hear feedback, *WITHOUT*
-    /// hearing an intermediate event for viewed that phrase, then we assume something wrong happened
-    /// and we reset anew.  
-    /// E.g. #2: If we hear a Viewing event for a phrase, then hear another Viewing event
-    /// for a different phrase, we reset for the most recent Viewing event, assigning state to the more
-    /// recent phrase.
-    /// </summary>
-    public bool EventsAreSynchronous { get; set; }
 
     #region State
 
@@ -48,9 +40,11 @@ namespace LearnLanguages.History.CompoundEventMakers
 
     private bool _ReviewingLineEventHandled { get; set; }
     private bool _ReviewedPhraseEventHandled { get; set; }
+    private MobileList<HistoryLineInfo> _ActiveLines { get; set; }
 
     #endregion
-    
+
+    private bool _IsReset { get; set; }
     protected override void Reset()
     {
       _ReviewMethodId = Guid.Empty;
@@ -64,36 +58,44 @@ namespace LearnLanguages.History.CompoundEventMakers
 
       _ReviewingLineEventHandled = false;
       _ReviewedPhraseEventHandled = false;
+      _IsReset = true;
     }
 
-    #region #1 Reviewing Line
-    public void Handle(Events.ReviewingLineEvent message)
+    #region Saga Events
+
+    #region #1 Reviewing Phrase
+    public void Handle(Events.ReviewingPhraseEvent message)
     {
-      if (EventsAreSynchronous)
-      {
-        Reset();
+      //WE ONLY CARE ABOUT PHRASES WHOSE TEXTS ARE EQUAL TO OUR ACTIVE LINES' TEXTS IN SAME LANGUAGE
+      var msgPhraseText = message.GetDetail<string>(HistoryResources.Key_PhraseText);
+      var msgLanguageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
+      var msgLanguageId = message.GetDetail<Guid>(HistoryResources.Key_LanguageId);
+      var results = from activeLineInfo in _ActiveLines
+                    where activeLineInfo.LineText == msgPhraseText &&
+                          activeLineInfo.LanguageText == msgLanguageText &&
+                          activeLineInfo.LanguageId == msgLanguageId
+                    select activeLineInfo;
+
+      if (results.Count() == 0)
+        return;
+
+      var lineInfo = results.First();
+
+      //THIS REVIEWING PHRASE EVENT PERTAINS TO ONE OF OUR ACTIVE LINES, AND WE 
+      //ONLY LISTEN TO ONE REVIEWING PHRASE EVENT AT A TIME, SO RESET.
+      Reset();
+      _IsReset = false;
         
-        _ReviewMethodId = message.Ids[HistoryResources.Key_ReviewMethodId];
-        _LineId = message.Ids[HistoryResources.Key_LineId];
-        _PhraseId = message.Ids[HistoryResources.Key_PhraseId];
-        _LineText = message.Strings[HistoryResources.Key_LineText];
-        _LanguageId = message.Ids[HistoryResources.Key_LanguageId];
-        _LanguageText = message.Strings[HistoryResources.Key_LanguageText];
+      //INTERNALIZE STATE FOR THIS NEW REVIEWING EVENT.
+      _ReviewMethodId = message.Ids[HistoryResources.Key_ReviewMethodId];
+      _LineId = lineInfo.LineId;
+      _PhraseId = message.Ids[HistoryResources.Key_PhraseId];
+      _LineText = lineInfo.LineText;
+      _LanguageId = lineInfo.LanguageId;
+      _LanguageText = lineInfo.LanguageText;
+      _LineNumber = lineInfo.LineNumber;
 
-        object msgLineNumberObj = (int)-1;
-        int msgLineNumber = -1;
-        var msgHasLineNumber = message.TryGetDetail(HistoryResources.Key_LineNumber, out msgLineNumberObj);
-        if (msgHasLineNumber)
-          msgLineNumber = (int)msgLineNumberObj;
-        _LineNumber = msgLineNumber;
-
-        _ReviewingLineEventHandled = true;
-      }
-      else
-      {
-        //EVENTS ARE ASYNCHRONOUS, I.E. EVENTS CAN RUN IN PARALLEL.  THIS AINT IMPLEMENTED YET.
-        throw new NotImplementedException();
-      }
+      _ReviewingLineEventHandled = true;
     }
     #endregion
 
@@ -105,46 +107,34 @@ namespace LearnLanguages.History.CompoundEventMakers
     /// </summary>
     public void Handle(Events.ReviewedPhraseEvent message)
     {
-      if (EventsAreSynchronous)
+      if (!_ReviewingLineEventHandled)
       {
-        if (!_ReviewingLineEventHandled)
-        {
-          //EITHER WE HAVE SKIPPED A PREVIOUS MESSAGE, THERE IS AN ERROR AND WE WILL 
-          //RESET FOR A NEW SAGA.
-          Reset();
-          Services.Log(HistoryResources.ErrorMsgSagaMessageIncorrectOrder, LogPriority.Medium, LogCategory.Warning);
-          return;
-        }
-                
-        var msgPhraseId = message.Ids[HistoryResources.Key_PhraseId];
-        var msgPhraseText = message.Strings[HistoryResources.Key_PhraseText];
-        var msgLanguageId = message.Ids[HistoryResources.Key_LanguageId];
-        var msgLanguageText = message.Strings[HistoryResources.Key_LanguageText];
-        var msgReviewedPhraseDuration = message.Duration;
-        
-        //MAKE SURE PHRASE IDS, LINE TEXT AND PHRASE TEXT, LANGUAGE ID, AND LANGUAGE TEXT MATCH 
-        //BETWEEN REVIEWINGLINE EVENT AND REVIEWED PHRASE EVENT
-        if (_PhraseId != msgPhraseId ||
-            _LineText != msgPhraseText ||
-            _LanguageId != msgLanguageId ||
-            _LanguageText != msgLanguageText)
-        {
-          Reset();
-          Services.Log(HistoryResources.ErrorMsgSagaMessageIncorrectOrder, LogPriority.Medium, LogCategory.Warning);
-          return;
-        }
-
-        //GET THE FEEDBACK FROM THE REVIEWED PHRASE EVENT
-        _FeedbackAsDouble = message.Doubles[HistoryResources.Key_FeedbackAsDouble];
-
-        
+        return;
       }
-      else
+
+      var msgPhraseId = message.Ids[HistoryResources.Key_PhraseId];
+      var msgPhraseText = message.Strings[HistoryResources.Key_PhraseText];
+      var msgLanguageId = message.Ids[HistoryResources.Key_LanguageId];
+      var msgLanguageText = message.Strings[HistoryResources.Key_LanguageText];
+      var msgReviewedPhraseDuration = message.Duration;
+
+      //MAKE SURE PHRASE IDS, LINE TEXT AND PHRASE TEXT, LANGUAGE ID, AND LANGUAGE TEXT MATCH 
+      //BETWEEN REVIEWINGLINE EVENT AND REVIEWED PHRASE EVENT
+      if (_PhraseId != msgPhraseId ||
+          _LineText != msgPhraseText ||
+          _LanguageId != msgLanguageId ||
+          _LanguageText != msgLanguageText)
       {
-        //EVENTS ARE ASYNCHRONOUS, I.E. EVENTS CAN RUN IN PARALLEL.  THIS AINT IMPLEMENTED YET.
-        throw new NotImplementedException();
+        if (!_IsReset)
+          Reset();
+        return;
       }
+
+      //GET THE FEEDBACK FROM THE REVIEWED PHRASE EVENT
+      _FeedbackAsDouble = message.Doubles[HistoryResources.Key_FeedbackAsDouble];
     }
+    #endregion
+
     #endregion
 
     private void DispatchCompoundEvent()
@@ -157,6 +147,26 @@ namespace LearnLanguages.History.CompoundEventMakers
         var reviewedLineEvent = new Events.ReviewedLineEvent(_LineId, _ReviewMethodId, _LineText, _LineNumber, 
           _PhraseId, _LanguageId, _LanguageText, _FeedbackAsDouble, _ReviewedPhraseDuration);
         HistoryPublisher.Ton.PublishEvent(reviewedLineEvent);   
+    }
+
+    public void Handle(Events.ActivatedLineEvent message)
+    {
+      var languageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
+      var lineText = message.GetDetail<string>(HistoryResources.Key_LineText);
+      var lineId = message.GetDetail<Guid>(HistoryResources.Key_LineId);
+      var languageId = message.GetDetail<Guid>(HistoryResources.Key_LanguageId);
+      var lineNumber = message.GetDetail<int>(HistoryResources.Key_LineNumber);
+
+      var lineInfo = new HistoryLineInfo()
+      {
+        LanguageId = languageId,
+        LanguageText = languageText,
+        LineId = lineId,
+        LineText = lineText,
+        LineNumber = lineNumber
+      };
+
+      _ActiveLines.Add(lineInfo);
     }
   }
 }

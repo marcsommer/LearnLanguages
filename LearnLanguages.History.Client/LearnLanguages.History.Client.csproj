@@ -73,6 +73,7 @@
     <Compile Include="Events\Compound\ReviewingLineEvent.cs" />
     <Compile Include="Events\Compound\ReviewedPhraseEvent.cs" />
     <Compile Include="Events\Compound\ReviewingPhraseEvent.cs" />
+    <Compile Include="Events\Simple\ActivatedLineEvent.cs" />
     <Compile Include="Events\Simple\ViewingPhrasePartOfLineOnScreenEvent.cs" />
     <Compile Include="Events\Simple\ViewedPhrasePartOfLineOnScreenEvent.cs" />
     <Compile Include="Events\Simple\ViewedPhraseOnScreenEvent.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="HistoryPublisher.cs" />
     <Compile Include="Bases\HistoryEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HistoryLineInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">

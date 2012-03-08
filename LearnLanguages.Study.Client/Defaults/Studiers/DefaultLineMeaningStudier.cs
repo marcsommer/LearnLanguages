@@ -8,6 +8,7 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Offer;
 using Caliburn.Micro;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.History;
 
 namespace LearnLanguages.Study
 {
@@ -156,6 +157,7 @@ namespace LearnLanguages.Study
       var viewModel = (IStudyItemViewModelBase)sender;
       var reviewMethodId = viewModel.ReviewMethodId;
       var reviewingLineEvent = new History.Events.ReviewingLineEvent(_Target, reviewMethodId);
+      HistoryPublisher.Ton.PublishEvent(reviewingLineEvent);
     }
 
     private void PopulateStudiersWithUnknownAggregatePhraseTexts(ExceptionCheckCallback callback)

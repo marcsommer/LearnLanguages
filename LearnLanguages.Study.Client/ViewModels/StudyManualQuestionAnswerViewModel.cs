@@ -158,7 +158,7 @@ namespace LearnLanguages.Study.ViewModels
     }
     public string ShowAnswerButtonLabel { get { return StudyResources.ButtonLabelShowAnswer; } }
 
-    private ExceptionCheckCallback _CompletedCallback { get; set; }
+    //private ExceptionCheckCallback _CompletedCallback { get; set; }
 
 
     #endregion
@@ -174,8 +174,10 @@ namespace LearnLanguages.Study.ViewModels
 
     public override void Show(ExceptionCheckCallback callback)
     {
-      _DateTimeQuestionShown = DateTime.Now;
       base.Show(callback);
+      _DateTimeQuestionShown = DateTime.Now;
+      var viewingEvent = new History.Events.ViewingPhraseOnScreenEvent(Question);
+      HistoryPublisher.Ton.PublishEvent(viewingEvent);
     }
 
     private void HideAnswer()
@@ -197,8 +199,8 @@ namespace LearnLanguages.Study.ViewModels
       HidingAnswer = false;
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
-      HistoryPublisher.Ton.PublishEvent(new ReviewedPhraseEvent(Question, ReviewMethodId, duration));
-      _CompletedCallback(null);
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question, duration));
+      _Callback(null);
     }
 
     //public bool CanNext
@@ -218,8 +220,8 @@ namespace LearnLanguages.Study.ViewModels
     public override void Abort()
     {
       ShowAnswer();
-      if (_CompletedCallback != null)
-        _CompletedCallback(null);
+      if (_Callback != null)
+        _Callback(null);
     }
 
     protected override Guid GetReviewMethodId()

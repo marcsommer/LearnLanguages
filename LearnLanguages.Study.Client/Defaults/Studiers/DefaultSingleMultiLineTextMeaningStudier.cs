@@ -191,6 +191,14 @@ namespace LearnLanguages.Study
     {
       _Target = target;
       _LastActiveLineStudiedIndex = -1;
+
+      //ACTIVATE EACH LINE FOR USE IN HISTORY PUBLISHER
+      foreach (var line in target.Lines)
+      {
+        var activatedLineEvent = new History.Events.ActivatedLineEvent(line);
+        History.HistoryPublisher.Ton.PublishEvent(activatedLineEvent);
+      }
+
       //EXECUTES CALLBACK WHEN POPULATE IS COMPLETED
       PopulateLineStudiers((e) =>
         {
