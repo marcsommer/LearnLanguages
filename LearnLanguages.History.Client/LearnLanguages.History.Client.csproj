@@ -75,6 +75,7 @@
     <Compile Include="Events\Compound\ReviewedPhraseEvent.cs" />
     <Compile Include="Events\Compound\ReviewingPhraseEvent.cs" />
     <Compile Include="Events\Simple\ActivatedLineEvent.cs" />
+    <Compile Include="Events\Simple\StartingStudySessionEvent.cs" />
     <Compile Include="Events\Simple\ViewingPhrasePartOfLineOnScreenEvent.cs" />
     <Compile Include="Events\Simple\ViewedPhrasePartOfLineOnScreenEvent.cs" />
     <Compile Include="Events\Simple\ViewedPhraseOnScreenEvent.cs" />

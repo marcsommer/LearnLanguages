@@ -6,6 +6,8 @@ using LearnLanguages.Common;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.History;
+using LearnLanguages.History.Events;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -251,10 +253,12 @@ namespace LearnLanguages.Study.ViewModels
     {
       AnswerVisibility = Visibility.Visible;
       HidingAnswer = false;
+
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
-      History.HistoryPublisher.Ton.PublishEvent(
-        new History.Events.ViewedPhraseOnScreenEvent(Question, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer, duration));
     }
 
     protected override Guid GetReviewMethodId()

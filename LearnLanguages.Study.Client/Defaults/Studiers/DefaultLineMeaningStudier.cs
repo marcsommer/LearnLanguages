@@ -331,7 +331,8 @@ namespace LearnLanguages.Study
             var newAggregate = phraseA + " " + phraseB;
 
             AggregatePhraseTexts[i] = newAggregate;
-            AggregatePhraseTexts.RemoveAt(i + 1);
+            if ((i + 1) < AggregatePhraseTexts.Count)
+              AggregatePhraseTexts.RemoveAt(i + 1);
             foundNewAggregate = true;
             break;
           }

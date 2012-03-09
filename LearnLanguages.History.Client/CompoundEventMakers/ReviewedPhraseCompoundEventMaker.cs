@@ -30,19 +30,36 @@ namespace LearnLanguages.History.CompoundEventMakers
     #region State
 
     private Guid _ReviewMethodId { get; set; }
-    private Guid _PhraseId { get; set; }
-    private string _PhraseText { get; set; }
-    private Guid _LanguageId { get; set; }
-    private string _LanguageText { get; set; }
+
+
+    private Guid _PhraseAId { get; set; }
+    private string _PhraseAText { get; set; }
+    private Guid _LanguageAId { get; set; }
+    private string _LanguageAText { get; set; }
+
+    private Guid _PhraseBId { get; set; }
+    private string _PhraseBText { get; set; }
+    private Guid _LanguageBId { get; set; }
+    private string _LanguageBText { get; set; }
+    
     private double _FeedbackAsDouble { get; set; }
 
+
     private bool _ReviewingEventHandled { get; set; }
-    private bool _ViewingEventHandled { get; set; }
-    private bool _ViewedEventHandled { get; set; }
+
+    private bool _ViewingAEventHandled { get; set; }
+    private bool _ViewedAEventHandled { get; set; }
+    private bool _ViewingBEventHandled { get; set; }
+    private bool _ViewedBEventHandled { get; set; }
+    
     private bool _FeedbackGivenEventHandled { get; set; }
 
-    private DateTime _ViewingTimestamp { get; set; }
-    private DateTime _ViewedTimestamp { get; set; }
+
+    private DateTime _ViewingATimestamp { get; set; }
+    private DateTime _ViewedATimestamp { get; set; }
+    private DateTime _ViewingBTimestamp { get; set; }
+    private DateTime _ViewedBTimestamp { get; set; }
+
     private DateTime _FeedbackTimestamp { get; set; }
 
     #endregion
@@ -51,13 +68,28 @@ namespace LearnLanguages.History.CompoundEventMakers
     protected override void Reset()
     {
       _ReviewingEventHandled = false;
+      
       _FeedbackGivenEventHandled = false;
-      _ViewingEventHandled = false;
-      _ViewedEventHandled = false;
+      _ViewingAEventHandled = false;
+      _ViewedAEventHandled = false;
+      _ViewingBEventHandled = false;
+      _ViewedBEventHandled = false;
 
       _FeedbackTimestamp = DateTime.MinValue;
-      _ViewingTimestamp = DateTime.MinValue;
-      _ViewedTimestamp = DateTime.MinValue;
+      _ViewingATimestamp = DateTime.MinValue;
+      _ViewedATimestamp = DateTime.MinValue;
+      _ViewingBTimestamp = DateTime.MinValue;
+      _ViewedBTimestamp = DateTime.MinValue;
+
+      _PhraseAId = Guid.Empty;
+      _PhraseAText = "";
+      _LanguageAId = Guid.Empty;
+      _LanguageAText = "";
+      _PhraseBId = Guid.Empty;
+      _PhraseBText = "";
+      _LanguageBId = Guid.Empty;
+      _LanguageBText = "";
+      
       _IsReset = true;
     }
 
@@ -81,21 +113,41 @@ namespace LearnLanguages.History.CompoundEventMakers
     {
       if (!_ReviewingEventHandled)
       {
+        Reset();
         return;
       }
 
-      var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
-      var phraseText = message.GetDetail<string>(HistoryResources.Key_PhraseText);
-      var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
-      var languageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
+      var msgPhraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
+      var msgPhraseText = message.GetDetail<string>(HistoryResources.Key_PhraseText);
+      var msgLanguageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
+      var msgLanguageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
 
-      _PhraseId = phraseId;
-      _PhraseText = phraseText;
-      _LanguageId = languageId;
-      _LanguageText = languageText;
+      if (!_ViewingAEventHandled)
+      {
+        _PhraseAId = msgPhraseId;
+        _PhraseAText = msgPhraseText;
+        _LanguageAId = msgLanguageId;
+        _LanguageAText = msgLanguageText;
 
-      _ViewingEventHandled = true;
-      _ViewingTimestamp = DateTime.Now;
+        _ViewingAEventHandled = true;
+        _ViewingATimestamp = DateTime.Now;
+      }
+      else if (!_ViewingBEventHandled)
+      {
+        _PhraseBId = msgPhraseId;
+        _PhraseBText = msgPhraseText;
+        _LanguageBId = msgLanguageId;
+        _LanguageBText = msgLanguageText;
+
+        _ViewingBEventHandled = true;
+        _ViewingBTimestamp = DateTime.Now;
+      }
+      else
+      {
+        //WE ALREADY HAVE BOTH PHRASE A AND PHRASE B FILLED OUT
+        return;
+      }
+
     }
     #endregion
 
@@ -106,18 +158,26 @@ namespace LearnLanguages.History.CompoundEventMakers
     /// </summary>
     public void Handle(Events.ViewedPhraseOnScreenEvent message)
     {
-      var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
-      var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
+      var msgPhraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
+      var msgLanguageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
 
-      if (_ViewingEventHandled &&
-          phraseId == _PhraseId &&
-          languageId == _LanguageId)
+      if (_ViewingAEventHandled &&
+          msgPhraseId == _PhraseAId &&
+          msgLanguageId == _LanguageAId)
       {
-        _ViewedEventHandled = true;
-        _ViewedTimestamp = DateTime.Now;
+        _ViewedAEventHandled = true;
+        _ViewedATimestamp = DateTime.Now;
+      }
+      else if (_ViewingBEventHandled &&
+        msgPhraseId == _PhraseBId &&
+        msgLanguageId == _LanguageBId)
+      {
+        _ViewedBEventHandled = true;
+        _ViewedBTimestamp = DateTime.Now;
       }
       else
       {
+        Reset();
         return;
       }
     }
@@ -126,8 +186,10 @@ namespace LearnLanguages.History.CompoundEventMakers
     #region #4 Feedback Given (dispatches compound event if successful)
     public void Handle(Events.FeedbackAsDoubleGivenEvent message)
     {
-      if (!_ViewingEventHandled || !_ViewedEventHandled)
+      if (!_ViewingAEventHandled || !_ViewedAEventHandled ||
+          !_ViewingBEventHandled || !_ViewedBEventHandled)
       {
+        Reset();
         return;
       }
 
@@ -144,17 +206,28 @@ namespace LearnLanguages.History.CompoundEventMakers
     private void DispatchCompoundEvent()
     {
       if (!_ReviewingEventHandled ||
-          !_ViewingEventHandled ||
-          !_ViewedEventHandled ||
+          !_ViewingAEventHandled ||
+          !_ViewedAEventHandled ||
+          !_ViewingBEventHandled ||
+          !_ViewedBEventHandled ||
           !_FeedbackGivenEventHandled ||
-          _PhraseId == Guid.Empty)
+          _PhraseAId == Guid.Empty ||
+          _PhraseBId == Guid.Empty)
         throw new HistoryException();
 
-      var duration = _ViewedTimestamp - _ViewingTimestamp;
-      
-      var reviewedEvent = new Events.ReviewedPhraseEvent(_FeedbackAsDouble, _PhraseId, _PhraseText, 
-        _LanguageId, _LanguageText, _ReviewMethodId, duration);
-      HistoryPublisher.Ton.PublishEvent(reviewedEvent);
+      //A
+      var durationA = _ViewedATimestamp - _ViewingATimestamp;
+      var reviewedAEvent = new Events.ReviewedPhraseEvent(_FeedbackAsDouble, _PhraseAId, _PhraseAText, 
+        _LanguageAId, _LanguageAText, _ReviewMethodId, durationA);
+      HistoryPublisher.Ton.PublishEvent(reviewedAEvent);
+
+      //B
+      var durationB = _ViewedBTimestamp - _ViewingBTimestamp;
+      var reviewedBEvent = new Events.ReviewedPhraseEvent(_FeedbackAsDouble, _PhraseBId, _PhraseBText,
+        _LanguageBId, _LanguageBText, _ReviewMethodId, durationB);
+      HistoryPublisher.Ton.PublishEvent(reviewedBEvent);
+
+      Reset();
     }
 
     public override void Enable()

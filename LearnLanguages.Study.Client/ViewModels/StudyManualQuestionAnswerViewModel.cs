@@ -197,9 +197,13 @@ namespace LearnLanguages.Study.ViewModels
     {
       AnswerVisibility = Visibility.Visible;
       HidingAnswer = false;
+
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
       HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer, duration));
+
       _Callback(null);
     }
 

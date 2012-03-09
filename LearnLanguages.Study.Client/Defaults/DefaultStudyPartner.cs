@@ -10,6 +10,7 @@ using System.ComponentModel;
 using LearnLanguages.Common.Delegates;
 using System.Threading;
 using System.Collections.Generic;
+using LearnLanguages.History.Events;
 
 namespace LearnLanguages.Study
 {
@@ -254,6 +255,10 @@ namespace LearnLanguages.Study
       ///3) SHOW STUDYITEMVIEWMODEL.
       ///4) WHEN SHOW IS DONE, ENABLE FEEDBACK VIEWMODEL.
       ///5) WHEN FEEDBACK IS PROVIDED, GO TO #2.
+      ///
+
+      ///need to prepare history publisher
+      History.HistoryPublisher.Ton.PublishEvent(new StartingStudySessionEvent());
       _Studier.InitializeForNewStudySession(multiLineTexts, (e) =>
         {
 

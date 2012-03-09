@@ -1,9 +1,10 @@
 ﻿using System;
 using LearnLanguages.Common.Interfaces;
+using Caliburn.Micro;
 
 namespace LearnLanguages.History.CompoundEventMakers
 {
-  public abstract class CompoundEventMakerBase : ICompoundEventMaker
+  public abstract class CompoundEventMakerBase : ICompoundEventMaker, IHandle<Events.StartingStudySessionEvent>
   {
     protected abstract void Reset();
 
@@ -20,6 +21,11 @@ namespace LearnLanguages.History.CompoundEventMakers
     public virtual void Disable()
     {
       HistoryPublisher.Ton.UnsubscribeFromEvents(this);
+      Reset();
+    }
+
+    public virtual void Handle(Events.StartingStudySessionEvent message)
+    {
       Reset();
     }
   }
