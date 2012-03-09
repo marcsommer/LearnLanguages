@@ -131,8 +131,7 @@ namespace LearnLanguages.History.CompoundEventMakers
         return;
       }
 
-      var feedback = (double)message.GetDetail(HistoryResources.Key_FeedbackAsDouble);
-
+      _FeedbackAsDouble = (double)message.GetDetail(HistoryResources.Key_FeedbackAsDouble);
       _FeedbackGivenEventHandled = true;
       _FeedbackTimestamp = DateTime.Now;
 

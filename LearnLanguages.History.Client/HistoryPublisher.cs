@@ -36,6 +36,7 @@ namespace LearnLanguages.History
             {
               _Ton = new HistoryPublisher();
               Services.Container.SatisfyImportsOnce(_Ton);
+              ConsoleHistoryListener.Ton.GetType();//hack
             }
           }
         }

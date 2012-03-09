@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 
 using LearnLanguages.Common;
 using LearnLanguages.Common.Interfaces;
@@ -7,7 +8,6 @@ using LearnLanguages.Common.Delegates;
 using LearnLanguages.Business;
 using Caliburn.Micro;
 using Csla.Core;
-using System.Threading;
 using LearnLanguages.History;
 
 namespace LearnLanguages.Study
@@ -17,7 +17,7 @@ namespace LearnLanguages.Study
   /// State == PhraseEdit, answer is type double between 0.0 and 1.0.
   /// </summary>
   public class DefaultPhrasePercentKnownAdvisor : IAdvisor, 
-                                                  IHandle<History.Events.ReviewedLineEvent>,
+                                                  //IHandle<History.Events.ReviewedLineEvent>,
                                                   IHandle<History.Events.ReviewedPhraseEvent>
   {
     #region Singleton Pattern Members
@@ -131,39 +131,39 @@ namespace LearnLanguages.Study
       }
     }
 
-    public void Handle(History.Events.ReviewedLineEvent message)
-    {
-      //THIS MESSAGE IS GOING TO BE RECORDED BY A DIFFERENT RECORDER OBJECT, BUT 
-      //WE WANT TO PUT IT INTO OUR CACHE FOR QUICK ADVISING
+    //public void Handle(History.Events.ReviewedLineEvent message)
+    //{
+    //  //THIS MESSAGE IS GOING TO BE RECORDED BY A DIFFERENT RECORDER OBJECT, BUT 
+    //  //WE WANT TO PUT IT INTO OUR CACHE FOR QUICK ADVISING
 
-      //LINETEXT
-      string lineText = "";
-      var messageHasLineText = message.TryGetDetail<string>(History.HistoryResources.Key_LineText, out lineText);
-      if (!messageHasLineText)
-        return;
+    //  //LINETEXT
+    //  string lineText = "";
+    //  var messageHasLineText = message.TryGetDetail<string>(History.HistoryResources.Key_LineText, out lineText);
+    //  if (!messageHasLineText)
+    //    return;
 
-      //LANGUAGE TEXT
-      string languageText = "";
-      var messageHasLanguageText =
-        message.TryGetDetail<string>(History.HistoryResources.Key_LanguageText, out languageText);
-      if (!messageHasLanguageText)
-        return;
+    //  //LANGUAGE TEXT
+    //  string languageText = "";
+    //  var messageHasLanguageText =
+    //    message.TryGetDetail<string>(History.HistoryResources.Key_LanguageText, out languageText);
+    //  if (!messageHasLanguageText)
+    //    return;
 
-      //FEEDBACK
-      double feedbackAsDouble = -1;
-      var messageHasFeedbackAsDouble =
-        message.TryGetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble, out feedbackAsDouble);
-      if (!messageHasFeedbackAsDouble)
-        return;
+    //  //FEEDBACK
+    //  double feedbackAsDouble = -1;
+    //  var messageHasFeedbackAsDouble =
+    //    message.TryGetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble, out feedbackAsDouble);
+    //  if (!messageHasFeedbackAsDouble)
+    //    return;
 
-      //ADD/REPLACE ENTRY
-      var keyPhraseInfo = new PhraseTextLanguageTextPair(lineText, languageText);
-      var containsLinePhrase = Cache.ContainsKey(keyPhraseInfo);
-      if (!containsLinePhrase)
-        Cache.Add(keyPhraseInfo, feedbackAsDouble);
-      else
-        Cache[keyPhraseInfo] = feedbackAsDouble;
-    }
+    //  //ADD/REPLACE ENTRY
+    //  var keyPhraseInfo = new PhraseTextLanguageTextPair(lineText, languageText);
+    //  var containsLinePhrase = Cache.ContainsKey(keyPhraseInfo);
+    //  if (!containsLinePhrase)
+    //    Cache.Add(keyPhraseInfo, feedbackAsDouble);
+    //  else
+    //    Cache[keyPhraseInfo] = feedbackAsDouble;
+    //}
 
     public void Handle(History.Events.ReviewedPhraseEvent message)
     {

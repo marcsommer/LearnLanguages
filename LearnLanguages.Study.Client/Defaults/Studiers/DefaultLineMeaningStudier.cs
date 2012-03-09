@@ -83,15 +83,20 @@ namespace LearnLanguages.Study
       }
     }
 
+    /// <summary>
+    /// This is the count of unknown phrases to be studied in this cycle of "GetNextStudyItemViewModel".
+    /// </summary>
+    private int _StudyCycleCountOfUnknownPhrases { get; set; }
+
     #endregion
 
     #region Methods
 
     public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
     {
-      //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT AT AGGREGATE PHRASE TEXTS LIST, THEN WE
-      //HAVE COMPLETED ONE ITERATION THROUGH OUR PHRASE TEXTS.  
-      if (_LastStudiedIndex >= (AggregatePhraseTexts.Count - 1))
+      //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT STUDIERS COUNT, THEN WE
+      //HAVE COMPLETED ONE ITERATION THROUGH OUR UNKNOWN AGGREGATE PHRASE TEXTS.  
+      if (_Studiers == null || _LastStudiedIndex >= (_Studiers.Count - 1))
       {
         //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
         //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
@@ -118,7 +123,7 @@ namespace LearnLanguages.Study
                   if (r2.Error != null)
                     callback(this, new ResultArgs<StudyItemViewModelArgs>(r2.Error));
 
-                  r2.Object.ViewModel.Shown += new EventHandler(ViewModelShownWhenStudyingAnEntireLine);
+                  //r2.Object.ViewModel.Shown += new EventHandler(ViewModelShownWhenStudyingAnEntireLine);
                 });
               _LastStudiedIndex = 0;
             });
@@ -140,7 +145,7 @@ namespace LearnLanguages.Study
             if (r.Error != null)
               callback(this, new ResultArgs<StudyItemViewModelArgs>(r.Error));
 
-            r.Object.ViewModel.Shown += ViewModelShownWhenStudyingAnEntireLine;
+            //r.Object.ViewModel.Shown += ViewModelShownWhenStudyingAnEntireLine;
             _LastStudiedIndex++;
             callback(this, r);
           });
@@ -153,13 +158,13 @@ namespace LearnLanguages.Study
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ViewModelShownWhenStudyingAnEntireLine(object sender, EventArgs e)
-    {
-      var viewModel = (IStudyItemViewModelBase)sender;
-      var reviewMethodId = viewModel.ReviewMethodId;
-      var reviewingLineEvent = new History.Events.ReviewingLineEvent(_Target, reviewMethodId);
-      HistoryPublisher.Ton.PublishEvent(reviewingLineEvent);
-    }
+    //private void ViewModelShownWhenStudyingAnEntireLine(object sender, EventArgs e)
+    //{
+    //  var viewModel = (IStudyItemViewModelBase)sender;
+    //  var reviewMethodId = viewModel.ReviewMethodId;
+    //  var reviewingLineEvent = new History.Events.ReviewingLineEvent(_Target, reviewMethodId);
+    //  HistoryPublisher.Ton.PublishEvent(reviewingLineEvent);
+    //}
 
     private void PopulateStudiersWithUnknownAggregatePhraseTexts(ExceptionCheckCallback callback)
     {
@@ -403,9 +408,14 @@ namespace LearnLanguages.Study
       if (_Target == null)
         return 0;
 
+      if (_PercentKnownIsUpToDate)
+        return _CachedPercentKnownValue;
+
       ThreadPool.QueueUserWorkItem(new WaitCallback(GetPercentKnownTask), _AutoResetEvent);
 
       _AutoResetEvent.WaitOne();
+      _CachedPercentKnownValue = _PercentKnownTaskVariable;
+      _PercentKnownIsUpToDate = true;
       return _PercentKnownTaskVariable;
       #region old...without advice
       //var listKnown = new List<string>();
@@ -430,6 +440,9 @@ namespace LearnLanguages.Study
       //return percentKnown;
       #endregion
     }
+
+    private bool _PercentKnownIsUpToDate = false;
+    private double _CachedPercentKnownValue = 0;
 
 
     private double _PercentKnownTaskVariable { get; set; }
@@ -478,10 +491,38 @@ namespace LearnLanguages.Study
       string phraseText = message.GetDetail<string>(History.HistoryResources.Key_PhraseText);
       double feedbackAsDouble = message.GetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble);
 
+      //IF OUR REVIEWED PHRASE IS RELATED TO OUR TARGET'S PHRASE TEXT, THEN OUR PERCENT KNOWN IS NOW OUT OF DATE.
+      if (PhraseIsRelatedToLineText(phraseText))
+        _PercentKnownIsUpToDate = false;
+
       if (feedbackAsDouble > KnowledgeThreshold)
         MarkPhraseKnown(phraseText);
       else
         MarkPhraseUnknown(phraseText);
+    }
+
+    private bool PhraseIsRelatedToLineText(string phraseText)
+    {
+      if (_Target.Phrase.Text.Contains(phraseText))
+        return true;
+
+      //check to see if any words of sufficient length are contained in this line text.  if so, then it's related.
+      var words = phraseText.ParseIntoWords();
+      List<string> wordsMoreThanTwoLettersLong = new List<string>();
+      foreach (var word in words)
+      {
+        if (word.Length > 2)
+          wordsMoreThanTwoLettersLong.Add(word);
+      }
+
+      foreach (var bigWord in wordsMoreThanTwoLettersLong)
+      {
+        if (_Target.Phrase.Text.Contains(bigWord))
+          return true;
+      }
+
+      //IF WE MADE IT HERE, THEN WE FOUND NO RELATED WORDS
+      return false;
     }
   }
 }
