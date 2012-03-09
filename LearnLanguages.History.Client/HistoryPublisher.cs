@@ -1,11 +1,21 @@
 ﻿using System;
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace LearnLanguages.History
 {
   public class HistoryPublisher : IHistoryPublisher
   {
+    public HistoryPublisher()
+    {
+      _CompoundEventMakers = new List<ICompoundEventMaker>();
+    }
+
+    [ImportMany]
+    public ICollection<ICompoundEventMaker> _CompoundEventMakers { get; set; }
+
     public Guid Id { get { return Guid.Parse(HistoryResources.HistoryPublisherId); } }
 
     #region Singleton Pattern Members
@@ -23,7 +33,10 @@ namespace LearnLanguages.History
           lock (_Lock)
           {
             if (_Ton == null)
+            {
               _Ton = new HistoryPublisher();
+              Services.Container.SatisfyImportsOnce(_Ton);
+            }
           }
         }
 

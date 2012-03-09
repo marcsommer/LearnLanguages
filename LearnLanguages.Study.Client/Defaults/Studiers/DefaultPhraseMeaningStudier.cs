@@ -17,7 +17,7 @@ namespace LearnLanguages.Study
   /// a phrase's history, it "simply" takes the phrase, produces an offer to show a Q & A about it.
   /// Listens for the ViewModel to publish a Q & A response
   /// </summary>
-  public class DefaultPhraseMeaningStudier : StudierBase<PhraseEdit>
+  public class DefaultPhraseMeaningStudier : StudierBase<PhraseEdit>, IStudyReviewMethod
   {
     #region Ctors and Init
     public DefaultPhraseMeaningStudier()
@@ -73,13 +73,29 @@ namespace LearnLanguages.Study
             }
 
             var studyItemViewModel = r2.Object;
+            studyItemViewModel.Shown += new EventHandler(studyItemViewModel_Shown);
             var result = new StudyItemViewModelArgs(studyItemViewModel);
+            _Phrase = phraseEdit;//hack
             callback(this, new ResultArgs<StudyItemViewModelArgs>(result));
           });
       });
     }
 
+    void studyItemViewModel_Shown(object sender, EventArgs e)
+    {
+      //we are now reviewing a phrase
+      var eventReviewingPhrase = new History.Events.ReviewingPhraseEvent(_Phrase, ReviewMethodId);
+      History.HistoryPublisher.Ton.PublishEvent(eventReviewingPhrase);
+    }
+
+    private PhraseEdit _Phrase { get; set; }
+
     #endregion
 
+
+    public Guid ReviewMethodId
+    {
+      get { return Guid.Parse(StudyResources.ReviewMethodIdDefaultPhraseMeaningStudier); }
+    }
   }
 }

@@ -403,6 +403,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2DF2AF17-CE4E-462B-AD39-B6E31DF985A5.
+        /// </summary>
+        public static string ReviewMethodIdDefaultPhraseMeaningStudier {
+            get {
+                return ResourceManager.GetString("ReviewMethodIdDefaultPhraseMeaningStudier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E5F6AF74-2F9D-4067-921B-009DE109759D.
         /// </summary>
         public static string ReviewMethodIdManualQA {

@@ -96,8 +96,27 @@ namespace LearnLanguages.DataAccess
                 select lang.Id).First();
       }
     }
+    public LanguageDto FrenchLanguageDto
+    {
+      get
+      {
+        return (from language in Languages
+                where language.Text == FrenchText
+                select language).First();
+      }
+    }
+    public Guid FrenchId
+    {
+      get
+      {
+        return (from lang in Languages
+                where lang.Text == FrenchText
+                select lang.Id).First();
+      }
+    }
     public string EnglishText = DalResources.DefaultEnglishLanguageText;
     public string SpanishText = "Spanish";
+    public string FrenchText = "French";
     #endregion
     #region Phrase Data
     public PhraseDto HelloPhraseDto
@@ -276,6 +295,14 @@ namespace LearnLanguages.DataAccess
         {
           Id = new Guid("DA5AA804-E59F-4608-988E-59C7923BE383"),
           Text = SpanishText,
+          Username = TestValidUsername,
+          UserId = DefaultTestValidUserId
+        },
+
+        new LanguageDto()
+        {
+          Id = new Guid("1EC13A63-2F4C-44F2-8C8D-F4780C209AC0"),
+          Text = FrenchText,
           Username = TestValidUsername,
           UserId = DefaultTestValidUserId
         }

@@ -61,6 +61,24 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FCE8B382-9700-4307-9F5F-DBDD30A70EE5.
+        /// </summary>
+        public static string CompoundEventMakerIdReviewedLine {
+            get {
+                return ResourceManager.GetString("CompoundEventMakerIdReviewedLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 88CC183E-E78C-4839-850F-EF7D871C01BC.
+        /// </summary>
+        public static string CompoundEventMakerIdReviewedPhrase {
+            get {
+                return ResourceManager.GetString("CompoundEventMakerIdReviewedPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An event has occurred in the incorrect order.  E.g. Feedback has been given before an event to produce feedback has occurred..
         /// </summary>
         public static string ErrorMsgSagaMessageIncorrectOrder {

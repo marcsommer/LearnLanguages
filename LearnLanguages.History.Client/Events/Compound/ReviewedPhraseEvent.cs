@@ -19,10 +19,17 @@ namespace LearnLanguages.History.Events
       AddReviewMethodId(reviewMethodId);
     }
 
-    public ReviewedPhraseEvent(Guid phraseId, Guid languageId, Guid reviewMethodId, TimeSpan duration)
-      : base(phraseId, languageId, duration)
+    public ReviewedPhraseEvent(double feedbackAsDouble, Guid phraseId, string phraseText, Guid languageId, 
+      string languageText, Guid reviewMethodId, TimeSpan duration)
+      : base(phraseId, phraseText, languageId, languageText, duration)
     {
       AddReviewMethodId(reviewMethodId);
+      AddFeedbackAsDouble(feedbackAsDouble);
+    }
+
+    private void AddFeedbackAsDouble(double feedbackAsDouble)
+    {
+      AddDetail(HistoryResources.Key_FeedbackAsDouble, feedbackAsDouble);
     }
 
     private void AddReviewMethodId(Guid reviewMethodId)

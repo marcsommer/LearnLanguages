@@ -214,11 +214,17 @@
     <Compile Include="..\LearnLanguages.Common\Interfaces\Feedback\IHaveFeedback.cs">
       <Link>Interfaces\Feedback\IHaveFeedback.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\History\ICompoundEventMaker.cs">
+      <Link>Interfaces\History\ICompoundEventMaker.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\History\IHistoryEvent.cs">
       <Link>Interfaces\History\IHistoryEvent.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Interfaces\History\IHistoryPublisher.cs">
       <Link>Interfaces\History\IHistoryPublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Common\Interfaces\History\IStudyReviewMethod.cs">
+      <Link>Interfaces\History\IStudyReviewMethod.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Common\Logging\ConsoleLogger.cs">
       <Link>Logging\ConsoleLogger.cs</Link>

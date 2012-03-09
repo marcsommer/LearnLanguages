@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CompoundEventMakerIdReviewedLine" xml:space="preserve">
+    <value>FCE8B382-9700-4307-9F5F-DBDD30A70EE5</value>
+  </data>
+  <data name="CompoundEventMakerIdReviewedPhrase" xml:space="preserve">
+    <value>88CC183E-E78C-4839-850F-EF7D871C01BC</value>
+  </data>
   <data name="ErrorMsgSagaMessageIncorrectOrder" xml:space="preserve">
     <value>An event has occurred in the incorrect order.  E.g. Feedback has been given before an event to produce feedback has occurred.</value>
   </data>

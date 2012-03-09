@@ -26,7 +26,7 @@ namespace LearnLanguages.Common
       delimiterString = delimiterString.Replace("\\n", "\n");
 
       var delimiters = delimiterString.ToCharArray();
-      var words = str.Split(delimiters).ToList();
+      var words = str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList();
       return words;
     }
 

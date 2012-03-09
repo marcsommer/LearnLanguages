@@ -235,6 +235,9 @@ debug=10 seconds (10000)</comment>
   <data name="PercentKnownSome" xml:space="preserve">
     <value>.25</value>
   </data>
+  <data name="ReviewMethodIdDefaultPhraseMeaningStudier" xml:space="preserve">
+    <value>2DF2AF17-CE4E-462B-AD39-B6E31DF985A5</value>
+  </data>
   <data name="ReviewMethodIdManualQA" xml:space="preserve">
     <value>E5F6AF74-2F9D-4067-921B-009DE109759D</value>
   </data>

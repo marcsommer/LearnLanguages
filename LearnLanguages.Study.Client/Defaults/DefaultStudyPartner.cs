@@ -27,6 +27,9 @@ namespace LearnLanguages.Study
       _FeedbackViewModel.IsEnabled = false;
       _ViewModel.FeedbackViewModel = _FeedbackViewModel;
       _FeedbackTimedOut = false;
+
+      //TODO: FIGURE OUT WHERE THIS SHOULD REALLY GO..MAYBE HERE: INITIALIZE COMPOUND EVENT MAKERS
+      //History.HistoryPublisher.Ton.
     }
 
     protected DefaultMultiLineTextsStudier _Studier { get; set; }

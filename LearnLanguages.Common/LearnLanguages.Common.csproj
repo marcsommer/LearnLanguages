@@ -107,6 +107,7 @@
     <Compile Include="Interfaces\Exchange\IOfferResponseOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOpportunity.cs" />
     <Compile Include="Interfaces\Feedback\IFeedbackViewModelBase.cs" />
+    <Compile Include="Interfaces\History\ICompoundEventMaker.cs" />
     <Compile Include="Interfaces\History\IStudyReviewMethod.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />

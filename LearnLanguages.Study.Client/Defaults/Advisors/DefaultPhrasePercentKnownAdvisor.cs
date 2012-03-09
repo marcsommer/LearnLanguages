@@ -8,6 +8,7 @@ using LearnLanguages.Business;
 using Caliburn.Micro;
 using Csla.Core;
 using System.Threading;
+using LearnLanguages.History;
 
 namespace LearnLanguages.Study
 {
@@ -15,13 +16,10 @@ namespace LearnLanguages.Study
   /// This advisor expects a question StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown with 
   /// State == PhraseEdit, answer is type double between 0.0 and 1.0.
   /// </summary>
-  public class DefaultPhrasePercentKnownAdvisor : IAdvisor, IHandle<History.Events.ReviewedLineEvent>
+  public class DefaultPhrasePercentKnownAdvisor : IAdvisor, 
+                                                  IHandle<History.Events.ReviewedLineEvent>,
+                                                  IHandle<History.Events.ReviewedPhraseEvent>
   {
-    public DefaultPhrasePercentKnownAdvisor()
-    {
-      Cache = new MobileDictionary<PhraseTextLanguageTextPair, double>();
-    }
-
     #region Singleton Pattern Members
     private static volatile DefaultPhrasePercentKnownAdvisor _Ton;
     private static object _Lock = new object();
@@ -43,7 +41,41 @@ namespace LearnLanguages.Study
     }
     #endregion
 
+    #region Ctors and Init
+
+    public DefaultPhrasePercentKnownAdvisor()
+    {
+      Cache = new MobileDictionary<PhraseTextLanguageTextPair, double>();
+      History.HistoryPublisher.Ton.SubscribeToEvents(this);
+    }
+
+    #endregion
+
+    #region Properties
+
     public Guid Id { get { return Guid.Parse(StudyResources.AdvisorIdPhrasePercentKnownStudyAdvisor); } }
+
+    private static AutoResetEvent _AutoResetEvent = new AutoResetEvent(false);
+    private PhraseEdit _CurrentWordPhrase { get; set; }
+    private int _CountWordsKnown { get; set; }
+
+    private class PhraseTextLanguageTextPair
+    {
+      public PhraseTextLanguageTextPair(string phraseText, string languageText)
+      {
+        PhraseText = phraseText;
+        LanguageText = languageText;
+      }
+
+      public string PhraseText { get; set; }
+      public string LanguageText { get; set; }
+    }
+    private MobileDictionary<PhraseTextLanguageTextPair, double> Cache { get; set; }
+
+    #endregion
+
+    #region Methods
+
     public bool AskAdvice(QuestionArgs questionArgs, AsyncCallback<object> answerCallback)
     {
       if (questionArgs == null)
@@ -59,190 +91,19 @@ namespace LearnLanguages.Study
       var phrase = (PhraseEdit)questionArgs.State;
 
       GetPercentKnown(phrase, (s, r) =>
-        {
-          if (r.Error != null)
-            answerCallback(this, new ResultArgs<object>(r.Error));
+      {
+        if (r.Error != null)
+          answerCallback(this, new ResultArgs<object>(r.Error));
 
-          answerCallback(this, new ResultArgs<object>(r.Object));
-        });
+        answerCallback(this, new ResultArgs<object>(r.Object));
+      });
 
-      
+
       return true;
     }
 
-    private void GetPercentKnown(PhraseEdit phrase, AsyncCallback<double> callback)
-    {
-      #region CHECK CACHE
-
-      var results = from entry in Cache
-                    where entry.Key.PhraseText == phrase.Text &&
-                          entry.Key.LanguageText == phrase.Language.Text
-                    select entry;
-
-      if (results.Count() == 1)
-      {
-        #region GIVE ANSWER FROM CACHE
-
-        var entry = results.First();
-
-        var percentKnown = entry.Value;
-        callback(this, new ResultArgs<double>(percentKnown));
-        return;
-
-        #endregion
-      }
-
-      #endregion
-      
-      #region CHECK BELIEFS IN DB
-
-        PhraseBeliefList.GetBeliefsAboutPhrase(phrase.Id, (s, r) =>
-          {
-            if (r.Error != null)
-            {
-              callback(this, new ResultArgs<double>(r.Error));
-              return;
-            }
-
-            var beliefs = r.Object;
-
-            if (beliefs.Count <= 0)
-            {
-              //WE HAVE NO BELIEFS ABOUT THIS PHRASE
-              #region GetPercentKnownAboutPhraseWithNoPriorBeliefs(phrase, (s2, r2) =>
-
-              GetPercentKnownAboutPhraseWithNoPriorBeliefs(phrase, (s2, r2) =>
-                {
-                  if (r2.Error != null)
-                  {
-                    callback(this, new ResultArgs<double>(r2.Error));
-                    return;
-                  }
-
-                  var percentKnown = r2.Object;
-                  callback(this, new ResultArgs<double>(percentKnown));
-                  return;
-                });
-
-              #endregion
-            }
-            else
-            {
-              //WE HAVE BELIEFS ABOUT THIS PHRASE
-              #region GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs, (s3, r3) =>
-              GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs, (s3, r3) =>
-                {
-                  if (r3.Error != null)
-                  {
-                    callback(this, new ResultArgs<double>(r3.Error));
-                    return;
-                  }
-
-                  var percentKnown = r3.Object;
-                  callback(this, new ResultArgs<double>(percentKnown));
-                  return;
-                });
-              #endregion
-            }
-          });
-
-      #endregion
-    }
-
-    private void GetPercentKnownAboutPhraseWithNoPriorBeliefs(PhraseEdit phrase, AsyncCallback<double> callback)
-    {
-      double percentKnown = 0;
-
-      //WE HAVE NO PRIOR BELIEFS ABOUT THIS PHRASE, SO WE WILL CHECK THE SUM OF THE BELIEFS OF THE INDIVIDUAL WORDS
-      var words = phrase.Text.ParseIntoWords();
-
-      #region ONLY ONE WORD IN PHRASE (RETURN WITH ZERO PERCENT KNOWN)
-      //IF WE ONLY HAVE A SINGLE WORD IN OUR PHRASE, THEN WE HAVE ALREADY CHECKED THIS SINGLE WORD FOR BELIEF 
-      //AND CAME UP EMPTY.  SO WE HAVE NO PERCENT KNOWN ABOUT THIS PHRASE.
-      if (words.Count < 2)
-      {
-        percentKnown = 0;
-        callback(this, new ResultArgs<double>(percentKnown));
-        return;
-      }
-      #endregion
-
-      #region MULTIPLE WORDS IN PHRASE (SUM PERCENT KNOWNS OF EACH WORD)
-
-      #region FIRST, GET THE PHRASES FOR EACH OF THE INDIVIDUAL WORDS
-      var phraseTextsCriteria = new Business.Criteria.PhraseTextsCriteria(phrase.Language.Text, words);
-      PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
-        {
-          //TODO: CHECK TO SEE WHAT HAPPENS IF WE DELETE A PHRASE THAT IS AN INDIVIDUAL WORD AND WE DO A FUNCTION (LIKE PERCENT KNOWN ABOUT PHRASE WITH NO PRIOR BELIEFS) THAT ASSUMES ALL INDIVIDUAL WORDS EXIST IN DATABASE.
-
-          if (r.Error != null)
-          {
-            callback(this, new ResultArgs<double>(r.Error));
-            return;
-          }
-
-          var wordPhrases = r.Object;
-
-          #region SECOND, CALL THIS ADVISOR'S GETPERCENTKNOWN RECURSIVELY FOR EACH INDIVIDUAL WORD'S PERCENT KNOWN
-
-          #region DECLARE ACTION THAT WILL USE WAITONE IN UPCOMING ASYNC FOR LOOP
-          Action<object> getPercentKnownWord = (object state) =>
-            {
-              AutoResetEvent autoResetEvent = (AutoResetEvent)state;
-            
-              #region PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
-              DefaultPhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
-                {
-                  if (r2.Error != null)
-                  {
-                    callback(this, new ResultArgs<double>(r2.Error));
-                    return;
-                  }
-
-                  //WE ASSUME A SINGLE WORD IS EITHER KNOWN OR UNKNOWN.
-                  if (r2.Object > 0)
-                    _CountWordsKnown++;
-
-                  autoResetEvent.Set();
-                });
-              #endregion
-            };
-
-          #endregion
-
-          #region EXECUTE ASYNC FOR LOOP EXECUTING ABOVE ACTION
-          _CountWordsKnown = 0;
-          foreach (var wordPhrase in wordPhrases)
-          {
-            _CurrentWordPhrase = wordPhrase;
-            ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), _AutoResetEvent);
-            _AutoResetEvent.WaitOne();
-          }
-          #endregion
-
-          #region FINALLY, GET THE PERCENT KNOWN = COUNT WORDS KNOWN / COUNT ALL WORDS (AND RETURN)
-          var countAllWords = wordPhrases.Count;
-          percentKnown = ((double)_CountWordsKnown) / ((double)countAllWords);
-
-          callback(this, new ResultArgs<double>(percentKnown));
-          return;
-          #endregion
-
-          #endregion
-        });
-
-      #endregion
-
-      #endregion
-    }
-
-    private static AutoResetEvent _AutoResetEvent = new AutoResetEvent(false);
-    private PhraseEdit _CurrentWordPhrase { get; set; }
-    private int _CountWordsKnown { get; set; }
-
-
-    private void GetPercentKnownAboutPhraseWithBeliefs(PhraseEdit phrase, 
-                                                       PhraseBeliefList beliefs, 
+    private void GetPercentKnownAboutPhraseWithBeliefs(PhraseEdit phrase,
+                                                       PhraseBeliefList beliefs,
                                                        AsyncCallback<double> callback)
     {
       try
@@ -280,17 +141,17 @@ namespace LearnLanguages.Study
       var messageHasLineText = message.TryGetDetail<string>(History.HistoryResources.Key_LineText, out lineText);
       if (!messageHasLineText)
         return;
-      
+
       //LANGUAGE TEXT
       string languageText = "";
-      var messageHasLanguageText = 
+      var messageHasLanguageText =
         message.TryGetDetail<string>(History.HistoryResources.Key_LanguageText, out languageText);
       if (!messageHasLanguageText)
         return;
 
       //FEEDBACK
       double feedbackAsDouble = -1;
-      var messageHasFeedbackAsDouble = 
+      var messageHasFeedbackAsDouble =
         message.TryGetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble, out feedbackAsDouble);
       if (!messageHasFeedbackAsDouble)
         return;
@@ -304,18 +165,204 @@ namespace LearnLanguages.Study
         Cache[keyPhraseInfo] = feedbackAsDouble;
     }
 
-    private class PhraseTextLanguageTextPair
+    public void Handle(History.Events.ReviewedPhraseEvent message)
     {
-      public PhraseTextLanguageTextPair(string phraseText, string languageText)
-      {
-        PhraseText = phraseText;
-        LanguageText = languageText;
-      }
+      var phraseText = message.GetDetail<string>(HistoryResources.Key_PhraseText);
+      var languageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
+      var feedbackAsDouble = message.GetDetail<double>(HistoryResources.Key_FeedbackAsDouble);
 
-      public string PhraseText { get; set; }
-      public string LanguageText { get; set; }
+      var results = from entry in Cache
+                    where entry.Key.PhraseText == phraseText &&
+                          entry.Key.LanguageText == languageText
+                    select entry;
+
+      if (results.Count() == 1)
+      {
+        //WE ARE REPLACING EXISTING PHRASE/LANGUAGE ENTRY'S FEEDBACK WITH MOST RECENT SCORE
+        var entryKey = results.First().Key;
+        Cache[entryKey] = feedbackAsDouble;
+      }
+      else
+      {
+        //WE ARE ADDING NEW PHRASE/LANGUAGE ENTRY WITH FEEDBACK SCORE
+        var key = new PhraseTextLanguageTextPair(phraseText, languageText);
+        Cache.Add(key, feedbackAsDouble);
+      }
     }
 
-    private MobileDictionary<PhraseTextLanguageTextPair, double> Cache { get; set; }
+    private void GetPercentKnown(PhraseEdit phrase, AsyncCallback<double> callback)
+    {
+      #region CHECK CACHE
+
+      var results = from entry in Cache
+                    where entry.Key.PhraseText == phrase.Text &&
+                          entry.Key.LanguageText == phrase.Language.Text
+                    select entry;
+
+      if (results.Count() == 1)
+      {
+        #region GIVE ANSWER FROM CACHE
+
+        var entry = results.First();
+
+        var percentKnown = entry.Value;
+        callback(this, new ResultArgs<double>(percentKnown));
+        return;
+
+        #endregion
+      }
+
+      #endregion
+
+      #region CHECK BELIEFS IN DB
+
+      PhraseBeliefList.GetBeliefsAboutPhrase(phrase.Id, (s, r) =>
+      {
+        if (r.Error != null)
+        {
+          callback(this, new ResultArgs<double>(r.Error));
+          return;
+        }
+
+        var beliefs = r.Object;
+
+        if (beliefs.Count <= 0)
+        {
+          //WE HAVE NO BELIEFS ABOUT THIS PHRASE
+          #region GetPercentKnownAboutPhraseWithNoPriorBeliefs(phrase, (s2, r2) =>
+
+          GetPercentKnownAboutPhraseWithNoPriorBeliefs(phrase, (s2, r2) =>
+          {
+            if (r2.Error != null)
+            {
+              callback(this, new ResultArgs<double>(r2.Error));
+              return;
+            }
+
+            var percentKnown = r2.Object;
+            callback(this, new ResultArgs<double>(percentKnown));
+            return;
+          });
+
+          #endregion
+        }
+        else
+        {
+          //WE HAVE BELIEFS ABOUT THIS PHRASE
+          #region GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs, (s3, r3) =>
+          GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs, (s3, r3) =>
+          {
+            if (r3.Error != null)
+            {
+              callback(this, new ResultArgs<double>(r3.Error));
+              return;
+            }
+
+            var percentKnown = r3.Object;
+            callback(this, new ResultArgs<double>(percentKnown));
+            return;
+          });
+          #endregion
+        }
+      });
+
+      #endregion
+    }
+
+    private void GetPercentKnownAboutPhraseWithNoPriorBeliefs(PhraseEdit phrase, AsyncCallback<double> callback)
+    {
+      double percentKnown = 0;
+
+      //WE HAVE NO PRIOR BELIEFS ABOUT THIS PHRASE, SO WE WILL CHECK THE SUM OF THE BELIEFS OF THE INDIVIDUAL WORDS
+      var words = phrase.Text.ParseIntoWords();
+
+      #region ONLY ONE WORD IN PHRASE (RETURN WITH ZERO PERCENT KNOWN)
+      //IF WE ONLY HAVE A SINGLE WORD IN OUR PHRASE, THEN WE HAVE ALREADY CHECKED THIS SINGLE WORD FOR BELIEF 
+      //AND CAME UP EMPTY.  SO WE HAVE NO PERCENT KNOWN ABOUT THIS PHRASE.
+      if (words.Count < 2)
+      {
+        percentKnown = 0;
+        callback(this, new ResultArgs<double>(percentKnown));
+        return;
+      }
+      #endregion
+
+      #region MULTIPLE WORDS IN PHRASE (SUM PERCENT KNOWNS OF EACH WORD)
+
+      #region FIRST, GET THE PHRASES FOR EACH OF THE INDIVIDUAL WORDS
+      var phraseTextsCriteria = new Business.Criteria.PhraseTextsCriteria(phrase.Language.Text, words);
+      PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
+      {
+        //TODO: CHECK TO SEE WHAT HAPPENS IF WE DELETE A PHRASE THAT IS AN INDIVIDUAL WORD AND WE DO A FUNCTION (LIKE PERCENT KNOWN ABOUT PHRASE WITH NO PRIOR BELIEFS) THAT ASSUMES ALL INDIVIDUAL WORDS EXIST IN DATABASE.
+
+        if (r.Error != null)
+        {
+          callback(this, new ResultArgs<double>(r.Error));
+          return;
+        }
+
+        var wordPhrases = r.Object;
+
+        #region SECOND, CALL THIS ADVISOR'S GETPERCENTKNOWN RECURSIVELY FOR EACH INDIVIDUAL WORD'S PERCENT KNOWN
+
+        #region DECLARE ACTION THAT WILL USE WAITONE IN UPCOMING ASYNC FOR LOOP
+        Action<object> getPercentKnownWord = (object state) =>
+        {
+          AutoResetEvent autoResetEvent = (AutoResetEvent)state;
+
+          #region PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
+          DefaultPhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
+          {
+            if (r2.Error != null)
+            {
+              callback(this, new ResultArgs<double>(r2.Error));
+              return;
+            }
+
+            //WE ASSUME A SINGLE WORD IS EITHER KNOWN OR UNKNOWN.
+            if (r2.Object > 0)
+              _CountWordsKnown++;
+
+            autoResetEvent.Set();
+          });
+          #endregion
+        };
+
+        #endregion
+
+        #region EXECUTE ASYNC FOR LOOP EXECUTING ABOVE ACTION
+        _CountWordsKnown = 0;
+        foreach (var wordPhrase in wordPhrases)
+        {
+          _CurrentWordPhrase = wordPhrase;
+          ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), _AutoResetEvent);
+          _AutoResetEvent.WaitOne();
+        }
+        #endregion
+
+        #region FINALLY, GET THE PERCENT KNOWN = COUNT WORDS KNOWN / COUNT ALL WORDS (AND RETURN)
+        var countAllWords = wordPhrases.Count;
+        percentKnown = ((double)_CountWordsKnown) / ((double)countAllWords);
+
+        callback(this, new ResultArgs<double>(percentKnown));
+        return;
+        #endregion
+
+        #endregion
+      });
+
+      #endregion
+
+      #endregion
+    }
+
+
+    #endregion
+
+    #region Events
+
+    #endregion
+
+    
   }
 }

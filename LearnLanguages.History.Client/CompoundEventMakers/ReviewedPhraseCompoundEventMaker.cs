@@ -1,5 +1,7 @@
 ﻿using System;
 using Caliburn.Micro;
+using System.ComponentModel.Composition;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.History.CompoundEventMakers
 {
@@ -9,6 +11,8 @@ namespace LearnLanguages.History.CompoundEventMakers
   /// event called "ReviewedPhraseEvent".  This event contains the phraseId, languageId of that phrase, 
   /// timespan duration of review, and feedback (as type double) given.  
   /// </summary>
+  [Export(typeof(ICompoundEventMaker))]
+  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class ReviewedPhraseCompoundEventMaker : CompoundEventMakerBase, 
                                                   IHandle<Events.ReviewingPhraseEvent>,
                                                   IHandle<Events.ViewingPhraseOnScreenEvent>,
@@ -27,7 +31,9 @@ namespace LearnLanguages.History.CompoundEventMakers
 
     private Guid _ReviewMethodId { get; set; }
     private Guid _PhraseId { get; set; }
+    private string _PhraseText { get; set; }
     private Guid _LanguageId { get; set; }
+    private string _LanguageText { get; set; }
     private double _FeedbackAsDouble { get; set; }
 
     private bool _ReviewingEventHandled { get; set; }
@@ -79,10 +85,14 @@ namespace LearnLanguages.History.CompoundEventMakers
       }
 
       var phraseId = (Guid)message.GetDetail(HistoryResources.Key_PhraseId);
+      var phraseText = message.GetDetail<string>(HistoryResources.Key_PhraseText);
       var languageId = (Guid)message.GetDetail(HistoryResources.Key_LanguageId);
+      var languageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
 
       _PhraseId = phraseId;
+      _PhraseText = phraseText;
       _LanguageId = languageId;
+      _LanguageText = languageText;
 
       _ViewingEventHandled = true;
       _ViewingTimestamp = DateTime.Now;
@@ -142,7 +152,9 @@ namespace LearnLanguages.History.CompoundEventMakers
         throw new HistoryException();
 
       var duration = _ViewedTimestamp - _ViewingTimestamp;
-      var reviewedEvent = new Events.ReviewedPhraseEvent(_PhraseId, _LanguageId, _ReviewMethodId, duration);
+      
+      var reviewedEvent = new Events.ReviewedPhraseEvent(_FeedbackAsDouble, _PhraseId, _PhraseText, 
+        _LanguageId, _LanguageText, _ReviewMethodId, duration);
       HistoryPublisher.Ton.PublishEvent(reviewedEvent);
     }
 
@@ -150,6 +162,11 @@ namespace LearnLanguages.History.CompoundEventMakers
     {
       Reset();
       base.Enable();
+    }
+
+    protected override Guid GetId()
+    {
+      return Guid.Parse(HistoryResources.CompoundEventMakerIdReviewedPhrase);
     }
   }
 }

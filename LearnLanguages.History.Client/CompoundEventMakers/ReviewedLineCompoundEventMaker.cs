@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Caliburn.Micro;
 using Csla.Core;
 using LearnLanguages.Business;
+using System.ComponentModel.Composition;
+using LearnLanguages.Common.Interfaces;
 
 namespace LearnLanguages.History.CompoundEventMakers
 {
@@ -13,6 +15,8 @@ namespace LearnLanguages.History.CompoundEventMakers
   /// event called "ReviewedLineEvent".  This event contains the phraseId, languageId of that phrase, 
   /// timespan duration of review, and feedback (as type double) given.  
   /// </summary>
+  [Export(typeof(ICompoundEventMaker))]
+  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class ReviewedLineCompoundEventMaker : CompoundEventMakerBase, 
                                                 IHandle<Events.ReviewingPhraseEvent>,
                                                 IHandle<Events.ReviewedPhraseEvent>, 
@@ -167,6 +171,11 @@ namespace LearnLanguages.History.CompoundEventMakers
       };
 
       _ActiveLines.Add(lineInfo);
+    }
+
+    protected override Guid GetId()
+    {
+      return Guid.Parse(HistoryResources.CompoundEventMakerIdReviewedLine);
     }
   }
 }

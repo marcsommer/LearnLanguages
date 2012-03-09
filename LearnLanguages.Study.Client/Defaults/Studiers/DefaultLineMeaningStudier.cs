@@ -9,6 +9,7 @@ using LearnLanguages.Offer;
 using Caliburn.Micro;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
+using System.Threading;
 
 namespace LearnLanguages.Study
 {
@@ -391,6 +392,8 @@ namespace LearnLanguages.Study
         KnownPhraseTexts.Remove(phraseText);
     }
 
+    private static AutoResetEvent _AutoResetEvent = new AutoResetEvent(false);
+
     /// <summary>
     /// Calculates the PercentKnown of this line.
     /// </summary>
@@ -400,26 +403,50 @@ namespace LearnLanguages.Study
       if (_Target == null)
         return 0;
 
-      var listKnown = new List<string>();
-      var listUnknown = new List<string>();
-      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+      ThreadPool.QueueUserWorkItem(new WaitCallback(GetPercentKnownTask), _AutoResetEvent);
+
+      _AutoResetEvent.WaitOne();
+      return _PercentKnownTaskVariable;
+      #region old...without advice
+      //var listKnown = new List<string>();
+      //var listUnknown = new List<string>();
+      //for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+      //{
+      //  var phraseText = AggregatePhraseTexts[i];
+      //  var phraseTextDistinctWords = phraseText.ParseIntoWords().Distinct();
+      //  if (IsPhraseKnown(phraseText))
+      //    listKnown.AddRange(phraseTextDistinctWords);
+      //  else
+      //    listUnknown.AddRange(phraseTextDistinctWords);
+      //}
+
+      //int knownWordsCount = listKnown.Count;
+      //int unknownWordsCount = listUnknown.Count;
+      //int totalWordsCount = knownWordsCount + unknownWordsCount;
+      //if (totalWordsCount == 0)
+      //  throw new Exception("knownWordsCount + unknownWordsCount == 0.  This means that we have an aggregate phrase of zero words in our LineAggregateInfo.  This shouldn't happen.");
+
+      //double percentKnown = (double)knownWordsCount / (double)(totalWordsCount);
+      //return percentKnown;
+      #endregion
+    }
+
+
+    private double _PercentKnownTaskVariable { get; set; }
+    public void GetPercentKnownTask(object state)
+    {
+      var are = (AutoResetEvent)state;
+
+      var questionArgs =
+        new Common.QuestionArgs(StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown, _Target.Phrase);
+      DefaultPhrasePercentKnownAdvisor.Ton.AskAdvice(questionArgs, (s, r) =>
       {
-        var phraseText = AggregatePhraseTexts[i];
-        var phraseTextDistinctWords = phraseText.ParseIntoWords().Distinct();
-        if (IsPhraseKnown(phraseText))
-          listKnown.AddRange(phraseTextDistinctWords);
-        else
-          listUnknown.AddRange(phraseTextDistinctWords);
-      }
+        if (r.Error != null)
+          throw r.Error;
 
-      int knownWordsCount = listKnown.Count;
-      int unknownWordsCount = listUnknown.Count;
-      int totalWordsCount = knownWordsCount + unknownWordsCount;
-      if (totalWordsCount == 0)
-        throw new Exception("knownWordsCount + unknownWordsCount == 0.  This means that we have an aggregate phrase of zero words in our LineAggregateInfo.  This shouldn't happen.");
-
-      double percentKnown = (double)knownWordsCount / (double)(totalWordsCount);
-      return percentKnown;
+        _PercentKnownTaskVariable = (double)r.Object;
+        are.Set();
+      });
     }
 
     #endregion
