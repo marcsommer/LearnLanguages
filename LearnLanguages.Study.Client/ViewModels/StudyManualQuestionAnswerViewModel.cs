@@ -223,7 +223,9 @@ namespace LearnLanguages.Study.ViewModels
 
     public override void Abort()
     {
-      ShowAnswer();
+      //ShowAnswer();
+      QuestionVisibility = Visibility.Collapsed;
+      AnswerVisibility = Visibility.Collapsed;
       if (_Callback != null)
         _Callback(null);
     }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.Navigation.EventMessages;
 
 namespace LearnLanguages.Study
 {
@@ -16,11 +17,13 @@ namespace LearnLanguages.Study
   /// adjust priorities to different MLTs, depending on priority of user, and how strongly we want to study 
   /// a certain MLT, due to its projected 'memory trace health' or whatever the paradigm we are using.
   /// </summary>
-  public class DefaultMultiLineTextsMeaningStudier : StudierBase<MultiLineTextList>
+  public class DefaultMultiLineTextsMeaningStudier : StudierBase<MultiLineTextList>,
+                                                     IHandle<NavigationRequestedEventMessage>
   {
     public DefaultMultiLineTextsMeaningStudier()
     {
       _Studiers = new Dictionary<Guid, DefaultSingleMultiLineTextMeaningStudier>();
+      Services.EventAggregator.Subscribe(this);//navigation
     }
 
     private int _CurrentMultiLineTextIndex = -1;
@@ -34,6 +37,11 @@ namespace LearnLanguages.Study
 
     public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
+      if (_AbortIsFlagged)
+      {
+        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        return;
+      }
       //WE ARE CYCLING THROUGH ALL OF THE MLTS, SO GET NEXT MLT TO STUDY INDEX
       var multiLineTextIndex = GetNextMultiLineTextIndex();
       var currentMultiLineText = _Target[multiLineTextIndex];
@@ -89,6 +97,8 @@ namespace LearnLanguages.Study
     public override void InitializeForNewStudySession(MultiLineTextList target, 
                                                       ExceptionCheckCallback completedCallback)
     {
+      _AbortIsFlagged = false;
+
       _Target = target;
       _Studiers.Clear();
       int initializedCount = 0;
@@ -97,17 +107,58 @@ namespace LearnLanguages.Study
       var newJobMultiLineTextList = _Target;
       foreach (var multiLineTextEdit in newJobMultiLineTextList)
       {
+        if (_AbortIsFlagged)
+        {
+          completedCallback(null);
+          return;
+        }
         var studier = new DefaultSingleMultiLineTextMeaningStudier();
         studier.InitializeForNewStudySession(multiLineTextEdit, (e) =>
           {
             if (e != null)
               throw e;
 
+            if (_AbortIsFlagged)
+            {
+              completedCallback(null);
+              return;
+            }
+
             _Studiers.Add(multiLineTextEdit.Id, studier);
             initializedCount++;
             if (initializedCount == newJobMultiLineTextList.Count)
               completedCallback(null);
           });
+      }
+    }
+
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      AbortStudying();
+    }
+
+    private void AbortStudying()
+    {
+      _AbortIsFlagged = true;
+    }
+
+    private object _AbortLock = new object();
+    private bool _abortIsFlagged = false;
+    private bool _AbortIsFlagged
+    {
+      get
+      {
+        lock (_AbortLock)
+        {
+          return _abortIsFlagged;
+        }
+      }
+      set
+      {
+        lock (_AbortLock)
+        {
+          _abortIsFlagged = value;
+        }
       }
     }
   }

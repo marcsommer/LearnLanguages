@@ -81,7 +81,7 @@
     <Compile Include="Defaults\Studiers\DefaultMultiLineTextsMeaningStudier.cs" />
     <Compile Include="Defaults\Studiers\DefaultMultiLineTextsOrderStudier.cs" />
     <Compile Include="Defaults\Studiers\DefaultMultiLineTextsStudier.cs" />
-    <Compile Include="Defaults\DefaultStudyPartner.cs" />
+    <Compile Include="Defaults\Studiers\DefaultStudyPartner.cs" />
     <Compile Include="EventMessages\StudyItemCompletedEventMessage.cs" />
     <Compile Include="Exceptions\StudyException.cs" />
     <Compile Include="Interfaces\IStudyItemViewModelBase.cs" />
@@ -126,6 +126,10 @@
     <ProjectReference Include="..\LearnLanguages.History.Client\LearnLanguages.History.Client.csproj">
       <Project>{DFC14799-1426-4266-A064-4B880612559F}</Project>
       <Name>LearnLanguages.History.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.Client.csproj">
+      <Project>{1CEB7E12-3D55-4EE4-BFCD-1AAB6F64F024}</Project>
+      <Name>LearnLanguages.Navigation.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
       <Project>{98EE87B2-152D-48D8-B509-93EEB92059BE}</Project>

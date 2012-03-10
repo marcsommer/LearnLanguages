@@ -4,11 +4,19 @@ using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common;
+using LearnLanguages.Navigation.EventMessages;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study
 {
-  public abstract class FeedbackViewModelBase : ViewModelBase, IFeedbackViewModelBase
+  public abstract class FeedbackViewModelBase : ViewModelBase, 
+                                                IFeedbackViewModelBase,
+                                                IHandle<NavigationRequestedEventMessage>
   {
+    public FeedbackViewModelBase()
+    {
+      Services.EventAggregator.Subscribe(this);//navigation
+    }
     public abstract IFeedback GetFeedback(int timeoutMilliseconds);
     public abstract void GetFeedbackAsync(int timeoutMilliseconds, 
                                           AsyncCallback<IFeedback> callback);
@@ -39,6 +47,11 @@ namespace LearnLanguages.Study
           NotifyOfPropertyChange(() => IsEnabled);
         }
       }
+    }
+
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      IsEnabled = false;
     }
   }
 }

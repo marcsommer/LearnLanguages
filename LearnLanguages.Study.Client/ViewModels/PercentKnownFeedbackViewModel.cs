@@ -17,6 +17,7 @@ namespace LearnLanguages.Study.ViewModels
   [Export(typeof(PercentKnownFeedbackViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class PercentKnownFeedbackViewModel : FeedbackViewModelBase
+                                               
   {
     #region Ctors and Init
 
@@ -24,6 +25,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       Feedback = new Feedback<double>();
       SetFeedback(-1);
+      Services.EventAggregator.Subscribe(this);
     }
 
     #endregion
@@ -223,6 +225,8 @@ namespace LearnLanguages.Study.ViewModels
     {
       SetFeedback(double.Parse(StudyResources.PercentKnownAll));
     }
+
+    
 
     #endregion
   }

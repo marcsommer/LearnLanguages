@@ -6,21 +6,34 @@ using LearnLanguages.Common.Interfaces;
 using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.Navigation.EventMessages;
 
 namespace LearnLanguages.Study
 {
 
-  public class DefaultMultiLineTextsStudier : StudierBase<MultiLineTextList> //:
+  public class DefaultMultiLineTextsStudier : StudierBase<MultiLineTextList>, //:
+                                              IHandle<NavigationRequestedEventMessage>
   {
+    public DefaultMultiLineTextsStudier()
+    {
+      Services.EventAggregator.Subscribe(this);//navigation
+    }
     public override void InitializeForNewStudySession(MultiLineTextList target, 
                                                       ExceptionCheckCallback completedCallback)
     {
+      _AbortIsFlagged = false;
       _Target = target;
       _MeaningStudier = new DefaultMultiLineTextsMeaningStudier();
       _MeaningStudier.InitializeForNewStudySession(target, (e) =>
         {
           if (e != null)
             throw e;
+
+          if (_AbortIsFlagged)
+          {
+            completedCallback(null);
+            return;
+          }
 
           _OrderStudier = new DefaultMultiLineTextsOrderStudier();
           //_OrderStudier.InitializeForNewStudySession(target, completedCallback);
@@ -31,6 +44,11 @@ namespace LearnLanguages.Study
 
     public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
+      if (_AbortIsFlagged)
+      {
+        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        return;
+      }
       //THIS LAYER OF STUDY DECIDES ON WHAT IS IMPORTANT: MEANING OR ORDER, THEN DELEGATES STUDY TO
       //THE CORRESPONDING STUDIER.
 
@@ -57,6 +75,9 @@ namespace LearnLanguages.Study
 
     private void UpdatePercentKnowns()
     {
+      if (_AbortIsFlagged)
+        return;
+
       //todo: update percent knowns using history
       if (_MeaningStudier == null)
         MeaningPercentKnown = 0.0d;
@@ -139,5 +160,34 @@ namespace LearnLanguages.Study
     //  Exchange.Ton.Publish(statusUpdate);
     //}
 
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      AbortStudying();
+    }
+
+    private void AbortStudying()
+    {
+      _AbortIsFlagged = true;
+    }
+
+    private object _AbortLock = new object();
+    private bool _abortIsFlagged = false;
+    private bool _AbortIsFlagged
+    {
+      get
+      {
+        lock (_AbortLock)
+        {
+          return _abortIsFlagged;
+        }
+      }
+      set
+      {
+        lock (_AbortLock)
+        {
+          _abortIsFlagged = value;
+        }
+      }
+    }
   }
 }

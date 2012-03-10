@@ -11,6 +11,7 @@ using LearnLanguages.Common.Delegates;
 using System.Threading;
 using System.Collections.Generic;
 using LearnLanguages.History.Events;
+using LearnLanguages.Navigation.EventMessages;
 
 namespace LearnLanguages.Study
 {
@@ -18,7 +19,8 @@ namespace LearnLanguages.Study
   /// 
   /// </summary>
   [Export(typeof(IStudyPartner))]
-  public class DefaultStudyPartner : StudyPartnerBase
+  public class DefaultStudyPartner : StudyPartnerBase, 
+                                     IHandle<NavigationRequestedEventMessage>
   {
     public DefaultStudyPartner()
     {
@@ -28,6 +30,7 @@ namespace LearnLanguages.Study
       _FeedbackViewModel.IsEnabled = false;
       _ViewModel.FeedbackViewModel = _FeedbackViewModel;
       _FeedbackTimedOut = false;
+      Services.EventAggregator.Subscribe(this);//navigation
 
       //TODO: FIGURE OUT WHERE THIS SHOULD REALLY GO..MAYBE HERE: INITIALIZE COMPOUND EVENT MAKERS
       //History.HistoryPublisher.Ton.
@@ -245,6 +248,10 @@ namespace LearnLanguages.Study
 
     private void StartNewStudySession(MultiLineTextList multiLineTexts)
     {
+      _AbortIsFlagged = false;
+      ///INITIALIZE HISTORY PUBLISHER
+      History.HistoryPublisher.Ton.PublishEvent(new StartingStudySessionEvent());
+
       ///OKAY, SO AT THIS POINT, WE HAVE DONE OUR WORK THROUGH THE EXCHANGE.  
       ///THE CALLER HAS A REFERENCE TO OUR _VIEWMODEL PROPERTY.  WE HAVE CONTROL
       ///OF THE STUDY PROCESS THROUGH THIS _VIEWMODEL PROPERTY.  WE USE TWO SUB VIEWMODELS
@@ -255,25 +262,30 @@ namespace LearnLanguages.Study
       ///3) SHOW STUDYITEMVIEWMODEL.
       ///4) WHEN SHOW IS DONE, ENABLE FEEDBACK VIEWMODEL.
       ///5) WHEN FEEDBACK IS PROVIDED, GO TO #2.
-      ///
-
-      ///need to prepare history publisher
-      History.HistoryPublisher.Ton.PublishEvent(new StartingStudySessionEvent());
       _Studier.InitializeForNewStudySession(multiLineTexts, (e) =>
         {
-
           //THIS STUDY THREAD EXECUTES ONE ITERATION OF STUDY.  ASSIGNS VIEWMODEL, SHOWS, GETS FEEDBACK.
           BackgroundWorker studyThread = new BackgroundWorker();
           
           #region Study Thread DoWork
           studyThread.DoWork += (s3, r3) =>
             {
-              _IsStudying = true;
+              if (_AbortIsFlagged)
+                return;
 
+              _IsStudying = true;
+              
               _Studier.GetNextStudyItemViewModel((s, r) =>
               {
                 if (r.Error != null)
                   throw r.Error;
+
+                if (_AbortIsFlagged)
+                {
+                  _IsStudying = false;
+                  return;
+                }
+
 
                 var studyItemViewModel = r.Object.ViewModel;
                 _ViewModel.StudyItemViewModel = studyItemViewModel;
@@ -288,6 +300,11 @@ namespace LearnLanguages.Study
                   if (e2 != null)
                     throw e2;
 
+                  if (_AbortIsFlagged)
+                  {
+                    _IsStudying = false;
+                    return;
+                  }
                   //IS DONE SHOWING, SO GET FEEDBACK
                   int timeout = int.Parse(StudyResources.DefaultFeedbackTimeoutMilliseconds);
                   _ViewModel.FeedbackViewModel.GetFeedbackAsync(timeout, (s2, r2) =>
@@ -295,13 +312,26 @@ namespace LearnLanguages.Study
                     if (r2.Error != null)
                       throw r2.Error;
 
+                    if (_AbortIsFlagged)
+                    {
+                      _IsStudying = false;
+                      return;
+                    }
+
                     _IsStudying = false;
                   });
                 });
               });
 
               while (_IsStudying)
+              {
+                if (_AbortIsFlagged)
+                {
+                  _IsStudying = false;
+                  return;
+                }
                 Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
+              }
             };
           #endregion
           #region Study Thread Completed
@@ -310,7 +340,8 @@ namespace LearnLanguages.Study
               if (r4.Error != null)
                 throw r4.Error;
 
-              studyThread.RunWorkerAsync();
+              if (!_AbortIsFlagged)
+                studyThread.RunWorkerAsync();
             };
           #endregion
 
@@ -319,66 +350,67 @@ namespace LearnLanguages.Study
      
     }
 
-    private void Study()
-    {
-      _IsStudying = false;
+    //private void Study()
+    //{
+    //  _IsStudying = false;
 
-      //DISABLE FEEDBACK UNTIL OUR ITEM IS DONE SHOWING.
-      _FeedbackViewModel.IsEnabled = false;
+    //  //DISABLE FEEDBACK UNTIL OUR ITEM IS DONE SHOWING.
+    //  _FeedbackViewModel.IsEnabled = false;
 
-      if (!_IsStudying)
-      {
-        _IsStudying = true;
-        _Studier.GetNextStudyItemViewModel((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+    //  if (!_IsStudying)
+    //  {
 
-          //HACK: MY CALLBACK GENERIC CAN'T CONTAIN AN INTERFACE, SO I CAN'T HAVE ISTUDYITEMVIEWMODELBASE
-          //AS THE RESULTING OBJECT, SO I MADE A ARGS OBJECT WRAPPER.  I'M SURE THERE IS A BETTER SOLUTION,
-          //BUT I NEED TO MOVE ON...I FORGOT, I HAVE RESULTARGS<IINTERFACE>...ARGH.  SHOULD FIX THIS SOMETIME.
-          var result = r.Object;
-          var studyItemViewModel = result.ViewModel;
-          if (studyItemViewModel != null)
-          {
-            _ViewModel.StudyItemViewModel = studyItemViewModel;
-          }
-          else
-            _ViewModel.StudyItemViewModel =
-              Services.Container.GetExportedValue<ViewModels.StudySessionCompleteViewModel>();
+    //    _IsStudying = true;
+    //    _Studier.GetNextStudyItemViewModel((s, r) =>
+    //    {
+    //      if (r.Error != null)
+    //        throw r.Error;
 
-          //SHOW THE STUDY ITEM VIEW MODEL.  CALLBACK HAPPENS WHEN THAT VIEWMODEL
-          //SAYS THAT IT IS DONE, AND THIS WILL THROW THE EXCEPTION IF IT IS THERE.
-          //ONCE THAT IS CHECKED FOR, WE SET OUR STUDYITEMVIEWMODEL TO NULL, WHICH
-          //OUR HEARTBEAT WILL RECOGNIZE ON ITS NEXT PULSE.
-          studyItemViewModel.Show((e) =>
-          {
-            if (e != null)
-              throw e;
+    //      //HACK: MY CALLBACK GENERIC CAN'T CONTAIN AN INTERFACE, SO I CAN'T HAVE ISTUDYITEMVIEWMODELBASE
+    //      //AS THE RESULTING OBJECT, SO I MADE A ARGS OBJECT WRAPPER.  I'M SURE THERE IS A BETTER SOLUTION,
+    //      //BUT I NEED TO MOVE ON...I FORGOT, I HAVE RESULTARGS<IINTERFACE>...ARGH.  SHOULD FIX THIS SOMETIME.
+    //      var result = r.Object;
+    //      var studyItemViewModel = result.ViewModel;
+    //      if (studyItemViewModel != null)
+    //      {
+    //        _ViewModel.StudyItemViewModel = studyItemViewModel;
+    //      }
+    //      else
+    //        _ViewModel.StudyItemViewModel =
+    //          Services.Container.GetExportedValue<ViewModels.StudySessionCompleteViewModel>();
 
-            //OUR VIEW MODEL IS DONE SHOWING.  ENABLE FEEDBACK AND GET FEEDBACK.
-            _FeedbackViewModel.IsEnabled = true;
-            _FeedbackViewModel.GetFeedbackAsync(int.Parse(StudyResources.DefaultFeedbackTimeoutMilliseconds),
-              (s2, r2) =>
-              {
-                if (r2.Error != null)
-                  throw r2.Error;
+    //      //SHOW THE STUDY ITEM VIEW MODEL.  CALLBACK HAPPENS WHEN THAT VIEWMODEL
+    //      //SAYS THAT IT IS DONE, AND THIS WILL THROW THE EXCEPTION IF IT IS THERE.
+    //      //ONCE THAT IS CHECKED FOR, WE SET OUR STUDYITEMVIEWMODEL TO NULL, WHICH
+    //      //OUR HEARTBEAT WILL RECOGNIZE ON ITS NEXT PULSE.
+    //      studyItemViewModel.Show((e) =>
+    //      {
+    //        if (e != null)
+    //          throw e;
 
-                //OUR FEEDBACK HAS BEEN PROVIDED.  WE ONLY CARE IF FEEDBACK IS NULL.  THIS MEANS THAT
-                //TIMEOUT OCCURRED, AND THEREFORE WE SHOULD NOT STUDY AGAIN.
-                _FeedbackTimedOut = r2.Object == null;
-                _ViewModel.StudyItemViewModel = null;
-                _IsStudying = false;
-              });
-          });
+    //        //OUR VIEW MODEL IS DONE SHOWING.  ENABLE FEEDBACK AND GET FEEDBACK.
+    //        _FeedbackViewModel.IsEnabled = true;
+    //        _FeedbackViewModel.GetFeedbackAsync(int.Parse(StudyResources.DefaultFeedbackTimeoutMilliseconds),
+    //          (s2, r2) =>
+    //          {
+    //            if (r2.Error != null)
+    //              throw r2.Error;
 
-        });
-      }
-      else
-      {
-        Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
-      }
-    }
+    //            //OUR FEEDBACK HAS BEEN PROVIDED.  WE ONLY CARE IF FEEDBACK IS NULL.  THIS MEANS THAT
+    //            //TIMEOUT OCCURRED, AND THEREFORE WE SHOULD NOT STUDY AGAIN.
+    //            _FeedbackTimedOut = r2.Object == null;
+    //            _ViewModel.StudyItemViewModel = null;
+    //            _IsStudying = false;
+    //          });
+    //      });
+
+    //    });
+    //  }
+    //  else
+    //  {
+    //    Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
+    //  }
+    //}
 
     private bool _IsStudying { get; set; }
 
@@ -389,6 +421,9 @@ namespace LearnLanguages.Study
     private void InitializeForNewStudySession(MultiLineTextList multiLineTexts, 
                                               ExceptionCheckCallback completedCallback)
     {
+      //INITIALIZE THIS
+      _AbortIsFlagged = false;
+
       //INITIALIZE STUDIER
       _Studier.InitializeForNewStudySession(multiLineTexts, (e) =>
         {
@@ -410,6 +445,36 @@ namespace LearnLanguages.Study
       //      System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultStudyHeartbeatTimeMilliseconds));
       //    }
       //  };
+    }
+
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      AbortStudying();
+    }
+
+    private void AbortStudying()
+    {
+      _AbortIsFlagged = true;
+    }
+
+    private object _AbortLock = new object();
+    private bool _abortIsFlagged = false;
+    private bool _AbortIsFlagged
+    {
+      get
+      {
+        lock (_AbortLock)
+        {
+          return _abortIsFlagged;
+        }
+      }
+      set
+      {
+        lock (_AbortLock)
+        {
+          _abortIsFlagged = value;
+        }
+      }
     }
   }
 }

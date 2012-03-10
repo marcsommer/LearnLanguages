@@ -2,11 +2,18 @@
 using System.Net;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.Navigation.EventMessages;
+using Caliburn.Micro;
 
 namespace LearnLanguages.Study
 {
-  public abstract class StudyItemViewModelBase : ViewModelBase, Interfaces.IStudyItemViewModelBase
+  public abstract class StudyItemViewModelBase : ViewModelBase, Interfaces.IStudyItemViewModelBase,
+                                                 IHandle<NavigationRequestedEventMessage>
   {
+    public StudyItemViewModelBase()
+    {
+      Services.EventAggregator.Subscribe(this);//navigation
+    }
     public virtual void Show(Common.Delegates.ExceptionCheckCallback callback)
     {
       _Callback = callback;
@@ -31,5 +38,10 @@ namespace LearnLanguages.Study
     }
     
     public event EventHandler Shown;
+
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      Abort();
+    }
   }
 }

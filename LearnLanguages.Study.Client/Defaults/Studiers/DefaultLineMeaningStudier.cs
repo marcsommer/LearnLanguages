@@ -10,6 +10,8 @@ using Caliburn.Micro;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
 using System.Threading;
+using LearnLanguages.Navigation.EventMessages;
+using LearnLanguages.History.Events;
 
 namespace LearnLanguages.Study
 {
@@ -20,7 +22,9 @@ namespace LearnLanguages.Study
   /// populating aggregate phrase texts with the OriginalAggregateSize, as well as aggregating
   /// adjacent known phrase texts, according to its own knowledge.
   /// </summary>
-  public class DefaultLineMeaningStudier : StudierBase<LineEdit>, IHandle<History.Events.ReviewedPhraseEvent>
+  public class DefaultLineMeaningStudier : StudierBase<LineEdit>, 
+                                           IHandle<ReviewedPhraseEvent>, 
+                                           IHandle<NavigationRequestedEventMessage>
   {
     #region Ctors and Init
 
@@ -29,6 +33,7 @@ namespace LearnLanguages.Study
       _Studiers = new Dictionary<int, DefaultPhraseMeaningStudier>();
       Exchange.Ton.SubscribeToStatusUpdates(this);
       History.HistoryPublisher.Ton.SubscribeToEvents(this);
+      Services.EventAggregator.Subscribe(this);//navigation
     }
 
     #endregion
@@ -94,6 +99,11 @@ namespace LearnLanguages.Study
 
     public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
     {
+      if (_AbortIsFlagged)
+      {
+        callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        return;
+      }
       //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT STUDIERS COUNT, THEN WE
       //HAVE COMPLETED ONE ITERATION THROUGH OUR UNKNOWN AGGREGATE PHRASE TEXTS.  
       if (_Studiers == null || _LastStudiedIndex >= (_Studiers.Count - 1))
@@ -101,12 +111,28 @@ namespace LearnLanguages.Study
         //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
         //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
         var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
+        if (_AbortIsFlagged)
+        {
+          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+          return;
+        }
         AggregateAdjacentKnownPhraseTexts(maxIterations);
+        if (_AbortIsFlagged)
+        {
+          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+          return;
+        }
         PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
         {
           //todo: go through all async code and make sure exceptions get relayed to callbacks instead of being thrown.
           if (e != null)
             callback(this, new ResultArgs<StudyItemViewModelArgs>(e));
+
+          if (_AbortIsFlagged)
+          {
+            callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+            return;
+          }
 
           if (_Studiers.Count == 0)
           {
@@ -123,11 +149,22 @@ namespace LearnLanguages.Study
                   if (r2.Error != null)
                     callback(this, new ResultArgs<StudyItemViewModelArgs>(r2.Error));
 
+                  if (_AbortIsFlagged)
+                  {
+                    callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+                    return;
+                  }
                   //r2.Object.ViewModel.Shown += new EventHandler(ViewModelShownWhenStudyingAnEntireLine);
                 });
               _LastStudiedIndex = 0;
             });
             
+          }
+
+          if (_AbortIsFlagged)
+          {
+            callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+            return;
           }
 
           //WE NOW HAVE COMPLETELY NEW STUDIERS, ALREADY INITIALIZED, SO WE JUST NEED TO RUN 
@@ -138,12 +175,23 @@ namespace LearnLanguages.Study
       }
       else
       {
+        if (_AbortIsFlagged)
+        {
+          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+          return;
+        }
         //WE ARE CONTINUING A STUDY CYCLE, SO RUN THE NEXT ONE AND UPDATE OUR LAST STUDIED INDEX.
         var indexToStudy = _LastStudiedIndex + 1;
         _Studiers[indexToStudy].GetNextStudyItemViewModel((s, r) =>
           {
             if (r.Error != null)
               callback(this, new ResultArgs<StudyItemViewModelArgs>(r.Error));
+
+            if (_AbortIsFlagged)
+            {
+              callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+              return;
+            }
 
             //r.Object.ViewModel.Shown += ViewModelShownWhenStudyingAnEntireLine;
             _LastStudiedIndex++;
@@ -168,6 +216,11 @@ namespace LearnLanguages.Study
 
     private void PopulateStudiersWithUnknownAggregatePhraseTexts(ExceptionCheckCallback callback)
     {
+      if (_AbortIsFlagged)
+      {
+        callback(null);
+        return;
+      }
       _Studiers.Clear();
       _LastStudiedIndex = -1;
 
@@ -180,10 +233,20 @@ namespace LearnLanguages.Study
             if (r.Error != null)
               throw r.Error;
 
+            if (_AbortIsFlagged)
+            {
+              callback(null);
+              return;
+            }
             var phraseList = r.Object;
             List<PhraseEdit> unknownPhraseEdits = new List<PhraseEdit>();
             for (int i = 0; i < AggregatePhraseTexts.Count; i++)
             {
+              if (_AbortIsFlagged)
+              {
+                callback(null);
+                return;
+              }
               var results = from phrase in phraseList
                             where phrase.Text == AggregatePhraseTexts[i]
                             select phrase;
@@ -198,6 +261,12 @@ namespace LearnLanguages.Study
             int unknownCount = 0;
             for (int i = 0; i < AggregatePhraseTexts.Count; i++)
             {
+              if (_AbortIsFlagged)
+              {
+                callback(null);
+                return;
+              }
+
               var phraseText = AggregatePhraseTexts[i];
               if (!IsPhraseKnown(phraseText))
                 unknownCount++;
@@ -209,6 +278,12 @@ namespace LearnLanguages.Study
             int initializedCount = 0;
             for (int i = 0; i < AggregatePhraseTexts.Count; i++)
             {
+              if (_AbortIsFlagged)
+              {
+                callback(null);
+                return;
+              }
+
               var phraseText = AggregatePhraseTexts[i];
               if (IsPhraseKnown(phraseText))
                 continue;
@@ -220,6 +295,12 @@ namespace LearnLanguages.Study
                 {
                   if (e != null)
                     throw e;
+
+                  if (_AbortIsFlagged)
+                  {
+                    callback(null);
+                    return;
+                  }
 
                   _Studiers.Add(unknownRelativeOrder, studier);
                   initializedCount++;
@@ -307,6 +388,10 @@ namespace LearnLanguages.Study
     /// </summary>
     private void AggregateAdjacentKnownPhraseTexts(int maxIterations)
     {
+      if (_AbortIsFlagged)
+      {
+        return;
+      }
       //FIRST, GIVE US A FRESH START...I'M NOT ENTIRELY SURE THIS IS NECESSARY.
       PopulateAggregatePhraseTexts(AggregateSize);
 
@@ -317,6 +402,11 @@ namespace LearnLanguages.Study
       var stillLooking = true;
       while (stillLooking && (iterations < maxIterations))
       {
+        if (_AbortIsFlagged)
+        {
+          return;
+        }
+
         //This is "starting" as in before our next for loop which may modify AggregatePhraseTexts.Count.
         var startingPhraseCount = AggregatePhraseTexts.Count;
         var foundNewAggregate = false;
@@ -324,6 +414,11 @@ namespace LearnLanguages.Study
         //We do this until count - 1, because we are indexing i and i+1.
         for (int i = 0; i < startingPhraseCount - 1; i++)
         {
+          if (_AbortIsFlagged)
+          {
+            return;
+          }
+
           var phraseA = AggregatePhraseTexts[i];
           var phraseB = AggregatePhraseTexts[i + 1];
           if (IsPhraseKnown(phraseA) && IsPhraseKnown(phraseB))
@@ -445,7 +540,6 @@ namespace LearnLanguages.Study
     private bool _PercentKnownIsUpToDate = false;
     private double _CachedPercentKnownValue = 0;
 
-
     private double _PercentKnownTaskVariable { get; set; }
     public void GetPercentKnownTask(object state)
     {
@@ -453,6 +547,11 @@ namespace LearnLanguages.Study
 
       var questionArgs =
         new Common.QuestionArgs(StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown, _Target.Phrase);
+      if (_AbortIsFlagged)
+      {
+        are.Set();
+        return;
+      }
       DefaultPhrasePercentKnownAdvisor.Ton.AskAdvice(questionArgs, (s, r) =>
       {
         if (r.Error != null)
@@ -467,12 +566,18 @@ namespace LearnLanguages.Study
 
     public override void InitializeForNewStudySession(LineEdit target, ExceptionCheckCallback completedCallback)
     {
+      _AbortIsFlagged = false;
       _IsReady = false;
       _Target = target;
       AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
       KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
       AggregatePhraseTexts = new List<string>();
       KnownPhraseTexts = new List<string>();
+      if (_AbortIsFlagged)
+      {
+        completedCallback(null);
+        return;
+      }
       PopulateAggregatePhraseTexts(AggregateSize);
       //CURRENTLY NO NEED TO AGGREGATE ADJACENT KNOWN PHRASE TEXTS BECAUSE WE START FROM UNKNOWN STATE.
       //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
@@ -482,6 +587,12 @@ namespace LearnLanguages.Study
         {
           if (e != null)
             throw e;
+
+          if (_AbortIsFlagged)
+          {
+            completedCallback(null);
+            return;
+          }
 
           completedCallback(null);
         });
@@ -525,5 +636,36 @@ namespace LearnLanguages.Study
       //IF WE MADE IT HERE, THEN WE FOUND NO RELATED WORDS
       return false;
     }
+
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      AbortStudying();
+    }
+
+    private void AbortStudying()
+    {
+      _AbortIsFlagged = true;
+    }
+
+    private object _AbortLock = new object();
+    private bool _abortIsFlagged = false;
+    private bool _AbortIsFlagged
+    {
+      get
+      {
+        lock (_AbortLock)
+        {
+          return _abortIsFlagged;
+        }
+      }
+      set
+      {
+        lock (_AbortLock)
+        {
+          _abortIsFlagged = value;
+        }
+      }
+    }
+
   }
 }

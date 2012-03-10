@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
+using LearnLanguages.Navigation.EventMessages;
 
 namespace LearnLanguages.Study
 {
@@ -28,7 +29,8 @@ namespace LearnLanguages.Study
   /// a whole slew of other factors...perfect for a neural net to figure out.  Alas, for now it must 
   /// just be active lines.
   /// </summary>
-  public class DefaultSingleMultiLineTextMeaningStudier : StudierBase<MultiLineTextEdit>
+  public class DefaultSingleMultiLineTextMeaningStudier : StudierBase<MultiLineTextEdit>,
+                                                          IHandle<NavigationRequestedEventMessage>
   {
     #region Ctors and Init
     
@@ -38,6 +40,7 @@ namespace LearnLanguages.Study
       _LineStudiers = new Dictionary<int, DefaultLineMeaningStudier>();
       _LastActiveLineStudiedIndex = -1;
       _KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
+      Services.EventAggregator.Subscribe(this);//navigation
     }
 
     public DefaultSingleMultiLineTextMeaningStudier(int startingAggregateSize)
@@ -82,9 +85,13 @@ namespace LearnLanguages.Study
     private DefaultLineMeaningStudier  ChooseNextLineStudier(out int nextLineNumber)
     {
       List<int> unknownLineNumbers = new List<int>();
+      nextLineNumber = -1;
 
       foreach (var studier in _LineStudiers)
       {
+        if (_AbortIsFlagged)
+          return null;
+
         var studierLineNumber = studier.Key;
         var studierPercentKnown = studier.Value.GetPercentKnown();
         if (studierPercentKnown > this._KnowledgeThreshold)
@@ -99,6 +106,9 @@ namespace LearnLanguages.Study
         //if (studierLineNumber < lowestSoFar)
         //  lowestSoFar = studierLineNumber;
       }
+
+      if (_AbortIsFlagged)
+        return null;
 
       //all lines are known if count == 0, so we have no studier to choose.
       if (unknownLineNumbers.Count == 0)
@@ -118,6 +128,9 @@ namespace LearnLanguages.Study
           nextLineNumberIndex >= _ActiveLinesCount)
         nextLineNumberIndex = 0;
 
+      if (_AbortIsFlagged)
+        return null;
+
       nextLineNumber = unknownLineNumbers[nextLineNumberIndex];
       var nextStudierToUse = _LineStudiers[nextLineNumber];
 
@@ -126,6 +139,11 @@ namespace LearnLanguages.Study
 
     private void UpdateKnowledge()
     {
+      if (_AbortIsFlagged)
+      {
+        return;
+      }
+
       //todo: MLTMeaning...dynamically set active lines count from either some sort of calculator class
       _ActiveLinesCount = int.Parse(StudyResources.DefaultMeaningStudierActiveLinesCount);
 
@@ -135,6 +153,10 @@ namespace LearnLanguages.Study
 
     protected void ChooseAggregateSize()
     {
+
+      if (_AbortIsFlagged)
+        return;
+
       //todo: MLTMeaning...dynamically choose aggregate size
       _AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
     }
@@ -144,6 +166,12 @@ namespace LearnLanguages.Study
       _LineStudiers.Clear();
       foreach (var line in _Target.Lines)
       {
+        if (_AbortIsFlagged)
+        {
+          completedCallback(null);
+          return;
+        }
+
         var lineStudier = new DefaultLineMeaningStudier();
         _LineStudiers.Add(line.LineNumber, lineStudier);
       }
@@ -154,9 +182,21 @@ namespace LearnLanguages.Study
       foreach (var lineStudierEntry in _LineStudiers)
       {
         var line = _Target.Lines[lineStudierEntry.Key];
+        if (_AbortIsFlagged)
+        {
+          completedCallback(null);
+          return;
+        }
+
         lineStudierEntry.Value.InitializeForNewStudySession(line, (e) =>
           {
             linesInitializedCount++;
+
+            if (_AbortIsFlagged)
+            {
+              completedCallback(null);
+              return;
+            }
 
             //IF WE HAVE INITIALIZED ALL OF OUR LINES, THEN OUR INITIALIZATION POPULATION IS COMPLETE
             if (linesInitializedCount == _Target.Lines.Count)
@@ -176,6 +216,8 @@ namespace LearnLanguages.Study
       double maxPercentKnownNonNormalized = 100 * lineCount;
       foreach (var lineInfo in _LineStudiers)
       {
+        if (_AbortIsFlagged)
+          return -1.0d;
         var linePercentKnown = lineInfo.Value.GetPercentKnown();
         totalPercentKnownNonNormalized += linePercentKnown;
       }
@@ -189,6 +231,7 @@ namespace LearnLanguages.Study
     public override void InitializeForNewStudySession(MultiLineTextEdit target, 
                                                       ExceptionCheckCallback completedCallback)
     {
+      _AbortIsFlagged = false;
       _Target = target;
       _LastActiveLineStudiedIndex = -1;
 
@@ -199,11 +242,23 @@ namespace LearnLanguages.Study
         History.HistoryPublisher.Ton.PublishEvent(activatedLineEvent);
       }
 
+      if (_AbortIsFlagged)
+      {
+        completedCallback(null);
+        return;
+      }
+
       //EXECUTES CALLBACK WHEN POPULATE IS COMPLETED
       PopulateLineStudiers((e) =>
         {
           if (e != null)
             throw e;
+
+          if (_AbortIsFlagged)
+          {
+            completedCallback(null);
+            return;
+          }
 
           completedCallback(null);
         });
@@ -211,12 +266,23 @@ namespace LearnLanguages.Study
 
     public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
     {
+      if (_AbortIsFlagged)
+      {
+        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        return;
+      }
       UpdateKnowledge();
       ChooseAggregateSize();
       var nextLineNumber = -1;
       DefaultLineMeaningStudier nextStudier = ChooseNextLineStudier(out nextLineNumber);
       if (nextStudier == null || nextLineNumber < 0)
         throw new Exception("todo: all lines are studied, publish completion event or something");
+
+      if (_AbortIsFlagged)
+      {
+        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        return;
+      }
 
       LineEdit nextLineEdit = _Target.Lines[nextLineNumber];
       if (nextLineEdit.LineNumber != nextLineNumber)
@@ -230,14 +296,56 @@ namespace LearnLanguages.Study
           throw new Exception("cannot find line with corresponding line number");
       }
 
+      if (_AbortIsFlagged)
+      {
+        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        return;
+      } 
+      
       nextStudier.GetNextStudyItemViewModel((s, r) =>
         {
           if (r.Error != null)
             throw r.Error;
 
+          if (_AbortIsFlagged)
+          {
+            callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+            return;
+          }
+
           callback(this, r);
         });
       _LastActiveLineStudiedIndex = nextLineEdit.LineNumber;
+    }
+
+    public void Handle(NavigationRequestedEventMessage message)
+    {
+      AbortStudying();
+    }
+
+    private void AbortStudying()
+    {
+      _AbortIsFlagged = true;
+    }
+
+    private object _AbortLock = new object();
+    private bool _abortIsFlagged = false;
+    private bool _AbortIsFlagged
+    {
+      get
+      {
+        lock (_AbortLock)
+        {
+          return _abortIsFlagged;
+        }
+      }
+      set
+      {
+        lock (_AbortLock)
+        {
+          _abortIsFlagged = value;
+        }
+      }
     }
   }
 }
