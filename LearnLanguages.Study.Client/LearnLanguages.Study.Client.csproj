@@ -75,7 +75,7 @@
     <Compile Include="Creators\GetTranslationArgs.cs" />
     <Compile Include="Defaults\Recorders\DefaultWordInPhraseReviewedRecorder.cs" />
     <Compile Include="Defaults\Studiers\DefaultPhraseMeaningStudier.cs" />
-    <Compile Include="Defaults\Recorders\DefaultPhraseReviewedRecorder.cs" />
+    <Compile Include="Defaults\Recorders\DefaultReviewedLineRecorder.cs" />
     <Compile Include="Defaults\Studiers\DefaultSingleMultiLineTextMeaningStudier.cs" />
     <Compile Include="Defaults\Studiers\DefaultLineMeaningStudier.cs" />
     <Compile Include="Defaults\Studiers\DefaultMultiLineTextsMeaningStudier.cs" />

@@ -1,12 +1,14 @@
 ﻿using System;
 using LearnLanguages.History;
 using LearnLanguages.Business;
+using LearnLanguages.History.Events;
+using LearnLanguages.History.Bases;
 
 namespace LearnLanguages.Study.Defaults
 {
-  public class DefaultPhraseReviewedRecorder : History.Bases.HistoryRecorderBase<History.Events.ReviewedLineEvent>
+  public class DefaultReviewedLineRecorder : HistoryRecorderBase<ReviewedLineEvent>
   {
-    public DefaultPhraseReviewedRecorder()
+    public DefaultReviewedLineRecorder()
     {
       Id = Guid.Parse(StudyResources.DefaultPhraseReviewedRecorderId);
     }

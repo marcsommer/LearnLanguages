@@ -310,6 +310,27 @@ namespace LearnLanguages.Study
                 });
 
             }
+
+            //THIS LINE IS ENTIRELY KNOWN, SO INITIALIZE A NEW STUDIER WITH THE ENTIRE LINE.
+            if (unknownCount == 0)
+            {
+              var studier = new DefaultPhraseMeaningStudier();
+              
+              studier.InitializeForNewStudySession(_Target.Phrase, (e) =>
+              {
+                if (e != null)
+                  throw e;
+
+                if (_AbortIsFlagged)
+                {
+                  callback(null);
+                  return;
+                }
+
+                _Studiers.Add(0, studier);
+                callback(null);
+              });
+            }
           }
           catch (Exception ex)
           {
