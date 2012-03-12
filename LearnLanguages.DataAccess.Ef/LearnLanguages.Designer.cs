@@ -32,6 +32,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LearnLanguages", "PhraseDataLineData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "LineData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.LineData), true)]
 [assembly: EdmRelationshipAttribute("LearnLanguages", "ContextPhraseDataTranslationData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "TranslationData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.TranslationData), true)]
 [assembly: EdmRelationshipAttribute("LearnLanguages", "PhraseDataDefaultStudyAdvisorKnowledgeBeliefData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "DefaultStudyAdvisorKnowledgeBeliefData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.DefaultStudyAdvisorKnowledgeBeliefData), true)]
+[assembly: EdmRelationshipAttribute("LearnLanguages", "PhraseDataPhraseBeliefData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "PhraseBeliefData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.PhraseBeliefData), true)]
+[assembly: EdmRelationshipAttribute("LearnLanguages", "UserDataPhraseBeliefData", "UserData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.UserData), "PhraseBeliefData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.PhraseBeliefData), true)]
 
 #endregion
 
@@ -194,6 +196,38 @@ namespace LearnLanguages.DataAccess.Ef
             }
         }
         private ObjectSet<DefaultStudyAdvisorKnowledgeBeliefData> _DefaultStudyAdvisorKnowledgeBeliefDatas;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<PhraseBeliefData> PhraseBeliefDatas
+        {
+            get
+            {
+                if ((_PhraseBeliefDatas == null))
+                {
+                    _PhraseBeliefDatas = base.CreateObjectSet<PhraseBeliefData>("PhraseBeliefDatas");
+                }
+                return _PhraseBeliefDatas;
+            }
+        }
+        private ObjectSet<PhraseBeliefData> _PhraseBeliefDatas;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StudyDataData> StudyDataDatas
+        {
+            get
+            {
+                if ((_StudyDataDatas == null))
+                {
+                    _StudyDataDatas = base.CreateObjectSet<StudyDataData>("StudyDataDatas");
+                }
+                return _StudyDataDatas;
+            }
+        }
+        private ObjectSet<StudyDataData> _StudyDataDatas;
 
         #endregion
 
@@ -253,6 +287,22 @@ namespace LearnLanguages.DataAccess.Ef
         public void AddToDefaultStudyAdvisorKnowledgeBeliefDatas(DefaultStudyAdvisorKnowledgeBeliefData defaultStudyAdvisorKnowledgeBeliefData)
         {
             base.AddObject("DefaultStudyAdvisorKnowledgeBeliefDatas", defaultStudyAdvisorKnowledgeBeliefData);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PhraseBeliefDatas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPhraseBeliefDatas(PhraseBeliefData phraseBeliefData)
+        {
+            base.AddObject("PhraseBeliefDatas", phraseBeliefData);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StudyDataDatas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStudyDataDatas(StudyDataData studyDataData)
+        {
+            base.AddObject("StudyDataDatas", studyDataData);
         }
 
         #endregion
@@ -805,6 +855,325 @@ namespace LearnLanguages.DataAccess.Ef
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LearnLanguages", Name="PhraseBeliefData")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class PhraseBeliefData : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PhraseBeliefData object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="timeStamp">Initial value of the TimeStamp property.</param>
+        /// <param name="text">Initial value of the Text property.</param>
+        /// <param name="strength">Initial value of the Strength property.</param>
+        /// <param name="believerId">Initial value of the BelieverId property.</param>
+        /// <param name="reviewMethodId">Initial value of the ReviewMethodId property.</param>
+        /// <param name="phraseDataId">Initial value of the PhraseDataId property.</param>
+        /// <param name="userDataId">Initial value of the UserDataId property.</param>
+        public static PhraseBeliefData CreatePhraseBeliefData(global::System.Guid id, global::System.TimeSpan timeStamp, global::System.String text, global::System.Double strength, global::System.Guid believerId, global::System.Guid reviewMethodId, global::System.Guid phraseDataId, global::System.Guid userDataId)
+        {
+            PhraseBeliefData phraseBeliefData = new PhraseBeliefData();
+            phraseBeliefData.Id = id;
+            phraseBeliefData.TimeStamp = timeStamp;
+            phraseBeliefData.Text = text;
+            phraseBeliefData.Strength = strength;
+            phraseBeliefData.BelieverId = believerId;
+            phraseBeliefData.ReviewMethodId = reviewMethodId;
+            phraseBeliefData.PhraseDataId = phraseDataId;
+            phraseBeliefData.UserDataId = userDataId;
+            return phraseBeliefData;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _Id;
+        partial void OnIdChanging(global::System.Guid value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.TimeSpan TimeStamp
+        {
+            get
+            {
+                return _TimeStamp;
+            }
+            set
+            {
+                OnTimeStampChanging(value);
+                ReportPropertyChanging("TimeStamp");
+                _TimeStamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TimeStamp");
+                OnTimeStampChanged();
+            }
+        }
+        private global::System.TimeSpan _TimeStamp;
+        partial void OnTimeStampChanging(global::System.TimeSpan value);
+        partial void OnTimeStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Text
+        {
+            get
+            {
+                return _Text;
+            }
+            set
+            {
+                OnTextChanging(value);
+                ReportPropertyChanging("Text");
+                _Text = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Text");
+                OnTextChanged();
+            }
+        }
+        private global::System.String _Text;
+        partial void OnTextChanging(global::System.String value);
+        partial void OnTextChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Strength
+        {
+            get
+            {
+                return _Strength;
+            }
+            set
+            {
+                OnStrengthChanging(value);
+                ReportPropertyChanging("Strength");
+                _Strength = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Strength");
+                OnStrengthChanged();
+            }
+        }
+        private global::System.Double _Strength;
+        partial void OnStrengthChanging(global::System.Double value);
+        partial void OnStrengthChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid BelieverId
+        {
+            get
+            {
+                return _BelieverId;
+            }
+            set
+            {
+                OnBelieverIdChanging(value);
+                ReportPropertyChanging("BelieverId");
+                _BelieverId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BelieverId");
+                OnBelieverIdChanged();
+            }
+        }
+        private global::System.Guid _BelieverId;
+        partial void OnBelieverIdChanging(global::System.Guid value);
+        partial void OnBelieverIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid ReviewMethodId
+        {
+            get
+            {
+                return _ReviewMethodId;
+            }
+            set
+            {
+                OnReviewMethodIdChanging(value);
+                ReportPropertyChanging("ReviewMethodId");
+                _ReviewMethodId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReviewMethodId");
+                OnReviewMethodIdChanged();
+            }
+        }
+        private global::System.Guid _ReviewMethodId;
+        partial void OnReviewMethodIdChanging(global::System.Guid value);
+        partial void OnReviewMethodIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid PhraseDataId
+        {
+            get
+            {
+                return _PhraseDataId;
+            }
+            set
+            {
+                OnPhraseDataIdChanging(value);
+                ReportPropertyChanging("PhraseDataId");
+                _PhraseDataId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PhraseDataId");
+                OnPhraseDataIdChanged();
+            }
+        }
+        private global::System.Guid _PhraseDataId;
+        partial void OnPhraseDataIdChanging(global::System.Guid value);
+        partial void OnPhraseDataIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid UserDataId
+        {
+            get
+            {
+                return _UserDataId;
+            }
+            set
+            {
+                OnUserDataIdChanging(value);
+                ReportPropertyChanging("UserDataId");
+                _UserDataId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserDataId");
+                OnUserDataIdChanged();
+            }
+        }
+        private global::System.Guid _UserDataId;
+        partial void OnUserDataIdChanging(global::System.Guid value);
+        partial void OnUserDataIdChanged();
+
+        #endregion
+
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "PhraseDataPhraseBeliefData", "PhraseData")]
+        public PhraseData PhraseData
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PhraseData>("LearnLanguages.PhraseDataPhraseBeliefData", "PhraseData").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PhraseData>("LearnLanguages.PhraseDataPhraseBeliefData", "PhraseData").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<PhraseData> PhraseDataReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PhraseData>("LearnLanguages.PhraseDataPhraseBeliefData", "PhraseData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<PhraseData>("LearnLanguages.PhraseDataPhraseBeliefData", "PhraseData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "UserDataPhraseBeliefData", "UserData")]
+        public UserData UserData
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.UserDataPhraseBeliefData", "UserData").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.UserDataPhraseBeliefData", "UserData").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<UserData> UserDataReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.UserDataPhraseBeliefData", "UserData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<UserData>("LearnLanguages.UserDataPhraseBeliefData", "UserData", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LearnLanguages", Name="PhraseData")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -1100,6 +1469,28 @@ namespace LearnLanguages.DataAccess.Ef
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "PhraseDataPhraseBeliefData", "PhraseBeliefData")]
+        public EntityCollection<PhraseBeliefData> PhraseBeliefDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<PhraseBeliefData>("LearnLanguages.PhraseDataPhraseBeliefData", "PhraseBeliefData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PhraseBeliefData>("LearnLanguages.PhraseDataPhraseBeliefData", "PhraseBeliefData", value);
+                }
+            }
+        }
 
         #endregion
 
@@ -1212,6 +1603,115 @@ namespace LearnLanguages.DataAccess.Ef
 
         #endregion
 
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LearnLanguages", Name="StudyDataData")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class StudyDataData : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new StudyDataData object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="nativeLanguageText">Initial value of the NativeLanguageText property.</param>
+        /// <param name="username">Initial value of the Username property.</param>
+        public static StudyDataData CreateStudyDataData(global::System.Guid id, global::System.String nativeLanguageText, global::System.String username)
+        {
+            StudyDataData studyDataData = new StudyDataData();
+            studyDataData.Id = id;
+            studyDataData.NativeLanguageText = nativeLanguageText;
+            studyDataData.Username = username;
+            return studyDataData;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _Id;
+        partial void OnIdChanging(global::System.Guid value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NativeLanguageText
+        {
+            get
+            {
+                return _NativeLanguageText;
+            }
+            set
+            {
+                OnNativeLanguageTextChanging(value);
+                ReportPropertyChanging("NativeLanguageText");
+                _NativeLanguageText = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NativeLanguageText");
+                OnNativeLanguageTextChanged();
+            }
+        }
+        private global::System.String _NativeLanguageText;
+        partial void OnNativeLanguageTextChanging(global::System.String value);
+        partial void OnNativeLanguageTextChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Username
+        {
+            get
+            {
+                return _Username;
+            }
+            set
+            {
+                OnUsernameChanging(value);
+                ReportPropertyChanging("Username");
+                _Username = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Username");
+                OnUsernameChanged();
+            }
+        }
+        private global::System.String _Username;
+        partial void OnUsernameChanging(global::System.String value);
+        partial void OnUsernameChanged();
+
+        #endregion
+
+    
     }
     
     /// <summary>
@@ -1690,6 +2190,28 @@ namespace LearnLanguages.DataAccess.Ef
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<LineData>("LearnLanguages.UserDataLineData", "LineData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "UserDataPhraseBeliefData", "PhraseBeliefData")]
+        public EntityCollection<PhraseBeliefData> PhraseBeliefDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<PhraseBeliefData>("LearnLanguages.UserDataPhraseBeliefData", "PhraseBeliefData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PhraseBeliefData>("LearnLanguages.UserDataPhraseBeliefData", "PhraseBeliefData", value);
                 }
             }
         }

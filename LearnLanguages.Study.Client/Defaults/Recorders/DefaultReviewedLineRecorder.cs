@@ -4,7 +4,7 @@ using LearnLanguages.Business;
 using LearnLanguages.History.Events;
 using LearnLanguages.History.Bases;
 
-namespace LearnLanguages.Study.Defaults
+namespace LearnLanguages.Study
 {
   public class DefaultReviewedLineRecorder : HistoryRecorderBase<ReviewedLineEvent>
   {

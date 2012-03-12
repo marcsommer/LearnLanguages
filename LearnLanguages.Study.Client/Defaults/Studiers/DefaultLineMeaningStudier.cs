@@ -122,7 +122,7 @@ namespace LearnLanguages.Study
           callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
           return;
         }
-        PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
+        PopulateStudiersWithAggregatePhraseTexts((e) =>
         {
           //todo: go through all async code and make sure exceptions get relayed to callbacks instead of being thrown.
           if (e != null)
@@ -214,7 +214,7 @@ namespace LearnLanguages.Study
     //  HistoryPublisher.Ton.PublishEvent(reviewingLineEvent);
     //}
 
-    private void PopulateStudiersWithUnknownAggregatePhraseTexts(ExceptionCheckCallback callback)
+    private void PopulateStudiersWithAggregatePhraseTexts(ExceptionCheckCallback callback)
     {
       if (_AbortIsFlagged)
       {
@@ -223,6 +223,31 @@ namespace LearnLanguages.Study
       }
       _Studiers.Clear();
       _LastStudiedIndex = -1;
+
+      #region IF WE ONLY HAVE ONE AGGREGATE PHRASE TEXT, THEN POPULATE OUR STUDIER WITH OUR TARGET LINE
+      if (AggregatePhraseTexts.Count == 1)
+      {
+        var studier = new DefaultPhraseMeaningStudier();
+        studier.InitializeForNewStudySession(_Target.Phrase, (e3) =>
+        {
+          if (e3 != null)
+            callback(e3);
+
+          if (_AbortIsFlagged)
+          {
+            callback(null);
+            return;
+          }
+
+          _Studiers.Add(0, studier);
+          callback(null);
+          return;
+        });
+
+        return;
+      }
+
+      #endregion
 
       var phraseTextsCriteria = 
         new Business.Criteria.PhraseTextsCriteria(_Target.Phrase.Language.Text, AggregatePhraseTexts);
@@ -294,7 +319,7 @@ namespace LearnLanguages.Study
               studier.InitializeForNewStudySession(unknownPhraseEdits[i], (e) =>
                 {
                   if (e != null)
-                    throw e;
+                    callback(e);
 
                   if (_AbortIsFlagged)
                   {
@@ -316,10 +341,10 @@ namespace LearnLanguages.Study
             {
               var studier = new DefaultPhraseMeaningStudier();
               
-              studier.InitializeForNewStudySession(_Target.Phrase, (e) =>
+              studier.InitializeForNewStudySession(_Target.Phrase, (e2) =>
               {
-                if (e != null)
-                  throw e;
+                if (e2 != null)
+                  callback(e2);
 
                 if (_AbortIsFlagged)
                 {
@@ -363,6 +388,13 @@ namespace LearnLanguages.Study
       var words = lineText.ParseIntoWords();
       var wordCount = words.Count;
       var aggregateCount = (wordCount - 1) / aggregateSize + 1; //equivalent to Count/AggregateSize rounded up
+
+      //IF AGGREGATE COUNT == 1, THEN OUR ENTIRE LINE IS OUR AGGREGATE PHRASE TEXT
+      if (aggregateCount == 1)
+      {
+        AggregatePhraseTexts.Add(lineText);
+        return;
+      }
 
       //our first aggregate phrases up to the very last one will be of size aggregate size
       //but our last one is the remainder and may contain anywhere from 1 to aggregateSize
@@ -416,6 +448,10 @@ namespace LearnLanguages.Study
       //FIRST, GIVE US A FRESH START...I'M NOT ENTIRELY SURE THIS IS NECESSARY.
       PopulateAggregatePhraseTexts(AggregateSize);
 
+      //IF AGGREGATE PHRASE TEXTS ONLY HAS ONE PHRASE, THEN WE DON'T HAVE ANY AGGREGATING TO DO
+      if (AggregatePhraseTexts.Count == 1)
+        return;
+
       //SET UP A LOOP THAT ITERATES THROUGH THE LIST OF AGGREGATE PHRASES
       //
       //var maxIterations = 100; //escape for our while loop
@@ -466,6 +502,12 @@ namespace LearnLanguages.Study
 
         //ITERATION COUNTER FOR ESCAPING OUT OF THIS WHILE LOOP.
         iterations++;
+      }
+
+      //IF WE HAVE ONLY ONE AGGREGATE PHRASE TEXT, THEN THAT TEXT SHOULD BE OUR EXACT LINE TEXT.
+      if (AggregatePhraseTexts.Count == 1)
+      {
+        AggregatePhraseTexts[0] = _Target.Phrase.Text;
       }
     }
 
@@ -602,9 +644,9 @@ namespace LearnLanguages.Study
       PopulateAggregatePhraseTexts(AggregateSize);
       //CURRENTLY NO NEED TO AGGREGATE ADJACENT KNOWN PHRASE TEXTS BECAUSE WE START FROM UNKNOWN STATE.
       //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
-      //AggregateAdjacentKnownPhraseTexts(
-      //  int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
-      PopulateStudiersWithUnknownAggregatePhraseTexts((e) =>
+      AggregateAdjacentKnownPhraseTexts(
+        int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
+      PopulateStudiersWithAggregatePhraseTexts((e) =>
         {
           if (e != null)
             throw e;

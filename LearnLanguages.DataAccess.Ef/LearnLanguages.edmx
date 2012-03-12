@@ -13,6 +13,8 @@
     <EntitySet Name="TranslationDatas" EntityType="LearnLanguages.Store.TranslationDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="LineDatas" EntityType="LearnLanguages.Store.LineDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="DefaultStudyAdvisorKnowledgeBeliefDatas" EntityType="LearnLanguages.Store.DefaultStudyAdvisorKnowledgeBeliefDatas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PhraseBeliefDatas" EntityType="LearnLanguages.Store.PhraseBeliefDatas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StudyDataDatas" EntityType="LearnLanguages.Store.StudyDataDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="AssociationUserDataWithLanguageData" EntityType="LearnLanguages.Store.AssociationUserDataWithLanguageData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="AssociationUserDataWithRoleData" EntityType="LearnLanguages.Store.AssociationUserDataWithRoleData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserDataRoleData" EntityType="LearnLanguages.Store.UserDataRoleData" store:Type="Tables" Schema="dbo" />
@@ -89,6 +91,14 @@
       <End Role="PhraseData" EntitySet="PhraseDatas" />
       <End Role="DefaultStudyAdvisorKnowledgeBeliefData" EntitySet="DefaultStudyAdvisorKnowledgeBeliefDatas" />
     </AssociationSet>
+    <AssociationSet Name="PhraseDataPhraseBeliefData" Association="LearnLanguages.Store.PhraseDataPhraseBeliefData">
+      <End Role="PhraseData" EntitySet="PhraseDatas" />
+      <End Role="PhraseBeliefData" EntitySet="PhraseBeliefDatas" />
+    </AssociationSet>
+    <AssociationSet Name="UserDataPhraseBeliefData" Association="LearnLanguages.Store.UserDataPhraseBeliefData">
+      <End Role="UserData" EntitySet="UserDatas" />
+      <End Role="PhraseBeliefData" EntitySet="PhraseBeliefDatas" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="LanguageDatas">
     <Key>
@@ -148,6 +158,27 @@
     <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ExpirationDate" Type="datetime" Nullable="false" />
     <Property Name="PhraseDataId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PhraseBeliefDatas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TimeStamp" Type="time" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Strength" Type="float" Nullable="false" />
+    <Property Name="BelieverId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ReviewMethodId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="PhraseDataId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="UserDataId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudyDataDatas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NativeLanguageText" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="AssociationUserDataWithLanguageData">
     <Key>
@@ -300,6 +331,30 @@
       </Principal>
       <Dependent Role="DefaultStudyAdvisorKnowledgeBeliefData">
         <PropertyRef Name="PhraseDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PhraseDataPhraseBeliefData">
+    <End Role="PhraseData" Type="LearnLanguages.Store.PhraseDatas" Multiplicity="1" />
+    <End Role="PhraseBeliefData" Type="LearnLanguages.Store.PhraseBeliefDatas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhraseData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PhraseBeliefData">
+        <PropertyRef Name="PhraseDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserDataPhraseBeliefData">
+    <End Role="UserData" Type="LearnLanguages.Store.UserDatas" Multiplicity="1" />
+    <End Role="PhraseBeliefData" Type="LearnLanguages.Store.PhraseBeliefDatas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PhraseBeliefData">
+        <PropertyRef Name="UserDataId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -467,6 +522,16 @@
             <End Role="PhraseData" EntitySet="PhraseDatas" />
             <End Role="DefaultStudyAdvisorKnowledgeBeliefData" EntitySet="DefaultStudyAdvisorKnowledgeBeliefDatas" />
           </AssociationSet>
+          <EntitySet Name="PhraseBeliefDatas" EntityType="LearnLanguages.PhraseBeliefData" />
+          <AssociationSet Name="PhraseDataPhraseBeliefData" Association="LearnLanguages.PhraseDataPhraseBeliefData">
+            <End Role="PhraseData" EntitySet="PhraseDatas" />
+            <End Role="PhraseBeliefData" EntitySet="PhraseBeliefDatas" />
+          </AssociationSet>
+          <AssociationSet Name="UserDataPhraseBeliefData" Association="LearnLanguages.UserDataPhraseBeliefData">
+            <End Role="UserData" EntitySet="UserDatas" />
+            <End Role="PhraseBeliefData" EntitySet="PhraseBeliefDatas" />
+          </AssociationSet>
+          <EntitySet Name="StudyDataDatas" EntityType="LearnLanguages.StudyDataData" />
         </EntityContainer>
         <EntityType Name="LanguageData">
           <Key>
@@ -492,6 +557,7 @@
           <NavigationProperty Name="LineDatas" Relationship="LearnLanguages.PhraseDataLineData" FromRole="PhraseData" ToRole="LineData" />
           <NavigationProperty Name="ContextTranslationData" Relationship="LearnLanguages.ContextPhraseDataTranslationData" FromRole="PhraseData" ToRole="TranslationData" />
           <NavigationProperty Name="DefaultStudyAdvisorKnowledgeBeliefDatas" Relationship="LearnLanguages.PhraseDataDefaultStudyAdvisorKnowledgeBeliefData" FromRole="PhraseData" ToRole="DefaultStudyAdvisorKnowledgeBeliefData" />
+          <NavigationProperty Name="PhraseBeliefDatas" Relationship="LearnLanguages.PhraseDataPhraseBeliefData" FromRole="PhraseData" ToRole="PhraseBeliefData" />
         </EntityType>
         <Association Name="AssociateLanguageDataWithPhraseData">
           <End Type="LearnLanguages.LanguageData" Role="LanguageData" Multiplicity="1" />
@@ -519,6 +585,7 @@
           <NavigationProperty Name="LanguageDatas" Relationship="LearnLanguages.UserDataLanguageData" FromRole="UserData" ToRole="LanguageData" />
           <Property Type="String" Name="NativeLanguageText" Nullable="false" />
           <NavigationProperty Name="LineDatas" Relationship="LearnLanguages.UserDataLineData" FromRole="UserData" ToRole="LineData" />
+          <NavigationProperty Name="PhraseBeliefDatas" Relationship="LearnLanguages.UserDataPhraseBeliefData" FromRole="UserData" ToRole="PhraseBeliefData" />
         </EntityType>
         <Association Name="AssociationUserDataWithPhraseData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" >
@@ -685,6 +752,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PhraseBeliefData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Time" Name="TimeStamp" Nullable="false" />
+          <Property Type="String" Name="Text" Nullable="false" Unicode="true" />
+          <Property Type="Double" Name="Strength" Nullable="false" />
+          <Property Type="Guid" Name="BelieverId" Nullable="false" />
+          <Property Type="Guid" Name="ReviewMethodId" Nullable="false" />
+          <NavigationProperty Name="PhraseData" Relationship="LearnLanguages.PhraseDataPhraseBeliefData" FromRole="PhraseBeliefData" ToRole="PhraseData" />
+          <Property Type="Guid" Name="PhraseDataId" Nullable="false" />
+          <NavigationProperty Name="UserData" Relationship="LearnLanguages.UserDataPhraseBeliefData" FromRole="PhraseBeliefData" ToRole="UserData" />
+          <Property Type="Guid" Name="UserDataId" Nullable="false" />
+        </EntityType>
+        <Association Name="PhraseDataPhraseBeliefData">
+          <End Type="LearnLanguages.PhraseData" Role="PhraseData" Multiplicity="1" />
+          <End Type="LearnLanguages.PhraseBeliefData" Role="PhraseBeliefData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhraseData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhraseBeliefData">
+              <PropertyRef Name="PhraseDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserDataPhraseBeliefData">
+          <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" />
+          <End Type="LearnLanguages.PhraseBeliefData" Role="PhraseBeliefData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhraseBeliefData">
+              <PropertyRef Name="UserDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="StudyDataData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NativeLanguageText" Nullable="false" />
+          <Property Type="String" Name="Username" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -754,6 +868,29 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
           <ScalarProperty Name="PhraseDataId" ColumnName="PhraseDataId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhraseBeliefDatas">
+      <EntityTypeMapping TypeName="IsTypeOf(LearnLanguages.PhraseBeliefData)">
+        <MappingFragment StoreEntitySet="PhraseBeliefDatas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="Strength" ColumnName="Strength" />
+          <ScalarProperty Name="BelieverId" ColumnName="BelieverId" />
+          <ScalarProperty Name="ReviewMethodId" ColumnName="ReviewMethodId" />
+          <ScalarProperty Name="PhraseDataId" ColumnName="PhraseDataId" />
+          <ScalarProperty Name="UserDataId" ColumnName="UserDataId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudyDataDatas">
+      <EntityTypeMapping TypeName="IsTypeOf(LearnLanguages.StudyDataData)">
+        <MappingFragment StoreEntitySet="StudyDataDatas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NativeLanguageText" ColumnName="NativeLanguageText" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

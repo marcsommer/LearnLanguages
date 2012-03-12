@@ -5,12 +5,14 @@ using LearnLanguages.Business;
 using System.ComponentModel;
 using System.Threading;
 using System.Collections.Generic;
+using LearnLanguages.History.Events;
+using LearnLanguages.History.Bases;
 
-namespace LearnLanguages.Study.Defaults
+namespace LearnLanguages.Study
 {
-  public class DefaultWordInPhraseReviewedRecorder : History.Bases.HistoryRecorderBase<History.Events.ReviewedLineEvent>
+  public class DefaultReviewedWordInPhraseRecorder : HistoryRecorderBase<ReviewedLineEvent>
   {
-    public DefaultWordInPhraseReviewedRecorder()
+    public DefaultReviewedWordInPhraseRecorder()
     {
       Id = Guid.Parse(StudyResources.DefaultWordInPhraseReviewedRecorderId);
     }

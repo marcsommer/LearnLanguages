@@ -73,7 +73,7 @@
     <Compile Include="Core\StudyJobCriteria.cs" />
     <Compile Include="Core\StudierBaseOfJAndTAndP.cs" />
     <Compile Include="Creators\GetTranslationArgs.cs" />
-    <Compile Include="Defaults\Recorders\DefaultWordInPhraseReviewedRecorder.cs" />
+    <Compile Include="Defaults\Recorders\DefaultReviewedWordInPhraseRecorder.cs" />
     <Compile Include="Defaults\Studiers\DefaultPhraseMeaningStudier.cs" />
     <Compile Include="Defaults\Recorders\DefaultReviewedLineRecorder.cs" />
     <Compile Include="Defaults\Studiers\DefaultSingleMultiLineTextMeaningStudier.cs" />

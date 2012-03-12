@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 02/29/2012 20:02:13
+-- Date Created: 03/12/2012 05:48:30
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -71,6 +71,12 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas] DROP CONSTRAINT [FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_PhraseDataPhraseBeliefData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PhraseBeliefDatas] DROP CONSTRAINT [FK_PhraseDataPhraseBeliefData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserDataPhraseBeliefData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PhraseBeliefDatas] DROP CONSTRAINT [FK_UserDataPhraseBeliefData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -96,6 +102,12 @@ IF OBJECT_ID(N'[dbo].[LineDatas]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas];
+GO
+IF OBJECT_ID(N'[dbo].[PhraseBeliefDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PhraseBeliefDatas];
+GO
+IF OBJECT_ID(N'[dbo].[StudyDataDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[StudyDataDatas];
 GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
@@ -173,6 +185,27 @@ CREATE TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas] (
 );
 GO
 
+-- Creating table 'PhraseBeliefDatas'
+CREATE TABLE [dbo].[PhraseBeliefDatas] (
+    [Id] uniqueidentifier  NOT NULL,
+    [TimeStamp] time  NOT NULL,
+    [Text] nvarchar(max)  NOT NULL,
+    [Strength] float  NOT NULL,
+    [BelieverId] uniqueidentifier  NOT NULL,
+    [ReviewMethodId] uniqueidentifier  NOT NULL,
+    [PhraseDataId] uniqueidentifier  NOT NULL,
+    [UserDataId] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'StudyDataDatas'
+CREATE TABLE [dbo].[StudyDataDatas] (
+    [Id] uniqueidentifier  NOT NULL,
+    [NativeLanguageText] nvarchar(max)  NOT NULL,
+    [Username] nvarchar(max)  NOT NULL
+);
+GO
+
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
     [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
@@ -244,6 +277,18 @@ GO
 -- Creating primary key on [Id] in table 'DefaultStudyAdvisorKnowledgeBeliefDatas'
 ALTER TABLE [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]
 ADD CONSTRAINT [PK_DefaultStudyAdvisorKnowledgeBeliefDatas]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'PhraseBeliefDatas'
+ALTER TABLE [dbo].[PhraseBeliefDatas]
+ADD CONSTRAINT [PK_PhraseBeliefDatas]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'StudyDataDatas'
+ALTER TABLE [dbo].[StudyDataDatas]
+ADD CONSTRAINT [PK_StudyDataDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -505,6 +550,34 @@ ADD CONSTRAINT [FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData]
 CREATE INDEX [IX_FK_PhraseDataDefaultStudyAdvisorKnowledgeBeliefData]
 ON [dbo].[DefaultStudyAdvisorKnowledgeBeliefDatas]
     ([PhraseDataId]);
+GO
+
+-- Creating foreign key on [PhraseDataId] in table 'PhraseBeliefDatas'
+ALTER TABLE [dbo].[PhraseBeliefDatas]
+ADD CONSTRAINT [FK_PhraseDataPhraseBeliefData]
+    FOREIGN KEY ([PhraseDataId])
+    REFERENCES [dbo].[PhraseDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PhraseDataPhraseBeliefData'
+CREATE INDEX [IX_FK_PhraseDataPhraseBeliefData]
+ON [dbo].[PhraseBeliefDatas]
+    ([PhraseDataId]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'PhraseBeliefDatas'
+ALTER TABLE [dbo].[PhraseBeliefDatas]
+ADD CONSTRAINT [FK_UserDataPhraseBeliefData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserDataPhraseBeliefData'
+CREATE INDEX [IX_FK_UserDataPhraseBeliefData]
+ON [dbo].[PhraseBeliefDatas]
+    ([UserDataId]);
 GO
 
 -- --------------------------------------------------

@@ -31,10 +31,16 @@ namespace LearnLanguages.Study
       _ViewModel.FeedbackViewModel = _FeedbackViewModel;
       _FeedbackTimedOut = false;
       Services.EventAggregator.Subscribe(this);//navigation
+      _ReviewedLineRecorder = new DefaultReviewedLineRecorder();
+      _ReviewedLineRecorder.IsEnabled = true;
+      _ReviewedWordInPhraseRecorder = new DefaultReviewedWordInPhraseRecorder();
+      _ReviewedWordInPhraseRecorder.IsEnabled = false;
 
       //TODO: FIGURE OUT WHERE THIS SHOULD REALLY GO..MAYBE HERE: INITIALIZE COMPOUND EVENT MAKERS
       //History.HistoryPublisher.Ton.
     }
+    private DefaultReviewedLineRecorder _ReviewedLineRecorder { get; set; }
+    private DefaultReviewedWordInPhraseRecorder _ReviewedWordInPhraseRecorder { get; set; }
 
     protected DefaultMultiLineTextsStudier _Studier { get; set; }
     protected bool _FeedbackTimedOut { get; set; }

@@ -9,6 +9,12 @@ namespace LearnLanguages.DataAccess.Ef
 {
   public static class EfHelper
   {
+    public static string GetConnectionString()
+    {
+      return ConfigurationManager.ConnectionStrings[EfResources.LearnLanguagesConnectionStringKey].ConnectionString;
+    }
+
+    #region ToData
     public static RoleData ToData(RoleDto dto)
     {
       return new RoleData()
@@ -17,6 +23,132 @@ namespace LearnLanguages.DataAccess.Ef
         Text = dto.Text,
       };
     }
+
+    public static LanguageData ToData(LanguageDto dto, LearnLanguagesContext context)
+    {
+      //CREATE DATA OBJECT
+      var languageData = context.LanguageDatas.CreateObject();
+
+      //ASSIGN SIMPLE PROPERTIES
+      languageData.Id = dto.Id;
+      languageData.Text = dto.Text;
+      languageData.UserDataId = dto.UserId;
+
+      //POPULATE USERDATA
+      var results = (from u in context.UserDatas
+                     where u.Id == dto.UserId
+                     select u);
+      if (results.Count() == 1)
+      {
+        var userData = results.First();
+
+        //MAKE SURE USERNAMES MATCH
+        if (userData.Username != dto.Username)
+          throw new ArgumentException("languageDto dto");
+        languageData.UserData = results.First();
+      }
+      else if (results.Count() == 0)
+        throw new Exceptions.UsernameAndUserIdDoNotMatchException(dto.Username, dto.UserId);
+      else
+        throw new Exceptions.VeryBadException(
+          string.Format(DalResources.ErrorMsgVeryBadException,
+          DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero));
+
+      //RETURN
+      return languageData;
+    }
+
+    #endregion
+
+    #region ToDto
+    public static UserDto ToDto(UserData data)
+    {
+      //SCALARS
+      var retUserDto = new UserDto()
+      {
+        Id = data.Id,
+        Username = data.Username,
+        Salt = data.Salt,
+        SaltedHashedPasswordValue = data.SaltedHashedPasswordValue
+      };
+
+      //PHRASES
+      retUserDto.PhraseIds = new List<Guid>();
+      foreach (var phraseData in data.PhraseDatas)
+      {
+        retUserDto.PhraseIds.Add(phraseData.Id);
+      }
+
+      //ROLES
+      retUserDto.RoleIds = new List<Guid>();
+      foreach (var roleData in data.RoleDatas)
+      {
+        retUserDto.RoleIds.Add(roleData.Id);
+      }
+
+      return retUserDto;
+    }
+    public static PhraseDto ToDto(PhraseData data)
+    {
+      return new PhraseDto()
+      {
+        Id = data.Id,
+        Text = data.Text,
+        LanguageId = data.LanguageDataId,
+        UserId = data.UserDataId,
+        Username = data.UserDataReference.Value.Username
+      };
+    }
+    public static LanguageDto ToDto(LanguageData data)
+    {
+      var dto = new LanguageDto()
+      {
+        Id = data.Id,
+        Text = data.Text,
+        UserId = data.UserDataId,
+        Username = data.UserData.Username
+      };
+
+      return dto;
+    }
+    public static TranslationDto ToDto(TranslationData fetchedTranslationData)
+    {
+      var dto = new TranslationDto()
+      {
+        Id = fetchedTranslationData.Id,
+        PhraseIds = (from phrase in fetchedTranslationData.PhraseDatas
+                     select phrase.Id).ToList(),
+        UserId = fetchedTranslationData.UserDataId,
+        Username = fetchedTranslationData.UserData.Username
+      };
+
+      return dto;
+    }
+    public static LineDto ToDto(LineData fetchedLineData)
+    {
+      var dto = new LineDto()
+      {
+        Id = fetchedLineData.Id,
+        LineNumber = fetchedLineData.LineNumber,
+        PhraseId = fetchedLineData.PhraseDataId,
+        UserId = fetchedLineData.UserDataId,
+        Username = fetchedLineData.UserData.Username
+      };
+
+      return dto;
+    }
+    public static StudyDataDto ToDto(StudyDataData fetchedStudyDataData)
+    {
+      var dto = new StudyDataDto()
+      {
+        Id = fetchedStudyDataData.Id,
+        NativeLanguageText = fetchedStudyDataData.NativeLanguageText,
+        Username = fetchedStudyDataData.Username
+      };
+
+      return dto;
+    }
+
     public static RoleDto ToDto(RoleData data)
     {
       return new RoleDto()
@@ -25,6 +157,8 @@ namespace LearnLanguages.DataAccess.Ef
         Text = data.Text
       };
     }
+
+    #endregion
 
     //public static UserData ToData(UserDto dto, bool includeForeignEntities = true)
     //{
@@ -77,45 +211,9 @@ namespace LearnLanguages.DataAccess.Ef
 
     //  return retUserData;
     //}
-    public static UserDto ToDto(UserData data)
-    {
-      //SCALARS
-      var retUserDto = new UserDto()
-      {
-        Id = data.Id,
-        Username = data.Username,
-        Salt = data.Salt,
-        SaltedHashedPasswordValue = data.SaltedHashedPasswordValue
-      };
 
-      //PHRASES
-      retUserDto.PhraseIds = new List<Guid>();
-      foreach (var phraseData in data.PhraseDatas)
-      {
-        retUserDto.PhraseIds.Add(phraseData.Id);
-      }
+    #region AddToContext
 
-      //ROLES
-      retUserDto.RoleIds = new List<Guid>();
-      foreach (var roleData in data.RoleDatas)
-      {
-        retUserDto.RoleIds.Add(roleData.Id);
-      }
-
-      return retUserDto;
-    }
-
-    public static PhraseDto ToDto(PhraseData data)
-    {
-      return new PhraseDto()
-      {
-        Id = data.Id,
-        Text = data.Text,
-        LanguageId = data.LanguageDataId,
-        UserId = data.UserDataId,
-        Username = data.UserDataReference.Value.Username
-      };
-    }
     /// <summary>
     /// Adds the phraseDto to the context, loading UserData and LanguageData into the newly
     /// created PhraseData.  Does NOT save changes to the context.
@@ -215,71 +313,29 @@ namespace LearnLanguages.DataAccess.Ef
 
       return newTranslationData;
     }
-
-    public static LanguageDto ToDto(LanguageData data)
+    /// <summary>
+    /// Adds the StudyDataDto to the context, loading UserData and PhraseDatas into the newly
+    /// created PhraseData.  Does NOT save changes to the context.
+    /// </summary>
+    public static StudyDataData AddToContext(StudyDataDto dto, LearnLanguagesContext context)
     {
-      var dto = new LanguageDto()
-      {
-        Id = data.Id,
-        Text = data.Text,
-        UserId = data.UserDataId,
-        Username = data.UserData.Username
-      };
+      //CREATE THE NEW OBJECT
+      var newStudyDataData = context.StudyDataDatas.CreateObject();
 
-      return dto;
-    }
-    public static LanguageData ToData(LanguageDto dto, LearnLanguagesContext context)
-    {
-      //CREATE DATA OBJECT
-      var languageData = context.LanguageDatas.CreateObject();
+      //ASSIGN PROPERTIES
+      newStudyDataData.NativeLanguageText = dto.NativeLanguageText;
+      newStudyDataData.Username = dto.Username;
 
-      //ASSIGN SIMPLE PROPERTIES
-      languageData.Id = dto.Id;
-      languageData.Text = dto.Text;
-      languageData.UserDataId = dto.UserId;
+      //ADD OBJECT TO CONTEXT
+      context.StudyDataDatas.AddObject(newStudyDataData);
 
-      //POPULATE USERDATA
-      var results = (from u in context.UserDatas
-                     where u.Id == dto.UserId
-                     select u);
-      if (results.Count() == 1)
-      {
-        var userData = results.First();
-
-        //MAKE SURE USERNAMES MATCH
-        if (userData.Username != dto.Username)
-          throw new ArgumentException("languageDto dto");
-        languageData.UserData = results.First();
-      }
-      else if (results.Count() == 0)
-        throw new Exceptions.UsernameAndUserIdDoNotMatchException(dto.Username, dto.UserId);
-      else
-        throw new Exceptions.VeryBadException(
-          string.Format(DalResources.ErrorMsgVeryBadException,
-          DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero));
-
-      //RETURN
-      return languageData;
+      //RETURN OBJECT
+      return newStudyDataData;
     }
 
-    public static string GetConnectionString()
-    {
-      return ConfigurationManager.ConnectionStrings[EfResources.LearnLanguagesConnectionStringKey].ConnectionString;
-    }
+    #endregion
 
-    public static TranslationDto ToDto(TranslationData fetchedTranslationData)
-    {
-      var dto = new TranslationDto()
-      {
-        Id = fetchedTranslationData.Id,
-        PhraseIds = (from phrase in fetchedTranslationData.PhraseDatas
-                     select phrase.Id).ToList(),
-        UserId = fetchedTranslationData.UserDataId,
-        Username = fetchedTranslationData.UserData.Username
-      };
-
-      return dto;
-    }
+    #region LoadDataFromDto
 
     /// <summary>
     /// Loads the information from the dto into the data object. Except...
@@ -385,7 +441,15 @@ namespace LearnLanguages.DataAccess.Ef
       lineData.LineNumber = dto.LineNumber;
     }
 
+    public static void LoadDataFromDto(ref StudyDataData studyDataData,
+                                         StudyDataDto dto,
+                                         LearnLanguagesContext learnLanguagesContext)
+    {
+      studyDataData.NativeLanguageText = dto.NativeLanguageText;
+      studyDataData.Username = dto.Username;
+    }
 
+    #endregion
 
     private static LanguageData GetLanguageData(Guid languageId, LearnLanguagesContext context)
     {
@@ -443,22 +507,5 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.VeryBadException(errorMsg);
       }
     }
-
-    public static LineDto ToDto(LineData fetchedLineData)
-    {
-      var dto = new LineDto()
-      {
-        Id = fetchedLineData.Id,
-        LineNumber = fetchedLineData.LineNumber,
-        PhraseId = fetchedLineData.PhraseDataId,
-        UserId = fetchedLineData.UserDataId,
-        Username = fetchedLineData.UserData.Username
-      };
-
-      return dto;
-    }
-
-
-    
   }
 }

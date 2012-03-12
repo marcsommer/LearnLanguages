@@ -129,13 +129,16 @@ namespace LearnLanguages.History.CompoundEventMakers
           _LanguageId != msgLanguageId ||
           _LanguageText != msgLanguageText)
       {
-        if (!_IsReset)
-          Reset();
+        //if (!_IsReset)
+        //  Reset();
         return;
       }
 
       //GET THE FEEDBACK FROM THE REVIEWED PHRASE EVENT
       _FeedbackAsDouble = message.Doubles[HistoryResources.Key_FeedbackAsDouble];
+      _ReviewedPhraseEventHandled = true;
+
+      DispatchCompoundEvent();
     }
     #endregion
 

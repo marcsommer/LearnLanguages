@@ -44,15 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PhraseBeliefDal.cs" />
-    <Compile Include="MultiLineTextDal.cs" />
-    <Compile Include="LineDal.cs" />
-    <Compile Include="StudyDataDal.cs" />
-    <Compile Include="TranslationDal.cs" />
-    <Compile Include="CustomIdentityDal.cs" />
-    <Compile Include="PhraseDal.cs" />
+    <Compile Include="Dals\PhraseBeliefDal.cs" />
+    <Compile Include="Dals\MultiLineTextDal.cs" />
+    <Compile Include="Dals\LineDal.cs" />
+    <Compile Include="Dals\StudyDataDal.cs" />
+    <Compile Include="Dals\TranslationDal.cs" />
+    <Compile Include="Dals\CustomIdentityDal.cs" />
+    <Compile Include="Dals\PhraseDal.cs" />
     <Compile Include="DalManager.cs" />
-    <Compile Include="LanguageDal.cs" />
+    <Compile Include="Dals\LanguageDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
