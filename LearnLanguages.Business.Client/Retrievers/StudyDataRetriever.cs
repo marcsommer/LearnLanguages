@@ -61,7 +61,6 @@ namespace LearnLanguages.Business
 #if !SILVERLIGHT
     public void DataPortal_Create(Criteria.ListOfPhrasesCriteria phrasesCriteria)
     {
-
       RetrieverId = Guid.NewGuid();
 
       using (var dalManager = DalFactory.GetDalManager())
@@ -81,38 +80,38 @@ namespace LearnLanguages.Business
         //POPULATE OUR STUDY DATA DTO
         StudyDataDto dto = null;
 
-        if (userHasStudyData)
-        {
-          //THE USER HAS STUDY DATA, SO FETCH IT
-          Result<StudyDataDto> resultFetch = studyDataDal.FetchForCurrentUser();
-          if (!resultFetch.IsSuccess)
-          {
-            Exception error = resultFetch.GetExceptionFromInfo();
-            if (error != null)
-              throw error;
-            else
-              throw new FetchFailedException(resultFetch.Msg);
-          }
+        StudyDataAlreadyExisted = userHasStudyData;
+        StudyData = DataPortal.Fetch<StudyDataEdit>();
+        #region old
+          //  Result<StudyDataDto> resultFetch = studyDataDal.FetchForCurrentUser();
+          //  if (!resultFetch.IsSuccess)
+          //  {
+          //    Exception error = resultFetch.GetExceptionFromInfo();
+          //    if (error != null)
+          //      throw error;
+          //    else
+          //      throw new FetchFailedException(resultFetch.Msg);
+          //  }
 
-          dto = resultFetch.Obj;
-          StudyDataAlreadyExisted = true;
-        }
-        else
-        {
-          //THE USER DOESN'T HAVE STUDY DATA
-          //SET PROPS ACCORDINGLY
-          dto = new StudyDataDto()
-          {
-            Id = Guid.Empty,
-            NativeLanguageText = "",
-            Username = Csla.ApplicationContext.User.Identity.Name
-          };
-          StudyDataAlreadyExisted = false;
-        }
+          //  dto = resultFetch.Obj;
+          //  StudyDataAlreadyExisted = true;
+          //}
+          //else
+          //{
+          //  //THE USER DOESN'T HAVE STUDY DATA
+          //  //SET PROPS ACCORDINGLY
+          //  dto = new StudyDataDto()
+          //  {
+          //    Id = Guid.Empty,
+          //    NativeLanguageText = "",
+          //    Username = Csla.ApplicationContext.User.Identity.Name
+          //  };
+          //  StudyDataAlreadyExisted = false;
+          #endregion
 
-        //OUR DTO IS NOW POPULATED
-        StudyData = StudyDataEdit.NewStudyDataEdit();
-        StudyData.LoadFromDtoBypassPropertyChecks(dto);
+        ////OUR DTO IS NOW POPULATED
+        //StudyData = StudyDataEdit.NewStudyDataEdit();
+        //StudyData.LoadFromDtoBypassPropertyChecks(dto);
       }
     }
 

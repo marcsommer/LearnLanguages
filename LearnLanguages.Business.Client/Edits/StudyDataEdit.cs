@@ -223,57 +223,57 @@ namespace LearnLanguages.Business
     //    LoadFromDtoBypassPropertyChecks(dto);
     //  }
     //}
-    //[Transactional(TransactionalTypes.TransactionScope)]
-    //protected void DataPortal_Fetch()
-    //{
-    //  using (var dalManager = DalFactory.GetDalManager())
-    //  {
-    //    var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
-    //    Result<bool> resultExists = studyDataDal.StudyDataExistsForCurrentUser();
-    //    if (!resultExists.IsSuccess)
-    //    {
-    //      Exception error = resultExists.GetExceptionFromInfo();
-    //      if (error != null)
-    //        throw error;
-    //      else
-    //        throw new FetchFailedException(resultExists.Msg);
-    //    }
-    //    var userHasStudyData = resultExists.Obj;
 
-    //    //POPULATE OUR STUDY DATA DTO
-    //    StudyDataDto dto = null;
+    protected void DataPortal_Fetch()
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
+        Result<bool> resultExists = studyDataDal.StudyDataExistsForCurrentUser();
+        if (!resultExists.IsSuccess)
+        {
+          Exception error = resultExists.GetExceptionFromInfo();
+          if (error != null)
+            throw error;
+          else
+            throw new FetchFailedException(resultExists.Msg);
+        }
+        var userHasStudyData = resultExists.Obj;
 
-    //    if (userHasStudyData)
-    //    {
-    //      //THE USER HAS STUDY DATA, SO FETCH IT
-    //      Result<StudyDataDto> resultFetch = studyDataDal.FetchForCurrentUser();
-    //      if (!resultFetch.IsSuccess)
-    //      {
-    //        Exception error = resultFetch.GetExceptionFromInfo();
-    //        if (error != null)
-    //          throw error;
-    //        else
-    //          throw new FetchFailedException(resultFetch.Msg);
-    //      }
+        //POPULATE OUR STUDY DATA DTO
+        StudyDataDto dto = null;
 
-    //      dto = resultFetch.Obj;
-    //    }
-    //    else
-    //    {
-    //      //THE USER DOESN'T HAVE STUDY DATA
-    //      //SET PROPS ACCORDINGLY
-    //      dto = new StudyDataDto()
-    //      {
-    //        Id = Guid.Empty,
-    //        NativeLanguageText = "",
-    //        Username = Csla.ApplicationContext.User.Identity.Name
-    //      };
-    //    }
+        if (userHasStudyData)
+        {
+          //THE USER HAS STUDY DATA, SO FETCH IT
+          Result<StudyDataDto> resultFetch = studyDataDal.FetchForCurrentUser();
+          if (!resultFetch.IsSuccess)
+          {
+            Exception error = resultFetch.GetExceptionFromInfo();
+            if (error != null)
+              throw error;
+            else
+              throw new FetchFailedException(resultFetch.Msg);
+          }
 
-    //    //OUR DTO IS NOW POPULATED
-    //    LoadFromDtoBypassPropertyChecks(dto);
-    //  }
-    //}
+          dto = resultFetch.Obj;
+        }
+        else
+        {
+          //THE USER DOESN'T HAVE STUDY DATA
+          //SET PROPS ACCORDINGLY
+          dto = new StudyDataDto()
+          {
+            Id = Guid.Empty,
+            NativeLanguageText = "",
+            Username = Csla.ApplicationContext.User.Identity.Name
+          };
+        }
+
+        //OUR DTO IS NOW POPULATED
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
 
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Insert()
@@ -304,6 +304,7 @@ namespace LearnLanguages.Business
         LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
+
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Update()
     {
@@ -326,6 +327,7 @@ namespace LearnLanguages.Business
         LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
+
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_DeleteSelf()
     {
@@ -343,6 +345,7 @@ namespace LearnLanguages.Business
         }
       }
     }
+
     [Transactional(TransactionalTypes.TransactionScope)]
     protected void DataPortal_Delete(Guid id)
     {
