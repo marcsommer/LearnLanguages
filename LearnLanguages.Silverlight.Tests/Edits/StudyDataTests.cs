@@ -155,32 +155,32 @@ namespace LearnLanguages.Silverlight.Tests
     //  EnqueueTestComplete();
     //}
 
-    [TestMethod]
-    [Asynchronous]
-    public void CREATE_NEW()
-    {
-      var isCreated = false;
-      StudyDataEdit newStudyDataEdit = null;
-      Exception newError = new Exception();
+    //[TestMethod]
+    //[Asynchronous]
+    //public void CREATE_NEW()
+    //{
+    //  var isCreated = false;
+    //  StudyDataEdit newStudyDataEdit = null;
+    //  Exception newError = new Exception();
       
-      StudyDataEdit.NewStudyDataEdit( (s,r) =>
-        {
-          newError = r.Error;
-          if (newError != null)
-            throw newError;
+    //  StudyDataRetriever.CreateNew( (s,r) =>
+    //    {
+    //      newError = r.Error;
+    //      if (newError != null)
+    //        throw newError;
 
-          newStudyDataEdit = r.Object;
-          isCreated = true;
-        });
-      EnqueueConditional(() => isCreated);
-      EnqueueCallback(
-                      () => { Assert.IsNotNull(newStudyDataEdit); },
-                      () => { Assert.IsNull(newError); },
-                      () => { Assert.IsNotNull(newStudyDataEdit.User); },
-                      () => { Assert.IsFalse(string.IsNullOrEmpty(newStudyDataEdit.Username)); }
-                      );
-      EnqueueTestComplete();
-    }
+    //      newStudyDataEdit = r.Object.StudyData;
+    //      isCreated = true;
+    //    });
+    //  EnqueueConditional(() => isCreated);
+    //  EnqueueCallback(
+    //                  () => { Assert.IsNotNull(newStudyDataEdit); },
+    //                  () => { Assert.IsNull(newError); },
+    //                  () => { Assert.IsNotNull(newStudyDataEdit.User); },
+    //                  () => { Assert.IsFalse(string.IsNullOrEmpty(newStudyDataEdit.Username)); }
+    //                  );
+    //  EnqueueTestComplete();
+    //}
 
     //[TestMethod]
     //[Asynchronous]
@@ -207,69 +207,60 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
-    public void GET()
+    public void GET_VIA_RETRIEVER()
     {
-      Guid testId = Guid.Empty;
-      var allLoaded = false;
       var isLoaded = false;
-      Exception getAllError = new Exception();
       Exception error = new Exception();
       StudyDataEdit studyDataEdit = null;
-
-      StudyDataList.GetAll((s1, r1) =>
-        {
-          getAllError = r1.Error;
-          if (getAllError != null)
-            throw r1.Error;
-          testId = r1.Object.First().Id;
-          allLoaded = true;
-          StudyDataEdit.GetStudyDataEdit(testId, (s, r) =>
-          {
-            error = r.Error;
-            studyDataEdit = r.Object;
-            isLoaded = true;
-          });
-        });
-
+      StudyDataRetriever.CreateNew((s, r) =>
+      //StudyDataEdit.GetStudyDataEditForCurrentUser(testId, (s, r) =>
+      {
+        error = r.Error;
+        studyDataEdit = r.Object.StudyData;
+        isLoaded = true;
+      });
 
       EnqueueConditional(() => isLoaded);
-      EnqueueConditional(() => allLoaded);
-      EnqueueCallback(() => { Assert.IsNull(error); },
-                      () => { Assert.IsNull(getAllError); },
-                      () => { Assert.IsNotNull(studyDataEdit); },
-                      () => { Assert.AreEqual(testId, studyDataEdit.Id); });
+      EnqueueCallback(
+                      () => { Assert.IsNull(error); },
+                      () => { Assert.IsNotNull(studyDataEdit); }
+                     );
       EnqueueTestComplete();
     }
 
     [TestMethod]
     [Asynchronous]
+    [Tag("current")]
     public void NEW_EDIT_BEGINSAVE_GET()
     {
       //INITIALIZE ERRORS TO EXCEPTION, BECAUSE WE TEST IF THEY ARE NULL LATER
-      Exception newError = new Exception();
+      Exception retrieveError = new Exception();
       Exception savedError = new Exception();
       Exception gottenError = new Exception();
 
       StudyDataEdit newStudyDataEdit = null;
       StudyDataEdit savedStudyDataEdit = null;
-      StudyDataEdit gottenStudyDataEdit = null;    
-  
-      var isNewed = false;
+      StudyDataEdit gottenStudyDataEdit = null;
+
+      var isRetrieved = false;
       var isEdited = false;
       var isSaved = false;
       var isGotten = false;
-      
+      var studyDataAlreadyExisted = false;
+
+      var editedStudyDataText = "Spanish";
+
       //NEW
-      StudyDataEdit.NewStudyDataEdit((s, r) =>
+      StudyDataRetriever.CreateNew((s, r) =>
       {
-        newError = r.Error;
-        if (newError != null)
-          throw newError;
-        newStudyDataEdit = r.Object;
-        isNewed = true;
+        retrieveError = r.Error;
+        if (retrieveError != null)
+          throw retrieveError;
+        newStudyDataEdit = r.Object.StudyData;
+        isRetrieved = true;
 
         //EDIT
-        newStudyDataEdit.NativeLanguageText = "Spanish";
+        newStudyDataEdit.NativeLanguageText = editedStudyDataText;
         //newStudyDataEdit.Username = SeedData.Ton.TestValidUsername;
         isEdited = true;
 
@@ -282,12 +273,16 @@ namespace LearnLanguages.Silverlight.Tests
           savedStudyDataEdit = r2.NewObject as StudyDataEdit;
           isSaved = true;
           //GET (CONFIRM SAVE)
-          StudyDataEdit.GetStudyDataEdit(savedStudyDataEdit.Id, (s3, r3) =>
+          StudyDataRetriever.CreateNew((s3, r3) =>
           {
             gottenError = r3.Error;
             if (gottenError != null)
               throw gottenError;
-            gottenStudyDataEdit = r3.Object;
+
+            gottenStudyDataEdit = r3.Object.StudyData;
+            //STUDY DATA SHOULD HAVE ALREADY EXISTED AS WE JUST SAVED IT.
+            studyDataAlreadyExisted = r3.Object.StudyDataAlreadyExisted;
+
             isGotten = true;
           });
         });
@@ -296,130 +291,146 @@ namespace LearnLanguages.Silverlight.Tests
 
       });
 
-      EnqueueConditional(() => isNewed);
+      EnqueueConditional(() => isRetrieved);
       EnqueueConditional(() => isEdited);
       EnqueueConditional(() => isSaved);
       EnqueueConditional(() => isGotten);
       EnqueueCallback(
-                      () => { Assert.IsNull(newError); },
+                      //NO ERRORS
+                      () => { Assert.IsNull(retrieveError); },
                       () => { Assert.IsNull(savedError); },
                       () => { Assert.IsNull(gottenError); },
+
+                      //NOT NULL
                       () => { Assert.IsNotNull(newStudyDataEdit); },
                       () => { Assert.IsNotNull(savedStudyDataEdit); },
                       () => { Assert.IsNotNull(gottenStudyDataEdit); },
+
+                      //SAME IDS
                       () => { Assert.AreEqual(savedStudyDataEdit.Id, gottenStudyDataEdit.Id); },
-                      () => { Assert.AreEqual(savedStudyDataEdit.NativeLanguageText,
-                                              gottenStudyDataEdit.NativeLanguageText); });
+
+                      //EDITED TEXT WAS PERSISTED AND THE GOTTEN STUDY DATA EDIT TEXT IS THE SAME
+                      () => { Assert.AreEqual(editedStudyDataText, gottenStudyDataEdit.NativeLanguageText); },
+
+                      //GOTTEN STUDY DATA CHECKS THAT THE STUDY DATA ALREADY EXISTED.  SHOULD BE TRUE AS WE SAVED IT.
+                      () => { Assert.IsTrue(studyDataAlreadyExisted); },
+
+                      //SAVED TEXT PERSISTED 
+                      () =>
+                      {
+                        Assert.AreEqual(savedStudyDataEdit.NativeLanguageText,
+                                        gottenStudyDataEdit.NativeLanguageText);
+                      });
 
       EnqueueTestComplete();
     }
 
-    [TestMethod]
-    [Asynchronous]
-    [ExpectedException(typeof(ExpectedException))]
-    public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
-    {
-      //INITIALIZE ERRORS TO EXCEPTION, BECAUSE EXPECT THEM TO BE NULL LATER
-      Exception newError = new Exception();
-      Exception savedError = new Exception();
-      Exception gottenError = new Exception();
-      Exception deletedError = new Exception();
+    //[TestMethod]
+    //[Asynchronous]
+    //[ExpectedException(typeof(ExpectedException))]
+    //public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
+    //{
+    //  //INITIALIZE ERRORS TO EXCEPTION, BECAUSE EXPECT THEM TO BE NULL LATER
+    //  Exception newError = new Exception();
+    //  Exception savedError = new Exception();
+    //  Exception gottenError = new Exception();
+    //  Exception deletedError = new Exception();
 
-      //INITIALIZE CONFIRM TO NULL, BECAUSE WE EXPECT THIS TO BE AN ERROR LATER
-      Exception deleteConfirmedError = null;
+    //  //INITIALIZE CONFIRM TO NULL, BECAUSE WE EXPECT THIS TO BE AN ERROR LATER
+    //  Exception deleteConfirmedError = null;
 
-      StudyDataEdit newStudyDataEdit = null;
-      StudyDataEdit savedStudyDataEdit = null;
-      StudyDataEdit gottenStudyDataEdit = null;
-      StudyDataEdit deletedStudyDataEdit = null;
+    //  StudyDataEdit newStudyDataEdit = null;
+    //  StudyDataEdit savedStudyDataEdit = null;
+    //  StudyDataEdit gottenStudyDataEdit = null;
+    //  StudyDataEdit deletedStudyDataEdit = null;
 
-      //INITIALIZE TO EMPTY StudyData EDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
-      StudyDataEdit deleteConfirmedStudyDataEdit = new StudyDataEdit();
+    //  //INITIALIZE TO EMPTY StudyData EDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
+    //  StudyDataEdit deleteConfirmedStudyDataEdit = new StudyDataEdit();
 
-      var isNewed = false;
-      var isSaved = false;
-      var isGotten = false;
-      var isDeleted = false;
-      var isDeleteConfirmed = false;
+    //  var isNewed = false;
+    //  var isSaved = false;
+    //  var isGotten = false;
+    //  var isDeleted = false;
+    //  var isDeleteConfirmed = false;
 
-      //NEW
-      StudyDataEdit.NewStudyDataEdit((s, r) =>
-      {
-        newError = r.Error;
-        if (newError != null)
-          throw newError;
-        newStudyDataEdit = r.Object;
-        isNewed = true;
+    //  //NEW
+    //  StudyDataEdit.NewStudyDataEdit((s, r) =>
+    //  {
+    //    newError = r.Error;
+    //    if (newError != null)
+    //      throw newError;
+    //    newStudyDataEdit = r.Object;
+    //    isNewed = true;
 
-        //EDIT
-        newStudyDataEdit.NativeLanguageText = "Spanish";
-        newStudyDataEdit.Username = SeedData.Ton.TestValidUsername;
+    //    //EDIT
+    //    newStudyDataEdit.NativeLanguageText = "Spanish";
+    //    newStudyDataEdit.Username = SeedData.Ton.TestValidUsername;
 
-        //SAVE
-        newStudyDataEdit.BeginSave((s2, r2) =>
-        {
-          savedError = r2.Error;
-          if (savedError != null)
-            throw savedError;
-          savedStudyDataEdit = r2.NewObject as StudyDataEdit;
-          isSaved = true;
-          //GET (CONFIRM SAVE)
-          StudyDataEdit.GetStudyDataEdit(savedStudyDataEdit.Id, (s3, r3) =>
-          {
-            gottenError = r3.Error;
-            if (gottenError != null)
-              throw gottenError;
-            gottenStudyDataEdit = r3.Object;
-            isGotten = true;
+    //    //SAVE
+    //    newStudyDataEdit.BeginSave((s2, r2) =>
+    //    {
+    //      savedError = r2.Error;
+    //      if (savedError != null)
+    //        throw savedError;
+    //      savedStudyDataEdit = r2.NewObject as StudyDataEdit;
+    //      isSaved = true;
+    //      //GET (CONFIRM SAVE)
+    //      StudyDataEdit.GetStudyDataEditForCurrentUser(savedStudyDataEdit.Id, (s3, r3) =>
+    //      {
+    //        gottenError = r3.Error;
+    //        if (gottenError != null)
+    //          throw gottenError;
+    //        gottenStudyDataEdit = r3.Object;
+    //        isGotten = true;
 
-            //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
-            gottenStudyDataEdit.Delete();
-            gottenStudyDataEdit.BeginSave((s4, r4) =>
-            {
-              deletedError = r4.Error;
-              if (deletedError != null)
-                throw deletedError;
+    //        //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
+    //        gottenStudyDataEdit.Delete();
+    //        gottenStudyDataEdit.BeginSave((s4, r4) =>
+    //        {
+    //          deletedError = r4.Error;
+    //          if (deletedError != null)
+    //            throw deletedError;
 
-              deletedStudyDataEdit = r4.NewObject as StudyDataEdit;
-              //TODO: Figure out why StudyDataEditTests final callback gets thrown twice.  When server throws an exception (expected because we are trying to fetch a deleted StudyData that shouldn't exist), the callback is executed twice.
-              StudyDataEdit.GetStudyDataEdit(deletedStudyDataEdit.Id, (s5, r5) =>
-              {
-                var debugExecutionLocation = Csla.ApplicationContext.ExecutionLocation;
-                var debugLogicalExecutionLocation = Csla.ApplicationContext.LogicalExecutionLocation;
-                deleteConfirmedError = r5.Error;
-                if (deleteConfirmedError != null)
-                {
-                  isDeleteConfirmed = true;
-                  throw new ExpectedException(deleteConfirmedError);
-                }
-                deleteConfirmedStudyDataEdit = r5.Object;
-              });
-            });
-          });
-        });
-      });
+    //          deletedStudyDataEdit = r4.NewObject as StudyDataEdit;
+    //          //TODO: Figure out why StudyDataEditTests final callback gets thrown twice.  When server throws an exception (expected because we are trying to fetch a deleted StudyData that shouldn't exist), the callback is executed twice.
+    //          StudyDataEdit.GetStudyDataEditForCurrentUser(deletedStudyDataEdit.Id, (s5, r5) =>
+    //          {
+    //            var debugExecutionLocation = Csla.ApplicationContext.ExecutionLocation;
+    //            var debugLogicalExecutionLocation = Csla.ApplicationContext.LogicalExecutionLocation;
+    //            deleteConfirmedError = r5.Error;
+    //            if (deleteConfirmedError != null)
+    //            {
+    //              isDeleteConfirmed = true;
+    //              throw new ExpectedException(deleteConfirmedError);
+    //            }
+    //            deleteConfirmedStudyDataEdit = r5.Object;
+    //          });
+    //        });
+    //      });
+    //    });
+    //  });
 
-      EnqueueConditional(() => isNewed);
-      EnqueueConditional(() => isSaved);
-      EnqueueConditional(() => isGotten);
-      EnqueueConditional(() => isDeleted);
-      EnqueueConditional(() => isDeleteConfirmed);
-      EnqueueCallback(
-                      () => { Assert.IsNull(newError); },
-                      () => { Assert.IsNull(savedError); },
-                      () => { Assert.IsNull(gottenError); },
-                      () => { Assert.IsNull(deletedError); },
-                      //WE EXPECT AN ERROR, AS WE TRIED A GET ON AN ID THAT SHOULD HAVE BEEN DELETED
-                      () => { Assert.IsNotNull(deleteConfirmedError); },
+    //  EnqueueConditional(() => isNewed);
+    //  EnqueueConditional(() => isSaved);
+    //  EnqueueConditional(() => isGotten);
+    //  EnqueueConditional(() => isDeleted);
+    //  EnqueueConditional(() => isDeleteConfirmed);
+    //  EnqueueCallback(
+    //                  () => { Assert.IsNull(newError); },
+    //                  () => { Assert.IsNull(savedError); },
+    //                  () => { Assert.IsNull(gottenError); },
+    //                  () => { Assert.IsNull(deletedError); },
+    //                  //WE EXPECT AN ERROR, AS WE TRIED A GET ON AN ID THAT SHOULD HAVE BEEN DELETED
+    //                  () => { Assert.IsNotNull(deleteConfirmedError); },
 
-                      () => { Assert.IsNotNull(newStudyDataEdit); },
-                      () => { Assert.IsNotNull(savedStudyDataEdit); },
-                      () => { Assert.IsNotNull(gottenStudyDataEdit); },
-                      () => { Assert.IsNotNull(deletedStudyDataEdit); },
-                      () => { Assert.IsNull(deleteConfirmedStudyDataEdit); });
+    //                  () => { Assert.IsNotNull(newStudyDataEdit); },
+    //                  () => { Assert.IsNotNull(savedStudyDataEdit); },
+    //                  () => { Assert.IsNotNull(gottenStudyDataEdit); },
+    //                  () => { Assert.IsNotNull(deletedStudyDataEdit); },
+    //                  () => { Assert.IsNull(deleteConfirmedStudyDataEdit); });
 
-      EnqueueTestComplete();
-    }
+    //  EnqueueTestComplete();
+    //}
 
   }
 }

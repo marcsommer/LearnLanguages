@@ -26,13 +26,13 @@ namespace LearnLanguages.Business
     {
       return DataPortal.Create<StudyDataEdit>();
     }
-    /// <summary>
-    /// Fetches a StudyDataEdit sync with given id
-    /// </summary>
-    public static StudyDataEdit GetStudyDataEdit(Guid id)
-    {
-      return DataPortal.Fetch<StudyDataEdit>(id);
-    }
+    ///// <summary>
+    ///// Fetches a StudyDataEdit sync with given id
+    ///// </summary>
+    //public static StudyDataEdit GetStudyDataEditForCurrentUser()
+    //{
+    //  return DataPortal.Fetch<StudyDataEdit>();
+    //}
 
 #endif
     #endregion
@@ -40,18 +40,18 @@ namespace LearnLanguages.Business
     #region Silverlight Factory Methods
 #if SILVERLIGHT
 
-    public static void NewStudyDataEdit(EventHandler<DataPortalResult<StudyDataEdit>> callback)
-    {
-      //DataPortal.BeginCreate<StudyDataEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<StudyDataEdit>(callback);
-    }
+    //public static void NewStudyDataEdit(EventHandler<DataPortalResult<StudyDataEdit>> callback)
+    //{
+    //  //DataPortal.BeginCreate<StudyDataEdit>(callback, DataPortal.ProxyModes.LocalOnly);
+    //  DataPortal.BeginCreate<StudyDataEdit>(callback);
+    //}
 
-    public static void GetStudyDataEdit(Guid id, EventHandler<DataPortalResult<StudyDataEdit>> callback)
-    {
-      DataPortal.BeginFetch<StudyDataEdit>(id, callback);
-    }
+    //public static void GetStudyDataEdit(Guid id, EventHandler<DataPortalResult<StudyDataEdit>> callback)
+    //{
+    //  DataPortal.BeginFetch<StudyDataEdit>(id, callback);
+    //}
 
-    //public static void GetStudyDataEdit(EventHandler<DataPortalResult<StudyDataEdit>> callback)
+    //public static void GetStudyDataEditForCurrentUser(EventHandler<DataPortalResult<StudyDataEdit>> callback)
     //{
     //  DataPortal.BeginFetch<StudyDataEdit>(callback);
     //}

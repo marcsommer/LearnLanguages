@@ -215,7 +215,6 @@ namespace LearnLanguages.DataAccess.Ef
         context.SaveChanges();
 
         //UPDATE USERS
-        //UPDATE USERS
         var affectedUsers = (from userDto in SeedData.Ton.Users
                              where userDto.TranslationIds.Contains(lineDto.Id)
                              select userDto).ToList();
@@ -227,6 +226,26 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         lineDto.Id = lineData.Id;
+      }
+
+      //STUDY DATAS
+      foreach (var studyDataDto in SeedData.Ton.StudyDatas)
+      {
+        var studyDataData = EfHelper.AddToContext(studyDataDto, context);
+        context.SaveChanges();
+
+        ////UPDATE USERS
+        //var affectedUsers = (from userDto in SeedData.Ton.Users
+        //                     where userDto.TranslationIds.Contains(studyDataDto.Id)
+        //                     select userDto).ToList();
+
+        //foreach (var affectedUser in affectedUsers)
+        //{
+        //  affectedUser.PhraseIds.Remove(studyDataDto.Id);
+        //  affectedUser.PhraseIds.Add(studyDataDto.Id);
+        //}
+
+        studyDataDto.Id = studyDataData.Id;
       }
     }
 
