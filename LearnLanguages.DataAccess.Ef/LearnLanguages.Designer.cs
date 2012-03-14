@@ -873,7 +873,7 @@ namespace LearnLanguages.DataAccess.Ef
         /// <param name="reviewMethodId">Initial value of the ReviewMethodId property.</param>
         /// <param name="phraseDataId">Initial value of the PhraseDataId property.</param>
         /// <param name="userDataId">Initial value of the UserDataId property.</param>
-        public static PhraseBeliefData CreatePhraseBeliefData(global::System.Guid id, global::System.TimeSpan timeStamp, global::System.String text, global::System.Double strength, global::System.Guid believerId, global::System.Guid reviewMethodId, global::System.Guid phraseDataId, global::System.Guid userDataId)
+        public static PhraseBeliefData CreatePhraseBeliefData(global::System.Guid id, global::System.DateTime timeStamp, global::System.String text, global::System.Double strength, global::System.Guid believerId, global::System.Guid reviewMethodId, global::System.Guid phraseDataId, global::System.Guid userDataId)
         {
             PhraseBeliefData phraseBeliefData = new PhraseBeliefData();
             phraseBeliefData.Id = id;
@@ -923,7 +923,7 @@ namespace LearnLanguages.DataAccess.Ef
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.TimeSpan TimeStamp
+        public global::System.DateTime TimeStamp
         {
             get
             {
@@ -938,8 +938,8 @@ namespace LearnLanguages.DataAccess.Ef
                 OnTimeStampChanged();
             }
         }
-        private global::System.TimeSpan _TimeStamp;
-        partial void OnTimeStampChanging(global::System.TimeSpan value);
+        private global::System.DateTime _TimeStamp;
+        partial void OnTimeStampChanging(global::System.DateTime value);
         partial void OnTimeStampChanged();
     
         /// <summary>

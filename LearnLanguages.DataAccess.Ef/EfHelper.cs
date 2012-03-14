@@ -137,6 +137,14 @@ namespace LearnLanguages.DataAccess.Ef
 
       return dto;
     }
+    public static RoleDto ToDto(RoleData data)
+    {
+      return new RoleDto()
+      {
+        Id = data.Id,
+        Text = data.Text
+      };
+    }
     public static StudyDataDto ToDto(StudyDataData fetchedStudyDataData)
     {
       var dto = new StudyDataDto()
@@ -148,14 +156,22 @@ namespace LearnLanguages.DataAccess.Ef
 
       return dto;
     }
-
-    public static RoleDto ToDto(RoleData data)
+    public static PhraseBeliefDto ToDto(PhraseBeliefData data)
     {
-      return new RoleDto()
+      var dto = new PhraseBeliefDto()
       {
         Id = data.Id,
-        Text = data.Text
+        BelieverId = data.BelieverId,
+        PhraseId = data.PhraseDataId,
+        ReviewMethodId = data.ReviewMethodId,
+        Strength = data.Strength,
+        Text = data.Text,
+        TimeStamp = data.TimeStamp,
+        UserId = data.UserDataId,
+        Username = data.UserData.Username,
       };
+
+      return dto;
     }
 
     #endregion
@@ -332,7 +348,29 @@ namespace LearnLanguages.DataAccess.Ef
       //RETURN OBJECT
       return newStudyDataData;
     }
+    /// <summary>
+    /// Adds the PhraseBeliefDto to the context, loading UserData and PhraseDatas into the newly
+    /// created PhraseBeliefData.  Does NOT save changes to the context.
+    /// </summary>
+    public static PhraseBeliefData AddToContext(PhraseBeliefDto dto, LearnLanguagesContext context)
+    {
+      //CREATE THE NEW OBJECT
+      var data = context.PhraseBeliefDatas.CreateObject();
 
+      //ASSIGN PROPERTIES
+      data.PhraseDataId = dto.PhraseId;
+      data.ReviewMethodId = dto.ReviewMethodId;
+      data.Strength = dto.Strength;
+      data.Text = dto.Text;
+      data.TimeStamp = dto.TimeStamp;
+      data.UserDataId = dto.UserId;
+
+      //ADD OBJECT TO CONTEXT
+      context.PhraseBeliefDatas.AddObject(data);
+
+      //RETURN OBJECT
+      return data;
+    }
     #endregion
 
     #region LoadDataFromDto
@@ -341,17 +379,17 @@ namespace LearnLanguages.DataAccess.Ef
     /// Loads the information from the dto into the data object. Except...
     /// Does NOT load dto.Id.
     /// </summary>
-    /// <param name="translationData"></param>
+    /// <param name="data"></param>
     /// <param name="dto"></param>
-    public static void LoadDataFromDto(ref TranslationData translationData, 
+    public static void LoadDataFromDto(ref TranslationData data, 
                                        TranslationDto dto, 
                                        LearnLanguagesContext context)
     {
       //COPY USER INFO
-      translationData.UserDataId = dto.UserId;
-      translationData.UserData = EfHelper.GetUserData(dto.UserId, context);
+      data.UserDataId = dto.UserId;
+      data.UserData = EfHelper.GetUserData(dto.UserId, context);
 
-      var currentPhraseIds = (from phrase in translationData.PhraseDatas
+      var currentPhraseIds = (from phrase in data.PhraseDatas
                               select phrase.Id);
 
       //COPY PHRASEID INFO
@@ -361,7 +399,7 @@ namespace LearnLanguages.DataAccess.Ef
         if (!currentPhraseIds.Contains(id))
         {
           PhraseData phraseData = EfHelper.GetPhraseData(id, context);
-          translationData.PhraseDatas.Add(phraseData);
+          data.PhraseDatas.Add(phraseData);
         }
       }
 
@@ -370,10 +408,10 @@ namespace LearnLanguages.DataAccess.Ef
       {
         if (!dto.PhraseIds.Contains(phraseId))
         {
-          var dataToRemove = (from phraseData in translationData.PhraseDatas
+          var dataToRemove = (from phraseData in data.PhraseDatas
                               where phraseData.Id == phraseId
                               select phraseData).First();
-          translationData.PhraseDatas.Remove(dataToRemove);
+          data.PhraseDatas.Remove(dataToRemove);
         }
       }
     }
@@ -382,71 +420,90 @@ namespace LearnLanguages.DataAccess.Ef
     /// Loads the information from the dto into the data object. Except...
     /// Does NOT load dto.Id.
     /// </summary>
-    /// <param name="phraseData"></param>
+    /// <param name="data"></param>
     /// <param name="dto"></param>
-    public static void LoadDataFromDto(ref PhraseData phraseData,
+    public static void LoadDataFromDto(ref PhraseData data,
                                        PhraseDto dto,
                                        LearnLanguagesContext context)
     {
       //USER INFO
-      phraseData.UserDataId = dto.UserId;
-      phraseData.UserData = EfHelper.GetUserData(dto.UserId, context);
+      data.UserDataId = dto.UserId;
+      data.UserData = EfHelper.GetUserData(dto.UserId, context);
 
       //LANGUAGE INFO
-      phraseData.LanguageDataId = dto.LanguageId;
-      phraseData.LanguageData = EfHelper.GetLanguageData(dto.LanguageId, context);
+      data.LanguageDataId = dto.LanguageId;
+      data.LanguageData = EfHelper.GetLanguageData(dto.LanguageId, context);
 
       //TEXT
-      phraseData.Text = dto.Text;
+      data.Text = dto.Text;
 
       //TRANSLATIONDATAS
-      phraseData.TranslationDatas.Load();
+      data.TranslationDatas.Load();
     }
 
     /// <summary>
     /// Loads the information from the dto into the data object. Except...
     /// Does NOT load dto.Id.
     /// </summary>
-    /// <param name="languageData"></param>
+    /// <param name="data"></param>
     /// <param name="dto"></param>
-    public static void LoadDataFromDto(ref LanguageData languageData,
+    public static void LoadDataFromDto(ref LanguageData data,
                                        LanguageDto dto,
                                        LearnLanguagesContext context)
     {
       //USER INFO
-      languageData.UserDataId = dto.UserId;
-      languageData.UserData = EfHelper.GetUserData(dto.UserId, context);
+      data.UserDataId = dto.UserId;
+      data.UserData = EfHelper.GetUserData(dto.UserId, context);
 
       //MAKE SURE USERDATA USERNAME MATCHES DTO.USERNAME
-      if (languageData.UserData.Username != dto.Username)
+      if (data.UserData.Username != dto.Username)
         throw new Exceptions.UsernameAndUserIdDoNotMatchException(dto.Username, dto.UserId);
 
       //TEXT
-      languageData.Text = dto.Text;
+      data.Text = dto.Text;
     }
 
-    public static void LoadDataFromDto(ref LineData lineData,
+    public static void LoadDataFromDto(ref LineData data,
                                        LineDto dto, 
                                        LearnLanguagesContext context)
     {
       //USER INFO
-      lineData.UserDataId = dto.UserId;
-      lineData.UserData = EfHelper.GetUserData(dto.UserId, context);
+      data.UserDataId = dto.UserId;
+      data.UserData = EfHelper.GetUserData(dto.UserId, context);
 
       //PHRASE INFO
-      lineData.PhraseDataId = dto.PhraseId;
-      lineData.PhraseData = EfHelper.GetPhraseData(dto.PhraseId, context);
+      data.PhraseDataId = dto.PhraseId;
+      data.PhraseData = EfHelper.GetPhraseData(dto.PhraseId, context);
 
       //TEXT
-      lineData.LineNumber = dto.LineNumber;
+      data.LineNumber = dto.LineNumber;
     }
 
-    public static void LoadDataFromDto(ref StudyDataData studyDataData,
-                                         StudyDataDto dto,
-                                         LearnLanguagesContext learnLanguagesContext)
+    public static void LoadDataFromDto(ref StudyDataData data,
+                                       StudyDataDto dto,
+                                       LearnLanguagesContext context)
     {
-      studyDataData.NativeLanguageText = dto.NativeLanguageText;
-      studyDataData.Username = dto.Username;
+      data.NativeLanguageText = dto.NativeLanguageText;
+      data.Username = dto.Username;
+    }
+
+    public static void LoadDataFromDto(ref PhraseBeliefData data, 
+                                       PhraseBeliefDto dto, 
+                                       LearnLanguagesContext context)
+    {
+      //USER INFO
+      data.UserDataId = dto.UserId;
+      data.UserData = EfHelper.GetUserData(dto.UserId, context);
+      
+      //PHRASE
+      data.PhraseDataId = dto.PhraseId;
+      data.PhraseData = EfHelper.GetPhraseData(dto.PhraseId, context);
+
+      //SCALAR
+      data.ReviewMethodId = dto.ReviewMethodId;
+      data.Strength = dto.Strength;
+      data.Text = dto.Text;
+      data.TimeStamp = dto.TimeStamp;
     }
 
     #endregion

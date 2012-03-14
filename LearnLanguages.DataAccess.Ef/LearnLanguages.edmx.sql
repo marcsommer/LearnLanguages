@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 03/12/2012 18:14:23
+-- Date Created: 03/13/2012 18:05:46
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -187,7 +187,7 @@ GO
 -- Creating table 'PhraseBeliefDatas'
 CREATE TABLE [dbo].[PhraseBeliefDatas] (
     [Id] uniqueidentifier  NOT NULL,
-    [TimeStamp] time  NOT NULL,
+    [TimeStamp] datetime  NOT NULL,
     [Text] nvarchar(max)  NOT NULL,
     [Strength] float  NOT NULL,
     [BelieverId] uniqueidentifier  NOT NULL,

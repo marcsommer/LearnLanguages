@@ -219,41 +219,41 @@ namespace LearnLanguages.Silverlight.Tests
     //  EnqueueTestComplete();
     //}
 
-    [TestMethod]
-    [Asynchronous]
-    public void GET()
-    {
-      Guid testId = Guid.Empty;
-      var allLoaded = false;
-      var isLoaded = false;
-      Exception getAllError = new Exception();
-      Exception error = new Exception();
-      PhraseBeliefEdit PhraseBeliefEdit = null;
+    //[TestMethod]
+    //[Asynchronous]
+    //public void GET()
+    //{
+    //  Guid testId = Guid.Empty;
+    //  var allLoaded = false;
+    //  var isLoaded = false;
+    //  Exception getAllError = new Exception();
+    //  Exception error = new Exception();
+    //  PhraseBeliefEdit PhraseBeliefEdit = null;
 
-      PhraseBeliefList.GetAll((s1, r1) =>
-        {
-          getAllError = r1.Error;
-          if (getAllError != null)
-            throw r1.Error;
-          testId = r1.Object.First().Id;
-          allLoaded = true;
-          PhraseBeliefEdit.GetPhraseBeliefEdit(testId, (s, r) =>
-          {
-            error = r.Error;
-            PhraseBeliefEdit = r.Object;
-            isLoaded = true;
-          });
-        });
+    //  PhraseBeliefList.GetAll((s1, r1) =>
+    //    {
+    //      getAllError = r1.Error;
+    //      if (getAllError != null)
+    //        throw r1.Error;
+    //      testId = r1.Object.First().Id;
+    //      allLoaded = true;
+    //      PhraseBeliefEdit.GetPhraseBeliefEdit(testId, (s, r) =>
+    //      {
+    //        error = r.Error;
+    //        PhraseBeliefEdit = r.Object;
+    //        isLoaded = true;
+    //      });
+    //    });
 
 
-      EnqueueConditional(() => isLoaded);
-      EnqueueConditional(() => allLoaded);
-      EnqueueCallback(() => { Assert.IsNull(error); },
-                      () => { Assert.IsNull(getAllError); },
-                      () => { Assert.IsNotNull(PhraseBeliefEdit); },
-                      () => { Assert.AreEqual(testId, PhraseBeliefEdit.Id); });
-      EnqueueTestComplete();
-    }
+    //  EnqueueConditional(() => isLoaded);
+    //  EnqueueConditional(() => allLoaded);
+    //  EnqueueCallback(() => { Assert.IsNull(error); },
+    //                  () => { Assert.IsNull(getAllError); },
+    //                  () => { Assert.IsNotNull(PhraseBeliefEdit); },
+    //                  () => { Assert.AreEqual(testId, PhraseBeliefEdit.Id); });
+    //  EnqueueTestComplete();
+    //}
 
     [TestMethod]
     [Asynchronous]
