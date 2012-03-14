@@ -16,5 +16,6 @@ namespace LearnLanguages.DataAccess
     public ICollection<Guid> LineIds { get; set; }
     public ICollection<Guid> PhraseBeliefIds { get; set; }
     public ICollection<Guid> RoleIds { get; set; }
+    public ICollection<Guid> MultiLineTextIds { get; set; }
   }
 }

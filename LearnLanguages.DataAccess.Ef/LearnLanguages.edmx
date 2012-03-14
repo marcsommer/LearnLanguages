@@ -15,10 +15,12 @@
     <EntitySet Name="DefaultStudyAdvisorKnowledgeBeliefDatas" EntityType="LearnLanguages.Store.DefaultStudyAdvisorKnowledgeBeliefDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="PhraseBeliefDatas" EntityType="LearnLanguages.Store.PhraseBeliefDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="StudyDataDatas" EntityType="LearnLanguages.Store.StudyDataDatas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MultiLineTextDatas" EntityType="LearnLanguages.Store.MultiLineTextDatas" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="AssociationUserDataWithLanguageData" EntityType="LearnLanguages.Store.AssociationUserDataWithLanguageData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="AssociationUserDataWithRoleData" EntityType="LearnLanguages.Store.AssociationUserDataWithRoleData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserDataRoleData" EntityType="LearnLanguages.Store.UserDataRoleData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TranslationDataPhraseData" EntityType="LearnLanguages.Store.TranslationDataPhraseData" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="LineDataMultiLineTextData" EntityType="LearnLanguages.Store.LineDataMultiLineTextData" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="AssociateLanguageDataWithPhraseData" Association="LearnLanguages.Store.AssociateLanguageDataWithPhraseData">
       <End Role="LanguageData" EntitySet="LanguageDatas" />
       <End Role="PhraseData" EntitySet="PhraseDatas" />
@@ -98,6 +100,18 @@
     <AssociationSet Name="UserDataPhraseBeliefData" Association="LearnLanguages.Store.UserDataPhraseBeliefData">
       <End Role="UserData" EntitySet="UserDatas" />
       <End Role="PhraseBeliefData" EntitySet="PhraseBeliefDatas" />
+    </AssociationSet>
+    <AssociationSet Name="MultiLineTextDataUserData" Association="LearnLanguages.Store.MultiLineTextDataUserData">
+      <End Role="MultiLineTextData" EntitySet="MultiLineTextDatas" />
+      <End Role="UserData" EntitySet="UserDatas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LineDataMultiLineTextData_LineData" Association="LearnLanguages.Store.FK_LineDataMultiLineTextData_LineData">
+      <End Role="LineData" EntitySet="LineDatas" />
+      <End Role="LineDataMultiLineTextData" EntitySet="LineDataMultiLineTextData" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LineDataMultiLineTextData_MultiLineTextData" Association="LearnLanguages.Store.FK_LineDataMultiLineTextData_MultiLineTextData">
+      <End Role="MultiLineTextData" EntitySet="MultiLineTextDatas" />
+      <End Role="LineDataMultiLineTextData" EntitySet="LineDataMultiLineTextData" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="LanguageDatas">
@@ -179,6 +193,15 @@
     <Property Name="NativeLanguageText" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <EntityType Name="MultiLineTextDatas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AdditionalMetadata" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserDataId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
   <EntityType Name="AssociationUserDataWithLanguageData">
     <Key>
       <PropertyRef Name="AssociationUserDataWithLanguageData_LanguageData_Id" />
@@ -210,6 +233,14 @@
     </Key>
     <Property Name="TranslationDatas_Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="PhraseDatas_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LineDataMultiLineTextData">
+    <Key>
+      <PropertyRef Name="LineDatas_Id" />
+      <PropertyRef Name="MultiLineTextDatas_Id" />
+    </Key>
+    <Property Name="LineDatas_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="MultiLineTextDatas_Id" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <Association Name="AssociateLanguageDataWithPhraseData">
     <End Role="LanguageData" Type="LearnLanguages.Store.LanguageDatas" Multiplicity="1" />
@@ -357,6 +388,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="MultiLineTextDataUserData">
+    <End Role="MultiLineTextData" Type="LearnLanguages.Store.MultiLineTextDatas" Multiplicity="*" />
+    <End Role="UserData" Type="LearnLanguages.Store.UserDatas" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="UserData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MultiLineTextData">
+        <PropertyRef Name="UserDataId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_AssociationUserDataWithLanguageData_UserData">
     <End Role="UserData" Type="LearnLanguages.Store.UserDatas" Multiplicity="1" />
     <End Role="AssociationUserDataWithLanguageData" Type="LearnLanguages.Store.AssociationUserDataWithLanguageData" Multiplicity="*" />
@@ -453,6 +496,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_LineDataMultiLineTextData_LineData">
+    <End Role="LineData" Type="LearnLanguages.Store.LineDatas" Multiplicity="1" />
+    <End Role="LineDataMultiLineTextData" Type="LearnLanguages.Store.LineDataMultiLineTextData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LineData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineDataMultiLineTextData">
+        <PropertyRef Name="LineDatas_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LineDataMultiLineTextData_MultiLineTextData">
+    <End Role="LineDataMultiLineTextData" Type="LearnLanguages.Store.LineDataMultiLineTextData" Multiplicity="*" />
+    <End Role="MultiLineTextData" Type="LearnLanguages.Store.MultiLineTextDatas" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="MultiLineTextData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineDataMultiLineTextData">
+        <PropertyRef Name="MultiLineTextDatas_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -531,6 +598,15 @@
             <End Role="PhraseBeliefData" EntitySet="PhraseBeliefDatas" />
           </AssociationSet>
           <EntitySet Name="StudyDataDatas" EntityType="LearnLanguages.StudyDataData" />
+          <EntitySet Name="MultiLineTextDatas" EntityType="LearnLanguages.MultiLineTextData" />
+          <AssociationSet Name="MultiLineTextDataUserData" Association="LearnLanguages.MultiLineTextDataUserData">
+            <End Role="MultiLineTextData" EntitySet="MultiLineTextDatas" />
+            <End Role="UserData" EntitySet="UserDatas" />
+          </AssociationSet>
+          <AssociationSet Name="LineDataMultiLineTextData" Association="LearnLanguages.LineDataMultiLineTextData">
+            <End Role="LineData" EntitySet="LineDatas" />
+            <End Role="MultiLineTextData" EntitySet="MultiLineTextDatas" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="LanguageData">
           <Key>
@@ -584,6 +660,7 @@
           <NavigationProperty Name="LanguageDatas" Relationship="LearnLanguages.UserDataLanguageData" FromRole="UserData" ToRole="LanguageData" />
           <NavigationProperty Name="LineDatas" Relationship="LearnLanguages.UserDataLineData" FromRole="UserData" ToRole="LineData" />
           <NavigationProperty Name="PhraseBeliefDatas" Relationship="LearnLanguages.UserDataPhraseBeliefData" FromRole="UserData" ToRole="PhraseBeliefData" />
+          <NavigationProperty Name="MultiLineTextDatas" Relationship="LearnLanguages.MultiLineTextDataUserData" FromRole="UserData" ToRole="MultiLineTextData" />
         </EntityType>
         <Association Name="AssociationUserDataWithPhraseData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" >
@@ -692,6 +769,7 @@
           <Property Type="Guid" Name="UserDataId" Nullable="false" />
           <NavigationProperty Name="PhraseData" Relationship="LearnLanguages.PhraseDataLineData" FromRole="LineData" ToRole="PhraseData" />
           <Property Type="Guid" Name="PhraseDataId" Nullable="false" />
+          <NavigationProperty Name="MultiLineTextDatas" Relationship="LearnLanguages.LineDataMultiLineTextData" FromRole="LineData" ToRole="MultiLineTextData" />
         </EntityType>
         <Association Name="UserDataLineData">
           <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" />
@@ -797,6 +875,33 @@
           <Property Type="String" Name="NativeLanguageText" Nullable="false" />
           <Property Type="String" Name="Username" Nullable="false" />
         </EntityType>
+        <EntityType Name="MultiLineTextData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Title" Nullable="false" />
+          <Property Type="String" Name="AdditionalMetadata" Nullable="false" />
+          <NavigationProperty Name="UserData" Relationship="LearnLanguages.MultiLineTextDataUserData" FromRole="MultiLineTextData" ToRole="UserData" />
+          <Property Type="Guid" Name="UserDataId" Nullable="false" />
+          <NavigationProperty Name="LineDatas" Relationship="LearnLanguages.LineDataMultiLineTextData" FromRole="MultiLineTextData" ToRole="LineData" />
+        </EntityType>
+        <Association Name="MultiLineTextDataUserData">
+          <End Type="LearnLanguages.MultiLineTextData" Role="MultiLineTextData" Multiplicity="*" />
+          <End Type="LearnLanguages.UserData" Role="UserData" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="UserData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MultiLineTextData">
+              <PropertyRef Name="UserDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="LineDataMultiLineTextData">
+          <End Type="LearnLanguages.LineData" Role="LineData" Multiplicity="*" />
+          <End Type="LearnLanguages.MultiLineTextData" Role="MultiLineTextData" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -891,6 +996,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MultiLineTextDatas">
+      <EntityTypeMapping TypeName="IsTypeOf(LearnLanguages.MultiLineTextData)">
+        <MappingFragment StoreEntitySet="MultiLineTextDatas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="AdditionalMetadata" ColumnName="AdditionalMetadata" />
+          <ScalarProperty Name="UserDataId" ColumnName="UserDataId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="AssociationUserDataWithLanguageData" TypeName="LearnLanguages.AssociationUserDataWithLanguageData" StoreEntitySet="AssociationUserDataWithLanguageData">
       <EndProperty Name="UserData">
         <ScalarProperty Name="Id" ColumnName="AssociationUserDataWithLanguageData_LanguageData_Id" />
@@ -921,6 +1036,14 @@
       </EndProperty>
       <EndProperty Name="PhraseData">
         <ScalarProperty Name="Id" ColumnName="PhraseDatas_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="LineDataMultiLineTextData" TypeName="LearnLanguages.LineDataMultiLineTextData" StoreEntitySet="LineDataMultiLineTextData">
+      <EndProperty Name="LineData">
+        <ScalarProperty Name="Id" ColumnName="LineDatas_Id" />
+      </EndProperty>
+      <EndProperty Name="MultiLineTextData">
+        <ScalarProperty Name="Id" ColumnName="MultiLineTextDatas_Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

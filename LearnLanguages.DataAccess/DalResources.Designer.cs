@@ -180,6 +180,15 @@ namespace LearnLanguages.DataAccess {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string DefaultNewMultiLineTextAdditionalMetadata {
+            get {
+                return ResourceManager.GetString("DefaultNewMultiLineTextAdditionalMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string DefaultNewMultiLineTextTitle {
             get {
                 return ResourceManager.GetString("DefaultNewMultiLineTextTitle", resourceCulture);

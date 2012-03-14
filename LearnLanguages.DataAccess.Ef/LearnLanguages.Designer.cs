@@ -34,6 +34,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LearnLanguages", "PhraseDataDefaultStudyAdvisorKnowledgeBeliefData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "DefaultStudyAdvisorKnowledgeBeliefData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.DefaultStudyAdvisorKnowledgeBeliefData), true)]
 [assembly: EdmRelationshipAttribute("LearnLanguages", "PhraseDataPhraseBeliefData", "PhraseData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.PhraseData), "PhraseBeliefData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.PhraseBeliefData), true)]
 [assembly: EdmRelationshipAttribute("LearnLanguages", "UserDataPhraseBeliefData", "UserData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.UserData), "PhraseBeliefData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.PhraseBeliefData), true)]
+[assembly: EdmRelationshipAttribute("LearnLanguages", "MultiLineTextDataUserData", "MultiLineTextData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.MultiLineTextData), "UserData", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LearnLanguages.DataAccess.Ef.UserData), true)]
+[assembly: EdmRelationshipAttribute("LearnLanguages", "LineDataMultiLineTextData", "LineData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.LineData), "MultiLineTextData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LearnLanguages.DataAccess.Ef.MultiLineTextData))]
 
 #endregion
 
@@ -228,6 +230,22 @@ namespace LearnLanguages.DataAccess.Ef
             }
         }
         private ObjectSet<StudyDataData> _StudyDataDatas;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<MultiLineTextData> MultiLineTextDatas
+        {
+            get
+            {
+                if ((_MultiLineTextDatas == null))
+                {
+                    _MultiLineTextDatas = base.CreateObjectSet<MultiLineTextData>("MultiLineTextDatas");
+                }
+                return _MultiLineTextDatas;
+            }
+        }
+        private ObjectSet<MultiLineTextData> _MultiLineTextDatas;
 
         #endregion
 
@@ -303,6 +321,14 @@ namespace LearnLanguages.DataAccess.Ef
         public void AddToStudyDataDatas(StudyDataData studyDataData)
         {
             base.AddObject("StudyDataDatas", studyDataData);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the MultiLineTextDatas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToMultiLineTextDatas(MultiLineTextData multiLineTextData)
+        {
+            base.AddObject("MultiLineTextDatas", multiLineTextData);
         }
 
         #endregion
@@ -844,6 +870,227 @@ namespace LearnLanguages.DataAccess.Ef
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<PhraseData>("LearnLanguages.PhraseDataLineData", "PhraseData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "LineDataMultiLineTextData", "MultiLineTextData")]
+        public EntityCollection<MultiLineTextData> MultiLineTextDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MultiLineTextData>("LearnLanguages.LineDataMultiLineTextData", "MultiLineTextData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MultiLineTextData>("LearnLanguages.LineDataMultiLineTextData", "MultiLineTextData", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LearnLanguages", Name="MultiLineTextData")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class MultiLineTextData : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new MultiLineTextData object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="title">Initial value of the Title property.</param>
+        /// <param name="additionalMetadata">Initial value of the AdditionalMetadata property.</param>
+        /// <param name="userDataId">Initial value of the UserDataId property.</param>
+        public static MultiLineTextData CreateMultiLineTextData(global::System.Guid id, global::System.String title, global::System.String additionalMetadata, global::System.Guid userDataId)
+        {
+            MultiLineTextData multiLineTextData = new MultiLineTextData();
+            multiLineTextData.Id = id;
+            multiLineTextData.Title = title;
+            multiLineTextData.AdditionalMetadata = additionalMetadata;
+            multiLineTextData.UserDataId = userDataId;
+            return multiLineTextData;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _Id;
+        partial void OnIdChanging(global::System.Guid value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Title
+        {
+            get
+            {
+                return _Title;
+            }
+            set
+            {
+                OnTitleChanging(value);
+                ReportPropertyChanging("Title");
+                _Title = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Title");
+                OnTitleChanged();
+            }
+        }
+        private global::System.String _Title;
+        partial void OnTitleChanging(global::System.String value);
+        partial void OnTitleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AdditionalMetadata
+        {
+            get
+            {
+                return _AdditionalMetadata;
+            }
+            set
+            {
+                OnAdditionalMetadataChanging(value);
+                ReportPropertyChanging("AdditionalMetadata");
+                _AdditionalMetadata = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AdditionalMetadata");
+                OnAdditionalMetadataChanged();
+            }
+        }
+        private global::System.String _AdditionalMetadata;
+        partial void OnAdditionalMetadataChanging(global::System.String value);
+        partial void OnAdditionalMetadataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid UserDataId
+        {
+            get
+            {
+                return _UserDataId;
+            }
+            set
+            {
+                OnUserDataIdChanging(value);
+                ReportPropertyChanging("UserDataId");
+                _UserDataId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserDataId");
+                OnUserDataIdChanged();
+            }
+        }
+        private global::System.Guid _UserDataId;
+        partial void OnUserDataIdChanging(global::System.Guid value);
+        partial void OnUserDataIdChanged();
+
+        #endregion
+
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "MultiLineTextDataUserData", "UserData")]
+        public UserData UserData
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.MultiLineTextDataUserData", "UserData").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.MultiLineTextDataUserData", "UserData").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<UserData> UserDataReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<UserData>("LearnLanguages.MultiLineTextDataUserData", "UserData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<UserData>("LearnLanguages.MultiLineTextDataUserData", "UserData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "LineDataMultiLineTextData", "LineData")]
+        public EntityCollection<LineData> LineDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<LineData>("LearnLanguages.LineDataMultiLineTextData", "LineData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<LineData>("LearnLanguages.LineDataMultiLineTextData", "LineData", value);
                 }
             }
         }
@@ -2186,6 +2433,28 @@ namespace LearnLanguages.DataAccess.Ef
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PhraseBeliefData>("LearnLanguages.UserDataPhraseBeliefData", "PhraseBeliefData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LearnLanguages", "MultiLineTextDataUserData", "MultiLineTextData")]
+        public EntityCollection<MultiLineTextData> MultiLineTextDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<MultiLineTextData>("LearnLanguages.MultiLineTextDataUserData", "MultiLineTextData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<MultiLineTextData>("LearnLanguages.MultiLineTextDataUserData", "MultiLineTextData", value);
                 }
             }
         }

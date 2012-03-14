@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using LearnLanguages.Business.Security;
+using Csla.Core;
 
 namespace LearnLanguages.DataAccess.Ef
 {
@@ -111,28 +112,28 @@ namespace LearnLanguages.DataAccess.Ef
 
       return dto;
     }
-    public static TranslationDto ToDto(TranslationData fetchedTranslationData)
+    public static TranslationDto ToDto(TranslationData data)
     {
       var dto = new TranslationDto()
       {
-        Id = fetchedTranslationData.Id,
-        PhraseIds = (from phrase in fetchedTranslationData.PhraseDatas
+        Id = data.Id,
+        PhraseIds = (from phrase in data.PhraseDatas
                      select phrase.Id).ToList(),
-        UserId = fetchedTranslationData.UserDataId,
-        Username = fetchedTranslationData.UserData.Username
+        UserId = data.UserDataId,
+        Username = data.UserData.Username
       };
 
       return dto;
     }
-    public static LineDto ToDto(LineData fetchedLineData)
+    public static LineDto ToDto(LineData data)
     {
       var dto = new LineDto()
       {
-        Id = fetchedLineData.Id,
-        LineNumber = fetchedLineData.LineNumber,
-        PhraseId = fetchedLineData.PhraseDataId,
-        UserId = fetchedLineData.UserDataId,
-        Username = fetchedLineData.UserData.Username
+        Id = data.Id,
+        LineNumber = data.LineNumber,
+        PhraseId = data.PhraseDataId,
+        UserId = data.UserDataId,
+        Username = data.UserData.Username
       };
 
       return dto;
@@ -145,13 +146,13 @@ namespace LearnLanguages.DataAccess.Ef
         Text = data.Text
       };
     }
-    public static StudyDataDto ToDto(StudyDataData fetchedStudyDataData)
+    public static StudyDataDto ToDto(StudyDataData data)
     {
       var dto = new StudyDataDto()
       {
-        Id = fetchedStudyDataData.Id,
-        NativeLanguageText = fetchedStudyDataData.NativeLanguageText,
-        Username = fetchedStudyDataData.Username
+        Id = data.Id,
+        NativeLanguageText = data.NativeLanguageText,
+        Username = data.Username
       };
 
       return dto;
@@ -167,6 +168,21 @@ namespace LearnLanguages.DataAccess.Ef
         Strength = data.Strength,
         Text = data.Text,
         TimeStamp = data.TimeStamp,
+        UserId = data.UserDataId,
+        Username = data.UserData.Username,
+      };
+
+      return dto;
+    }
+    public static MultiLineTextDto ToDto(MultiLineTextData data)
+    {
+      var dto = new MultiLineTextDto()
+      {
+        Id = data.Id,
+        AdditionalMetadata = data.AdditionalMetadata,
+        LineIds = (from line in data.LineDatas
+                   select line.Id).ToList(),
+        Title = data.Title,
         UserId = data.UserDataId,
         Username = data.UserData.Username,
       };
@@ -371,6 +387,53 @@ namespace LearnLanguages.DataAccess.Ef
       //RETURN OBJECT
       return data;
     }
+    /// <summary>
+    /// Adds the dto to the context, loading UserData and LineDatas into the newly
+    /// created PhraseBeliefData.  Does NOT save changes to the context.
+    /// </summary>
+    public static MultiLineTextData AddToContext(MultiLineTextDto dto, LearnLanguagesContext context)
+    {
+      //CREATE NEW TRANSLATIONDATA
+      var data = context.MultiLineTextDatas.CreateObject();
+
+      //SCALARS
+      data.Title = dto.Title;
+      data.AdditionalMetadata = dto.AdditionalMetadata;
+
+      //ASSIGN USER INFO
+      data.UserDataId = dto.UserId;
+
+      //ADD LINE DATAS FROM DTO.LINEIDS
+      if (dto.LineIds != null)
+      {
+        foreach (var id in dto.LineIds)
+        {
+          var results = (from line in context.LineDatas
+                         where line.Id == id
+                         select line);
+
+          if (results.Count() == 1)
+          {
+            var lineData = results.First();
+            data.LineDatas.Add(lineData);
+          }
+          else if (results.Count() == 0)
+            throw new Exceptions.IdNotFoundException(id);
+          else
+          {
+            var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                         DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+            throw new Exceptions.VeryBadException(errorMsg);
+          }
+        }
+      }
+
+      //ADD DATA TO CONTEXT
+      context.MultiLineTextDatas.AddObject(data);
+
+      return data;
+    }
+
     #endregion
 
     #region LoadDataFromDto
@@ -506,7 +569,31 @@ namespace LearnLanguages.DataAccess.Ef
       data.TimeStamp = dto.TimeStamp;
     }
 
+    public static void LoadDataFromDto(ref MultiLineTextData data,
+                                       MultiLineTextDto dto, 
+                                       LearnLanguagesContext context)
+    {
+      //USER INFO
+      data.UserDataId = dto.UserId;
+      data.UserData = EfHelper.GetUserData(dto.UserId, context);
+
+      //LINE IDS
+      foreach (var id in dto.LineIds)
+      {
+        LineData lineData = EfHelper.GetLineData(id, context);
+        data.LineDatas.Add(lineData);
+      }
+
+      //SCALAR
+      data.Title = dto.Title;
+      data.AdditionalMetadata = dto.AdditionalMetadata;
+    }
+
+    
+
     #endregion
+
+    #region Get [User/Language/Phrase/Line] Data
 
     private static LanguageData GetLanguageData(Guid languageId, LearnLanguagesContext context)
     {
@@ -564,5 +651,27 @@ namespace LearnLanguages.DataAccess.Ef
         throw new Exceptions.VeryBadException(errorMsg);
       }
     }
+    private static LineData GetLineData(Guid id, LearnLanguagesContext context)
+    {
+      var currentUserId = ((CustomIdentity)Csla.ApplicationContext.User.Identity).UserId;
+
+      var results = from lineData in context.LineDatas
+                    where lineData.Id == id &&
+                          lineData.UserDataId == currentUserId
+                    select lineData;
+
+      if (results.Count() == 1)
+        return results.First();
+      else if (results.Count() == 0)
+        throw new Exceptions.IdNotFoundException(id);
+      else
+      {
+        var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                     DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+        throw new Exceptions.VeryBadException(errorMsg);
+      }
+    }
+
+    #endregion
   }
 }

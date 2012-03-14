@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 03/13/2012 18:05:46
+-- Date Created: 03/14/2012 00:06:49
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -205,6 +205,15 @@ CREATE TABLE [dbo].[StudyDataDatas] (
 );
 GO
 
+-- Creating table 'MultiLineTextDatas'
+CREATE TABLE [dbo].[MultiLineTextDatas] (
+    [Id] uniqueidentifier  NOT NULL,
+    [Title] nvarchar(max)  NOT NULL,
+    [AdditionalMetadata] nvarchar(max)  NOT NULL,
+    [UserDataId] uniqueidentifier  NOT NULL
+);
+GO
+
 -- Creating table 'AssociationUserDataWithLanguageData'
 CREATE TABLE [dbo].[AssociationUserDataWithLanguageData] (
     [AssociationUserDataWithLanguageData_LanguageData_Id] uniqueidentifier  NOT NULL,
@@ -230,6 +239,13 @@ GO
 CREATE TABLE [dbo].[TranslationDataPhraseData] (
     [TranslationDatas_Id] uniqueidentifier  NOT NULL,
     [PhraseDatas_Id] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'LineDataMultiLineTextData'
+CREATE TABLE [dbo].[LineDataMultiLineTextData] (
+    [LineDatas_Id] uniqueidentifier  NOT NULL,
+    [MultiLineTextDatas_Id] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -291,6 +307,12 @@ ADD CONSTRAINT [PK_StudyDataDatas]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'MultiLineTextDatas'
+ALTER TABLE [dbo].[MultiLineTextDatas]
+ADD CONSTRAINT [PK_MultiLineTextDatas]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- Creating primary key on [AssociationUserDataWithLanguageData_LanguageData_Id], [AssociationUserDataWithLanguageData_UserData_Id] in table 'AssociationUserDataWithLanguageData'
 ALTER TABLE [dbo].[AssociationUserDataWithLanguageData]
 ADD CONSTRAINT [PK_AssociationUserDataWithLanguageData]
@@ -313,6 +335,12 @@ GO
 ALTER TABLE [dbo].[TranslationDataPhraseData]
 ADD CONSTRAINT [PK_TranslationDataPhraseData]
     PRIMARY KEY NONCLUSTERED ([TranslationDatas_Id], [PhraseDatas_Id] ASC);
+GO
+
+-- Creating primary key on [LineDatas_Id], [MultiLineTextDatas_Id] in table 'LineDataMultiLineTextData'
+ALTER TABLE [dbo].[LineDataMultiLineTextData]
+ADD CONSTRAINT [PK_LineDataMultiLineTextData]
+    PRIMARY KEY NONCLUSTERED ([LineDatas_Id], [MultiLineTextDatas_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -577,6 +605,43 @@ ADD CONSTRAINT [FK_UserDataPhraseBeliefData]
 CREATE INDEX [IX_FK_UserDataPhraseBeliefData]
 ON [dbo].[PhraseBeliefDatas]
     ([UserDataId]);
+GO
+
+-- Creating foreign key on [UserDataId] in table 'MultiLineTextDatas'
+ALTER TABLE [dbo].[MultiLineTextDatas]
+ADD CONSTRAINT [FK_MultiLineTextDataUserData]
+    FOREIGN KEY ([UserDataId])
+    REFERENCES [dbo].[UserDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_MultiLineTextDataUserData'
+CREATE INDEX [IX_FK_MultiLineTextDataUserData]
+ON [dbo].[MultiLineTextDatas]
+    ([UserDataId]);
+GO
+
+-- Creating foreign key on [LineDatas_Id] in table 'LineDataMultiLineTextData'
+ALTER TABLE [dbo].[LineDataMultiLineTextData]
+ADD CONSTRAINT [FK_LineDataMultiLineTextData_LineData]
+    FOREIGN KEY ([LineDatas_Id])
+    REFERENCES [dbo].[LineDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [MultiLineTextDatas_Id] in table 'LineDataMultiLineTextData'
+ALTER TABLE [dbo].[LineDataMultiLineTextData]
+ADD CONSTRAINT [FK_LineDataMultiLineTextData_MultiLineTextData]
+    FOREIGN KEY ([MultiLineTextDatas_Id])
+    REFERENCES [dbo].[MultiLineTextDatas]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_LineDataMultiLineTextData_MultiLineTextData'
+CREATE INDEX [IX_FK_LineDataMultiLineTextData_MultiLineTextData]
+ON [dbo].[LineDataMultiLineTextData]
+    ([MultiLineTextDatas_Id]);
 GO
 
 -- --------------------------------------------------
