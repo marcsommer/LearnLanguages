@@ -488,7 +488,7 @@ namespace LearnLanguages.DataAccess
 
       return results.Count() == 1;
     }
-
+    
     public Guid GetPhraseId(string phraseText)
     {
         return (from phrase in Phrases

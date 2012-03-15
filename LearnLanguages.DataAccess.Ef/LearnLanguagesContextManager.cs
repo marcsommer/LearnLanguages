@@ -59,8 +59,6 @@ namespace LearnLanguages.DataAccess.Ef
 
     private void SeedContext(LearnLanguagesContext context)
     {
-      
-
       //ROLES
       foreach (var roleDto in SeedData.Ton.Roles)
       {
@@ -107,7 +105,8 @@ namespace LearnLanguages.DataAccess.Ef
         context.UserDatas.AddObject(userData);
         context.SaveChanges();
 
-        //UPDATE SEED DATA THAT REFERENCES THE ID OF THIS USER
+        #region UPDATE AFFECTED SEED DATA THAT REFERENCES THE ID OF THIS USER
+        
         var affectedLanguages = (from languageDto in SeedData.Ton.Languages
                                  where languageDto.UserId == userDto.Id
                                  select languageDto);
@@ -135,7 +134,35 @@ namespace LearnLanguages.DataAccess.Ef
           affectedTranslation.UserId = userData.Id;
         }
 
+        var affectedLines = (from lineDto in SeedData.Ton.Lines
+                             where lineDto.UserId == userDto.Id
+                             select lineDto);
+
+        foreach (var affectedLine in affectedLines)
+        {
+          affectedLine.UserId = userData.Id;
+        }
+
+        var affectedMultiLineTexts = (from multiLineTextDto in SeedData.Ton.MultiLineTexts
+                                      where multiLineTextDto.UserId == userDto.Id
+                                      select multiLineTextDto);
+
+        foreach (var affectedMultiLineText in affectedMultiLineTexts)
+        {
+          affectedMultiLineText.UserId = userData.Id;
+        }
+
+        var affectedPhraseBeliefs = (from phraseBeliefDto in SeedData.Ton.PhraseBeliefs
+                                     where phraseBeliefDto.UserId == userDto.Id
+                                     select phraseBeliefDto);
+
+        foreach (var affectedPhraseBelief in affectedPhraseBeliefs)
+        {
+          affectedPhraseBelief.UserId = userData.Id;
+        }
+
         userDto.Id = userData.Id;
+        #endregion
       }
 
       //LANGUAGES
@@ -209,20 +236,20 @@ namespace LearnLanguages.DataAccess.Ef
       }
 
       //LINES
-      foreach (var lineDto in SeedData.Ton.Translations)
+      foreach (var lineDto in SeedData.Ton.Lines)
       {
         var lineData = EfHelper.AddToContext(lineDto, context);
         context.SaveChanges();
 
         //UPDATE USERS
         var affectedUsers = (from userDto in SeedData.Ton.Users
-                             where userDto.TranslationIds.Contains(lineDto.Id)
+                             where userDto.LineIds.Contains(lineDto.Id)
                              select userDto).ToList();
 
         foreach (var affectedUser in affectedUsers)
         {
-          affectedUser.PhraseIds.Remove(lineDto.Id);
-          affectedUser.PhraseIds.Add(lineDto.Id);
+          affectedUser.LineIds.Remove(lineDto.Id);
+          affectedUser.LineIds.Add(lineDto.Id);
         }
 
         lineDto.Id = lineData.Id;
