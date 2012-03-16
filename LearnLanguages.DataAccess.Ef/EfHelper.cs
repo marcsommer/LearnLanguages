@@ -282,6 +282,7 @@ namespace LearnLanguages.DataAccess.Ef
       newLineData.PhraseDataId = dto.PhraseId;
       newLineData.UserDataId = dto.UserId;
 
+
       context.LineDatas.AddObject(newLineData);
 
       return newLineData;

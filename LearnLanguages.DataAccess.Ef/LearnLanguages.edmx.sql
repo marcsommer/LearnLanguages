@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 03/14/2012 00:06:49
+-- Date Created: 03/15/2012 21:09:38
 -- Generated from EDMX file: C:\Users\User\Documents\Visual Studio 2010\Projects\LearnLanguages\LearnLanguages.DataAccess.Ef\LearnLanguages.edmx
 -- --------------------------------------------------
 
@@ -77,6 +77,15 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_UserDataPhraseBeliefData]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PhraseBeliefDatas] DROP CONSTRAINT [FK_UserDataPhraseBeliefData];
 GO
+IF OBJECT_ID(N'[dbo].[FK_MultiLineTextDataUserData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MultiLineTextDatas] DROP CONSTRAINT [FK_MultiLineTextDataUserData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LineDataMultiLineTextData_LineData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LineDataMultiLineTextData] DROP CONSTRAINT [FK_LineDataMultiLineTextData_LineData];
+GO
+IF OBJECT_ID(N'[dbo].[FK_LineDataMultiLineTextData_MultiLineTextData]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[LineDataMultiLineTextData] DROP CONSTRAINT [FK_LineDataMultiLineTextData_MultiLineTextData];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -109,6 +118,9 @@ GO
 IF OBJECT_ID(N'[dbo].[StudyDataDatas]', 'U') IS NOT NULL
     DROP TABLE [dbo].[StudyDataDatas];
 GO
+IF OBJECT_ID(N'[dbo].[MultiLineTextDatas]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MultiLineTextDatas];
+GO
 IF OBJECT_ID(N'[dbo].[AssociationUserDataWithLanguageData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[AssociationUserDataWithLanguageData];
 GO
@@ -120,6 +132,9 @@ IF OBJECT_ID(N'[dbo].[UserDataRoleData]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[TranslationDataPhraseData]', 'U') IS NOT NULL
     DROP TABLE [dbo].[TranslationDataPhraseData];
+GO
+IF OBJECT_ID(N'[dbo].[LineDataMultiLineTextData]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LineDataMultiLineTextData];
 GO
 
 -- --------------------------------------------------

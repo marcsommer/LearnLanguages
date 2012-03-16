@@ -108,8 +108,8 @@ namespace LearnLanguages.Study
     {
       try
       {
-        if (beliefs.Count < 2)
-          throw new ArgumentException("beliefs.Count < 2");
+        if (beliefs.Count < 1)
+          throw new ArgumentException("beliefs.Count");
 
         ///FOR NOW, THIS JUST GETS THE MOST RECENT BELIEF AND GOES WITH THE STRENGTH OF THAT BELIEF.
         ///THIS IS ABSOLUTELY NOT HOW IT SHOULD BE BUT THAT IS WHY WE HAVE A "DEFAULT" ADVISOR AND

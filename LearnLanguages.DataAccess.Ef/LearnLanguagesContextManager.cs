@@ -211,6 +211,14 @@ namespace LearnLanguages.DataAccess.Ef
           affectedTranslation.PhraseIds.Add(phraseData.Id);
         }
 
+        var affectedLines = (from lineDto in SeedData.Ton.Lines
+                             where lineDto.PhraseId == phraseDto.Id
+                             select lineDto);
+        foreach (var affectedLine in affectedLines)
+        {
+          affectedLine.PhraseId = phraseData.Id;
+        }
+
         phraseDto.Id = phraseData.Id;
       }
 
