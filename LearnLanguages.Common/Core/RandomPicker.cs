@@ -66,6 +66,10 @@ namespace LearnLanguages.Common
     {
       return PickOne<object>(aObject, bObject, out loser, aWeight, bWeight);
     }
-    
+
+    public int NextInt(int minInclusive, int maxExclusive)
+    {
+      return Randomizer.Next(minInclusive, maxExclusive);
+    }
   }
 }

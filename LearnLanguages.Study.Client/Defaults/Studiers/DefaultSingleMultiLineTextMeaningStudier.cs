@@ -82,7 +82,7 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    private DefaultLineMeaningStudier  ChooseNextLineStudier(out int nextLineNumber)
+    private DefaultLineMeaningStudier ChooseNextLineStudier(out int nextLineNumber)
     {
       List<int> unknownLineNumbers = new List<int>();
       nextLineNumber = -1;
@@ -110,12 +110,23 @@ namespace LearnLanguages.Study
       if (_AbortIsFlagged)
         return null;
 
-      //all lines are known if count == 0, so we have no studier to choose.
+      //ALL LINES ARE KNOWN IF COUNT == 0, SO PICK A LINE AT RANDOM
       if (unknownLineNumbers.Count == 0)
       {
-        nextLineNumber = -1;
-        return null;
+        int randomLineNumber = Common.RandomPicker.Ton.NextInt(0, _Target.Lines.Count);
+        nextLineNumber = randomLineNumber;
+        var studier = _LineStudiers[nextLineNumber];
+        return studier;
       }
+
+      ////all lines are known if count == 0, so we have no studier to choose.
+      //if (unknownLineNumbers.Count == 0)
+      //{
+      //  nextLineNumber = -1;
+      //  return null;
+      //}
+
+
 
       //THIS IS DIFFICULT, BECAUSE WE'RE HANDLING INDEXES OF INDEXES.
       //WE ARE LOOKING FOR THE LINE NUMBER OF THE NEXT STUDIER (THE INDEX FOR THAT STUDIER).
