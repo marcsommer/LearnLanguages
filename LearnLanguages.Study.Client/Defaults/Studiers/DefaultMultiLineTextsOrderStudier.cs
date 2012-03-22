@@ -34,18 +34,16 @@ namespace LearnLanguages.Study
   public class DefaultMultiLineTextsOrderStudier : StudierBase<MultiLineTextList>,
                                                    IHandle<NavigationRequestedEventMessage>
   {
+    #region Ctors and Init
+
     public DefaultMultiLineTextsOrderStudier()
     {
-      _Studiers = new Dictionary<Guid, DefaultSingleMultiLineTextOrderStudier>();
       Services.EventAggregator.Subscribe(this);//navigation
+      LineGroupSize = int.Parse(StudyResources.DefaultOrderStudierLineGroupSize);
+      _KnownGroupNumbers = new List<int>();
     }
 
-    private int _CurrentMultiLineTextIndex = -1;
-
-    ///// <summary>
-    ///// Collection of Studiers, indexed by the MLT that they study.
-    ///// </summary>
-    //private Dictionary<Guid, DefaultSingleMultiLineTextOrderStudier> _Studiers { get; set; }
+    #endregion
 
     #region Methods
 
@@ -56,93 +54,98 @@ namespace LearnLanguages.Study
         callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
         return;
       }
-      //WE ARE CYCLING THROUGH ALL OF THE MLTS, SO GET NEXT MLT TO STUDY INDEX
-      var multiLineTextIndex = GetNextMultiLineTextIndex();
-      var currentMultiLineText = _Target[multiLineTextIndex];
-      var studier = _Studiers[currentMultiLineText.Id];
 
-      //WE HAVE ALREADY INITIALIZED EACH STUDIER, SO NOW JUST DELEGATE THE WORK TO THE STUDIER
-      studier.GetNextStudyItemViewModel(callback);
-    }
+      //IF WE KNOW ALL OF OUR GROUPS, RESET AND START OVER
+      if (_KnownGroupNumbers.Count == _LineGroups.Count)
+        _KnownGroupNumbers.Clear();
 
-    private int GetNextMultiLineTextIndex()
-    {
-      //cycle through the , and get the corresponding studier for this MLT.
-      _CurrentMultiLineTextIndex++;
-      if (_CurrentMultiLineTextIndex > (_Target.Count - 1))
-        _CurrentMultiLineTextIndex = 0;
+      //GET THE INITIAL GROUP NUMBER TO TRY TO STUDY
+      var groupNumberToStudy = _LastGroupNumberStudied + 1;
+      if (groupNumberToStudy == _LineGroups.Count)
+        groupNumberToStudy = 0;
 
-      return _CurrentMultiLineTextIndex;
-    }
-
-    public double GetPercentKnown()
-    {
-      if (_Studiers.Count == 0)
-        return 0.0d;
-
-      var totalLineCount = 0;
-      double totalPercentKnownNonNormalized = 0.0d;
-      foreach (var studier in _Studiers)
+      //FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
+      for (int i = 0; i < _LineGroups.Count; i++)
       {
-        var multiLineTextId = studier.Key;
-        var results = from mlt in _Target
-                      where mlt.Id == multiLineTextId
-                      select mlt;
-        var studierLineCount = results.First().Lines.Count;
-        //var studierLineCount = studier.Key.Lines.Count;
-        totalLineCount += studierLineCount;
+        if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
+          break;
 
-        var studierPercentKnown = studier.Value.GetPercentKnown();
-        totalPercentKnownNonNormalized += (studierPercentKnown / 100.0d) * studierLineCount;
-        //eg 50% known 10 lines
-        //25% known 1000 lines.  Percent known should be just over 25% known (255/1010 to be exact);
-        //totalLineCount = 1010
-        //totalPercentKnownNonNormalized = (.5 * 10) + (.25 * 1000) = 255
-        //totalPercentKnownNonNormalized = 255 / 1010 = .252475
+        //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
+        groupNumberToStudy++;
+        if (groupNumberToStudy == _LineGroups.Count)
+          groupNumberToStudy = 0;
       }
 
-      var totalPercentKnownNormalized = totalPercentKnownNonNormalized / totalLineCount;
+      //WE NOW HAVE THE GROUP NUMBER TO STUDY.  
+      var group = _LineGroups[groupNumberToStudy];
+      var lineToStudy = group.GetLine();
 
-      return totalPercentKnownNormalized;
+
+
     }
-
-    #endregion
 
     public override void InitializeForNewStudySession(MultiLineTextList target,
                                                       ExceptionCheckCallback completedCallback)
     {
-      _AbortIsFlagged = false;
-
-      _Target = target;
-      _Studiers.Clear();
-      int initializedCount = 0;
-
-      //CREATE STUDIER FOR EACH MULTILINETEXT IN MULTILINETEXTS TARGET
-      var newJobMultiLineTextList = _Target;
-      foreach (var multiLineTextEdit in newJobMultiLineTextList)
+      try
       {
+        _AbortIsFlagged = false;
+        _Target = target;
         if (_AbortIsFlagged)
         {
           completedCallback(null);
           return;
         }
-        var studier = new DefaultSingleMultiLineTextOrderStudier();
-        studier.InitializeForNewStudySession(multiLineTextEdit, (e) =>
-        {
-          if (e != null)
-            throw e;
+        _LastGroupNumberStudied = -1;
+        PopulateGroups();
+        _KnownGroupNumbers.Clear();
 
-          if (_AbortIsFlagged)
+        completedCallback(null);
+      }
+      catch (Exception ex)
+      {
+        completedCallback(ex);
+      }
+    }
+
+    private void PopulateGroups()
+    {
+      _LineGroups = new List<LineGroup>();
+      var currentGroupIndex = -1;
+
+      foreach (var multiLineText in _Target)
+      {
+        //get ordered list of lines in MLT
+        var orderedList = multiLineText.Lines.OrderBy<LineEdit, int>((l) =>
           {
-            completedCallback(null);
-            return;
-          }
+            return l.LineNumber;
+          }).ToList();
 
-          _Studiers.Add(multiLineTextEdit.Id, studier);
-          initializedCount++;
-          if (initializedCount == newJobMultiLineTextList.Count)
-            completedCallback(null);
-        });
+        var count = orderedList.Count();
+        
+        //WE ARE GOING TO CREATE GROUPS WITH GROUPSIZE NUMBER OF LINES PER GROUP.
+        LineGroup tmpGroup = null;
+
+        for (int i = 0; i < count; i++)
+        {
+          var line = orderedList[i];
+
+          if (tmpGroup == null)
+          {
+            currentGroupIndex++;
+            tmpGroup = new LineGroup(currentGroupIndex);
+          }
+          tmpGroup.Lines.Add(line);
+
+          //IF OUR GROUP HAS REACHED THE GROUP SIZE OR IF WE ARE ON THE LAST ELEMENT IN THE MLT
+          if (tmpGroup.Lines.Count == LineGroupSize ||
+              i == count - 1)
+          {
+            //THIS GROUP IS FINISHED.  ADD IT TO OUR _LINEGROUPS, AND RESET OUR TMP VAR
+            _LineGroups.Add(tmpGroup);
+            tmpGroup = null;
+          }
+        }
       }
     }
 
@@ -155,6 +158,12 @@ namespace LearnLanguages.Study
     {
       _AbortIsFlagged = true;
     }
+
+   
+
+    #endregion
+
+    #region Properties
 
     private object _AbortLock = new object();
     private bool _abortIsFlagged = false;
@@ -175,5 +184,95 @@ namespace LearnLanguages.Study
         }
       }
     }
+
+    public int LineGroupSize { get; set; }
+
+    private List<LineGroup> _LineGroups { get; set; }
+    private List<int> _KnownGroupNumbers { get; set; }
+
+    private int _LastGroupNumberStudied { get; set; }
+
+    #endregion
+
+    #region Nested Classes
+
+    private class LineGroup : IHandle<History.Events.ReviewedLineEvent>
+    {
+      public LineGroup(int groupNumber)
+      {
+        Lines = new List<LineEdit>();
+        GroupNumber = groupNumber;
+        _LastStudied = 0;
+        History.HistoryPublisher.Ton.SubscribeToEvents(this);
+      }
+
+      public int HitCount { get; set; }
+      public int MissCount { get; set; }
+      public int TotalCount { get { return HitCount + MissCount; } }
+
+      public List<LineEdit> Lines { get; set; }
+      public int GroupNumber { get; set; }
+      /// <summary>
+      /// Private variable used to keep track of which line this line group should be studying.
+      /// </summary>
+      private int _LastStudied { get; set; }
+      /// <summary>
+      /// Tells this LineGroup that whatever line it is on, it was reviewed correctly (known).
+      /// </summary>
+      public void MarkHit()
+      {
+        HitCount++;
+        _LastStudied++;
+        if (_LastStudied >= Lines.Count)
+          ResetLastStudied();
+        CurrentLine = null;
+      }
+      /// <summary>
+      /// Tells this LineGroup that whatever line it is on, it was reviewed incorrectly (unknown).
+      /// </summary>
+      public void MarkMiss()
+      {
+        MissCount++;
+        ResetLastStudied();
+        CurrentLine = null;
+      }
+
+      private void ResetLastStudied()
+      {
+        _LastStudied = -1;
+      }
+
+      public LineEdit GetLine()
+      {
+        var toStudy = _LastStudied++;
+        if (toStudy >= Lines.Count)
+          toStudy = 0;
+        var nextLine = Lines[toStudy];
+        CurrentLine = nextLine;
+        _LastStudied = toStudy;
+        return nextLine;
+      }
+
+      private LineEdit CurrentLine { get; set; }
+
+      public void Handle(History.Events.ReviewedLineEvent message)
+      {
+        var msgLineText = message.GetDetail<string>(History.HistoryResources.Key_LineText);
+        if (CurrentLine == null ||
+            CurrentLine.Phrase == null ||
+            string.IsNullOrEmpty(CurrentLine.Phrase.Text) ||
+            msgLineText != CurrentLine.Phrase.Text)
+          return;
+
+        var feedbackAsDouble = message.GetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble);
+        var feedbackIsCorrect = feedbackAsDouble >= double.Parse(StudyResources.DefaultKnowledgeThreshold);
+        if (feedbackIsCorrect)
+          MarkHit();
+        else
+          MarkMiss();
+      }
+    }
+
+    #endregion
   }
 }

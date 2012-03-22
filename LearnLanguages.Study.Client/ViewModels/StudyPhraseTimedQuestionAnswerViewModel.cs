@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
+using LearnLanguages.Common;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
@@ -10,13 +11,13 @@ using LearnLanguages.History.Events;
 
 namespace LearnLanguages.Study.ViewModels
 {
-  [Export(typeof(StudyManualQuestionAnswerViewModel))]
+  [Export(typeof(StudyPhraseTimedQuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class StudyManualQuestionAnswerViewModel : StudyItemViewModelBase
+  public class StudyPhraseTimedQuestionAnswerViewModel : StudyItemViewModelBase
   {
     #region Ctors and Init
 
-    public StudyManualQuestionAnswerViewModel()
+    public StudyPhraseTimedQuestionAnswerViewModel()
     {
       Services.EventAggregator.Subscribe(this);
     }
@@ -65,7 +66,6 @@ namespace LearnLanguages.Study.ViewModels
         {
           _HidingAnswer = value;
           NotifyOfPropertyChange(() => HidingAnswer);
-          //NotifyOfPropertyChange(() => CanNext);
         }
       }
     }
@@ -94,35 +94,9 @@ namespace LearnLanguages.Study.ViewModels
         {
           _AnswerVisibility = value;
           NotifyOfPropertyChange(() => AnswerVisibility);
-          NotifyOfPropertyChange(() => ShowAnswerButtonVisibility);
         }
       }
     }
-
-    public Visibility ShowAnswerButtonVisibility
-    {
-      get
-      {
-        if (AnswerVisibility == Visibility.Collapsed)
-          return Visibility.Visible;
-        else
-          return Visibility.Collapsed;
-      }
-    }
-
-    //private Visibility _NextButtonVisibility = Visibility.Collapsed;
-    //public Visibility NextButtonVisibility
-    //{
-    //  get { return _NextButtonVisibility; }
-    //  set
-    //  {
-    //    if (value != _NextButtonVisibility)
-    //    {
-    //      _NextButtonVisibility = value;
-    //      NotifyOfPropertyChange(() => NextButtonVisibility);
-    //    }
-    //  }
-    //}
 
     public string QuestionHeader
     {
@@ -156,30 +130,114 @@ namespace LearnLanguages.Study.ViewModels
         return Answer.Language.Text;
       }
     }
-    public string ShowAnswerButtonLabel { get { return StudyResources.ButtonLabelShowAnswer; } }
 
-    //private ExceptionCheckCallback _CompletedCallback { get; set; }
-
+    private int _QuestionDurationInMilliseconds;
+    public int QuestionDurationInMilliseconds
+    {
+      get { return _QuestionDurationInMilliseconds; }
+      set
+      {
+        if (value != _QuestionDurationInMilliseconds)
+        {
+          _QuestionDurationInMilliseconds = value;
+          NotifyOfPropertyChange(() => QuestionDurationInMilliseconds);
+        }
+      }
+    }
 
     #endregion
 
     #region Methods
 
+    /// <summary>
+    /// Executes callback when answer is shown, or when exception is thrown.
+    /// </summary>
+    /// <param name="question">Question PhraseEdit</param>
+    /// <param name="answer">Answer PhraseEdit</param>
+    /// <param name="questionDurationInMilliseconds"></param>
+    /// <param name="callback"></param>
+    protected void AskQuestion(PhraseEdit question,
+                            PhraseEdit answer,
+                            int questionDurationInMilliseconds,
+                            ExceptionCheckCallback callback)
+    {
+      try
+      {
+
+        //BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
+        //client.SpeakCompleted += client_SpeakCompleted;
+        //client.SpeakAsync(StudyResources.BingAppId, question.Text, BingTranslateHelper.GetLanguageCode(question.Language.Text), string.Empty, string.Empty);
+
+        HideAnswer();
+        Question = question;
+        Answer = answer;
+        //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
+        BackgroundWorker timer = new BackgroundWorker();
+        timer.DoWork += (s, e) =>
+        {
+          try
+          {
+
+            System.Threading.Thread.Sleep(questionDurationInMilliseconds);
+            //if (AnswerVisibility == Visibility.Collapsed)
+              
+            ShowAnswer();
+            callback(null);
+          }
+          catch (Exception ex)
+          {
+            callback(ex);
+          }
+        };
+
+        timer.RunWorkerAsync();
+      }
+      catch (Exception ex)
+      {
+        callback(ex);
+      }
+    }
+
     public void Initialize(PhraseEdit question, PhraseEdit answer)
     {
       Question = question;
       Answer = answer;
+      var words = question.Text.ParseIntoWords();
+      var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+      QuestionDurationInMilliseconds = durationMilliseconds;
       HideAnswer();
     }
 
     public override void Show(ExceptionCheckCallback callback)
     {
-      base.Show(callback);
       _DateTimeQuestionShown = DateTime.Now;
-      var viewingEvent = new History.Events.ViewingPhraseOnScreenEvent(Question);
-      HistoryPublisher.Ton.PublishEvent(viewingEvent);
+      ViewModelVisibility = Visibility.Visible;
+      DispatchShown();
+      var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Question);
+      History.HistoryPublisher.Ton.PublishEvent(eventViewing);
+      AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
+        {
+          if (e != null)
+          {
+            callback(e);
+          }
+          else
+          {
+            //WAIT FOR ALOTTED TIME FOR USER TO THINK ABOUT ANSWER.
+            System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultThinkAboutAnswerTime));
+            callback(null);
+          }
+        });
     }
 
+    public override void Abort()
+    {
+      QuestionVisibility = Visibility.Collapsed;
+      AnswerVisibility = Visibility.Collapsed;
+      if (_Callback != null)
+        _Callback(null);
+    }
+    
     private void HideAnswer()
     {
       HidingAnswer = true;
@@ -203,36 +261,13 @@ namespace LearnLanguages.Study.ViewModels
       HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question, duration));
       HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer));
       HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer, duration));
-
-      _Callback(null);
-    }
-
-    //public bool CanNext
-    //{
-    //  get
-    //  {
-    //    return (_CompletedCallback != null && !HidingAnswer);
-    //  }
-    //}
-    //public void Next()
-    //{
-    //  _CompletedCallback(null);
-    //}
-
-    #endregion
-
-    public override void Abort()
-    {
-      //ShowAnswer();
-      QuestionVisibility = Visibility.Collapsed;
-      AnswerVisibility = Visibility.Collapsed;
-      if (_Callback != null)
-        _Callback(null);
     }
 
     protected override Guid GetReviewMethodId()
     {
-      return Guid.Parse(StudyResources.ReviewMethodIdManualQA);
+      return Guid.Parse(StudyResources.ReviewMethodIdTimedQA);
     }
+
+    #endregion
   }
 }

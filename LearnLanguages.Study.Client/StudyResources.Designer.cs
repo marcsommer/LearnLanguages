@@ -223,6 +223,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 4.
+        /// </summary>
+        public static string DefaultOrderStudierLineGroupSize {
+            get {
+                return ResourceManager.GetString("DefaultOrderStudierLineGroupSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 8FA20DFF-0C65-4BC0-B4AC-38B72AB03CD7.
         /// </summary>
         public static string DefaultPhraseReviewedRecorderId {
@@ -412,20 +421,38 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 360BF760-95AA-4EB3-B2E2-C7DAD1EB29AA.
+        /// </summary>
+        public static string ReviewMethodIdStudyLineOrderManualQA {
+            get {
+                return ResourceManager.GetString("ReviewMethodIdStudyLineOrderManualQA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0DB35AFA-49A9-4C11-A4B1-B4C6795B5931.
+        /// </summary>
+        public static string ReviewMethodIdStudyLineOrderTimedQA {
+            get {
+                return ResourceManager.GetString("ReviewMethodIdStudyLineOrderTimedQA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E5F6AF74-2F9D-4067-921B-009DE109759D.
         /// </summary>
-        public static string ReviewMethodIdManualQA {
+        public static string ReviewMethodIdStudyPhraseManualQA {
             get {
-                return ResourceManager.GetString("ReviewMethodIdManualQA", resourceCulture);
+                return ResourceManager.GetString("ReviewMethodIdStudyPhraseManualQA", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to C7061A4F-43A1-4F31-B40D-4B6F5B8020A7.
         /// </summary>
-        public static string ReviewMethodIdTimedQA {
+        public static string ReviewMethodIdStudyPhraseTimedQA {
             get {
-                return ResourceManager.GetString("ReviewMethodIdTimedQA", resourceCulture);
+                return ResourceManager.GetString("ReviewMethodIdStudyPhraseTimedQA", resourceCulture);
             }
         }
         
@@ -462,6 +489,24 @@ namespace LearnLanguages.Study {
         public static string StudyContextTotal {
             get {
                 return ResourceManager.GetString("StudyContextTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string StudyLineOrderAnswerHeader {
+            get {
+                return ResourceManager.GetString("StudyLineOrderAnswerHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Number: {0}.
+        /// </summary>
+        public static string StudyLineOrderQuestionHeader {
+            get {
+                return ResourceManager.GetString("StudyLineOrderQuestionHeader", resourceCulture);
             }
         }
         

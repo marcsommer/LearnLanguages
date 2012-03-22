@@ -11,23 +11,23 @@ using LearnLanguages.History.Events;
 
 namespace LearnLanguages.Study.ViewModels
 {
-  [Export(typeof(StudyTimedQuestionAnswerViewModel))]
+  [Export(typeof(StudyLineOrderTimedQuestionAnswerViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class StudyTimedQuestionAnswerViewModel : StudyItemViewModelBase
+  public class StudyLineOrderTimedQuestionAnswerViewModel : StudyItemViewModelBase
   {
     #region Ctors and Init
 
-    public StudyTimedQuestionAnswerViewModel()
+    public StudyLineOrderTimedQuestionAnswerViewModel()
     {
-      Services.EventAggregator.Subscribe(this);
+      //Services.EventAggregator.Subscribe(this);
     }
 
     #endregion
 
     #region Properties
 
-    private PhraseEdit _Question;
-    public PhraseEdit Question
+    private LineEdit _Question;
+    public LineEdit Question
     {
       get { return _Question; }
       set
@@ -41,8 +41,8 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    private PhraseEdit _Answer;
-    public PhraseEdit Answer
+    private LineEdit _Answer;
+    public LineEdit Answer
     {
       get { return _Answer; }
       set
@@ -105,13 +105,7 @@ namespace LearnLanguages.Study.ViewModels
         if (Question == null)
           return StudyResources.ErrorMsgQuestionIsNull;
 
-        if (Question.Language == null)
-          return StudyResources.ErrorMsgLanguageIsNull;
-
-        if (string.IsNullOrEmpty(Question.Language.Text))
-          return StudyResources.ErrorMsgLanguageTextIsNullOrEmpty;
-
-        return Question.Language.Text;
+        return string.Format(StudyResources.StudyLineOrderQuestionHeader, Question.LineNumber);
       }
     }
     public string AnswerHeader
@@ -121,13 +115,7 @@ namespace LearnLanguages.Study.ViewModels
         if (Answer == null)
           return StudyResources.ErrorMsgAnswerIsNull;
 
-        if (Answer.Language == null)
-          return StudyResources.ErrorMsgLanguageIsNull;
-
-        if (string.IsNullOrEmpty(Answer.Language.Text))
-          return StudyResources.ErrorMsgLanguageTextIsNullOrEmpty;
-
-        return Answer.Language.Text;
+        return StudyResources.StudyLineOrderAnswerHeader;
       }
     }
 
@@ -152,14 +140,14 @@ namespace LearnLanguages.Study.ViewModels
     /// <summary>
     /// Executes callback when answer is shown, or when exception is thrown.
     /// </summary>
-    /// <param name="question">Question PhraseEdit</param>
-    /// <param name="answer">Answer PhraseEdit</param>
+    /// <param name="question">Question LineEdit</param>
+    /// <param name="answer">Answer LineEdit</param>
     /// <param name="questionDurationInMilliseconds"></param>
     /// <param name="callback"></param>
-    protected void AskQuestion(PhraseEdit question,
-                            PhraseEdit answer,
-                            int questionDurationInMilliseconds,
-                            ExceptionCheckCallback callback)
+    protected void AskQuestion(LineEdit question,
+                               LineEdit answer,
+                               int questionDurationInMilliseconds,
+                               ExceptionCheckCallback callback)
     {
       try
       {
@@ -177,7 +165,6 @@ namespace LearnLanguages.Study.ViewModels
         {
           try
           {
-
             System.Threading.Thread.Sleep(questionDurationInMilliseconds);
             //if (AnswerVisibility == Visibility.Collapsed)
               
@@ -198,11 +185,11 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    public void Initialize(PhraseEdit question, PhraseEdit answer)
+    public void Initialize(LineEdit question, LineEdit answer)
     {
       Question = question;
       Answer = answer;
-      var words = question.Text.ParseIntoWords();
+      var words = question.Phrase.Text.ParseIntoWords();
       var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
       QuestionDurationInMilliseconds = durationMilliseconds;
       HideAnswer();
@@ -213,7 +200,7 @@ namespace LearnLanguages.Study.ViewModels
       _DateTimeQuestionShown = DateTime.Now;
       ViewModelVisibility = Visibility.Visible;
       DispatchShown();
-      var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Question);
+      var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Question.Phrase);
       History.HistoryPublisher.Ton.PublishEvent(eventViewing);
       AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
         {
@@ -258,14 +245,14 @@ namespace LearnLanguages.Study.ViewModels
 
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
-      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question, duration));
-      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer));
-      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question.Phrase, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer.Phrase));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer.Phrase, duration));
     }
 
     protected override Guid GetReviewMethodId()
     {
-      return Guid.Parse(StudyResources.ReviewMethodIdTimedQA);
+      return Guid.Parse(StudyResources.ReviewMethodIdStudyLineOrderTimedQA);
     }
 
     #endregion

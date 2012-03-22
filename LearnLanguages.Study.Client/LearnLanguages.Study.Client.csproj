@@ -101,13 +101,14 @@
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Creators\StudyItemViewModelFactory.cs" />
-    <Compile Include="ViewModels\StudyManualQuestionAnswerViewModel.cs" />
+    <Compile Include="ViewModels\StudyLineOrderManualQuestionAnswerViewModel.cs" />
+    <Compile Include="ViewModels\StudyLineOrderTimedQuestionAnswerViewModel.cs" />
+    <Compile Include="ViewModels\StudyPhraseManualQuestionAnswerViewModel.cs" />
     <Compile Include="ViewModels\DefaultStudyPartnerViewModel.cs" />
     <Compile Include="ViewModels\PercentKnownFeedbackViewModel.cs" />
     <Compile Include="ViewModels\StudySessionCompleteViewModel.cs" />
     <Compile Include="ViewModels\DefaultStudyMultiLineTextsViewModel.cs" />
-    <Compile Include="ViewModels\StudyTimedQuestionAnswerViewModel.cs" />
-    <Compile Include="_RandomPhraseStudyPartner.cs" />
+    <Compile Include="ViewModels\StudyPhraseTimedQuestionAnswerViewModel.cs" />
     <Compile Include="Core\StudyPartnerBase.cs" />
   </ItemGroup>
   <ItemGroup>

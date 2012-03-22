@@ -175,6 +175,9 @@ debug=10 seconds (10000)</comment>
   <data name="DefaultOfferExchangeId" xml:space="preserve">
     <value>92A7E7C6-8278-4142-A962-6616E2959D1C</value>
   </data>
+  <data name="DefaultOrderStudierLineGroupSize" xml:space="preserve">
+    <value>4</value>
+  </data>
   <data name="DefaultPhraseReviewedRecorderId" xml:space="preserve">
     <value>8FA20DFF-0C65-4BC0-B4AC-38B72AB03CD7</value>
   </data>
@@ -238,10 +241,16 @@ debug=10 seconds (10000)</comment>
   <data name="ReviewMethodIdDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>2DF2AF17-CE4E-462B-AD39-B6E31DF985A5</value>
   </data>
-  <data name="ReviewMethodIdManualQA" xml:space="preserve">
+  <data name="ReviewMethodIdStudyLineOrderManualQA" xml:space="preserve">
+    <value>360BF760-95AA-4EB3-B2E2-C7DAD1EB29AA</value>
+  </data>
+  <data name="ReviewMethodIdStudyLineOrderTimedQA" xml:space="preserve">
+    <value>0DB35AFA-49A9-4C11-A4B1-B4C6795B5931</value>
+  </data>
+  <data name="ReviewMethodIdStudyPhraseManualQA" xml:space="preserve">
     <value>E5F6AF74-2F9D-4067-921B-009DE109759D</value>
   </data>
-  <data name="ReviewMethodIdTimedQA" xml:space="preserve">
+  <data name="ReviewMethodIdStudyPhraseTimedQA" xml:space="preserve">
     <value>C7061A4F-43A1-4F31-B40D-4B6F5B8020A7</value>
   </data>
   <data name="SourceNameDatabase" xml:space="preserve">
@@ -255,6 +264,13 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="StudyContextTotal" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="StudyLineOrderAnswerHeader" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StudyLineOrderQuestionHeader" xml:space="preserve">
+    <value>Line Number: {0}</value>
+    <comment>{0} = Line.LineNumber</comment>
   </data>
   <data name="WarningMsgEmptyAggregatePhraseTextFound" xml:space="preserve">
     <value>An empty phrase text was found in AggregatePhraseTexts.  This shouldn't happen.</value>
