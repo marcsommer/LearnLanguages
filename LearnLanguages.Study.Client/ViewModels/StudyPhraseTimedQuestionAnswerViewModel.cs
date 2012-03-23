@@ -265,7 +265,7 @@ namespace LearnLanguages.Study.ViewModels
 
     protected override Guid GetReviewMethodId()
     {
-      return Guid.Parse(StudyResources.ReviewMethodIdTimedQA);
+      return Guid.Parse(StudyResources.ReviewMethodIdStudyPhraseTimedQA);
     }
 
     #endregion

@@ -7,6 +7,7 @@ using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
 using LearnLanguages.History.Events;
+using System.Text;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -25,8 +26,8 @@ namespace LearnLanguages.Study.ViewModels
 
     #region Properties
 
-    private LineEdit _Question;
-    public LineEdit Question
+    private string _Question;
+    public string Question
     {
       get { return _Question; }
       set
@@ -40,8 +41,8 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    private LineEdit _Answer;
-    public LineEdit Answer
+    private string _Answer;
+    public string Answer
     {
       get { return _Answer; }
       set
@@ -51,6 +52,34 @@ namespace LearnLanguages.Study.ViewModels
           _Answer = value;
           NotifyOfPropertyChange(() => Answer);
           NotifyOfPropertyChange(() => AnswerHeader);
+        }
+      }
+    }
+
+    private LineEdit _Line;
+    public LineEdit Line
+    {
+      get { return _Line; }
+      set
+      {
+        if (value != _Line)
+        {
+          _Line = value;
+          NotifyOfPropertyChange(() => Line);
+        }
+      }
+    }
+
+    private MultiLineTextEdit _MultiLineText;
+    public MultiLineTextEdit MultiLineText
+    {
+      get { return _MultiLineText; }
+      set
+      {
+        if (value != _MultiLineText)
+        {
+          _MultiLineText = value;
+          NotifyOfPropertyChange(() => MultiLineText);
         }
       }
     }
@@ -154,11 +183,32 @@ namespace LearnLanguages.Study.ViewModels
 
     #region Methods
 
-    public void Initialize(LineEdit question, LineEdit answer)
+    public void Initialize(LineEdit line, MultiLineTextEdit multiLineText)
     {
-      Question = question;
-      Answer = answer;
       HideAnswer();
+      Line = line;
+      MultiLineText = multiLineText;
+      PopulateQuestionAndAnswer();
+    }
+
+    protected virtual void PopulateQuestionAndAnswer()
+    {
+      string question = "";
+      var sb = new StringBuilder();
+      LineEdit prevLine = null;
+      if (Line.LineNumber != 0)
+      {
+        prevLine = MultiLineText.Lines[Line.LineNumber-1];
+        sb.AppendLine(StudyResources.StudyLineOrderLineNumberPrefix + 
+                      prevLine.LineNumber.ToString() + 
+                      StudyResources.StudyLineOrderSeparatorBetweenLineNumberAndLineText + 
+                      prevLine.Phrase.Text);
+        sb.AppendLine(StudyResources.StudyLineOrderQuestionBlank);
+      }
+      else
+      {
+        question
+      }
     }
 
     public override void Show(ExceptionCheckCallback callback)

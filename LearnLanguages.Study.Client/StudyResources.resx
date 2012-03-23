@@ -268,9 +268,15 @@ debug=10 seconds (10000)</comment>
   <data name="StudyLineOrderAnswerHeader" xml:space="preserve">
     <value />
   </data>
+  <data name="StudyLineOrderLineNumberPrefix" xml:space="preserve">
+    <value>Line #: </value>
+  </data>
   <data name="StudyLineOrderQuestionHeader" xml:space="preserve">
     <value>Line Number: {0}</value>
     <comment>{0} = Line.LineNumber</comment>
+  </data>
+  <data name="StudyLineOrderSeparatorBetweenLineNumberAndLineText" xml:space="preserve">
+    <value>  </value>
   </data>
   <data name="WarningMsgEmptyAggregatePhraseTextFound" xml:space="preserve">
     <value>An empty phrase text was found in AggregatePhraseTexts.  This shouldn't happen.</value>

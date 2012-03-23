@@ -232,7 +232,7 @@ namespace LearnLanguages.Study.ViewModels
 
     protected override Guid GetReviewMethodId()
     {
-      return Guid.Parse(StudyResources.ReviewMethodIdManualQA);
+      return Guid.Parse(StudyResources.ReviewMethodIdStudyPhraseManualQA);
     }
   }
 }
