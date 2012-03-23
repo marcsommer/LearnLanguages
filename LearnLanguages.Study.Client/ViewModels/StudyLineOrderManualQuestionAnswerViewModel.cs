@@ -193,29 +193,35 @@ namespace LearnLanguages.Study.ViewModels
 
     protected virtual void PopulateQuestionAndAnswer()
     {
-      string question = "";
       var sb = new StringBuilder();
       LineEdit prevLine = null;
       if (Line.LineNumber != 0)
       {
+        //PREVIOUS LINE
         prevLine = MultiLineText.Lines[Line.LineNumber-1];
         sb.AppendLine(StudyResources.StudyLineOrderLineNumberPrefix + 
                       prevLine.LineNumber.ToString() + 
                       StudyResources.StudyLineOrderSeparatorBetweenLineNumberAndLineText + 
                       prevLine.Phrase.Text);
+
+        //BLANK REPRESENTING THE LINE IN QUESTION
         sb.AppendLine(StudyResources.StudyLineOrderQuestionBlank);
       }
       else
       {
-        question
+        //NO PREVIOUS LINE BECAUSE WE'RE STUDYING THE 1ST LINE IN MLT
+        sb.AppendLine(StudyResources.StudyLineOrderQuestionWhatIsFirstLine);
       }
+
+      Question = sb.ToString();
+      Answer = Line.Phrase.Text;
     }
 
     public override void Show(ExceptionCheckCallback callback)
     {
       base.Show(callback);
       _DateTimeQuestionShown = DateTime.Now;
-      var viewingEvent = new History.Events.ViewingPhraseOnScreenEvent(Question.Phrase);
+      var viewingEvent = new History.Events.ViewingPhraseOnScreenEvent(Line.Phrase);
       HistoryPublisher.Ton.PublishEvent(viewingEvent);
     }
 
@@ -239,9 +245,9 @@ namespace LearnLanguages.Study.ViewModels
 
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
-      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question.Phrase, duration));
-      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer.Phrase));
-      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer.Phrase, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Line.Phrase, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Line.Phrase));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Line.Phrase, duration));
 
       _Callback(null);
     }

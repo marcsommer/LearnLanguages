@@ -511,11 +511,29 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _____.
+        /// </summary>
+        public static string StudyLineOrderQuestionBlank {
+            get {
+                return ResourceManager.GetString("StudyLineOrderQuestionBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line Number: {0}.
         /// </summary>
         public static string StudyLineOrderQuestionHeader {
             get {
                 return ResourceManager.GetString("StudyLineOrderQuestionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the first line?.
+        /// </summary>
+        public static string StudyLineOrderQuestionWhatIsFirstLine {
+            get {
+                return ResourceManager.GetString("StudyLineOrderQuestionWhatIsFirstLine", resourceCulture);
             }
         }
         

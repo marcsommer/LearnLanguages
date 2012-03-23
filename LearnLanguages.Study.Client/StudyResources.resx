@@ -271,9 +271,15 @@ debug=10 seconds (10000)</comment>
   <data name="StudyLineOrderLineNumberPrefix" xml:space="preserve">
     <value>Line #: </value>
   </data>
+  <data name="StudyLineOrderQuestionBlank" xml:space="preserve">
+    <value>_____</value>
+  </data>
   <data name="StudyLineOrderQuestionHeader" xml:space="preserve">
     <value>Line Number: {0}</value>
     <comment>{0} = Line.LineNumber</comment>
+  </data>
+  <data name="StudyLineOrderQuestionWhatIsFirstLine" xml:space="preserve">
+    <value>What is the first line?</value>
   </data>
   <data name="StudyLineOrderSeparatorBetweenLineNumberAndLineText" xml:space="preserve">
     <value>  </value>
