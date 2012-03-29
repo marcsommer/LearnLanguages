@@ -6,6 +6,7 @@ using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common;
 using LearnLanguages.Common.Translation;
+using LearnLanguages.Study.ViewModels;
 
 namespace LearnLanguages.Study
 {
@@ -115,81 +116,89 @@ namespace LearnLanguages.Study
       }
     }
 
-    ///// <summary>
-    ///// Creates a study item using the line and MLT. 
-    ///// This prepares the view model so that all that is necessary for the caller is to call
-    ///// viewmodel.Show(...);
-    ///// </summary>
-    //public void Procure(LineEdit line,
-    //                    MultiLineTextEdit multiLineText,
-    //                    AsyncCallback<StudyItemViewModelBase> callback)
-    //{
-    //  //FOR NOW, THIS WILL JUST CREATE ONE OF TWO STUDY ITEM VIEW MODELS: 
-    //  //STUDY LINE ORDER VIEWMODEL (TIMED OR MANUAL).
-    //  //IT WILL SHOW THE QUESTION AND HIDE THE ANSWER FOR VARIOUS AMOUNTS OF TIME, DEPENDING ON QUESTION
-    //  //LENGTH, AND OTHER FACTORS.
-    //  //IN THE FUTURE, THIS WILL BE EXTENSIBILITY POINT WHERE WE CAN SELECT DIFFERENT VARIETIES OF Q AND A 
-    //  //TRANSLATION VIEW MODELS BASED ON HOW SUCCESSFUL THEY ARE.  WE CAN ALSO HAVE DIFFERENT CONFIGURATIONS
-    //  //OF VARIETIES BE SELECTED HERE.
+    /// <summary>
+    /// Creates a study item using the line and MLT. 
+    /// This prepares the view model so that all that is necessary for the caller is to call
+    /// viewmodel.Show(...);
+    /// </summary>
+    public void Procure(LineEdit line,
+                        MultiLineTextEdit multiLineText,
+                        AsyncCallback<StudyItemViewModelBase> callback)
+    {
+      //FOR NOW, THIS WILL JUST CREATE ONE OF TWO STUDY ITEM VIEW MODELS: 
+      //STUDY LINE ORDER VIEWMODEL (TIMED OR MANUAL).
+      //IT WILL SHOW THE QUESTION AND HIDE THE ANSWER FOR VARIOUS AMOUNTS OF TIME, DEPENDING ON QUESTION
+      //LENGTH, AND OTHER FACTORS.
+      //IN THE FUTURE, THIS WILL BE EXTENSIBILITY POINT WHERE WE CAN SELECT DIFFERENT VARIETIES OF Q AND A 
+      //TRANSLATION VIEW MODELS BASED ON HOW SUCCESSFUL THEY ARE.  WE CAN ALSO HAVE DIFFERENT CONFIGURATIONS
+      //OF VARIETIES BE SELECTED HERE.
 
-    //  var languageText = phrase.Language.Text;
+      var manualViewModel = new StudyLineOrderManualQuestionAnswerViewModel();
+      var timedViewModel = new StudyLineOrderTimedQuestionAnswerViewModel();
+      object dummy = null;
+      var viewModel = RandomPicker.Ton.PickOne(manualViewModel, timedViewModel, out dummy);
+      if (viewModel is StudyLineOrderManualQuestionAnswerViewModel)
+        manualViewModel.Initialize(line, multiLineText);
+      else
+        timedViewModel.Initialize(line, multiLineText);
+      //IF THE TARGET LANGUAGE IS DIFFERENT FROM THE PHRASE LANGUAGE, THEN WE CREATE A TRANSLATION Q & A.
+      //IF THE TWO LANGUAGES ARE THE SAME, THEN WE CREATE A STUDY NATIVE LANGUAGE PHRASE Q & A.
 
-    //  //IF THE TARGET LANGUAGE IS DIFFERENT FROM THE PHRASE LANGUAGE, THEN WE CREATE A TRANSLATION Q & A.
-    //  //IF THE TWO LANGUAGES ARE THE SAME, THEN WE CREATE A STUDY NATIVE LANGUAGE PHRASE Q & A.
+      bool phraseIsInForeignLanguage = (languageText != nativeLanguageText);
+      if (phraseIsInForeignLanguage)
+      {
+        //DO A TRANSLATION Q & A
+        //WE NEED TO FIND A TRANSLATION FOR THIS FOREIGN LANGUAGE PHRASE.
+        PhraseEdit translatedPhrase = null;
 
-    //  bool phraseIsInForeignLanguage = (languageText != nativeLanguageText);
-    //  if (phraseIsInForeignLanguage)
-    //  {
-    //    //DO A TRANSLATION Q & A
-    //    //WE NEED TO FIND A TRANSLATION FOR THIS FOREIGN LANGUAGE PHRASE.
-    //    PhraseEdit translatedPhrase = null;
+        GetTranslatedPhrase(phrase, nativeLanguageText, (s, r) =>
+        {
+          if (r.Error != null)
+          {
+            callback(this, new ResultArgs<StudyItemViewModelBase>(r.Error));
+            return;
+          }
 
-    //    GetTranslatedPhrase(phrase, nativeLanguageText, (s, r) =>
-    //    {
-    //      if (r.Error != null)
-    //      {
-    //        callback(this, new ResultArgs<StudyItemViewModelBase>(r.Error));
-    //        return;
-    //      }
+          translatedPhrase = r.Object;
 
-    //      translatedPhrase = r.Object;
+          try
+          {
+            //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
+            var timedQA = new ViewModels.StudyTimedQuestionAnswerViewModel();
+            var manualQA = new ViewModels.StudyManualQuestionAnswerViewModel();
 
-    //      try
-    //      {
-    //        //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
-    //        var timedQA = new ViewModels.StudyTimedQuestionAnswerViewModel();
-    //        var manualQA = new ViewModels.StudyManualQuestionAnswerViewModel();
+            //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
+            StudyItemViewModelBase dummy = null;
+            var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
 
-    //        //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
-    //        StudyItemViewModelBase dummy = null;
-    //        var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
+            //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
+            PhraseEdit answer = null;
+            var question = RandomPicker.Ton.PickOne(phrase, translatedPhrase, out answer);
 
-    //        //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
-    //        PhraseEdit answer = null;
-    //        var question = RandomPicker.Ton.PickOne(phrase, translatedPhrase, out answer);
+            //INITIALIZE VIEWMODEL WITH Q & A
+            if (qaViewModel is ViewModels.StudyTimedQuestionAnswerViewModel)
+              ((ViewModels.StudyTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
+            else
+              ((ViewModels.StudyManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
 
-    //        //INITIALIZE VIEWMODEL WITH Q & A
-    //        if (qaViewModel is ViewModels.StudyTimedQuestionAnswerViewModel)
-    //          ((ViewModels.StudyTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
-    //        else
-    //          ((ViewModels.StudyManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
+            //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
+            callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
+          }
+          catch (Exception ex)
+          {
+            callback(this, new ResultArgs<StudyItemViewModelBase>(ex));
+          }
+        });
 
-    //        //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
-    //        callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
-    //      }
-    //      catch (Exception ex)
-    //      {
-    //        callback(this, new ResultArgs<StudyItemViewModelBase>(ex));
-    //      }
-    //    });
+      }
+      else
+      {
+        //DO A NATIVE LANGUAGE Q & A
+        throw new NotImplementedException();
+      }
+    }
 
-    //  }
-    //  else
-    //  {
-    //    //DO A NATIVE LANGUAGE Q & A
-    //    throw new NotImplementedException();
-    //  }
-    //}
+
     /// <summary>
     /// Uses auto translation service (as of writing, this is BingTranslatorService) to translate phrase
     /// into another phrase, which is returned in the callback.

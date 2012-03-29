@@ -80,8 +80,18 @@ namespace LearnLanguages.Study
       var group = _LineGroups[groupNumberToStudy];
       var lineToStudy = group.GetLine();
 
+      //WE NOW HAVE THE LINE TO STUDY.  PROCURE A LINE ORDER 
+      StudyItemViewModelFactory.Ton.Procure(lineToStudy, group.MultiLineText, (s, r) =>
+        {
+          if (r.Error != null)
+            callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(r.Error));
 
-
+          var viewModel = r.Object;
+          StudyItemViewModelArgs args = new StudyItemViewModelArgs(viewModel);
+          callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(args));
+          return;
+        });
+      return;
     }
 
     public override void InitializeForNewStudySession(MultiLineTextList target,
@@ -133,7 +143,7 @@ namespace LearnLanguages.Study
           if (tmpGroup == null)
           {
             currentGroupIndex++;
-            tmpGroup = new LineGroup(currentGroupIndex);
+            tmpGroup = new LineGroup(currentGroupIndex, multiLineText);
           }
           tmpGroup.Lines.Add(line);
 
@@ -158,8 +168,6 @@ namespace LearnLanguages.Study
     {
       _AbortIsFlagged = true;
     }
-
-   
 
     #endregion
 
@@ -198,8 +206,9 @@ namespace LearnLanguages.Study
 
     private class LineGroup : IHandle<History.Events.ReviewedLineEvent>
     {
-      public LineGroup(int groupNumber)
+      public LineGroup(int groupNumber, MultiLineTextEdit multiLineText)
       {
+        MultiLineText = multiLineText;
         Lines = new List<LineEdit>();
         GroupNumber = groupNumber;
         _LastStudied = 0;
@@ -210,6 +219,7 @@ namespace LearnLanguages.Study
       public int MissCount { get; set; }
       public int TotalCount { get { return HitCount + MissCount; } }
 
+      public MultiLineTextEdit MultiLineText { get; set; }
       public List<LineEdit> Lines { get; set; }
       public int GroupNumber { get; set; }
       /// <summary>

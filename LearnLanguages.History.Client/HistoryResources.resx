@@ -132,6 +132,9 @@
   <data name="IsEnabledReviewedLineCompoundEventMaker" xml:space="preserve">
     <value>true</value>
   </data>
+  <data name="IsEnabledReviewedLineOrderCompoundEventMaker" xml:space="preserve">
+    <value>True</value>
+  </data>
   <data name="IsEnabledReviewedPhraseCompoundEventMaker" xml:space="preserve">
     <value>true</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="Key_LineText" xml:space="preserve">
     <value>LineText</value>
+  </data>
+  <data name="Key_MultiLineTextId" xml:space="preserve">
+    <value>MultiLineTextId</value>
   </data>
   <data name="Key_ParentId" xml:space="preserve">
     <value>ParentId</value>

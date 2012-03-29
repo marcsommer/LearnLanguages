@@ -106,6 +106,15 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to True.
+        /// </summary>
+        public static string IsEnabledReviewedLineOrderCompoundEventMaker {
+            get {
+                return ResourceManager.GetString("IsEnabledReviewedLineOrderCompoundEventMaker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to true.
         /// </summary>
         public static string IsEnabledReviewedPhraseCompoundEventMaker {
@@ -183,6 +192,15 @@ namespace LearnLanguages.History {
         public static string Key_LineText {
             get {
                 return ResourceManager.GetString("Key_LineText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiLineTextId.
+        /// </summary>
+        public static string Key_MultiLineTextId {
+            get {
+                return ResourceManager.GetString("Key_MultiLineTextId", resourceCulture);
             }
         }
         

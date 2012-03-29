@@ -26,8 +26,8 @@ namespace LearnLanguages.Study.ViewModels
 
     #region Properties
 
-    private LineEdit _Question;
-    public LineEdit Question
+    private string _Question;
+    public string Question
     {
       get { return _Question; }
       set
@@ -41,8 +41,8 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    private LineEdit _Answer;
-    public LineEdit Answer
+    private string _Answer;
+    public string Answer
     {
       get { return _Answer; }
       set
@@ -56,6 +56,33 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+    private LineEdit _Line;
+    public LineEdit Line
+    {
+      get { return _Line; }
+      set
+      {
+        if (value != _Line)
+        {
+          _Line = value;
+          NotifyOfPropertyChange(() => Line);
+        }
+      }
+    }
+
+    private MultiLineTextEdit _MultiLineText;
+    public MultiLineTextEdit MultiLineText
+    {
+      get { return _MultiLineText; }
+      set
+      {
+        if (value != _MultiLineText)
+        {
+          _MultiLineText = value;
+          NotifyOfPropertyChange(() => MultiLineText);
+        }
+      }
+    }
     private bool _HidingAnswer;
     public bool HidingAnswer
     {
@@ -144,9 +171,7 @@ namespace LearnLanguages.Study.ViewModels
     /// <param name="answer">Answer LineEdit</param>
     /// <param name="questionDurationInMilliseconds"></param>
     /// <param name="callback"></param>
-    protected void AskQuestion(LineEdit question,
-                               LineEdit answer,
-                               int questionDurationInMilliseconds,
+    protected void AskQuestion(int questionDurationInMilliseconds,
                                ExceptionCheckCallback callback)
     {
       try
@@ -157,8 +182,6 @@ namespace LearnLanguages.Study.ViewModels
         //client.SpeakAsync(StudyResources.BingAppId, question.Text, BingTranslateHelper.GetLanguageCode(question.Language.Text), string.Empty, string.Empty);
 
         HideAnswer();
-        Question = question;
-        Answer = answer;
         //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
         BackgroundWorker timer = new BackgroundWorker();
         timer.DoWork += (s, e) =>
@@ -185,14 +208,38 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    public void Initialize(LineEdit question, LineEdit answer)
+    public void Initialize(LineEdit line, MultiLineTextEdit multiLineText)
     {
-      Question = question;
-      Answer = answer;
-      var words = question.Phrase.Text.ParseIntoWords();
-      var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
-      QuestionDurationInMilliseconds = durationMilliseconds;
       HideAnswer();
+      Line = line;
+      MultiLineText = multiLineText;
+      PopulateQuestionAndAnswer();
+    }
+
+    protected virtual void PopulateQuestionAndAnswer()
+    {
+      var sb = new System.Text.StringBuilder();
+      LineEdit prevLine = null;
+      if (Line.LineNumber != 0)
+      {
+        //PREVIOUS LINE
+        prevLine = MultiLineText.Lines[Line.LineNumber - 1];
+        sb.AppendLine(StudyResources.StudyLineOrderLineNumberPrefix +
+                      prevLine.LineNumber.ToString() +
+                      StudyResources.StudyLineOrderSeparatorBetweenLineNumberAndLineText +
+                      prevLine.Phrase.Text);
+
+        //BLANK REPRESENTING THE LINE IN QUESTION
+        sb.AppendLine(StudyResources.StudyLineOrderQuestionBlank);
+      }
+      else
+      {
+        //NO PREVIOUS LINE BECAUSE WE'RE STUDYING THE 1ST LINE IN MLT
+        sb.AppendLine(StudyResources.StudyLineOrderQuestionWhatIsFirstLine);
+      }
+
+      Question = sb.ToString();
+      Answer = Line.Phrase.Text;
     }
 
     public override void Show(ExceptionCheckCallback callback)
@@ -200,9 +247,11 @@ namespace LearnLanguages.Study.ViewModels
       _DateTimeQuestionShown = DateTime.Now;
       ViewModelVisibility = Visibility.Visible;
       DispatchShown();
-      var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Question.Phrase);
+      var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Line.Phrase);
       History.HistoryPublisher.Ton.PublishEvent(eventViewing);
-      AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
+      var reviewingLineOrderEvent = new History.Events.ReviewingLineOrderEvent(Line, MultiLineText, GetReviewMethodId());
+      HistoryPublisher.Ton.PublishEvent(reviewingLineOrderEvent);
+      AskQuestion(QuestionDurationInMilliseconds, (e) =>
         {
           if (e != null)
           {

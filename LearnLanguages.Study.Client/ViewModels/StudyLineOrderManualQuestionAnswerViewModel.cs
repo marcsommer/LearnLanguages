@@ -223,6 +223,8 @@ namespace LearnLanguages.Study.ViewModels
       _DateTimeQuestionShown = DateTime.Now;
       var viewingEvent = new History.Events.ViewingPhraseOnScreenEvent(Line.Phrase);
       HistoryPublisher.Ton.PublishEvent(viewingEvent);
+      var reviewingLineOrderEvent = new History.Events.ReviewingLineOrderEvent(Line, MultiLineText, GetReviewMethodId());
+      HistoryPublisher.Ton.PublishEvent(reviewingLineOrderEvent);
     }
 
     private void HideAnswer()
