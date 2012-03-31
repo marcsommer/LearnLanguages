@@ -27,7 +27,7 @@ namespace LearnLanguages.Study
       _MeaningStudier.InitializeForNewStudySession(target, (e) =>
         {
           if (e != null)
-            throw e;
+            completedCallback(e);
 
           if (_AbortIsFlagged)
           {
@@ -36,9 +36,14 @@ namespace LearnLanguages.Study
           }
 
           _OrderStudier = new DefaultMultiLineTextsOrderStudier();
-          //_OrderStudier.InitializeForNewStudySession(target, completedCallback);
-          //WHEN ORDER STUDIER IS IMPLEMENTED, THIS MUST BE CHANGED TO MAKE THIS CALLBACK WITHIN INITIALIZE
-          completedCallback(null);
+          _OrderStudier.InitializeForNewStudySession(target, (e2) =>
+            {
+              if (e2 != null)
+                completedCallback(e2);
+
+              completedCallback(null);
+              return;
+            });
         });
     }
 
@@ -69,7 +74,8 @@ namespace LearnLanguages.Study
       else
       {
         //TODO: IMPLEMENT ORDER STUDIER DO AND REFERENCE THIS IN DEFAULT MLTS STUDIER
-        _MeaningStudier.GetNextStudyItemViewModel(callback);//only because this is the only impl i have going.  this DES NOT GO HERE!!!!!!!!!!!!!!!!!!!!
+        //_MeaningStudier.GetNextStudyItemViewModel(callback);//only because this is the only impl i have going.  this DES NOT GO HERE!!!!!!!!!!!!!!!!!!!!
+        _OrderStudier.GetNextStudyItemViewModel(callback);
       }
     }
 

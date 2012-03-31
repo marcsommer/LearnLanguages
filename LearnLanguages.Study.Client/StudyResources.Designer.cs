@@ -178,7 +178,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3.
+        ///   Looks up a localized string similar to 5.
         /// </summary>
         public static string DefaultMeaningStudierAggregateSize {
             get {

@@ -160,7 +160,7 @@ debug=10 seconds (10000)</comment>
     <value>4</value>
   </data>
   <data name="DefaultMeaningStudierAggregateSize" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="DefaultMillisecondsTimePerWordInQuestion" xml:space="preserve">
     <value>500</value>

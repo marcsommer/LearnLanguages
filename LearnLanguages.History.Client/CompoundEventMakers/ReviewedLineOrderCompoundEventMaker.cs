@@ -18,9 +18,8 @@ namespace LearnLanguages.History.CompoundEventMakers
   [Export(typeof(ICompoundEventMaker))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class ReviewedLineOrderCompoundEventMaker : CompoundEventMakerBase, 
-                                                IHandle<Events.ReviewingPhraseEvent>,
-                                                IHandle<Events.ReviewedPhraseEvent>, 
-                                                IHandle<Events.ActivatedLineEvent>
+                                                     IHandle<Events.ReviewingLineOrderEvent>,
+                                                     IHandle<Events.FeedbackAsDoubleGivenEvent>
   {
     public ReviewedLineOrderCompoundEventMaker()
     {
@@ -90,21 +89,21 @@ namespace LearnLanguages.History.CompoundEventMakers
         return;
       }
 
-      var msgLineId = message.Ids[HistoryResources.Key_LineId];
-      var msgLineText = message.Strings[HistoryResources.Key_LineText];
-      var msgReviewedPhraseDuration = message.Duration;
-      var msgMultiLineTextId = message.GetDetail<Guid>(HistoryResources.Key_MultiLineTextId);
+      //var msgLineId = message.Ids[HistoryResources.Key_LineId];
+      //var msgLineText = message.Strings[HistoryResources.Key_LineText];
+      //var msgReviewedPhraseDuration = message.Duration;
+      //var msgMultiLineTextId = message.GetDetail<Guid>(HistoryResources.Key_MultiLineTextId);
 
-      //MAKE SURE PHRASE IDS, LINE TEXT AND PHRASE TEXT, LANGUAGE ID, AND LANGUAGE TEXT MATCH 
-      //BETWEEN REVIEWINGLINE EVENT AND REVIEWED PHRASE EVENT
-      if (_LineId != msgLineId ||
-          _LineText != msgLineText ||
-          _MultiLineTextId != msgMultiLineTextId)
-      {
-        //if (!_IsReset)
-        //  Reset();
-        return;
-      }
+      ////MAKE SURE PHRASE IDS, LINE TEXT AND PHRASE TEXT, LANGUAGE ID, AND LANGUAGE TEXT MATCH 
+      ////BETWEEN REVIEWINGLINE EVENT AND REVIEWED PHRASE EVENT
+      //if (_LineId != msgLineId ||
+      //    _LineText != msgLineText ||
+      //    _MultiLineTextId != msgMultiLineTextId)
+      //{
+      //  //if (!_IsReset)
+      //  //  Reset();
+      //  return;
+      //}
 
       //GET THE FEEDBACK FROM THE REVIEWED PHRASE EVENT
       _FeedbackAsDouble = message.Doubles[HistoryResources.Key_FeedbackAsDouble];
@@ -125,29 +124,29 @@ namespace LearnLanguages.History.CompoundEventMakers
 
         //DISPATCH THE REVIEWED LINE COMPOUND EVENT
         var reviewedLineEvent = new Events.ReviewedLineOrderEvent(_LineId, _ReviewMethodId, _LineText, _LineNumber, 
-          _PhraseId, _LanguageId, _LanguageText, _FeedbackAsDouble, _Duration);
+          _FeedbackAsDouble, _Duration);
         HistoryPublisher.Ton.PublishEvent(reviewedLineEvent);   
     }
 
-    public void Handle(Events.ActivatedLineEvent message)
-    {
-      var languageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
-      var lineText = message.GetDetail<string>(HistoryResources.Key_LineText);
-      var lineId = message.GetDetail<Guid>(HistoryResources.Key_LineId);
-      var languageId = message.GetDetail<Guid>(HistoryResources.Key_LanguageId);
-      var lineNumber = message.GetDetail<int>(HistoryResources.Key_LineNumber);
+    //public void Handle(Events.ActivatedLineEvent message)
+    //{
+    //  var languageText = message.GetDetail<string>(HistoryResources.Key_LanguageText);
+    //  var lineText = message.GetDetail<string>(HistoryResources.Key_LineText);
+    //  var lineId = message.GetDetail<Guid>(HistoryResources.Key_LineId);
+    //  var languageId = message.GetDetail<Guid>(HistoryResources.Key_LanguageId);
+    //  var lineNumber = message.GetDetail<int>(HistoryResources.Key_LineNumber);
 
-      var lineInfo = new HistoryLineInfo()
-      {
-        LanguageId = languageId,
-        LanguageText = languageText,
-        LineId = lineId,
-        LineText = lineText,
-        LineNumber = lineNumber
-      };
+    //  var lineInfo = new HistoryLineInfo()
+    //  {
+    //    LanguageId = languageId,
+    //    LanguageText = languageText,
+    //    LineId = lineId,
+    //    LineText = lineText,
+    //    LineNumber = lineNumber
+    //  };
 
-      _ActiveLines.Add(lineInfo);
-    }
+    //  _ActiveLines.Add(lineInfo);
+    //}
 
     protected override Guid GetId()
     {

@@ -59,7 +59,7 @@ namespace LearnLanguages.DataAccess.Ef
 
     private void SeedContext(LearnLanguagesContext context)
     {
-      //ROLES
+      //ROLES 
       foreach (var roleDto in SeedData.Ton.Roles)
       {
         var roleData = EfHelper.ToData(roleDto);

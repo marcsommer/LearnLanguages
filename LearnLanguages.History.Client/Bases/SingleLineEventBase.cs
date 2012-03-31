@@ -8,6 +8,13 @@ namespace LearnLanguages.History.Bases
   [Serializable]
   public abstract class SingleLineEventBase : HistoryEventBase
   {
+    private Guid lineId;
+    private Guid reviewMethodId;
+    private string lineText;
+    private int lineNumber;
+    private double feedbackAsDoubleGiven;
+    private int duration;
+
     public SingleLineEventBase()
       : base()
     {
@@ -82,6 +89,17 @@ namespace LearnLanguages.History.Bases
       : base(duration, details)
     {
       AddLineDetails(line);
+    }
+
+    public SingleLineEventBase(Guid lineId, Guid reviewMethodId, string lineText, int lineNumber, 
+      double feedbackAsDoubleGiven, TimeSpan duration)
+      : base(duration)
+    {
+      AddLineId(lineId);
+      AddDetail(HistoryResources.Key_ReviewMethodId, reviewMethodId);
+      AddLineText(lineText);
+      AddLineNumber(lineNumber);
+      AddDetail(HistoryResources.Key_FeedbackAsDouble, feedbackAsDoubleGiven);
     }
 
     protected virtual void AddLineDetails(LineEdit line)

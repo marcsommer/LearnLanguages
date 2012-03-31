@@ -132,7 +132,7 @@ namespace LearnLanguages.Study.ViewModels
         if (Question == null)
           return StudyResources.ErrorMsgQuestionIsNull;
 
-        return string.Format(StudyResources.StudyLineOrderQuestionHeader, Question.LineNumber);
+        return string.Format(StudyResources.StudyLineOrderQuestionHeader, Line.LineNumber);
       }
     }
     public string AnswerHeader
@@ -294,9 +294,9 @@ namespace LearnLanguages.Study.ViewModels
 
       _DateTimeAnswerShown = DateTime.Now;
       var duration = _DateTimeAnswerShown - _DateTimeQuestionShown;
-      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Question.Phrase, duration));
-      HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Answer.Phrase));
-      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Answer.Phrase, duration));
+      HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Line.Phrase, duration));
+      //HistoryPublisher.Ton.PublishEvent(new ViewingPhraseOnScreenEvent(Line.Phrase));
+      //HistoryPublisher.Ton.PublishEvent(new ViewedPhraseOnScreenEvent(Line.Phrase, duration));
     }
 
     protected override Guid GetReviewMethodId()

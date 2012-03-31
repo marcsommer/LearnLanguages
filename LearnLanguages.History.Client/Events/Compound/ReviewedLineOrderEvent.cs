@@ -25,6 +25,13 @@ namespace LearnLanguages.History.Events
 
     }
 
+    public ReviewedLineOrderEvent(Guid lineId, Guid reviewMethodId, string lineText, 
+      int lineNumber, double feedbackAsDoubleGiven, TimeSpan duration)
+      : base(lineId, reviewMethodId, lineText, lineNumber, feedbackAsDoubleGiven, duration)
+    {
+
+    }
+
     //todo: left off here.  need to make this ctor...see how it will be used.
 
     //public ReviewedLineOrderEvent(Guid lineId, Guid reviewMethodId, string lineText, int lineNumber, Guid phraseId,

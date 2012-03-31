@@ -160,7 +160,7 @@ namespace LearnLanguages.Study.ViewModels
         if (Question == null)
           return StudyResources.ErrorMsgQuestionIsNull;
 
-        return string.Format(StudyResources.StudyLineOrderQuestionHeader, Question.LineNumber);
+        return string.Format(StudyResources.StudyLineOrderQuestionHeader, Line.LineNumber);
       }
     }
     public string AnswerHeader
