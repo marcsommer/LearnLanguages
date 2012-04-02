@@ -502,7 +502,7 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Line #: .
+        ///   Looks up a localized string similar to Line # .
         /// </summary>
         public static string StudyLineOrderLineNumberPrefix {
             get {

@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Navigation.EventMessages;
+using LearnLanguages.History;
 
 namespace LearnLanguages.Study
 {
@@ -32,13 +33,15 @@ namespace LearnLanguages.Study
   /// list.
   /// </summary>
   public class DefaultMultiLineTextsOrderStudier : StudierBase<MultiLineTextList>,
-                                                   IHandle<NavigationRequestedEventMessage>
+                                                   IHandle<NavigationRequestedEventMessage>, 
+                                                   IHandle<History.Events.ReviewedLineOrderEvent>
   {
     #region Ctors and Init
 
     public DefaultMultiLineTextsOrderStudier()
     {
       Services.EventAggregator.Subscribe(this);//navigation
+      HistoryPublisher.Ton.SubscribeToEvents(this);
       LineGroupSize = int.Parse(StudyResources.DefaultOrderStudierLineGroupSize);
       _KnownGroupNumbers = new List<int>();
     }
@@ -54,44 +57,65 @@ namespace LearnLanguages.Study
         callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
         return;
       }
-
-      //IF WE KNOW ALL OF OUR GROUPS, RESET AND START OVER
-      if (_KnownGroupNumbers.Count == _LineGroups.Count)
-        _KnownGroupNumbers.Clear();
-
-      //GET THE INITIAL GROUP NUMBER TO TRY TO STUDY
-      var groupNumberToStudy = _LastGroupNumberStudied + 1;
-      if (groupNumberToStudy == _LineGroups.Count)
-        groupNumberToStudy = 0;
-
-      //FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
-      for (int i = 0; i < _LineGroups.Count; i++)
+      try
       {
-        if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
-          break;
+        //IF WE KNOW ALL OF OUR GROUPS, RESET AND START OVER
+        if (_KnownGroupNumbers.Count == _LineGroups.Count)
+          _KnownGroupNumbers.Clear();
 
-        //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
-        groupNumberToStudy++;
+        //GET THE INITIAL GROUP NUMBER TO TRY TO STUDY
+        int groupNumberToStudy = _PrevGroupNumberStudied;
+        LineGroup group = null;
+        if (_PrevStudyWasHit)
+        {
+          //PREV STUDY WAS HIT, SO TRY TO STAY WITH THE PREV GROUP.
+          group = GetGroupFromGroupNumber(_PrevGroupNumberStudied);
+
+          if (group == null)
+            throw new Exception();//SINCE PREV STUDY WAS HIT, THIS SHOULD NEVER HAPPEN.
+
+
+        }
+        else
+        {
+        }
+        groupNumberToStudy = _PrevGroupNumberStudied;
         if (groupNumberToStudy == _LineGroups.Count)
           groupNumberToStudy = 0;
-      }
 
-      //WE NOW HAVE THE GROUP NUMBER TO STUDY.  
-      var group = _LineGroups[groupNumberToStudy];
-      var lineToStudy = group.GetLine();
-
-      //WE NOW HAVE THE LINE TO STUDY.  PROCURE A LINE ORDER 
-      StudyItemViewModelFactory.Ton.Procure(lineToStudy, group.MultiLineText, (s, r) =>
+        //FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
+        for (int i = 0; i < _LineGroups.Count; i++)
         {
-          if (r.Error != null)
-            callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(r.Error));
+          if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
+            break;
 
-          var viewModel = r.Object;
-          StudyItemViewModelArgs args = new StudyItemViewModelArgs(viewModel);
-          callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(args));
-          return;
-        });
-      return;
+          //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
+          groupNumberToStudy++;
+          if (groupNumberToStudy == _LineGroups.Count)
+            groupNumberToStudy = 0;
+        }
+
+        //WE NOW HAVE THE GROUP NUMBER TO STUDY.  
+        var group = _LineGroups[groupNumberToStudy];
+        var lineToStudy = group.GetLine();
+
+        //WE NOW HAVE THE LINE TO STUDY.  PROCURE A LINE ORDER 
+        StudyItemViewModelFactory.Ton.Procure(lineToStudy, group.MultiLineText, (s, r) =>
+          {
+            if (r.Error != null)
+              callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(r.Error));
+
+            var viewModel = r.Object;
+            StudyItemViewModelArgs args = new StudyItemViewModelArgs(viewModel);
+            callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(args));
+            return;
+          });
+        return;
+      }
+      catch (Exception ex)
+      {
+        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(ex));
+      }
     }
 
     public override void InitializeForNewStudySession(MultiLineTextList target,
@@ -106,7 +130,8 @@ namespace LearnLanguages.Study
           completedCallback(null);
           return;
         }
-        _LastGroupNumberStudied = -1;
+        _PrevGroupNumberStudied = -1;
+        _PrevStudyWasHit = false;
         PopulateGroups();
         _KnownGroupNumbers.Clear();
 
@@ -169,6 +194,26 @@ namespace LearnLanguages.Study
       _AbortIsFlagged = true;
     }
 
+    private LineGroup GetGroupFromLineNumber(int lineNumber)
+    {
+      var results = (from g in _LineGroups
+                     where (from line in g.Lines
+                            where line.LineNumber == lineNumber
+                            select line).Count() == 1
+                     select g);
+      
+      return results.FirstOrDefault();
+    }
+
+    private LineGroup GetGroupFromGroupNumber(int groupNumber)
+    {
+      var results = (from g in _LineGroups
+                     where g.GroupNumber == groupNumber
+                     select g);
+
+      return results.FirstOrDefault();
+    }
+
     #endregion
 
     #region Properties
@@ -198,7 +243,8 @@ namespace LearnLanguages.Study
     private List<LineGroup> _LineGroups { get; set; }
     private List<int> _KnownGroupNumbers { get; set; }
 
-    private int _LastGroupNumberStudied { get; set; }
+    private int _PrevGroupNumberStudied { get; set; }
+    private bool _PrevStudyWasHit { get; set; }
 
     #endregion
 
@@ -208,10 +254,11 @@ namespace LearnLanguages.Study
     {
       public LineGroup(int groupNumber, MultiLineTextEdit multiLineText)
       {
+        Completed = false;
         MultiLineText = multiLineText;
         Lines = new List<LineEdit>();
         GroupNumber = groupNumber;
-        _LastStudied = 0;
+        ResetLastStudied();
         History.HistoryPublisher.Ton.SubscribeToEvents(this);
       }
 
@@ -234,7 +281,10 @@ namespace LearnLanguages.Study
         HitCount++;
         _LastStudied++;
         if (_LastStudied >= Lines.Count)
-          ResetLastStudied();
+        {
+          Completed = true;
+          //ResetLastStudied();
+        }
         CurrentLine = null;
       }
       /// <summary>
@@ -254,7 +304,12 @@ namespace LearnLanguages.Study
 
       public LineEdit GetLine()
       {
-        var toStudy = _LastStudied++;
+        if (Completed)
+        {
+          ResetLastStudied();
+          Completed = false;
+        }
+        var toStudy = _LastStudied + 1;
         if (toStudy >= Lines.Count)
           toStudy = 0;
         var nextLine = Lines[toStudy];
@@ -265,24 +320,51 @@ namespace LearnLanguages.Study
 
       private LineEdit CurrentLine { get; set; }
 
-      public void Handle(History.Events.ReviewedLineEvent message)
-      {
-        var msgLineText = message.GetDetail<string>(History.HistoryResources.Key_LineText);
-        if (CurrentLine == null ||
-            CurrentLine.Phrase == null ||
-            string.IsNullOrEmpty(CurrentLine.Phrase.Text) ||
-            msgLineText != CurrentLine.Phrase.Text)
-          return;
+      public bool Completed { get; set; }
 
-        var feedbackAsDouble = message.GetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble);
-        var feedbackIsCorrect = feedbackAsDouble >= double.Parse(StudyResources.DefaultKnowledgeThreshold);
-        if (feedbackIsCorrect)
-          MarkHit();
-        else
-          MarkMiss();
-      }
+      //public void Handle(History.Events.ReviewedLineOrderEvent message)
+      //{
+      //  var msgLineText = message.GetDetail<string>(History.HistoryResources.Key_LineText);
+      //  if (CurrentLine == null ||
+      //      CurrentLine.Phrase == null ||
+      //      string.IsNullOrEmpty(CurrentLine.Phrase.Text) ||
+      //      msgLineText != CurrentLine.Phrase.Text)
+      //    return;
+
+      //  var feedbackAsDouble = message.GetDetail<double>(History.HistoryResources.Key_FeedbackAsDouble);
+      //  var feedbackIsCorrect = feedbackAsDouble >= double.Parse(StudyResources.DefaultKnowledgeThreshold);
+      //  if (feedbackIsCorrect)
+      //    MarkHit();
+      //  else
+      //    MarkMiss();
+      //}
     }
 
     #endregion
+
+    public void Handle(History.Events.ReviewedLineOrderEvent message)
+    {
+      //GET GROUP FROM REVIEWED LINE NUMBER
+      var msgLineNumber = message.GetDetail<int>(HistoryResources.Key_LineNumber);
+      var group = GetGroupFromLineNumber(msgLineNumber);
+
+      //DETERMINE IF FEEDBACK IS A HIT OR MISS
+      var msgFeedbackAsDouble = message.GetDetail<double>(HistoryResources.Key_FeedbackAsDouble);
+      var isHit = msgFeedbackAsDouble >= double.Parse(StudyResources.DefaultKnowledgeThreshold);
+
+      //MARK GROUP AS HIT OR MISS.
+      if (isHit)
+      {
+        group.MarkHit();
+        _PrevStudyWasHit = true;
+        //_GroupNumberToStudy = GetGroupNumberToStudy(group, prevStudyWasHit, true);
+        //_GroupNumberToStudy = group.GroupNumber;
+      }
+      else
+      {
+        group.MarkMiss();
+      }
+    }
+
   }
 }

@@ -2,12 +2,14 @@
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
+using System.Linq;
+using System.Text;
+
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
 using LearnLanguages.History.Events;
-using System.Text;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -198,7 +200,10 @@ namespace LearnLanguages.Study.ViewModels
       if (Line.LineNumber != 0)
       {
         //PREVIOUS LINE
-        prevLine = MultiLineText.Lines[Line.LineNumber-1];
+        prevLine = (from line in MultiLineText.Lines
+                    where line.LineNumber == Line.LineNumber - 1
+                    select line).FirstOrDefault();
+        //prevLine = MultiLineText.Lines[Line.LineNumber - 1];
         sb.AppendLine(StudyResources.StudyLineOrderLineNumberPrefix + 
                       prevLine.LineNumber.ToString() + 
                       StudyResources.StudyLineOrderSeparatorBetweenLineNumberAndLineText + 
@@ -266,8 +271,6 @@ namespace LearnLanguages.Study.ViewModels
     //  _CompletedCallback(null);
     //}
 
-    #endregion
-
     public override void Abort()
     {
       //ShowAnswer();
@@ -281,5 +284,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       return Guid.Parse(StudyResources.ReviewMethodIdStudyLineOrderManualQA);
     }
+
+    #endregion
   }
 }

@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
+using System.Linq;
+
 using LearnLanguages.Common;
 using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Business;
@@ -176,13 +178,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       try
       {
-
-        //BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
-        //client.SpeakCompleted += client_SpeakCompleted;
-        //client.SpeakAsync(StudyResources.BingAppId, question.Text, BingTranslateHelper.GetLanguageCode(question.Language.Text), string.Empty, string.Empty);
-
         HideAnswer();
-        //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
         BackgroundWorker timer = new BackgroundWorker();
         timer.DoWork += (s, e) =>
         {
@@ -220,10 +216,13 @@ namespace LearnLanguages.Study.ViewModels
     {
       var sb = new System.Text.StringBuilder();
       LineEdit prevLine = null;
-      if (Line.LineNumber != 0)
+      if (Line.LineNumber > 0)
       {
         //PREVIOUS LINE
-        prevLine = MultiLineText.Lines[Line.LineNumber - 1];
+        prevLine = (from line in MultiLineText.Lines
+                    where line.LineNumber == Line.LineNumber - 1
+                    select line).FirstOrDefault();
+        //prevLine = MultiLineText.Lines[Line.LineNumber - 1];
         sb.AppendLine(StudyResources.StudyLineOrderLineNumberPrefix +
                       prevLine.LineNumber.ToString() +
                       StudyResources.StudyLineOrderSeparatorBetweenLineNumberAndLineText +

@@ -131,12 +131,15 @@
   </data>
   <data name="IsEnabledReviewedLineCompoundEventMaker" xml:space="preserve">
     <value>true</value>
+    <comment>Currently, CompoundEventMakers are exported to Mef container, imported by HistoryPublisher, and enabled per this setting in ctor of CEM.</comment>
   </data>
   <data name="IsEnabledReviewedLineOrderCompoundEventMaker" xml:space="preserve">
-    <value>True</value>
+    <value>true</value>
+    <comment>Currently, CompoundEventMakers are exported to Mef container, imported by HistoryPublisher, and enabled per this setting in ctor of CEM.</comment>
   </data>
   <data name="IsEnabledReviewedPhraseCompoundEventMaker" xml:space="preserve">
     <value>true</value>
+    <comment>Currently, CompoundEventMakers are exported to Mef container, imported by HistoryPublisher, and enabled per this setting in ctor of CEM.</comment>
   </data>
   <data name="Key_ChildId" xml:space="preserve">
     <value>ChildId</value>

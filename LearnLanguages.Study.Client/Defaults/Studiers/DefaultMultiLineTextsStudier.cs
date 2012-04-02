@@ -69,7 +69,8 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
-        _MeaningStudier.GetNextStudyItemViewModel(callback);
+        //_MeaningStudier.GetNextStudyItemViewModel(callback);
+        _OrderStudier.GetNextStudyItemViewModel(callback);//DEBUG ONLY.  
       }
       else
       {

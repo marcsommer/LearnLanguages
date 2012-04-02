@@ -106,7 +106,7 @@ namespace LearnLanguages.History {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to True.
+        ///   Looks up a localized string similar to true.
         /// </summary>
         public static string IsEnabledReviewedLineOrderCompoundEventMaker {
             get {
