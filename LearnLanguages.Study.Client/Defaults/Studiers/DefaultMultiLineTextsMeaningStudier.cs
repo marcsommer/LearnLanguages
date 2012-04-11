@@ -79,7 +79,7 @@ namespace LearnLanguages.Study
         totalLineCount += studierLineCount;
 
         var studierPercentKnown = studier.Value.GetPercentKnown();
-        totalPercentKnownNonNormalized += (studierPercentKnown / 100.0d) * studierLineCount;
+        totalPercentKnownNonNormalized += studierPercentKnown * studierLineCount;
         //eg 50% known 10 lines
         //25% known 1000 lines.  Percent known should be just over 25% known (255/1010 to be exact);
         //totalLineCount = 1010

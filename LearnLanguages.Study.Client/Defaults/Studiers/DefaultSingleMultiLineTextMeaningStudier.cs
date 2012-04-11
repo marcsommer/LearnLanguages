@@ -224,7 +224,7 @@ namespace LearnLanguages.Study
     {
       var lineCount = _Target.Lines.Count;
       double totalPercentKnownNonNormalized = 0.0d;
-      double maxPercentKnownNonNormalized = 100 * lineCount;
+      double maxPercentKnownNonNormalized = lineCount;
       foreach (var lineInfo in _LineStudiers)
       {
         if (_AbortIsFlagged)

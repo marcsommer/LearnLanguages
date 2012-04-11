@@ -268,6 +268,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2000.
+        /// </summary>
+        public static string DefaultTimeLineOrderQuestionInMilliseconds {
+            get {
+                return ResourceManager.GetString("DefaultTimeLineOrderQuestionInMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 73A27EAD-A83E-4FBA-B400-679A1AC58AC7.
         /// </summary>
         public static string DefaultWordInPhraseReviewedRecorderId {
@@ -408,6 +417,33 @@ namespace LearnLanguages.Study {
         public static string PercentKnownSome {
             get {
                 return ResourceManager.GetString("PercentKnownSome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.1.
+        /// </summary>
+        public static string ProbabilityChooseMeaningIfKnowAllOfMeaning {
+            get {
+                return ResourceManager.GetString("ProbabilityChooseMeaningIfKnowAllOfMeaning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.8.
+        /// </summary>
+        public static string ProbabilityChooseMeaningIfKnowMostOfMeaning {
+            get {
+                return ResourceManager.GetString("ProbabilityChooseMeaningIfKnowMostOfMeaning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.9.
+        /// </summary>
+        public static string ProbabilityChooseMeaningIfKnowSomeOfMeaning {
+            get {
+                return ResourceManager.GetString("ProbabilityChooseMeaningIfKnowSomeOfMeaning", resourceCulture);
             }
         }
         

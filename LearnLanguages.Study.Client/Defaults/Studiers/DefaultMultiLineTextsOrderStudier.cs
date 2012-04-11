@@ -59,9 +59,17 @@ namespace LearnLanguages.Study
       }
       try
       {
+        LineEdit lineToStudy = null;
+
         //IF WE KNOW ALL OF OUR GROUPS, RESET AND START OVER
         if (_KnownGroupNumbers.Count == _LineGroups.Count)
+        {
+          _PrevGroupNumberStudied = -1;
+          _PrevStudyWasHit = false;
           _KnownGroupNumbers.Clear();
+          foreach (var completedGroup in _LineGroups)
+            completedGroup.Reset();
+        }
 
         //GET THE INITIAL GROUP NUMBER TO TRY TO STUDY
         int groupNumberToStudy = _PrevGroupNumberStudied;
@@ -74,30 +82,55 @@ namespace LearnLanguages.Study
           if (group == null)
             throw new Exception();//SINCE PREV STUDY WAS HIT, THIS SHOULD NEVER HAPPEN.
 
-
+          //IF THE GROUP IS NOT YET COMPLETED, GET ITS NEXT LINE, OTHERWISE WE NEED TO TRY THE NEXT GROUP.
+          if (!group.Completed)
+          {
+            lineToStudy = group.GetLine();
+            if (lineToStudy == null)
+              throw new Exception();
+            _PrevGroupNumberStudied = group.GroupNumber;
+          }
+          else
+          {
+            //PREVIOUS GROUP WAS A HIT AND THAT COMPLETED THAT GROUP, SO GET NEXT GROUP
+            int nextGroupNumber = GetNextUnknownGroupNumber();
+            group = GetGroupFromGroupNumber(nextGroupNumber);
+            if (group.Completed)
+              throw new Exception();
+            lineToStudy = group.GetLine();
+            _PrevGroupNumberStudied = group.GroupNumber;
+          }
         }
         else
         {
-        }
-        groupNumberToStudy = _PrevGroupNumberStudied;
-        if (groupNumberToStudy == _LineGroups.Count)
-          groupNumberToStudy = 0;
-
-        //FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
-        for (int i = 0; i < _LineGroups.Count; i++)
-        {
-          if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
-            break;
-
-          //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
-          groupNumberToStudy++;
-          if (groupNumberToStudy == _LineGroups.Count)
-            groupNumberToStudy = 0;
+          //PREVIOUS WAS A MISS, SO GET LINE FROM NEXT UNKNOWN GROUP
+          int nextGroupNumber = GetNextUnknownGroupNumber();
+          group = GetGroupFromGroupNumber(nextGroupNumber);
+          if (group.Completed)
+            throw new Exception();
+          lineToStudy = group.GetLine();
+          _PrevGroupNumberStudied = group.GroupNumber;
         }
 
-        //WE NOW HAVE THE GROUP NUMBER TO STUDY.  
-        var group = _LineGroups[groupNumberToStudy];
-        var lineToStudy = group.GetLine();
+        //groupNumberToStudy = _PrevGroupNumberStudied;
+        //if (groupNumberToStudy == _LineGroups.Count)
+        //  groupNumberToStudy = 0;
+
+        ////FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
+        //for (int i = 0; i < _LineGroups.Count; i++)
+        //{
+        //  if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
+        //    break;
+
+        //  //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
+        //  groupNumberToStudy++;
+        //  if (groupNumberToStudy == _LineGroups.Count)
+        //    groupNumberToStudy = 0;
+        //}
+
+        ////WE NOW HAVE THE GROUP NUMBER TO STUDY.  
+        //var group = _LineGroups[groupNumberToStudy];
+        //var lineToStudy = group.GetLine();
 
         //WE NOW HAVE THE LINE TO STUDY.  PROCURE A LINE ORDER 
         StudyItemViewModelFactory.Ton.Procure(lineToStudy, group.MultiLineText, (s, r) =>
@@ -116,6 +149,38 @@ namespace LearnLanguages.Study
       {
         callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(ex));
       }
+    }
+
+    private int GetNextUnknownGroupNumber()
+    {
+      //THE NEXT CANDIDATE IS EITHER THE PREV GROUP NUMBER STUDIED + 1, OR THE FIRST GROUP NUMBER.
+      //IF PREV GROUP NUMBER STUDIED IS THE LAST IN LINEGROUPS (COUNT-1), THEN NEXT CANDIDATE IS 0.
+      int nextCandidateNumber = -1;
+      int retNextGroupNumber = -1;
+      if (_PrevGroupNumberStudied == (_LineGroups.Count - 1))
+        nextCandidateNumber = 0;
+      else
+        nextCandidateNumber = _PrevGroupNumberStudied + 1;
+
+      for (int i = 0; i < _LineGroups.Count; i++)
+      {
+        if (_KnownGroupNumbers.Contains(nextCandidateNumber))
+        {
+          //THIS CANDIDATE IS KNOWN, SO INC UNLESS WE ARE AT LAST GROUP, THEN START BACK AT BEGINNING
+          if (nextCandidateNumber == (_LineGroups.Count - 1))
+            nextCandidateNumber = 0;
+          else
+            nextCandidateNumber++;
+        }
+        else
+        {
+          //THIS CANDIDATE IS UNKNOWN, SO WE NEED LOOK NO FURTHER
+          retNextGroupNumber = nextCandidateNumber;
+          break;
+        }
+      }
+
+      return retNextGroupNumber;
     }
 
     public override void InitializeForNewStudySession(MultiLineTextList target,
@@ -250,7 +315,7 @@ namespace LearnLanguages.Study
 
     #region Nested Classes
 
-    private class LineGroup : IHandle<History.Events.ReviewedLineEvent>
+    private class LineGroup //: IHandle<History.Events.ReviewedLineEvent>
     {
       public LineGroup(int groupNumber, MultiLineTextEdit multiLineText)
       {
@@ -280,7 +345,7 @@ namespace LearnLanguages.Study
       {
         HitCount++;
         _LastStudied++;
-        if (_LastStudied >= Lines.Count)
+        if (_LastStudied >= Lines.Count-1)
         {
           Completed = true;
           //ResetLastStudied();
@@ -314,13 +379,22 @@ namespace LearnLanguages.Study
           toStudy = 0;
         var nextLine = Lines[toStudy];
         CurrentLine = nextLine;
-        _LastStudied = toStudy;
+        //_LastStudied = toStudy;
         return nextLine;
       }
 
       private LineEdit CurrentLine { get; set; }
 
       public bool Completed { get; set; }
+
+      public void Reset()
+      {
+        CurrentLine = null;
+        Completed = false;
+        ResetLastStudied();
+        HitCount = 0;
+        MissCount = 0;
+      }
 
       //public void Handle(History.Events.ReviewedLineOrderEvent message)
       //{
@@ -356,6 +430,8 @@ namespace LearnLanguages.Study
       if (isHit)
       {
         group.MarkHit();
+        if (group.Completed)
+          _KnownGroupNumbers.Add(group.GroupNumber);
         _PrevStudyWasHit = true;
         //_GroupNumberToStudy = GetGroupNumberToStudy(group, prevStudyWasHit, true);
         //_GroupNumberToStudy = group.GroupNumber;
@@ -363,6 +439,7 @@ namespace LearnLanguages.Study
       else
       {
         group.MarkMiss();
+        _PrevStudyWasHit = false;
       }
     }
 

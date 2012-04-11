@@ -69,8 +69,8 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
-        //_MeaningStudier.GetNextStudyItemViewModel(callback);
-        _OrderStudier.GetNextStudyItemViewModel(callback);//DEBUG ONLY.  
+        _MeaningStudier.GetNextStudyItemViewModel(callback);
+        //_OrderStudier.GetNextStudyItemViewModel(callback);//DEBUG ONLY.  
       }
       else
       {
@@ -98,15 +98,49 @@ namespace LearnLanguages.Study
     /// </summary>
     private bool ShouldStudyMeaning()
     {
-      //function: y = -((x-.1)^(6) + (x-.1)^4) + .9
-      //x = percent of meaning known
-      //y = probability should study meaning
+      ///THIS HAS THREE AREAS: KNOW NONE OF MEANING OF SONG (WHERE STUDYING ORDER WOULD BE WORTHLESS)
+      ///                      KNOW SOME OF SONG (WHERE ORDER WOULD BE OKAY SOMETIMES)
+      ///                      KNOW MOST OF SONG (WHERE ORDER WOULD BE OKAY MORE OFTEN)
+      ///                      KNOW ALL OF SONG (WHERE WE SHOULD BE STUDYING ALMOST STRICTLY ORDER)
+
+      double thresholdSome = double.Parse(StudyResources.PercentKnownSome);
+      double thresholdMost = double.Parse(StudyResources.PercentKnownMost);
+      double thresholdAll = double.Parse(StudyResources.PercentKnownAll);
+
+      //IF WE DON'T KNOW MUCH OF THE SONG AT ALL, THEN WE SHOULD ALWAYS STUDY MEANING
+      if (MeaningPercentKnown < thresholdSome)
+        return true;
+
+      var probabilityChooseMeaning = 0.0d;
+
+      if (MeaningPercentKnown < thresholdMost)
+      {
+        //WE KNOW SOME OF THE MEANING
+        probabilityChooseMeaning = double.Parse(StudyResources.ProbabilityChooseMeaningIfKnowSomeOfMeaning);
+      }
+      else if (MeaningPercentKnown < thresholdAll)
+      {
+        //WE KNOW MOST OF THE MEANING
+        probabilityChooseMeaning = double.Parse(StudyResources.ProbabilityChooseMeaningIfKnowMostOfMeaning);
+      }
+      else
+      {
+        //WE KNOW ALL OF THE MEANING
+        probabilityChooseMeaning = double.Parse(StudyResources.ProbabilityChooseMeaningIfKnowAllOfMeaning);
+      }
+
+      #region Deprecated using probability function
+      ////function: y = -((x-.1)^(6) + (x-.1)^4) + .9
+      ////x = percent of meaning known
+      ////y = probability should study meaning
       
-      var random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second + DateTime.Now.Minute);
-      var x = MeaningPercentKnown / 100.0d;
-      var A = Math.Pow(x-0.1, 6); //1st term in above function, (x-0.1)^6
-      var B = Math.Pow(x-0.1, 4); //2nd term in above function, (x-0.1)^4
-      var probabilityChooseMeaning = -(A + B) + .9;
+      //var x = MeaningPercentKnown;
+      //var A = Math.Pow(x-0.1, 6); //1st term in above function, (x-0.1)^6
+      //var B = Math.Pow(x-0.1, 4); //2nd term in above function, (x-0.1)^4
+      //var probabilityChooseMeaning = -(A + B) + .9;
+      //if (probabilityChooseMeaning < 0.1)
+      //  probabilityChooseMeaning = 0.1;
+      #endregion
 
       //Now we have our probability.  We can think of this probability as a threshold between 0.0 and 1.0.
       //If we have a probability of 0.7, then if we choose a random double between 0.0 and 1.0 and it is 
@@ -114,6 +148,7 @@ namespace LearnLanguages.Study
       //If our probability is 0.1, then we are very unlikely to choose a random double below 0.1.
 
       //So, choose our random double between 0.0 and 1.0
+      var random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second + DateTime.Now.Minute);
       var randomDouble = random.NextDouble();
 
       //Check to see if this is below our probability of choosing meaning.

@@ -190,6 +190,9 @@ debug=10 seconds (10000)</comment>
   <data name="DefaultThinkAboutAnswerTime" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="DefaultTimeLineOrderQuestionInMilliseconds" xml:space="preserve">
+    <value>2000</value>
+  </data>
   <data name="DefaultWordInPhraseReviewedRecorderId" xml:space="preserve">
     <value>73A27EAD-A83E-4FBA-B400-679A1AC58AC7</value>
   </data>
@@ -237,6 +240,15 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="PercentKnownSome" xml:space="preserve">
     <value>.25</value>
+  </data>
+  <data name="ProbabilityChooseMeaningIfKnowAllOfMeaning" xml:space="preserve">
+    <value>0.1</value>
+  </data>
+  <data name="ProbabilityChooseMeaningIfKnowMostOfMeaning" xml:space="preserve">
+    <value>0.8</value>
+  </data>
+  <data name="ProbabilityChooseMeaningIfKnowSomeOfMeaning" xml:space="preserve">
+    <value>0.9</value>
   </data>
   <data name="ReviewMethodIdDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>2DF2AF17-CE4E-462B-AD39-B6E31DF985A5</value>

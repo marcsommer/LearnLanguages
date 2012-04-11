@@ -250,6 +250,7 @@ namespace LearnLanguages.Study.ViewModels
       History.HistoryPublisher.Ton.PublishEvent(eventViewing);
       var reviewingLineOrderEvent = new History.Events.ReviewingLineOrderEvent(Line, MultiLineText, GetReviewMethodId());
       HistoryPublisher.Ton.PublishEvent(reviewingLineOrderEvent);
+      QuestionDurationInMilliseconds = int.Parse(StudyResources.DefaultTimeLineOrderQuestionInMilliseconds);
       AskQuestion(QuestionDurationInMilliseconds, (e) =>
         {
           if (e != null)
