@@ -44,9 +44,20 @@ namespace LearnLanguages.DataAccess.Ef
       var isPool = System.Threading.Thread.CurrentThread.IsThreadPoolThread;
       using (LearnLanguagesContext context = new LearnLanguagesContext())
       {
-        if (context.DatabaseExists() && bool.Parse(EfResources.DeleteAllExistingDataAndStartNewSeedData))
-          context.DeleteDatabase();
-
+        //try
+        {
+          //context.Connection.Open();
+          //context.CreateDatabase();
+          bool databaseExists = context.DatabaseExists();
+          bool deleteAll = bool.Parse(EfResources.DeleteAllExistingDataAndStartNewSeedData);
+          //if (context.DatabaseExists() && bool.Parse(EfResources.DeleteAllExistingDataAndStartNewSeedData))
+          if (databaseExists && deleteAll)
+            context.DeleteDatabase();
+        }
+        //catch (Exception ex)
+        //{
+        //  var i = 2;
+        //}
         if (!context.DatabaseExists())
         {
           context.CreateDatabase();

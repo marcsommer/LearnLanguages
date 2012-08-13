@@ -248,7 +248,6 @@ namespace LearnLanguages.DataAccess.Ef
         private ObjectSet<MultiLineTextData> _MultiLineTextDatas;
 
         #endregion
-
         #region AddTo Methods
     
         /// <summary>
@@ -332,11 +331,11 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
+    
 
     #endregion
-
+    
     #region Entities
     
     /// <summary>
@@ -365,7 +364,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -444,7 +442,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnPhraseDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -487,7 +484,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -516,7 +512,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -595,7 +590,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUserDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -660,7 +654,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -691,7 +684,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -794,7 +786,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnPhraseDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -897,7 +888,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -928,7 +918,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -1031,7 +1020,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUserDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -1096,7 +1084,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -1135,7 +1122,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -1334,7 +1320,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUserDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -1415,7 +1400,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -1446,7 +1430,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -1549,7 +1532,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnLanguageDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -1740,7 +1722,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -1767,7 +1748,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -1822,7 +1802,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnTextChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -1849,7 +1828,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -1878,7 +1856,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -1957,7 +1934,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUsernameChanged();
 
         #endregion
-
     
     }
     
@@ -1985,7 +1961,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -2064,7 +2039,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnContextPhraseDataIdChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -2167,7 +2141,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
     
     /// <summary>
@@ -2198,7 +2171,6 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
         #region Primitive Properties
     
         /// <summary>
@@ -2301,7 +2273,6 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnSaltedHashedPasswordValueChanged();
 
         #endregion
-
     
         #region Navigation Properties
     
@@ -2460,10 +2431,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-
     }
 
     #endregion
-
     
 }

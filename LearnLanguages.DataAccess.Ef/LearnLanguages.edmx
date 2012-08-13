@@ -1064,6 +1064,167 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
+      <Diagram Name="LearnLanguages" ZoomLevel="72">
+        <EntityTypeShape EntityType="LearnLanguages.LanguageData" Width="1.5" PointX="5.125" PointY="3.625" Height="1.9802864583333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.PhraseData" Width="1.5" PointX="2.875" PointY="3" Height="3.1340950520833317" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.UserData" Width="1.5" PointX="0.625" PointY="3" Height="3.1340950520833317" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.RoleData" Width="1.5" PointX="2.875" PointY="7.625" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.TranslationData" Width="1.5" PointX="5.125" PointY="0.5" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.LineData" Width="1.5" PointX="5.125" PointY="6.375" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.DefaultStudyAdvisorKnowledgeBeliefData" Width="1.5" PointX="5" PointY="10.75" Height="1.7879850260416674" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.PhraseBeliefData" Width="1.5" PointX="8.125" PointY="3.125" Height="2.9417936197916674" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.StudyDataData" Width="1.5" PointX="0.625" PointY="0.5" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="LearnLanguages.MultiLineTextData" Width="1.5" PointX="7.375" PointY="7.5" Height="2.1725878906249996" IsExpanded="true" />
+        <AssociationConnector Association="LearnLanguages.AssociateLanguageDataWithPhraseData" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.125" PointY="4.6151432291666659" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="4.6151432291666641" />
+          <ConnectorPoint PointX="4.541666666666667" PointY="4.6151432291666659" />
+          <ConnectorPoint PointX="4.375" PointY="4.6151432291666659" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.AssociationUserDataWithPhraseData" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.125" PointY="4.5670475260416659" />
+          <ConnectorPoint PointX="2.875" PointY="4.5670475260416659" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.AssociationUserDataWithLanguageData" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.375" PointY="6.1340950520833317" />
+          <ConnectorPoint PointX="1.375" PointY="6.3840950520833317" />
+          <ConnectorPoint PointX="1.4947929166666667" PointY="6.3840950520833308" />
+          <ConnectorPoint PointX="1.6614595833333332" PointY="6.3840950520833317" />
+          <ConnectorPoint PointX="1.6979191666666667" PointY="6.3840950520833308" />
+          <ConnectorPoint PointX="1.8645858333333332" PointY="6.3840950520833317" />
+          <ConnectorPoint PointX="1.9010454166666666" PointY="6.3840950520833308" />
+          <ConnectorPoint PointX="2.0677120833333333" PointY="6.3840950520833317" />
+          <ConnectorPoint PointX="4.75" PointY="6.3840950520833317" />
+          <ConnectorPoint PointX="4.75" PointY="4.0888196145833327" />
+          <ConnectorPoint PointX="4.791666666666667" PointY="4.0888196145833318" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="4.0888196145833327" />
+          <ConnectorPoint PointX="5.125" PointY="4.0888196145833327" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.AssociationUserDataWithRoleData" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.7812525" PointY="6.1340950520833317" />
+          <ConnectorPoint PointX="1.7812525" PointY="8.422841796875" />
+          <ConnectorPoint PointX="2.875" PointY="8.422841796875" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.UserDataRoleData" ManuallyRouted="false">
+          <ConnectorPoint PointX="0.9687475" PointY="6.1340950520833317" />
+          <ConnectorPoint PointX="0.9687475" PointY="7.9926683984374991" />
+          <ConnectorPoint PointX="1.4947929166666667" PointY="7.9926683984374982" />
+          <ConnectorPoint PointX="1.6614595833333332" PointY="7.9926683984374991" />
+          <ConnectorPoint PointX="1.6979191666666667" PointY="7.9926683984374982" />
+          <ConnectorPoint PointX="1.8645858333333332" PointY="7.9926683984374991" />
+          <ConnectorPoint PointX="2.875" PointY="7.9926683984374991" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.UserDataPhraseData" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.125" PointY="3.7210237630208329" />
+          <ConnectorPoint PointX="2.875" PointY="3.7210237630208329" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.PhraseDataLanguageData" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.375" PointY="5.1727148437499988" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="5.172714843749997" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="5.1727148437499988" />
+          <ConnectorPoint PointX="5.125" PointY="5.1727148437499988" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.TranslationDataPhraseData" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.125" PointY="1.5862939453124998" />
+          <ConnectorPoint PointX="4.1145858333333329" PointY="1.5862939453124991" />
+          <ConnectorPoint PointX="3.9479191666666664" PointY="1.5862939453124998" />
+          <ConnectorPoint PointX="3.625" PointY="1.5862939453124998" />
+          <ConnectorPoint PointX="3.625" PointY="3" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.UserDataTranslationData" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.375" PointY="3" />
+          <ConnectorPoint PointX="1.375" PointY="2.3456835937499996" />
+          <ConnectorPoint PointX="2.375" PointY="2.3456835937499996" />
+          <ConnectorPoint PointX="2.375" PointY="2.1606929179687504" />
+          <ConnectorPoint PointX="3.5416666666666665" PointY="2.16069291796875" />
+          <ConnectorPoint PointX="3.7083333333333335" PointY="2.1606929179687504" />
+          <ConnectorPoint PointX="3.9479191666666664" PointY="2.16069291796875" />
+          <ConnectorPoint PointX="4.1145858333333329" PointY="2.1606929179687504" />
+          <ConnectorPoint PointX="5.125" PointY="2.1606929179687504" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.UserDataLanguageData" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.7812519999999998" PointY="3" />
+          <ConnectorPoint PointX="1.7812519999999998" PointY="2.75" />
+          <ConnectorPoint PointX="3.5416666666666665" PointY="2.7499999999999996" />
+          <ConnectorPoint PointX="3.7083333333333335" PointY="2.75" />
+          <ConnectorPoint PointX="3.9479191666666664" PointY="2.7499999999999996" />
+          <ConnectorPoint PointX="4.1145858333333329" PointY="2.75" />
+          <ConnectorPoint PointX="4.625" PointY="2.75" />
+          <ConnectorPoint PointX="4.625" PointY="4.8939290364583323" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="4.8939290364583306" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="4.8939290364583323" />
+          <ConnectorPoint PointX="5.125" PointY="4.8939290364583323" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.UserDataLineData" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.9843787499999999" PointY="6.1340950520833317" />
+          <ConnectorPoint PointX="1.9843787499999999" PointY="6.9732975260416659" />
+          <ConnectorPoint PointX="4.947916666666667" PointY="6.973297526041665" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="6.9732975260416659" />
+          <ConnectorPoint PointX="5.125" PointY="6.9732975260416659" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.PhraseDataLineData" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.375" PointY="6.071786359775639" />
+          <ConnectorPoint PointX="4.9375" PointY="6.634286359775639" />
+          <ConnectorPoint PointX="4.9375" PointY="6.1875" />
+          <ConnectorPoint PointX="4.9723244349011217" PointY="6.2223244349011209" />
+          <ConnectorPoint PointX="5.0901755650988791" PointY="6.3401755650988791" />
+          <ConnectorPoint PointX="5.125" PointY="6.375" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.ContextPhraseDataTranslationData" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.0312525" PointY="3" />
+          <ConnectorPoint PointX="4.0312525" PointY="1.0118944726562491" />
+          <ConnectorPoint PointX="5.125" PointY="1.0118944726562491" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.PhraseDataDefaultStudyAdvisorKnowledgeBeliefData" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.375" PointY="3.28125" />
+          <ConnectorPoint PointX="4.541666666666667" PointY="3.2812499999999996" />
+          <ConnectorPoint PointX="4.708333333333333" PointY="3.28125" />
+          <ConnectorPoint PointX="4.791666666666667" PointY="3.2812499999999996" />
+          <ConnectorPoint PointX="4.958333333333333" PointY="3.28125" />
+          <ConnectorPoint PointX="5.03125" PointY="3.28125" />
+          <ConnectorPoint PointX="5.03125" PointY="10.75" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.PhraseDataPhraseBeliefData" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.375" PointY="5.8672900390625" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="5.8672900390624978" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="5.8672900390625" />
+          <ConnectorPoint PointX="7.666666666666667" PointY="5.8672900390624987" />
+          <ConnectorPoint PointX="7.833333333333333" PointY="5.8672900390625" />
+          <ConnectorPoint PointX="8.125" PointY="5.8672900390625" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.UserDataPhraseBeliefData" ManuallyRouted="false">
+          <ConnectorPoint PointX="0.96874799999999994" PointY="3" />
+          <ConnectorPoint PointX="0.96874799999999994" PointY="2.875" />
+          <ConnectorPoint PointX="1.2916666666666667" PointY="2.8749999999999996" />
+          <ConnectorPoint PointX="1.4583333333333333" PointY="2.875" />
+          <ConnectorPoint PointX="1.6979186666666666" PointY="2.8749999999999996" />
+          <ConnectorPoint PointX="1.8645853333333331" PointY="2.875" />
+          <ConnectorPoint PointX="3.5416666666666665" PointY="2.8749999999999996" />
+          <ConnectorPoint PointX="3.7083333333333335" PointY="2.875" />
+          <ConnectorPoint PointX="3.9479191666666664" PointY="2.8749999999999996" />
+          <ConnectorPoint PointX="4.1145858333333329" PointY="2.875" />
+          <ConnectorPoint PointX="4.541666666666667" PointY="2.8749999999999996" />
+          <ConnectorPoint PointX="4.708333333333333" PointY="2.875" />
+          <ConnectorPoint PointX="4.875" PointY="2.875" />
+          <ConnectorPoint PointX="4.875" PointY="6.125" />
+          <ConnectorPoint PointX="4.947916666666667" PointY="6.1249999999999991" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="6.125" />
+          <ConnectorPoint PointX="7.75" PointY="6.125" />
+          <ConnectorPoint PointX="7.75" PointY="4.4648930195312495" />
+          <ConnectorPoint PointX="8.125" PointY="4.4648930195312495" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.MultiLineTextDataUserData" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.375" PointY="9.4778857421875" />
+          <ConnectorPoint PointX="5.114583333333333" PointY="9.4778857421875" />
+          <ConnectorPoint PointX="4.947916666666667" PointY="9.4778857421875" />
+          <ConnectorPoint PointX="1.57812625" PointY="9.4778857421875" />
+          <ConnectorPoint PointX="1.57812625" PointY="6.1340950520833317" />
+        </AssociationConnector>
+        <AssociationConnector Association="LearnLanguages.LineDataMultiLineTextData" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.625" PointY="8.1199446614583337" />
+          <ConnectorPoint PointX="7.375" PointY="8.1199446614583337" />
+        </AssociationConnector>
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
