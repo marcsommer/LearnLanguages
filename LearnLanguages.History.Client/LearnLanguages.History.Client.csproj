@@ -73,6 +73,7 @@
     <Compile Include="CompoundEventMakers\ReviewedPhraseCompoundEventMaker.cs" />
     <Compile Include="ConsoleHistoryListener.cs" />
     <Compile Include="Events\Compound\ReviewedLineOrderEvent.cs" />
+    <Compile Include="Events\Simple\PhraseAutoTranslatedEvent.cs" />
     <Compile Include="Events\Simple\ReviewingLineOrderEvent.cs" />
     <Compile Include="Events\Simple\ReviewingLineEvent.cs" />
     <Compile Include="Events\Compound\ReviewedPhraseEvent.cs" />

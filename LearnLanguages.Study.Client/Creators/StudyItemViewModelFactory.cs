@@ -241,6 +241,13 @@ namespace LearnLanguages.Study
 
             //GOT TRANSLATED PHRASE VIA AUTOTRANSLATE
             translatedPhrase = r2.Object;
+
+            //FIRE EVENT THAT WE HAVE AUTOTRANSLATED A PHRASE
+            var autoTranslatedEvent = 
+              new History.Events.PhraseAutoTranslatedEvent(phrase, translatedPhrase);
+            Services.EventAggregator.Publish(autoTranslatedEvent);
+
+            //CALLBACK
             callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
             return;
           });

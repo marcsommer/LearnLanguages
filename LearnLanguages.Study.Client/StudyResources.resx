@@ -123,6 +123,10 @@
   <data name="AdvisorQuestionWhatIsPhrasePercentKnown" xml:space="preserve">
     <value>What is the percent known of this phrase?</value>
   </data>
+  <data name="AutoSavePhrasesAutomaticallyTranslated" xml:space="preserve">
+    <value>True</value>
+    <comment>If true, this saves all phrases translated by the auto translator service to the DB.</comment>
+  </data>
   <data name="BingAppId" xml:space="preserve">
     <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
   </data>
@@ -177,6 +181,9 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="DefaultOrderStudierLineGroupSize" xml:space="preserve">
     <value>4</value>
+  </data>
+  <data name="DefaultPhraseAutoTranslatedRecorderId" xml:space="preserve">
+    <value>4F8FA6A7-DD12-4A32-A3C6-FF248059926B</value>
   </data>
   <data name="DefaultPhraseReviewedRecorderId" xml:space="preserve">
     <value>8FA20DFF-0C65-4BC0-B4AC-38B72AB03CD7</value>
