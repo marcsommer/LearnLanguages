@@ -17,13 +17,12 @@ namespace LearnLanguages.Study
     public DefaultPhraseAutoTranslatedRecorder()
     {
       Id = Guid.Parse(StudyResources.DefaultPhraseAutoTranslatedRecorderId);
-      IsEnabled = bool.Parse(StudyResources.AutoSavePhrasesAutomaticallyTranslated);
     }
 
     /// <summary>
     /// Always returns true.
     /// Since this is not really a recorder, it doesn't do anything special like filtering events.
-    /// The IsEnabled is set in ctor against the StudyResources setting.
+    /// Use the IsEnabled property to enable/disable this object.
     /// </summary>
     protected override bool ShouldRecord(History.Events.PhraseAutoTranslatedEvent message)
     {

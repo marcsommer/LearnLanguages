@@ -4,6 +4,7 @@ using System.Net;
 using Csla.Serialization;
 using Csla;
 using System.Collections.Generic;
+using Csla.Core;
 
 namespace LearnLanguages.Business.Criteria
 {
@@ -16,12 +17,12 @@ namespace LearnLanguages.Business.Criteria
   {
     public ListOfPhrasesCriteria(params PhraseEdit[] phrases)
     {
-      Phrases = new List<PhraseEdit>(phrases);
+      Phrases = new MobileList<PhraseEdit>(phrases);
     }
 
     public ListOfPhrasesCriteria(IList<PhraseEdit> phrases)
     {
-      Phrases = new List<PhraseEdit>(phrases);
+      Phrases = new MobileList<PhraseEdit>(phrases);
     }
 
     public static readonly PropertyInfo<IList<PhraseEdit>> PhrasesProperty = 

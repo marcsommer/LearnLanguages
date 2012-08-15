@@ -245,7 +245,7 @@ namespace LearnLanguages.Study
             //FIRE EVENT THAT WE HAVE AUTOTRANSLATED A PHRASE
             var autoTranslatedEvent = 
               new History.Events.PhraseAutoTranslatedEvent(phrase, translatedPhrase);
-            Services.EventAggregator.Publish(autoTranslatedEvent);
+            History.HistoryPublisher.Ton.PublishEvent(autoTranslatedEvent);
 
             //CALLBACK
             callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
