@@ -105,13 +105,15 @@ namespace LearnLanguages.Study
 
       //CREATE STUDIER FOR EACH MULTILINETEXT IN MULTILINETEXTS TARGET
       var newJobMultiLineTextList = _Target;
-      foreach (var multiLineTextEdit in newJobMultiLineTextList)
+      //foreach (var multiLineTextEdit in newJobMultiLineTextList)
+      for (int i = 0; i < newJobMultiLineTextList.Count; i++)
       {
         if (_AbortIsFlagged)
         {
           completedCallback(null);
           return;
         }
+        var multiLineTextEdit = newJobMultiLineTextList[i];
         var studier = new DefaultSingleMultiLineTextMeaningStudier();
         studier.InitializeForNewStudySession(multiLineTextEdit, (e) =>
           {

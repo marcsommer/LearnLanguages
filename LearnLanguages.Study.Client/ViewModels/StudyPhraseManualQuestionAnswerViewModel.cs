@@ -110,20 +110,6 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    //private Visibility _NextButtonVisibility = Visibility.Collapsed;
-    //public Visibility NextButtonVisibility
-    //{
-    //  get { return _NextButtonVisibility; }
-    //  set
-    //  {
-    //    if (value != _NextButtonVisibility)
-    //    {
-    //      _NextButtonVisibility = value;
-    //      NotifyOfPropertyChange(() => NextButtonVisibility);
-    //    }
-    //  }
-    //}
-
     public string QuestionHeader
     {
       get
@@ -157,9 +143,6 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
     public string ShowAnswerButtonLabel { get { return StudyResources.ButtonLabelShowAnswer; } }
-
-    //private ExceptionCheckCallback _CompletedCallback { get; set; }
-
 
     #endregion
 
@@ -234,5 +217,153 @@ namespace LearnLanguages.Study.ViewModels
     {
       return Guid.Parse(StudyResources.ReviewMethodIdStudyPhraseManualQA);
     }
+
+    #region Edit/Save Question Stuff
+
+    private Visibility _EditQuestionButtonVisibility = Visibility.Visible;
+    public Visibility EditQuestionButtonVisibility
+    {
+      get { return _EditQuestionButtonVisibility; }
+      set
+      {
+        if (value != _EditQuestionButtonVisibility)
+        {
+          _EditQuestionButtonVisibility = value;
+          NotifyOfPropertyChange(() => EditQuestionButtonVisibility);
+        }
+      }
+    }
+
+    private Visibility _SaveQuestionButtonVisibility = Visibility.Collapsed;
+    public Visibility SaveQuestionButtonVisibility
+    {
+      get { return _SaveQuestionButtonVisibility; }
+      set
+      {
+        if (value != _SaveQuestionButtonVisibility)
+        {
+          _SaveQuestionButtonVisibility = value;
+          NotifyOfPropertyChange(() => SaveQuestionButtonVisibility);
+        }
+      }
+    }
+
+    public string ButtonLabelEditQuestion { get { return StudyResources.ButtonLabelEdit; } }
+    public string ButtonLabelSaveQuestion { get { return StudyResources.ButtonLabelSave; } }
+
+    private bool _QuestionIsReadOnly = true;
+    public bool QuestionIsReadOnly
+    {
+      get { return _QuestionIsReadOnly; }
+      set
+      {
+        if (value != _QuestionIsReadOnly)
+        {
+          _QuestionIsReadOnly = value;
+          NotifyOfPropertyChange(() => QuestionIsReadOnly);
+        }
+      }
+    }
+
+    public bool CanEditQuestion
+    {
+      get
+      {
+        //if the question is read only, then we are NOT currently editing the question.
+        //therefore, we can press the edit question button which is what CanEditQuestion is asking.
+        return QuestionIsReadOnly;
+      }
+    }
+    public void EditQuestion()
+    {
+      QuestionIsReadOnly = false;
+      //hack: UpdateEditButtonVisibilities method instead of visibility converter
+      UpdateEditButtonVisibilities();
+    }
+
+    public bool CanSaveQuestion
+    {
+      get
+      {
+        //return Question != null && Question.IsSavable && SaveQuestionButtonIsEnabled;
+        return Question != null && Question.IsValid && SaveQuestionButtonIsEnabled;
+      }
+    }
+    public void SaveQuestion()
+    {
+      QuestionIsReadOnly = true;
+      SaveQuestionButtonIsEnabled = false;
+
+      if (Question.IsChild)
+      {
+        var parentList = (PhraseList)Question.Parent;
+        //parentList.ChildChanged += parentList_ChildChanged;
+        parentList.BeginSave((s1, r1) =>
+          {
+            if (r1.Error != null)
+              throw r1.Error;
+
+            //SAVE HANDLED STUFF IN PARENTLIST_CHILDCHANGED EVENT HANDLER.
+            var debugtest = Question.Text;
+            SaveQuestionButtonIsEnabled = true;
+            QuestionIsReadOnly = true;
+            UpdateEditButtonVisibilities();
+          });
+      }
+      else
+      {
+        Question.BeginSave((s, r) =>
+          {
+            if (r.Error != null)
+              throw r.Error;
+
+            Question = (PhraseEdit)r.NewObject;
+            SaveQuestionButtonIsEnabled = true;
+            QuestionIsReadOnly = true;
+            UpdateEditButtonVisibilities();
+          });
+      }
+    }
+
+    void parentList_ChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
+    {
+      Question = (PhraseEdit)e.ChildObject;
+      ((PhraseList)Question.Parent).ChildChanged -= parentList_ChildChanged;
+      SaveQuestionButtonIsEnabled = true;
+      QuestionIsReadOnly = true;
+      UpdateEditButtonVisibilities();
+    }
+
+
+    private bool _SaveQuestionButtonIsEnabled = true;
+    public bool SaveQuestionButtonIsEnabled
+    {
+      get { return _SaveQuestionButtonIsEnabled; }
+      set
+      {
+        if (value != _SaveQuestionButtonIsEnabled)
+        {
+          _SaveQuestionButtonIsEnabled = value;
+          NotifyOfPropertyChange(() => SaveQuestionButtonIsEnabled);
+          NotifyOfPropertyChange(() => CanSaveQuestion);
+        }
+      }
+    }
+
+    private void UpdateEditButtonVisibilities()
+    {
+      if (QuestionIsReadOnly)
+      {
+        EditQuestionButtonVisibility = Visibility.Visible;
+        SaveQuestionButtonVisibility = Visibility.Collapsed;
+      }
+      else
+      {
+        EditQuestionButtonVisibility = Visibility.Collapsed;
+        SaveQuestionButtonVisibility = Visibility.Visible;
+      }
+    }
+
+    #endregion
   }
 }

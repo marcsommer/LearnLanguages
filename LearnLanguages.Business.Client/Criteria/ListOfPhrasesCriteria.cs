@@ -15,6 +15,10 @@ namespace LearnLanguages.Business.Criteria
   [Serializable]
   public class ListOfPhrasesCriteria : CriteriaBase<ListOfPhrasesCriteria>
   {
+    public ListOfPhrasesCriteria()
+    {
+      Phrases = new MobileList<PhraseEdit>();
+    }
     public ListOfPhrasesCriteria(params PhraseEdit[] phrases)
     {
       Phrases = new MobileList<PhraseEdit>(phrases);

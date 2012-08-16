@@ -97,6 +97,24 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string ButtonLabelEdit {
+            get {
+                return ResourceManager.GetString("ButtonLabelEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string ButtonLabelSave {
+            get {
+                return ResourceManager.GetString("ButtonLabelSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Answer.
         /// </summary>
         public static string ButtonLabelShowAnswer {

@@ -11,6 +11,7 @@ namespace LearnLanguages.Business
   [Serializable]
   public class TranslationCreator : Common.CslaBases.ReadOnlyBase<TranslationCreator>
   {
+
     #region Factory Methods
 
     /// <summary>

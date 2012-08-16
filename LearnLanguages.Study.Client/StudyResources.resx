@@ -130,6 +130,12 @@
   <data name="BingAppId" xml:space="preserve">
     <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
   </data>
+  <data name="ButtonLabelEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ButtonLabelSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="ButtonLabelShowAnswer" xml:space="preserve">
     <value>Show Answer</value>
   </data>
