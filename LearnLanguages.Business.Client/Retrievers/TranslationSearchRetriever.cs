@@ -69,7 +69,7 @@ namespace LearnLanguages.Business
     public void DataPortal_Create(Criteria.TranslationSearchCriteria criteria)
     {
       RetrieverId = Guid.NewGuid();
-      Translation = TranslationEdit.NewTranslationEdit();
+      //Translation = TranslationEdit.NewTranslationEdit();
 
       using (var dalManager = DalFactory.GetDalManager())
       {

@@ -152,8 +152,9 @@ namespace LearnLanguages.Business
           Language = DataPortal.FetchChild<LanguageEdit>(dto.LanguageId);
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
-        if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+
+        //if (!string.IsNullOrEmpty(dto.Username))
+        //  User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
       }
     }
     public override PhraseDto CreateDto()

@@ -84,6 +84,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseTextsCriteria.cs">
       <Link>Criteria\PhraseTextsCriteria.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\TranslationPairSearchCriteria.cs">
+      <Link>Criteria\TranslationPairSearchCriteria.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\TranslationSearchCriteria.cs">
       <Link>Criteria\TranslationSearchCriteria.cs</Link>
     </Compile>
@@ -129,11 +132,17 @@
     <Compile Include="..\LearnLanguages.Business.Client\Lists\TranslationList.cs">
       <Link>Lists\TranslationList.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesByTextAndLanguageRetriever.cs">
+      <Link>Retrievers\PhrasesByTextAndLanguageRetriever.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesExistRetriever.cs">
       <Link>Retrievers\PhrasesExistRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\StudyDataRetriever.cs">
       <Link>Retrievers\StudyDataRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationPairSearchRetriever.cs">
+      <Link>Retrievers\TranslationPairSearchRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationSearchRetriever.cs">
       <Link>Retrievers\TranslationSearchRetriever.cs</Link>
