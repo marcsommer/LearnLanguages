@@ -198,14 +198,107 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    public void Initialize(PhraseEdit question, PhraseEdit answer)
+    public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
     {
-      Question = question;
-      Answer = answer;
-      var words = question.Text.ParseIntoWords();
-      var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
-      QuestionDurationInMilliseconds = durationMilliseconds;
-      HideAnswer();
+      //get these anew from database, so we know that we are NOT dealing
+      //with any children.
+      
+      #region 1) Determine which phrase is "foreign"
+      bool questionIsForeign = false;
+      PhraseEdit foreignPhrase = null;
+      PhraseEdit nativePhrase = null;
+      var criteria = new Business.Criteria.PhraseCriteria(question);
+      Business.StudyDataRetriever.CreateNew((s, r) =>
+        {
+          if (r.Error != null)
+            callback(r.Error);
+
+          var nativeLanguageText = r.Object.StudyData.NativeLanguageText;
+          if (question.Language.Text == nativeLanguageText)
+          {
+            foreignPhrase = answer;
+            nativePhrase = question;
+            questionIsForeign = false;
+          }
+          else
+          {
+            foreignPhrase = question;
+            nativePhrase = answer;
+            questionIsForeign = true;
+          }
+        
+        #region Now find the translation related to the question and answer
+          
+      var criteria = 
+        new Business.Criteria.TranslationSearchCriteria(message.SourcePhrase, 
+                                                        message.TranslatedPhrase.Language.Text);
+      Business.TranslationSearchRetriever.CreateNew(criteria, (s, r) =>
+        {
+          if (r.Error != null)
+          {
+            throw r.Error;
+          }
+
+          if (r.Object.Translation != null)
+          {
+            //we already have a translation for this, so we don't need to do anything further.
+            return;
+          }
+          
+
+          //NO PRIOR TRANSLATION EXISTS, SO CREATE AND SAVE.
+
+          //CREATE
+          var createTranslationCriteria = 
+            new Business.Criteria.ListOfPhrasesCriteria(message.SourcePhrase, message.TranslatedPhrase);
+          TranslationCreator.CreateNew(createTranslationCriteria, (s2, r2) =>
+            {
+              if (r2.Error != null)
+              {
+                throw r2.Error;
+              }
+
+              //SAVE
+              r2.Object.Translation.BeginSave((s3, r3) =>
+                {
+                  if (r3.Error != null)
+                    throw r3.Error;
+                });
+            });
+        });
+        #endregion
+        });
+      #endregion
+      //QUESTION
+      PhraseEdit.GetPhraseEdit(, (s, r) =>
+      {
+        if (r.Error != null)
+          callback(r.Error);
+        Question = r.Object;
+
+        //ANSWER
+        PhraseEdit.GetPhraseEdit(answer.Id, (s2, r2) =>
+        {
+          if (r2.Error != null)
+            callback(r2.Error);
+
+          Answer = r2.Object;
+
+          //FINISH UP
+          var words = Question.Text.ParseIntoWords();
+          var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+          QuestionDurationInMilliseconds = durationMilliseconds;
+          HideAnswer();
+          callback(null);
+        });
+      });
+
+      //Question = question;
+      //Answer = answer;
+      //var words = question.Text.ParseIntoWords();
+      //var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+      //QuestionDurationInMilliseconds = durationMilliseconds;
+      //HideAnswer();
     }
 
     public override void Show(ExceptionCheckCallback callback)

@@ -95,12 +95,28 @@ namespace LearnLanguages.Study
 
               //INITIALIZE VIEWMODEL WITH Q & A
               if (qaViewModel is ViewModels.StudyPhraseTimedQuestionAnswerViewModel)
-                ((ViewModels.StudyPhraseTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
-              else
-                ((ViewModels.StudyPhraseManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
+                ((ViewModels.StudyPhraseTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer, (e1) =>
+                  {
+                    //error callback
+                    if (e1 != null)
+                      callback(this, new ResultArgs<StudyItemViewModelBase>(e1));
 
-              //INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
-              callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
+                    //success callback
+                    callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
+                  });
+              else
+                ((ViewModels.StudyPhraseManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer, (e2) =>
+                  {
+                    //error callback
+                    if (e2 != null)
+                      callback(this, new ResultArgs<StudyItemViewModelBase>(e2));
+
+                    //success callback
+                    callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
+                  });
+
+              ////INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
+              //callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
             }
             catch (Exception ex)
             {

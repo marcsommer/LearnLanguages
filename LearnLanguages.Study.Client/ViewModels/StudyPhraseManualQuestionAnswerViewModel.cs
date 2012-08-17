@@ -7,6 +7,7 @@ using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
 using LearnLanguages.History.Events;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -148,11 +149,35 @@ namespace LearnLanguages.Study.ViewModels
 
     #region Methods
 
-    public void Initialize(PhraseEdit question, PhraseEdit answer)
+    public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
     {
-      Question = question;
-      Answer = answer;
-      HideAnswer();
+      //get these anew from database, so we know that we are NOT dealing
+      //with any children.
+
+      //QUESTION
+      PhraseEdit.GetPhraseEdit(question.Id, (s, r) =>
+        {
+          if (r.Error != null)
+            callback(r.Error);
+          Question = r.Object;
+          
+          //ANSWER
+          PhraseEdit.GetPhraseEdit(answer.Id, (s2, r2) =>
+          {
+            if (r2.Error != null)
+              callback(r2.Error);
+
+            Answer = r2.Object;
+          
+            //FINISH UP
+            HideAnswer();
+            callback(null);
+          });
+
+        });
+      //Question = question;
+      //Answer = answer;
+      //HideAnswer();
     }
 
     public override void Show(ExceptionCheckCallback callback)
