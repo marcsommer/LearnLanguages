@@ -42,34 +42,52 @@ namespace LearnLanguages.DataAccess.Ef
 
     protected override UserDto GetUserImpl(string username)
     {
-      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      try
       {
-        var results = from userData in ctx.ObjectContext.UserDatas
-                      where userData.Username == username
-                      select userData;
+        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+        {
+          var results = from userData in ctx.ObjectContext.UserDatas
+                        where userData.Username == username
+                        select userData;
 
-        if (results.Count() == 1)
-        {
-          var userDto = EfHelper.ToDto(results.First());
-          return userDto;
+          if (results.Count() == 1)
+          {
+            var userDto = EfHelper.ToDto(results.First());
+            return userDto;
+          }
+          else if (results.Count() == 0)
+          {
+            return null;
+          }
+          else
+          {
+
+#if DEBUG
+            //if (retRoles == null)
+            System.Diagnostics.Debugger.Break();
+#endif
+
+            //results.count is not one or zero.  either it's negative, which would be framework absurd, or its more than one,
+            //which means that we have multiple users with the same username.  this is very bad.
+            var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                         DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+            throw new Exceptions.VeryBadException(errorMsg);
+          }
         }
-        else if (results.Count() == 0)
-        {
-          return null;
-        }
-        else
-        {
-          //results.count is not one or zero.  either it's negative, which would be framework absurd, or its more than one,
-          //which means that we have multiple users with the same username.  this is very bad.
-          var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
-                                       DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
-          throw new Exceptions.VeryBadException(errorMsg);
-        }
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debugger.Break();
+        var exc = ex;
+        throw;
       }
     }
 
     protected override ICollection<RoleDto> GetRolesImpl(string username)
     {
+      try
+      {
+
       //GET USER
       var userDto = GetUserImpl(username);
       if (username == null)
@@ -89,7 +107,19 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
 
-      return retRoles;
+#if DEBUG
+      if (retRoles == null)
+        System.Diagnostics.Debugger.Break();
+#endif
+       
+        return retRoles;
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debugger.Break();
+        
+        throw;
+      }
     }
   }
 }

@@ -145,47 +145,56 @@ namespace LearnLanguages.Study.ViewModels
     }
     public string ShowAnswerButtonLabel { get { return StudyResources.ButtonLabelShowAnswer; } }
 
+    private string _InitialQuestionText;
+    private string _ModifiedQuestionText;
     #endregion
 
     #region Methods
 
     public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
     {
-      if (!question.IsValid)
-        callback(new ArgumentException("question is not a valid phrase", "question"));
-      if (!answer.IsValid)
-        callback(new ArgumentException("answer is not a valid phrase", "answer"));
+      Question = question;
+      _InitialQuestionText = question.Text;
+      _ModifiedQuestionText = "";
+      Answer = answer;
+      HideAnswer();
+      callback(null);
+
+      //if (!question.IsValid)
+      //  callback(new ArgumentException("question is not a valid phrase", "question"));
+      //if (!answer.IsValid)
+      //  callback(new ArgumentException("answer is not a valid phrase", "answer"));
 
 
-      //THE POINT OF THIS METHOD IS TO ASSIGN QUESTION, ANSWER, AND CALCULATE TIMING
-      //WE GET THE ACTUAL PHRASEEDITS FROM THE DB
-      //get these anew from database, so we know that we are NOT dealing
-      //with any children, to make things smoother when we are editing/saving them.
+      ////THE POINT OF THIS METHOD IS TO ASSIGN QUESTION, ANSWER, AND CALCULATE TIMING
+      ////WE GET THE ACTUAL PHRASEEDITS FROM THE DB
+      ////get these anew from database, so we know that we are NOT dealing
+      ////with any children, to make things smoother when we are editing/saving them.
 
 
-      var criteria = new Business.Criteria.ListOfPhrasesCriteria(question, answer);
-      Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
-      {
-        if (r.Error != null)
-        {
-          callback(r.Error);
-          return;
-        }
+      //var criteria = new Business.Criteria.ListOfPhrasesCriteria(question, answer);
+      //Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
+      //{
+      //  if (r.Error != null)
+      //  {
+      //    callback(r.Error);
+      //    return;
+      //  }
 
-        var retriever = r.Object;
+      //  var retriever = r.Object;
 
-        Question = retriever.RetrievedPhrases[question.Id];
-        Answer = retriever.RetrievedPhrases[answer.Id];
+      //  Question = retriever.RetrievedPhrases[question.Id];
+      //  Answer = retriever.RetrievedPhrases[answer.Id];
 
-        if (Question == null)
-          callback(new ArgumentException("phrase not found in DB", "question"));
-        if (Answer == null)
-          callback(new ArgumentException("phrase not found in DB", "answer"));
+      //  if (Question == null)
+      //    callback(new ArgumentException("phrase not found in DB", "question"));
+      //  if (Answer == null)
+      //    callback(new ArgumentException("phrase not found in DB", "answer"));
 
-        //FINISH UP
-        HideAnswer();
-        callback(null);
-      });
+      //  //FINISH UP
+      //  HideAnswer();
+      //  callback(null);
+      //});
     }
 
     public override void Show(ExceptionCheckCallback callback)
@@ -329,18 +338,61 @@ namespace LearnLanguages.Study.ViewModels
 
       if (Question.IsChild)
       {
-        var parentList = (PhraseList)Question.Parent;
-        //parentList.ChildChanged += parentList_ChildChanged;
-        parentList.BeginSave((s1, r1) =>
-          {
-            if (r1.Error != null)
-              throw r1.Error;
+        //QUESTION IS CHILD, AND I'M NOT ABLE TO GET THE PARENT SAVE TO WORK, SO
+        //I'M GOING TO GET THE QUESTION FROM THE DB DIRECTLY, SAVE IT WITH THE NEW TEXT,
+        //AND REPLACE THE QUESTION WITH THE SAVED DB NON-CHILD OBJECT.
 
-            //SAVE HANDLED STUFF IN PARENTLIST_CHILDCHANGED EVENT HANDLER.
-            var debugtest = Question.Text;
-            SaveQuestionButtonIsEnabled = true;
-            QuestionIsReadOnly = true;
-            UpdateEditButtonVisibilities();
+        //I'M GOING TO HACK THIS UP NOW CUZ I NEED TO GET MOVING.
+        //MAKING TWO FIELDS FOR THIS VM: INITIAL AND MODIFIED QUESTION TEXT.
+        //GOING TO USE THESE TO MANIPULATE SHIT HOW I WANT IT
+
+        //The Question PhraseEdit has the modified text, but we need to search
+        //via the initial text so we're going to store the modified text,
+        //re-apply the initial text, do the search, pull the old DB object,
+        //modify THAT PhraseEdit with the stored modified text, save it,
+        //then store the newly saved (with new text) PhraseEdit as our Question.
+
+        _ModifiedQuestionText = Question.Text;
+        Question.Text = _InitialQuestionText;
+        var criteria = new Business.Criteria.ListOfPhrasesCriteria(Question);
+        PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
+        //PhraseEdit.GetPhraseEdit(Question.Id, (s, r) =>
+          {
+            if (r.Error != null)
+              throw r.Error;
+            //var retrievedQuestion = r.Object;
+
+            var retrievedQuestion = r.Object.RetrievedPhrases[Question.Id];
+            if (retrievedQuestion == null)
+              throw new Exception("retrieved question is null");
+
+            retrievedQuestion.Text = _ModifiedQuestionText;
+
+            //RETRIEVED QUESTION IS NOW EDITED, NEED TO SAVE IT
+            retrievedQuestion.BeginSave((s2, r2) =>
+              {
+                if (r2.Error != null)
+                  throw r2.Error;
+                Question = (PhraseEdit)r2.NewObject;
+
+                //debug
+                //confirm save
+                var crit = new Business.Criteria.ListOfPhrasesCriteria(Question);
+                PhrasesByTextAndLanguageRetriever.CreateNew(crit, (ss, rr) =>
+                  {
+                    if (rr.Error != null)
+                      throw rr.Error;
+
+                  });
+                //end debug
+
+                //FINISH UP
+                SaveQuestionButtonIsEnabled = true;
+                QuestionIsReadOnly = true;
+                UpdateEditButtonVisibilities();
+                _InitialQuestionText = _ModifiedQuestionText;
+                _ModifiedQuestionText = "";
+              });
           });
       }
       else
@@ -357,17 +409,7 @@ namespace LearnLanguages.Study.ViewModels
           });
       }
     }
-
-    void parentList_ChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
-    {
-      Question = (PhraseEdit)e.ChildObject;
-      ((PhraseList)Question.Parent).ChildChanged -= parentList_ChildChanged;
-      SaveQuestionButtonIsEnabled = true;
-      QuestionIsReadOnly = true;
-      UpdateEditButtonVisibilities();
-    }
-
-
+    
     private bool _SaveQuestionButtonIsEnabled = true;
     public bool SaveQuestionButtonIsEnabled
     {

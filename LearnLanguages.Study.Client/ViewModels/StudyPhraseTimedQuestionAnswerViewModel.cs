@@ -200,44 +200,54 @@ namespace LearnLanguages.Study.ViewModels
 
     public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
     {
-      if (!question.IsValid)
-        callback(new ArgumentException("question is not a valid phrase", "question"));
-      if (!answer.IsValid)
-        callback(new ArgumentException("answer is not a valid phrase", "answer"));
+      Question = question;
+      Answer = answer;
+
+      //FINISH UP
+      var words = Question.Text.ParseIntoWords();
+      var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+      QuestionDurationInMilliseconds = durationMilliseconds;
+      HideAnswer();
+      callback(null);
+
+      //if (!question.IsValid)
+      //  callback(new ArgumentException("question is not a valid phrase", "question"));
+      //if (!answer.IsValid)
+      //  callback(new ArgumentException("answer is not a valid phrase", "answer"));
 
 
-      //THE POINT OF THIS METHOD IS TO ASSIGN QUESTION, ANSWER, AND CALCULATE TIMING
-      //WE GET THE ACTUAL PHRASEEDITS FROM THE DB
-      //get these anew from database, so we know that we are NOT dealing
-      //with any children, to make things smoother when we are editing/saving them.
+      ////THE POINT OF THIS METHOD IS TO ASSIGN QUESTION, ANSWER, AND CALCULATE TIMING
+      ////WE GET THE ACTUAL PHRASEEDITS FROM THE DB
+      ////get these anew from database, so we know that we are NOT dealing
+      ////with any children, to make things smoother when we are editing/saving them.
       
 
-      var criteria = new Business.Criteria.ListOfPhrasesCriteria(question, answer);
-      Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
-        {
-          if (r.Error != null)
-          {
-            callback(r.Error);
-            return;
-          }
+      //var criteria = new Business.Criteria.ListOfPhrasesCriteria(question, answer);
+      //Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
+      //  {
+      //    if (r.Error != null)
+      //    {
+      //      callback(r.Error);
+      //      return;
+      //    }
 
-          var retriever = r.Object;
+      //    var retriever = r.Object;
 
-          Question = retriever.RetrievedPhrases[question.Id];
-          Answer = retriever.RetrievedPhrases[answer.Id];
+      //    Question = retriever.RetrievedPhrases[question.Id];
+      //    Answer = retriever.RetrievedPhrases[answer.Id];
 
-          if (Question == null)
-            callback(new ArgumentException("phrase not found in DB", "question"));
-          if (Answer == null)
-            callback(new ArgumentException("phrase not found in DB", "answer"));
+      //    if (Question == null)
+      //      callback(new ArgumentException("phrase not found in DB", "question"));
+      //    if (Answer == null)
+      //      callback(new ArgumentException("phrase not found in DB", "answer"));
 
-          //FINISH UP
-          var words = Question.Text.ParseIntoWords();
-          var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
-          QuestionDurationInMilliseconds = durationMilliseconds;
-          HideAnswer();
-          callback(null);
-        });
+      //    //FINISH UP
+      //    var words = Question.Text.ParseIntoWords();
+      //    var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
+      //    QuestionDurationInMilliseconds = durationMilliseconds;
+      //    HideAnswer();
+      //    callback(null);
+      //  });
     }
 
     public override void Show(ExceptionCheckCallback callback)
