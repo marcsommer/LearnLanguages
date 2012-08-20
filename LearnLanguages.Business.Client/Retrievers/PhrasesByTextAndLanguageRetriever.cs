@@ -109,9 +109,15 @@ namespace LearnLanguages.Business
           //if we directly add this retrievedPhrase, then it will be a child
           //we need to get the non-child version of this
           //RetrievedPhrases.Add(criteriaPhrase.Id, retrievedPhrase);
-
-          var nonChildVersion = PhraseEdit.GetPhraseEdit(retrievedPhrase.Id);
-          RetrievedPhrases.Add(criteriaPhrase.Id, nonChildVersion);
+          if (retrievedPhrase != null)
+          {
+            var nonChildVersion = PhraseEdit.GetPhraseEdit(retrievedPhrase.Id);
+            RetrievedPhrases.Add(criteriaPhrase.Id, nonChildVersion);
+          }
+          else
+          {
+            RetrievedPhrases.Add(criteriaPhrase.Id, null);
+          }
         }
       }
     }

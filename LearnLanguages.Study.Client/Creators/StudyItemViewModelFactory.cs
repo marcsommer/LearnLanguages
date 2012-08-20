@@ -88,6 +88,10 @@ namespace LearnLanguages.Study
               //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
               StudyItemViewModelBase dummy = null;
               var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
+              //todo: debug only choosing manual viewmodels at the moment
+              //debug
+              qaViewModel = manualQA;
+              //enddebug
 
               //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
               PhraseEdit answer = null;
@@ -255,17 +259,38 @@ namespace LearnLanguages.Study
               return;
             }
 
-            //GOT TRANSLATED PHRASE VIA AUTOTRANSLATE
+            //GOT TRANSLATED PHRASE VIA AUTOTRANSLATE.  NEED TO CHECK IF WE ALREADY HAVE THIS
+            //PHRASE IN OUR DB, AND USE THAT OBJECT INSTEAD IF WE DO.
             translatedPhrase = r2.Object;
+            var translatedPhraseLanguageText = translatedPhrase.Language.Text;
+            var criteriaPhrase = new Business.Criteria.ListOfPhrasesCriteria(translatedPhrase);
+            Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteriaPhrase, (s3, r3) =>
+              {
+                if (r3.Error != null)
+                {
+                  callback(this, new ResultArgs<PhraseEdit>(r2.Error));
+                  return;
+                }
 
-            //FIRE EVENT THAT WE HAVE AUTOTRANSLATED A PHRASE
-            var autoTranslatedEvent = 
-              new History.Events.PhraseAutoTranslatedEvent(phrase, translatedPhrase);
-            History.HistoryPublisher.Ton.PublishEvent(autoTranslatedEvent);
+                //CHECK OUR RETRIEVER IF IT SUCCESSFULLY FOUND A PHRASE EDIT IN THE DB.
+                //IF IT DID FIND ONE (NOT NULL), THEN ASSIGN OUR TRANSLATEDPHRASE VAR TO THE DB VERSION.
+                //THIS WAY, WE WON'T DUPLICATE PHRASES IN OUR DB.
+                var translatedPhraseRetriever = r3.Object;
+                var dbPhraseEdit = translatedPhraseRetriever.RetrievedPhrases[translatedPhrase.Id];
+                if (dbPhraseEdit != null)
+                  translatedPhrase = dbPhraseEdit;
 
-            //CALLBACK
-            callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
-            return;
+                //FIRE EVENT THAT WE HAVE AUTOTRANSLATED A PHRASE
+                var autoTranslatedEvent =
+                  new History.Events.PhraseAutoTranslatedEvent(phrase, translatedPhrase);
+                History.HistoryPublisher.Ton.PublishEvent(autoTranslatedEvent);
+
+                //CALLBACK
+                callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+                return;
+
+              });
+
           });
         }
       });

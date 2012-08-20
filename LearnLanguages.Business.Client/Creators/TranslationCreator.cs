@@ -59,6 +59,10 @@ namespace LearnLanguages.Business
         Translation.Phrases.AddNew();
       }
 
+
+      //TODO: FIX TRANSLATIONCREATOR CLASS.  LEAVING OFF HERE.  
+      //THIS SHOULD CHECK TO SEE IF THE PHRASES ALREADY EXIST, AND IF SO,
+      //THEN IT SHOULD ADD THE PHRASES FROM THE DB, OTHERWISE CREATE NEW PHRASES.
       for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
       {
         var sourcePhrase = phrasesCriteria.Phrases[i];
