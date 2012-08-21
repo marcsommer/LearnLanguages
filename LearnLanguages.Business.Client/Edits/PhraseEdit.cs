@@ -309,18 +309,36 @@ namespace LearnLanguages.Business
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Insert()
     {
-      //Dal is responsible for setting new Id
-      //PhraseDto dto = new PhraseDto()
-      //{
-      //  Id = this.Id,
-      //  LanguageId = this.LanguageId,
-      //  Text = this.Text
-      //};
+      //WE DO EXTRA CHECKING FOR PHRASE.TEXT AND PHRASE.LANGUAGE.TEXT,
+      //SO WE DECIDE BETWEEN INSERT AND UPDATE WITHIN THIS METHOD.
+      //THIS AS OPPOSED TO LETTING CSLA HANDLE ALL THESE DECISIONS WITH 
+      //META INFORMATION.
+
       using (var dalManager = DalFactory.GetDalManager())
       {
         var phraseDal = dalManager.GetProvider<IPhraseDal>();
         var dto = CreateDto();
         var result = phraseDal.Insert(dto);
+
+        ////IF THIS PHRASE ALREADY EXISTS IN DB (SAME TEXT AND LANGUAGETEXT)
+        ////THEN WE WILL CALL AN UPDATE, OTHERWISE CONTINUE WITH INSERT.
+        //PhraseDto dto = CreateDto();
+        //Result<PhraseDto> result = null;
+
+        //var retriever = PhrasesByTextAndLanguageRetriever.CreateNew(this);
+        //if (retriever.RetrievedSinglePhrase != null)
+        //{
+        //  //PERFORM AN UPDATE
+        //  //REPLACE THE DTO ID
+        //  dto.Id = retriever.RetrievedSinglePhrase.Id;
+        //  result = phraseDal.Update(dto);
+        //}
+        //else
+        //{
+        //  //PERFORM AN INSERT
+        //  result = phraseDal.Insert(dto);
+        //}
+
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();
@@ -332,6 +350,7 @@ namespace LearnLanguages.Business
         //SetIdBypassPropertyChecks(result.Obj.Id);
         //Loading the whole Dto now because I think the insert may affect LanguageId and UserId, and the object
         //may need to load new LanguageEdit child, new languageId, etc.
+        //HACK: possible optimization available here (loading from dto instead of just setting id.)  I think a lot of these methods could benefit from this but we'll see.
         LoadFromDtoBypassPropertyChecks(result.Obj);
       }
     }
@@ -465,7 +484,12 @@ namespace LearnLanguages.Business
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()
-    {   
+    {
+      //WE DO EXTRA CHECKING FOR PHRASE.TEXT AND PHRASE.LANGUAGE.TEXT,
+      //SO WE DECIDE BETWEEN INSERT AND UPDATE WITHIN THIS METHOD.
+      //THIS AS OPPOSED TO LETTING CSLA HANDLE ALL THESE DECISIONS WITH 
+      //META INFORMATION.
+
       using (var dalManager = DalFactory.GetDalManager())
       {
         FieldManager.UpdateChildren(this);
@@ -477,6 +501,25 @@ namespace LearnLanguages.Business
         {
           var dto = CreateDto();
           var result = phraseDal.Insert(dto);
+          ////IF THIS PHRASE ALREADY EXISTS IN DB (SAME TEXT AND LANGUAGETEXT)
+          ////THEN WE WILL CALL AN UPDATE, OTHERWISE CONTINUE WITH INSERT.
+          //PhraseDto dto = CreateDto();
+          //Result<PhraseDto> result = null;
+
+          //var retriever = PhrasesByTextAndLanguageRetriever.CreateNew(this);
+          //if (retriever.RetrievedSinglePhrase != null)
+          //{
+          //  //PERFORM AN UPDATE
+          //  //REPLACE THE DTO ID
+          //  dto.Id = retriever.RetrievedSinglePhrase.Id;
+          //  result = phraseDal.Update(dto);
+          //}
+          //else
+          //{
+          //  //PERFORM AN INSERT
+          //  result = phraseDal.Insert(dto);
+          //}
+
           if (!result.IsSuccess)
           {
             Exception error = result.GetExceptionFromInfo();

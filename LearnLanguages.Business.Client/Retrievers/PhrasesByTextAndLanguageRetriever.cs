@@ -36,6 +36,47 @@ namespace LearnLanguages.Business
       DataPortal.BeginCreate<PhrasesByTextAndLanguageRetriever>(criteria, callback);
     }
 
+    /// <summary>
+    /// Retrieves a single PhraseEdit from the DB that match the PhraseEdit given in 
+    /// the criteria.  It stores this retrieved phrases in a dictionary, with the 
+    /// given phrase.Id in the criteria as the keys and the retrieved phrases as the 
+    /// values.
+    /// 
+    /// For any phrase in criteria given that is not found in DB, the retrieved phrase 
+    /// will be null.
+    /// 
+    /// THIS IS NOT OPTIMIZED, AND IT DOES MOST OF THE WORK ON THE SERVER SIDE.  I MIGHT 
+    /// SHOULD TURN THIS INTO A COMMAND OBJECT
+    /// AND HAVE THIS DONE ON THE CLIENT SIDE, ESPECIALLY SINCE CURRENTLY IT IS JUST 
+    /// USING PHRASELIST.GETALL() AND THEN 
+    /// WORKING OFF OF THAT ANYWAY.
+    /// </summary>
+    /// <param name="criteria">single phrase that you want to retrieve</param>
+    /// <param name="callback">callback executed once retrieval is complete</param>
+    public static void CreateNew(PhraseEdit criteria,
+      EventHandler<DataPortalResult<PhrasesByTextAndLanguageRetriever>> callback)
+    {
+      DataPortal.BeginCreate<PhrasesByTextAndLanguageRetriever>(criteria, callback);
+    }
+
+#if SILVERLIGHT
+    /// <summary>
+    /// Retrieves a single PhraseEdit FROM THE GIVEN LIST that match 
+    /// the PhraseEdit.Text and Language.Text in the criteria.
+    /// It stores this in the RetrievedSinglePhrase Property if found.
+    /// 
+    /// THIS DOES NOT TOUCH THE SERVER.  I JUST PUT IT HERE TO HAVE THE 
+    /// RETRIEVAL PARALLEL THE ONES THAT DO INDEED TOUCH THE SERVER.
+    /// </summary>
+    /// <param name="criteria">single phrase that you want to retrieve</param>
+    public static void CreateNew(Criteria.FindPhraseInPhraseListCriteria criteria,
+      EventHandler<DataPortalResult<PhrasesByTextAndLanguageRetriever>> callback)
+    {
+      DataPortal.BeginCreate<PhrasesByTextAndLanguageRetriever>(criteria, callback,
+        DataPortal.ProxyModes.LocalOnly);      
+    }
+#endif 
+
 #if !SILVERLIGHT
     /// <summary>
     /// Retrieves PhraseEdits from the DB that match the PhraseEdits given in the criteria.
@@ -53,6 +94,40 @@ namespace LearnLanguages.Business
     {
       return DataPortal.Create<PhrasesByTextAndLanguageRetriever>(criteria);
     }
+
+    /// <summary>
+    /// Retrieves a single PhraseEdit from the DB that match the PhraseEdit given in the criteria.
+    /// It stores this retrieved phrases in a dictionary, with the given phrase.Id in the criteria
+    /// as the keys and the retrieved phrases as the values.
+    /// 
+    /// For any phrase in criteria given that is not found in DB, the retrieved phrase will be null.
+    /// 
+    /// THIS IS NOT OPTIMIZED, AND IT DOES MOST OF THE WORK ON THE SERVER SIDE.  I MIGHT SHOULD TURN THIS INTO A COMMAND OBJECT
+    /// AND HAVE THIS DONE ON THE CLIENT SIDE, ESPECIALLY SINCE CURRENTLY IT IS JUST USING PHRASELIST.GETALL() AND THEN 
+    /// WORKING OFF OF THAT ANYWAY.
+    /// </summary>
+    /// <param name="criteria">single phrase that you want to retrieve</param>
+    /// <param name="callback">callback executed once retrieval is complete</param>
+    public static PhrasesByTextAndLanguageRetriever CreateNew(PhraseEdit criteria)
+    {
+      return DataPortal.Create<PhrasesByTextAndLanguageRetriever>(criteria);
+    }
+
+    /// <summary>
+    /// Retrieves a single PhraseEdit FROM THE GIVEN LIST that match 
+    /// the PhraseEdit.Text and Language.Text in the criteria.
+    /// It stores this in the RetrievedSinglePhrase Property if found.
+    /// 
+    /// THIS DOES NOT TOUCH THE SERVER.  I JUST PUT IT HERE TO HAVE THE 
+    /// RETRIEVAL PARALLEL THE ONES THAT DO INDEED TOUCH THE SERVER.
+    /// </summary>
+    /// <param name="criteria">single phrase that you want to retrieve</param>
+    [RunLocal]
+    public static void CreateNew(Criteria.FindPhraseInPhraseListCriteria criteria)
+    {
+      DataPortal.Create<PhrasesByTextAndLanguageRetriever>(criteria);
+    }
+
 #endif
 
     #endregion
@@ -74,11 +149,30 @@ namespace LearnLanguages.Business
       private set { LoadProperty(RetrievedPhrasesProperty, value); }
     }
 
+    public static readonly PropertyInfo<PhraseEdit> RetrievedSinglePhraseProperty =
+      RegisterProperty<PhraseEdit>(c => c.RetrievedSinglePhrase);
+    /// <summary>
+    /// If this retriever was used to get a single phrase, then this property will be used.
+    /// If it is successful, then the phrase will be here.  If it doesn't find it, then this
+    /// will be null.
+    /// 
+    /// HOWEVER, if a list of phrases is used, this will always be null!
+    /// </summary>
+    public PhraseEdit RetrievedSinglePhrase
+    {
+      get { return ReadProperty(RetrievedSinglePhraseProperty); }
+      private set { LoadProperty(RetrievedSinglePhraseProperty, value); }
+    }
+
+
+
     #endregion
 
     #region DP_XYZ
 
+    
 #if !SILVERLIGHT
+
     public void DataPortal_Create(Criteria.ListOfPhrasesCriteria criteria)
     {
       //WE ARE GOING TO GET ALL THE PHRASES
@@ -121,7 +215,49 @@ namespace LearnLanguages.Business
         }
       }
     }
+
+    public void DataPortal_Create(PhraseEdit criteria)
+    {
+      //INITIALIZE
+      RetrieverId = Guid.NewGuid();
+      RetrievedPhrases = null;
+      RetrievedSinglePhrase = null;
+
+      //GET ALL PHRASES (FOR THIS USER ONLY)
+      PhraseList allPhrases = PhraseList.GetAll();
+
+      RetrievedSinglePhrase = FindPhraseInPhraseList(criteria.Text, criteria.Language.Text, allPhrases);
+    }
+
+    public void DataPortal_Create(Criteria.FindPhraseInPhraseListCriteria criteria)
+    {
+      //INITIALIZE
+      RetrieverId = Guid.NewGuid();
+      RetrievedPhrases = null;
+      RetrievedSinglePhrase = null;
+
+      RetrievedSinglePhrase = FindPhraseInPhraseList(criteria.PhraseText, 
+                                                     criteria.LanguageText, 
+                                                     criteria.Phrases);
+    }
+
     
+
+
+    /// <summary>
+    /// Returns the FirstOrDefault PhraseEdit in phrases matching exactly the phraseText and languageText given.
+    /// </summary>
+    /// <param name="phraseText">PhraseEdit.Text to match</param>
+    /// <param name="languageText">PhraseEdit.Language.Text to match</param>
+    /// <param name="phrases">list of phrases in which to search</param>
+    /// <returns>First PhraseEdit matching phraseText and languageText if found, or null if none found</returns>
+    private PhraseEdit FindPhraseInPhraseList(string phraseText, string languageText, PhraseList phrases)
+    {
+      return (from phrase in phrases
+              where phrase.Text == phraseText &&
+                    phrase.Language.Text == languageText
+              select phrase).FirstOrDefault();
+    }
   
 #endif
 

@@ -282,12 +282,35 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override PhraseDto InsertImpl(PhraseDto dto)
     {
+      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      PhraseData phraseData = null;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
-        var newPhraseData = EfHelper.AddToContext(dto, ctx.ObjectContext);
-        ctx.ObjectContext.SaveChanges();
-        dto.Id = newPhraseData.Id;
-        return dto;
+        //before inserting, we need to make sure that the phrase.text 
+        //and phrase.language.text are not already in the DB.  If so, we need 
+        //to call an update instead of insert
+
+        var results = (from data in ctx.ObjectContext.PhraseDatas
+                       where data.Text == dto.Text &&
+                             data.LanguageData.Id == dto.LanguageId &&
+                             data.UserDataId == currentUserId
+                       select data).FirstOrDefault();
+        if (results != null)
+        {
+          //ALREADY EXISTS IN DB.  NEED TO PERFORM AN UPDATE
+          dto.Id = results.Id;
+
+          //hack: would be faster to effectively duplicate UpdateImpl code here instead of calling UpdateImpl(). (refactor and reshape code).  Would be cleaner as well, I think.
+          return UpdateImpl(dto);
+        }
+        else
+        {
+          //NO PHRASE EXISTS IN THE DB, SO PERFORM THE INSERT, SAVE CHANGES AND RETURN
+          phraseData = EfHelper.AddToContext(dto, ctx.ObjectContext);
+          ctx.ObjectContext.SaveChanges();
+          dto.Id = phraseData.Id;
+          return dto;
+        }
       }
     }
     protected override PhraseDto DeleteImpl(Guid id)

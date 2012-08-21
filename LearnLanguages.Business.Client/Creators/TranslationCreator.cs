@@ -2,6 +2,7 @@
 using System.Net;
 using Csla;
 using Csla.Serialization;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Business
 {
@@ -50,25 +51,35 @@ namespace LearnLanguages.Business
 #if !SILVERLIGHT
     public void DataPortal_Create(Criteria.ListOfPhrasesCriteria phrasesCriteria)
     {
+      //INITIALIZE TRANSLATION CREATOR
       RetrieverId = Guid.NewGuid();
       Translation = TranslationEdit.NewTranslationEdit();
+
+      //WILL USE THIS TO POPULATE THE TRANSLATION
+      List<PhraseEdit> phrasesToUse = new List<PhraseEdit>(phrasesCriteria.Phrases);
       
       //FILL TRANSLATION.PHRASES WITH EMPTY PHRASES
-      for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
+      for (int i = 0; i < phrasesToUse.Count; i++)
       {
         Translation.Phrases.AddNew();
       }
-
-
-      //TODO: FIX TRANSLATIONCREATOR CLASS.  LEAVING OFF HERE.  
-      //THIS SHOULD CHECK TO SEE IF THE PHRASES ALREADY EXIST, AND IF SO,
-      //THEN IT SHOULD ADD THE PHRASES FROM THE DB, OTHERWISE CREATE NEW PHRASES.
-      for (int i = 0; i < phrasesCriteria.Phrases.Count; i++)
+      
+      //RETRIEVE ANY ALREADY-EXISTING PHRASES IN DB
+      var retriever = PhrasesByTextAndLanguageRetriever.CreateNew(phrasesCriteria);
+      for (int i = 0; i < phrasesToUse.Count; i++)
       {
-        var sourcePhrase = phrasesCriteria.Phrases[i];
-        var targetPhrase = Translation.Phrases[i];
-        var dto = sourcePhrase.CreateDto();
-        targetPhrase.LoadFromDtoBypassPropertyChecks(dto);
+        var phraseToAdd = phrasesToUse[i];
+
+        //IF THE RETRIEVEDPHRASES CONTAINS TO THE KEY (WHICH IT SHOULD) 
+        //AND THE RETRIEVER FOUND AN ALREADY EXISTING PHRASE IN DB,
+        //THEN REPLACE PHRASETOADD WITH THAT DB PHRASE
+        if (retriever.RetrievedPhrases.ContainsKey(phraseToAdd.Id) &&
+            retriever.RetrievedPhrases[phraseToAdd.Id] != null)
+          phraseToAdd = retriever.RetrievedPhrases[phraseToAdd.Id];
+
+        var translationChildPhrase = Translation.Phrases[i];
+        var dto = phraseToAdd.CreateDto();
+        translationChildPhrase.LoadFromDtoBypassPropertyChecks(dto);
       }
     }
 
