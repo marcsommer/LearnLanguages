@@ -52,6 +52,10 @@
     <Reference Include="Csla">
       <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
     </Reference>
+    <Reference Include="LearnLanguages.Silverlight">
+      <HintPath>..\LearnLanguages.Silverlight\Bin\Debug\LearnLanguages.Silverlight.dll</HintPath>
+    </Reference>
+    <Reference Include="LearnLanguages.Study, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="mscorlib" />
     <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />

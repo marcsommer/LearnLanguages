@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" 
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400">
+    d:DesignHeight="300" d:DesignWidth="400" xmlns:my="clr-namespace:LearnLanguages.Silverlight.Views;assembly=LearnLanguages.Silverlight">
     
   <Border Style="{StaticResource DebugBorder}">
     <Grid x:Name="LayoutRoot" Background="White">
@@ -72,19 +72,37 @@
           <toolkit:HeaderedContentControl.Content>
             <!--<toolkit:BusyIndicator IsBusy="{Binding Path=HidingAnswer}">-->
 
-              <Grid>
-                <!--THESE PURPOSEFULLY SHARE THE SAME GRID ROW/COLUMN.-->
-                <!--SHOW ANSWER BUTTON-->
-                <Button x:Name="ShowAnswer"
-                        Visibility="{Binding Path=ShowAnswerButtonVisibility}" 
-                        Content="{Binding Path=ShowAnswerButtonLabel}" />
+            <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35"/>
+              </Grid.ColumnDefinitions>
+            <!--THESE PURPOSEFULLY SHARE THE SAME GRID ROW/COLUMN.-->
                 
-                <!--ANSWER TEXT-->
-                <TextBox x:Name="Answer_Text" 
-                         Visibility="{Binding Path=AnswerVisibility}" 
-                         Style="{StaticResource QAContentStyle}"
-                         />
-              </Grid>
+              <!--SHOW ANSWER BUTTON-->
+              <Button x:Name="ShowAnswer"
+                      Visibility="{Binding Path=ShowAnswerButtonVisibility}" 
+                      Content="{Binding Path=ShowAnswerButtonLabel}" 
+                      MinWidth="100"
+                      MinHeight="75"/>
+                
+              <!--ANSWER TEXT-->
+              <TextBox x:Name="Answer_Text" 
+                       Visibility="{Binding Path=AnswerVisibility}" 
+                       Style="{StaticResource QAContentStyle}"
+                       IsReadOnly="{Binding Path=AnswerIsReadOnly}"
+                       />
+              <Button Grid.Column="1"
+                    x:Name="EditAnswer"
+                    Content="{Binding Path=ButtonLabelEditAnswer}" 
+                    Visibility="{Binding Path=EditAnswerButtonVisibility}"/>
+              <Button Grid.Column="1"
+                    x:Name="SaveAnswer"
+                    Content="{Binding Path=ButtonLabelSaveAnswer}" 
+                    Visibility="{Binding Path=SaveAnswerButtonVisibility}"
+                    />
+              
+            </Grid>
             
             <!--</toolkit:BusyIndicator>-->
           </toolkit:HeaderedContentControl.Content>
