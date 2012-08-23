@@ -62,6 +62,7 @@
                       Visibility="{Binding Path=SaveQuestionButtonVisibility}"
                       />
             </Grid>
+          
           </toolkit:HeaderedContentControl.Content>
         </toolkit:HeaderedContentControl>
       </Border>
@@ -77,25 +78,25 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="35"/>
               </Grid.ColumnDefinitions>
-            <!--THESE PURPOSEFULLY SHARE THE SAME GRID ROW/COLUMN.-->
-                
+              <!--SHOW ANSWER AND ANSWER TEXT PURPOSEFULLY SHARE THE SAME GRID ROW/COLUMN.-->
               <!--SHOW ANSWER BUTTON-->
               <Button x:Name="ShowAnswer"
                       Visibility="{Binding Path=ShowAnswerButtonVisibility}" 
                       Content="{Binding Path=ShowAnswerButtonLabel}" 
                       MinWidth="100"
                       MinHeight="75"/>
-                
               <!--ANSWER TEXT-->
               <TextBox x:Name="Answer_Text" 
                        Visibility="{Binding Path=AnswerVisibility}" 
                        Style="{StaticResource QAContentStyle}"
                        IsReadOnly="{Binding Path=AnswerIsReadOnly}"
                        />
+              <!--EDIT ANSWER BUTTON-->
               <Button Grid.Column="1"
                     x:Name="EditAnswer"
                     Content="{Binding Path=ButtonLabelEditAnswer}" 
                     Visibility="{Binding Path=EditAnswerButtonVisibility}"/>
+              <!--SAVE ANSWER BUTTON-->
               <Button Grid.Column="1"
                     x:Name="SaveAnswer"
                     Content="{Binding Path=ButtonLabelSaveAnswer}" 

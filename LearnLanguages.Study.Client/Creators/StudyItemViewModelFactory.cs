@@ -88,10 +88,6 @@ namespace LearnLanguages.Study
               //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
               StudyItemViewModelBase dummy = null;
               var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
-              //todo: debug only choosing manual viewmodels at the moment
-              //debug
-              qaViewModel = manualQA;
-              //enddebug
 
               //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
               PhraseEdit answer = null;

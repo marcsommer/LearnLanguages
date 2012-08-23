@@ -19,10 +19,17 @@
           <Setter Property="FontSize" Value="7" />
           <Setter Property="FontStyle" Value="Italic" />
         </Style>
-        <Style TargetType="TextBlock" x:Key="QAContentStyle">
+        <Style TargetType="TextBox" x:Key="QAContentStyle">
           <Setter Property="Padding" Value="0" />
           <Setter Property="FontSize" Value="14" />
           <Setter Property="FontStyle" Value="Normal" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <Setter Property="AcceptsReturn" Value="True" />
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
+          <Setter Property="MinHeight" Value="75" />
+          <Setter Property="MinWidth" Value="200" />
+          <Setter Property="FontFamily" Value="Lucida Sans Unicode" />
+          <Setter Property="FontSize" Value="12" />
         </Style>
       </Grid.Resources>
       
@@ -31,7 +38,27 @@
         <toolkit:HeaderedContentControl Header="{Binding Path=QuestionHeader}" Style="{StaticResource QAHeaderStyle}">
           <toolkit:HeaderedContentControl.Content>
 
-              <TextBlock x:Name="Question_Text" Visibility="{Binding Path=QuestionVisibility}" Style="{StaticResource QAContentStyle}"/>
+            <Grid HorizontalAlignment="Stretch">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35"/>
+              </Grid.ColumnDefinitions>
+              <TextBox Grid.Column="0"
+                       x:Name="Question_Text" 
+                       Visibility="{Binding Path=QuestionVisibility}" 
+                       Style="{StaticResource QAContentStyle}" 
+                       IsReadOnly="{Binding Path=QuestionIsReadOnly}"
+                       />
+              <Button Grid.Column="1"
+                      x:Name="EditQuestion"
+                      Content="{Binding Path=ButtonLabelEditQuestion}" 
+                      Visibility="{Binding Path=EditQuestionButtonVisibility}"/>
+              <Button Grid.Column="1"
+                      x:Name="SaveQuestion"
+                      Content="{Binding Path=ButtonLabelSaveQuestion}" 
+                      Visibility="{Binding Path=SaveQuestionButtonVisibility}"
+                      />
+            </Grid>
 
           </toolkit:HeaderedContentControl.Content>
         </toolkit:HeaderedContentControl>
@@ -43,8 +70,32 @@
           <toolkit:HeaderedContentControl.Content>
             <toolkit:BusyIndicator IsBusy="{Binding Path=HidingAnswer}">
 
-              <TextBlock x:Name="Answer_Text" Visibility="{Binding Path=AnswerVisibility}" Style="{StaticResource QAContentStyle}"/>
-              <!--<TextBlock Text="this is the answer here" />-->
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="35"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--ANSWER TEXT-->
+                <TextBox x:Name="Answer_Text" 
+                       Visibility="{Binding Path=AnswerVisibility}" 
+                       Style="{StaticResource QAContentStyle}"
+                       IsReadOnly="{Binding Path=AnswerIsReadOnly}"
+                       />
+                <!--EDIT ANSWER BUTTON-->
+                <Button Grid.Column="1"
+                    x:Name="EditAnswer"
+                    Content="{Binding Path=ButtonLabelEditAnswer}" 
+                    Visibility="{Binding Path=EditAnswerButtonVisibility}"/>
+                <!--SAVE ANSWER BUTTON-->
+                <Button Grid.Column="1"
+                    x:Name="SaveAnswer"
+                    Content="{Binding Path=ButtonLabelSaveAnswer}" 
+                    Visibility="{Binding Path=SaveAnswerButtonVisibility}"
+                    />
+
+              </Grid>
+
             </toolkit:BusyIndicator>
           </toolkit:HeaderedContentControl.Content>
         </toolkit:HeaderedContentControl>

@@ -165,7 +165,6 @@ namespace LearnLanguages.Business
     }
 
 
-
     #endregion
 
     #region DP_XYZ
@@ -226,7 +225,16 @@ namespace LearnLanguages.Business
       //GET ALL PHRASES (FOR THIS USER ONLY)
       PhraseList allPhrases = PhraseList.GetAll();
 
-      RetrievedSinglePhrase = FindPhraseInPhraseList(criteria.Text, criteria.Language.Text, allPhrases);
+      var retrievedPhrase = FindPhraseInPhraseList(criteria.Text, criteria.Language.Text, allPhrases);
+
+      //if we directly add this retrievedPhrase, then it will be a child
+      //we need to get the non-child version of this
+      //RetrievedPhrases.Add(criteriaPhrase.Id, retrievedPhrase);
+      if (retrievedPhrase != null && retrievedPhrase.IsChild)
+      {
+        var nonChildVersion = PhraseEdit.GetPhraseEdit(retrievedPhrase.Id);
+        RetrievedSinglePhrase = nonChildVersion;
+      }
     }
 
     public void DataPortal_Create(Criteria.FindPhraseInPhraseListCriteria criteria)
@@ -236,9 +244,21 @@ namespace LearnLanguages.Business
       RetrievedPhrases = null;
       RetrievedSinglePhrase = null;
 
-      RetrievedSinglePhrase = FindPhraseInPhraseList(criteria.PhraseText, 
-                                                     criteria.LanguageText, 
-                                                     criteria.Phrases);
+      var retrievedPhrase = FindPhraseInPhraseList(criteria.PhraseText, 
+                                                   criteria.LanguageText, 
+                                                   criteria.Phrases);
+
+      //if we directly add this retrievedPhrase, then it will be a child
+      //we need to get the non-child version of this
+      //RetrievedPhrases.Add(criteriaPhrase.Id, retrievedPhrase);
+      if (criteria.GetPhraseFromDB && retrievedPhrase != null && retrievedPhrase.IsChild)
+      {
+        var nonChildVersion = PhraseEdit.GetPhraseEdit(retrievedPhrase.Id);
+        RetrievedSinglePhrase = nonChildVersion;
+      }
+      else
+        RetrievedSinglePhrase = retrievedPhrase;
+
     }
 
     

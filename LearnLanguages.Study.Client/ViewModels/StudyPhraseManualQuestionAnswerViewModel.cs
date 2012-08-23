@@ -151,11 +151,11 @@ namespace LearnLanguages.Study.ViewModels
 
     public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
     {
-      Question = question;
       _InitialQuestionText = question.Text;
       _ModifiedQuestionText = "";
       _InitialAnswerText = answer.Text;
       _ModifiedAnswerText = "";
+      Question = question;
       Answer = answer;
       HideAnswer();
       callback(null);
@@ -209,6 +209,7 @@ namespace LearnLanguages.Study.ViewModels
     {
       HidingAnswer = true;
       AnswerVisibility = Visibility.Collapsed;
+      UpdateEditAnswerButtonVisibilities();
     }
 
     public bool CanShowAnswer
@@ -339,78 +340,104 @@ namespace LearnLanguages.Study.ViewModels
       QuestionIsReadOnly = true;
       SaveQuestionButtonIsEnabled = false;
 
-      if (Question.IsChild)
+      #region Get the DB version of question, then modify it and save
+
+      //STORE OUR MODIFIED TEXT
+      _ModifiedQuestionText = Question.Text;
+
+      //PREPARE QUESTION TO BE SEARCHED FOR IN DB
+      Question.Text = _InitialQuestionText;
+
+      #region SEARCH IN DB FOR QUESTION (WITH INITIAL TEXT)
+      Business.PhrasesByTextAndLanguageRetriever.CreateNew(Question, (s, r) =>
       {
-        //QUESTION IS CHILD, AND I'M NOT ABLE TO GET THE PARENT SAVE TO WORK, SO
-        //I'M GOING TO GET THE QUESTION FROM THE DB DIRECTLY, SAVE IT WITH THE NEW TEXT,
-        //AND REPLACE THE QUESTION WITH THE SAVED DB NON-CHILD OBJECT.
+        if (r.Error != null)
+          throw r.Error;
 
-        //I'M GOING TO HACK THIS UP NOW CUZ I NEED TO GET MOVING.
-        //MAKING TWO FIELDS FOR THIS VM: INITIAL AND MODIFIED QUESTION TEXT.
-        //GOING TO USE THESE TO MANIPULATE SHIT HOW I WANT IT
-
-        //The Question PhraseEdit has the modified text, but we need to search
-        //via the initial text so we're going to store the modified text,
-        //re-apply the initial text, do the search, pull the old DB object,
-        //modify THAT PhraseEdit with the stored modified text, save it,
-        //then store the newly saved (with new text) PhraseEdit as our Question.
-
-        _ModifiedQuestionText = Question.Text;
-        Question.Text = _InitialQuestionText;
-        var criteria = new Business.Criteria.ListOfPhrasesCriteria(Question);
-        PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
-        //PhraseEdit.GetPhraseEdit(Question.Id, (s, r) =>
+        var dbQuestion = r.Object.RetrievedSinglePhrase;
+        if (dbQuestion == null)
+        {
+          //QUESTION NOT IN DB, BUT QUESTION IS A CHILD
+          if (Question.IsChild)
           {
-            if (r.Error != null)
-              throw r.Error;
-            //var retrievedQuestion = r.Object;
+            //CANNOT SAVE THE QUESTION DIRECTLY BECAUSE IT IS A CHILD
 
-            var retrievedQuestion = r.Object.RetrievedPhrases[Question.Id];
-            if (retrievedQuestion == null)
-              throw new Exception("retrieved question is null");
+            #region CREATE NEW PHRASE EDIT, LOAD FROM QUESTION DTO, SAVE QUESTION
+            PhraseEdit.NewPhraseEdit((s3, r3) =>
+            {
+              if (r3.Error != null)
+                throw r3.Error;
 
-            retrievedQuestion.Text = _ModifiedQuestionText;
+              var newQuestionObj = r3.Object;
 
-            //RETRIEVED QUESTION IS NOW EDITED, NEED TO SAVE IT
-            retrievedQuestion.BeginSave((s2, r2) =>
+              Question.Text = _ModifiedQuestionText;
+              var dto = Question.CreateDto();
+              dto.Id = Guid.NewGuid();
+
+              newQuestionObj.LoadFromDtoBypassPropertyChecks(dto);
+              Question = newQuestionObj;
+
+              #region Save Question
+              Question.BeginSave((s4, r4) =>
               {
-                if (r2.Error != null)
-                  throw r2.Error;
-                Question = (PhraseEdit)r2.NewObject;
+                if (r4.Error != null)
+                  throw r4.Error;
 
-                //debug
-                //confirm save
-                var crit = new Business.Criteria.ListOfPhrasesCriteria(Question);
-                PhrasesByTextAndLanguageRetriever.CreateNew(crit, (ss, rr) =>
-                  {
-                    if (rr.Error != null)
-                      throw rr.Error;
-
-                  });
-                //end debug
-
-                //FINISH UP
+                Question = (PhraseEdit)r4.NewObject;
+                _InitialQuestionText = Question.Text;
+                _ModifiedQuestionText = "";
                 SaveQuestionButtonIsEnabled = true;
                 QuestionIsReadOnly = true;
                 UpdateEditQuestionButtonVisibilities();
-                _InitialQuestionText = _ModifiedQuestionText;
-                _ModifiedQuestionText = "";
               });
-          });
-      }
-      else
-      {
-        Question.BeginSave((s, r) =>
+              #endregion
+            });
+            #endregion
+          }
+          //QUESTION NOT IN DB, BUT QUESTION IS NOT A CHILD
+          else
           {
-            if (r.Error != null)
-              throw r.Error;
+            #region SAVE THE QUESTION DIRECTLY, B/C IT IS NOT A CHILD
+            Question.BeginSave((s2, r2) =>
+            {
+              if (r2.Error != null)
+                throw r2.Error;
 
-            Question = (PhraseEdit)r.NewObject;
+              Question = (PhraseEdit)r2.NewObject;
+              _InitialQuestionText = Question.Text;
+              _ModifiedQuestionText = "";
+              SaveQuestionButtonIsEnabled = true;
+              QuestionIsReadOnly = true;
+              UpdateEditQuestionButtonVisibilities();
+            });
+            #endregion
+          }
+        }
+        //QUESTION WAS FOUND IN DB
+        else
+        {
+          #region REASSIGN THE QUESTION WITH THE DBQUESTION, SAVE WITH THE MODIFIED TEXT
+          Question = dbQuestion;
+          Question.Text = _ModifiedQuestionText;
+          Question.BeginSave((s5, r5) =>
+          {
+            if (r5.Error != null)
+              throw r5.Error;
+
+            Question = (PhraseEdit)r5.NewObject;
+            _InitialQuestionText = Question.Text;
+            _ModifiedQuestionText = "";
             SaveQuestionButtonIsEnabled = true;
             QuestionIsReadOnly = true;
             UpdateEditQuestionButtonVisibilities();
           });
-      }
+          #endregion
+        }
+      });
+
+      #endregion
+
+      #endregion
     }
     
     private bool _SaveQuestionButtonIsEnabled = true;
@@ -523,78 +550,104 @@ namespace LearnLanguages.Study.ViewModels
       AnswerIsReadOnly = true;
       SaveAnswerButtonIsEnabled = false;
 
-      if (Answer.IsChild)
+      #region Get the DB version of answer, then modify it and save
+
+      //STORE OUR MODIFIED TEXT
+      _ModifiedAnswerText = Answer.Text;
+
+      //PREPARE ANSWER TO BE SEARCHED FOR IN DB
+      Answer.Text = _InitialAnswerText;
+
+      #region SEARCH IN DB FOR ANSWER (WITH INITIAL TEXT)
+      Business.PhrasesByTextAndLanguageRetriever.CreateNew(Answer, (s, r) =>
       {
-        //QUESTION IS CHILD, AND I'M NOT ABLE TO GET THE PARENT SAVE TO WORK, SO
-        //I'M GOING TO GET THE QUESTION FROM THE DB DIRECTLY, SAVE IT WITH THE NEW TEXT,
-        //AND REPLACE THE QUESTION WITH THE SAVED DB NON-CHILD OBJECT.
+        if (r.Error != null)
+          throw r.Error;
 
-        //I'M GOING TO HACK THIS UP NOW CUZ I NEED TO GET MOVING.
-        //MAKING TWO FIELDS FOR THIS VM: INITIAL AND MODIFIED QUESTION TEXT.
-        //GOING TO USE THESE TO MANIPULATE SHIT HOW I WANT IT
-
-        //The Answer PhraseEdit has the modified text, but we need to search
-        //via the initial text so we're going to store the modified text,
-        //re-apply the initial text, do the search, pull the old DB object,
-        //modify THAT PhraseEdit with the stored modified text, save it,
-        //then store the newly saved (with new text) PhraseEdit as our Answer.
-
-        _ModifiedAnswerText = Answer.Text;
-        Answer.Text = _InitialAnswerText;
-        var criteria = new Business.Criteria.ListOfPhrasesCriteria(Answer);
-        PhrasesByTextAndLanguageRetriever.CreateNew(criteria, (s, r) =>
-        //PhraseEdit.GetPhraseEdit(Answer.Id, (s, r) =>
+        var dbAnswer = r.Object.RetrievedSinglePhrase;
+        if (dbAnswer == null)
+        {
+          //ANSWER NOT IN DB, BUT ANSWER IS A CHILD
+          if (Answer.IsChild)
           {
-            if (r.Error != null)
-              throw r.Error;
-            //var retrievedAnswer = r.Object;
+            //CANNOT SAVE THE ANSWER DIRECTLY BECAUSE IT IS A CHILD
 
-            var retrievedAnswer = r.Object.RetrievedPhrases[Answer.Id];
-            if (retrievedAnswer == null)
-              throw new Exception("retrieved question is null");
+            #region CREATE NEW PHRASE EDIT, LOAD FROM ANSWER DTO, SAVE ANSWER
+            PhraseEdit.NewPhraseEdit((s3, r3) =>
+            {
+              if (r3.Error != null)
+                throw r3.Error;
 
-            retrievedAnswer.Text = _ModifiedAnswerText;
+              var newAnswerObj = r3.Object;
 
-            //RETRIEVED QUESTION IS NOW EDITED, NEED TO SAVE IT
-            retrievedAnswer.BeginSave((s2, r2) =>
+              Answer.Text = _ModifiedAnswerText;
+              var dto = Answer.CreateDto();
+              dto.Id = Guid.NewGuid();
+
+              newAnswerObj.LoadFromDtoBypassPropertyChecks(dto);
+              Answer = newAnswerObj;
+
+              #region Save Answer
+              Answer.BeginSave((s4, r4) =>
               {
-                if (r2.Error != null)
-                  throw r2.Error;
-                Answer = (PhraseEdit)r2.NewObject;
+                if (r4.Error != null)
+                  throw r4.Error;
 
-                //debug
-                //confirm save
-                var crit = new Business.Criteria.ListOfPhrasesCriteria(Answer);
-                PhrasesByTextAndLanguageRetriever.CreateNew(crit, (ss, rr) =>
-                  {
-                    if (rr.Error != null)
-                      throw rr.Error;
-
-                  });
-                //end debug
-
-                //FINISH UP
+                Answer = (PhraseEdit)r4.NewObject;
+                _InitialAnswerText = Answer.Text;
+                _ModifiedAnswerText = "";
                 SaveAnswerButtonIsEnabled = true;
                 AnswerIsReadOnly = true;
                 UpdateEditAnswerButtonVisibilities();
-                _InitialAnswerText = _ModifiedAnswerText;
-                _ModifiedAnswerText = "";
               });
-          });
-      }
-      else
-      {
-        Answer.BeginSave((s, r) =>
+              #endregion
+            });
+            #endregion
+          }
+          //ANSWER NOT IN DB, BUT ANSWER IS NOT A CHILD
+          else
           {
-            if (r.Error != null)
-              throw r.Error;
+            #region SAVE THE ANSWER DIRECTLY, B/C IT IS NOT A CHILD
+            Answer.BeginSave((s2, r2) =>
+            {
+              if (r2.Error != null)
+                throw r2.Error;
 
-            Answer = (PhraseEdit)r.NewObject;
+              Answer = (PhraseEdit)r2.NewObject;
+              _InitialAnswerText = Answer.Text;
+              _ModifiedAnswerText = "";
+              SaveAnswerButtonIsEnabled = true;
+              AnswerIsReadOnly = true;
+              UpdateEditAnswerButtonVisibilities();
+            });
+            #endregion
+          }
+        }
+        //ANSWER WAS FOUND IN DB
+        else
+        {
+          #region REASSIGN THE ANSWER WITH THE DBANSWER, SAVE WITH THE MODIFIED TEXT
+          Answer = dbAnswer;
+          Answer.Text = _ModifiedAnswerText;
+          Answer.BeginSave((s5, r5) =>
+          {
+            if (r5.Error != null)
+              throw r5.Error;
+
+            Answer = (PhraseEdit)r5.NewObject;
+            _InitialAnswerText = Answer.Text;
+            _ModifiedAnswerText = "";
             SaveAnswerButtonIsEnabled = true;
             AnswerIsReadOnly = true;
             UpdateEditAnswerButtonVisibilities();
           });
-      }
+          #endregion
+        }
+      });
+
+      #endregion
+
+      #endregion
     }
     
     private bool _SaveAnswerButtonIsEnabled = true;
