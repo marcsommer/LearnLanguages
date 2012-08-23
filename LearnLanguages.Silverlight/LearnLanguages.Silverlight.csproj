@@ -98,6 +98,8 @@
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="EventMessages\ThinkedAboutSomethingEventMessage.cs" />
+    <Compile Include="EventMessages\ThinkingAboutSomethingEventMessage.cs" />
     <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />
     <Compile Include="Interfaces\ICanExpand.cs" />
     <Compile Include="EventMessages\LanguageEventMessage.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
     <Compile Include="ViewModels\Add\AddSong\AddSongViewModel.cs" />
     <Compile Include="ViewModels\Bases\NavigationSetTitleViewModelBase.cs" />
+    <Compile Include="ViewModels\Core\ThinkingPanelViewModel.cs" />
     <Compile Include="ViewModels\Core\HomeViewModel.cs" />
     <Compile Include="ViewModels\Core\NavigationSetViewModel.cs" />
     <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongPhraseEditViewModel.cs" />
@@ -197,6 +200,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Core\ThinkingPanelView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Core\HomeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

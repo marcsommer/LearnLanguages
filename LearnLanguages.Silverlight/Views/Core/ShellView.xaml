@@ -12,14 +12,28 @@
 
   <controls:DockPanel x:Name="LayoutRoot"
                       LastChildFill="True">
+
+    <!--THINKING PANEL-->
+    <Border controls:DockPanel.Dock="Bottom"
+            Style="{StaticResource LargeViewSection}">
+
+      <ContentControl x:Name="ThinkingPanel" 
+                      HorizontalContentAlignment="Stretch"
+                      VerticalContentAlignment="Stretch"
+                      TabIndex="2"
+                      Height="20"/>
+    </Border>
     
     <!--NAVIGATION PANEL-->
     <Border controls:DockPanel.Dock="Left"
             Style="{StaticResource LargeViewSection}">
-
+      
       <ContentControl x:Name="NavigationPanel" 
                       TabIndex="0" />
     </Border>
+
+    
+
 
     <!--MAIN VIEW AREA-->
     <Border Style="{StaticResource LargeViewSection}">

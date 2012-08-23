@@ -18,6 +18,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       ReloadNavigationPanel();
       Services.Container.SatisfyImportsOnce(this);
       Title = AppResources.DefaultAppTitle;
+      ThinkingPanel = Services.Container.GetExportedValue<ThinkingPanelViewModel>();
     }
 
     /// <summary>
@@ -69,6 +70,20 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _Main = value;
           NotifyOfPropertyChange(() => Main);
+        }
+      }
+    }
+
+    private ThinkingPanelViewModel _ThinkingPanel;
+    public ThinkingPanelViewModel ThinkingPanel
+    {
+      get { return _ThinkingPanel; }
+      set
+      {
+        if (value != _ThinkingPanel)
+        {
+          _ThinkingPanel = value;
+          NotifyOfPropertyChange(() => ThinkingPanel);
         }
       }
     }
