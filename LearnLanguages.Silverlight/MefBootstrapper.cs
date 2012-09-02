@@ -18,9 +18,7 @@ namespace LearnLanguages.Silverlight
 #if DEBUG
     private DebugEventMessageListener _Listener;
 #endif
-
-
-
+    
     protected override void Configure()
     {
       //CREATE ASSEMBLY CATALOGS FOR COMPOSITION OF APPLICATION (WPF)

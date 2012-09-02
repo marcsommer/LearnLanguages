@@ -42,45 +42,75 @@ namespace LearnLanguages.DataAccess.Ef
 
     protected override UserDto GetUserImpl(string username)
     {
-      try
+      int maxTries = int.Parse(EfResources.MaxDeadlockAttempts);
+      for (int i = 0; i < maxTries; i++)
       {
-        using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
-        {
-          var results = from userData in ctx.ObjectContext.UserDatas
-                        where userData.Username == username
-                        select userData;
+#if DEBUG
+        //debug: I want to break it here if this is a retry, in which case i > 0
+        if (i > 0)
+          System.Diagnostics.Debugger.Break();
+#endif
 
-          if (results.Count() == 1)
+        try
+        {
+          using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
           {
-            var userDto = EfHelper.ToDto(results.First());
-            return userDto;
+            var results = from userData in ctx.ObjectContext.UserDatas
+                          where userData.Username == username
+                          select userData;
+
+            if (results.Count() == 1)
+            {
+              var userDto = EfHelper.ToDto(results.First());
+              return userDto;
+            }
+            else if (results.Count() == 0)
+            {
+              return null;
+            }
+            else
+            {
+#if DEBUG
+              System.Diagnostics.Debugger.Break();
+#endif
+
+              //RESULTS.COUNT IS NOT ONE OR ZERO.  EITHER IT'S NEGATIVE, WHICH WOULD BE FRAMEWORK ABSURD, OR ITS MORE THAN ONE,
+              //WHICH MEANS THAT WE HAVE MULTIPLE USERS WITH THE SAME USERNAME.  THIS IS VERY BAD.
+              var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                           DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+              throw new Exceptions.VeryBadException(errorMsg);
+            }
           }
-          else if (results.Count() == 0)
+        }
+        catch (Exception ex)
+        {
+          var sqlDeadlockMsg = @"Transaction (Process ID 55) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.";
+          if (ex.InnerException.Message == sqlDeadlockMsg)
           {
-            return null;
+            //DO NOTHING IF THE ERROR IS A DEADLOCK. WE HAVE THIS IN A FOR LOOP THAT WILL RETRY UP TO A MAX NUMBER OF ATTEMPTS
           }
           else
           {
-
-#if DEBUG
-            //if (retRoles == null)
             System.Diagnostics.Debugger.Break();
-#endif
-
-            //results.count is not one or zero.  either it's negative, which would be framework absurd, or its more than one,
-            //which means that we have multiple users with the same username.  this is very bad.
-            var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
-                                         DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
-            throw new Exceptions.VeryBadException(errorMsg);
+            //RETHROW THIS EXCEPTION
+            throw;
           }
         }
       }
-      catch (Exception ex)
-      {
-        System.Diagnostics.Debugger.Break();
-        var exc = ex;
-        throw;
-      }
+
+      //IF WE REACH THIS POINT, THEN WE HAVE TRIED OUR MAX TRIES AT BREAKING A SQL DEADLOCK.
+#if DEBUG
+      //if (retRoles == null)
+      System.Diagnostics.Debugger.Break();
+#endif
+
+      //results.count is not one or zero.  either it's negative, which would be framework absurd, or its more than one,
+      //which means that we have multiple users with the same username.  this is very bad.
+      var errorMsg2 = string.Format(DalResources.ErrorMsgVeryBadException,
+                                   DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+      throw new Exceptions.VeryBadException(errorMsg2);
+
+
     }
 
     protected override ICollection<RoleDto> GetRolesImpl(string username)

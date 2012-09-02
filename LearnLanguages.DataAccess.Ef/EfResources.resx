@@ -125,7 +125,7 @@
     <comment>Newly created phrases are populated with the id of the Language that has this as its text.</comment>
   </data>
   <data name="DeleteAllExistingDataAndStartNewSeedData" xml:space="preserve">
-    <value>True</value>
+    <value>false</value>
     <comment>warning, this will delete all existing data</comment>
   </data>
   <data name="ErrorMsgPropertyNotAssigned" xml:space="preserve">
@@ -146,5 +146,8 @@
   <data name="LearnLanguagesConnectionStringKey" xml:space="preserve">
     <value>LearnLanguagesContext</value>
     <comment>This is the name in the app.config connectionstrings section for our object context.</comment>
+  </data>
+  <data name="MaxDeadlockAttempts" xml:space="preserve">
+    <value>10</value>
   </data>
 </root>

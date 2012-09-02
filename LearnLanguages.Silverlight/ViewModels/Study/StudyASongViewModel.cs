@@ -656,6 +656,10 @@ namespace LearnLanguages.Silverlight.ViewModels
                !GoInProgress;
       }
     }
+
+    /// <summary>
+    /// This method is called when the user presses the Go button.
+    /// </summary>
     public void Go()
     {
       var ids = new MobileList<Guid>();
