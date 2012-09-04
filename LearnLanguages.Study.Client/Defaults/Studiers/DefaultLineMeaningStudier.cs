@@ -371,7 +371,7 @@ namespace LearnLanguages.Study
     /// the final phrase which may have fewer words.
     /// </summary>
     /// <param name="aggregateSize">the number of words contained in each aggregate phrase text.</param>
-    private void PopulateAggregatePhraseTexts(int aggregateSize)
+    private void PopulateAggregatePhraseTexts(int aggregateSize, bool skipAggregationIfLineIsKnown = true)
     {
       if (aggregateSize == 0)
         throw new ArgumentOutOfRangeException("aggregateSize");
@@ -379,6 +379,15 @@ namespace LearnLanguages.Study
       AggregatePhraseTexts.Clear();
 
       var lineText = _Target.Phrase.Text;
+      if (skipAggregationIfLineIsKnown && IsPhraseKnown(lineText))
+      {
+        //IF WE ARE SKIPPING THE AGGREGATION (WE'RE NOT FORCING LINE TO BREAK INTO AGGREGATES)
+        //AND IF THE ENTIRE LINE TEXT IS KNOWN, 
+        //THEN ADD THE ENTIRE LINE TEXT TO THE AGGREGATE PHRASE TEXTS AND WE'RE DONE.
+        AggregatePhraseTexts.Add(lineText);
+        return;
+      }
+      
       //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
       //We will end up with 20/2 = 10 aggregate phrases.  
       //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 
@@ -629,6 +638,10 @@ namespace LearnLanguages.Study
 
     public override void InitializeForNewStudySession(LineEdit target, ExceptionCheckCallback completedCallback)
     {
+#if DEBUG
+      var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+
       _AbortIsFlagged = false;
       _IsReady = false;
       _Target = target;
@@ -641,15 +654,10 @@ namespace LearnLanguages.Study
         completedCallback(null);
         return;
       }
-      PopulateAggregatePhraseTexts(AggregateSize);
-      //CURRENTLY NO NEED TO AGGREGATE ADJACENT KNOWN PHRASE TEXTS BECAUSE WE START FROM UNKNOWN STATE.
-      //ONCE WE START USING AN EXTERNAL KNOWLEDGE STATE, THEN WE CAN AGGREGATE 
-      AggregateAdjacentKnownPhraseTexts(
-        int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
-      PopulateStudiersWithAggregatePhraseTexts((e) =>
+      UpdateKnowledge((e2) =>
         {
-          if (e != null)
-            throw e;
+          if (e2 != null)
+            throw e2;
 
           if (_AbortIsFlagged)
           {
@@ -657,8 +665,53 @@ namespace LearnLanguages.Study
             return;
           }
 
-          completedCallback(null);
+          PopulateAggregatePhraseTexts(AggregateSize);
+          AggregateAdjacentKnownPhraseTexts(
+            int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
+          PopulateStudiersWithAggregatePhraseTexts((e) =>
+          {
+#if DEBUG
+            var threadId2 = System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+            if (e != null)
+              throw e;
+
+            if (_AbortIsFlagged)
+            {
+              completedCallback(null);
+              return;
+            }
+
+            completedCallback(null);
+          });
         });
+      
+    }
+
+    public void UpdateKnowledge(ExceptionCheckCallback callback)
+    {
+      var questionArgs =
+        new Common.QuestionArgs(StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown, _Target.Phrase);
+      DefaultPhrasePercentKnownAdvisor.Ton.AskAdvice(questionArgs, (s, r) =>
+      {
+//#if DEBUG
+//        if (_Target.Phrase.Text.Contains("faire"))
+//          System.Diagnostics.Debugger.Break();
+//#endif
+        if (r.Error != null)
+          callback(r.Error);
+
+        _CachedPercentKnownValue = (double)r.Object;
+        _PercentKnownIsUpToDate = true;
+
+        if (_CachedPercentKnownValue >= KnowledgeThreshold)
+          MarkPhraseKnown(_Target.Phrase.Text);
+        else
+          MarkPhraseUnknown(_Target.Phrase.Text);
+
+        callback(null);
+        return;
+      });
     }
 
     public void Handle(History.Events.ReviewedPhraseEvent message)

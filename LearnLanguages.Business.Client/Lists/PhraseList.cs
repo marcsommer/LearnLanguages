@@ -68,43 +68,32 @@ namespace LearnLanguages.Business
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void DataPortal_Create(Criteria.PhraseTextsCriteria phraseTextsCriteria)
     {
+      var sep = " ||| ";
+      var msg = DateTime.Now.ToShortTimeString() +
+                   "PhraseList.DP_Create" + sep +
+                   "ThreadID = " +
+                   System.Threading.Thread.CurrentThread.ManagedThreadId.ToString() + sep +
+                   "PhraseTexts.Count = " + phraseTextsCriteria.PhraseTexts.Count.ToString() + sep +
+                   "1st Phrase = " + phraseTextsCriteria.PhraseTexts[0];
+      System.Diagnostics.Trace.WriteLine(msg);
+      //Services.Log(msg, LogPriority.Low, LogCategory.Information);
+
+
       if (phraseTextsCriteria.PhraseTexts.Count == 0)
         throw new ArgumentException("phraseTextsCriteria");
       using (var dalManager = DalFactory.GetDalManager())
       {
         var languageText = phraseTextsCriteria.LanguageText;
-        //var languageDal = dalManager.GetProvider<ILanguageDal>();
-        //var languageResult = languageDal.Fetch(languageText);
         var language = DataPortal.FetchChild<LanguageEdit>(languageText);
-        //LanguageEdit language = null;
-        //if (!languageResult.IsSuccess)
-        //{
-        //  var exception = languageResult.GetExceptionFromInfo();
-        //  if (exception == null)
-        //    throw new LanguageTextNotFoundException(languageText);
-        //  else if (exception.Message.Contains(LanguageTextNotFoundException.GetDefaultErrorMessage(languageText)))
-        //  {
-        //    //IF THE LANGUAGE TEXT DOES NOT EXIST, CREATE IT
-        //    //CAN'T CHECK FOR DATA EXCEPTION TYPE BECAUSE IT WILL BE A GENERAL CSLA DATAPORTAL EXCEPTION
-        //    //language = LanguageEdit.NewLanguageEdit();
-        //    language = DataPortal.CreateChild<LanguageEdit>();
-        //    language.Text = languageText;
-        //    //language = language.Save();
-        //  }
-        //  else
-        //    throw new CreateFailedException(DataAccess.DalResources.ErrorMsgLanguageTextProblemWhileCreatingPhraseTexts);
-        //}
-
-        //var languageDto = languageResult.Obj;
-        //language = LanguageEdit.NewLanguageEdit(languageDto);
-        //language.LoadFromDtoBypassPropertyChecks(languageDto);
-
+       
         //WE NOW HAVE OUR LANGUAGEEDIT THAT WILL BE USED FOR ALL PHRASE TEXTS.
         var PhraseDal = dalManager.GetProvider<IPhraseDal>();
 
         //PhraseList newPhraseList = PhraseList.NewPhraseList();
-        foreach (var phraseText in phraseTextsCriteria.PhraseTexts)
+        for (int i = 0; i < phraseTextsCriteria.PhraseTexts.Count; i++)
         {
+        //foreach (var phraseText in phraseTextsCriteria.PhraseTexts)
+          var phraseText = phraseTextsCriteria.PhraseTexts[i];
           if (string.IsNullOrEmpty(phraseText))
             continue;
           PhraseEdit phraseEdit = DataPortal.CreateChild<PhraseEdit>();

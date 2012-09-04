@@ -35,6 +35,10 @@ namespace LearnLanguages.Study
 
     public override void InitializeForNewStudySession(PhraseEdit target, ExceptionCheckCallback completedCallback)
     {
+#if DEBUG
+      var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+
       _AbortIsFlagged = false;
       _Target = target;
       completedCallback(null);

@@ -242,6 +242,9 @@ namespace LearnLanguages.Study
     public override void InitializeForNewStudySession(MultiLineTextEdit target, 
                                                       ExceptionCheckCallback completedCallback)
     {
+#if DEBUG
+      var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
       _AbortIsFlagged = false;
       _Target = target;
       _LastActiveLineStudiedIndex = -1;

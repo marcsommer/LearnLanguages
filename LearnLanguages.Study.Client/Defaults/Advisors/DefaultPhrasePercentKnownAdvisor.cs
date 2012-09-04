@@ -9,6 +9,7 @@ using LearnLanguages.Business;
 using Caliburn.Micro;
 using Csla.Core;
 using LearnLanguages.History;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Study
 {
@@ -56,6 +57,7 @@ namespace LearnLanguages.Study
     public Guid Id { get { return Guid.Parse(StudyResources.AdvisorIdPhrasePercentKnownStudyAdvisor); } }
 
     private static AutoResetEvent _AutoResetEvent = new AutoResetEvent(false);
+    private static Dictionary<Guid, AutoResetEvent> _AutoResetEvents = new Dictionary<Guid, AutoResetEvent>();
     private PhraseEdit _CurrentWordPhrase { get; set; }
     private int _CountWordsKnown { get; set; }
 
@@ -308,7 +310,18 @@ namespace LearnLanguages.Study
         #region DECLARE ACTION THAT WILL USE WAITONE IN UPCOMING ASYNC FOR LOOP
         Action<object> getPercentKnownWord = (object state) =>
         {
-          AutoResetEvent autoResetEvent = (AutoResetEvent)state;
+          //AutoResetEvent autoResetEvent = (AutoResetEvent)state;
+          Guid id = (Guid)state;
+          //IF THE ID IS NOT THERE, THEN THIS AUTORESETEVENT HAS ALREADY BEEN REMOVED FROM THE LIST
+          //IE, IT HAS TIMED OUT.
+          if (!_AutoResetEvents.ContainsKey(id))
+            return;
+
+          var autoResetEvent = _AutoResetEvents[(Guid)state];
+//#if DEBUG
+//          if (_CurrentWordPhrase.Text.Contains("Dans"))
+//            System.Diagnostics.Debugger.Break();
+//#endif 
 
           #region PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
           DefaultPhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
@@ -332,11 +345,20 @@ namespace LearnLanguages.Study
 
         #region EXECUTE ASYNC FOR LOOP EXECUTING ABOVE ACTION
         _CountWordsKnown = 0;
+        var localAutoResetEvent = new AutoResetEvent(false);
+        var areID = Guid.NewGuid();
+        _AutoResetEvents.Add(areID, localAutoResetEvent);
         foreach (var wordPhrase in wordPhrases)
         {
           _CurrentWordPhrase = wordPhrase;
-          ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), _AutoResetEvent);
-          _AutoResetEvent.WaitOne();
+          int dummyWorker = -1;
+          int dummyCompletionPort = -1;
+          ThreadPool.GetMaxThreads(out dummyWorker, out dummyCompletionPort);
+          ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), areID);
+
+          //ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), _AutoResetEvent);
+          localAutoResetEvent.WaitOne(500);
+
         }
         #endregion
 
