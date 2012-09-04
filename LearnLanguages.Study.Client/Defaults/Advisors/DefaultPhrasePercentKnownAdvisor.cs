@@ -273,109 +273,115 @@ namespace LearnLanguages.Study
 
     private void GetPercentKnownAboutPhraseWithNoPriorBeliefs(PhraseEdit phrase, AsyncCallback<double> callback)
     {
+      //FOR RIGHT NOW, THIS IS JUST GOING TO RETURN ZERO. IT SUCKS BUT OH WELL.
+      //TODO: IMPLEMENT GETPERCENTKNOWNABOUTPHRASEWITHNOPRIORBELIEFS
       double percentKnown = 0;
+      callback(this, new ResultArgs<double>(percentKnown));
+      return;
 
-      //WE HAVE NO PRIOR BELIEFS ABOUT THIS PHRASE, SO WE WILL CHECK THE SUM OF THE BELIEFS OF THE INDIVIDUAL WORDS
-      var words = phrase.Text.ParseIntoWords();
 
-      #region ONLY ONE WORD IN PHRASE (RETURN WITH ZERO PERCENT KNOWN)
-      //IF WE ONLY HAVE A SINGLE WORD IN OUR PHRASE, THEN WE HAVE ALREADY CHECKED THIS SINGLE WORD FOR BELIEF 
-      //AND CAME UP EMPTY.  SO WE HAVE NO PERCENT KNOWN ABOUT THIS PHRASE.
-      if (words.Count < 2)
-      {
-        percentKnown = 0;
-        callback(this, new ResultArgs<double>(percentKnown));
-        return;
-      }
-      #endregion
 
-      #region MULTIPLE WORDS IN PHRASE (SUM PERCENT KNOWNS OF EACH WORD)
+//      //WE HAVE NO PRIOR BELIEFS ABOUT THIS PHRASE, SO WE WILL CHECK THE SUM OF THE BELIEFS OF THE INDIVIDUAL WORDS
+//      var words = phrase.Text.ParseIntoWords();
 
-      #region FIRST, GET THE PHRASES FOR EACH OF THE INDIVIDUAL WORDS
-      var phraseTextsCriteria = new Business.Criteria.PhraseTextsCriteria(phrase.Language.Text, words);
-      PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
-      {
-        //TODO: CHECK TO SEE WHAT HAPPENS IF WE DELETE A PHRASE THAT IS AN INDIVIDUAL WORD AND WE DO A FUNCTION (LIKE PERCENT KNOWN ABOUT PHRASE WITH NO PRIOR BELIEFS) THAT ASSUMES ALL INDIVIDUAL WORDS EXIST IN DATABASE.
+//      #region ONLY ONE WORD IN PHRASE (RETURN WITH ZERO PERCENT KNOWN)
+//      //IF WE ONLY HAVE A SINGLE WORD IN OUR PHRASE, THEN WE HAVE ALREADY CHECKED THIS SINGLE WORD FOR BELIEF 
+//      //AND CAME UP EMPTY.  SO WE HAVE NO PERCENT KNOWN ABOUT THIS PHRASE.
+//      if (words.Count < 2)
+//      {
+//        percentKnown = 0;
+//        callback(this, new ResultArgs<double>(percentKnown));
+//        return;
+//      }
+//      #endregion
 
-        if (r.Error != null)
-        {
-          callback(this, new ResultArgs<double>(r.Error));
-          return;
-        }
+//      #region MULTIPLE WORDS IN PHRASE (SUM PERCENT KNOWNS OF EACH WORD)
 
-        var wordPhrases = r.Object;
+//      #region FIRST, GET THE PHRASES FOR EACH OF THE INDIVIDUAL WORDS
+//      var phraseTextsCriteria = new Business.Criteria.PhraseTextsCriteria(phrase.Language.Text, words);
+//      PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
+//      {
+//        //TODO: CHECK TO SEE WHAT HAPPENS IF WE DELETE A PHRASE THAT IS AN INDIVIDUAL WORD AND WE DO A FUNCTION (LIKE PERCENT KNOWN ABOUT PHRASE WITH NO PRIOR BELIEFS) THAT ASSUMES ALL INDIVIDUAL WORDS EXIST IN DATABASE.
 
-        #region SECOND, CALL THIS ADVISOR'S GETPERCENTKNOWN RECURSIVELY FOR EACH INDIVIDUAL WORD'S PERCENT KNOWN
+//        if (r.Error != null)
+//        {
+//          callback(this, new ResultArgs<double>(r.Error));
+//          return;
+//        }
 
-        #region DECLARE ACTION THAT WILL USE WAITONE IN UPCOMING ASYNC FOR LOOP
-        Action<object> getPercentKnownWord = (object state) =>
-        {
-          //AutoResetEvent autoResetEvent = (AutoResetEvent)state;
-          Guid id = (Guid)state;
-          //IF THE ID IS NOT THERE, THEN THIS AUTORESETEVENT HAS ALREADY BEEN REMOVED FROM THE LIST
-          //IE, IT HAS TIMED OUT.
-          if (!_AutoResetEvents.ContainsKey(id))
-            return;
+//        var wordPhrases = r.Object;
 
-          var autoResetEvent = _AutoResetEvents[(Guid)state];
-//#if DEBUG
-//          if (_CurrentWordPhrase.Text.Contains("Dans"))
-//            System.Diagnostics.Debugger.Break();
-//#endif 
+//        #region SECOND, CALL THIS ADVISOR'S GETPERCENTKNOWN RECURSIVELY FOR EACH INDIVIDUAL WORD'S PERCENT KNOWN
 
-          #region PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
-          DefaultPhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
-          {
-            if (r2.Error != null)
-            {
-              callback(this, new ResultArgs<double>(r2.Error));
-              return;
-            }
+//        #region DECLARE ACTION THAT WILL USE WAITONE IN UPCOMING ASYNC FOR LOOP
+//        Action<object> getPercentKnownWord = (object state) =>
+//        {
+//          //AutoResetEvent autoResetEvent = (AutoResetEvent)state;
+//          Guid id = (Guid)state;
+//          //IF THE ID IS NOT THERE, THEN THIS AUTORESETEVENT HAS ALREADY BEEN REMOVED FROM THE LIST
+//          //IE, IT HAS TIMED OUT.
+//          if (!_AutoResetEvents.ContainsKey(id))
+//            return;
 
-            //WE ASSUME A SINGLE WORD IS EITHER KNOWN OR UNKNOWN.
-            if (r2.Object > 0)
-              _CountWordsKnown++;
+//          var autoResetEvent = _AutoResetEvents[(Guid)state];
+////#if DEBUG
+////          if (_CurrentWordPhrase.Text.Contains("Dans"))
+////            System.Diagnostics.Debugger.Break();
+////#endif 
 
-            autoResetEvent.Set();
-          });
-          #endregion
-        };
+//          #region PhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
+//          DefaultPhrasePercentKnownAdvisor.Ton.GetPercentKnown(_CurrentWordPhrase, (s2, r2) =>
+//          {
+//            if (r2.Error != null)
+//            {
+//              callback(this, new ResultArgs<double>(r2.Error));
+//              return;
+//            }
 
-        #endregion
+//            //WE ASSUME A SINGLE WORD IS EITHER KNOWN OR UNKNOWN.
+//            if (r2.Object > 0)
+//              _CountWordsKnown++;
 
-        #region EXECUTE ASYNC FOR LOOP EXECUTING ABOVE ACTION
-        _CountWordsKnown = 0;
-        var localAutoResetEvent = new AutoResetEvent(false);
-        var areID = Guid.NewGuid();
-        _AutoResetEvents.Add(areID, localAutoResetEvent);
-        foreach (var wordPhrase in wordPhrases)
-        {
-          _CurrentWordPhrase = wordPhrase;
-          int dummyWorker = -1;
-          int dummyCompletionPort = -1;
-          ThreadPool.GetMaxThreads(out dummyWorker, out dummyCompletionPort);
-          ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), areID);
+//            autoResetEvent.Set();
+//          });
+//          #endregion
+//        };
 
-          //ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), _AutoResetEvent);
-          localAutoResetEvent.WaitOne(500);
+//        #endregion
 
-        }
-        #endregion
+//        #region EXECUTE ASYNC FOR LOOP EXECUTING ABOVE ACTION
+//        _CountWordsKnown = 0;
+//        var localAutoResetEvent = new AutoResetEvent(false);
+//        var areID = Guid.NewGuid();
+//        _AutoResetEvents.Add(areID, localAutoResetEvent);
+//        foreach (var wordPhrase in wordPhrases)
+//        {
+//          _CurrentWordPhrase = wordPhrase;
+//          int dummyWorker = -1;
+//          int dummyCompletionPort = -1;
+//          ThreadPool.GetMaxThreads(out dummyWorker, out dummyCompletionPort);
+//          ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), areID);
 
-        #region FINALLY, GET THE PERCENT KNOWN = COUNT WORDS KNOWN / COUNT ALL WORDS (AND RETURN)
-        var countAllWords = wordPhrases.Count;
-        percentKnown = ((double)_CountWordsKnown) / ((double)countAllWords);
+//          //ThreadPool.QueueUserWorkItem(new WaitCallback(getPercentKnownWord), _AutoResetEvent);
+//          localAutoResetEvent.WaitOne(500);
 
-        callback(this, new ResultArgs<double>(percentKnown));
-        return;
-        #endregion
+//        }
+//        #endregion
 
-        #endregion
-      });
+//        #region FINALLY, GET THE PERCENT KNOWN = COUNT WORDS KNOWN / COUNT ALL WORDS (AND RETURN)
+//        var countAllWords = wordPhrases.Count;
+//        percentKnown = ((double)_CountWordsKnown) / ((double)countAllWords);
 
-      #endregion
+//        callback(this, new ResultArgs<double>(percentKnown));
+//        return;
+//        #endregion
 
-      #endregion
+//        #endregion
+//      });
+
+//      #endregion
+
+//      #endregion
     }
 
 

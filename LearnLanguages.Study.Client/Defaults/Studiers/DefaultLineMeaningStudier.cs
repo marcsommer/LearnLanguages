@@ -379,7 +379,8 @@ namespace LearnLanguages.Study
       AggregatePhraseTexts.Clear();
 
       var lineText = _Target.Phrase.Text;
-      if (skipAggregationIfLineIsKnown && IsPhraseKnown(lineText))
+      var lineIsKnown = IsPhraseKnown(lineText);
+      if (skipAggregationIfLineIsKnown && lineIsKnown)
       {
         //IF WE ARE SKIPPING THE AGGREGATION (WE'RE NOT FORCING LINE TO BREAK INTO AGGREGATES)
         //AND IF THE ENTIRE LINE TEXT IS KNOWN, 
