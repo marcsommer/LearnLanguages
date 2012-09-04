@@ -63,9 +63,15 @@ namespace LearnLanguages.Silverlight.ViewModels
       //1) GET NATIVE LANGUAGE
       //2) POPULATE SONGS
 
+      //LET HISTORY KNOW WE'RE THINKING
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      
       //WE MUST FIRST KNOW WHAT THE USER'S NATIVE LANGUAGE IS.
       StudyDataRetriever.CreateNew((s, r) =>
       {
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+
         if (r.Error != null)
           throw r.Error;
 
@@ -367,8 +373,14 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// </summary>
     private void StartPopulateAllSongs()
     {
+      //LET HISTORY KNOW WE'RE THINKING ABOUT SOMETHING
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      
       MultiLineTextList.GetAll((s, r) =>
       {
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+
         if (r.Error != null)
           throw r.Error;
 
@@ -423,6 +435,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         #endregion
 
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+
         var allMultiLineTexts = r.Object;
         ModelList = r.Object;
 
@@ -431,6 +445,8 @@ namespace LearnLanguages.Silverlight.ViewModels
                      select multiLineText).ToList();
 
         songs.Sort(comparison);
+
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
 
         //CACHE ALL SONGS SO WE WON'T HAVE TO DOWNLOAD THEM AGAIN.  THIS IS ASSUMING MY CURRENT NAVIGATION
         //STRUCTURE WHICH MEANS THAT YOU CAN'T ADD SONGS WITHOUT RECREATING THIS ENTIRE VIEWMODEL.
@@ -452,6 +468,9 @@ namespace LearnLanguages.Silverlight.ViewModels
       {
         //IsBusy = true;
         IsPopulating = true;
+
+        var targetId = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
 
         if (Items.Count > 0)
           foreach (var viewModel in Items)
@@ -540,9 +559,14 @@ namespace LearnLanguages.Silverlight.ViewModels
             {
               AbortIsFlagged = false;
               ProgressValue = 0;
+
+              History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+
               break;
             }
           }
+
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
         }
 
         IsPopulating = false;
@@ -624,7 +648,17 @@ namespace LearnLanguages.Silverlight.ViewModels
         return;
 
       //WE HAVE BEEN SUCCESSFULLY NAVIGATED TO.
-      InitializeViewModel();
+
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      try
+      {
+        InitializeViewModel();
+      }
+      finally
+      {
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      }
     }
 
     public bool LoadFromUri(Uri uri)
@@ -669,8 +703,13 @@ namespace LearnLanguages.Silverlight.ViewModels
           ids.Add(songViewModel.Model.Id);
       }
 
+      //var targetId = new Guid(@"5D4355FE-C46E-4AA1-9E4A-45288C341C44");
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
       MultiLineTextList.NewMultiLineTextList(ids, (s, r) =>
         {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+
           if (r.Error != null)
             throw r.Error;
 
@@ -698,6 +737,10 @@ namespace LearnLanguages.Silverlight.ViewModels
               
               //ADD OPPORTUNITY TO OUR FUTURE OPPORTUNITIES
               FutureOpportunities.Add(opportunity);
+
+              //LET THE HISTORY SHOW THAT YOU ARE THINKING ABOUT THIS OPPORTUNITY
+              var opportunityId = opportunity.Id;
+              History.Events.ThinkingAboutTargetEvent.Publish(opportunityId);
 
               //PUBLISH THE OPPORTUNITY
               Exchange.Ton.Publish(opportunity);
@@ -846,6 +889,10 @@ namespace LearnLanguages.Silverlight.ViewModels
         //MOVE THE OPPORTUNITY TO PAST OPPORTUNITIES
         CurrentOpportunities.Remove(message.Opportunity);
         PastOpportunities.Add(message.Opportunity);
+
+        //LET HISTORY KNOW WE ARE DONE THINKING OF THIS OPPORTUNITY
+        var targetId = message.Opportunity.Id;
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
 
         //GET THE STUDY VIEWMODEL THAT WILL HOUSE OUR CREATED IVIEWMODELBASE
         var studyViewModel = Services.Container.GetExportedValue<StudyViewModel>();

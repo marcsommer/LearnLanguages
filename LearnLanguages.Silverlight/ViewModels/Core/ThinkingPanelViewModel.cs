@@ -13,25 +13,25 @@ namespace LearnLanguages.Silverlight.ViewModels
   [Export(typeof(ThinkingPanelViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class ThinkingPanelViewModel : ViewModelBase,
-                                        IHandle<EventMessages.ThinkingAboutSomethingEventMessage>,
-                                        IHandle<EventMessages.ThinkedAboutSomethingEventMessage>
+                                        IHandle<History.Events.ThinkingAboutTargetEvent>,
+                                        IHandle<History.Events.ThinkedAboutTargetEvent>
                                         
   {
     public ThinkingPanelViewModel()
     {
-      Services.EventAggregator.Subscribe(this);
+      History.HistoryPublisher.Ton.SubscribeToEvents(this);
       Thoughts = new List<Guid>();
       ThinkingText = "Ready";
     }
 
     private List<Guid> Thoughts { get; set; }
 
-    public void Handle(EventMessages.ThinkingAboutSomethingEventMessage message)
+    public void Handle(History.Events.ThinkingAboutTargetEvent message)
     {
-      //IF WE AREN'T ALREADY TRACKING THIS THINKID, THEN ADD IT TO OUR THOUGHTS
-      if (!(Thoughts.Contains(message.ThinkId)))
+      //IF WE AREN'T ALREADY TRACKING THIS TargetId, THEN ADD IT TO OUR THOUGHTS
+      if (!(Thoughts.Contains(message.TargetId)))
       {
-        Thoughts.Add(message.ThinkId);
+        Thoughts.Add(message.TargetId);
       }
 
       UpdateThinkingText();
@@ -39,19 +39,22 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     private void UpdateThinkingText()
     {
+      //todo: updatethinkingtext strings to resx
       var thoughtCount = Thoughts.Count;
-      if (thoughtCount > 0)
+      if (thoughtCount > 1)
         ThinkingText = "Thinking About " + thoughtCount.ToString() + " Thing(s)..." + (new Random().Next().ToString());
-      else
-        ThinkingText = "Ready";
+      else if (thoughtCount == 1)
+        ThinkingText = "Thinking About 1 Thing..." + (new Random().Next().ToString());
+      else 
+        ThinkingText = "Ready. Give me something to think about!";
     }
 
-    public void Handle(EventMessages.ThinkedAboutSomethingEventMessage message)
+    public void Handle(History.Events.ThinkedAboutTargetEvent message)
     {
-      //IF WE ARE TRACKING THIS THINKID, THEN REMOVE IT FROM OUR THOUGHTS
-      if (!(Thoughts.Contains(message.ThinkId)))
+      //IF WE ARE TRACKING THIS TargetId, THEN REMOVE IT FROM OUR THOUGHTS
+      if (Thoughts.Contains(message.TargetId))
       {
-        Thoughts.Remove(message.ThinkId);
+        Thoughts.Remove(message.TargetId);
       }
 
       UpdateThinkingText();

@@ -110,8 +110,13 @@ namespace LearnLanguages.Study
     {
       try
       {
+//#if DEBUG
+//        if (phrase.Text.Contains("amour") && phrase.Text.Contains("mon"))
+//          System.Diagnostics.Debugger.Break();
+//#endif
         if (beliefs.Count < 1)
-          throw new ArgumentException("beliefs.Count");
+          throw new ArgumentException("beliefs.Count < 1. This method assumes that there is at least one belief about the phrase \n\n" +
+                                      "Phrase.Text: " + phrase.Text);
 
         ///FOR NOW, THIS JUST GETS THE MOST RECENT BELIEF AND GOES WITH THE STRENGTH OF THAT BELIEF.
         ///THIS IS ABSOLUTELY NOT HOW IT SHOULD BE BUT THAT IS WHY WE HAVE A "DEFAULT" ADVISOR AND
@@ -121,7 +126,7 @@ namespace LearnLanguages.Study
                       orderby belief.TimeStamp
                       select belief;
 
-        var mostRecentBelief = results.First();
+        var mostRecentBelief = results.Last();
         var percentKnown = mostRecentBelief.Strength;
         callback(this, new ResultArgs<double>(percentKnown));
         return;

@@ -261,6 +261,10 @@ namespace LearnLanguages.Study
       ///INITIALIZE HISTORY PUBLISHER
       History.HistoryPublisher.Ton.PublishEvent(new StartingStudySessionEvent());
 
+      //LET HISTORY KNOW WE ARE NOW THINKING ABOUT SOMETHING (INITIALIZEFORNEWSTUDYSESSION)
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+
       ///OKAY, SO AT THIS POINT, WE HAVE DONE OUR WORK THROUGH THE EXCHANGE.  
       ///THE CALLER HAS A REFERENCE TO OUR _VIEWMODEL PROPERTY.  WE HAVE CONTROL
       ///OF THE STUDY PROCESS THROUGH THIS _VIEWMODEL PROPERTY.  WE USE TWO SUB VIEWMODELS
@@ -273,6 +277,9 @@ namespace LearnLanguages.Study
       ///5) WHEN FEEDBACK IS PROVIDED, GO TO #2.
       _Studier.InitializeForNewStudySession(multiLineTexts, (e) =>
         {
+          //LET HISTORY KNOW WE HAVE COMPLETED OUR THINKING ABOUT (INITIALIZEFORNEWSTUDYSESSION)
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+
           //THIS STUDY THREAD EXECUTES ONE ITERATION OF STUDY.  ASSIGNS VIEWMODEL, SHOWS, GETS FEEDBACK.
           BackgroundWorker studyThread = new BackgroundWorker();
           
@@ -283,9 +290,14 @@ namespace LearnLanguages.Study
                 return;
 
               _IsStudying = true;
-              
+
+              var targetId2 = Guid.NewGuid();
+              History.Events.ThinkingAboutTargetEvent.Publish(targetId2);
+
               _Studier.GetNextStudyItemViewModel((s, r) =>
               {
+                History.Events.ThinkedAboutTargetEvent.Publish(targetId2);
+
                 if (r.Error != null)
                   throw r.Error;
 

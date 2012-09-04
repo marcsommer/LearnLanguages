@@ -396,6 +396,5 @@ namespace LearnLanguages.DataAccess.Ef
 
       return retDefaultLanguageId;
     }
-
   }
 }

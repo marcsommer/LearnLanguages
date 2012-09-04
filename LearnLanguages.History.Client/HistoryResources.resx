@@ -195,6 +195,9 @@
   <data name="Key_TargetTypePhrase" xml:space="preserve">
     <value>Phrase</value>
   </data>
+  <data name="Key_ThinkId" xml:space="preserve">
+    <value>ThinkId</value>
+  </data>
   <data name="TextPhraseCreatedFromScratch" xml:space="preserve">
     <value>PhraseCreatedFromScratch</value>
   </data>

@@ -98,8 +98,6 @@
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
-    <Compile Include="EventMessages\ThinkedAboutSomethingEventMessage.cs" />
-    <Compile Include="EventMessages\ThinkingAboutSomethingEventMessage.cs" />
     <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />
     <Compile Include="Interfaces\ICanExpand.cs" />
     <Compile Include="EventMessages\LanguageEventMessage.cs" />

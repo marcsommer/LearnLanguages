@@ -642,6 +642,8 @@ namespace LearnLanguages.Study
 #if DEBUG
       var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
+      var thinkingTargetId = target.Id;
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkingTargetId);
 
       _AbortIsFlagged = false;
       _IsReady = false;
@@ -652,16 +654,21 @@ namespace LearnLanguages.Study
       KnownPhraseTexts = new List<string>();
       if (_AbortIsFlagged)
       {
+        History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
         completedCallback(null);
         return;
       }
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
       UpdateKnowledge((e2) =>
         {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
           if (e2 != null)
             throw e2;
 
           if (_AbortIsFlagged)
           {
+            History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
             completedCallback(null);
             return;
           }
@@ -679,10 +686,12 @@ namespace LearnLanguages.Study
 
             if (_AbortIsFlagged)
             {
+              History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
               completedCallback(null);
               return;
             }
 
+            History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
             completedCallback(null);
           });
         });
@@ -696,7 +705,7 @@ namespace LearnLanguages.Study
       DefaultPhrasePercentKnownAdvisor.Ton.AskAdvice(questionArgs, (s, r) =>
       {
 //#if DEBUG
-//        if (_Target.Phrase.Text.Contains("faire"))
+//        if (_Target.Phrase.Text.Contains("amour"))
 //          System.Diagnostics.Debugger.Break();
 //#endif
         if (r.Error != null)

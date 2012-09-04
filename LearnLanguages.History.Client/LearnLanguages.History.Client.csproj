@@ -80,6 +80,9 @@
     <Compile Include="Events\Simple\ReviewingPhraseEvent.cs" />
     <Compile Include="Events\Simple\ActivatedLineEvent.cs" />
     <Compile Include="Events\Simple\StartingStudySessionEvent.cs" />
+    <Compile Include="Events\Simple\ThinkedAboutTargetEvent.cs" />
+    <Compile Include="Events\Simple\ThinkingAboutTargetEvent.cs" />
+    <Compile Include="Bases\ThinkingEventBase.cs" />
     <Compile Include="Events\Simple\ViewingPhrasePartOfLineOnScreenEvent.cs" />
     <Compile Include="Events\Simple\ViewedPhrasePartOfLineOnScreenEvent.cs" />
     <Compile Include="Events\Simple\ViewedPhraseOnScreenEvent.cs" />

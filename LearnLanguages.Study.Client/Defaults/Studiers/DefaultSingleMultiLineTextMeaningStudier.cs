@@ -245,6 +245,9 @@ namespace LearnLanguages.Study
 #if DEBUG
       var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
+      var thinkingTargetId = target.Id;
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkingTargetId);
+
       _AbortIsFlagged = false;
       _Target = target;
       _LastActiveLineStudiedIndex = -1;
@@ -258,6 +261,7 @@ namespace LearnLanguages.Study
 
       if (_AbortIsFlagged)
       {
+        History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
         completedCallback(null);
         return;
       }
@@ -270,10 +274,12 @@ namespace LearnLanguages.Study
 
           if (_AbortIsFlagged)
           {
+            History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
             completedCallback(null);
             return;
           }
 
+          History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
           completedCallback(null);
         });
     }

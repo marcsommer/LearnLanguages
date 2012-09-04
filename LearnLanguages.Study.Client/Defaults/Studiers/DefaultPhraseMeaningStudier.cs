@@ -38,9 +38,13 @@ namespace LearnLanguages.Study
 #if DEBUG
       var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
+      var thinkingTargetId = target.Id;
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkingTargetId);
 
       _AbortIsFlagged = false;
       _Target = target;
+
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
       completedCallback(null);
     }
 
