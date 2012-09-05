@@ -697,7 +697,7 @@ namespace LearnLanguages.Study
         });
       
     }
-
+    
     public void UpdateKnowledge(ExceptionCheckCallback callback)
     {
       var questionArgs =

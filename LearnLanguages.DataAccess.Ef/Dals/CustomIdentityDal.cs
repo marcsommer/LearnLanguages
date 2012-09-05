@@ -45,11 +45,11 @@ namespace LearnLanguages.DataAccess.Ef
       int maxTries = int.Parse(EfResources.MaxDeadlockAttempts);
       for (int i = 0; i < maxTries; i++)
       {
-#if DEBUG
-        //debug: I want to break it here if this is a retry, in which case i > 0
-        if (i > 0)
-          System.Diagnostics.Debugger.Break();
-#endif
+//#if DEBUG
+//        //debug: I want to break it here if this is a retry, in which case i > 0
+//        if (i > 0)
+//          System.Diagnostics.Debugger.Break();
+//#endif
 
         try
         {
@@ -84,9 +84,11 @@ namespace LearnLanguages.DataAccess.Ef
         }
         catch (Exception ex)
         {
-          var sqlDeadlockMsg = @"Transaction (Process ID 55) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.";
-          if (ex.InnerException.Message == sqlDeadlockMsg)
+          if (ex is System.Data.EntityCommandExecutionException && 
+              ex.InnerException is System.Data.SqlClient.SqlException &&
+              ex.InnerException.Message.Contains("Rerun the transaction"))
           {
+            //"Transaction (Process ID 55) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction."
             //DO NOTHING IF THE ERROR IS A DEADLOCK. WE HAVE THIS IN A FOR LOOP THAT WILL RETRY UP TO A MAX NUMBER OF ATTEMPTS
           }
           else
