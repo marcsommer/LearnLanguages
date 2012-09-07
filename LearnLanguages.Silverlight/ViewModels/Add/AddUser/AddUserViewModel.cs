@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
+using System.Text.RegularExpressions;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -61,11 +62,22 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get
       {
-        return (NewPassword == ConfirmNewPassword &&
+        //PASSWORDS MATCH
+        bool passwordsMatch = NewPassword == ConfirmNewPassword;
+        //USERNAME IS CORRECTLY FORMATTED (REGEX CHECK)
+        bool newUsernameMatchesRegex = Regex.IsMatch(NewUsername, Business.BusinessResources.UsernameValidationRegex);
+
+        //USERNAME IS AT LEAST MIN USERNAME LENGTH
+        int minUsernameLength = int.Parse(Business.BusinessResources.MinUsernameLength);
+        bool usernameIsAtLeastMinLength = NewUsername.Length >= minUsernameLength;
+
+        return (Csla.ApplicationContext.User.Identity.IsAuthenticated &&
+                Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin) &&
                 !string.IsNullOrEmpty(NewPassword) && 
                 !string.IsNullOrEmpty(NewUsername) &&
-                Csla.ApplicationContext.User.Identity.IsAuthenticated &&
-                Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin));
+                passwordsMatch &&
+                newUsernameMatchesRegex &&
+                usernameIsAtLeastMinLength);
       }
     }
     public void AddUser()

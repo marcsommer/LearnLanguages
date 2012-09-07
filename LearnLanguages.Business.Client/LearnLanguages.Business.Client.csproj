@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\RemoveAlreadyExistingPhraseTextsCommand.cs" />
+    <Compile Include="Creators\NewUserCreator.cs" />
+    <Compile Include="Criteria\UserInfoCriteria.cs" />
     <Compile Include="Criteria\FindPhraseInPhraseListCriteria.cs" />
     <Compile Include="Criteria\TranslationPairSearchCriteria.cs" />
     <Compile Include="Criteria\PhraseIdCriteria.cs" />

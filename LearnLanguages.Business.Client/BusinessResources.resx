@@ -163,4 +163,8 @@
   <data name="SongMinimumLineCount" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="UsernameValidationRegex" xml:space="preserve">
+    <value>^[a-zA-Z0-9_]*$</value>
+    <comment>Only numbers, letters, and underscores</comment>
+  </data>
 </root>

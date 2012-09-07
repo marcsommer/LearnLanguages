@@ -66,6 +66,19 @@ namespace LearnLanguages.Business.Security
         throw new LearnLanguages.DataAccess.Exceptions.UserNotAuthenticatedException();
     }
 
+    protected override void AddBusinessRules()
+    {
+      base.AddBusinessRules();
+
+      //USERNAME MIN LENGTH
+      int minUsernameLength = int.Parse(BusinessResources.MinUsernameLength);
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.MinLength(NameProperty, minUsernameLength));
+      
+      //USERNAME REGEX
+      string usernameRegexMatch = BusinessResources.UsernameValidationRegex;
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.RegExMatch(NameProperty, usernameRegexMatch));
+    }
+
 #if !SILVERLIGHT
     /// <summary>
     /// This should run ONLY on the server.

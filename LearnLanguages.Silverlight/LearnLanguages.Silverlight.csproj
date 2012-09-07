@@ -103,10 +103,6 @@
     <Compile Include="EventMessages\LanguageEventMessage.cs" />
     <Compile Include="EventMessages\LanguageAddedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
-    <Compile Include="Investment\InvestmentAction.cs" />
-    <Compile Include="Investment\InvestmentMethod.cs" />
-    <Compile Include="Investment\InvestmentComponent.cs" />
-    <Compile Include="Investment\InvestmentSession.cs" />
     <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IViewModelMetadata.cs" />
     <Compile Include="MainPage.xaml.cs">

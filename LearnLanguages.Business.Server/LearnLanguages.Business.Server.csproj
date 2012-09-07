@@ -66,6 +66,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Creators\BlankTranslationCreator.cs">
       <Link>Creators\BlankTranslationCreator.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Creators\NewUserCreator.cs">
+      <Link>Creators\NewUserCreator.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Creators\TranslationCreator.cs">
       <Link>Creators\TranslationCreator.cs</Link>
     </Compile>
@@ -92,6 +95,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\TranslationSearchCriteria.cs">
       <Link>Criteria\TranslationSearchCriteria.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\UserInfoCriteria.cs">
+      <Link>Criteria\UserInfoCriteria.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Edits\LanguageEdit.cs">
       <Link>Edits\LanguageEdit.cs</Link>
