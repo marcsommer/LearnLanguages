@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LearnLanguages.DataAccess.Exceptions;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.DataAccess.Mock
 {
@@ -91,6 +92,78 @@ namespace LearnLanguages.DataAccess.Mock
       {
         retResult = Result<ICollection<RoleDto>>.FailureWithInfo(null, ex);
       }
+      return retResult;
+    }
+
+    public Result<UserDto> AddUser(string newUsername, string password)
+    {
+      Result<UserDto> retResult = Result<UserDto>.Undefined(null);
+      try
+      {
+        //VALIDATE WE ARE IN ROLE TO ADD A USER
+        bool isInRoleToAddUser = DalHelper.IsInRoleToAddUser();
+        if (!isInRoleToAddUser)
+          throw new DataAccess.Exceptions.UserNotAuthorizedException(DalResources.ErrorMsgAttemptedToAddUser, 0);
+
+        //VALIDATE USERNAME
+        bool usernameIsValid = CommonHelper.UsernameIsValid(newUsername);
+        if (!usernameIsValid)
+          throw new DataAccess.Exceptions.InvalidUsernameException(newUsername);
+
+        //VALIDATE USER DOESN'T ALREADY EXIST
+        if (SeedData.Ton.ContainsUsername(newUsername))
+          throw new DataAccess.Exceptions.UsernameAlreadyExistsException(newUsername);
+        
+        //VALIDATE PASSWORD
+        bool passwordIsValid = CommonHelper.PasswordIsValid(password);
+        if (!passwordIsValid)
+          throw new DataAccess.Exceptions.InvalidPasswordException(password);
+
+        //GENERATE UNIQUE SALT 
+        bool saltAlreadyExists = true;
+        int salt = -1;
+        Random r = new Random(DateTime.Now.Millisecond * DateTime.Now.Minute * DateTime.Now.Month);
+        int maxTries = int.Parse(DalResources.MaxTriesGenerateSalt);
+        int tries = 0;
+        do
+        {
+          salt = r.Next(int.Parse(DataAccess.DalResources.MaxSaltValue));
+          saltAlreadyExists = SeedData.Ton.ContainsSalt(salt);
+          tries++;
+          if (tries > maxTries)
+            throw new DataAccess.Exceptions.GeneralDataAccessException("MaxTries for generating salt reached.");
+        } while (saltAlreadyExists);
+
+        //GENERATE SALTEDHASHEDPASSWORD
+        var saltedHashedPasswordObj = new Common.SaltedHashedPassword(password, salt);
+        string saltedHashedPasswordString = saltedHashedPasswordObj.Value;
+
+        //GET ROLEID FOR PLAIN USER (NOT ADMIN)
+        var roleId = SeedData.Ton.UserRoleId;
+
+        //CREATE ACTUAL USERDTO
+        UserDto newUserDto = new UserDto()
+        {
+          Id = Guid.NewGuid(),
+          Username = newUsername,
+          Salt = salt,
+          SaltedHashedPasswordValue = saltedHashedPasswordString,
+          RoleIds = new List<Guid>() { roleId }
+        };
+
+        //ADD THE USER TO THE SEEDDATA (WE ARE IN THE MOCK DAL)
+        SeedData.Ton.Users.Add(newUserDto);
+
+        //ASSIGN SUCCESFUL RESULT WITH USERDTO
+        retResult = Result<UserDto>.Success(newUserDto);
+      }
+      catch (Exception ex)
+      {
+        //WRAP EXCEPTION IN FAILURE WITH INFO RESULT
+        retResult = Result<UserDto>.FailureWithInfo(null, ex);
+      }
+
+      //RETURN RESULT
       return retResult;
     }
   }

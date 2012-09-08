@@ -144,9 +144,6 @@
   <data name="MinNativeLanguageTextLength" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="MinUsernameLength" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="RuleInfoCountsMustBeEqual" xml:space="preserve">
     <value>{0}.Count must equal {1}.Count</value>
     <comment>{0} = Primary Collection Property Name, e.g. Phrases
@@ -162,9 +159,5 @@
   </data>
   <data name="SongMinimumLineCount" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="UsernameValidationRegex" xml:space="preserve">
-    <value>^[a-zA-Z0-9_]*$</value>
-    <comment>Only numbers, letters, and underscores</comment>
   </data>
 </root>

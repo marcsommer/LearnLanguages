@@ -73,6 +73,9 @@
     <Compile Include="..\dependencies\csla_contrib\ScreenWithSubject.cs">
       <Link>CslaContrib\ScreenWithSubject.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\CommonHelper.cs">
+      <Link>CommonHelper.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\CommonResources.cs">
       <Link>CommonResources.cs</Link>
     </Compile>

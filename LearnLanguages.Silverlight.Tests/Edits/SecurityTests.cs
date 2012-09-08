@@ -150,5 +150,30 @@ namespace LearnLanguages.Silverlight.Tests
 
       EnqueueTestComplete();
     }
+
+    [TestMethod]
+    [Asynchronous]
+    [Tag("current")]
+    public void TEST_ADD_USER()
+    {
+      var isCreated = false;
+
+      var testUsername = "BobValidUsername";
+      var testPassword = "password1";
+      var criteria = new Business.Criteria.UserInfoCriteria(testUsername, testPassword);
+      Business.NewUserCreator.CreateNew(criteria, (s, r) =>
+        {
+          if (r.Error != null)
+            throw r.Error;
+          isCreated = true;
+        });
+
+
+      EnqueueConditional(() => isCreated);
+
+      EnqueueCallback(() => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); });
+
+      EnqueueTestComplete();
+    }
   }
 }

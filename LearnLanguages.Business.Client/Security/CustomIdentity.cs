@@ -69,13 +69,9 @@ namespace LearnLanguages.Business.Security
     protected override void AddBusinessRules()
     {
       base.AddBusinessRules();
-
-      //USERNAME MIN LENGTH
-      int minUsernameLength = int.Parse(BusinessResources.MinUsernameLength);
-      BusinessRules.AddRule(new Csla.Rules.CommonRules.MinLength(NameProperty, minUsernameLength));
       
       //USERNAME REGEX
-      string usernameRegexMatch = BusinessResources.UsernameValidationRegex;
+      string usernameRegexMatch = CommonResources.UsernameValidationRegex;
       BusinessRules.AddRule(new Csla.Rules.CommonRules.RegExMatch(NameProperty, usernameRegexMatch));
     }
 

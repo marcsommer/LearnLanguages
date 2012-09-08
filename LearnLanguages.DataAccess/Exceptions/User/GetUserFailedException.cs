@@ -7,7 +7,7 @@ namespace LearnLanguages.DataAccess.Exceptions
   public class GetUserFailedException : Exception
   {
     public GetUserFailedException(string username)
-      : base(string.Format(DalResources.ErrorMsgUsernameNotFoundException, username))
+      : base(string.Format(DalResources.ErrorMsgGetUserFailedException, username))
     {
       Username = username;
     }
@@ -19,7 +19,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public GetUserFailedException(Exception innerException, string username)
-      : base(DalResources.ErrorMsgUsernameNotFoundException, innerException)
+      : base(DalResources.ErrorMsgGetUserFailedException, innerException)
     {
       Username = username;
     }

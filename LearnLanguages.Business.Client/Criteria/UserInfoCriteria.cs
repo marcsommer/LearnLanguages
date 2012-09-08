@@ -18,12 +18,13 @@ namespace LearnLanguages.Business.Criteria
     {
       //required for serialization
     }
-    public UserInfoCriteria(string username, string clearUnsaltedPassword, string saltedHashedPassword, int salt)
+    //public UserInfoCriteria(string username, string clearUnsaltedPassword, string saltedHashedPassword, int salt)
+    public UserInfoCriteria(string username, string clearUnsaltedPassword)
     {
       LoadProperty<string>(UsernameProperty, username);
       LoadProperty<string>(ClearUnsaltedPasswordProperty, clearUnsaltedPassword);
-      LoadProperty<string>(SaltedHashedPasswordProperty, saltedHashedPassword);
-      LoadProperty<int>(SaltProperty, salt);
+      //LoadProperty<string>(SaltedHashedPasswordProperty, saltedHashedPassword);
+      //LoadProperty<int>(SaltProperty, salt);
     }
 
     public static readonly PropertyInfo<string> UsernameProperty = RegisterProperty<string>(c => c.Username);
@@ -41,20 +42,20 @@ namespace LearnLanguages.Business.Criteria
       private set { LoadProperty(ClearUnsaltedPasswordProperty, value); }
     }
 
-    public static readonly PropertyInfo<string> SaltedHashedPasswordProperty =
-      RegisterProperty<string>(c => c.SaltedHashedPassword);
-    public string SaltedHashedPassword
-    {
-      get { return ReadProperty(SaltedHashedPasswordProperty); }
-      private set { LoadProperty(SaltedHashedPasswordProperty, value); }
-    }
+    //public static readonly PropertyInfo<string> SaltedHashedPasswordProperty =
+    //  RegisterProperty<string>(c => c.SaltedHashedPassword);
+    //public string SaltedHashedPassword
+    //{
+    //  get { return ReadProperty(SaltedHashedPasswordProperty); }
+    //  private set { LoadProperty(SaltedHashedPasswordProperty, value); }
+    //}
 
-    public static readonly PropertyInfo<int> SaltProperty =
-      RegisterProperty<int>(c => c.Salt);
-    public int Salt
-    {
-      get { return ReadProperty(SaltProperty); }
-      private set { LoadProperty(SaltProperty, value); }
-    }
+    //public static readonly PropertyInfo<int> SaltProperty =
+    //  RegisterProperty<int>(c => c.Salt);
+    //public int Salt
+    //{
+    //  get { return ReadProperty(SaltProperty); }
+    //  private set { LoadProperty(SaltProperty, value); }
+    //}
   }
 }

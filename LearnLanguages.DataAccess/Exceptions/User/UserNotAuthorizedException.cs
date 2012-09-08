@@ -21,6 +21,12 @@ namespace LearnLanguages.DataAccess.Exceptions
 
     }
 
+    public UserNotAuthorizedException(string descriptionOfAttempt, int signatureDummy)
+      : base(string.Format(DalResources.ErrorMsgUserNotAuthorizedToDoException, descriptionOfAttempt))
+    {
+      
+    }
+
     public UserNotAuthorizedException(Exception innerException)
       : base(DalResources.ErrorMsgUserNotAuthorizedException, innerException)
     {

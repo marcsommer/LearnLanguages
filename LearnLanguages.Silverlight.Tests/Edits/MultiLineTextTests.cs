@@ -226,7 +226,6 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
-    [Tag("current")]
     public void NEW_EDIT_BEGINSAVE_GET()
     {
       MultiLineTextEdit newMultiLineTextEdit = null;

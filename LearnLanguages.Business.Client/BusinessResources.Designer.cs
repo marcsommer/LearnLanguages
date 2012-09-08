@@ -142,15 +142,6 @@ namespace LearnLanguages.Business {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.
-        /// </summary>
-        public static string MinUsernameLength {
-            get {
-                return ResourceManager.GetString("MinUsernameLength", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}.Count must equal {1}.Count.
         /// </summary>
         public static string RuleInfoCountsMustBeEqual {
@@ -183,15 +174,6 @@ namespace LearnLanguages.Business {
         public static string SongMinimumLineCount {
             get {
                 return ResourceManager.GetString("SongMinimumLineCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ^[a-zA-Z0-9_]*$.
-        /// </summary>
-        public static string UsernameValidationRegex {
-            get {
-                return ResourceManager.GetString("UsernameValidationRegex", resourceCulture);
             }
         }
     }

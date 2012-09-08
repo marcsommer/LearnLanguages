@@ -163,8 +163,7 @@ namespace LearnLanguages.Business
       BusinessRules.AddRule(new Csla.Rules.CommonRules.MinLength(NativeLanguageTextProperty, 
                                                                  int.Parse(BusinessResources.MinNativeLanguageTextLength)));
 
-      BusinessRules.AddRule(new Csla.Rules.CommonRules.MinLength(UsernameProperty,
-                                                                 int.Parse(BusinessResources.MinUsernameLength)));
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.RegExMatch(UsernameProperty, CommonResources.UsernameValidationRegex));
     }
 
     #endregion

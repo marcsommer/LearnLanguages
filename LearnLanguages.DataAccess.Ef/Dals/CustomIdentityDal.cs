@@ -153,5 +153,10 @@ namespace LearnLanguages.DataAccess.Ef
         throw;
       }
     }
+
+    protected override UserDto AddUserImpl(string username, string password)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

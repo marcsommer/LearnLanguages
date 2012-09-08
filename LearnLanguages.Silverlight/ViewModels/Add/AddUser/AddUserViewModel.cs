@@ -64,20 +64,21 @@ namespace LearnLanguages.Silverlight.ViewModels
       {
         //PASSWORDS MATCH
         bool passwordsMatch = NewPassword == ConfirmNewPassword;
-        //USERNAME IS CORRECTLY FORMATTED (REGEX CHECK)
-        bool newUsernameMatchesRegex = Regex.IsMatch(NewUsername, Business.BusinessResources.UsernameValidationRegex);
 
-        //USERNAME IS AT LEAST MIN USERNAME LENGTH
-        int minUsernameLength = int.Parse(Business.BusinessResources.MinUsernameLength);
-        bool usernameIsAtLeastMinLength = NewUsername.Length >= minUsernameLength;
+        //PASSWORD IS VALID
+        bool newPasswordIsValid = Common.CommonHelper.PasswordIsValid(NewPassword);
 
-        return (Csla.ApplicationContext.User.Identity.IsAuthenticated &&
-                Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin) &&
-                !string.IsNullOrEmpty(NewPassword) && 
-                !string.IsNullOrEmpty(NewUsername) &&
-                passwordsMatch &&
-                newUsernameMatchesRegex &&
-                usernameIsAtLeastMinLength);
+        //USERNAME IS VALID
+        bool newUsernameIsValid = Common.CommonHelper.UsernameIsValid(NewUsername);
+
+        bool canAddUser = Csla.ApplicationContext.User.Identity.IsAuthenticated &&
+                          Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin) &&
+                          !string.IsNullOrEmpty(NewPassword) && 
+                          !string.IsNullOrEmpty(NewUsername) &&
+                          passwordsMatch &&
+                          newUsernameIsValid;
+        
+        return canAddUser;
       }
     }
     public void AddUser()

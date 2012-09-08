@@ -97,5 +97,11 @@ namespace LearnLanguages
     public static string SplitWordsDelimiterString = @" \/:;<>,.?[]{}|~`!#@$%^&*()+=""\\r\\n";
 
     public static string ShowGridLines { get { return false.ToString(); } }
+
+    //Only numbers, letters, and underscores
+    public static string UsernameValidationRegex = @"^[a-zA-Z0-9_]*$";
+
+    //Must contain digit, and an alpha, and can only contain digits, alphas, and !@#$%^&*() special characters
+    public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()]{6,15}$";
   }
 }

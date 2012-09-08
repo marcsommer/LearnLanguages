@@ -72,6 +72,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LearnLanguages.DataAccess\DalHelper.cs">
+      <Link>DalHelper.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\DalResources.Designer.cs">
       <Link>DalResources.Designer.cs</Link>
       <AutoGen>True</AutoGen>
@@ -135,6 +138,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\IdNotFoundException.cs">
       <Link>Exceptions\IdNotFoundException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\InvalidPasswordException.cs">
+      <Link>Exceptions\InvalidPasswordException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\LanguageTextAlreadyExistsException.cs">
       <Link>Exceptions\LanguageTextAlreadyExistsException.cs</Link>
     </Compile>
@@ -159,8 +165,14 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\GetUserFailedException.cs">
       <Link>Exceptions\User\GetUserFailedException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\InvalidUsernameException.cs">
+      <Link>Exceptions\User\InvalidUsernameException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\LoadUserDataException.cs">
       <Link>Exceptions\User\LoadUserDataException.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UsernameAlreadyExistsException.cs">
+      <Link>Exceptions\User\UsernameAlreadyExistsException.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UsernameAndUserIdDoNotMatchException.cs">
       <Link>Exceptions\User\UsernameAndUserIdDoNotMatchException.cs</Link>

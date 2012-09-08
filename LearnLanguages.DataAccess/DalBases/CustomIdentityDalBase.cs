@@ -62,9 +62,28 @@ namespace LearnLanguages.DataAccess
 
       return retResult;
     }
+    public Result<UserDto> AddUser(string username, string password)
+    {
+      Result<UserDto> retResult = Result<UserDto>.Undefined(null);
+      try
+      {
+        var userDto = AddUserImpl(username, password);
+        if (userDto == null)
+          throw new Exception();
+        retResult = Result<UserDto>.Success(userDto);
+      }
+      catch (Exception ex)
+      {
+        var wrapperEx = new Exceptions.GetUserFailedException(ex, username);
+        retResult = Result<UserDto>.FailureWithInfo(null, wrapperEx);
+      }
+
+      return retResult;
+    }
 
     protected abstract bool? VerifyUserImpl(string username, string password);
     protected abstract UserDto GetUserImpl(string username);
     protected abstract ICollection<RoleDto> GetRolesImpl(string username);
+    protected abstract UserDto AddUserImpl(string username, string password);
   }
 }

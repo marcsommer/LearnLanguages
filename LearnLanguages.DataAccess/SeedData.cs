@@ -501,5 +501,21 @@ namespace LearnLanguages.DataAccess
               where u.Id == userId
               select u.Username).FirstOrDefault();
     }
+
+    public bool ContainsSalt(int salt)
+    {
+      var exists = (from u in Users
+                    where u.Salt == salt
+                    select u).Count() > 0;
+      return exists;
+    }
+
+    public bool ContainsUsername(string username)
+    {
+      var exists = (from u in Users
+                    where u.Username == username
+                    select u).Count() > 0;
+      return exists;
+    }
   }
 }
