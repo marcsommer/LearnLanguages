@@ -11,6 +11,8 @@ using System.Windows.Shapes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearnLanguages.Business.Security;
 using Microsoft.Silverlight.Testing;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Silverlight.Tests
 {
@@ -153,7 +155,6 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
-    [Tag("current")]
     public void TEST_ADD_USER()
     {
       var isCreated = false;
@@ -165,6 +166,7 @@ namespace LearnLanguages.Silverlight.Tests
         {
           if (r.Error != null)
             throw r.Error;
+
           isCreated = true;
         });
 
@@ -174,6 +176,125 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueCallback(() => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); });
 
       EnqueueTestComplete();
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    [Tag("current")]
+    public void TEST_ADD_50_RANDOM_USERS_RANDOM_PASSWORDS_MUST_CLEAN_SOLUTION_FIRST()
+    {
+      int numToAdd = 50;
+      var creationAttempts = 0;
+      var creationSuccesses = 0;
+
+      for (int i = 0; i < numToAdd; i++)
+      {
+        string randomUsername = GenerateRandomUsername();
+        string randomPassword = GenerateRandomPassword();
+        var criteria = new Business.Criteria.UserInfoCriteria(randomUsername, randomPassword);
+
+        Business.NewUserCreator.CreateNew(criteria, (s, r) =>
+        {
+          creationAttempts++;
+          //if (r.Error != null)
+          //  throw r.Error;
+          if (r.Error == null)
+            creationSuccesses++;
+        });
+      }
+
+      EnqueueConditional(() => creationAttempts == numToAdd);
+
+      EnqueueCallback(() => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); },
+                      () => { Assert.AreEqual(numToAdd, creationAttempts); },
+                      () => { Assert.AreEqual(numToAdd, creationSuccesses); });
+
+      EnqueueTestComplete();
+    }
+
+    private string GenerateRandomPassword()
+    {
+      int minValidPasswordLength = 6;
+      int maxValidPasswordLength = 15;
+      string validPasswordChars = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-_=+";
+      string randomPassword = "";
+      bool randomPasswordIsValid = false;
+      do
+      {
+        randomPassword =
+          GenerateRandomString(validPasswordChars, minValidPasswordLength, maxValidPasswordLength);
+        //randomPasswordIsValid = Regex.IsMatch(randomPassword, CommonResources.PasswordValidationRegex);
+        randomPasswordIsValid = Common.CommonHelper.PasswordIsValid(randomPassword);
+      } while (!randomPasswordIsValid);
+
+      return randomPassword;
+    }
+
+    #region private List<string> _usernames
+
+    private object ___usernamesLock = new object();
+    private List<string> __usernames = new List<string>();
+    private List<string> _usernames
+    {
+      get
+      {
+        lock (___usernamesLock)
+        {
+          var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+          return __usernames;
+        }
+      }
+      set
+      {
+        lock (___usernamesLock)
+        {
+          __usernames = value;
+        }
+      }
+    }
+
+    #endregion
+
+    private string GenerateRandomUsername()
+    {
+      int minValidUsernameLength = 3;
+      int maxValidUsernameLength = 30;
+      string validUsernameChars = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_";
+      string randomUsername = "";
+      bool randomUsernameIsValid = false;
+
+      do
+      {
+        randomUsername =
+          GenerateRandomString(validUsernameChars, minValidUsernameLength, maxValidUsernameLength);
+        //randomUsernameIsValid = Regex.IsMatch(randomUsername, CommonResources.UsernameValidationRegex);
+        randomUsernameIsValid = Common.CommonHelper.UsernameIsValid(randomUsername);
+        if (randomUsernameIsValid)
+        {
+          var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+          if (_usernames.Contains(randomUsername))
+            randomUsernameIsValid = false;
+        }
+      } while (!randomUsernameIsValid);
+
+      _usernames.Add(randomUsername);
+      return randomUsername;
+    }
+
+    private static string GenerateRandomString(string validChars, int minLength, int maxLength)
+    {
+      System.Threading.Thread.Sleep(20); //for randomizer
+      Random r = new Random(DateTime.Now.Millisecond * DateTime.Now.Second + DateTime.Now.Minute);
+      int length = r.Next(minLength, maxLength + 1);
+      string generatedString = "";
+      for (int i = 0; i < length; i++)
+      {
+        int randomCharIndex = r.Next(0, validChars.Length);
+        char randomChar = validChars[randomCharIndex];
+        generatedString += randomChar;
+      }
+
+      return generatedString;
     }
   }
 }

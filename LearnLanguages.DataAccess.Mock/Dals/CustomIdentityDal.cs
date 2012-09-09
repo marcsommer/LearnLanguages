@@ -65,9 +65,11 @@ namespace LearnLanguages.DataAccess.Mock
 
         if (userResults.Count() == 1)
         {
-          var roleIds = userResults.First().RoleIds;
-          foreach (var roleId in roleIds)
+          var roleIds = userResults.First().RoleIds.ToList();
+          for (int i = 0; i < roleIds.Count; i++)
+          //foreach (var roleId in roleIds)
           {
+            var roleId = roleIds[i];
             var roleResults = (from role in SeedData.Ton.Roles
                                where role.Id == roleId
                                select role);
