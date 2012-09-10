@@ -58,8 +58,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReadOnly\DeleteUserReadOnly.cs" />
     <Compile Include="Commands\RemoveAlreadyExistingPhraseTextsCommand.cs" />
-    <Compile Include="Creators\NewUserCreator.cs" />
+    <Compile Include="ReadOnly\NewUserCreator.cs" />
     <Compile Include="Criteria\UserInfoCriteria.cs" />
     <Compile Include="Criteria\FindPhraseInPhraseListCriteria.cs" />
     <Compile Include="Criteria\TranslationPairSearchCriteria.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Lists\LineList.cs" />
     <Compile Include="Lists\StudyDataList.cs" />
     <Compile Include="Criteria\PhraseCriteria.cs" />
-    <Compile Include="Creators\BlankTranslationCreator.cs" />
+    <Compile Include="ReadOnly\BlankTranslationCreator.cs" />
     <Compile Include="BusinessResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -85,7 +86,7 @@
     </Compile>
     <Compile Include="BusinessRules\CollectionMinimumCountBusinessRule.cs" />
     <Compile Include="BusinessRules\CollectionCountsAreEqualBusinessRule.cs" />
-    <Compile Include="Creators\BlankPhraseCreator.cs" />
+    <Compile Include="ReadOnly\BlankPhraseCreator.cs" />
     <Compile Include="Commands\PhraseDefaultSetterCommand.cs" />
     <Compile Include="Lists\TranslationList.cs" />
     <Compile Include="Edits\TranslationEdit.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Retrievers\TranslationSearchRetriever.cs" />
     <Compile Include="Retrievers\StudyDataRetriever.cs" />
     <Compile Include="Retrievers\PhrasesExistRetriever.cs" />
-    <Compile Include="Creators\TranslationCreator.cs" />
+    <Compile Include="ReadOnly\TranslationCreator.cs" />
     <Compile Include="Security\CustomIdentity.cs" />
     <Compile Include="Security\CustomPrincipal.cs" />
   </ItemGroup>

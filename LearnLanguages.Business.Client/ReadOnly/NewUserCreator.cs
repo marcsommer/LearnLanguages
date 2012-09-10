@@ -46,6 +46,7 @@ namespace LearnLanguages.Business
     public void DataPortal_Create(Criteria.UserInfoCriteria criteria)
     {
       RetrieverId = Guid.NewGuid();
+      WasSuccessful = false;
 
       using (var dalManager = DalFactory.GetDalManager())
       {

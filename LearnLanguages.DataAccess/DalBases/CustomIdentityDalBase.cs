@@ -80,10 +80,29 @@ namespace LearnLanguages.DataAccess
 
       return retResult;
     }
+    public Result<bool?> DeleteUser(string username)
+    {
+      Result<bool?> retResult = Result<bool?>.Undefined(null);
+      try
+      {
+        var deleteResult = DeleteUserImpl(username);
+        if (deleteResult == null)
+          throw new Exception();
+        retResult = Result<bool?>.Success(deleteResult);
+      }
+      catch (Exception ex)
+      {
+        var wrapperEx = new Exceptions.GetUserFailedException(ex, username);
+        retResult = Result<bool?>.FailureWithInfo(null, wrapperEx);
+      }
+
+      return retResult;
+    }
 
     protected abstract bool? VerifyUserImpl(string username, string password);
     protected abstract UserDto GetUserImpl(string username);
     protected abstract ICollection<RoleDto> GetRolesImpl(string username);
     protected abstract UserDto AddUserImpl(string username, string password);
+    protected abstract bool? DeleteUserImpl(string username);
   }
 }

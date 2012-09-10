@@ -60,18 +60,6 @@
     <Compile Include="..\LearnLanguages.Business.Client\Commands\RemoveAlreadyExistingPhraseTextsCommand.cs">
       <Link>Commands\RemoveAlreadyExistingPhraseTextsCommand.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Creators\BlankPhraseCreator.cs">
-      <Link>Creators\BlankPhraseCreator.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Creators\BlankTranslationCreator.cs">
-      <Link>Creators\BlankTranslationCreator.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Creators\NewUserCreator.cs">
-      <Link>Creators\NewUserCreator.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Creators\TranslationCreator.cs">
-      <Link>Creators\TranslationCreator.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\FindPhraseInPhraseListCriteria.cs">
       <Link>Criteria\FindPhraseInPhraseListCriteria.cs</Link>
     </Compile>
@@ -140,6 +128,21 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\TranslationList.cs">
       <Link>Lists\TranslationList.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\BlankPhraseCreator.cs">
+      <Link>ReadOnly\BlankPhraseCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\BlankTranslationCreator.cs">
+      <Link>ReadOnly\BlankTranslationCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\DeleteUserReadOnly.cs">
+      <Link>ReadOnly\DeleteUserReadOnly.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\NewUserCreator.cs">
+      <Link>ReadOnly\NewUserCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\TranslationCreator.cs">
+      <Link>ReadOnly\TranslationCreator.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesByTextAndLanguageRetriever.cs">
       <Link>Retrievers\PhrasesByTextAndLanguageRetriever.cs</Link>
