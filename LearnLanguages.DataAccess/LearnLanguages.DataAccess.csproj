@@ -84,7 +84,6 @@
     <Compile Include="Exceptions\SeedDataException.cs" />
     <Compile Include="Exceptions\User\UsernameNotFoundException.cs" />
     <Compile Include="Exceptions\User\GetRolesFailedException.cs" />
-    <Compile Include="Exceptions\User\UserNotAuthenticatedException.cs" />
     <Compile Include="Exceptions\VeryBadException.cs" />
     <Compile Include="Exceptions\User\VerifyUserFailedException.cs" />
     <Compile Include="Exceptions\User\GetUserFailedException.cs" />

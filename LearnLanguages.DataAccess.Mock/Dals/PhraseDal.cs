@@ -172,7 +172,7 @@ namespace LearnLanguages.DataAccess.Mock
       //to get to this point, we must have already been authenticated
       Debug.Assert(Csla.ApplicationContext.User.Identity.IsAuthenticated);
       //if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
-      //  throw new Exceptions.UserNotAuthenticatedException();
+      //  throw new Common.Exceptions.UserNotAuthenticatedException();
 
       var languageId = SeedData.Ton.DefaultLanguageId;
 

@@ -91,6 +91,7 @@
     <Compile Include="Core\LearnLanguagesExtensions.cs" />
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="Exceptions\UserNotAuthenticatedException.cs" />
     <Compile Include="Interfaces\Core\IAdvisor.cs" />
     <Compile Include="Interfaces\Core\IInitialize.cs" />
     <Compile Include="Interfaces\Exchange\IStatusUpdateOfTTargetAndTProduct.cs" />

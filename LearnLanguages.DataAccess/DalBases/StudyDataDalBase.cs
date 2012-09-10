@@ -17,7 +17,7 @@ namespace LearnLanguages.DataAccess
       Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = NewImpl(criteria);
         retResult = Result<StudyDataDto>.Success(dto);
@@ -34,7 +34,7 @@ namespace LearnLanguages.DataAccess
     //  Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
     //  try
     //  {
-    //    CheckAuthentication();
+    //    Common.CommonHelper.CheckAuthentication();
 
     //    var dto = FetchImpl(id);
     //    retResult = Result<StudyDataDto>.Success(dto);
@@ -51,7 +51,7 @@ namespace LearnLanguages.DataAccess
     //  Result<ICollection<StudyDataDto>> retResult = Result<ICollection<StudyDataDto>>.Undefined(null);
     //  try
     //  {
-    //    CheckAuthentication();
+    //    Common.CommonHelper.CheckAuthentication();
 
     //    var dtos = FetchImpl(ids);
     //    retResult = Result<ICollection<StudyDataDto>>.Success(dtos);
@@ -68,7 +68,7 @@ namespace LearnLanguages.DataAccess
       Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = FetchForCurrentUserImpl();
         retResult = Result<StudyDataDto>.Success(dto);
@@ -85,7 +85,7 @@ namespace LearnLanguages.DataAccess
       Result<bool> retResult = Result<bool>.Undefined(false);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = StudyDataExistsForCurrentUserImpl();
         retResult = Result<bool>.Success(dto);
@@ -102,7 +102,7 @@ namespace LearnLanguages.DataAccess
       Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var updatedDto = UpdateImpl(dtoToUpdate);
         retResult = Result<StudyDataDto>.Success(updatedDto);
@@ -119,7 +119,7 @@ namespace LearnLanguages.DataAccess
       Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var insertedDto = InsertImpl(dtoToInsert);
         retResult = Result<StudyDataDto>.Success(insertedDto);
@@ -136,7 +136,7 @@ namespace LearnLanguages.DataAccess
       Result<StudyDataDto> retResult = Result<StudyDataDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var dto = DeleteImpl(id);
         retResult = Result<StudyDataDto>.Success(dto);
@@ -153,7 +153,7 @@ namespace LearnLanguages.DataAccess
       Result<ICollection<StudyDataDto>> retResult = Result<ICollection<StudyDataDto>>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var allDtos = GetAllImpl();
         retResult = Result<ICollection<StudyDataDto>>.Success(allDtos);
@@ -179,7 +179,7 @@ namespace LearnLanguages.DataAccess
     protected void CheckAuthentication()
     {
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
-        throw new Exceptions.UserNotAuthenticatedException();
+        throw new Common.Exceptions.UserNotAuthenticatedException();
     }
 
     

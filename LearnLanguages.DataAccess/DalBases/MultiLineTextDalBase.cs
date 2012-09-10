@@ -17,7 +17,7 @@ namespace LearnLanguages.DataAccess
       Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = NewImpl(criteria);
         retResult = Result<MultiLineTextDto>.Success(dto);
@@ -34,7 +34,7 @@ namespace LearnLanguages.DataAccess
       Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = FetchImpl(id);
         retResult = Result<MultiLineTextDto>.Success(dto);
@@ -51,7 +51,7 @@ namespace LearnLanguages.DataAccess
       Result<ICollection<MultiLineTextDto>> retResult = Result<ICollection<MultiLineTextDto>>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dtos = FetchImpl(ids);
         retResult = Result<ICollection<MultiLineTextDto>>.Success(dtos);
@@ -73,7 +73,7 @@ namespace LearnLanguages.DataAccess
       Result<ICollection<MultiLineTextDto>> retResult = Result<ICollection<MultiLineTextDto>>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dtos = FetchByIdImpl(lineId);
         retResult = Result<ICollection<MultiLineTextDto>>.Success(dtos);
@@ -90,7 +90,7 @@ namespace LearnLanguages.DataAccess
       Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var updatedDto = UpdateImpl(dtoToUpdate);
         retResult = Result<MultiLineTextDto>.Success(updatedDto);
@@ -107,7 +107,7 @@ namespace LearnLanguages.DataAccess
       Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var insertedDto = InsertImpl(dtoToInsert);
         retResult = Result<MultiLineTextDto>.Success(insertedDto);
@@ -124,7 +124,7 @@ namespace LearnLanguages.DataAccess
       Result<MultiLineTextDto> retResult = Result<MultiLineTextDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var dto = DeleteImpl(id);
         retResult = Result<MultiLineTextDto>.Success(dto);
@@ -141,7 +141,7 @@ namespace LearnLanguages.DataAccess
       Result<ICollection<MultiLineTextDto>> retResult = Result<ICollection<MultiLineTextDto>>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var allDtos = GetAllImpl();
         retResult = Result<ICollection<MultiLineTextDto>>.Success(allDtos);
@@ -163,10 +163,6 @@ namespace LearnLanguages.DataAccess
     protected abstract MultiLineTextDto DeleteImpl(Guid id);
     protected abstract ICollection<MultiLineTextDto> GetAllImpl();
 
-    protected void CheckAuthentication()
-    {
-      if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
-        throw new Exceptions.UserNotAuthenticatedException();
-    }
+    
   }
 }

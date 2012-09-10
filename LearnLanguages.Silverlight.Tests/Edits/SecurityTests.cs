@@ -159,8 +159,8 @@ namespace LearnLanguages.Silverlight.Tests
     {
       var isCreated = false;
 
-      var testUsername = "BobValidUsername";
-      var testPassword = "password1";
+      var testUsername = "user2";
+      var testPassword = "password2";
       var criteria = new Business.Criteria.UserInfoCriteria(testUsername, testPassword);
       Business.NewUserCreator.CreateNew(criteria, (s, r) =>
         {
@@ -180,6 +180,7 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
+    [Tag("current")]
     public void TEST_ADD_50_RANDOM_USERS_RANDOM_PASSWORDS_MUST_CLEAN_SOLUTION_FIRST()
     {
       int numToAdd = 50;

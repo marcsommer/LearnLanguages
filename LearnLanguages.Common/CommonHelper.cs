@@ -21,5 +21,11 @@ namespace LearnLanguages.Common
       var isValid = Regex.IsMatch(username, CommonResources.UsernameValidationRegex);
       return isValid;
     }
+
+    public static void CheckAuthentication()
+    {
+      if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
+        throw new Common.Exceptions.UserNotAuthenticatedException();
+    }
   }
 }

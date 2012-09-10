@@ -17,7 +17,7 @@ namespace LearnLanguages.DataAccess
       Result<PhraseBeliefDto> retResult = Result<PhraseBeliefDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = NewImpl(criteria);
         retResult = Result<PhraseBeliefDto>.Success(dto);
@@ -39,7 +39,7 @@ namespace LearnLanguages.DataAccess
         Result<PhraseBeliefDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var dto = FetchImpl(id);
         retResult = Result<PhraseBeliefDto>.Success(dto);
@@ -63,7 +63,7 @@ namespace LearnLanguages.DataAccess
         Result<ICollection<PhraseBeliefDto>>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var beliefDtosRelatedToPhrase = FetchAllRelatedToPhraseImpl(phraseId);
         retResult = Result<ICollection<PhraseBeliefDto>>.Success(beliefDtosRelatedToPhrase);
@@ -80,7 +80,7 @@ namespace LearnLanguages.DataAccess
       Result<PhraseBeliefDto> retResult = Result<PhraseBeliefDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
 
         var updatedDto = UpdateImpl(dtoToUpdate);
         retResult = Result<PhraseBeliefDto>.Success(updatedDto);
@@ -97,7 +97,7 @@ namespace LearnLanguages.DataAccess
       Result<PhraseBeliefDto> retResult = Result<PhraseBeliefDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var insertedDto = InsertImpl(dtoToInsert);
         retResult = Result<PhraseBeliefDto>.Success(insertedDto);
@@ -114,7 +114,7 @@ namespace LearnLanguages.DataAccess
       Result<PhraseBeliefDto> retResult = Result<PhraseBeliefDto>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var dto = DeleteImpl(id);
         retResult = Result<PhraseBeliefDto>.Success(dto);
@@ -131,7 +131,7 @@ namespace LearnLanguages.DataAccess
       Result<ICollection<PhraseBeliefDto>> retResult = Result<ICollection<PhraseBeliefDto>>.Undefined(null);
       try
       {
-        CheckAuthentication();
+        Common.CommonHelper.CheckAuthentication();
         
         var allDtos = GetAllImpl();
         retResult = Result<ICollection<PhraseBeliefDto>>.Success(allDtos);
@@ -156,7 +156,7 @@ namespace LearnLanguages.DataAccess
     protected void CheckAuthentication()
     {
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
-        throw new Exceptions.UserNotAuthenticatedException();
+        throw new Common.Exceptions.UserNotAuthenticatedException();
     }
   }
 }

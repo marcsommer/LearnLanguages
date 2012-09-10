@@ -31,7 +31,7 @@ namespace LearnLanguages.DataAccess.Mock
     public static void CheckAuthentication()
     {
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
-        throw new Exceptions.UserNotAuthenticatedException();
+        throw new Common.Exceptions.UserNotAuthenticatedException();
     }
   }
 }

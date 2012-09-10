@@ -26,6 +26,7 @@ namespace LearnLanguages
     {
       return string.Format("The following was not found: \n{0}", whatWasNotFound);
     }
+    public static string ErrorMsgUserNotAuthenticatedException { get { return "The current user has not been authenticated."; } }
 
     #endregion
 

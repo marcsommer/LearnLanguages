@@ -63,7 +63,7 @@ namespace LearnLanguages.Business.Security
     public static void CheckAuthentication()
     {
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
-        throw new LearnLanguages.DataAccess.Exceptions.UserNotAuthenticatedException();
+        throw new Common.Exceptions.UserNotAuthenticatedException();
     }
 
     protected override void AddBusinessRules()

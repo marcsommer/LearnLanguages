@@ -26,22 +26,20 @@ namespace LearnLanguages.Silverlight.ViewModels
       _FinalizeDeleteVisibility = Visibility.Collapsed;
       _ProgressVisibility = Visibility.Collapsed;
 
+      
+      var thinkingId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkingId);
       PhraseList.GetAll((s, r) =>
       {
+        History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
         if (r.Error != null)
           throw r.Error;
 
         var allPhrases = r.Object;
         ModelList = allPhrases;
-        //AllPhrasesCache = allPhrases.ToList();
+        History.Events.ThinkingAboutTargetEvent.Publish(thinkingId);
         PopulateItems(allPhrases);
-        //hack: loading viewmodels changes the phraseedit.language, so we have to save immediately to make clean.
-        //Model.BeginSave((s2, r2) =>
-        //  {
-        //    if (r2.Error != null)
-        //      throw r2.Error;
-        //    Model = (PhraseList)r2.NewObject;
-        //  });
+        History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
       });
     }
 

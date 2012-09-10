@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Csla.Serialization;
 
-namespace LearnLanguages.DataAccess.Exceptions
+namespace LearnLanguages.Common.Exceptions
 {
   [Serializable]
   public class UserNotAuthenticatedException : Exception
   {
     public UserNotAuthenticatedException()
-      : base(DalResources.ErrorMsgUserNotAuthenticatedException)
+      : base(CommonResources.ErrorMsgUserNotAuthenticatedException)
     {
 
     }
@@ -22,7 +22,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public UserNotAuthenticatedException(Exception innerException)
-      : base(DalResources.ErrorMsgUserNotAuthenticatedException, innerException)
+      : base(CommonResources.ErrorMsgUserNotAuthenticatedException, innerException)
     {
 
     }

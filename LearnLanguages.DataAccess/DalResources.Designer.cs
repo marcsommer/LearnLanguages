@@ -574,6 +574,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The max number of retries due to db deadlock has been attempted..
+        /// </summary>
+        public static string ErrorMsgVeryBadExceptionDetail_DeadlockRetriesExceededMaxTries {
+            get {
+                return ResourceManager.GetString("ErrorMsgVeryBadExceptionDetail_DeadlockRetriesExceededMaxTries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The result count was anticipated to be either one or zero.  This probably occurred when making a call to the database, expecting a unique result set..
         /// </summary>
         public static string ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero {

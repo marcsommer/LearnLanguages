@@ -180,9 +180,6 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UsernameNotFoundException.cs">
       <Link>Exceptions\User\UsernameNotFoundException.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UserNotAuthenticatedException.cs">
-      <Link>Exceptions\User\UserNotAuthenticatedException.cs</Link>
-    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\UserNotAuthorizedException.cs">
       <Link>Exceptions\User\UserNotAuthorizedException.cs</Link>
     </Compile>

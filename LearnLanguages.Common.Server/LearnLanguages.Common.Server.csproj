@@ -136,6 +136,9 @@
     <Compile Include="..\LearnLanguages.Common\Exceptions\PartNotSatisfiedException.cs">
       <Link>Exceptions\PartNotSatisfiedException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Common\Exceptions\UserNotAuthenticatedException.cs">
+      <Link>Exceptions\UserNotAuthenticatedException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Common\Feedback\FeedbackOfT.cs">
       <Link>Feedback\FeedbackOfT.cs</Link>
     </Compile>
