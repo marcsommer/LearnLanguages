@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using LearnLanguages.Common.ViewModelBases;
 using System.Text.RegularExpressions;
+using System;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -76,14 +77,25 @@ namespace LearnLanguages.Silverlight.ViewModels
                           !string.IsNullOrEmpty(NewPassword) && 
                           !string.IsNullOrEmpty(NewUsername) &&
                           passwordsMatch &&
-                          newUsernameIsValid;
+                          newUsernameIsValid &&
+                          newPasswordIsValid;
         
         return canAddUser;
       }
     }
     public void AddUser()
     {
-      MessageBox.Show("This function is not yet implemented.");
+      var thinkingId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkingId);
+      var criteria = new Business.Criteria.UserInfoCriteria(NewUsername, NewPassword);
+      Business.NewUserCreator.CreateNew(criteria, (s, r) =>
+        {
+          History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
+          if (r.Error != null)
+            throw r.Error;
+          else
+            MessageBox.Show(string.Format(ViewViewModelResources.MessageNewUserAdded, NewUsername));
+        });
     }
   }
 }

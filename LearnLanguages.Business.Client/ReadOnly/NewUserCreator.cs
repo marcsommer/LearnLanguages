@@ -27,14 +27,14 @@ namespace LearnLanguages.Business
     public static readonly PropertyInfo<Guid> RetrieverIdProperty = RegisterProperty<Guid>(c => c.RetrieverId);
     public Guid RetrieverId
     {
-      get { return GetProperty(RetrieverIdProperty); }
+      get { return ReadProperty(RetrieverIdProperty); }
       private set { LoadProperty(RetrieverIdProperty, value); }
     }
 
     public static readonly PropertyInfo<bool> WasSuccessfulProperty = RegisterProperty<bool>(c => c.WasSuccessful);
     public bool WasSuccessful
     {
-      get { return GetProperty(WasSuccessfulProperty); }
+      get { return ReadProperty(WasSuccessfulProperty); }
       private set { LoadProperty(WasSuccessfulProperty, value); }
     }
 

@@ -268,6 +268,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempted to delete user..
+        /// </summary>
+        public static string ErrorMsgAttemptedToDeleteUser {
+            get {
+                return ResourceManager.GetString("ErrorMsgAttemptedToDeleteUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The criteria given was incorrect.  The expected criteria is as follows: {0}.
         /// </summary>
         public static string ErrorMsgBadCriteriaException {

@@ -335,4 +335,7 @@
     <value>There was an error trying to add the user with username ({0}).</value>
     <comment>{0} = username</comment>
   </data>
+  <data name="ErrorMsgAttemptedToDeleteUser" xml:space="preserve">
+    <value>Attempted to delete user.</value>
+  </data>
 </root>

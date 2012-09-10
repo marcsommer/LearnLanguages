@@ -14,6 +14,17 @@ using Csla.Core;
 
 namespace LearnLanguages.Common
 {
+  /// <summary>
+  /// This class is used to both encode/confirm passwords. So, when you are storing a user's
+  /// password info, you create one of these objects with the password, and salt. This
+  /// then creates the saltedhashed password. You then store the salt and SaltedHashedPassword string
+  /// in DB.
+  /// 
+  /// Then, create one of these when confirming password. First, get the user's salt from db.
+  /// Then create this object with that salt and the possible password.
+  /// Then compare the output of this salted hashed password string to the 
+  /// salted hashed password string in the DB.
+  /// </summary>
   [Serializable]
   public class SaltedHashedPassword : MobileObject
   {

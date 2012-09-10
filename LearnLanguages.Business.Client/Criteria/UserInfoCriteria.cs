@@ -18,7 +18,7 @@ namespace LearnLanguages.Business.Criteria
     {
       //required for serialization
     }
-    //public UserInfoCriteria(string username, string clearUnsaltedPassword, string saltedHashedPassword, int salt)
+    
     public UserInfoCriteria(string username, string clearUnsaltedPassword)
     {
       LoadProperty<string>(UsernameProperty, username);
@@ -26,6 +26,15 @@ namespace LearnLanguages.Business.Criteria
       //LoadProperty<string>(SaltedHashedPasswordProperty, saltedHashedPassword);
       //LoadProperty<int>(SaltProperty, salt);
     }
+
+    public UserInfoCriteria(string username)
+    {
+      LoadProperty<string>(UsernameProperty, username);
+      //LoadProperty<string>(ClearUnsaltedPasswordProperty, clearUnsaltedPassword);
+      //LoadProperty<string>(SaltedHashedPasswordProperty, saltedHashedPassword);
+      //LoadProperty<int>(SaltProperty, salt);
+    }
+
 
     public static readonly PropertyInfo<string> UsernameProperty = RegisterProperty<string>(c => c.Username);
     public string Username

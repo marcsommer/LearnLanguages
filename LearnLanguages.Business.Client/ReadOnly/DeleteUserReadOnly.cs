@@ -14,7 +14,7 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void Execute(Criteria.UserInfoCriteria criteria, 
+    public static void CreateNew(Criteria.UserInfoCriteria criteria, 
       EventHandler<DataPortalResult<DeleteUserReadOnly>> callback)
     {
       DataPortal.BeginCreate<DeleteUserReadOnly>(criteria, callback);

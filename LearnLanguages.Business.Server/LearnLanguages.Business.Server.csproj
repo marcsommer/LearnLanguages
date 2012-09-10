@@ -141,23 +141,23 @@
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\NewUserCreator.cs">
       <Link>ReadOnly\NewUserCreator.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\PhrasesByTextAndLanguageRetriever.cs">
+      <Link>ReadOnly\PhrasesByTextAndLanguageRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\PhrasesExistRetriever.cs">
+      <Link>ReadOnly\PhrasesExistRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\StudyDataRetriever.cs">
+      <Link>ReadOnly\StudyDataRetriever.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\TranslationCreator.cs">
       <Link>ReadOnly\TranslationCreator.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesByTextAndLanguageRetriever.cs">
-      <Link>Retrievers\PhrasesByTextAndLanguageRetriever.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\TranslationPairSearchRetriever.cs">
+      <Link>ReadOnly\TranslationPairSearchRetriever.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\PhrasesExistRetriever.cs">
-      <Link>Retrievers\PhrasesExistRetriever.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\StudyDataRetriever.cs">
-      <Link>Retrievers\StudyDataRetriever.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationPairSearchRetriever.cs">
-      <Link>Retrievers\TranslationPairSearchRetriever.cs</Link>
-    </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Retrievers\TranslationSearchRetriever.cs">
-      <Link>Retrievers\TranslationSearchRetriever.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\TranslationSearchRetriever.cs">
+      <Link>ReadOnly\TranslationSearchRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Security\CustomIdentity.cs">
       <Link>Security\CustomIdentity.cs</Link>

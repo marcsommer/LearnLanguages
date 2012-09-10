@@ -158,5 +158,10 @@ namespace LearnLanguages.DataAccess.Ef
     {
       throw new NotImplementedException();
     }
+
+    protected override bool? DeleteUserImpl(string username)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

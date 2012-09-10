@@ -24,9 +24,60 @@ namespace LearnLanguages.DataAccess.Mock
     private string _TestInvalidUsername = "ImNotAValidUser";
     private string _TestInvalidPassword = "ImNotAValidPassword";
 
+    /// <summary>
+    /// Returns Success if verify user is valid or invalid. Throw exceptions if something bad happens.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
     public Result<bool?> VerifyUser(string username, string password)
     {
-      return Result<bool?>.Success(username == _TestValidUsername && password == _TestValidPassword);
+      //old
+      //return Result<bool?>.Success(username == _TestValidUsername && password == _TestValidPassword);
+      Result<bool?> retResult = Result<bool?>.Undefined(null);
+      try
+      {
+        var results = from u in SeedData.Ton.Users
+                      where u.Username == username
+                      select u;
+
+        if (results.Count() == 1)
+        {
+          //USERNAME FOUND. CHECK PASSWORD
+          var userDto = results.First();
+          SaltedHashedPassword saltedHashedPasswordObj = 
+            new SaltedHashedPassword(password, userDto.Salt);
+          if (string.Compare(userDto.SaltedHashedPasswordValue,
+                             saltedHashedPasswordObj.Value,
+                             StringComparison.InvariantCulture) == 0)
+          {
+            //PASSWORDS MATCH
+            retResult = Result<bool?>.Success(true);
+          }
+          else
+          {
+            //PASSWORDS DO *NOT* MATCH
+            retResult = Result<bool?>.Success(false);
+          }
+        }
+        else if (results.Count() == 0)
+        {
+          //USERNAME NOT FOUND.
+          retResult = Result<bool?>.Success(false);
+        }
+        else
+        {
+          //?? VERY BAD EXCEPTION. MULTIPLE USERS WITH THAT USERNAME FOUND?
+          throw new Exceptions.VeryBadException();
+        }
+
+      }
+      catch (Exception ex)
+      {
+        retResult = Result<bool?>.FailureWithInfo(null, ex);
+      }
+
+      return retResult;
     }
     public Result<UserDto> GetUser(string username)
     {
@@ -168,5 +219,45 @@ namespace LearnLanguages.DataAccess.Mock
       //RETURN RESULT
       return retResult;
     }
+
+
+    public Result<bool?> DeleteUser(string username)
+    {
+      Result<bool?> retResult = Result<bool?>.Undefined(null);
+      try
+      {
+        //VALIDATE WE ARE IN ROLE TO ADD A USER
+        bool isInRoleToAddUser = DalHelper.IsInRoleToAddUser();
+        if (!isInRoleToAddUser)
+          throw new DataAccess.Exceptions.UserNotAuthorizedException(DalResources.ErrorMsgAttemptedToDeleteUser, 0);
+
+        bool containsUsername = false;
+        var results = from user in SeedData.Ton.Users
+                      where user.Username == username
+                      select user;
+
+        if (results.Count() == 1)
+        {
+          //return Result<bool?>.Success(results.First());
+          var userToRemove = results.First();
+          SeedData.Ton.Users.Remove(userToRemove);
+          retResult = Result<bool?>.Success(true);
+        }
+        else if (results.Count() == 0)
+          throw new Exceptions.UsernameNotFoundException(username);
+        else
+          throw new Exceptions.VeryBadException();
+      }
+      catch (Exception ex)
+      {
+        //WRAP EXCEPTION IN FAILURE WITH INFO RESULT
+        retResult = Result<bool?>.FailureWithInfo(null, ex);
+      }
+
+      //RETURN RESULT
+      return retResult;
+    }
   }
 }
+
+

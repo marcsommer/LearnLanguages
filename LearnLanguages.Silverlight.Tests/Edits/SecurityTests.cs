@@ -180,7 +180,6 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
-    [Tag("current")]
     public void TEST_ADD_50_RANDOM_USERS_RANDOM_PASSWORDS_MUST_CLEAN_SOLUTION_FIRST()
     {
       int numToAdd = 50;
@@ -212,6 +211,81 @@ namespace LearnLanguages.Silverlight.Tests
       EnqueueTestComplete();
     }
 
+    [TestMethod]
+    [Asynchronous]
+    public void TEST_ADD_THEN_DELETE_RANDOM_USER()
+    {
+      bool wasAdded = false;
+      bool wasDeleted = false;
+
+      string randomUsername = GenerateRandomUsername();
+      string randomPassword = GenerateRandomPassword();
+      var criteria = new Business.Criteria.UserInfoCriteria(randomUsername, randomPassword);
+
+      Business.NewUserCreator.CreateNew(criteria, (s, r) =>
+      {
+        if (r.Error != null)
+          throw r.Error;
+        wasAdded = true;
+        
+
+        criteria = new Business.Criteria.UserInfoCriteria(randomUsername);
+        Business.DeleteUserReadOnly.CreateNew(criteria, (s2, r2) =>
+          {
+            if (r2.Error != null)
+              throw r2.Error;
+
+            wasDeleted = true;
+          });
+      });
+
+
+      EnqueueConditional(() => wasAdded);
+      EnqueueConditional(() => wasDeleted);
+
+      EnqueueCallback(
+                      () => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); }
+                     );
+
+      EnqueueTestComplete();
+    }
+
+
+    [TestMethod]
+    [Asynchronous]
+    [ExpectedException(typeof(ExpectedException))]
+    public void TEST_DELETE_USER_THAT_DOESNT_EXIST_EXPECT_EXPECTED_EXCEPTION()
+    {
+      bool wasDeleted = false;
+
+      string randomUsername = GenerateRandomUsername();
+      var criteria = new Business.Criteria.UserInfoCriteria(randomUsername);
+
+      criteria = new Business.Criteria.UserInfoCriteria(randomUsername);
+      Business.DeleteUserReadOnly.CreateNew(criteria, (s2, r2) =>
+      {
+        if (r2.Error != null)// &&
+          //WHY DOES THIS THROW (*UN*EXPECTED) EXCEPTION AND JUST CHECKING FOR != NULL THROWS EXPECTED EXCEPTION?
+          //r2.Error is Csla.DataPortalException) //&&
+          //r2.Error.Message.Contains(@"UsernameNotFoundException"))
+        {
+          throw new ExpectedException(r2.Error);
+        }
+        else
+        {
+          throw new Exception();
+        }
+      });
+
+
+      EnqueueConditional(() => wasDeleted);
+
+      //EnqueueCallback(
+      //                () => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); }
+      //               );
+
+      EnqueueTestComplete();
+    }
     private string GenerateRandomPassword()
     {
       int minValidPasswordLength = 6;
