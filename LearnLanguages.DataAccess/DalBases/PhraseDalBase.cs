@@ -145,7 +145,5 @@ namespace LearnLanguages.DataAccess
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
         throw new Exceptions.UserNotAuthenticatedException();
     }
-
-
   }
 }

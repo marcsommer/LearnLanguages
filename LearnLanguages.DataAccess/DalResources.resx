@@ -158,25 +158,30 @@
     <value>Criteria is expected to be of type UserDto</value>
   </data>
   <data name="ErrorMsgCreateFailedException" xml:space="preserve">
-    <value>The Create operation failed.</value>
+    <value>The Create operation failed. InnerExceptionMsg = {0}</value>
+    <comment>{0} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgDeleteFailedException" xml:space="preserve">
-    <value>The Delete operation failed.</value>
+    <value>The Delete operation failed. InnerExceptionMsg = {0}</value>
+    <comment>{0} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgDeleteFailedExceptionDetail_MultipleItemsFound" xml:space="preserve">
     <value>The Delete operation failed.  There were multiple items found to delete.</value>
   </data>
   <data name="ErrorMsgFetchFailedException" xml:space="preserve">
-    <value>The Fetch operation failed.</value>
+    <value>The Fetch operation failed. InnerExceptionMsg = {0}</value>
+    <comment>{0} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgGeneralDataAccessException" xml:space="preserve">
-    <value>GeneralDataAccessException.  See Inner Exception for details.</value>
+    <value>GeneralDataAccessException.  InnerExceptionMsg = {0}</value>
+    <comment>{0} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgGetAllFailedException" xml:space="preserve">
-    <value>The GetAll operation failed.</value>
+    <value>The GetAll operation failed. InnerExceptionMsg = {0}</value>
+    <comment>{0} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgGetRolesFailedException" xml:space="preserve">
-    <value>The roles of user ({0}) could not be retrieved.</value>
+    <value>The roles of user ({0}) could not be retrieved. InnerExceptionMsg = {1}</value>
     <comment>{0} = username</comment>
   </data>
   <data name="ErrorMsgIdAlreadyExists" xml:space="preserve">
@@ -188,7 +193,8 @@
     <comment>{0} = id</comment>
   </data>
   <data name="ErrorMsgInsertFailedException" xml:space="preserve">
-    <value>The Insert operation failed.</value>
+    <value>The Insert operation failed. InnerExceptionMsg = {0}</value>
+    <comment>{0} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgSeedDataException" xml:space="preserve">
     <value>SeedData threw an exception.</value>
@@ -207,8 +213,8 @@
     <comment>{0} = username</comment>
   </data>
   <data name="ErrorMsgVeryBadException" xml:space="preserve">
-    <value>Something happened that was very bad. ({0})</value>
-    <comment>{0} = detailed message</comment>
+    <value>Something happened that was very bad. Detail = {0}</value>
+    <comment>{0} = detailed message/inner exception msg</comment>
   </data>
   <data name="ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero" xml:space="preserve">
     <value>The result count was anticipated to be either one or zero.  This probably occurred when making a call to the database, expecting a unique result set.</value>
@@ -321,8 +327,8 @@
     <value>The username ({0}) is invalid. It must contain only letters, numbers, underscore, dash, periods.</value>
   </data>
   <data name="ErrorMsgGetUserFailedException" xml:space="preserve">
-    <value>GetUser Failed. Username: ({0})</value>
-    <comment>{0} = Username</comment>
+    <value>GetUser Failed. Username: ({0}) InnerExceptionMsg = {1}</value>
+    <comment>{0} = Username, {1} = InnerExceptionMsg</comment>
   </data>
   <data name="ErrorMsgUserNotAuthorizedToDoException" xml:space="preserve">
     <value>Current user is not authorized, but attempted to do, the following: \n {0}</value>

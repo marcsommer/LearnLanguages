@@ -214,8 +214,11 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseDto FetchImpl(Guid id)
     {
+      var currentUserId = MockHelper.GetCurrentUserId();
+      
       var results = from item in SeedData.Ton.Phrases
-                    where item.Id == id
+                    where item.Id == id && 
+                          item.UserId == currentUserId
                     select item;
 
       if (results.Count() == 1)
@@ -247,8 +250,11 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseDto UpdateImpl(PhraseDto dto)
     {
+      var currentUserId = MockHelper.GetCurrentUserId();
+
       var results = from item in SeedData.Ton.Phrases
-                    where item.Id == dto.Id
+                    where item.Id == dto.Id &&
+                          item.UserId == currentUserId
                     select item;
 
       if (results.Count() == 1)
@@ -272,6 +278,8 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseDto InsertImpl(PhraseDto dto)
     {
+      var currentUserId = MockHelper.GetCurrentUserId();
+
       var results = from item in SeedData.Ton.Phrases
                     where item.Id == dto.Id
                     select item;
@@ -303,8 +311,11 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override PhraseDto DeleteImpl(Guid id)
     {
+      var currentUserId = MockHelper.GetCurrentUserId();
+
       var results = from item in SeedData.Ton.Phrases
-                    where item.Id == id
+                    where item.Id == id &&
+                          item.UserId == currentUserId
                     select item;
 
       if (results.Count() == 1)
@@ -323,7 +334,13 @@ namespace LearnLanguages.DataAccess.Mock
     }
     protected override ICollection<PhraseDto> GetAllImpl()
     {
-      var allDtos = new List<PhraseDto>(SeedData.Ton.Phrases);
+      var currentUserId = MockHelper.GetCurrentUserId();
+
+      var results = from dto in SeedData.Ton.Phrases
+                    where dto.UserId == currentUserId
+                    select dto;
+
+      var allDtos = new List<PhraseDto>(results);
       return allDtos;
     }
 

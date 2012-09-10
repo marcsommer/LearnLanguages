@@ -6,8 +6,8 @@ namespace LearnLanguages.DataAccess.Exceptions
   [Serializable]
   public class VeryBadException : Exception
   {
-    public VeryBadException() 
-      : base()
+    public VeryBadException()
+      : base(string.Format(DalResources.ErrorMsgVeryBadException, "no detail provided"))
     {
     }
 
@@ -18,7 +18,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public VeryBadException(Exception innerException)
-      : base(DalResources.ErrorMsgVeryBadException, innerException)
+      : base(string.Format(DalResources.ErrorMsgVeryBadException, innerException.Message), innerException)
     {
 
     }

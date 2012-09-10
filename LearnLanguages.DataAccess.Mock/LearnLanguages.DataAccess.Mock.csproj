@@ -53,6 +53,7 @@
     <Compile Include="Dals\PhraseDal.cs" />
     <Compile Include="DalManager.cs" />
     <Compile Include="Dals\LanguageDal.cs" />
+    <Compile Include="MockHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -25,7 +25,7 @@ namespace LearnLanguages.DataAccess.Mock
     private string _TestInvalidPassword = "ImNotAValidPassword";
 
     /// <summary>
-    /// Returns Success if verify user is valid or invalid. Throw exceptions if something bad happens.
+    /// Returns Success(true) if verify user is valid, Success(false) if invalid. Throws exceptions if something bad happens.
     /// </summary>
     /// <param name="username"></param>
     /// <param name="password"></param>
@@ -147,7 +147,6 @@ namespace LearnLanguages.DataAccess.Mock
       }
       return retResult;
     }
-
     public Result<UserDto> AddUser(string newUsername, string password)
     {
       Result<UserDto> retResult = Result<UserDto>.Undefined(null);
@@ -219,8 +218,6 @@ namespace LearnLanguages.DataAccess.Mock
       //RETURN RESULT
       return retResult;
     }
-
-
     public Result<bool?> DeleteUser(string username)
     {
       Result<bool?> retResult = Result<bool?>.Undefined(null);

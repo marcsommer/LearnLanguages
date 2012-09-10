@@ -295,7 +295,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Create operation failed..
+        ///   Looks up a localized string similar to The Create operation failed. InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgCreateFailedException {
             get {
@@ -304,7 +304,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Delete operation failed..
+        ///   Looks up a localized string similar to The Delete operation failed. InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgDeleteFailedException {
             get {
@@ -322,7 +322,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Fetch operation failed..
+        ///   Looks up a localized string similar to The Fetch operation failed. InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgFetchFailedException {
             get {
@@ -331,7 +331,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GeneralDataAccessException.  See Inner Exception for details..
+        ///   Looks up a localized string similar to GeneralDataAccessException.  InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgGeneralDataAccessException {
             get {
@@ -340,7 +340,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The GetAll operation failed..
+        ///   Looks up a localized string similar to The GetAll operation failed. InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgGetAllFailedException {
             get {
@@ -349,7 +349,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The roles of user ({0}) could not be retrieved..
+        ///   Looks up a localized string similar to The roles of user ({0}) could not be retrieved. InnerExceptionMsg = {1}.
         /// </summary>
         public static string ErrorMsgGetRolesFailedException {
             get {
@@ -358,7 +358,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GetUser Failed. Username: ({0}).
+        ///   Looks up a localized string similar to GetUser Failed. Username: ({0}) InnerExceptionMsg = {1}.
         /// </summary>
         public static string ErrorMsgGetUserFailedException {
             get {
@@ -394,7 +394,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Insert operation failed..
+        ///   Looks up a localized string similar to The Insert operation failed. InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgInsertFailedException {
             get {
@@ -565,7 +565,7 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Something happened that was very bad. ({0}).
+        ///   Looks up a localized string similar to Something happened that was very bad. Detail = {0}.
         /// </summary>
         public static string ErrorMsgVeryBadException {
             get {

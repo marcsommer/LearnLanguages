@@ -19,7 +19,7 @@ namespace LearnLanguages.DataAccess.Exceptions
     }
 
     public CreateFailedException(Exception innerException)
-      : base(DalResources.ErrorMsgCreateFailedException, innerException)
+      : base(string.Format(DalResources.ErrorMsgCreateFailedException, innerException.Message), innerException)
     {
 
     }
