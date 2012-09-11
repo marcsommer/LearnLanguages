@@ -45,6 +45,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LearnLanguages.Business.Client\BusinessHelper.cs">
+      <Link>BusinessHelper.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\BusinessResources.Designer.cs">
       <Link>BusinessResources.Designer.cs</Link>
     </Compile>

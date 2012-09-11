@@ -27,5 +27,7 @@ namespace LearnLanguages.Common
       if (!Csla.ApplicationContext.User.Identity.IsAuthenticated)
         throw new Common.Exceptions.UserNotAuthenticatedException();
     }
+
+    
   }
 }

@@ -286,9 +286,9 @@ namespace LearnLanguages.DataAccess.Ef
       PhraseData phraseData = null;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
-        //before inserting, we need to make sure that the phrase.text 
-        //and phrase.language.text are not already in the DB.  If so, we need 
-        //to call an update instead of insert
+        //BEFORE INSERTING, WE NEED TO MAKE SURE THAT THE PHRASE.TEXT 
+        //AND PHRASE.LANGUAGE.TEXT ARE NOT ALREADY IN THE DB.  IF SO, WE NEED 
+        //TO CALL AN UPDATE INSTEAD OF INSERT
 
         var results = (from data in ctx.ObjectContext.PhraseDatas
                        where data.Text == dto.Text &&

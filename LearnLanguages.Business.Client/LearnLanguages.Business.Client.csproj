@@ -58,6 +58,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessHelper.cs" />
     <Compile Include="ReadOnly\DeleteUserReadOnly.cs" />
     <Compile Include="Commands\RemoveAlreadyExistingPhraseTextsCommand.cs" />
     <Compile Include="ReadOnly\NewUserCreator.cs" />
