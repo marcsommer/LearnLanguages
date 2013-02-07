@@ -10,8 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LearnLanguages.DataAccess.Mock</RootNamespace>
     <AssemblyName>LearnLanguages.DataAccess.Mock</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,11 +35,28 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csla, Version=4.2.2.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\net45\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-WPF.4.5.10\lib\net45\Csla.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.XmlSerializers">
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\net45\Csla.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,7 +72,7 @@
     <Compile Include="Dals\LineDal.cs" />
     <Compile Include="Dals\StudyDataDal.cs" />
     <Compile Include="Dals\TranslationDal.cs" />
-    <Compile Include="Dals\CustomIdentityDal.cs" />
+    <Compile Include="Dals\UserDal.cs" />
     <Compile Include="Dals\PhraseDal.cs" />
     <Compile Include="DalManager.cs" />
     <Compile Include="Dals\LanguageDal.cs" />
@@ -57,6 +80,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Business.Server\LearnLanguages.Business.Server.csproj">
+      <Project>{9AB67D6B-F6B7-4AD4-8C51-C5049AE7898A}</Project>
+      <Name>LearnLanguages.Business.Server</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Common.Server\LearnLanguages.Common.Server.csproj">
       <Project>{D0155DB8-9B4B-4594-8DE9-6268F0E2595B}</Project>
       <Name>LearnLanguages.Common.Server</Name>
@@ -65,6 +92,9 @@
       <Project>{63BBC54E-3AF9-40AE-9EA2-D72132D18A1B}</Project>
       <Name>LearnLanguages.DataAccess</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

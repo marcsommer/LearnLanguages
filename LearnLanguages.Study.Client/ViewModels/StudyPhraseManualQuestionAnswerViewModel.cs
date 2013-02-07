@@ -8,6 +8,7 @@ using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
 using LearnLanguages.History.Events;
 using LearnLanguages.Common;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -19,6 +20,7 @@ namespace LearnLanguages.Study.ViewModels
 
     public StudyPhraseManualQuestionAnswerViewModel()
     {
+      StudyItemTitle = StudyResources.StudyPhraseManualQuestionAnswerStudyItemTitle;     
       Services.EventAggregator.Subscribe(this);
     }
 
@@ -149,7 +151,7 @@ namespace LearnLanguages.Study.ViewModels
 
     #region Methods
 
-    public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
+    public void Initialize(PhraseEdit question, PhraseEdit answer)
     {
       _InitialQuestionText = question.Text;
       _ModifiedQuestionText = "";
@@ -158,7 +160,6 @@ namespace LearnLanguages.Study.ViewModels
       Question = question;
       Answer = answer;
       HideAnswer();
-      callback(null);
 
       //if (!question.IsValid)
       //  callback(new ArgumentException("question is not a valid phrase", "question"));
@@ -197,7 +198,7 @@ namespace LearnLanguages.Study.ViewModels
       //});
     }
 
-    public override void Show(ExceptionCheckCallback callback)
+    public void Show(ExceptionCheckCallback callback)
     {
       base.Show(callback);
       _DateTimeQuestionShown = DateTime.Now;
@@ -335,7 +336,7 @@ namespace LearnLanguages.Study.ViewModels
         return Question != null && Question.IsValid && SaveQuestionButtonIsEnabled;
       }
     }
-    public void SaveQuestion()
+    public async Task SaveQuestion()
     {
       QuestionIsReadOnly = true;
       SaveQuestionButtonIsEnabled = false;
@@ -349,91 +350,63 @@ namespace LearnLanguages.Study.ViewModels
       Question.Text = _InitialQuestionText;
 
       #region SEARCH IN DB FOR QUESTION (WITH INITIAL TEXT)
-      Business.PhrasesByTextAndLanguageRetriever.CreateNew(Question, (s, r) =>
+      var retriever =
+        await Business.PhrasesByTextAndLanguageRetriever.CreateNewAsync(Question);
+
+      var dbQuestion = retriever.RetrievedSinglePhrase;
+      if (dbQuestion == null)
       {
-        if (r.Error != null)
-          throw r.Error;
-
-        var dbQuestion = r.Object.RetrievedSinglePhrase;
-        if (dbQuestion == null)
+        //QUESTION NOT IN DB, BUT QUESTION IS A CHILD
+        if (Question.IsChild)
         {
-          //QUESTION NOT IN DB, BUT QUESTION IS A CHILD
-          if (Question.IsChild)
-          {
-            //CANNOT SAVE THE QUESTION DIRECTLY BECAUSE IT IS A CHILD
-
-            #region CREATE NEW PHRASE EDIT, LOAD FROM QUESTION DTO, SAVE QUESTION
-            PhraseEdit.NewPhraseEdit((s3, r3) =>
-            {
-              if (r3.Error != null)
-                throw r3.Error;
-
-              var newQuestionObj = r3.Object;
-
-              Question.Text = _ModifiedQuestionText;
-              var dto = Question.CreateDto();
-              dto.Id = Guid.NewGuid();
-
-              newQuestionObj.LoadFromDtoBypassPropertyChecks(dto);
-              Question = newQuestionObj;
-
-              #region Save Question
-              Question.BeginSave((s4, r4) =>
-              {
-                if (r4.Error != null)
-                  throw r4.Error;
-
-                Question = (PhraseEdit)r4.NewObject;
-                _InitialQuestionText = Question.Text;
-                _ModifiedQuestionText = "";
-                SaveQuestionButtonIsEnabled = true;
-                QuestionIsReadOnly = true;
-                UpdateEditQuestionButtonVisibilities();
-              });
-              #endregion
-            });
-            #endregion
-          }
-          //QUESTION NOT IN DB, BUT QUESTION IS NOT A CHILD
-          else
-          {
-            #region SAVE THE QUESTION DIRECTLY, B/C IT IS NOT A CHILD
-            Question.BeginSave((s2, r2) =>
-            {
-              if (r2.Error != null)
-                throw r2.Error;
-
-              Question = (PhraseEdit)r2.NewObject;
-              _InitialQuestionText = Question.Text;
-              _ModifiedQuestionText = "";
-              SaveQuestionButtonIsEnabled = true;
-              QuestionIsReadOnly = true;
-              UpdateEditQuestionButtonVisibilities();
-            });
-            #endregion
-          }
-        }
-        //QUESTION WAS FOUND IN DB
-        else
-        {
-          #region REASSIGN THE QUESTION WITH THE DBQUESTION, SAVE WITH THE MODIFIED TEXT
-          Question = dbQuestion;
+          //CANNOT SAVE THE QUESTION DIRECTLY BECAUSE IT IS A CHILD
+          #region CREATE NEW PHRASE EDIT, LOAD FROM QUESTION DTO, SAVE QUESTION
+          var newQuestionObj = await PhraseEdit.NewPhraseEditAsync();
           Question.Text = _ModifiedQuestionText;
-          Question.BeginSave((s5, r5) =>
-          {
-            if (r5.Error != null)
-              throw r5.Error;
+          var dto = Question.CreateDto();
+          dto.Id = Guid.NewGuid();
 
-            Question = (PhraseEdit)r5.NewObject;
-            _InitialQuestionText = Question.Text;
-            _ModifiedQuestionText = "";
-            SaveQuestionButtonIsEnabled = true;
-            QuestionIsReadOnly = true;
-            UpdateEditQuestionButtonVisibilities();
-          });
+          newQuestionObj.LoadFromDtoBypassPropertyChecks(dto);
+          Question = newQuestionObj;
+
+          #region Save Question
+          Question = await Question.SaveAsync();
+          _InitialQuestionText = Question.Text;
+          _ModifiedQuestionText = "";
+          SaveQuestionButtonIsEnabled = true;
+          QuestionIsReadOnly = true;
+          UpdateEditQuestionButtonVisibilities();
+          #endregion
+
           #endregion
         }
-      });
+        //QUESTION NOT IN DB, BUT QUESTION IS NOT A CHILD
+        else
+        {
+          #region SAVE THE QUESTION DIRECTLY, B/C IT IS NOT A CHILD
+          Question = await Question.SaveAsync();
+          _InitialQuestionText = Question.Text;
+          _ModifiedQuestionText = "";
+          SaveQuestionButtonIsEnabled = true;
+          QuestionIsReadOnly = true;
+          UpdateEditQuestionButtonVisibilities();
+          #endregion
+        }
+      }
+      //QUESTION WAS FOUND IN DB
+      else
+      {
+        #region REASSIGN THE QUESTION WITH THE DBQUESTION, SAVE WITH THE MODIFIED TEXT
+        Question = dbQuestion;
+        Question.Text = _ModifiedQuestionText;
+        Question = await Question.SaveAsync();
+        _InitialQuestionText = Question.Text;
+        _ModifiedQuestionText = "";
+        SaveQuestionButtonIsEnabled = true;
+        QuestionIsReadOnly = true;
+        UpdateEditQuestionButtonVisibilities();
+        #endregion
+      }
 
       #endregion
 
@@ -545,7 +518,7 @@ namespace LearnLanguages.Study.ViewModels
         return Answer != null && Answer.IsValid && SaveAnswerButtonIsEnabled;
       }
     }
-    public void SaveAnswer()
+    public async Task SaveAnswer()
     {
       AnswerIsReadOnly = true;
       SaveAnswerButtonIsEnabled = false;
@@ -559,91 +532,63 @@ namespace LearnLanguages.Study.ViewModels
       Answer.Text = _InitialAnswerText;
 
       #region SEARCH IN DB FOR ANSWER (WITH INITIAL TEXT)
-      Business.PhrasesByTextAndLanguageRetriever.CreateNew(Answer, (s, r) =>
+      var retriever = await Business.PhrasesByTextAndLanguageRetriever.CreateNewAsync(Answer);
+
+      var dbAnswer = retriever.RetrievedSinglePhrase;
+      if (dbAnswer == null)
       {
-        if (r.Error != null)
-          throw r.Error;
-
-        var dbAnswer = r.Object.RetrievedSinglePhrase;
-        if (dbAnswer == null)
+        //ANSWER NOT IN DB, BUT ANSWER IS A CHILD
+        if (Answer.IsChild)
         {
-          //ANSWER NOT IN DB, BUT ANSWER IS A CHILD
-          if (Answer.IsChild)
-          {
-            //CANNOT SAVE THE ANSWER DIRECTLY BECAUSE IT IS A CHILD
+          //CANNOT SAVE THE ANSWER DIRECTLY BECAUSE IT IS A CHILD
 
-            #region CREATE NEW PHRASE EDIT, LOAD FROM ANSWER DTO, SAVE ANSWER
-            PhraseEdit.NewPhraseEdit((s3, r3) =>
-            {
-              if (r3.Error != null)
-                throw r3.Error;
+          #region CREATE NEW PHRASE EDIT, LOAD FROM ANSWER DTO, SAVE ANSWER
+          var newAnswerObj = await PhraseEdit.NewPhraseEditAsync();
 
-              var newAnswerObj = r3.Object;
-
-              Answer.Text = _ModifiedAnswerText;
-              var dto = Answer.CreateDto();
-              dto.Id = Guid.NewGuid();
-
-              newAnswerObj.LoadFromDtoBypassPropertyChecks(dto);
-              Answer = newAnswerObj;
-
-              #region Save Answer
-              Answer.BeginSave((s4, r4) =>
-              {
-                if (r4.Error != null)
-                  throw r4.Error;
-
-                Answer = (PhraseEdit)r4.NewObject;
-                _InitialAnswerText = Answer.Text;
-                _ModifiedAnswerText = "";
-                SaveAnswerButtonIsEnabled = true;
-                AnswerIsReadOnly = true;
-                UpdateEditAnswerButtonVisibilities();
-              });
-              #endregion
-            });
-            #endregion
-          }
-          //ANSWER NOT IN DB, BUT ANSWER IS NOT A CHILD
-          else
-          {
-            #region SAVE THE ANSWER DIRECTLY, B/C IT IS NOT A CHILD
-            Answer.BeginSave((s2, r2) =>
-            {
-              if (r2.Error != null)
-                throw r2.Error;
-
-              Answer = (PhraseEdit)r2.NewObject;
-              _InitialAnswerText = Answer.Text;
-              _ModifiedAnswerText = "";
-              SaveAnswerButtonIsEnabled = true;
-              AnswerIsReadOnly = true;
-              UpdateEditAnswerButtonVisibilities();
-            });
-            #endregion
-          }
-        }
-        //ANSWER WAS FOUND IN DB
-        else
-        {
-          #region REASSIGN THE ANSWER WITH THE DBANSWER, SAVE WITH THE MODIFIED TEXT
-          Answer = dbAnswer;
           Answer.Text = _ModifiedAnswerText;
-          Answer.BeginSave((s5, r5) =>
-          {
-            if (r5.Error != null)
-              throw r5.Error;
+          var dto = Answer.CreateDto();
+          dto.Id = Guid.NewGuid();
 
-            Answer = (PhraseEdit)r5.NewObject;
-            _InitialAnswerText = Answer.Text;
-            _ModifiedAnswerText = "";
-            SaveAnswerButtonIsEnabled = true;
-            AnswerIsReadOnly = true;
-            UpdateEditAnswerButtonVisibilities();
-          });
+          newAnswerObj.LoadFromDtoBypassPropertyChecks(dto);
+          Answer = newAnswerObj;
+
+          #region Save Answer
+          Answer = await Answer.SaveAsync();
+          _InitialAnswerText = Answer.Text;
+          _ModifiedAnswerText = "";
+          SaveAnswerButtonIsEnabled = true;
+          AnswerIsReadOnly = true;
+          UpdateEditAnswerButtonVisibilities();
+          #endregion
           #endregion
         }
-      });
+        //ANSWER NOT IN DB, BUT ANSWER IS NOT A CHILD
+        else
+        {
+          #region SAVE THE ANSWER DIRECTLY, B/C IT IS NOT A CHILD
+          Answer = await Answer.SaveAsync();
+          _InitialAnswerText = Answer.Text;
+          _ModifiedAnswerText = "";
+          SaveAnswerButtonIsEnabled = true;
+          AnswerIsReadOnly = true;
+          UpdateEditAnswerButtonVisibilities();
+          #endregion
+        }
+      }
+      //ANSWER WAS FOUND IN DB
+      else
+      {
+        #region REASSIGN THE ANSWER WITH THE DBANSWER, SAVE WITH THE MODIFIED TEXT
+        Answer = dbAnswer;
+        Answer.Text = _ModifiedAnswerText;
+        Answer = await Answer.SaveAsync();
+        _InitialAnswerText = Answer.Text;
+        _ModifiedAnswerText = "";
+        SaveAnswerButtonIsEnabled = true;
+        AnswerIsReadOnly = true;
+        UpdateEditAnswerButtonVisibilities();
+        #endregion
+      }
 
       #endregion
 
@@ -693,5 +638,10 @@ namespace LearnLanguages.Study.ViewModels
     #endregion
 
     #endregion
+
+    protected override Task ShowAsyncImpl()
+    {
+      throw new NotImplementedException();
+    }
   }
 }

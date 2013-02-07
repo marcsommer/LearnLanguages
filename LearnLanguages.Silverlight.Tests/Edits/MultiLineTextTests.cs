@@ -1,329 +1,187 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using LearnLanguages.Business;
-using Microsoft.Silverlight.Testing;
+
 using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
 using System.Linq;
 using Csla;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Silverlight.Testing;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.Tests
 {
   [TestClass]
+  [Tag("multilinetext")]
   [Tag("mlt")]
-  public class MultiLineTextTests : Microsoft.Silverlight.Testing.SilverlightTest
+  public class MultiLineTextTests : TestsBase
   {
-    private LanguageEdit _ServerEnglishLang;
-    private LanguageEdit _ServerSpanishLang;
-
-    //[ClassInitialize]
-    //[Asynchronous]
-    //public void InitializeMultiLineTextTests()
-    //{
-
-    //  //WE NEED TO UPDATE THE CLIENT SeedData.Ton IDS.  
-    //  var isLoaded = false;
-    //  var multiLineTextsCorrected = false;
-    //  Exception error = new Exception();
-    //  Exception errorMultiLineTextList = new Exception();
-    //  LanguageList allLanguages = null;
-    //  MultiLineTextList allMultiLineTexts = null;
-
-    //  LanguageList.GetAll((s, r) =>
-    //  {
-    //    #region Initialize Language Data
-    //    error = r.Error;
-    //    if (error != null)
-    //      throw error;
-
-    //    allLanguages = r.Object;
-    //    _ServerEnglishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Ton.EnglishText
-    //                          select language).First();
-
-    //    SeedData.Ton.EnglishLanguageDto.Id = _ServerEnglishLang.Id;
-
-    //    _ServerSpanishLang = (from language in allLanguages
-    //                          where language.Text == SeedData.Ton.SpanishText
-    //                          select language).First();
-
-    //    SeedData.Ton.SpanishLanguageDto.Id = _ServerSpanishLang.Id;
-
-    //    #endregion
-
-    //    isLoaded = true;
-
-    //    MultiLineTextList.GetAll((s2, r2) =>
-    //      {
-    //        errorMultiLineTextList = r2.Error;
-    //        if (errorMultiLineTextList != null)
-    //          throw errorMultiLineTextList;
-
-    //        allMultiLineTexts = r2.Object;
-
-    //        var serverHelloMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                           where multiLineText.Text == SeedData.Ton.HelloText &&
-    //                                                 multiLineText.Language.Text == SeedData.Ton.EnglishText
-    //                                           select multiLineText);
-    //        MultiLineTextEdit serverHelloMultiLineText = null;
-    //        if (serverHelloMultiLineTextQuery.Count() == 0) //we don't have the hello multiLineText in the db, so put it there
-    //        {
-    //          var multiLineText = allMultiLineTexts[0];
-    //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Ton.HelloText;
-    //          multiLineText.Language = _ServerEnglishLang;
-    //          multiLineText.ApplyEdit();
-    //          serverHelloMultiLineText = multiLineText;
-    //        }
-    //        else
-    //          serverHelloMultiLineText = serverHelloMultiLineTextQuery.First();
-
-
-    //        var serverHolaMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                          where multiLineText.Text == SeedData.Ton.HolaText &&
-    //                                                multiLineText.Language.Text == SeedData.Ton.EnglishText
-    //                                          select multiLineText);
-    //        MultiLineTextEdit serverHolaMultiLineText = null;
-    //        if (serverHolaMultiLineTextQuery.Count() == 0) //we don't have the Hola multiLineText in the db, so put it there
-    //        {
-    //          var multiLineText = allMultiLineTexts[1];
-    //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Ton.HolaText;
-    //          multiLineText.Language = _ServerSpanishLang;
-    //          multiLineText.ApplyEdit();
-    //          serverHolaMultiLineText = multiLineText;
-    //        }
-    //        else
-    //          serverHolaMultiLineText = serverHolaMultiLineTextQuery.First();
-
-    //        var serverLongMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                          where multiLineText.Text == SeedData.Ton.LongText &&
-    //                                                multiLineText.Language.Text == SeedData.Ton.EnglishText
-    //                                          select multiLineText);
-    //        MultiLineTextEdit serverLongMultiLineText = null;
-    //        if (serverLongMultiLineTextQuery.Count() == 0) //we don't have the Long multiLineText in the db, so put it there
-    //        {
-    //          var multiLineText = allMultiLineTexts[2];
-    //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Ton.LongText;
-    //          multiLineText.Language = _ServerEnglishLang;
-    //          multiLineText.ApplyEdit();
-    //          serverLongMultiLineText = multiLineText;
-    //        }
-    //        else
-    //          serverLongMultiLineText = serverLongMultiLineTextQuery.First();
-
-
-    //        var serverDogMultiLineTextQuery = (from multiLineText in allMultiLineTexts
-    //                                         where multiLineText.Text == SeedData.Ton.DogText &&
-    //                                               multiLineText.Language.Text == SeedData.Ton.EnglishText
-    //                                         select multiLineText);
-    //        MultiLineTextEdit serverDogMultiLineText = null;
-    //        if (serverDogMultiLineTextQuery.Count() == 0) //we don't have the Dog multiLineText in the db, so put it there
-    //        {
-    //          var multiLineText = allMultiLineTexts[3];
-    //          multiLineText.BeginEdit();
-    //          multiLineText.Text = SeedData.Ton.DogText;
-    //          multiLineText.Language = _ServerSpanishLang;
-    //          multiLineText.ApplyEdit();
-    //          serverDogMultiLineText = multiLineText;
-    //        }
-    //        else
-    //          serverDogMultiLineText = serverDogMultiLineTextQuery.First();
-
-    //        var validUserId = serverHelloMultiLineText.UserId;
-    //        SeedData.Ton.GetTestValidUserDto().Id = validUserId;
-
-    //        SeedData.Ton.HelloMultiLineTextDto.Id = serverHelloMultiLineText.Id;
-    //        SeedData.Ton.HolaMultiLineTextDto.Id = serverHolaMultiLineText.Id;
-    //        SeedData.Ton.LongMultiLineTextDto.Id = serverLongMultiLineText.Id;
-    //        SeedData.Ton.DogMultiLineTextDto.Id = serverDogMultiLineText.Id;
-
-    //        SeedData.Ton.HelloMultiLineTextDto.UserId = serverHelloMultiLineText.UserId;
-    //        SeedData.Ton.HolaMultiLineTextDto.UserId = serverHolaMultiLineText.UserId;
-    //        SeedData.Ton.LongMultiLineTextDto.UserId = serverLongMultiLineText.UserId;
-    //        SeedData.Ton.DogMultiLineTextDto.UserId = serverDogMultiLineText.UserId;
-
-    //        multiLineTextsCorrected = true;
-    //      });
-    //  });
-
-    //  EnqueueConditional(() => isLoaded);
-    //  EnqueueConditional(() => multiLineTextsCorrected);
-    //  EnqueueCallback(() => { Assert.IsNull(error); },
-    //                  () => { Assert.IsNotNull(allLanguages); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.EnglishId); },
-    //                  () => { Assert.AreNotEqual(Guid.Empty, SeedData.Ton.SpanishId); },
-    //                  () => { Assert.IsTrue(allLanguages.Count > 0); });
-    //  EnqueueTestComplete();
-    //}
 
     [TestMethod]
     [Asynchronous]
-    public void CREATE_NEW()
+    public async Task CREATE_NEW()
     {
       var isCreated = false;
       MultiLineTextEdit newMultiLineTextEdit = null;
-      Exception newError = new Exception();
 
-      MultiLineTextEdit.NewMultiLineTextEdit((s, r) =>
-        {
-          newError = r.Error;
-          if (newError != null)
-            throw newError;
+      var isAsyncComplete = false;
+      var hasError = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
+      {
+        newMultiLineTextEdit = await MultiLineTextEdit.NewMultiLineTextEditAsync();
+        Assert.IsTrue(newMultiLineTextEdit.User.IsAuthenticated);
+        Assert.AreEqual(Csla.ApplicationContext.User.Identity.Name,
+          newMultiLineTextEdit.Username);
+      }
+      catch
+      {
+        hasError = true;
+      }
+      finally
+      {
+        EnqueueCallback(
+                        () => Assert.IsFalse(hasError),
+                        () => Assert.IsNotNull(newMultiLineTextEdit)
+                        );
 
-          newMultiLineTextEdit = r.Object;
-          Assert.IsTrue(newMultiLineTextEdit.User.IsAuthenticated);
-          Assert.AreEqual(Csla.ApplicationContext.User.Identity.Name, newMultiLineTextEdit.Username);
-          isCreated = true;
-        });
-      EnqueueConditional(() => isCreated);
-      EnqueueCallback(
-                      () => { Assert.IsNotNull(newMultiLineTextEdit); },
-                      () => { Assert.IsNull(newError); }
-                      );
-      EnqueueTestComplete();
+        EnqueueTestComplete();
+        Teardown();
+        isAsyncComplete = true;
+      }
     }
 
     [TestMethod]
     [Asynchronous]
-    public void GET()
+    public async Task GET()
     {
       Guid testId = Guid.Empty;
-      var allLoaded = false;
-      var isLoaded = false;
-      Exception getAllError = new Exception();
-      Exception error = new Exception();
       MultiLineTextEdit multiLineTextEdit = null;
+      var isAsyncComplete = false;
+      var hasError = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
+      {
+        var allMultiLineTexts = await MultiLineTextList.GetAllAsync();
 
-      MultiLineTextList.GetAll((s1, r1) =>
-        {
-          getAllError = r1.Error;
-          if (getAllError != null)
-            throw r1.Error;
+        testId = allMultiLineTexts.First().Id;
+        multiLineTextEdit = await MultiLineTextEdit.GetMultiLineTextEditAsync(testId);
+      }
+      catch
+      {
+        hasError = true;
+      }
+      finally
+      {
+        EnqueueCallback(
+                        () => Assert.IsFalse(hasError),
+                        () => Assert.IsNotNull(multiLineTextEdit),
+                        () => Assert.IsTrue(multiLineTextEdit.Lines.Count >= 2),
+                        () => Assert.AreEqual(testId, multiLineTextEdit.Id)
+                        );
 
-          testId = r1.Object.First().Id;
-          allLoaded = true;
-          MultiLineTextEdit.GetMultiLineTextEdit(testId, (s, r) =>
-          {
-            error = r.Error;
-            multiLineTextEdit = r.Object;
-            isLoaded = true;
-          });
-        });
-
-
-      EnqueueConditional(() => isLoaded);
-      EnqueueConditional(() => allLoaded);
-      EnqueueCallback(() => { Assert.IsNull(error); },
-                      () => { Assert.IsNull(getAllError); },
-                      () => { Assert.IsNotNull(multiLineTextEdit); },
-                      () => { Assert.IsTrue(multiLineTextEdit.Lines.Count >= 2); },
-        //() => { Assert.IsTrue(multiLineTextEdit.Lines.Count == multiLineTextEdit.LineIds.Count); },
-                      () => { Assert.AreEqual(testId, multiLineTextEdit.Id); });
-      EnqueueTestComplete();
+        EnqueueTestComplete();
+        Teardown();
+        isAsyncComplete = true;
+      }
     }
 
     [TestMethod]
     [Asynchronous]
-    public void NEW_EDIT_BEGINSAVE_GET()
+    public async Task NEW_EDIT_BEGINSAVE_GET()
     {
       MultiLineTextEdit newMultiLineTextEdit = null;
       MultiLineTextEdit savedMultiLineTextEdit = null;
       MultiLineTextEdit gottenMultiLineTextEdit = null;
 
-      var isNewed = false;
-      var isEdited = false;
-      var isSaved = false;
-      var isGotten = false;
-
+      string mltTitle = "My Test MLT Title Here";
       string lineAText = "MultiLineTextTests.neweditbeginsaveget.Test Line A Text.  This is line A in English.";
-      string lineBText = "MultiLineTextTests.neweditbeginsaveget.Test Line BBBB Text.  This is line B in Spanish.";
+      string lineBText = "MultiLineTextTests.neweditbeginsaveget.Test Line BBBB Text.  This is line B in English.";
       LineEdit lineA = null;
       LineEdit lineB = null;
-      
-      //NEW
-      MultiLineTextEdit.NewMultiLineTextEdit((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-          newMultiLineTextEdit = r.Object;
-          isNewed = true;
 
-          //EDIT
-          //newMultiLineTextEdit.Lines.add
+      bool gottenMultiLineTextLinesCountIsTwo = false;
+      bool gottenMultiLineTextContainsLineA = false;
+      bool gottenMultiLineTextContainsLineB = false;
 
-          newMultiLineTextEdit.Lines.AddedNew += (s5, r5) =>
-            {
-              if (lineA == null)
-              {
-                lineA = r5.NewObject;
-                lineA.Id = Guid.NewGuid();
-                lineA.Phrase.Text = lineAText;
-                lineA.Phrase.LanguageId = SeedData.Ton.EnglishId;
-                //lineA.Username = Csla.ApplicationContext.User.Identity.Name;
-                //lineA.UserId = SeedData.Ton.GetTestValidUserDto().Id;
-              }
-              else
-              {
-                lineB = r5.NewObject;
-                lineB.Id = Guid.NewGuid();
-                lineB.Phrase.Text = lineBText;
-                lineB.Phrase.LanguageId = SeedData.Ton.SpanishId;
-                //lineB.Username = Csla.ApplicationContext.User.Identity.Name;
-                //lineB.UserId = SeedData.Ton.GetTestValidUserDto().Id;
-              }
-            };
+      var isAsyncComplete = false;
+      var hasError = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
+      {
+        //NEW UP THE MULTILINETEXT
+        newMultiLineTextEdit = await MultiLineTextEdit.NewMultiLineTextEditAsync();
 
-          newMultiLineTextEdit.Lines.AddNew();
-          newMultiLineTextEdit.Lines.AddNew();
-          isEdited = true;
+        //EDIT
 
-          //newMultiLineTextEdit.AddLine(lineA);
-          //newMultiLineTextEdit.AddLine(lineB);
+        //TITLE MLT
+        newMultiLineTextEdit.Title = mltTitle;
 
-          //SAVE
-          newMultiLineTextEdit.BeginSave((s2, r2) =>
-            {
-              if (r2.Error != null)
-                throw r2.Error;
+        //CREATE LINES IN A LINELIST
 
-              savedMultiLineTextEdit = (MultiLineTextEdit)r2.NewObject;
-              isSaved = true;
+        //1) CREATE LINE INFO DICTIONARY
+        var lineInfoDictionary = new Dictionary<int, string>();
+        lineInfoDictionary.Add(0, lineAText);
+        lineInfoDictionary.Add(1, lineBText);
 
-              //GET (CONFIRM SAVE)
-              MultiLineTextEdit.GetMultiLineTextEdit(savedMultiLineTextEdit.Id, (s3, r3) =>
-                {
-                  if (r3.Error != null)
-                    throw r3.Error;
+        //2) LANGUAGE TEXT
+        var linesLanguageText = SeedData.Ton.EnglishText;
 
-                  gottenMultiLineTextEdit = r3.Object;
-                  isGotten = true;
-                });
-            });
-        });
+        //3) CRITERIA
+        var criteria = new Business.Criteria.LineInfosCriteria(linesLanguageText, lineInfoDictionary);
 
-      EnqueueConditional(() => isNewed);
-      EnqueueConditional(() => isEdited);
-      EnqueueConditional(() => isSaved);
-      EnqueueConditional(() => isGotten);
-      EnqueueCallback(
-                      () => { Assert.IsNotNull(newMultiLineTextEdit); },
-                      () => { Assert.IsNotNull(savedMultiLineTextEdit); },
-                      () => { Assert.IsNotNull(gottenMultiLineTextEdit); },
-                      () => { Assert.IsNotNull(lineA); },
-                      () => { Assert.IsNotNull(lineB); },
-                      () => { Assert.IsTrue(gottenMultiLineTextEdit.Lines.Count >= 2); },
-                      () => { Assert.AreEqual(savedMultiLineTextEdit.Id, gottenMultiLineTextEdit.Id); }
-                     );
+        //4) CREATE LINES
+        var lineList = await LineList.NewLineListAsync(criteria);
 
-      EnqueueTestComplete();
+        //5) ASSIGN LINES
+        newMultiLineTextEdit.Lines = lineList;
+
+        savedMultiLineTextEdit = await newMultiLineTextEdit.SaveAsync();
+
+        //GET (CONFIRM SAVE)
+        gottenMultiLineTextEdit = 
+          await MultiLineTextEdit.GetMultiLineTextEditAsync(savedMultiLineTextEdit.Id);
+        gottenMultiLineTextLinesCountIsTwo = (gottenMultiLineTextEdit.Lines.Count == 2);
+
+        gottenMultiLineTextContainsLineA = (from line in gottenMultiLineTextEdit.Lines
+                                            where line.LineNumber == 0
+                                            select line).First().Phrase.Text == lineAText;
+        gottenMultiLineTextContainsLineB = (from line in gottenMultiLineTextEdit.Lines
+                                            where line.LineNumber == 1
+                                            select line).First().Phrase.Text == lineBText;
+      }
+      catch
+      {
+        hasError = true;
+      }
+      finally
+      {
+        EnqueueCallback(
+                        () => Assert.IsFalse(hasError),
+                        () => Assert.IsTrue(gottenMultiLineTextLinesCountIsTwo),
+                        () => Assert.IsTrue(gottenMultiLineTextContainsLineA),
+                        () => Assert.IsTrue(gottenMultiLineTextContainsLineB),
+                        () => Assert.IsNotNull(newMultiLineTextEdit),
+                        () => Assert.IsNotNull(savedMultiLineTextEdit),
+                        () => Assert.IsNotNull(gottenMultiLineTextEdit),
+                        () => Assert.AreEqual(savedMultiLineTextEdit.Id, gottenMultiLineTextEdit.Id)
+                        );
+
+        EnqueueTestComplete();
+        Teardown();
+        isAsyncComplete = true;
+      }
     }
 
     //[TestMethod]
     //[Asynchronous]
     //[ExpectedException(typeof(ExpectedException))]
-    //public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
+    //public async TaskNEW_EDIT_BEGINSAVE_GET_DELETE_GET()
     //{
     //  MultiLineTextEdit newMultiLineTextEdit = null;
     //  MultiLineTextEdit savedMultiLineTextEdit = null;

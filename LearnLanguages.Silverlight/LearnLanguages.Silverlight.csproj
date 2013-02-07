@@ -12,7 +12,7 @@
     <RootNamespace>LearnLanguages.Silverlight</RootNamespace>
     <AssemblyName>LearnLanguages.Silverlight</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>true</SilverlightApplication>
     <SupportedCultures>
@@ -31,6 +31,11 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <LinkedServerProject>
     </LinkedServerProject>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -48,6 +53,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,29 +64,72 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT, STAGING</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoConfig>true</NoConfig>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro">
       <HintPath>..\dependencies\caliburn_silverlight\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\sl50\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Silverlight.4.5.10\lib\sl50\Csla.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CompilerServices.AsyncTargetingPack.1.0.0\lib\sl50\Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217" />
+    <Reference Include="System.ComponentModel.Composition, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.Composition.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition.Initialization, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=5.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Controls, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Windows.Controls.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Controls, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Controls.Data, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.DataForm.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.Input, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.DomainServices, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Input, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Navigation, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Pivot, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Theming.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Data, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.Windows.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
@@ -97,112 +146,60 @@
     <Compile Include="Args\QuestionAnswerArgs.cs" />
     <Compile Include="Delegates\QuestionAnswerCallback.cs" />
     <Compile Include="DebugEventMessageListener.cs" />
-    <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
-    <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />
-    <Compile Include="Interfaces\ICanExpand.cs" />
-    <Compile Include="EventMessages\LanguageEventMessage.cs" />
-    <Compile Include="EventMessages\LanguageAddedEventMessage.cs" />
-    <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
-    <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
     <Compile Include="Interfaces\IViewModelMetadata.cs" />
+    <Compile Include="MainAppModule.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MefBootstrapper.cs" />
-    <Compile Include="NavigationController.cs" />
-    <Compile Include="NavigationSet.cs" />
+    <Compile Include="Pages\AddSongPage.cs" />
+    <Compile Include="Pages\LoginPage.cs" />
+    <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\Add\AddSong\AddSongMultiLineTextEditViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddSong\AddSongViewModel.cs" />
-    <Compile Include="ViewModels\Bases\NavigationSetTitleViewModelBase.cs" />
+    <Compile Include="ViewModels\Add\Song\AddSongMultiLineTextEditViewModel.cs" />
+    <Compile Include="ViewModels\Add\Song\AddSongViewModel.cs" />
     <Compile Include="ViewModels\Core\ThinkingPanelViewModel.cs" />
     <Compile Include="ViewModels\Core\HomeViewModel.cs" />
-    <Compile Include="ViewModels\Core\NavigationSetViewModel.cs" />
-    <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongPhraseEditViewModel.cs" />
-    <Compile Include="ViewModels\IWantToLearn\IWantToLearnViewModel.cs" />
-    <Compile Include="ViewModels\IWantToLearn\IWantToLearnASongViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Add\AddSongNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\IWantToLearn\IWantToLearnASongNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Study\StudyASongNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\ChugNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\AdminNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\ProgressNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\ReviewNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\TestNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\EditNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\NavigationSetTitles\StudyNavigationSetTitleViewModel.cs" />
-    <Compile Include="ViewModels\Study\AskUserExtraDataViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddLanguage\AddLanguageViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddLanguage\AddLanguageLanguageEditViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationViewModel.cs" />
-    <Compile Include="ViewModels\Bases\TranslationEditViewModelBaseOfT.cs" />
-    <Compile Include="ViewModels\Bases\TranslationPhrasesItemViewModelBase.cs" />
     <Compile Include="ViewModels\Core\LoginFailedViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Add\AddLanguageNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Study\StudyNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\View\ViewLanguagesNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\View\ViewTranslationsNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowViewModel.cs" />
-    <Compile Include="ViewModels\Study\AskHowMuchDoYouKnowResponseViewModel.cs" />
-    <Compile Include="EventMessages\NativeLanguageChangedEventMessage.cs" />
-    <Compile Include="ViewModels\Study\StudyAPhraseViewModel.cs" />
-    <Compile Include="ViewModels\Study\StudyASongItemViewModel.cs" />
-    <Compile Include="ViewModels\Study\StudyASongViewModel.cs" />
-    <Compile Include="ViewModels\Study\QuestionAnswerViewModel.cs" />
-    <Compile Include="ViewModels\Study\StudyViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesItemViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewLanguages\ViewLanguagesViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsItemViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewTranslations\ViewTranslationsViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Add\AddTranslationNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddTranslation\AddTranslationTranslationEditViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewPhrases\ViewPhrasesItemViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\View\ViewPhrasesNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\View\ViewPhrases\ViewPhrasesViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\AuthenticationStatusNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\AuthenticationStatusViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Add\AddUserNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddUser\AddUserViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddPhrase\AddPhraseViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\Add\AddPhraseNavigationButtonViewModel.cs" />
-    <Compile Include="ViewModels\Core\LanguageEditViewModel.cs" />
-    <Compile Include="ViewModels\Add\AddPhrase\AddPhrasePhraseEditViewModel.cs" />
-    <Compile Include="ViewModels\Core\LanguageSelectorViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\LoginNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\LoginViewModel.cs" />
-    <Compile Include="ViewModels\NavigationButtons\LogoutNavigationButtonViewModel.cs" />
     <Compile Include="ViewModels\Core\LogoutViewModel.cs" />
-    <Compile Include="ViewModels\Bases\NavigationButtonViewModelBase.cs" />
-    <Compile Include="ViewModels\Core\NavigationPanelViewModel.cs" />
     <Compile Include="ViewModels\MetaDataAttributes\ViewModelMetadataAttribute.cs" />
     <Compile Include="ViewModels\Core\ShellViewModel.cs" />
-    <Compile Include="ViewViewModelResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewViewModelResources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  
+  <ItemGroup>
+    <!-- CUSTOM SERVICE REFERENCES FILES-->
+    <Content Include="ServiceReferences.ClientConfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="ServiceReferences.Debug.ClientConfig">
+      <DependentUpon>ServiceReferences.ClientConfig</DependentUpon>
+    </None>
+    <None Include="ServiceReferences.Staging.ClientConfig">
+      <DependentUpon>ServiceReferences.ClientConfig</DependentUpon>
+    </None>
+    <None Include="ServiceReferences.Release.ClientConfig">
+      <DependentUpon>ServiceReferences.ClientConfig</DependentUpon>
+    </None>
+  </ItemGroup>
+  
   <ItemGroup>
     <Page Include="Views\Core\ThinkingPanelView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Core\HomeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\StudyASongNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -218,67 +215,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationSetTitles\AdminNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationSetTitles\TestNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationSetTitles\ProgressNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationSetTitles\ReviewNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationSetTitles\EditNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationSetTitles\ChugNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationSetTitles\StudyNavigationSetTitleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Core\NavigationSetView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\AddSongNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Add\AddSong\AddSongView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Add\AddSong\AddSongMultiLineTextEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\IWantToLearn\IWantToLearnASong\IWantToLearnASongAddSongMultiLineTextEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\IWantToLearnASongNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\IWantToLearnNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\IWantToLearn\IWantToLearnView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\IWantToLearn\IWantToLearnASong\IWantToLearnASongView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -290,10 +231,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtons\StudyNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Study\AskHowMuchDoYouKnowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -301,10 +238,6 @@
     <Page Include="Views\Study\StudyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NavigationButtons\ViewLanguagesNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\View\ViewLanguages\ViewLanguagesView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -314,19 +247,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtons\AddLanguageNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Add\AddLanguage\AddLanguageLanguageEditView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Add\AddLanguage\AddLanguageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\ViewTranslationsNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -350,10 +275,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtons\AddTranslationNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Add\AddTranslation\AddTranslationPhrasesItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -370,17 +291,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtons\ViewPhrasesNavigationButtonView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\View\ViewPhrases\ViewPhrasesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NavigationButtons\AddPhraseNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Core\LanguageEditView.xaml">
       <SubType>Designer</SubType>
@@ -402,19 +315,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NavigationButtons\AddUserNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\AuthenticationStatusNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Core\AuthenticationStatusView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationButtons\LoginNavigationButtonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -422,15 +323,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NavigationButtons\LogoutNavigationButtonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Core\LogoutView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Core\NavigationPanelView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -438,20 +331,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\OutOfBrowserSettings.xml" />
     <Resource Include="Content\progress.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Analysis.Client\LearnLanguages.Analysis.Client.csproj">
+      <Project>{4ac0d8f4-1f5d-43a8-8182-38198cea41d5}</Project>
+      <Name>LearnLanguages.Analysis.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
       <Project>{4314B702-58FE-44EC-BF55-61CC4483C05C}</Project>
       <Name>LearnLanguages.Business.Client</Name>
@@ -461,7 +352,7 @@
       <Name>LearnLanguages.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.CompressedProxy\LearnLanguages.CompressedProxy.csproj">
-      <Project>{C6D3C11D-57E0-49CF-B9B8-7BB5710EB986}</Project>
+      <Project>{c6d3c11d-57e0-49cf-b9b8-7bb5710eb986}</Project>
       <Name>LearnLanguages.CompressedProxy</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
@@ -472,13 +363,17 @@
       <Project>{DFC14799-1426-4266-A064-4B880612559F}</Project>
       <Name>LearnLanguages.History.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.Client.csproj">
+    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.csproj">
       <Project>{1CEB7E12-3D55-4EE4-BFCD-1AAB6F64F024}</Project>
-      <Name>LearnLanguages.Navigation.Client</Name>
+      <Name>LearnLanguages.Navigation</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
       <Project>{98EE87B2-152D-48D8-B509-93EEB92059BE}</Project>
       <Name>LearnLanguages.Offer.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Silverlight.Common\LearnLanguages.Silverlight.Common.csproj">
+      <Project>{671298a4-bd06-4e12-a844-d6dd0147d5e6}</Project>
+      <Name>LearnLanguages.Silverlight.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj">
       <Project>{02C0F892-7DD3-41FA-96C2-D02D4D4BB6C2}</Project>
@@ -487,16 +382,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AppResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ViewViewModelResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ViewViewModelResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Feedback\" />
+    <Folder Include="ViewModels\Bases\" />
+    <Folder Include="ViewModels\Study\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -506,6 +399,17 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="BeforeBuild" Condition="Exists('ServiceReferences.$(Configuration).ClientConfig')">
+    <Move SourceFiles="ServiceReferences.ClientConfig" DestinationFiles="ServiceReferences.Build.ClientConfig" />
+
+    <TransformXml Source="ServiceReferences.Build.ClientConfig" Destination="ServiceReferences.ClientConfig" Transform="ServiceReferences.$(Configuration).ClientConfig" />
+  </Target>
+  <Target Name="AfterBuild" Condition="Exists('ServiceReferences.Build.ClientConfig')">
+    <Delete Files="ServiceReferences.ClientConfig" />
+    <Move SourceFiles="ServiceReferences.Build.ClientConfig"
+          DestinationFiles="ServiceReferences.ClientConfig" />
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">

@@ -9,7 +9,7 @@ using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
 #endif
 using LearnLanguages.Business.Security;
-
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -17,93 +17,6 @@ namespace LearnLanguages.Business
   public class LanguageEdit : Common.CslaBases.BusinessBase<LanguageEdit, LanguageDto>, IHaveId
   {
     #region Factory Methods
-
-    #region Silverlight Factory Methods
-#if SILVERLIGHT
-    /// <summary>
-    /// This happens DataPortal.ProxyModes.LocalOnly
-    /// </summary>
-    /// <param name="callback"></param>
-    public static void NewLanguageEdit(EventHandler<DataPortalResult<LanguageEdit>> callback)
-    {
-      //DataPortal.BeginCreate<LanguageEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<LanguageEdit>(callback);
-    }
-    ///// <summary>
-    ///// This happens DataPortal.ProxyModes.LocalOnly
-    ///// </summary>
-    ///// <param name="id"></param>
-    ///// <param name="callback"></param>
-    //public static void NewLanguageEdit(Guid id, EventHandler<DataPortalResult<LanguageEdit>> callback)
-    //{
-    //  DataPortal.BeginCreate<LanguageEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-    //}
-
-    public static void GetLanguageEdit(Guid id, EventHandler<DataPortalResult<LanguageEdit>> callback)
-    {
-      DataPortal.BeginFetch<LanguageEdit>(id, callback);
-    }
-
-    public static void GetLanguageEdit(string languageText, EventHandler<DataPortalResult<LanguageEdit>> callback)
-    {
-      LanguageEdit retLanguage = null;
-
-      //HACK: GETLANGUAGEEDIT BY LANGUAGE TEXT.  RIGHT NOW, THIS GETALL'S THE LANGUAGES AND LOOKS IN THAT RESULT..  NEED TO IMPLEMENT THIS IN LANGUAGEDAL (GETLANGUAGEBYTEXT).
-      LanguageList.GetAll((s, r) =>
-      {
-        DataAccess.Exceptions.GeneralDataAccessException exception = null;
-        if (r.Error != null)
-          throw new DataAccess.Exceptions.GetAllFailedException(r.Error);
-        var allLanguages = r.Object;
-
-        try
-        {
-          var results = (from language in allLanguages
-                         where language.Text == languageText
-                         select language);
-
-          if (results.Count() > 0)
-            retLanguage = results.First();
-        }
-        catch (Exception ex)
-        {
-          exception = new DataAccess.Exceptions.GeneralDataAccessException(ex);
-        }
-        finally
-        {
-          callback(null, new DataPortalResult<LanguageEdit>(retLanguage, exception, null));
-        }
-      });
-    }
-
-    public static void GetDefaultLanguageId(EventHandler<DataPortalResult<Guid>> callback)
-    {
-      LanguageList.GetAll((s, r) =>
-        {
-          DataAccess.Exceptions.GeneralDataAccessException exception = null;
-          if (r.Error != null)
-            throw new DataAccess.Exceptions.GetAllFailedException(r.Error);
-          var allLanguages = r.Object;
-          Guid defaultLanguageId = Guid.Empty;
-          try
-          {
-            defaultLanguageId = (from language in allLanguages
-                                 where language.Text == DalResources.DefaultEnglishLanguageText
-                                 select language).First().Id;
-          }
-          catch (Exception ex)
-          {
-            exception = new DataAccess.Exceptions.GeneralDataAccessException(ex);
-          }
-          finally
-          {
-            callback(null, new DataPortalResult<Guid>(defaultLanguageId, exception, null));
-          }
-        });
-    }
-
-#endif
-    #endregion
 
     #region Wpf Factory Methods
 #if !SILVERLIGHT
@@ -146,6 +59,65 @@ namespace LearnLanguages.Business
     }
 
 #endif
+    #endregion
+
+    #region Async Factory Methods
+
+    /// <summary>
+    /// Created on the server.
+    /// </summary>
+    public static async Task<LanguageEdit> NewLanguageEditAsync()
+    {
+      return await DataPortal.CreateAsync<LanguageEdit>();
+    }
+
+    public static async Task<LanguageEdit> GetLanguageEditAsync(Guid id)
+    {
+      return await DataPortal.FetchAsync<LanguageEdit>(id);
+    }
+
+    public static async Task<LanguageEdit> GetLanguageEditAsync(string languageText)
+    {
+      LanguageEdit retLanguage = null;
+
+      //HACK: GETLANGUAGEEDIT BY LANGUAGE TEXT.  RIGHT NOW, THIS GETALL'S THE LANGUAGES AND LOOKS IN THAT RESULT..  NEED TO IMPLEMENT THIS IN LANGUAGEDAL (GETLANGUAGEBYTEXT).
+      var allLanguages = await LanguageList.GetAllAsync();
+      try
+      {
+        var results = (from language in allLanguages
+                       where language.Text == languageText
+                       select language);
+
+        if (results.Count() > 0)
+          retLanguage = results.First();
+
+        return retLanguage;
+      }
+      catch (Exception ex)
+      {
+        throw new DataAccess.Exceptions.GeneralDataAccessException(ex);
+      }
+    }
+
+    public static async Task<Guid> GetDefaultLanguageIdAsync()
+    {
+      var allLanguages = await LanguageList.GetAllAsync();
+
+      Guid defaultLanguageId = Guid.Empty;
+      try
+      {
+        defaultLanguageId = (from language in allLanguages
+                             where language.Text == DalResources.DefaultEnglishLanguageText
+                             select language).First().Id;
+
+        return defaultLanguageId;
+      }
+      catch (Exception ex)
+      {
+        throw new DataAccess.Exceptions.GeneralDataAccessException(ex);
+      }
+    }
+
     #endregion
 
     #region Shared Factory Methods
@@ -196,10 +168,10 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User
+    public static readonly PropertyInfo<UserIdentity> UserProperty =
+      RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    public UserIdentity User
     {
       get { return GetProperty(UserProperty); }
       private set { LoadProperty(UserProperty, value); }
@@ -216,7 +188,7 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
     }
 
@@ -233,9 +205,10 @@ namespace LearnLanguages.Business
       return retDto;
     }
 
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected override async Task<LanguageEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
 
     /// <summary>
@@ -330,10 +303,10 @@ namespace LearnLanguages.Business
 
     #region WPF DP_XYZ
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETFX_CORE
 
     [Transactional(TransactionalTypes.TransactionScope)]
-    protected override void DataPortal_Create()
+    protected void DataPortal_Create()
     {
       using (var dalManager = DalFactory.GetDalManager())
       {

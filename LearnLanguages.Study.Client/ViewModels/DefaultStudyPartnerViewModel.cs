@@ -50,8 +50,8 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
-    private IViewModelBase _StudyItemViewModel;
-    public IViewModelBase StudyItemViewModel
+    private StudyItemViewModelBase _StudyItemViewModel;
+    public StudyItemViewModelBase StudyItemViewModel
     {
       get { return _StudyItemViewModel; }
       set
@@ -59,6 +59,13 @@ namespace LearnLanguages.Study.ViewModels
         if (value != _StudyItemViewModel)
         {
           _StudyItemViewModel = value;
+          if (_StudyItemViewModel is Interfaces.IStudyItemViewModelBase)
+          {
+            var studyItemTitle = ((Interfaces.IStudyItemViewModelBase)_StudyItemViewModel).StudyItemTitle;
+            //IF THE STUDYITEMTITLE ISN'T EMPTY, THEN WE ASSIGN IT TO OUR STUDY TITLE. 
+            //ELSE WE USE THE DEFAULT
+            StudyTitle = studyItemTitle != "" ? studyItemTitle : StudyResources.DefaultStudyTitle;
+          }
           NotifyOfPropertyChange(() => StudyItemViewModel);
         }
       }

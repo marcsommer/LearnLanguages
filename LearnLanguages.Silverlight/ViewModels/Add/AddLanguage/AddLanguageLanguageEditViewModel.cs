@@ -2,6 +2,8 @@
 using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
+using System.Threading.Tasks;
+using LearnLanguages.Common.EventMessages;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -11,26 +13,22 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public string LabelLanguageText { get { return ViewViewModelResources.LabelAddLanguageLanguageText; } }
 
-    public override void Save()
+    public override async Task SaveAsync()
     {
-      Model.BeginSave((s, r) =>
-       {
-         try
-         {
-           if (r.Error != null)
-             throw r.Error;
-           Model = (LanguageEdit)r.NewObject;
-           NotifyOfPropertyChange(() => CanSave);
-           Services.EventAggregator.Publish(new EventMessages.LanguageAddedEventMessage(Model.Text));
-         }
-         catch (Csla.DataPortalException dpex)
-         {
-           var errorMsgLanguageTextAlreadyExists =
-             DataAccess.Exceptions.LanguageTextAlreadyExistsException.GetDefaultErrorMessage(Model.Text);
-           if (dpex.Message.Contains(errorMsgLanguageTextAlreadyExists))
-             System.Windows.MessageBox.Show(errorMsgLanguageTextAlreadyExists);
-         }
-       });  
+      try
+      {
+        var model = await Model.SaveAsync();
+        Model = model;
+        NotifyOfPropertyChange(() => CanSave);
+        Services.EventAggregator.Publish(new LanguageAddedEventMessage(Model.Text));
+      }
+      catch (Csla.DataPortalException dpex)
+      {
+        var errorMsgLanguageTextAlreadyExists =
+          DataAccess.Exceptions.LanguageTextAlreadyExistsException.GetDefaultErrorMessage(Model.Text);
+        if (dpex.Message.Contains(errorMsgLanguageTextAlreadyExists))
+          System.Windows.MessageBox.Show(errorMsgLanguageTextAlreadyExists);
+      }
     }
   }
 }

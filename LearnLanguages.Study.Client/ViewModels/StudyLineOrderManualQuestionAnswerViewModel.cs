@@ -21,6 +21,7 @@ namespace LearnLanguages.Study.ViewModels
 
     public StudyLineOrderManualQuestionAnswerViewModel()
     {
+      StudyItemTitle = StudyResources.StudyLineManualQuestionAnswerStudyItemTitle;
       //Services.EventAggregator.Subscribe(this);
     }
 
@@ -222,7 +223,7 @@ namespace LearnLanguages.Study.ViewModels
       Answer = Line.Phrase.Text;
     }
 
-    public override void Show(ExceptionCheckCallback callback)
+    public void Show(ExceptionCheckCallback callback)
     {
       base.Show(callback);
       _DateTimeQuestionShown = DateTime.Now;
@@ -286,5 +287,10 @@ namespace LearnLanguages.Study.ViewModels
     }
 
     #endregion
+
+    protected override System.Threading.Tasks.Task ShowAsyncImpl()
+    {
+      throw new NotImplementedException();
+    }
   }
 }

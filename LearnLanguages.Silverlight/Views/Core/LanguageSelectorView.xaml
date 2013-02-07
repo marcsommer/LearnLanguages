@@ -15,7 +15,7 @@
                   SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" 
                   IsEnabled="{Binding Path=IsEnabled}"/>
 
-        <Button x:Name="AddLanguage" Content="+" ToolTipService.ToolTip="{Binding Path=AddLanguageToolTip}"/>
+        <Button x:Name="AddLanguage" Content="+" Width="30" ToolTipService.ToolTip="{Binding Path=AddLanguageToolTip}"/>
       </StackPanel>
 
     </Grid>

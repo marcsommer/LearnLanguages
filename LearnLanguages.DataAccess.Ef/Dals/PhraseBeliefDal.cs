@@ -179,7 +179,7 @@ namespace LearnLanguages.DataAccess.Ef
     //}
     protected override PhraseBeliefDto NewImpl(object criteria)
     {
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       string currentUsername = identity.Name;
       Guid currentUserId = Guid.Empty;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -208,7 +208,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override PhraseBeliefDto FetchImpl(Guid id)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -244,7 +244,7 @@ namespace LearnLanguages.DataAccess.Ef
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var allPhraseBeliefDtos = new List<PhraseBeliefDto>();
-        CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+        UserIdentity identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
 
         var phraseBeliefDatas = (from phraseBeliefData in ctx.ObjectContext.PhraseBeliefDatas
                                  where phraseBeliefData.UserDataId == identity.UserId &&
@@ -270,7 +270,7 @@ namespace LearnLanguages.DataAccess.Ef
     //}
     protected override PhraseBeliefDto UpdateImpl(PhraseBeliefDto dto)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -316,7 +316,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override PhraseBeliefDto DeleteImpl(Guid id)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -360,11 +360,11 @@ namespace LearnLanguages.DataAccess.Ef
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var allPhraseBeliefDtos = new List<PhraseBeliefDto>();
-        CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+        UserIdentity identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
 
         var phraseBeliefDatas = (from phraseBeliefData in ctx.ObjectContext.PhraseBeliefDatas
-                           where phraseBeliefData.UserDataId == identity.UserId
-                           select phraseBeliefData);//.ToList();
+                                 where phraseBeliefData.UserDataId == identity.UserId
+                                 select phraseBeliefData);//.ToList();
 
         foreach (var usersPhraseBeliefData in phraseBeliefDatas)
         {

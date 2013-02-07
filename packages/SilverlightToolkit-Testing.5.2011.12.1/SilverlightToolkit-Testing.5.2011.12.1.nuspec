@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SilverlightToolkit-Testing</id>
+    <version>5.2011.12.1</version>
+    <authors>AndWeAccelerate</authors>
+    <owners>AndWeAccelerate</owners>
+    <licenseUrl>http://silverlight.codeplex.com/license</licenseUrl>
+    <projectUrl>http://silverlight.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Unofficial Silverlight Unit Testing Framework package. Contains Microsoft.Silverlight.Testing.dll and Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll from Silverlight Toolkit.</description>
+    <tags>silverlight toolkit sltoolkit unit test</tags>
+  </metadata>
+</package>

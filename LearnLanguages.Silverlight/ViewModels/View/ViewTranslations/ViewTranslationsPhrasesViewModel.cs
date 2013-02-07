@@ -271,20 +271,26 @@ namespace LearnLanguages.Silverlight.ViewModels
       //NotifyOfPropertyChange(() => CanSave);
     }
 
-    void ModelList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
+    private async void ModelList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
     {
       var phrase = e.NewObject;
-      PhraseDefaultSetterCommand.BeginExecute(phrase, (s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          phrase = r.Object.Phrase;
-
-          PopulateViewModels(ModelList);
-        });
+      var cmd = await PhraseDefaultSetterCommand.ExecuteAsync(phrase);
+      phrase = cmd.Phrase;
+      PopulateViewModels(ModelList);
     }
 
     #endregion
+
+    public string ToolTip
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
+      }
+    }
   }
 }

@@ -2,12 +2,13 @@
 using System.Net;
 using Csla;
 using Csla.Serialization;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
 
   /// <summary>
-  /// This class creates a new phrase, loads it with the default language.
+  /// This class takes a given phrase and loads it with the default language.
   /// </summary>
   [Serializable]
   public class PhraseDefaultSetterCommand : CommandBase<PhraseDefaultSetterCommand>
@@ -18,7 +19,6 @@ namespace LearnLanguages.Business
     {
       Phrase = phrase;
     }
-
 
 #if !SILVERLIGHT 
     public static bool Execute(PhraseEdit phrase) 
@@ -31,7 +31,17 @@ namespace LearnLanguages.Business
     } 
 #endif
 
-    public static void BeginExecute(PhraseEdit phrase, EventHandler<DataPortalResult<PhraseDefaultSetterCommand>> callback)
+    public static async Task<PhraseDefaultSetterCommand> ExecuteAsync(PhraseEdit phrase)
+    {
+      var cmd = new PhraseDefaultSetterCommand(phrase);
+      cmd.BeforeServer();
+      cmd = await DataPortal.ExecuteAsync<PhraseDefaultSetterCommand>(cmd);
+      cmd.AfterServer();
+      return cmd;
+    }
+
+    /*
+     public static void BeginExecute(PhraseEdit phrase, EventHandler<DataPortalResult<PhraseDefaultSetterCommand>> callback)
     {
       var cmd = new PhraseDefaultSetterCommand(phrase);
       cmd.BeforeServer();
@@ -44,7 +54,7 @@ namespace LearnLanguages.Business
         callback(o, e);
       });
     }
-
+     */
     public static readonly PropertyInfo<PhraseEdit> PhraseProperty = RegisterProperty<PhraseEdit>(c => c.Phrase);
     public PhraseEdit Phrase
     {
@@ -74,14 +84,22 @@ namespace LearnLanguages.Business
 #if !SILVERLIGHT
     protected override void DataPortal_Execute()
     {
-      //CURRENT USER
-      Phrase.LoadCurrentUser();
+      try
+      {
+        //CURRENT USER
+        Phrase.LoadCurrentUser();
 
-      //DEFAULT LANGUAGE
-      var languageId = LanguageEdit.GetDefaultLanguageId();
-      Phrase.LanguageId = languageId;
-      Phrase.Language = DataPortal.FetchChild<LanguageEdit>(Phrase.LanguageId);
-      Result = true;
+        //DEFAULT LANGUAGE
+        var languageId = LanguageEdit.GetDefaultLanguageId();
+        Phrase.LanguageId = languageId;
+        Phrase.Language = DataPortal.FetchChild<LanguageEdit>(Phrase.LanguageId);
+        Result = true;
+      }
+      catch (Exception)
+      {
+        Result = false;
+        throw;
+      }
     }
 #endif
   }

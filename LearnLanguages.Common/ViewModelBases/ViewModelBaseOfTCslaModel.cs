@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using LearnLanguages.Common.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Common.ViewModelBases
 {
@@ -42,26 +43,30 @@ namespace LearnLanguages.Common.ViewModelBases
     protected virtual void HandleModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
       NotifyOfPropertyChange(() => e.PropertyName);
-      NotifyOfPropertyChange(() => CanSave);
+      NotifyOfPropertyChange(() => CanSaveAsync);
     }
 
-    public virtual bool CanSave
+    public virtual bool CanSaveAsync
     {
       get
       {
         return (Model != null && Model.IsSavable);
       }
     }
-    public virtual void Save()
+    public virtual async Task SaveAsync()
     {
-      Model.BeginSave((s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
-        Model = (TCslaModel)r.NewObject;
-        DispatchSavedEvent();
-        NotifyOfPropertyChange(() => CanSave);
-      });
+      var model = await Model.SaveAsync();
+      Model = model;
+      DispatchSavedEvent();
+      NotifyOfPropertyChange(() => CanSaveAsync);
+      //Model.BeginSave((s, r) =>
+      //{
+      //  if (r.Error != null)
+      //    throw r.Error;
+      //  Model = (TCslaModel)r.NewObject;
+      //  DispatchSavedEvent();
+      //  NotifyOfPropertyChange(() => CanSave);
+      //});
     }
 
     protected void DispatchSavedEvent()

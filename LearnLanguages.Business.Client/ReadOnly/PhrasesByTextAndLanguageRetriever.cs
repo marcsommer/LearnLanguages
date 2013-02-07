@@ -6,6 +6,7 @@ using Csla.Serialization;
 using Csla.Core;
 using LearnLanguages.DataAccess;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -13,7 +14,8 @@ namespace LearnLanguages.Business
   /// This class retrieves phrases by searching using their text and language.text.
   /// </summary>
   [Serializable]
-  public class PhrasesByTextAndLanguageRetriever : Common.CslaBases.ReadOnlyBase<PhrasesByTextAndLanguageRetriever>
+  public class PhrasesByTextAndLanguageRetriever : 
+    Common.CslaBases.ReadOnlyBase<PhrasesByTextAndLanguageRetriever>
   {
     #region Factory Methods
 
@@ -29,11 +31,10 @@ namespace LearnLanguages.Business
     /// WORKING OFF OF THAT ANYWAY.
     /// </summary>
     /// <param name="criteria">phrases to be retrieved from DB</param>
-    /// <param name="callback">callback executed once retrieval is complete</param>
-    public static void CreateNew(Criteria.ListOfPhrasesCriteria criteria, 
-      EventHandler<DataPortalResult<PhrasesByTextAndLanguageRetriever>> callback)
+    public static async Task<PhrasesByTextAndLanguageRetriever> CreateNewAsync(Criteria.ListOfPhrasesCriteria criteria) 
     {
-      DataPortal.BeginCreate<PhrasesByTextAndLanguageRetriever>(criteria, callback);
+      var result = await DataPortal.CreateAsync<PhrasesByTextAndLanguageRetriever>(criteria);
+      return result;
     }
 
     /// <summary>
@@ -52,11 +53,10 @@ namespace LearnLanguages.Business
     /// WORKING OFF OF THAT ANYWAY.
     /// </summary>
     /// <param name="criteria">single phrase that you want to retrieve</param>
-    /// <param name="callback">callback executed once retrieval is complete</param>
-    public static void CreateNew(PhraseEdit criteria,
-      EventHandler<DataPortalResult<PhrasesByTextAndLanguageRetriever>> callback)
+    public static async Task<PhrasesByTextAndLanguageRetriever> CreateNewAsync(PhraseEdit criteria)
     {
-      DataPortal.BeginCreate<PhrasesByTextAndLanguageRetriever>(criteria, callback);
+      var result = await DataPortal.CreateAsync<PhrasesByTextAndLanguageRetriever>(criteria);
+      return result;
     }
 
 #if SILVERLIGHT
@@ -69,11 +69,12 @@ namespace LearnLanguages.Business
     /// RETRIEVAL PARALLEL THE ONES THAT DO INDEED TOUCH THE SERVER.
     /// </summary>
     /// <param name="criteria">single phrase that you want to retrieve</param>
-    public static void CreateNew(Criteria.FindPhraseInPhraseListCriteria criteria,
-      EventHandler<DataPortalResult<PhrasesByTextAndLanguageRetriever>> callback)
+    [RunLocal]
+    public static async Task<PhrasesByTextAndLanguageRetriever> CreateNewAsync(
+      Criteria.FindPhraseInPhraseListCriteria criteria)
     {
-      DataPortal.BeginCreate<PhrasesByTextAndLanguageRetriever>(criteria, callback,
-        DataPortal.ProxyModes.LocalOnly);      
+      var result = await DataPortal.CreateAsync<PhrasesByTextAndLanguageRetriever>(criteria);
+      return result;
     }
 #endif 
 
@@ -183,34 +184,50 @@ namespace LearnLanguages.Business
       if (RetrievedPhrases == null)
         RetrievedPhrases = new MobileDictionary<Guid, PhraseEdit>();
 
-      //GET ALL PHRASES (FOR THIS USER ONLY)
-      PhraseList allPhrases = PhraseList.GetAll();
+      ////GET ALL PHRASES (FOR THIS USER ONLY)
+      //PhraseList allPhrases = PhraseList.GetAll();
 
-
-      //ITERATE THROUGH CRITERIA PHRASES
+      //KEY = TEXT, VALUE = PHRASELIST CONTAINING ALL PHRASES THAT CONTAIN THE KEY TEXT
+      var phraseLists = new Dictionary<string, PhraseList>();
       for (int i = 0; i < criteria.Phrases.Count; i++)
       {
         var criteriaPhrase = criteria.Phrases[i];
 
-        var retrievedPhrase = (from phrase in allPhrases
-                               where phrase.Text == criteriaPhrase.Text &&
-                                     phrase.Language.Text == criteriaPhrase.Language.Text
-                               select phrase).FirstOrDefault();
+        //IF WE'VE ALREADY DONE THIS PHRASE, THEN GO ON TO THE NEXT ONE, SO WE DON'T DUPLICATE WORK
+        if (RetrievedPhrases.ContainsKey(criteriaPhrase.Id))
+          continue;
 
-        if (!RetrievedPhrases.ContainsKey(criteriaPhrase.Id))
+        //INITIALIZE RETRIEVED PHRASE
+        PhraseEdit retrievedPhrase = null;
+
+        //GET ALL PHRASES THAT CONTAIN THIS PHRASE, IN ANY LANGUAGE
+        var allPhrasesContainingPhrase = PhraseList.GetAllContainingText(criteriaPhrase.Text);
+
+        //IF WE FOUND A PHRASE/MULTIPLE PHRASES, THEN WE WANT THE ONE THAT MATCHES OUR
+        //CRITERIA PHRASE IN TEXT AND LANGUAGE
+        if (allPhrasesContainingPhrase.Count > 0)
         {
-          //if we directly add this retrievedPhrase, then it will be a child
-          //we need to get the non-child version of this
-          //RetrievedPhrases.Add(criteriaPhrase.Id, retrievedPhrase);
-          if (retrievedPhrase != null)
-          {
-            var nonChildVersion = PhraseEdit.GetPhraseEdit(retrievedPhrase.Id);
-            RetrievedPhrases.Add(criteriaPhrase.Id, nonChildVersion);
-          }
-          else
-          {
-            RetrievedPhrases.Add(criteriaPhrase.Id, null);
-          }
+          retrievedPhrase = (from phrase in allPhrasesContainingPhrase
+                             where phrase.Text == criteriaPhrase.Text &&
+                                   phrase.Language.Text == criteriaPhrase.Language.Text
+                             select phrase).FirstOrDefault();
+        }
+
+        if (retrievedPhrase != null && retrievedPhrase.IsChild)
+        {
+          //WE ONLY WANT NON-CHILD VERSIONS OF PHRASE
+          var nonChildVersion = PhraseEdit.GetPhraseEdit(retrievedPhrase.Id);
+          RetrievedPhrases.Add(criteriaPhrase.Id, nonChildVersion);
+        }
+        else if (retrievedPhrase != null && !retrievedPhrase.IsChild)
+        {
+          //PHRASE IS ALREADY NOT A CHILD, SO ADD IT
+          RetrievedPhrases.Add(criteriaPhrase.Id, retrievedPhrase);
+        }
+        else
+        {
+          //NO RETRIEVED PHRASE, SO ADD NULL FOR THIS CRITERIAPHRASE.ID
+          RetrievedPhrases.Add(criteriaPhrase.Id, null);
         }
       }
     }

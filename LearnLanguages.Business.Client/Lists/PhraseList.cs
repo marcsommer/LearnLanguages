@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
 using System.ComponentModel;
 using LearnLanguages.Business.Security;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -14,51 +15,73 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void GetAll(EventHandler<DataPortalResult<PhraseList>> callback)
+    /// <summary>
+    /// Gets all phrases belonging to the current user async.
+    /// </summary>
+    public static async Task<PhraseList> GetAllAsync()
     {
-      DataPortal.BeginFetch<PhraseList>(callback);
+      var result = await DataPortal.FetchAsync<PhraseList>();
+      return result;
     }
 
-    public static void NewPhraseList(ICollection<Guid> phraseIds, EventHandler<DataPortalResult<PhraseList>> callback)
+#if !SILVERLIGHT
+    public static PhraseList GetAll()
     {
-      DataPortal.BeginFetch<PhraseList>(phraseIds, callback);
+      var result = DataPortal.Fetch<PhraseList>();
+      return result;
     }
 
-    public static void NewPhraseList(Criteria.PhraseTextsCriteria phraseTextsCriteria,
-      EventHandler<DataPortalResult<PhraseList>> callback)
+    public static PhraseList GetAllContainingText(string text)
     {
-      DataPortal.BeginCreate<PhraseList>(phraseTextsCriteria, callback);
+      var result = DataPortal.Fetch<PhraseList>(text);
+      return result;
+    }
+#endif
+
+    /// <summary>
+    /// Gets all phrases that include the given text somewhere as a substring of the Phrase.Text property.
+    /// </summary>
+    /// <param name="text">Substring of text to search for.</param>
+    public static async Task<PhraseList> GetAllContainingTextAsyncCaseInsensitive(string text)
+    {
+      var result = await DataPortal.FetchAsync<PhraseList>(text);
+      return result;
     }
 
-    public static PhraseList NewPhraseList()
+
+
+    /// <summary>
+    /// Creates a PhraseList, populating it with the phrases for the current user
+    /// with the given ids in phraseIds.
+    /// These are created as children of the list (normal behavior).
+    /// </summary>
+    /// <param name="phraseIds">Ids of the phrases for the current user with which to populate the newly created list.</param>
+    public static async Task<PhraseList> NewPhraseListAsync(ICollection<Guid> phraseIds)
+    {
+      var result = await DataPortal.FetchAsync<PhraseList>(phraseIds);
+      return result;
+    }
+
+    public static async Task<PhraseList> NewPhraseListAsync(Criteria.PhraseTextsCriteria phraseTextsCriteria)
+    {
+      var result = await DataPortal.CreateAsync<PhraseList>(phraseTextsCriteria);
+      return result;
+    }
+
+    public static PhraseList NewPhraseListNewedUpOnly()
     {
       return new PhraseList();
     }
 
-#if SILVERLIGHT
-    /// <summary>
-    /// Runs locally.
-    /// </summary>
-    /// <param name="callback"></param>
-    public static void NewPhraseList(EventHandler<DataPortalResult<PhraseList>> callback)
-    {
-      DataPortal.BeginCreate<PhraseList>(callback, DataPortal.ProxyModes.LocalOnly);
-    }
-#else
     /// <summary>
     /// Runs locally.
     /// </summary>
     [RunLocal]
-    public static void NewPhraseList(EventHandler<DataPortalResult<PhraseList>> callback)
+    public static async Task<PhraseList> NewPhraseListAsync()
     {
-      DataPortal.BeginCreate<PhraseList>(callback);
+      var result = await DataPortal.CreateAsync<PhraseList>();
+      return result;
     }
-
-    public static PhraseList GetAll()
-    {
-      return DataPortal.Fetch<PhraseList>();
-    }
-#endif
 
     #endregion
 
@@ -68,6 +91,7 @@ namespace LearnLanguages.Business
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void DataPortal_Create(Criteria.PhraseTextsCriteria phraseTextsCriteria)
     {
+#if DEBUG
       var sep = " ||| ";
       var msg = DateTime.Now.ToShortTimeString() +
                    "PhraseList.DP_Create" + sep +
@@ -77,6 +101,7 @@ namespace LearnLanguages.Business
                    "1st Phrase = " + phraseTextsCriteria.PhraseTexts[0];
       System.Diagnostics.Trace.WriteLine(msg);
       //Services.Log(msg, LogPriority.Low, LogCategory.Information);
+#endif
 
 
       if (phraseTextsCriteria.PhraseTexts.Count == 0)
@@ -87,7 +112,7 @@ namespace LearnLanguages.Business
         var language = DataPortal.FetchChild<LanguageEdit>(languageText);
        
         //WE NOW HAVE OUR LANGUAGEEDIT THAT WILL BE USED FOR ALL PHRASE TEXTS.
-        var PhraseDal = dalManager.GetProvider<IPhraseDal>();
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
         //PhraseList newPhraseList = PhraseList.NewPhraseList();
         for (int i = 0; i < phraseTextsCriteria.PhraseTexts.Count; i++)
@@ -110,9 +135,9 @@ namespace LearnLanguages.Business
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var PhraseDal = dalManager.GetProvider<IPhraseDal>();
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
-        Result<ICollection<PhraseDto>> result = PhraseDal.Fetch(phraseIds);
+        Result<ICollection<PhraseDto>> result = phraseDal.Fetch(phraseIds);
         if (!result.IsSuccess || result.IsError)
         {
           if (result.Info != null)
@@ -139,14 +164,47 @@ namespace LearnLanguages.Business
     }
 
     
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public void DataPortal_Fetch()
+    //[EditorBrowsable(EditorBrowsableState.Never)]
+    protected void DataPortal_Fetch()
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var PhraseDal = dalManager.GetProvider<IPhraseDal>();
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
 
-        Result<ICollection<PhraseDto>> result = PhraseDal.GetAll();
+        Result<ICollection<PhraseDto>> result = phraseDal.GetAll();
+        if (!result.IsSuccess || result.IsError)
+        {
+          if (result.Info != null)
+          {
+            var ex = result.GetExceptionFromInfo();
+            if (ex != null)
+              throw new GetAllFailedException(ex.Message);
+            else
+              throw new GetAllFailedException();
+          }
+          else
+            throw new GetAllFailedException();
+        }
+
+        //RESULT WAS SUCCESSFUL
+        var allPhraseDtos = result.Obj;
+        foreach (var phraseDto in allPhraseDtos)
+        {
+          //var PhraseEdit = DataPortal.CreateChild<PhraseEdit>(PhraseDto);
+          var phraseEdit = DataPortal.FetchChild<PhraseEdit>(phraseDto);
+          this.Add(phraseEdit);
+        }
+      }
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    protected void DataPortal_Fetch(string text)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var phraseDal = dalManager.GetProvider<IPhraseDal>();
+
+        Result<ICollection<PhraseDto>> result = phraseDal.Fetch(text);
         if (!result.IsSuccess || result.IsError)
         {
           if (result.Info != null)
@@ -162,11 +220,11 @@ namespace LearnLanguages.Business
         }
 
         //RESULT WAS SUCCESSFUL
-        var allPhraseDtos = result.Obj;
-        foreach (var PhraseDto in allPhraseDtos)
+        var phraseDtos = result.Obj;
+        foreach (var phraseDto in phraseDtos)
         {
           //var PhraseEdit = DataPortal.CreateChild<PhraseEdit>(PhraseDto);
-          var PhraseEdit = DataPortal.FetchChild<PhraseEdit>(PhraseDto);
+          var PhraseEdit = DataPortal.FetchChild<PhraseEdit>(phraseDto);
           this.Add(PhraseEdit);
         }
       }
@@ -208,10 +266,10 @@ namespace LearnLanguages.Business
 
     private void PhraseList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseEdit> e)
     {
-      //CustomIdentity.CheckAuthentication();
+      //Common.CommonHelper.CheckAuthentication();
       var phraseEdit = e.NewObject;
       phraseEdit.LoadCurrentUser();
-      //var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      //var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       //phraseEdit.UserId = identity.UserId;
       //phraseEdit.Username = identity.Name;
     }

@@ -18,6 +18,12 @@ namespace LearnLanguages.Navigation.EventMessages
 
     }
 
+    public static void Publish(NavigationInfo navInfo)
+    {
+      var eventMsg = new NavigationRequestedEventMessage(navInfo);
+      Services.EventAggregator.Publish(eventMsg);
+    }
+
     ///// <summary>
     ///// Navigation requested event message, for navigating to view models using convention over configuration.
     ///// EXPECTED FORMAT: [CoreText]ViewModel
@@ -54,5 +60,7 @@ namespace LearnLanguages.Navigation.EventMessages
     //  : base(requestedViewModelCoreText, queryEntries, Guid.NewGuid())
     //{
     //}
+
+    
   }
 }

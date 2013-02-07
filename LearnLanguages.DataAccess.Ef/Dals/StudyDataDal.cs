@@ -13,7 +13,7 @@ namespace LearnLanguages.DataAccess.Ef
   {
     protected override StudyDataDto NewImpl(object criteria)
     {
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       string currentUsername = identity.Name;
       Guid currentUserId = Guid.Empty;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -34,7 +34,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     //protected override StudyDataDto FetchImpl(Guid id)
     //{
-    //  var currentUsername = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).Name;
+    //  var currentUsername = ((UserIdentity)(Csla.ApplicationContext.User.Identity)).Name;
 
     //  using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
     //  {
@@ -126,7 +126,7 @@ namespace LearnLanguages.DataAccess.Ef
     //}
     protected override StudyDataDto UpdateImpl(StudyDataDto dto)
     {
-      var currentUsername = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).Name;
+      var currentUsername = Business.BusinessHelper.GetCurrentUsername();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -145,18 +145,19 @@ namespace LearnLanguages.DataAccess.Ef
           var updatedDto = EfHelper.ToDto(studyDataData);
           return updatedDto;
         }
+        else if (results.Count() == 0)
+        {
+          //NO STUDY DATA FOR CURRENT USER TO UPDATE. 
+          //SO, INSERT STUDY DATA INSTEAD
+          return InsertImpl(dto);
+        }
         else
         {
-          if (results.Count() == 0)
-            throw new Exceptions.IdNotFoundException(dto.Id);
-          else
-          {
-            //results.count is not one or zero.  either it's negative, which would be framework absurd, or its more than one,
-            //which means that we have multiple studyDatas with the same id.  this is very bad.
-            var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
-                                         DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
-            throw new Exceptions.VeryBadException(errorMsg);
-          }
+          //RESULTS.COUNT IS NOT ONE OR ZERO.  EITHER IT'S NEGATIVE, WHICH WOULD BE FRAMEWORK ABSURD, OR ITS MORE THAN ONE,
+          //WHICH MEANS THAT WE HAVE MULTIPLE STUDYDATAS WITH THE SAME ID.  THIS IS VERY BAD.
+          var errorMsg = string.Format(DalResources.ErrorMsgVeryBadException,
+                                       DalResources.ErrorMsgVeryBadExceptionDetail_ResultCountNotOneOrZero);
+          throw new Exceptions.VeryBadException(errorMsg);
         }
       }
     }
@@ -172,7 +173,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override StudyDataDto DeleteImpl(Guid id)
     {
-      var currentUsername = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).Name;
+      var currentUsername = ((UserIdentity)(Csla.ApplicationContext.User.Identity)).Name;
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -217,7 +218,7 @@ namespace LearnLanguages.DataAccess.Ef
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var allStudyDataDtos = new List<StudyDataDto>();
-        CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+        UserIdentity identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
 
         var studyDataDatas = (from studyDataData in ctx.ObjectContext.StudyDataDatas
                            where studyDataData.Username == identity.Name

@@ -8,6 +8,8 @@ using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Navigation.EventMessages;
+using System.Threading.Tasks;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study
 {
@@ -93,18 +95,35 @@ namespace LearnLanguages.Study
           return null;
 
         var studierLineNumber = studier.Key;
-        var studierPercentKnown = studier.Value.GetPercentKnown();
-        if (studierPercentKnown > this._KnowledgeThreshold)
+        var task = studier.Value.GetPercentKnownAsync();
+        var timeoutInMs = int.Parse(StudyResources.DefaultTimeoutGetPercentKnown);
+        if (task.Wait(timeoutInMs))
         {
-          //line is known
-          continue;
+          var studierPercentKnown = task.Result;
+          if (studierPercentKnown > this._KnowledgeThreshold)
+          {
+            //LINE IS KNOWN
+            continue;
+          }
+          else
+          {
+            //LINE IS UNKNOWN
+            unknownLineNumbers.Add(studierLineNumber);
+            ////if line is lowest so far, then update lowestsofar to this line number
+            //if (studierLineNumber < lowestSoFar)
+            //  lowestSoFar = studierLineNumber;
+          }
         }
-
-        //line is unknown
-        unknownLineNumbers.Add(studierLineNumber);
-        ////if line is lowest so far, then update lowestsofar to this line number
-        //if (studierLineNumber < lowestSoFar)
-        //  lowestSoFar = studierLineNumber;
+        else
+        {
+          //TIMEOUT WAS REACHED. NEED TO ASSUME THIS WILL BE REACHED SOMETIMES
+          //NEED TO DECIDE HOW THIS IS HANDLED.
+          Services.PublishMessageEvent("GetPercentKnown timeout reached.", 
+            MessagePriority.High, MessageType.Error);
+          
+          //i'm throwing this just temporarily. I"m not sure how to handle this situation
+          throw new Exception();
+        }
       }
 
       if (_AbortIsFlagged)
@@ -118,15 +137,6 @@ namespace LearnLanguages.Study
         var studier = _LineStudiers[nextLineNumber];
         return studier;
       }
-
-      ////all lines are known if count == 0, so we have no studier to choose.
-      //if (unknownLineNumbers.Count == 0)
-      //{
-      //  nextLineNumber = -1;
-      //  return null;
-      //}
-
-
 
       //THIS IS DIFFICULT, BECAUSE WE'RE HANDLING INDEXES OF INDEXES.
       //WE ARE LOOKING FOR THE LINE NUMBER OF THE NEXT STUDIER (THE INDEX FOR THAT STUDIER).
@@ -151,10 +161,8 @@ namespace LearnLanguages.Study
     private void UpdateKnowledge()
     {
       if (_AbortIsFlagged)
-      {
         return;
-      }
-
+      
       //todo: MLTMeaning...dynamically set active lines count from either some sort of calculator class
       _ActiveLinesCount = int.Parse(StudyResources.DefaultMeaningStudierActiveLinesCount);
 
@@ -172,17 +180,14 @@ namespace LearnLanguages.Study
       _AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
     }
 
-    protected virtual void PopulateLineStudiers(ExceptionCheckCallback completedCallback)
+    protected virtual async Task PopulateLineStudiersAsync()
     {
       _LineStudiers.Clear();
       foreach (var line in _Target.Lines)
       {
         if (_AbortIsFlagged)
-        {
-          completedCallback(null);
           return;
-        }
-
+        
         var lineStudier = new DefaultLineMeaningStudier();
         _LineStudiers.Add(line.LineNumber, lineStudier);
       }
@@ -194,25 +199,18 @@ namespace LearnLanguages.Study
       {
         var line = _Target.Lines[lineStudierEntry.Key];
         if (_AbortIsFlagged)
-        {
-          completedCallback(null);
           return;
-        }
 
-        lineStudierEntry.Value.InitializeForNewStudySession(line, (e) =>
-          {
-            linesInitializedCount++;
+        await lineStudierEntry.Value.InitializeForNewStudySessionAsync(line);
+        linesInitializedCount++;
 
-            if (_AbortIsFlagged)
-            {
-              completedCallback(null);
-              return;
-            }
+        if (_AbortIsFlagged)
+          return;
 
-            //IF WE HAVE INITIALIZED ALL OF OUR LINES, THEN OUR INITIALIZATION POPULATION IS COMPLETE
-            if (linesInitializedCount == _Target.Lines.Count)
-              completedCallback(null);
-          });
+        //IF WE HAVE INITIALIZED ALL OF OUR LINES, THEN OUR INITIALIZATION 
+        //POPULATION IS COMPLETE
+        if (linesInitializedCount == _Target.Lines.Count)
+          return;
       }
     }
 
@@ -229,8 +227,24 @@ namespace LearnLanguages.Study
       {
         if (_AbortIsFlagged)
           return -1.0d;
-        var linePercentKnown = lineInfo.Value.GetPercentKnown();
-        totalPercentKnownNonNormalized += linePercentKnown;
+
+        var task = lineInfo.Value.GetPercentKnownAsync();
+        var timeoutInMs = int.Parse(StudyResources.DefaultTimeoutGetPercentKnown);
+        if (task.Wait(timeoutInMs))
+        {
+          var linePercentKnown = task.Result;
+          totalPercentKnownNonNormalized += linePercentKnown;
+        }
+        else
+        {
+          //TIMEOUT WAS REACHED. NEED TO ASSUME THIS WILL BE REACHED SOMETIMES
+          //NEED TO DECIDE HOW THIS IS HANDLED.
+          Services.PublishMessageEvent("GetPercentKnown timeout reached.",
+            MessagePriority.High, MessageType.Error);
+
+          //i'm throwing this just temporarily. I"m not sure how to handle this situation
+          throw new Exception();
+        }
       }
 
       var totalPercentKnownNormalized = totalPercentKnownNonNormalized / maxPercentKnownNonNormalized;
@@ -239,14 +253,11 @@ namespace LearnLanguages.Study
     
     #endregion
 
-    public override void InitializeForNewStudySession(MultiLineTextEdit target, 
-                                                      ExceptionCheckCallback completedCallback)
+    public async override Task InitializeForNewStudySessionAsync(MultiLineTextEdit target)
     {
-#if DEBUG
-      var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
-#endif
-      var thinkingTargetId = target.Id;
-      History.Events.ThinkingAboutTargetEvent.Publish(thinkingTargetId);
+      //USE POSTSHARP AOP FOR THINKING EVENTS
+      var methodThinkId = target.Id;
+      History.Events.ThinkingAboutTargetEvent.Publish(methodThinkId);
 
       _AbortIsFlagged = false;
       _Target = target;
@@ -259,52 +270,36 @@ namespace LearnLanguages.Study
         History.HistoryPublisher.Ton.PublishEvent(activatedLineEvent);
       }
 
+      #region Abort Check
       if (_AbortIsFlagged)
       {
-        History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-        completedCallback(null);
+        History.Events.ThinkedAboutTargetEvent.Publish(methodThinkId);
         return;
       }
+      #endregion
 
       //EXECUTES CALLBACK WHEN POPULATE IS COMPLETED
-      PopulateLineStudiers((e) =>
-        {
-          if (e != null)
-            throw e;
+      await PopulateLineStudiersAsync();
 
-          if (_AbortIsFlagged)
-          {
-            History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-            completedCallback(null);
-            return;
-          }
-
-          History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-          completedCallback(null);
-        });
+      History.Events.ThinkedAboutTargetEvent.Publish(methodThinkId);
     }
 
-    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
+    public async override Task<ResultArgs<StudyItemViewModelArgs>> GetNextStudyItemViewModelAsync()
     {
       if (_AbortIsFlagged)
-      {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
-      }
+        return await StudyHelper.GetAbortedAsync();
+      
       UpdateKnowledge();
       ChooseAggregateSize();
       var nextLineNumber = -1;
-      DefaultLineMeaningStudier nextStudier = ChooseNextLineStudier(out nextLineNumber);
+      var nextStudier = ChooseNextLineStudier(out nextLineNumber);
       if (nextStudier == null || nextLineNumber < 0)
         throw new Exception("todo: all lines are studied, publish completion event or something");
 
       if (_AbortIsFlagged)
-      {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
-      }
+        return await StudyHelper.GetAbortedAsync();
 
-      LineEdit nextLineEdit = _Target.Lines[nextLineNumber];
+      var nextLineEdit = _Target.Lines[nextLineNumber];
       if (nextLineEdit.LineNumber != nextLineNumber)
       {
         var results = from line in _Target.Lines
@@ -317,25 +312,10 @@ namespace LearnLanguages.Study
       }
 
       if (_AbortIsFlagged)
-      {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
-      } 
-      
-      nextStudier.GetNextStudyItemViewModel((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+        return await StudyHelper.GetAbortedAsync();
 
-          if (_AbortIsFlagged)
-          {
-            callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-            return;
-          }
-
-          callback(this, r);
-        });
       _LastActiveLineStudiedIndex = nextLineEdit.LineNumber;
+      return await nextStudier.GetNextStudyItemViewModelAsync();
     }
 
     public void Handle(NavigationRequestedEventMessage message)
@@ -367,5 +347,7 @@ namespace LearnLanguages.Study
         }
       }
     }
+
+       
   }
 }

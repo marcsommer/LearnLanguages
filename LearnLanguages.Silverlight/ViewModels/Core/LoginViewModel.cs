@@ -2,13 +2,16 @@
 using LearnLanguages.Business.Security;
 using LearnLanguages.Common.ViewModelBases;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using LearnLanguages.Common.EventMessages;
+using LearnLanguages.Silverlight.Common;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(LoginViewModel))]
   [ViewModelMetadata("Login")]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class LoginViewModel : ViewModelBase
+  public class LoginViewModel : PageViewModelBase
   {
     private string _Username;
     public string Username
@@ -40,38 +43,38 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public void Login()
+    public async Task Login()
     {
       LoggingIn = true;
-      CustomPrincipal.BeginLogin(Username, Password, (e) =>
-        {
-          if (e != null)
-            throw e;
-          //Navigation.Publish.AuthenticationChanged();
-          Services.EventAggregator.Publish(new EventMessages.AuthenticationChangedEventMessage());
+#if DEBUG
+      //var allEdits = await Business.PhraseList.GetAllAsync();
+#endif
 
-          if (Csla.ApplicationContext.User.Identity.IsAuthenticated)
+      var result = await UserPrincipal.LoginAsync(Username, Password);
+      AuthenticationChangedEventMessage.Publish();
+
+      if (Csla.ApplicationContext.User.Identity.IsAuthenticated)
+      {
+        //LOGIN SUCCESSFUL
+        LoggingIn = false;
+      }
+      else
+      {
+        //LOGIN UNSUCCESSFUL
+        //PENALIZE FOR NOT LOGGING IN PROPERLY.
+        //QUICK AND DIRTY PENALTY.
+        //HACK: LOGIN FAILED PENALTY EASILY CIRCUMVENTED.  THIS REALLY NEEDS TO BE DONE ON THE SERVER SIDE.
+        System.Windows.MessageBox.Show(AppResources.LoginFailedMessage);
+        BackgroundWorker worker = new BackgroundWorker();
+        worker.DoWork += (sender, eventArg) =>
           {
-            //LOGIN SUCCESSFUL
+            System.Threading.Thread.Sleep(int.Parse(AppResources.LoginFailedPenaltyInMilliseconds));
             LoggingIn = false;
-          }
-          else
-          {
-            //LOGIN UNSUCCESSFUL
-            //PENALIZE FOR NOT LOGGING IN PROPERLY.
-            //QUICK AND DIRTY PENALTY.
-            //HACK: LOGIN FAILED PENALTY EASILY CIRCUMVENTED.  THIS REALLY NEEDS TO BE DONE ON THE SERVER SIDE.
-            System.Windows.MessageBox.Show(AppResources.LoginFailedMessage);
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += (sender, eventArg) =>
-              {
-                System.Threading.Thread.Sleep(int.Parse(AppResources.LoginFailedPenaltyInMilliseconds));
-                LoggingIn = false;
-              };
-            worker.RunWorkerAsync();
-          }
-        });
+          };
+        worker.RunWorkerAsync();
+      }
     }
+
     public bool CanLogin
     {
       get
@@ -95,6 +98,14 @@ namespace LearnLanguages.Silverlight.ViewModels
           NotifyOfPropertyChange(() => CanLogin);
         }
       }
+    }
+
+    protected override void InitializePageViewModelPropertiesImpl()
+    {
+      Instructions = ViewViewModelResources.InstructionsLoginPage;
+      Title = ViewViewModelResources.TitleLoginPage;
+      Description = ViewViewModelResources.DescriptionLoginPage;
+      ToolTip = ViewViewModelResources.ToolTipLoginPage;
     }
   }
 }

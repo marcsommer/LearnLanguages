@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -248,6 +249,7 @@ namespace LearnLanguages.DataAccess.Ef
         private ObjectSet<MultiLineTextData> _MultiLineTextDatas;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -331,11 +333,11 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -364,7 +366,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -383,7 +386,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -408,7 +411,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnExpirationDateChanging(value);
                 ReportPropertyChanging("ExpirationDate");
-                _ExpirationDate = StructuralObject.SetValidValue(value);
+                _ExpirationDate = StructuralObject.SetValidValue(value, "ExpirationDate");
                 ReportPropertyChanged("ExpirationDate");
                 OnExpirationDateChanged();
             }
@@ -432,7 +435,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnPhraseDataIdChanging(value);
                 ReportPropertyChanging("PhraseDataId");
-                _PhraseDataId = StructuralObject.SetValidValue(value);
+                _PhraseDataId = StructuralObject.SetValidValue(value, "PhraseDataId");
                 ReportPropertyChanged("PhraseDataId");
                 OnPhraseDataIdChanged();
             }
@@ -442,7 +445,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnPhraseDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -484,6 +487,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -512,7 +516,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -531,7 +536,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -556,7 +561,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnTextChanging(value);
                 ReportPropertyChanging("Text");
-                _Text = StructuralObject.SetValidValue(value, false);
+                _Text = StructuralObject.SetValidValue(value, false, "Text");
                 ReportPropertyChanged("Text");
                 OnTextChanged();
             }
@@ -580,7 +585,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUserDataIdChanging(value);
                 ReportPropertyChanging("UserDataId");
-                _UserDataId = StructuralObject.SetValidValue(value);
+                _UserDataId = StructuralObject.SetValidValue(value, "UserDataId");
                 ReportPropertyChanged("UserDataId");
                 OnUserDataIdChanged();
             }
@@ -590,7 +595,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUserDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -654,6 +659,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -684,7 +690,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -703,7 +710,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -728,7 +735,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnLineNumberChanging(value);
                 ReportPropertyChanging("LineNumber");
-                _LineNumber = StructuralObject.SetValidValue(value);
+                _LineNumber = StructuralObject.SetValidValue(value, "LineNumber");
                 ReportPropertyChanged("LineNumber");
                 OnLineNumberChanged();
             }
@@ -752,7 +759,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUserDataIdChanging(value);
                 ReportPropertyChanging("UserDataId");
-                _UserDataId = StructuralObject.SetValidValue(value);
+                _UserDataId = StructuralObject.SetValidValue(value, "UserDataId");
                 ReportPropertyChanged("UserDataId");
                 OnUserDataIdChanged();
             }
@@ -776,7 +783,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnPhraseDataIdChanging(value);
                 ReportPropertyChanging("PhraseDataId");
-                _PhraseDataId = StructuralObject.SetValidValue(value);
+                _PhraseDataId = StructuralObject.SetValidValue(value, "PhraseDataId");
                 ReportPropertyChanged("PhraseDataId");
                 OnPhraseDataIdChanged();
             }
@@ -786,7 +793,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnPhraseDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -888,6 +895,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -918,7 +926,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -937,7 +946,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -962,7 +971,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnTitleChanging(value);
                 ReportPropertyChanging("Title");
-                _Title = StructuralObject.SetValidValue(value, false);
+                _Title = StructuralObject.SetValidValue(value, false, "Title");
                 ReportPropertyChanged("Title");
                 OnTitleChanged();
             }
@@ -986,7 +995,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnAdditionalMetadataChanging(value);
                 ReportPropertyChanging("AdditionalMetadata");
-                _AdditionalMetadata = StructuralObject.SetValidValue(value, false);
+                _AdditionalMetadata = StructuralObject.SetValidValue(value, false, "AdditionalMetadata");
                 ReportPropertyChanged("AdditionalMetadata");
                 OnAdditionalMetadataChanged();
             }
@@ -1010,7 +1019,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUserDataIdChanging(value);
                 ReportPropertyChanging("UserDataId");
-                _UserDataId = StructuralObject.SetValidValue(value);
+                _UserDataId = StructuralObject.SetValidValue(value, "UserDataId");
                 ReportPropertyChanged("UserDataId");
                 OnUserDataIdChanged();
             }
@@ -1020,7 +1029,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUserDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -1084,6 +1093,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1122,7 +1132,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1141,7 +1152,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -1166,7 +1177,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnTimeStampChanging(value);
                 ReportPropertyChanging("TimeStamp");
-                _TimeStamp = StructuralObject.SetValidValue(value);
+                _TimeStamp = StructuralObject.SetValidValue(value, "TimeStamp");
                 ReportPropertyChanged("TimeStamp");
                 OnTimeStampChanged();
             }
@@ -1190,7 +1201,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnTextChanging(value);
                 ReportPropertyChanging("Text");
-                _Text = StructuralObject.SetValidValue(value, false);
+                _Text = StructuralObject.SetValidValue(value, false, "Text");
                 ReportPropertyChanged("Text");
                 OnTextChanged();
             }
@@ -1214,7 +1225,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnStrengthChanging(value);
                 ReportPropertyChanging("Strength");
-                _Strength = StructuralObject.SetValidValue(value);
+                _Strength = StructuralObject.SetValidValue(value, "Strength");
                 ReportPropertyChanged("Strength");
                 OnStrengthChanged();
             }
@@ -1238,7 +1249,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnBelieverIdChanging(value);
                 ReportPropertyChanging("BelieverId");
-                _BelieverId = StructuralObject.SetValidValue(value);
+                _BelieverId = StructuralObject.SetValidValue(value, "BelieverId");
                 ReportPropertyChanged("BelieverId");
                 OnBelieverIdChanged();
             }
@@ -1262,7 +1273,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnReviewMethodIdChanging(value);
                 ReportPropertyChanging("ReviewMethodId");
-                _ReviewMethodId = StructuralObject.SetValidValue(value);
+                _ReviewMethodId = StructuralObject.SetValidValue(value, "ReviewMethodId");
                 ReportPropertyChanged("ReviewMethodId");
                 OnReviewMethodIdChanged();
             }
@@ -1286,7 +1297,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnPhraseDataIdChanging(value);
                 ReportPropertyChanging("PhraseDataId");
-                _PhraseDataId = StructuralObject.SetValidValue(value);
+                _PhraseDataId = StructuralObject.SetValidValue(value, "PhraseDataId");
                 ReportPropertyChanged("PhraseDataId");
                 OnPhraseDataIdChanged();
             }
@@ -1310,7 +1321,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUserDataIdChanging(value);
                 ReportPropertyChanging("UserDataId");
-                _UserDataId = StructuralObject.SetValidValue(value);
+                _UserDataId = StructuralObject.SetValidValue(value, "UserDataId");
                 ReportPropertyChanged("UserDataId");
                 OnUserDataIdChanged();
             }
@@ -1320,7 +1331,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUserDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -1400,6 +1411,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1430,7 +1442,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1449,7 +1462,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -1474,7 +1487,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnTextChanging(value);
                 ReportPropertyChanging("Text");
-                _Text = StructuralObject.SetValidValue(value, false);
+                _Text = StructuralObject.SetValidValue(value, false, "Text");
                 ReportPropertyChanged("Text");
                 OnTextChanged();
             }
@@ -1498,7 +1511,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUserDataIdChanging(value);
                 ReportPropertyChanging("UserDataId");
-                _UserDataId = StructuralObject.SetValidValue(value);
+                _UserDataId = StructuralObject.SetValidValue(value, "UserDataId");
                 ReportPropertyChanged("UserDataId");
                 OnUserDataIdChanged();
             }
@@ -1522,7 +1535,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnLanguageDataIdChanging(value);
                 ReportPropertyChanging("LanguageDataId");
-                _LanguageDataId = StructuralObject.SetValidValue(value);
+                _LanguageDataId = StructuralObject.SetValidValue(value, "LanguageDataId");
                 ReportPropertyChanged("LanguageDataId");
                 OnLanguageDataIdChanged();
             }
@@ -1532,7 +1545,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnLanguageDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -1722,6 +1735,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1748,7 +1762,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1767,7 +1782,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -1792,7 +1807,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnTextChanging(value);
                 ReportPropertyChanging("Text");
-                _Text = StructuralObject.SetValidValue(value, false);
+                _Text = StructuralObject.SetValidValue(value, false, "Text");
                 ReportPropertyChanged("Text");
                 OnTextChanged();
             }
@@ -1802,7 +1817,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnTextChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -1828,6 +1843,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1856,7 +1872,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1875,7 +1892,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -1900,7 +1917,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnNativeLanguageTextChanging(value);
                 ReportPropertyChanging("NativeLanguageText");
-                _NativeLanguageText = StructuralObject.SetValidValue(value, false);
+                _NativeLanguageText = StructuralObject.SetValidValue(value, false, "NativeLanguageText");
                 ReportPropertyChanged("NativeLanguageText");
                 OnNativeLanguageTextChanged();
             }
@@ -1924,7 +1941,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUsernameChanging(value);
                 ReportPropertyChanging("Username");
-                _Username = StructuralObject.SetValidValue(value, false);
+                _Username = StructuralObject.SetValidValue(value, false, "Username");
                 ReportPropertyChanged("Username");
                 OnUsernameChanged();
             }
@@ -1934,7 +1951,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnUsernameChanged();
 
         #endregion
-    
+
     }
     
     /// <summary>
@@ -1961,7 +1978,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1980,7 +1998,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -2005,7 +2023,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUserDataIdChanging(value);
                 ReportPropertyChanging("UserDataId");
-                _UserDataId = StructuralObject.SetValidValue(value);
+                _UserDataId = StructuralObject.SetValidValue(value, "UserDataId");
                 ReportPropertyChanged("UserDataId");
                 OnUserDataIdChanged();
             }
@@ -2029,7 +2047,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnContextPhraseDataIdChanging(value);
                 ReportPropertyChanging("ContextPhraseDataId");
-                _ContextPhraseDataId = StructuralObject.SetValidValue(value);
+                _ContextPhraseDataId = StructuralObject.SetValidValue(value, "ContextPhraseDataId");
                 ReportPropertyChanged("ContextPhraseDataId");
                 OnContextPhraseDataIdChanged();
             }
@@ -2039,7 +2057,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnContextPhraseDataIdChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -2141,6 +2159,7 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2171,7 +2190,8 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2190,7 +2210,7 @@ namespace LearnLanguages.DataAccess.Ef
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -2215,7 +2235,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnUsernameChanging(value);
                 ReportPropertyChanging("Username");
-                _Username = StructuralObject.SetValidValue(value, false);
+                _Username = StructuralObject.SetValidValue(value, false, "Username");
                 ReportPropertyChanged("Username");
                 OnUsernameChanged();
             }
@@ -2239,7 +2259,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnSaltChanging(value);
                 ReportPropertyChanging("Salt");
-                _Salt = StructuralObject.SetValidValue(value);
+                _Salt = StructuralObject.SetValidValue(value, "Salt");
                 ReportPropertyChanged("Salt");
                 OnSaltChanged();
             }
@@ -2263,7 +2283,7 @@ namespace LearnLanguages.DataAccess.Ef
             {
                 OnSaltedHashedPasswordValueChanging(value);
                 ReportPropertyChanging("SaltedHashedPasswordValue");
-                _SaltedHashedPasswordValue = StructuralObject.SetValidValue(value, false);
+                _SaltedHashedPasswordValue = StructuralObject.SetValidValue(value, false, "SaltedHashedPasswordValue");
                 ReportPropertyChanged("SaltedHashedPasswordValue");
                 OnSaltedHashedPasswordValueChanged();
             }
@@ -2273,7 +2293,7 @@ namespace LearnLanguages.DataAccess.Ef
         partial void OnSaltedHashedPasswordValueChanged();
 
         #endregion
-    
+
         #region Navigation Properties
     
         /// <summary>
@@ -2431,8 +2451,9 @@ namespace LearnLanguages.DataAccess.Ef
         }
 
         #endregion
+
     }
 
     #endregion
-    
+
 }

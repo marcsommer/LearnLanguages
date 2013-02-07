@@ -21,6 +21,7 @@ namespace LearnLanguages.Study.ViewModels
 
     public StudyLineOrderTimedQuestionAnswerViewModel()
     {
+      StudyItemTitle = StudyResources.StudyLineTimedQuestionAnswerStudyItemTitle;
       //Services.EventAggregator.Subscribe(this);
     }
 
@@ -241,11 +242,11 @@ namespace LearnLanguages.Study.ViewModels
       Answer = Line.Phrase.Text;
     }
 
-    public override void Show(ExceptionCheckCallback callback)
+    public void Show(ExceptionCheckCallback callback)
     {
       _DateTimeQuestionShown = DateTime.Now;
       ViewModelVisibility = Visibility.Visible;
-      DispatchShown();
+      //DispatchShown();
       var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Line.Phrase);
       History.HistoryPublisher.Ton.PublishEvent(eventViewing);
       var reviewingLineOrderEvent = new History.Events.ReviewingLineOrderEvent(Line, MultiLineText, GetReviewMethodId());
@@ -305,5 +306,10 @@ namespace LearnLanguages.Study.ViewModels
     }
 
     #endregion
+
+    protected override System.Threading.Tasks.Task ShowAsyncImpl()
+    {
+      throw new NotImplementedException();
+    }
   }
 }

@@ -8,7 +8,7 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
-
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -18,7 +18,7 @@ namespace LearnLanguages.Business
     #region Ctors and Init
     public TranslationEdit()
     {
-      Phrases = PhraseList.NewPhraseList();
+      Phrases = PhraseList.NewPhraseListNewedUpOnly();
     }
     #endregion
     
@@ -54,26 +54,17 @@ namespace LearnLanguages.Business
     #region Silverlight Factory Methods
 #if SILVERLIGHT
 
-    public static void NewTranslationEdit(EventHandler<DataPortalResult<TranslationEdit>> callback)
+    public static async Task<TranslationEdit> NewTranslationEditAsync()
     {
-      DataPortal.BeginCreate<TranslationEdit>(callback);
+      var result = await DataPortal.CreateAsync<TranslationEdit>();
+      return result;
     }
 
-    ///// <summary>
-    ///// This happens DataPortal.ProxyModes.LocalOnly
-    ///// </summary>
-    //public static void NewTranslationEdit(Guid id, EventHandler<DataPortalResult<TranslationEdit>> callback)
-    //{
-    //  DataPortal.BeginCreate<TranslationEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-    //  //DataPortal.BeginCreate<TranslationEdit>(id, callback);
-    //}
-
-    public static void GetTranslationEdit(Guid id, EventHandler<DataPortalResult<TranslationEdit>> callback)
+    public static async Task<TranslationEdit> GetTranslationEditAsync(Guid id)
     {
-      DataPortal.BeginFetch<TranslationEdit>(id, callback);
+      var result = await DataPortal.FetchAsync<TranslationEdit>(id);
+      return result;
     }
-
-    
 
 #endif
     #endregion
@@ -118,10 +109,10 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User
+    public static readonly PropertyInfo<UserIdentity> UserProperty =
+      RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    public UserIdentity User
     {
       get { return GetProperty(UserProperty); }
       private set { LoadProperty(UserProperty, value); }
@@ -143,7 +134,7 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
 
       BusinessRules.CheckRules();
@@ -174,11 +165,12 @@ namespace LearnLanguages.Business
     }
 
     /// <summary>
-    /// Begins to persist object
+    /// Persist object async.
     /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected override async Task<TranslationEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
 
     /// <summary>

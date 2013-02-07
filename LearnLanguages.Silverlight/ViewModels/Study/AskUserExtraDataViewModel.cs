@@ -7,14 +7,18 @@ using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Common.Delegates;
+using System.Threading.Tasks;
+using LearnLanguages.Common.EventMessages;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(AskUserExtraDataViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class AskUserExtraDataViewModel : ViewModelBase<StudyDataEdit, StudyDataDto>,
-                                           IHandle<EventMessages.NativeLanguageChangedEventMessage>
+                                           IHandle<NativeLanguageChangedEventMessage>
   {
+    #region Ctors and Init
+
     public AskUserExtraDataViewModel()
     {
       Languages = Services.Container.GetExportedValue<LanguageSelectorViewModel>();
@@ -24,16 +28,32 @@ namespace LearnLanguages.Silverlight.ViewModels
       else
         InstructionsVisibility = Visibility.Visible;
 
-      StudyDataRetriever.CreateNew((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          Model = r.Object.StudyData;
-        });
+      InitializeModelAsync();
     }
 
-    public string Instructions { get { return ViewViewModelResources.InstructionsAskUserExtraData; } }
+    private async Task InitializeModelAsync()
+    {
+      #region Thinking
+      var thinkId = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      var studyDataRetriever = await StudyDataRetriever.CreateNewAsync();
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      #endregion
+
+      Model = studyDataRetriever.StudyData;
+    }
+
+    #endregion
+
+    #region Fields
+
+    private AsyncCallback<StudyDataEdit> _Callback;
+
+    #endregion
+
+    #region Properties
 
     #region Native Language
 
@@ -58,9 +78,9 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     public string LabelNativeLanguageText { get { return ViewViewModelResources.LabelAskUserExtraDataNativeLanguageText; } }
-    public string InstructionsSelectNativeLanguageText 
+    public string InstructionsSelectNativeLanguageText
     {
-      get { return ViewViewModelResources.InstructionsAskUserExtraDataSelectNativeLanguageText; } 
+      get { return ViewViewModelResources.InstructionsAskUserExtraDataSelectNativeLanguageText; }
     }
 
     #endregion
@@ -79,18 +99,80 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    //public bool CanSelectLanguage
-    //{
-    //  get
-    //  {
-    //    return true;
-    //  }
-    //}
-    //public void SelectLanguage()
-    //{
-    //  var selectViewModel = Services.Container.GetExportedValue<SelectNativeLanguageViewModel>();
-    //  Services.WindowManager.ShowDialog(selectViewModel);
-    //}
+    public string Instructions { get { return ViewViewModelResources.InstructionsAskUserExtraData; } }
+
+    #endregion
+
+    #region Methods
+
+    public void ShowModal(AsyncCallback<StudyDataEdit> callback)
+    {
+      _Callback = callback;
+      Services.WindowManager.ShowDialog(this);
+    }
+
+    #endregion
+
+    #region Commands
+
+    public override bool CanSave
+    {
+      get
+      {
+        return (base.CanSave &&
+                !string.IsNullOrEmpty(Model.NativeLanguageText));
+      }
+    }
+    public override async Task SaveAsync()
+    {
+      var model = await Model.SaveAsync();
+      Model = model;
+      EventMessages.NativeLanguageChangedEventMessage.Publish(Model.NativeLanguageText);
+      DispatchSavedEvent();
+      NotifyOfPropertyChange(() => CanSave);
+      if (_Callback != null)
+        _Callback(this, new Common.ResultArgs<StudyDataEdit>(Model));
+      TryClose();
+    }
+    #endregion
+
+    #region Events
+
+    public void Handle(NativeLanguageChangedEventMessage message)
+    {
+      Model.NativeLanguageText = message.NewNativeLanguageText;
+      NotifyOfPropertyChange(() => Model);
+      NotifyOfPropertyChange(() => CanSave);
+
+      if (!Model.IsSavable)
+        throw new Exception();
+
+      Model.BeginSave((s, r) =>
+      {
+        if (r.Error != null)
+        {
+          if (_Callback != null)
+          {
+            var result = new Common.ResultArgs<StudyDataEdit>(r.Error);
+            _Callback(this, result);
+            _Callback = null;
+          }
+          else
+            throw r.Error;
+        }
+
+        if (_Callback != null)
+        {
+          var result = new Common.ResultArgs<StudyDataEdit>(Model);
+          _Callback(this, result);
+          _Callback = null;
+        }
+
+        TryClose();
+      });
+    }
+
+    #endregion
 
     #region Base
 
@@ -123,66 +205,5 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #endregion
 
-    public void Handle(EventMessages.NativeLanguageChangedEventMessage message)
-    {
-      Model.NativeLanguageText = message.NewNativeLanguageText;
-      NotifyOfPropertyChange(() => Model);
-      NotifyOfPropertyChange(() => CanSave);
-
-      if (!Model.IsSavable)
-        throw new Exception();
-
-      Model.BeginSave((s, r) =>
-        {
-          if (r.Error != null)
-          {
-            if (_Callback != null)
-            {
-              var result = new Common.ResultArgs<StudyDataEdit>(r.Error);
-              _Callback(this, result);
-              _Callback = null;
-            }
-            else
-              throw r.Error;
-          }
-
-          if (_Callback != null)
-          {
-            var result = new Common.ResultArgs<StudyDataEdit>(Model);
-            _Callback(this, result);
-            _Callback = null;
-          }
-        });
-    }
-
-    private AsyncCallback<StudyDataEdit> _Callback;
-    public void ShowModal(AsyncCallback<StudyDataEdit> callback)
-    {
-      _Callback = callback;
-      Services.WindowManager.ShowDialog(this);
-    }
-
-    public override bool CanSave
-    {
-      get
-      {
-        return (base.CanSave &&
-                !string.IsNullOrEmpty(Model.NativeLanguageText));
-      }
-    }
-    public override void Save()
-    {
-      Model.BeginSave((s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
-        Model = (StudyDataEdit)r.NewObject;
-        EventMessages.NativeLanguageChangedEventMessage.Publish(Model.NativeLanguageText);
-        DispatchSavedEvent();
-        NotifyOfPropertyChange(() => CanSave);
-        if (_Callback != null)
-          _Callback(this, new Common.ResultArgs<StudyDataEdit>(Model));
-      });
-    }
   }
 }

@@ -12,11 +12,16 @@
     <RootNamespace>LearnLanguages.Study</RootNamespace>
     <AssemblyName>LearnLanguages.Study</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -34,6 +39,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,31 +50,60 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoConfig>true</NoConfig>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro">
       <HintPath>..\dependencies\caliburn_silverlight\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\sl50\Csla.dll</HintPath>
     </Reference>
-    <Reference Include="LearnLanguages.Silverlight">
-      <HintPath>..\LearnLanguages.Silverlight\Bin\Debug\LearnLanguages.Silverlight.dll</HintPath>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Silverlight.4.5.10\lib\sl50\Csla.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="LearnLanguages.Study, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CompilerServices.AsyncTargetingPack.1.0.0\lib\sl50\Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ComponentModel.Composition, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.Composition.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Browser" />
+    <Reference Include="System.Windows.Controls, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.DataForm.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.Input, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Data, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BeliefHelper.cs" />
+    <Compile Include="Core\MultiLineTextListStudyPartnerBase.cs" />
     <Compile Include="Defaults\Advisors\DefaultPhrasePercentKnownAdvisor.cs" />
     <Compile Include="Core\FeedbackViewModelBase.cs" />
     <Compile Include="Core\StudierBaseOfT.cs" />
@@ -77,16 +112,12 @@
     <Compile Include="Core\StudyJobCriteria.cs" />
     <Compile Include="Core\StudierBaseOfJAndTAndP.cs" />
     <Compile Include="Creators\GetTranslationArgs.cs" />
+    <Compile Include="Defaults\Recorders\ReviewedPhraseRecorder.cs" />
     <Compile Include="Defaults\Recorders\DefaultAutoTranslatedPhraseRecorder.cs" />
     <Compile Include="Defaults\Recorders\DefaultReviewedWordInPhraseRecorder.cs" />
-    <Compile Include="Defaults\Studiers\DefaultPhraseMeaningStudier.cs" />
+    <Compile Include="Defaults\Simple\SimpleLanguageTextPercentKnownPair.cs" />
+    <Compile Include="Defaults\Simple\SimpleStudyPartner.cs" />
     <Compile Include="Defaults\Recorders\DefaultReviewedLineRecorder.cs" />
-    <Compile Include="Defaults\Studiers\DefaultSingleMultiLineTextMeaningStudier.cs" />
-    <Compile Include="Defaults\Studiers\DefaultLineMeaningStudier.cs" />
-    <Compile Include="Defaults\Studiers\DefaultMultiLineTextsMeaningStudier.cs" />
-    <Compile Include="Defaults\Studiers\DefaultMultiLineTextsOrderStudier.cs" />
-    <Compile Include="Defaults\Studiers\DefaultMultiLineTextsStudier.cs" />
-    <Compile Include="Defaults\Studiers\DefaultStudyPartner.cs" />
     <Compile Include="EventMessages\StudyItemCompletedEventMessage.cs" />
     <Compile Include="Exceptions\StudyException.cs" />
     <Compile Include="Interfaces\IStudyItemViewModelBase.cs" />
@@ -94,29 +125,35 @@
     <Compile Include="Interfaces\IGetStudyData.cs" />
     <Compile Include="Interfaces\IStudyPartner.cs" />
     <Compile Include="Core\StudyJobInfoOfT.cs" />
+    <Compile Include="StudyModule.cs" />
+    <Compile Include="Pages\ExecuteStudySongsPage.cs" />
+    <Compile Include="Pages\StudySongsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\BingTranslatorService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
+    <Compile Include="Pages\SimpleProgressPage.cs" />
+    <Compile Include="StudyHelper.cs" />
     <Compile Include="StudyResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StudyResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Creators\StudyItemViewModelFactory.cs" />
-    <Compile Include="ViewModels\StudyLineOrderManualQuestionAnswerViewModel.cs" />
-    <Compile Include="ViewModels\StudyLineOrderTimedQuestionAnswerViewModel.cs" />
-    <Compile Include="ViewModels\StudyPhraseManualQuestionAnswerViewModel.cs" />
+    <Compile Include="ViewModels\AskUserExtraDataViewModel.cs" />
+    <Compile Include="ViewModels\StudySongsItemViewModel.cs" />
+    <Compile Include="ViewModels\StudySongsViewModel.cs" />
+    <Compile Include="ViewModels\SimpleProgressViewModel.cs" />
     <Compile Include="ViewModels\DefaultStudyPartnerViewModel.cs" />
     <Compile Include="ViewModels\PercentKnownFeedbackViewModel.cs" />
     <Compile Include="ViewModels\StudySessionCompleteViewModel.cs" />
     <Compile Include="ViewModels\DefaultStudyMultiLineTextsViewModel.cs" />
     <Compile Include="ViewModels\StudyPhraseTimedQuestionAnswerViewModel.cs" />
     <Compile Include="Core\StudyPartnerBase.cs" />
+    <Compile Include="ViewModels\ExecuteStudySongsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Analysis.Client\LearnLanguages.Analysis.Client.csproj">
+      <Project>{4ac0d8f4-1f5d-43a8-8182-38198cea41d5}</Project>
+      <Name>LearnLanguages.Analysis.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
       <Project>{4314B702-58FE-44EC-BF55-61CC4483C05C}</Project>
       <Name>LearnLanguages.Business.Client</Name>
@@ -133,16 +170,36 @@
       <Project>{DFC14799-1426-4266-A064-4B880612559F}</Project>
       <Name>LearnLanguages.History.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.Client.csproj">
+    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.csproj">
       <Project>{1CEB7E12-3D55-4EE4-BFCD-1AAB6F64F024}</Project>
-      <Name>LearnLanguages.Navigation.Client</Name>
+      <Name>LearnLanguages.Navigation</Name>
     </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
       <Project>{98EE87B2-152D-48D8-B509-93EEB92059BE}</Project>
       <Name>LearnLanguages.Offer.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Silverlight.Common\LearnLanguages.Silverlight.Common.csproj">
+      <Project>{671298a4-bd06-4e12-a844-d6dd0147d5e6}</Project>
+      <Name>LearnLanguages.Silverlight.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AskUserExtraDataView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StudySongsItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StudySongsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SimpleProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\StudyLineOrderTimedQuestionAnswerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -155,18 +212,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <None Include="Service References\BingTranslatorService\configuration91.svcinfo" />
-    <None Include="Service References\BingTranslatorService\configuration.svcinfo" />
-    <None Include="Service References\BingTranslatorService\LearnLanguages.Study.BingTranslatorService.GetTranslationsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\BingTranslatorService\LearnLanguages.Study.BingTranslatorService.TranslateArrayResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\BingTranslatorService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="StudyHeirarchy.txt" />
     <Content Include="StudyNotes.txt" />
     <Page Include="Views\DefaultStudyPartnerView.xaml">
@@ -189,6 +234,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\ExecuteStudySongsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="StudyResources.resx">
@@ -197,21 +246,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\BingTranslatorService\soap.wsdl" />
-    <None Include="Service References\BingTranslatorService\soap.xsd" />
-    <None Include="Service References\BingTranslatorService\soap1.xsd" />
-    <None Include="Service References\BingTranslatorService\soap2.xsd" />
-    <None Include="Service References\BingTranslatorService\soap3.xsd" />
-    <None Include="Service References\BingTranslatorService\SoapService.wsdl" />
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\BingTranslatorService\" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Defaults\Studiers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

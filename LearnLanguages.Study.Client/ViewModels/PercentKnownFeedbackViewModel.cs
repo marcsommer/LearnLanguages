@@ -6,6 +6,7 @@ using LearnLanguages.Common.Feedback;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Common;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -23,8 +24,6 @@ namespace LearnLanguages.Study.ViewModels
 
     public PercentKnownFeedbackViewModel()
     {
-      Feedback = new Feedback<double>();
-      SetFeedback(-1);
       Services.EventAggregator.Subscribe(this);
     }
 
@@ -125,16 +124,26 @@ namespace LearnLanguages.Study.ViewModels
 
     public override IFeedback GetFeedback(int timeoutMilliseconds)
     {
+      //INITIALIZE VARIABLES
+      Feedback = new Feedback<double>();
+      SetFeedback(-1);
       TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
       DateTime timeoutDateTime = DateTime.Now + timeoutTimeSpan;
       IsEnabled = true;
       bool feedbackIsProvided = false;
+
+      //TIMESTAMP WHEN FEEDBACK IS ASKED
       _FeedbackAsked = DateTime.Now;
       do
       {
+        //SLEEP A CERTAIN AMOUNT OF TIME BETWEEN CHECKING FOR FEEDBACK VALUE
         System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
         var feedbackValue = ((Feedback<double>)Feedback).Value;
-        feedbackIsProvided = feedbackValue != -1;
+
+        //IF FEEDBACK IS PROVIDED, IT WILL BE EQUAL TO OR GREATER THAN 0
+        //NEGATIVE FEEDBACK IS NOT ALLOWED (IT SHOULD INITIALIZE TO A NEGATIVE 
+        //VALUE, E.G. -1)
+        feedbackIsProvided = feedbackValue >= 0;
       }
       while (DateTime.Now < timeoutDateTime && !feedbackIsProvided);
       IsEnabled = false;
@@ -144,50 +153,54 @@ namespace LearnLanguages.Study.ViewModels
       return Feedback;
     }
 
-    public override void GetFeedbackAsync(int timeoutMilliseconds,
-                                          AsyncCallback<IFeedback> callback)
+    //CONVERT FEEDBACK VIEWMODEL GETFEEDBACKASYNC TO ASYNC/AWAIT KEYWORD PATTERN
+    public override async Task<IFeedback> GetFeedbackAsync(int timeoutMilliseconds)
     {
-      //ENABLE THE FEEDBACK CONTROLS (E.G. BUTTONS)
-      IsEnabled = true;
+      var getFeedbackTask = new Task<IFeedback>(() => GetFeedback(timeoutMilliseconds));
+      getFeedbackTask.Start();
+      return await getFeedbackTask;
 
-      BackgroundWorker worker = new BackgroundWorker();
-      worker.DoWork += (s, r) =>
-        {
-          //RUNS ON A BACKGROUND THREAD
-          try
-          {
-            //var threadIdDoWork = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
-            DateTime timeoutDateTime = DateTime.Now + timeoutTimeSpan;
-            bool feedbackIsProvided = false;
-            _FeedbackAsked = DateTime.Now;
-            do
-            {
-              //DO THIS WHILE WE ARE WAITING FOR FEEDBACK FROM A CONTROL OR A TIMEOUT
-              var feedbackValue = ((Feedback<double>)Feedback).Value;
-              feedbackIsProvided = feedbackValue != -1;
-              System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
-            }
-            while (DateTime.Now < timeoutDateTime && !feedbackIsProvided);
+      ////ENABLE THE FEEDBACK CONTROLS (E.G. BUTTONS)
+      //IsEnabled = true;
 
-          }
-          catch (Exception ex)
-          {
-            IsEnabled = false;
-            callback(this, new ResultArgs<IFeedback>(ex));
-          }
-        };
-      worker.RunWorkerCompleted += (s2, r2) =>
-        {
-          //RUNS ON THE MAIN THREAD
-          //var threadIdCompleted = System.Threading.Thread.CurrentThread.ManagedThreadId;
-          _FeedbackGiven = DateTime.Now;
-          PublishFeedback();
-          IsEnabled = false;
-          callback(this, new ResultArgs<IFeedback>(Feedback));
-        };
+      //BackgroundWorker worker = new BackgroundWorker();
+      //worker.DoWork += (s, r) =>
+      //  {
+      //    //RUNS ON A BACKGROUND THREAD
+      //    try
+      //    {
+      //      //var threadIdDoWork = System.Threading.Thread.CurrentThread.ManagedThreadId;
+      //      TimeSpan timeoutTimeSpan = new TimeSpan(0, 0, 0, 0, timeoutMilliseconds);
+      //      DateTime timeoutDateTime = DateTime.Now + timeoutTimeSpan;
+      //      bool feedbackIsProvided = false;
+      //      _FeedbackAsked = DateTime.Now;
+      //      do
+      //      {
+      //        //DO THIS WHILE WE ARE WAITING FOR FEEDBACK FROM A CONTROL OR A TIMEOUT
+      //        var feedbackValue = ((Feedback<double>)Feedback).Value;
+      //        feedbackIsProvided = feedbackValue != -1;
+      //        System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultFeedbackCheckIntervalMilliseconds));
+      //      }
+      //      while (DateTime.Now < timeoutDateTime && !feedbackIsProvided);
 
-      worker.RunWorkerAsync();
+      //    }
+      //    catch (Exception ex)
+      //    {
+      //      IsEnabled = false;
+      //      callback(this, new ResultArgs<IFeedback>(ex));
+      //    }
+      //  };
+      //worker.RunWorkerCompleted += (s2, r2) =>
+      //  {
+      //    //RUNS ON THE MAIN THREAD
+      //    //var threadIdCompleted = System.Threading.Thread.CurrentThread.ManagedThreadId;
+      //    _FeedbackGiven = DateTime.Now;
+      //    PublishFeedback();
+      //    IsEnabled = false;
+      //    callback(this, new ResultArgs<IFeedback>(Feedback));
+      //  };
+
+      //worker.RunWorkerAsync();
     }
 
     private void PublishFeedback()
@@ -229,5 +242,7 @@ namespace LearnLanguages.Study.ViewModels
     
 
     #endregion
+
+    
   }
 }

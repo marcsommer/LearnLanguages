@@ -10,8 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LearnLanguages.DataAccess</RootNamespace>
     <AssemblyName>LearnLanguages.DataAccess</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,10 +35,28 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\net45\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-WPF.4.5.10\lib\net45\Csla.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.XmlSerializers">
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\net45\Csla.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -52,7 +76,7 @@
     <Compile Include="DalBases\LanguageDalBase.cs" />
     <Compile Include="DalBases\TranslationDalBase.cs" />
     <Compile Include="DalBases\PhraseDalBase.cs" />
-    <Compile Include="DalBases\CustomIdentityDalBase.cs" />
+    <Compile Include="DalBases\UserDalBase.cs" />
     <Compile Include="DalFactory.cs" />
     <Compile Include="DalHelper.cs" />
     <Compile Include="DalResources.Designer.cs">
@@ -67,6 +91,7 @@
     <Compile Include="Dtos\TranslationDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Exceptions\MustRunOnServerException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
     <Compile Include="Exceptions\MultipleIdsNotFoundException.cs" />
     <Compile Include="Exceptions\LanguageTextNotFoundException.cs" />
@@ -101,7 +126,7 @@
     <Compile Include="Interfaces\IStudyDataDal.cs" />
     <Compile Include="Interfaces\ITranslationDal.cs" />
     <Compile Include="Interfaces\IDalManager.cs" />
-    <Compile Include="Interfaces\ICustomIdentityDal.cs" />
+    <Compile Include="Interfaces\IUserDal.cs" />
     <Compile Include="Interfaces\ILanguageDal.cs" />
     <Compile Include="Interfaces\IPhraseDal.cs" />
     <Compile Include="Dtos\LanguageDto.cs" />
@@ -122,7 +147,9 @@
       <Name>LearnLanguages.Common.Server</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

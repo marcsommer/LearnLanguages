@@ -8,6 +8,8 @@ using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Navigation.EventMessages;
+using System.Threading.Tasks;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study
 {
@@ -35,20 +37,18 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
+    public override async Task<ResultArgs<StudyItemViewModelArgs>> GetNextStudyItemViewModelAsync()
     {
       if (_AbortIsFlagged)
-      {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
-      }
+        return await StudyHelper.GetAbortedAsync();
+
       //WE ARE CYCLING THROUGH ALL OF THE MLTS, SO GET NEXT MLT TO STUDY INDEX
       var multiLineTextIndex = GetNextMultiLineTextIndex();
       var currentMultiLineText = _Target[multiLineTextIndex];
       var studier = _Studiers[currentMultiLineText.Id];
 
       //WE HAVE ALREADY INITIALIZED EACH STUDIER, SO NOW JUST DELEGATE THE WORK TO THE STUDIER
-      studier.GetNextStudyItemViewModel(callback);
+      return await studier.GetNextStudyItemViewModelAsync();
     }
 
     private int GetNextMultiLineTextIndex()
@@ -94,8 +94,7 @@ namespace LearnLanguages.Study
     
     #endregion
 
-    public override void InitializeForNewStudySession(MultiLineTextList target, 
-                                                      ExceptionCheckCallback completedCallback)
+    public override async Task InitializeForNewStudySessionAsync(MultiLineTextList target)
     {
       _AbortIsFlagged = false;
 
@@ -109,28 +108,31 @@ namespace LearnLanguages.Study
       for (int i = 0; i < newJobMultiLineTextList.Count; i++)
       {
         if (_AbortIsFlagged)
-        {
-          completedCallback(null);
           return;
-        }
         var multiLineTextEdit = newJobMultiLineTextList[i];
         var studier = new DefaultSingleMultiLineTextMeaningStudier();
-        studier.InitializeForNewStudySession(multiLineTextEdit, (e) =>
-          {
-            if (e != null)
-              throw e;
 
-            if (_AbortIsFlagged)
-            {
-              completedCallback(null);
-              return;
-            }
+        #region Thinking (try..)
+        var targetId = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+        try
+        {
+        #endregion
+          await studier.InitializeForNewStudySessionAsync(multiLineTextEdit);
+        #region (...finally) Thinked
+        }
+        finally
+        {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+        }
+          #endregion
+        if (_AbortIsFlagged)
+          return;
 
-            _Studiers.Add(multiLineTextEdit.Id, studier);
-            initializedCount++;
-            if (initializedCount == newJobMultiLineTextList.Count)
-              completedCallback(null);
-          });
+        _Studiers.Add(multiLineTextEdit.Id, studier);
+        initializedCount++;
+        if (initializedCount == newJobMultiLineTextList.Count)
+          return;
       }
     }
 

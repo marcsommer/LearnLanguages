@@ -3,6 +3,7 @@ using LearnLanguages.History;
 using LearnLanguages.Business;
 using LearnLanguages.History.Events;
 using LearnLanguages.History.Bases;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -21,17 +22,17 @@ namespace LearnLanguages.Study
       return true;
     }
 
-    protected override void Record(History.Events.ReviewedLineEvent message)
+    protected override async Task RecordAsync(History.Events.ReviewedLineEvent message)
     {
-        /// DETAILS: LINE ID
-        /// REVIEWMETHODID
-        /// LINETEXT
-        /// LINENUMBER
-        /// PHRASEID
-        /// LANGUAGEID
-        /// LANGUAGETEXT
-        /// FEEDBACKASDOUBLE
-        /// DURATION
+      /// DETAILS: LINE ID
+      /// REVIEWMETHODID
+      /// LINETEXT
+      /// LINENUMBER
+      /// PHRASEID
+      /// LANGUAGEID
+      /// LANGUAGETEXT
+      /// FEEDBACKASDOUBLE
+      /// DURATION
 
       var lineId = message.GetDetail<Guid>(HistoryResources.Key_LineId);
       var reviewMethodId = message.GetDetail<Guid>(HistoryResources.Key_ReviewMethodId);
@@ -44,52 +45,42 @@ namespace LearnLanguages.Study
       var duration = message.Duration;
 
       #region CREATE BELIEF
-      PhraseBeliefEdit.NewPhraseBeliefEdit(phraseId, (s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+      var belief = await PhraseBeliefEdit.NewPhraseBeliefEditAsync(phraseId);
 
-          var belief = r.Object;
+      if (belief.Phrase.Text != lineText ||
+          belief.Phrase.Language.Text != languageText)
+        throw new Exception("phrasetext or languagetext does not match message");
 
-          if (belief.Phrase.Text != lineText ||
-              belief.Phrase.Language.Text != languageText)
-            throw new Exception("phrasetext or languagetext does not match message");
+      #region EDIT BELIEF
+      //THE TIMESTAMP OF RECORDER'S BELIEF IS RIGHT NOW
+      belief.TimeStamp = DateTime.Now;
 
-          #region EDIT BELIEF
-          //THE TIMESTAMP OF RECORDER'S BELIEF IS RIGHT NOW
-          belief.TimeStamp = DateTime.Now;
+      //RECORDER USES TEXT PROPERTY FOR DETAILS ABOUT REVIEW IN FORM OF 
+      //QUERY STRING, INCLUDING LINE ID/NUMBER AND DURATION
+      var beliefText = @"?";
+      #region Build beliefText
+      beliefText += HistoryResources.Key_DurationInMilliseconds + "=" + duration.Milliseconds.ToString();
+      beliefText += @"&" + HistoryResources.Key_LineId + "=" + lineId.ToString();
+      beliefText += @"&" + HistoryResources.Key_LineNumber + "=" + lineNumber.ToString();
+      #endregion
+      belief.Text = beliefText;
 
-          //RECORDER USES TEXT PROPERTY FOR DETAILS ABOUT REVIEW IN FORM OF 
-          //QUERY STRING, INCLUDING LINE ID/NUMBER AND DURATION
-          var beliefText = @"?";
-          #region Build beliefText
-          beliefText += HistoryResources.Key_DurationInMilliseconds + "=" + duration.Milliseconds.ToString();
-          beliefText += @"&" + HistoryResources.Key_LineId + "=" + lineId.ToString();
-          beliefText += @"&" + HistoryResources.Key_LineNumber + "=" + lineNumber.ToString();
-          #endregion
-          belief.Text = beliefText;
-          
-          //FEEDBACK STRENGTH.  RECORDER IS PASSTHROUGH IN THIS CASE.  RECORDER HAS NO ALTERATION
-          //TO THE STRENGTH OF THE FEEDBACK.
-          belief.Strength = feedback;
+      //FEEDBACK STRENGTH.  RECORDER IS PASSTHROUGH IN THIS CASE.  RECORDER HAS NO ALTERATION
+      //TO THE STRENGTH OF THE FEEDBACK.
+      belief.Strength = feedback;
 
-          //THE RECORDER IS THE BELIEVER IN THIS CASE
-          belief.BelieverId = Id;
+      //THE RECORDER IS THE BELIEVER IN THIS CASE
+      belief.BelieverId = Id;
 
-          //REVIEWMETHOD ID
-          belief.ReviewMethodId = reviewMethodId;
+      //REVIEWMETHOD ID
+      belief.ReviewMethodId = reviewMethodId;
 
-          //PHRASE IS ALREADY SET
-          #endregion
+      //PHRASE IS ALREADY SET
+      #endregion
 
-          #region SAVE BELIEF
-          belief.BeginSave((s3, r3) =>
-            {
-              if (r3.Error != null)
-                throw r3.Error;
-            });
-          #endregion
-        });
+      #region SAVE BELIEF
+      await belief.SaveAsync();
+      #endregion
 
       #endregion
     }

@@ -1,5 +1,5 @@
 ﻿
 namespace LearnLanguages
 {
-  public enum LogPriority { Low, Medium, High }
+  public enum LogPriority { Low, VeryLow, Medium, High, VeryHigh }
 }

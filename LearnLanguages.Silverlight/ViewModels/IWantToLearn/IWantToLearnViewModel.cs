@@ -86,5 +86,17 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       get { return bool.Parse(AppResources.ShowGridLines); }
     }
+
+    public string ToolTip
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
+      }
+    }
   }
 }

@@ -6,6 +6,7 @@ using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common;
 using LearnLanguages.Navigation.EventMessages;
 using Caliburn.Micro;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -18,8 +19,7 @@ namespace LearnLanguages.Study
       Services.EventAggregator.Subscribe(this);//navigation
     }
     public abstract IFeedback GetFeedback(int timeoutMilliseconds);
-    public abstract void GetFeedbackAsync(int timeoutMilliseconds, 
-                                          AsyncCallback<IFeedback> callback);
+    public abstract Task<IFeedback> GetFeedbackAsync(int timeoutMilliseconds);
 
     private IFeedback _Feedback;
     public IFeedback Feedback
@@ -49,7 +49,7 @@ namespace LearnLanguages.Study
       }
     }
 
-    public void Handle(NavigationRequestedEventMessage message)
+    public virtual void Handle(NavigationRequestedEventMessage message)
     {
       IsEnabled = false;
     }

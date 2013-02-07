@@ -1,62 +1,24 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using LearnLanguages.Business.Security;
-using Microsoft.Silverlight.Testing;
+
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Silverlight.Testing;
+using System.Threading.Tasks;
+
 
 namespace LearnLanguages.Silverlight.Tests
 {
   [TestClass]
-  [Tag("sec")]
-  public class SecurityTests : Microsoft.Silverlight.Testing.SilverlightTest
+  [Tag("security")]
+  public class SecurityTests : TestsBase
   {
-
-    //private void OutputExecutionLocations()
-    //{
-    //  string msg = "ExecutionLocation: " + Csla.ApplicationContext.ExecutionLocation.ToString();
-    //  msg = msg + "\r\nLogicalExecutionLocation: " + Csla.ApplicationContext.LogicalExecutionLocation.ToString();
-    //  MessageBox.Show(msg);
-    //}
-
-
-    //[ClassInitialize]
-    //public void Initialize()
-    //{
-    //  _TestUsername = "user";
-    //  _TestRole = "Users";
-    //  _TestPassword = "password";
-    //  _TestSaltedHashedPassword = new SaltedHashedPassword(_TestPassword);
-    //  _TestSalt = _TestSaltedHashedPassword.Salt;
-
-    //  MockDb.Users.Add(new User()
-    //    {
-    //      Username = _TestUsername,
-    //      SaltedHashedPasswordValue = _TestSaltedHashedPassword.Value,
-    //      Salt = _TestSalt
-    //    });
-
-    //  MockDb.UserRoles.Add(new UserRole() 
-    //    { 
-    //      Username = _TestUsername, 
-    //      Role = _TestRole 
-    //    });
-
-
-    //}
-
-    private string _TestValidUsername = "user";
-    private string _TestRole = "Admin";
-    private string _TestValidPassword = "password";
+    private string _TestValidUsernameAdmin = "user";
+    private string _TestRoleAdmin = "Admin";
+    private string _TestRoleUser = "User";
+    private string _TestValidPasswordAdmin = "password";
     //private SaltedHashedPassword _TestSaltedHashedPassword;
     private string _TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
     private int _TestSalt = -54623530;
@@ -66,227 +28,271 @@ namespace LearnLanguages.Silverlight.Tests
 
     [TestMethod]
     [Asynchronous]
-    [Tag("valid")]
-    public void TEST_CUSTOM_PRINCIPAL_BEGIN_LOGIN_SUCCESS_VALID_USERNAME_VALID_PASSWORD()
+    public async Task TEST_LOGIN_ASYNC_SUCCESS_VALID_USERNAME_VALID_PASSWORD_LOGOUT()
     {
-      var isInitialized = false;
-
-      CustomPrincipal.BeginLogin(_TestValidUsername, _TestValidPassword, (e) =>
+      var asyncIsCompleted = false;
+      EnqueueConditional(() => asyncIsCompleted);
+      try
       {
-        if (e != null)
-          throw e;
-        isInitialized = true;
-      });
-
-      EnqueueConditional(() => isInitialized);
-
-      EnqueueCallback(() => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(_TestRole)); },
-                      () => { Assert.AreEqual(_TestValidUsername, Csla.ApplicationContext.User.Identity.Name); },
-                      () => { Assert.IsTrue(Csla.ApplicationContext.User.Identity.IsAuthenticated); });
-
-      EnqueueTestComplete();
-    }
-
-    [TestMethod]
-    [Asynchronous]
-    public void TEST_CUSTOM_PRINCIPAL_BEGIN_LOGIN_FAIL_INVALID_USERNAME_INVALID_PASSWORD()
-    {
-      var isInitialized = false;
-
-      CustomPrincipal.BeginLogin(_TestInvalidUsername, _TestInvalidPassword, (e) =>
+        await UserPrincipal.LoginAsync(_TestValidUsernameAdmin, _TestValidPasswordAdmin);
+      }
+      finally
       {
-        if (e != null)
-          throw e;
-        isInitialized = true;
-      });
-
-      EnqueueConditional(() => isInitialized);
-
-      EnqueueCallback(() => { Assert.IsFalse(Csla.ApplicationContext.User.IsInRole(_TestRole)); },
-                      () => { Assert.AreNotEqual(_TestValidUsername, Csla.ApplicationContext.User.Identity.Name); },
-                      () => { Assert.IsFalse(Csla.ApplicationContext.User.Identity.IsAuthenticated); });
-
-      EnqueueTestComplete();
+        asyncIsCompleted = true;
+        EnqueueCallback(() => Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(_TestRoleUser)),
+                      () => Assert.AreEqual(_TestValidUsernameAdmin, Csla.ApplicationContext.User.Identity.Name),
+                      () => Assert.IsTrue(Csla.ApplicationContext.User.Identity.IsAuthenticated),
+                      () => UserPrincipal.Logout()
+                      );
+        EnqueueTestComplete();
+      }
     }
 
     [TestMethod]
     [Asynchronous]
-    public void TEST_CUSTOM_PRINCIPAL_BEGIN_LOGIN_FAIL_VALID_USERNAME_INVALID_PASSWORD()
+    public async Task TEST_LOGIN_ASYNC_FAIL_INVALID_USERNAME_INVALID_PASSWORD()
     {
-      var isInitialized = false;
-
-      CustomPrincipal.BeginLogin(_TestValidUsername, _TestInvalidPassword, (e) =>
+      var asyncIsCompleted = false;
+      EnqueueConditional(() => asyncIsCompleted);
+      try
       {
-        if (e != null)
-          throw e;
-        isInitialized = true;
-      });
-
-      EnqueueConditional(() => isInitialized);
-
-      EnqueueCallback(() => { Assert.IsFalse(Csla.ApplicationContext.User.IsInRole(_TestRole)); },
-                      () => { Assert.AreNotEqual(_TestValidUsername, Csla.ApplicationContext.User.Identity.Name); },
-                      () => { Assert.IsFalse(Csla.ApplicationContext.User.Identity.IsAuthenticated); });
-
-      EnqueueTestComplete();
-    }
-
-    [TestMethod]
-    [Asynchronous]
-    public void TEST_CUSTOM_PRINCIPAL_BEGIN_LOGIN_FAIL_INVALID_USERNAME_VALID_PASSWORD()
-    {
-      var isInitialized = false;
-
-      CustomPrincipal.BeginLogin(_TestInvalidUsername, _TestValidPassword, (e) =>
+        await UserPrincipal.LoginAsync(_TestInvalidUsername, _TestInvalidPassword);
+      }
+      finally
       {
-        if (e != null)
-          throw e;
-        isInitialized = true;
-      });
-
-      EnqueueConditional(() => isInitialized);
-
-      EnqueueCallback(() => { Assert.IsFalse(Csla.ApplicationContext.User.IsInRole(_TestRole)); },
-                      () => { Assert.AreNotEqual(_TestValidUsername, Csla.ApplicationContext.User.Identity.Name); },
-                      () => { Assert.IsFalse(Csla.ApplicationContext.User.Identity.IsAuthenticated); });
-
-      EnqueueTestComplete();
+        asyncIsCompleted = true;
+        EnqueueCallback(() => Assert.IsFalse(Csla.ApplicationContext.User.IsInRole(_TestRoleUser)),
+                        () => Assert.AreNotEqual(_TestValidUsernameAdmin, 
+                                                 Csla.ApplicationContext.User.Identity.Name),
+                        () => Assert.IsFalse(Csla.ApplicationContext.User.Identity.IsAuthenticated)
+                        );
+        EnqueueTestComplete();
+      }
     }
 
     [TestMethod]
     [Asynchronous]
-    public void TEST_ADD_USER()
+    public async Task TEST_LOGIN_ASYNC_FAIL_VALID_USERNAME_INVALID_PASSWORD()
     {
-      var isCreated = false;
-
-      var testUsername = "user2";
-      var testPassword = "password2";
-      var criteria = new Business.Criteria.UserInfoCriteria(testUsername, testPassword);
-      Business.NewUserCreator.CreateNew(criteria, (s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          isCreated = true;
-        });
-
-
-      EnqueueConditional(() => isCreated);
-
-      EnqueueCallback(() => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); });
-
-      EnqueueTestComplete();
+      var asyncIsCompleted = false;
+      EnqueueConditional(() => asyncIsCompleted);
+      try
+      {
+        await UserPrincipal.LoginAsync(_TestValidUsernameAdmin, _TestInvalidPassword);
+      }
+      finally
+      {
+        asyncIsCompleted = true;
+        EnqueueCallback(() => Assert.IsFalse(Csla.ApplicationContext.User.IsInRole(_TestRoleUser)),
+                        () => Assert.AreNotEqual(_TestValidUsernameAdmin, 
+                                                 Csla.ApplicationContext.User.Identity.Name),
+                        () => Assert.IsFalse(Csla.ApplicationContext.User.Identity.IsAuthenticated)
+                        );
+        EnqueueTestComplete();
+      }
     }
 
     [TestMethod]
     [Asynchronous]
-    [Tag("current")]
-    public void TEST_ADD_50_RANDOM_USERS_RANDOM_PASSWORDS_MUST_CLEAN_SOLUTION_FIRST()
+    public async Task TEST_LOGIN_ASYNC_FAIL_INVALID_USERNAME_VALID_PASSWORD()
     {
-      int numToAdd = 50;
+      var asyncIsCompleted = false;
+      EnqueueConditional(() => asyncIsCompleted);
+      try
+      {
+        await UserPrincipal.LoginAsync(_TestInvalidUsername, _TestValidPasswordAdmin);
+      }
+      finally
+      {
+        asyncIsCompleted = true;
+        EnqueueCallback(() => Assert.IsFalse(Csla.ApplicationContext.User.IsInRole(_TestRoleUser)),
+                        () => Assert.AreNotEqual(_TestValidUsernameAdmin, 
+                                                 Csla.ApplicationContext.User.Identity.Name),
+                        () => Assert.IsFalse(Csla.ApplicationContext.User.Identity.IsAuthenticated)
+                        );
+        EnqueueTestComplete();
+      }
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    public async Task TEST_LOGIN_ADMIN_ADD_USER_DELETE_USER_LOGOUT()
+    {
+
+      var newUserLoginWasSuccessful = false;
+      var newUserIsInUserRole = false;
+      //ASSUME DELETED USER LOGIN IS SUCCESSFUL
+      var deletedUserLoginWasSuccessful = true;
+
+      Business.NewUserCreator creator = null;
+      Business.DeleteUserReadOnly deleter = null;
+
+      var isAsyncComplete = false;
+      var hasError = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
+      {
+        //LOGIN AS THE ADMIN
+        await UserPrincipal.LoginAsync(_TestValidUsernameAdmin, _TestValidPasswordAdmin);
+
+        //CREATE THE USER
+        var testNewUsername = "user929283";
+        var testNewUserPassword = "password223jfkj";
+        var criteria = new Csla.Security.UsernameCriteria(testNewUsername, testNewUserPassword);
+        creator = await Business.NewUserCreator.CreateNewAsync(criteria);
+
+        //LOGOUT ADMIN
+        UserPrincipal.Logout();
+
+        //LOGIN AS THE NEW USER
+        await UserPrincipal.LoginAsync(testNewUsername, testNewUserPassword);
+
+        //CONFIRM LOGIN
+        newUserLoginWasSuccessful = Common.CommonHelper.CurrentUserIsAuthenticated();
+
+        //LOGOUT NEW USER
+        UserPrincipal.Logout();
+        
+        //LOG BACK IN AS ADMIN
+        await UserPrincipal.LoginAsync(_TestValidUsernameAdmin, _TestValidPasswordAdmin);
+
+        //DELETE THE USER
+        deleter = await Business.DeleteUserReadOnly.CreateNewAsync(testNewUsername);
+
+        //LOGOUT ADMIN AGAIN
+        UserPrincipal.Logout();
+
+        //TRY TO LOG THE DELETED USER BACK IN, BUT SHOULD FAIL (BUT NOT THROW EXCEPTION)
+        await UserPrincipal.LoginAsync(testNewUsername, testNewUserPassword);
+
+        //THIS SHOULD BE FALSE.
+        deletedUserLoginWasSuccessful = Common.CommonHelper.CurrentUserIsAuthenticated();
+
+        EnqueueTestComplete();
+      }
+      catch
+      {
+        hasError = true;
+      }
+      finally
+      {
+        var adminRole = DataAccess.SeedData.Ton.AdminRoleText;
+        EnqueueCallback(
+                        () => Assert.IsFalse(hasError),
+                        () => Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(adminRole)),
+                        () => Assert.IsTrue(creator.WasSuccessful),
+                        () => Assert.IsTrue(deleter.WasSuccessful),
+                        () => Assert.IsFalse(deletedUserLoginWasSuccessful),
+                        () => Assert.IsFalse(Common.CommonHelper.CurrentUserIsAuthenticated())
+                        );
+
+        EnqueueTestComplete();
+        Teardown();
+        isAsyncComplete = true;
+      }
+    }
+    [TestMethod]
+    [Asynchronous]
+    public async Task TEST_ADD_20_RANDOM_USERS_RANDOM_PASSWORDS_MUST_CLEAN_SOLUTION_FIRST()
+    {
+      int numToDo = 20;
+      int maxAttempts = 50;
       var creationAttempts = 0;
       var creationSuccesses = 0;
 
-      for (int i = 0; i < numToAdd; i++)
+      var isAsyncComplete = false;
+      var hasError = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
       {
-        string randomUsername = GenerateRandomUsername();
-        string randomPassword = GenerateRandomPassword();
-        var criteria = new Business.Criteria.UserInfoCriteria(randomUsername, randomPassword);
-
-        Business.NewUserCreator.CreateNew(criteria, (s, r) =>
+        for (int i = 0; i < numToDo; i++)
         {
-          creationAttempts++;
-          //if (r.Error != null)
-          //  throw r.Error;
-          if (r.Error == null)
-            creationSuccesses++;
-        });
-      }
+          string randomUsername = GenerateRandomUsername();
+          string randomPassword = GenerateRandomPassword();
+          var criteria = new Csla.Security.UsernameCriteria(randomUsername, randomPassword);
 
-      EnqueueConditional(() => creationAttempts == numToAdd);
-
-      EnqueueCallback(() => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); },
-                      () => { Assert.AreEqual(numToAdd, creationAttempts); },
-                      () => { Assert.AreEqual(numToAdd, creationSuccesses); });
-
-      EnqueueTestComplete();
-    }
-
-    [TestMethod]
-    [Asynchronous]
-    public void TEST_ADD_THEN_DELETE_RANDOM_USER()
-    {
-      bool wasAdded = false;
-      bool wasDeleted = false;
-
-      string randomUsername = GenerateRandomUsername();
-      string randomPassword = GenerateRandomPassword();
-      var criteria = new Business.Criteria.UserInfoCriteria(randomUsername, randomPassword);
-
-      Business.NewUserCreator.CreateNew(criteria, (s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
-        wasAdded = true;
-        
-
-        criteria = new Business.Criteria.UserInfoCriteria(randomUsername);
-        Business.DeleteUserReadOnly.CreateNew(criteria, (s2, r2) =>
+          try
           {
-            if (r2.Error != null)
-              throw r2.Error;
+            creationAttempts++;
+            var creator = await Business.NewUserCreator.CreateNewAsync(criteria);
+            creationSuccesses++;
+          }
+          catch (Exception ex)
+          {
+            //Don't care about errors.
+            //we just don't increment creationSuccesses
+          }
+        }
+      }
+      catch
+      {
+        hasError = true;
+      }
+      finally
+      {
+        EnqueueConditional(() => (creationSuccesses == numToDo) || (maxAttempts == creationAttempts));
 
-            wasDeleted = true;
-          });
-      });
+        EnqueueCallback(
+                        () => Assert.IsFalse(hasError),
+                        () => Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(_TestRoleUser)),
+                        () => Assert.IsTrue(creationAttempts < maxAttempts),
+                        () => Assert.AreEqual(numToDo, creationSuccesses),
+                        () => Teardown()
+                       );
 
-
-      EnqueueConditional(() => wasAdded);
-      EnqueueConditional(() => wasDeleted);
-
-      EnqueueCallback(
-                      () => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); }
-                     );
-
-      EnqueueTestComplete();
+        EnqueueTestComplete();
+        
+        isAsyncComplete = true;
+      }
     }
-
-
+    
     [TestMethod]
     [Asynchronous]
-    [ExpectedException(typeof(ExpectedException))]
-    public void TEST_DELETE_USER_THAT_DOESNT_EXIST_EXPECT_EXPECTED_EXCEPTION()
+    public async Task TEST_DELETE_USER_THAT_DOESNT_EXIST()
     {
-      bool wasDeleted = false;
-
       string randomUsername = GenerateRandomUsername();
-      var criteria = new Business.Criteria.UserInfoCriteria(randomUsername);
+      Business.DeleteUserReadOnly deleter = null;
 
-      criteria = new Business.Criteria.UserInfoCriteria(randomUsername);
-      Business.DeleteUserReadOnly.CreateNew(criteria, (s2, r2) =>
+      var isAsyncComplete = false;
+      var hasError = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
       {
-        if (r2.Error != null)// &&
-          //WHY DOES THIS THROW (*UN*EXPECTED) EXCEPTION AND JUST CHECKING FOR != NULL THROWS EXPECTED EXCEPTION?
-          //r2.Error is Csla.DataPortalException) //&&
-          //r2.Error.Message.Contains(@"UsernameNotFoundException"))
-        {
-          throw new ExpectedException(r2.Error);
-        }
-        else
-        {
-          throw new Exception();
-        }
-      });
+        deleter = await Business.DeleteUserReadOnly.CreateNewAsync(randomUsername);
+      }
+      catch (Csla.DataPortalException dpex)
+      {
+        //WE EXPECT AN EXCEPTION OF TYPE USER NOT FOUND. OTHERWISE,
+        //WE NEED TO RETHROW THE EXCEPTION.
+        if (!TestsHelper.IsUserNotFoundException(dpex))
+          throw dpex;
+      }
+      catch
+      {
+        //HAS ERROR REFERS TO THE METHOD HAS A PROBLEM.
+        //IT DOES NOT MEAN THAT WE HAVE AN EXCEPTION, BECAUSE
+        //WE ARE INDEED EXPECTING AN EXCEPTION.
+        hasError = true;
+      }
+      finally
+      {
+        EnqueueCallback(
+                        () => Assert.IsFalse(hasError),
+                        () => Assert.IsNull(deleter),
+                        () => Teardown()
+                        );
 
-
-      EnqueueConditional(() => wasDeleted);
-
-      //EnqueueCallback(
-      //                () => { Assert.IsTrue(Csla.ApplicationContext.User.IsInRole(DataAccess.SeedData.Ton.AdminRoleText)); }
-      //               );
-
-      EnqueueTestComplete();
+        EnqueueTestComplete();
+        
+        isAsyncComplete = true;
+      }
     }
+
+    #region Helpers
+
     private string GenerateRandomPassword()
     {
       int minValidPasswordLength = 6;
@@ -371,5 +377,7 @@ namespace LearnLanguages.Silverlight.Tests
 
       return generatedString;
     }
+
+    #endregion
   }
 }

@@ -5,6 +5,7 @@ using LearnLanguages.Business;
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Offer;
+using LearnLanguages.Navigation.EventMessages;
 
 namespace LearnLanguages.Study.Interfaces
 {
@@ -16,7 +17,8 @@ namespace LearnLanguages.Study.Interfaces
                                    IHandle<IOfferResponse<MultiLineTextList, IViewModelBase>>,
                                    IHandle<IStatusUpdate<MultiLineTextList, IViewModelBase>>,
                                    IHandle<ICancelation>,
-                                   IHandle<IConglomerateMessage>
+                                   IHandle<IConglomerateMessage>, 
+                                   IHandle<NavigationRequestedEventMessage>
   {
     //void Study(MultiLineTextList multiLineTexts, LanguageEdit language, IEventAggregator eventAggregator);
     //IDoAJob<IStudyJobInfo<MultiLineTextList>, MultiLineTextList> MultiLineTextsStudier { get; }

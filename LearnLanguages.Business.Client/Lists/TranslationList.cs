@@ -5,36 +5,50 @@ using Csla.Serialization;
 using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class TranslationList : Common.CslaBases.BusinessListBase<TranslationList, TranslationEdit, TranslationDto>
+  public class TranslationList : Common.CslaBases.BusinessListBase<TranslationList, 
+                                                                   TranslationEdit, 
+                                                                   TranslationDto>
   {
-    public static void GetAll(EventHandler<DataPortalResult<TranslationList>> callback)
-    {
-      DataPortal.BeginFetch<TranslationList>(callback);
-    }
+    #region Factory Methods
 
+    public static async Task<TranslationList> GetAllAsync()
+    {
+      var result = await DataPortal.FetchAsync<TranslationList>();
+      return result;
+    }
     
     /// <summary>
     /// Gets all of the translations that contain the given phrase, using that phrase's id.  This in 
     /// contrast to searching through all translations' texts and matching up the phrase.text or regex, etc.
     /// THIS DOES NOT THROW AN EXCEPTION IF THE PHRASE IS NOT FOUND.
     /// </summary>
-    public static void GetAllTranslationsContainingPhraseById(PhraseEdit phrase, 
-      EventHandler<DataPortalResult<TranslationList>> callback)
+    public static async Task<TranslationList> GetAllTranslationsContainingPhraseByIdAsync(PhraseEdit phrase)
     {
       var criteria = new Criteria.PhraseCriteria(phrase);
-      DataPortal.BeginFetch<TranslationList>(criteria, callback);
+      var result = await DataPortal.FetchAsync<TranslationList>(criteria);
+      return result;
     }
 
-    public static void NewTranslationList(ICollection<Guid> translationIds, EventHandler<DataPortalResult<TranslationList>> callback)
+    /// <summary>
+    /// Gets a list of translations corresponding to the given ids, accessible to the current user.
+    /// </summary>
+    /// <param name="translationIds">Collection of Guid Ids of the TranslationEdit which will populate the newly created list.</param>
+    public static async Task<TranslationList> NewTranslationListAsync(ICollection<Guid> translationIds)
     {
-      DataPortal.BeginFetch<TranslationList>(translationIds, callback);
+      var result = await DataPortal.FetchAsync<TranslationList>(translationIds);
+      return result;
     }
+
+    #endregion
 
 #if !SILVERLIGHT
+
+    #region Factory Methods
 
     /// <summary>
     /// Gets all of the translations that contain the given phrase, using that phrase's id.  This in 
@@ -47,7 +61,10 @@ namespace LearnLanguages.Business
       return DataPortal.Fetch<TranslationList>(criteria);
     }
 
-    
+    #endregion
+
+    #region DP_xyz (including child)
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected void DataPortal_Fetch(ICollection<Guid> translationIds)
     {
@@ -161,6 +178,9 @@ namespace LearnLanguages.Business
         Items.Add(translationEdit);
       }
     }
+
+    #endregion
+
 #endif
   }
 }

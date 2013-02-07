@@ -10,6 +10,7 @@ using Caliburn.Micro;
 using Csla.Core;
 using LearnLanguages.History;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -78,38 +79,39 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public bool AskAdvice(QuestionArgs questionArgs, AsyncCallback<object> answerCallback)
+    public async Task<ResultArgs<object>> AskAdviceAsync(QuestionArgs questionArgs)
     {
       if (questionArgs == null)
         throw new ArgumentNullException("questionArgs");
-      if (answerCallback == null)
-        throw new ArgumentNullException("answerQuestion");
 
       //WE ONLY KNOW HOW TO DEAL WITH PHRASE EDIT QUESTIONS ABOUT PERCENT KNOWN.
       if (!(questionArgs.State is PhraseEdit) ||
             questionArgs.Question != StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown)
-        return false;
+        return await new Task<ResultArgs<object>>(() => 
+        {
+          var errorMsg = string.Format("Unknown question for advice.\n" +
+                                       "questionArgs.State: {0}\n" +
+                                       "questionArgs.Question: {1}", 
+                                       questionArgs.State.ToString(), questionArgs.Question);
+          var error = new Study.StudyException(errorMsg);
+          return new ResultArgs<object>(error);
+        });
 
       var phrase = (PhraseEdit)questionArgs.State;
 
-      GetPercentKnown(phrase, (s, r) =>
-      {
-        if (r.Error != null)
-          answerCallback(this, new ResultArgs<object>(r.Error));
+      var result = await GetPercentKnownAsync(phrase);
+      //THE RESULT IS CASTED ALREADY AS A DOUBLE. WE NEED TO WRAP IT AS A DOUBLE
+      var percentKnownObjectWrapper = new ResultArgs<object>(result.Object);
+      
 
-        answerCallback(this, new ResultArgs<object>(r.Object));
-      });
-
-
-      return true;
+      return await StudyHelper.WrapInTask<ResultArgs<object>>(percentKnownObjectWrapper);
+      //var answerTask = new Task<ResultArgs<object>>(() => { return new ResultArgs<object>(percentKnown); });
+      //return await answerTask;
     }
 
-    private void GetPercentKnownAboutPhraseWithBeliefs(PhraseEdit phrase,
-                                                       PhraseBeliefList beliefs,
-                                                       AsyncCallback<double> callback)
+    private async Task<ResultArgs<double>> GetPercentKnownAboutPhraseWithBeliefs(PhraseEdit phrase,
+                                                                                 PhraseBeliefList beliefs)
     {
-      try
-      {
 //#if DEBUG
 //        if (phrase.Text.Contains("amour") && phrase.Text.Contains("mon"))
 //          System.Diagnostics.Debugger.Break();
@@ -128,14 +130,8 @@ namespace LearnLanguages.Study
 
         var mostRecentBelief = results.Last();
         var percentKnown = mostRecentBelief.Strength;
-        callback(this, new ResultArgs<double>(percentKnown));
-        return;
-      }
-      catch (Exception ex)
-      {
-        callback(this, new ResultArgs<double>(ex));
-        return;
-      }
+        return await new Task<ResultArgs<double>>(() => { return new ResultArgs<double>(percentKnown); });
+      
     }
 
     //public void Handle(History.Events.ReviewedLineEvent message)
@@ -197,7 +193,7 @@ namespace LearnLanguages.Study
       }
     }
 
-    private void GetPercentKnown(PhraseEdit phrase, AsyncCallback<double> callback)
+    private async Task<ResultArgs<double>> GetPercentKnownAsync(PhraseEdit phrase)
     {
       #region CHECK CACHE
 
@@ -213,8 +209,7 @@ namespace LearnLanguages.Study
         var entry = results.First();
 
         var percentKnown = entry.Value;
-        callback(this, new ResultArgs<double>(percentKnown));
-        return;
+        return await new Task<ResultArgs<double>>(() => { return new ResultArgs<double>(percentKnown); });
 
         #endregion
       }
@@ -223,68 +218,34 @@ namespace LearnLanguages.Study
 
       #region CHECK BELIEFS IN DB
 
-      PhraseBeliefList.GetBeliefsAboutPhrase(phrase.Id, (s, r) =>
+      var beliefs = await PhraseBeliefList.GetBeliefsAboutPhraseAsync(phrase.Id);
+
+      if (beliefs.Count <= 0)
       {
-        if (r.Error != null)
-        {
-          callback(this, new ResultArgs<double>(r.Error));
-          return;
-        }
-
-        var beliefs = r.Object;
-
-        if (beliefs.Count <= 0)
-        {
-          //WE HAVE NO BELIEFS ABOUT THIS PHRASE
-          #region GetPercentKnownAboutPhraseWithNoPriorBeliefs(phrase, (s2, r2) =>
-
-          GetPercentKnownAboutPhraseWithNoPriorBeliefs(phrase, (s2, r2) =>
-          {
-            if (r2.Error != null)
-            {
-              callback(this, new ResultArgs<double>(r2.Error));
-              return;
-            }
-
-            var percentKnown = r2.Object;
-            callback(this, new ResultArgs<double>(percentKnown));
-            return;
-          });
-
-          #endregion
-        }
-        else
-        {
-          //WE HAVE BELIEFS ABOUT THIS PHRASE
-          #region GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs, (s3, r3) =>
-          GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs, (s3, r3) =>
-          {
-            if (r3.Error != null)
-            {
-              callback(this, new ResultArgs<double>(r3.Error));
-              return;
-            }
-
-            var percentKnown = r3.Object;
-            callback(this, new ResultArgs<double>(percentKnown));
-            return;
-          });
-          #endregion
-        }
-      });
+        //WE HAVE NO PRIOR BELIEFS ABOUT THIS PHRASE
+        var percentKnownTask = GetPercentKnownAboutPhraseWithNoPriorBeliefsAsync(phrase);
+        return await percentKnownTask;
+      }
+      else
+      {
+        //WE HAVE BELIEFS ABOUT THIS PHRASE
+        var percentKnownTask = GetPercentKnownAboutPhraseWithBeliefs(phrase, beliefs);
+        return await percentKnownTask;
+      }
 
       #endregion
     }
 
-    private void GetPercentKnownAboutPhraseWithNoPriorBeliefs(PhraseEdit phrase, AsyncCallback<double> callback)
+    private async Task<ResultArgs<double>> GetPercentKnownAboutPhraseWithNoPriorBeliefsAsync(PhraseEdit phrase)
     {
       //FOR RIGHT NOW, THIS IS JUST GOING TO RETURN ZERO. IT SUCKS BUT OH WELL.
       //TODO: IMPLEMENT GETPERCENTKNOWNABOUTPHRASEWITHNOPRIORBELIEFS
       double percentKnown = 0;
-      callback(this, new ResultArgs<double>(percentKnown));
-      return;
+      var result = new ResultArgs<double>(percentKnown);
+      return result;
 
-
+      //return await StudyHelper.WrapInTask<double>(percentKnown);
+      //return await new Task<ResultArgs<double>>(() => { return new ResultArgs<double>(percentKnown); });
 
 //      //WE HAVE NO PRIOR BELIEFS ABOUT THIS PHRASE, SO WE WILL CHECK THE SUM OF THE BELIEFS OF THE INDIVIDUAL WORDS
 //      var words = phrase.Text.ParseIntoWords();
@@ -389,13 +350,10 @@ namespace LearnLanguages.Study
 //      #endregion
     }
 
-
     #endregion
 
     #region Events
 
     #endregion
-
-    
   }
 }

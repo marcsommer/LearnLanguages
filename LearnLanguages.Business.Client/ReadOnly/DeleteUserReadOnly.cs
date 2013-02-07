@@ -3,6 +3,7 @@ using System.Net;
 using Csla;
 using Csla.Serialization;
 using LearnLanguages.DataAccess;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -14,10 +15,10 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void CreateNew(Criteria.UserInfoCriteria criteria, 
-      EventHandler<DataPortalResult<DeleteUserReadOnly>> callback)
+    public static async Task<DeleteUserReadOnly> CreateNewAsync(string username)
     {
-      DataPortal.BeginCreate<DeleteUserReadOnly>(criteria, callback);
+      var result = await DataPortal.CreateAsync<DeleteUserReadOnly>(username);
+      return result;
     }
 
     #endregion
@@ -32,6 +33,9 @@ namespace LearnLanguages.Business
     }
 
     public static readonly PropertyInfo<bool> WasSuccessfulProperty = RegisterProperty<bool>(c => c.WasSuccessful);
+    /// <summary>
+    /// True if the delete operation was successful. Otherwise, false.
+    /// </summary>
     public bool WasSuccessful
     {
       get { return ReadProperty(WasSuccessfulProperty); }
@@ -43,15 +47,15 @@ namespace LearnLanguages.Business
     #region DP_XYZ
 
 #if !SILVERLIGHT
-    public void DataPortal_Create(Criteria.UserInfoCriteria criteria)
+    public void DataPortal_Create(string username)
     {
       RetrieverId = Guid.NewGuid();
       WasSuccessful = false;
 
       using (var dalManager = DalFactory.GetDalManager())
       {
-        var customIdentityDal = dalManager.GetProvider<ICustomIdentityDal>();
-        var result = customIdentityDal.DeleteUser(criteria.Username);
+        var customIdentityDal = dalManager.GetProvider<IUserDal>();
+        var result = customIdentityDal.Delete(username);
         if (!result.IsSuccess)
         {
           Exception error = result.GetExceptionFromInfo();

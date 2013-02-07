@@ -34,6 +34,11 @@ namespace LearnLanguages.Study
     protected List<IOffer<MultiLineTextList, IViewModelBase>> _DeniedOffers { get; set; }
     protected IOffer<MultiLineTextList, IViewModelBase> _CurrentOffer { get; set; }
 
+    protected MultiLineTextList GetCurrentTarget() 
+    {
+      return _CurrentOffer.Opportunity.JobInfo.Target;
+    }
+
     /// <summary>
     /// Analyze opportunities published on Exchange.
     /// </summary>
@@ -50,5 +55,7 @@ namespace LearnLanguages.Study
     /// <param name="message"></param>
     public abstract void Handle(IConglomerateMessage message);
     public abstract void Handle(IStatusUpdate<MultiLineTextList, IViewModelBase> message);
+
+    public abstract void Handle(Navigation.EventMessages.NavigationRequestedEventMessage message);
   }
 }

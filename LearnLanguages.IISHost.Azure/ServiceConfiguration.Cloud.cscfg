@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="LearnLanguages.IISHost.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
+  <Role name="LearnLanguages.IISHost">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=krokercloudservice;AccountKey=jYzwyBI2DRrL0ZgwgTmgbxNANd1jk59TFzIjchsLSggRV2XUpsGDKlnY8g0sjwD6iJMq2rQOy5sJ8sy1TxcjMA==" />-->
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

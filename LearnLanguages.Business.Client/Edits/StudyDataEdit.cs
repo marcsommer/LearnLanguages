@@ -7,7 +7,7 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
-
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -39,22 +39,9 @@ namespace LearnLanguages.Business
 
     #region Silverlight Factory Methods
 #if SILVERLIGHT
-
-    //public static void NewStudyDataEdit(EventHandler<DataPortalResult<StudyDataEdit>> callback)
-    //{
-    //  //DataPortal.BeginCreate<StudyDataEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-    //  DataPortal.BeginCreate<StudyDataEdit>(callback);
-    //}
-
-    //public static void GetStudyDataEdit(Guid id, EventHandler<DataPortalResult<StudyDataEdit>> callback)
-    //{
-    //  DataPortal.BeginFetch<StudyDataEdit>(id, callback);
-    //}
-
-    //public static void GetStudyDataEditForCurrentUser(EventHandler<DataPortalResult<StudyDataEdit>> callback)
-    //{
-    //  DataPortal.BeginFetch<StudyDataEdit>(callback);
-    //}
+    
+    //None
+    
 #endif
     #endregion
     #endregion
@@ -79,10 +66,10 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User
+    public static readonly PropertyInfo<UserIdentity> UserProperty =
+      RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    public UserIdentity User
     {
       get { return GetProperty(UserProperty); }
       private set { LoadProperty(UserProperty, value); }
@@ -97,7 +84,7 @@ namespace LearnLanguages.Business
         LoadProperty<string>(NativeLanguageTextProperty, dto.NativeLanguageText);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
     }
     public override StudyDataDto CreateDto()
@@ -111,11 +98,12 @@ namespace LearnLanguages.Business
     }
 
     /// <summary>
-    /// Begins to persist object
+    /// Persist object async.
     /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected override async Task<StudyDataEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
 
     /// <summary>
@@ -142,8 +130,8 @@ namespace LearnLanguages.Business
     /// </summary>
     internal void LoadCurrentUser()
     {
-      CustomIdentity.CheckAuthentication();
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      Common.CommonHelper.CheckAuthentication();
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       Username = identity.Name;
       User = identity;
     }

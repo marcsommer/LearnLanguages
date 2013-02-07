@@ -72,10 +72,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         //USERNAME IS VALID
         bool newUsernameIsValid = Common.CommonHelper.UsernameIsValid(NewUsername);
 
-        bool canAddUser = Csla.ApplicationContext.User.Identity.IsAuthenticated &&
-                          Csla.ApplicationContext.User.IsInRole(DataAccess.DalResources.RoleAdmin) &&
-                          !string.IsNullOrEmpty(NewPassword) && 
-                          !string.IsNullOrEmpty(NewUsername) &&
+        bool canAddUser = DataAccess.DalHelper.IsInRoleToAddUser() &&
                           passwordsMatch &&
                           newUsernameIsValid &&
                           newPasswordIsValid;
@@ -83,19 +80,28 @@ namespace LearnLanguages.Silverlight.ViewModels
         return canAddUser;
       }
     }
-    public void AddUser()
+    public async void AddUser()
     {
+      #region Thinking
       var thinkingId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(thinkingId);
-      var criteria = new Business.Criteria.UserInfoCriteria(NewUsername, NewPassword);
-      Business.NewUserCreator.CreateNew(criteria, (s, r) =>
-        {
-          History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
-          if (r.Error != null)
-            throw r.Error;
-          else
-            MessageBox.Show(string.Format(ViewViewModelResources.MessageNewUserAdded, NewUsername));
-        });
+      #endregion
+      var criteria = new Csla.Security.UsernameCriteria(NewUsername, NewPassword);
+      try
+      {
+        var result = await Business.NewUserCreator.CreateNewAsync(criteria);
+        MessageBox.Show(string.Format(ViewViewModelResources.MessageNewUserAdded, NewUsername));
+      }
+      catch (Exception ex)
+      {
+        
+      }
+      finally
+      {
+        #region Thinked
+        History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
+        #endregion
+      }
     }
   }
 }

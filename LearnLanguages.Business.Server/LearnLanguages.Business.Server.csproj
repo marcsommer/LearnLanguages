@@ -10,8 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LearnLanguages.Business</RootNamespace>
     <AssemblyName>LearnLanguages.Business</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,10 +35,28 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_wpf\Csla.dll</HintPath>
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\net45\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-WPF.4.5.10\lib\net45\Csla.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.XmlSerializers">
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\net45\Csla.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -45,6 +69,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LearnLanguages.Business.Client\BusinessHelper.cs">
+      <Link>BusinessHelper.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\BusinessResources.Designer.cs">
       <Link>BusinessResources.Designer.cs</Link>
     </Compile>
@@ -74,6 +101,9 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseIdCriteria.cs">
       <Link>Criteria\PhraseIdCriteria.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseTextLanguageTextPairsCriteria.cs">
+      <Link>Criteria\PhraseTextLanguageTextPairsCriteria.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Criteria\PhraseTextsCriteria.cs">
       <Link>Criteria\PhraseTextsCriteria.cs</Link>
@@ -108,6 +138,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Edits\TranslationEdit.cs">
       <Link>Edits\TranslationEdit.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Edits\UserEdit.cs">
+      <Link>Edits\UserEdit.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\Lists\LanguageList.cs">
       <Link>Lists\LanguageList.cs</Link>
     </Compile>
@@ -129,6 +162,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\Lists\TranslationList.cs">
       <Link>Lists\TranslationList.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\Lists\UserList.cs">
+      <Link>Lists\UserList.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\BlankPhraseCreator.cs">
       <Link>ReadOnly\BlankPhraseCreator.cs</Link>
     </Compile>
@@ -137,6 +173,12 @@
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\DeleteUserReadOnly.cs">
       <Link>ReadOnly\DeleteUserReadOnly.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\MostRecentPhraseDataBeliefsRetriever.cs">
+      <Link>ReadOnly\MostRecentPhraseDataBeliefsRetriever.cs</Link>
+    </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\MultiLineTextDtosOnlyRetriever.cs">
+      <Link>ReadOnly\MultiLineTextDtosOnlyRetriever.cs</Link>
     </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\NewUserCreator.cs">
       <Link>ReadOnly\NewUserCreator.cs</Link>
@@ -159,11 +201,11 @@
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\TranslationSearchRetriever.cs">
       <Link>ReadOnly\TranslationSearchRetriever.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Security\CustomIdentity.cs">
-      <Link>Security\CustomIdentity.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Security\UserIdentity.cs">
+      <Link>Security\UserIdentity.cs</Link>
     </Compile>
-    <Compile Include="..\LearnLanguages.Business.Client\Security\CustomPrincipal.cs">
-      <Link>Security\CustomPrincipal.cs</Link>
+    <Compile Include="..\LearnLanguages.Business.Client\Security\UserPrincipal.cs">
+      <Link>Security\UserPrincipal.cs</Link>
     </Compile>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -182,6 +224,9 @@
     <EmbeddedResource Include="..\LearnLanguages.Business.Client\BusinessResources.resx">
       <Link>BusinessResources.resx</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

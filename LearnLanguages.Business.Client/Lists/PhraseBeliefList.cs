@@ -8,27 +8,55 @@ using System.ComponentModel;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
 using LearnLanguages.DataAccess.Exceptions;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
   [Serializable]
-  public class PhraseBeliefList : Common.CslaBases.BusinessListBase<PhraseBeliefList, PhraseBeliefEdit, PhraseBeliefDto>
+  public class PhraseBeliefList : 
+    Common.CslaBases.BusinessListBase<PhraseBeliefList, 
+                                      PhraseBeliefEdit, 
+                                      PhraseBeliefDto>
   {
     #region Factory Methods
 
-    public static void GetAll(EventHandler<DataPortalResult<PhraseBeliefList>> callback)
+    /// <summary>
+    /// Get all of the PhraseBeliefEdits that belong to the current user.
+    /// </summary>
+    public static async Task<PhraseBeliefList> GetAllAsync()
     {
-      DataPortal.BeginFetch<PhraseBeliefList>(callback);
+      var result = await DataPortal.FetchAsync<PhraseBeliefList>();
+      return result;
     }
+
+#if !SILVERLIGHT
+
+    /// <summary>
+    /// Get all of the PhraseBeliefEdits that belong to the current user.
+    /// </summary>
+    public static PhraseBeliefList GetAll()
+    {
+      var result = DataPortal.Fetch<PhraseBeliefList>();
+      return result;
+    }
+
+#endif
 
     /// <summary>
     /// Gets all beliefs about a given phrase, using phrase.Id
     /// </summary>
-    public static void GetBeliefsAboutPhrase(Guid phraseId, 
-      EventHandler<DataPortalResult<PhraseBeliefList>> callback)
+    public static async Task<PhraseBeliefList> GetBeliefsAboutPhraseAsync(Guid phraseId)
     {
       var criteria = new Criteria.PhraseIdCriteria(phraseId);
-      DataPortal.BeginFetch<PhraseBeliefList>(criteria, callback);
+      var result = await DataPortal.FetchAsync<PhraseBeliefList>(criteria);
+      return result;
+    }
+
+    public static async Task<PhraseBeliefList>
+      GetBeliefsAboutPhrasesInMultiLineTextsAsync(MultiLineTextList mltList)
+    {
+      var result = await DataPortal.FetchAsync<PhraseBeliefList>(mltList);
+      return result;
     }
     
     /// <summary>
@@ -39,25 +67,15 @@ namespace LearnLanguages.Business
       return new PhraseBeliefList();
     }
 
-#if SILVERLIGHT
-    /// <summary>
-    /// Runs locally.
-    /// </summary>
-    /// <param name="callback"></param>
-    public static void NewPhraseBeliefList(EventHandler<DataPortalResult<PhraseBeliefList>> callback)
-    {
-      DataPortal.BeginCreate<PhraseBeliefList>(callback, DataPortal.ProxyModes.LocalOnly);
-    }
-#else
     /// <summary>
     /// Runs locally.
     /// </summary>
     [RunLocal]
-    public static void NewPhraseBeliefList(EventHandler<DataPortalResult<PhraseBeliefList>> callback)
+    public static async Task<PhraseBeliefList> NewPhraseBeliefListAsync()
     {
-      DataPortal.BeginCreate<PhraseBeliefList>(callback);
+      var result = await DataPortal.CreateAsync<PhraseBeliefList>();
+      return result;
     }
-#endif
 
     #endregion
 
@@ -65,6 +83,46 @@ namespace LearnLanguages.Business
 
 #if !SILVERLIGHT
     
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public void DataPortal_Fetch(MultiLineTextList mltList)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var beliefDal = dalManager.GetProvider<IPhraseBeliefDal>();
+        
+        ///SLOW METHOD RIGHT NOW. ITERATE THROUGH ALL PHRASES 
+        ///IN LINES OF MLTS, AND GET ALL BELIEFS ABOUT THOSE PHRASES.
+        for (int i = 0; i < mltList.Count; i++)
+        {
+          var mlt = mltList[i];
+          for (int j = 0; j < mlt.Lines.Count; j++)
+          {
+            var phrase = mlt.Lines[j].Phrase;
+            Result<ICollection<PhraseBeliefDto>> result = 
+              beliefDal.FetchAllRelatedToPhrase(phrase.Id);
+            
+            //IF ERROR
+            if (!result.IsSuccess || result.IsError)
+            {
+              if (result.Info != null)
+              {
+                var ex = result.GetExceptionFromInfo();
+                if (ex != null)
+                  throw new FetchFailedException(ex.Message);
+                else
+                  throw new FetchFailedException();
+              }
+              else
+                throw new FetchFailedException();
+            }
+
+            //NO ERROR, SO ADD THESE BELIEFS TO OUR LIST
+            AddDtos(result.Obj);
+          }
+        }
+      }
+    }
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void DataPortal_Fetch(Criteria.PhraseIdCriteria phraseIdCriteria)
     {
@@ -97,6 +155,11 @@ namespace LearnLanguages.Business
     private void LoadDtos(ICollection<PhraseBeliefDto> dtos)
     {
       Items.Clear();
+      AddDtos(dtos);
+    }
+
+    private void AddDtos(ICollection<PhraseBeliefDto> dtos)
+    {
       foreach (var beliefDto in dtos)
       {
         //var PhraseBeliefEdit = DataPortal.CreateChild<PhraseBeliefEdit>(PhraseBeliefDto);
@@ -104,7 +167,7 @@ namespace LearnLanguages.Business
         this.Add(beliefEdit);
       }
     }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void DataPortal_Fetch()
     {
@@ -193,10 +256,10 @@ namespace LearnLanguages.Business
 
     private void PhraseBeliefList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<PhraseBeliefEdit> e)
     {
-      //CustomIdentity.CheckAuthentication();
+      //Common.CommonHelper.CheckAuthentication();
       var beliefEdit = e.NewObject;
       beliefEdit.LoadCurrentUser();
-      //var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      //var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       //beliefEdit.UserId = identity.UserId;
       //beliefEdit.Username = identity.Name;
     }

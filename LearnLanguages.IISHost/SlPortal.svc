@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Service="Compression.CompressedPortal" %>
+﻿<% @ServiceHost Service="Csla.Server.Hosts.Mobile.WcfPortal" %>

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
 using System.ComponentModel;
 using LearnLanguages.Business.Security;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -16,19 +17,22 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void GetAll(EventHandler<DataPortalResult<LineList>> callback)
+    public static async Task<LineList> GetAllAsync()
     {
-      DataPortal.BeginFetch<LineList>(callback);
+      var result = await DataPortal.FetchAsync<LineList>();
+      return result;
     }
 
-    public static void NewLineList(ICollection<Guid> lineIds, EventHandler<DataPortalResult<LineList>> callback)
+    public static async Task<LineList> NewLineListAsync(ICollection<Guid> lineIds)
     {
-      DataPortal.BeginFetch<LineList>(lineIds, callback);
+      var result = await DataPortal.FetchAsync<LineList>(lineIds);
+      return result;
     }
 
-    public static void NewLineList(Criteria.LineInfosCriteria lineInfos, EventHandler<DataPortalResult<LineList>> callback)
+    public static async Task<LineList> NewLineListAsync(Criteria.LineInfosCriteria lineInfos)
     {
-      DataPortal.BeginCreate<LineList>(lineInfos, callback);
+      var result = await DataPortal.CreateAsync<LineList>(lineInfos);
+      return result;
     }
 
     /// <summary>
@@ -39,25 +43,15 @@ namespace LearnLanguages.Business
       return new LineList();
     }
 
-#if SILVERLIGHT
-    /// <summary>
-    /// Runs locally.
-    /// </summary>
-    /// <param name="callback"></param>
-    public static void NewLineList(EventHandler<DataPortalResult<LineList>> callback)
-    {
-      DataPortal.BeginCreate<LineList>(callback, DataPortal.ProxyModes.LocalOnly);
-    }
-#else
     /// <summary>
     /// Runs locally.
     /// </summary>
     [RunLocal]
-    public static void NewLineList(EventHandler<DataPortalResult<LineList>> callback)
+    public static async Task<LineList> NewLineListAsync()
     {
-      DataPortal.BeginCreate<LineList>(callback);
+      var result = await DataPortal.CreateAsync<LineList>();
+      return result;
     }
-#endif
 
     #endregion
 
@@ -224,10 +218,10 @@ namespace LearnLanguages.Business
 
     private void LineList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<LineEdit> e)
     {
-      //CustomIdentity.CheckAuthentication();
+      //Common.CommonHelper.CheckAuthentication();
       var lineEdit = e.NewObject;
       lineEdit.LoadCurrentUser();
-      //var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      //var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       //lineEdit.UserId = identity.UserId;
       //lineEdit.Username = identity.Name;
     }

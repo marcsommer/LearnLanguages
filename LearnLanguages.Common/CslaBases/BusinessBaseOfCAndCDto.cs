@@ -2,6 +2,7 @@
 using Csla;
 using Csla.Serialization;
 using Csla.DataPortalClient;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Common.CslaBases
 {
@@ -10,6 +11,7 @@ namespace LearnLanguages.Common.CslaBases
     where C : CslaBases.BusinessBase<C, CDto>
     where CDto : class
   {
+
     #region Business Properties and Methods
 
     #region public Guid Id
@@ -22,6 +24,12 @@ namespace LearnLanguages.Common.CslaBases
     #endregion
 
     public abstract CDto CreateDto();
+
+    public virtual void Child_Create(CDto dto)
+    {
+      LoadFromDtoBypassPropertyChecks(dto);
+    }
+
     public virtual void LoadFromDtoBypassPropertyChecks(CDto dto)
     {
       LoadFromDtoBypassPropertyChecksImpl(dto);
@@ -37,15 +45,36 @@ namespace LearnLanguages.Common.CslaBases
       }
     }
 
+    public override Task<C> SaveAsync(bool forceUpdate)
+    {
+      //EXPOSES METHOD TO DESCENDANTS
+      return base.SaveAsync(forceUpdate);
+    }
+
+    protected override Task<C> SaveAsync(bool forceUpdate, object userState, bool isSync)
+    {
+      //EXPOSES METHOD TO DESCENDANTS
+      return base.SaveAsync(forceUpdate, userState, isSync);
+    }
+
     #endregion
 
     #region DP_XYZ (All: .net, sl, child)
 
-    public virtual void Child_Create(CDto dto)
+    protected override void DataPortal_Create()
     {
-      LoadFromDtoBypassPropertyChecks(dto);
+      //THIS GETS RID OF THE DEFAULT RUNLOCAL ATTRIBUTE ON THE CSLA.BUSINESSBASE.
+      //EXPOSES METHOD TO DESCENDANTS
+      base.DataPortal_Create();
+    }
+
+    protected override void DataPortal_Insert()
+    {
+      //EXPOSES METHOD TO DESCENDANTS
+      base.DataPortal_Insert();
     }
 
     #endregion
+
   }
 }

@@ -179,7 +179,7 @@ namespace LearnLanguages.DataAccess.Ef
     //}
     protected override PhraseDto NewImpl(object criteria)
     {
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       string currentUsername = identity.Name;
       Guid currentUserId = Guid.Empty;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -204,7 +204,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override PhraseDto FetchImpl(Guid id)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -235,18 +235,63 @@ namespace LearnLanguages.DataAccess.Ef
         }
       }
     }
+    protected override ICollection<PhraseDto> FetchImpl(string text)
+    {
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
+      var retPhraseDtos = new List<PhraseDto>();
+
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      {
+        //FIND ALL PHRASE DATAS THAT CONTAIN THE TEXT (ANY LANGUAGE)
+        var results = from phraseData in ctx.ObjectContext.PhraseDatas
+                      where phraseData.Text.Contains(text) &&
+                            phraseData.UserDataId == currentUserId
+                      select phraseData;
+
+        //CONVERT THE DATA TO A DTO, AND ADD TO RETURN LIST
+        foreach (var phraseData in results)
+        {
+          var phraseDto = EfHelper.ToDto(phraseData);
+          retPhraseDtos.Add(phraseDto);
+        }
+      }
+
+      return retPhraseDtos;
+    }
     protected override ICollection<PhraseDto> FetchImpl(ICollection<Guid> ids)
     {
-      var phraseDtos = new List<PhraseDto>();
-      foreach (var id in ids)
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
+      var retPhraseDtos = new List<PhraseDto>();
+
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
-        phraseDtos.Add(FetchImpl(id));
+        //FIND ALL PHRASE DATAS THAT CONTAIN THE TEXT (ANY LANGUAGE)
+        var results = from phraseData in ctx.ObjectContext.PhraseDatas
+                      where ids.Contains(phraseData.Id) &&
+                            phraseData.UserDataId == currentUserId
+                      select phraseData;
+
+        //CONVERT THE DATA TO A DTO, AND ADD TO RETURN LIST
+        foreach (var phraseData in results)
+        {
+          var phraseDto = EfHelper.ToDto(phraseData);
+          retPhraseDtos.Add(phraseDto);
+        }
       }
-      return phraseDtos;
+
+      return retPhraseDtos;
     }
+    //{
+    //  var phraseDtos = new List<PhraseDto>();
+    //  foreach (var id in ids)
+    //  {
+    //    phraseDtos.Add(FetchImpl(id));
+    //  }
+    //  return phraseDtos;
+    //}
     protected override PhraseDto UpdateImpl(PhraseDto dto)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -282,13 +327,13 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override PhraseDto InsertImpl(PhraseDto dto)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
       PhraseData phraseData = null;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
-        //before inserting, we need to make sure that the phrase.text 
-        //and phrase.language.text are not already in the DB.  If so, we need 
-        //to call an update instead of insert
+        //BEFORE INSERTING, WE NEED TO MAKE SURE THAT THE PHRASE.TEXT 
+        //AND PHRASE.LANGUAGE.TEXT ARE NOT ALREADY IN THE DB.  IF SO, WE NEED 
+        //TO CALL AN UPDATE INSTEAD OF INSERT
 
         var results = (from data in ctx.ObjectContext.PhraseDatas
                        where data.Text == dto.Text &&
@@ -315,7 +360,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override PhraseDto DeleteImpl(Guid id)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -374,7 +419,7 @@ namespace LearnLanguages.DataAccess.Ef
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
         var allPhraseDtos = new List<PhraseDto>();
-        CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+        UserIdentity identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
 
         var phraseDatas = (from phraseData in ctx.ObjectContext.PhraseDatas
                            where phraseData.UserDataId == identity.UserId
@@ -411,5 +456,7 @@ namespace LearnLanguages.DataAccess.Ef
       return retDefaultLanguageId;
     }
 
+
+    
   }
 }

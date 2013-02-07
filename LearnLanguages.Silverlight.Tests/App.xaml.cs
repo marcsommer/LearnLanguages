@@ -2,6 +2,7 @@
 using System.Windows;
 using Microsoft.Silverlight.Testing;
 
+
 namespace LearnLanguages.Silverlight.Tests
 {
   public partial class App : Application
@@ -18,8 +19,19 @@ namespace LearnLanguages.Silverlight.Tests
 
     private void Application_Startup(object sender, StartupEventArgs e)
     {
-      Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
-      Csla.DataPortal.ProxyTypeName = typeof(Compression.CompressedProxy<>).AssemblyQualifiedName;
+      //Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      //Csla.DataPortal.ProxyTypeName = typeof(Compression.CompressedProxy<>).AssemblyQualifiedName;
+
+      //INITIALIZE CSLA DATA PORTAL
+      //Csla.DataPortalClient.WcfProxy.DefaultUrl = "http://localhost:50094/SlPortal.svc";
+      Csla.DataPortal.ProxyTypeName =
+        typeof(Compression.CompressedProxy).AssemblyQualifiedName;
+      Csla.DataPortalClient.WcfProxy.DefaultUrl =
+        DataAccess.DalResources.WcfProxyDefaultUrl;
+
+      //COMMENTING OUT THIS FOLLOWING LINE GIVES ME THE NON-NEGATIVE NUMBER REQUIRED ERROR
+      Csla.ApplicationContext.DataPortalProxy =
+        typeof(Csla.DataPortalClient.WcfProxy).AssemblyQualifiedName;
 
       RootVisual = UnitTestSystem.CreateTestPage();
     }

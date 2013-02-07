@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LearnLanguages.Business;
 using Microsoft.Silverlight.Testing;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using System.Linq;
+using LearnLanguages.Business.Security;
 
 namespace LearnLanguages.Silverlight.Tests
 {
@@ -13,337 +15,276 @@ namespace LearnLanguages.Silverlight.Tests
   //WAS UPDATED.  THE RELATIONSHIPS SHOULD BE VALID HOWEVER.
   [TestClass]
   [Tag("language")]
-  public class LanguageTests : Microsoft.Silverlight.Testing.SilverlightTest
+  public class LanguageTests : TestsBase
   {
-    private Guid _EnglishId { get; set; }
-    private Guid _SpanishId { get; set; }
-
-    [ClassInitialize]
-    [Asynchronous]
-    public void InitializeLanguageTests()
-    {
-      var isLoaded = false;
-      Exception error = null;
-      LanguageList allLanguages = null;
-      LanguageList.GetAll((s, r) =>
-        {
-          error = r.Error;
-          if (error != null)
-            throw error;
-
-          allLanguages = r.Object;
-          _EnglishId = (from language in allLanguages
-                        where language.Text == SeedData.Ton.EnglishText
-                        select language.Id).First();
-
-          _SpanishId = (from language in allLanguages
-                        where language.Text == SeedData.Ton.SpanishText
-                        select language.Id).First();
-
-          isLoaded = true;
-        });
-
-      EnqueueConditional(() => isLoaded);
-      EnqueueCallback(() => { Assert.IsNull(error); },
-                      () => { Assert.IsNotNull(allLanguages); },
-                      () => { Assert.AreNotEqual(Guid.Empty, _EnglishId); },
-                      () => { Assert.AreNotEqual(Guid.Empty, _SpanishId); },
-                      () => { Assert.IsTrue(allLanguages.Count > 0); });
-      EnqueueTestComplete();
-    }
-
-    [TestMethod]
-    [Asynchronous]
-    public void CREATE_NEW()
-    {
-      var isCreated = false;
-      LanguageEdit languageEdit = null;
-      LanguageEdit.NewLanguageEdit( (s,r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          languageEdit = r.Object;
-          isCreated = true;
-        });
-      EnqueueConditional(() => isCreated);
-      EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
-                      () => { Assert.IsNull(null); });
-      EnqueueTestComplete();
-    }
-
-    //[TestMethod]
-    //[Asynchronous]
-    //public void CREATE_NEW_WITH_ID()
-    //{
-    //  Guid id = new Guid("BDEF87AC-21FA-4BAE-A155-91CDDA52C9CD");
     
-    //  var isCreated = false;
-    //  LanguageEdit languageEdit = null;
-    //  LanguageEdit.NewLanguageEdit(id, (s,r) =>
-    //    {
-    //      if (r.Error != null)
-    //        throw r.Error;
+    //[ClassInitialize]
+    //[Asynchronous]
+    //public static async Task InitializeLanguageTests(TestContext context)
+    //{
+      //var task = LanguageList.GetAllAsync();
+      //var wasSuccessful = task.Wait(5000);
+      //if (!wasSuccessful)
+      //  throw new Exception("GetAllLanguages timed out.");
 
-    //      languageEdit = r.Object;
-    //      isCreated = true;
-    //    });
-    //  EnqueueConditional(() => isCreated);
-    //  EnqueueCallback(() => { Assert.IsNotNull(languageEdit); },
-    //                  () => { Assert.IsNull(null); },
-    //                  () => { Assert.AreEqual(id, languageEdit.Id); });
-    //  EnqueueTestComplete();
+      //var allLanguages = task.Result;
+      
+      //await UserPrincipal.LoginAsync("user", "password");
+
+      //var allLanguages = await LanguageList.GetAllAsync();
+      //_EnglishId = (from language in allLanguages
+      //              where language.Text == SeedData.Ton.EnglishText
+      //              select language.Id).First();
+
+      //_SpanishId = (from language in allLanguages
+      //              where language.Text == SeedData.Ton.SpanishText
+      //              select language.Id).First();
     //}
 
     [TestMethod]
     [Asynchronous]
-    [Tag("lget")]
-    public void GET()
+    public async Task CREATE_NEW()
     {
-      Guid testId = _EnglishId;
-      var isLoaded = false;
-      Exception error = null;
-      LanguageEdit languageEdit = null;
-
-      LanguageEdit.GetLanguageEdit(testId, (s, r) =>
+      var isSetup = false;
+      await Setup();
+      try
       {
-        error = r.Error;
-        if (error != null)
-          throw error;
-        languageEdit = r.Object;
-        isLoaded = true;
-      });
+        isSetup = true;
+        var isCreated = false;
+        var languageEdit = await LanguageEdit.NewLanguageEditAsync();
+        isCreated = true;
 
-      EnqueueConditional(() => isLoaded);
-      EnqueueCallback(() => { Assert.IsNull(error); },
-                      () => { Assert.IsNotNull(languageEdit); },
-                      () => { Assert.AreEqual(testId, languageEdit.Id); });
-      EnqueueTestComplete();
+        EnqueueConditional(() => isSetup);
+        EnqueueConditional(() => isCreated);
+        EnqueueCallback(() => Assert.IsNotNull(languageEdit));
+        EnqueueCallback(() => Assert.AreNotEqual(Guid.Empty, languageEdit.UserId));
+
+        EnqueueTestComplete();
+      }
+      finally
+      {
+        Teardown();
+      }
     }
 
     [TestMethod]
     [Asynchronous]
-    public void NEW_EDIT_BEGINSAVE_GET()
+    public async Task GET()
     {
-      //INITIALIZE ERRORS TO EXCEPTION, BECAUSE WE TEST IF THEY ARE NULL LATER
-      Exception newError = new Exception();
-      Exception savedError = new Exception();
-      Exception gottenError = new Exception();
-
-      LanguageEdit languageEdit = null;
-      LanguageEdit savedLanguageEdit = null;
-      LanguageEdit gottenLanguageEdit = null;    
-  
-      var isNewed = false;
-      var isSaved = false;
-      var isGotten = false;
-      
-      //NEW
-      LanguageEdit.NewLanguageEdit((s, r) =>
+      #region Setup (try..)
+      var isSetup = false;
+      await Setup();
+      try
       {
-        newError = r.Error;
-        if (newError != null)
-          throw newError;
-        languageEdit = r.Object;
-        isNewed = true;
+        isSetup = true;
+
+        EnqueueConditional(() => isSetup);
+      #endregion
+
+        Guid testId = _EnglishId;
+        var isGotten = false;
+        var isError = false;
+        LanguageEdit languageEdit = null;
+        try
+        {
+          languageEdit = await LanguageEdit.GetLanguageEditAsync(testId);
+          isGotten = true;
+        }
+        catch (Exception ex)
+        {
+          isGotten = true;
+          isError = true;
+        }
+
+        EnqueueConditional(() => isGotten);
+        EnqueueConditional(() => isSetup);
+
+        EnqueueCallback(() => Assert.IsNotNull(languageEdit));
+        EnqueueCallback(() => Assert.IsTrue(isGotten));
+        EnqueueCallback(() => Assert.IsFalse(isError));
+        EnqueueCallback(() => Assert.AreEqual(testId, languageEdit.Id));
+
+        EnqueueTestComplete();
+
+      #region (...finally) Teardown
+      }
+      finally
+      {
+        Teardown();
+      }
+
+        #endregion
+    }
+
+    [TestMethod]
+    [Asynchronous]
+    public async Task NEW_EDIT_BEGINSAVE_GET()
+    {
+      #region Setup (try..)
+      var isAsyncComplete = false;
+      var isSetup = false;
+      await Setup();
+      try
+      {
+        isSetup = true;
+        EnqueueConditional(() => isSetup);
+      #endregion
+        //NEW
+        var languageEdit = await LanguageEdit.NewLanguageEditAsync();
 
         //EDIT
         languageEdit.Text = "TestLanguage_NEW_EDIT_BEGINSAVE_GET";
 
         //SAVE
-        languageEdit.BeginSave((s2, r2) =>
-        {
-          savedError = r2.Error;
-          if (savedError != null)
-            throw savedError;
-          savedLanguageEdit = r2.NewObject as LanguageEdit;
-          isSaved = true;
-          //GET (CONFIRM SAVE)
-          LanguageEdit.GetLanguageEdit(savedLanguageEdit.Id, (s3, r3) =>
-          {
-            gottenError = r3.Error;
-            if (gottenError != null)
-              throw gottenError;
-            gottenLanguageEdit = r3.Object;
-            isGotten = true;
-          });
-        });
+        var savedLanguageEdit = await languageEdit.SaveAsync();
 
-      });
+        //GET (CONFIRM SAVE)
+        var gottenLanguageEdit = await LanguageEdit.GetLanguageEditAsync(savedLanguageEdit.Id);
 
-      EnqueueConditional(() => isNewed);
-      EnqueueConditional(() => isSaved);
-      EnqueueConditional(() => isGotten);
-      EnqueueCallback(
-                      () => { Assert.IsNull(newError); },
-                      () => { Assert.IsNull(savedError); },
-                      () => { Assert.IsNull(gottenError); },
-                      () => { Assert.IsNotNull(languageEdit); },
-                      () => { Assert.IsNotNull(savedLanguageEdit); },
-                      () => { Assert.IsNotNull(gottenLanguageEdit); },
-                      () => { Assert.AreEqual(savedLanguageEdit.Id, gottenLanguageEdit.Id); },
-                      () => { Assert.AreEqual(savedLanguageEdit.Text, gottenLanguageEdit.Text); });
+        isAsyncComplete = true;
 
-      EnqueueTestComplete();
+        EnqueueConditional(() => isAsyncComplete);
+
+        EnqueueCallback(() => Assert.IsNotNull(languageEdit));
+        EnqueueCallback(() => Assert.IsNotNull(savedLanguageEdit));
+        EnqueueCallback(() => Assert.IsNotNull(gottenLanguageEdit));
+        EnqueueCallback(() => Assert.AreNotEqual(languageEdit.Id, savedLanguageEdit.Id));
+        EnqueueCallback(() => Assert.AreEqual(savedLanguageEdit.Id, gottenLanguageEdit.Id));
+        EnqueueCallback(() => Assert.AreEqual(savedLanguageEdit.Text, gottenLanguageEdit.Text));
+
+        EnqueueTestComplete();
+        
+      #region (...finally) Teardown
+      }
+      finally
+      {
+        Teardown();
+      }
+      #endregion
     }
 
+    
     [TestMethod]
     [Asynchronous]
-    [ExpectedException(typeof(ExpectedException))]
-    public void NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
+    public async Task NEW_EDIT_BEGINSAVE_GET_DELETE_GET()
     {
-      //INITIALIZE ERRORS TO EXCEPTION, BECAUSE EXPECT THEM TO BE NULL LATER
-      Exception newError = new Exception();
-      Exception savedError = new Exception();
-      Exception gottenError = new Exception();
-      Exception deletedError = new Exception();
-
-      //INITIALIZE CONFIRM TO NULL, BECAUSE WE EXPECT THIS TO BE AN ERROR LATER
-      Exception deleteConfirmedError = null;
-
-      LanguageEdit languageEdit = null;
-      LanguageEdit savedLanguageEdit = null;
-      LanguageEdit gottenLanguageEdit = null;
-      LanguageEdit deletedLanguageEdit = null;
-
-      //INITIALIZE TO EMPTY LANGUAGE EDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
-      LanguageEdit deleteConfirmedLanguageEdit = new LanguageEdit();
-
-      var isNewed = false;
-      var isSaved = false;
-      var isGotten = false;
-      var isDeleted = false;
-      var isDeleteConfirmed = false;
-
-      //NEW
-      LanguageEdit.NewLanguageEdit((s, r) =>
+      #region Setup (try..)
+      var isAsyncComplete = false;
+      EnqueueConditional(() => isAsyncComplete);
+      await Setup();
+      try
       {
-        newError = r.Error;
-        if (newError != null)
-          throw newError;
-        languageEdit = r.Object;
-        isNewed = true;
+      #endregion
+        LanguageEdit languageEdit = null;
+        LanguageEdit savedLanguageEdit = null;
+        LanguageEdit gottenLanguageEdit = null;
+        LanguageEdit deletedLanguageEdit = null;
+
+        //INITIALIZE TO EMPTY LANGUAGE EDIT, BECAUSE WE EXPECT THIS TO BE NULL LATER
+        LanguageEdit deleteConfirmedLanguageEdit = new LanguageEdit();
+
+        //NEW
+        languageEdit = await LanguageEdit.NewLanguageEditAsync();
 
         //EDIT
         languageEdit.Text = "TestLanguage";
 
         //SAVE
-        languageEdit.BeginSave((s2, r2) =>
+        savedLanguageEdit = await languageEdit.SaveAsync();
+
+        //GET (CONFIRM SAVE)
+        gottenLanguageEdit = await LanguageEdit.GetLanguageEditAsync(savedLanguageEdit.Id);
+
+        //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
+        gottenLanguageEdit.Delete();
+        deletedLanguageEdit = await gottenLanguageEdit.SaveAsync();
+
+        EnqueueTestComplete();
+
+        try
         {
-          savedError = r2.Error;
-          if (savedError != null)
-            throw savedError;
-          savedLanguageEdit = r2.NewObject as LanguageEdit;
-          isSaved = true;
-          //GET (CONFIRM SAVE)
-          LanguageEdit.GetLanguageEdit(savedLanguageEdit.Id, (s3, r3) =>
-          {
-            gottenError = r3.Error;
-            if (gottenError != null)
-              throw gottenError;
-            gottenLanguageEdit = r3.Object;
-            isGotten = true;
+          deleteConfirmedLanguageEdit = await LanguageEdit.GetLanguageEditAsync(deletedLanguageEdit.Id);
+          throw new Exception();
+        }
+        catch (Csla.DataPortalException dpex)
+        {
+          //WE ARE EXPECTING ONLY ID NOT FOUND EXCEPTIONS
+          if (!TestsHelper.IsIdNotFoundException(dpex))
+            throw dpex;
 
-            //DELETE (MARKS DELETE.  SAVE INITIATES ACTUAL DELETE IN DB)
-            gottenLanguageEdit.Delete();
-            gottenLanguageEdit.BeginSave((s4, r4) =>
-            {
-              deletedError = r4.Error;
-              if (deletedError != null)
-                throw deletedError;
-
-              deletedLanguageEdit = r4.NewObject as LanguageEdit;
-              //TODO: Figure out why LanguageEditTests final callback gets thrown twice.  The server throws expected exception, but callback is executed twice.
-              LanguageEdit.GetLanguageEdit(deletedLanguageEdit.Id, (s5, r5) =>
-              {
-                deleteConfirmedError = r5.Error;
-                if (deleteConfirmedError != null)
-                {
-                  isDeleteConfirmed = true;
-                  throw new ExpectedException(deleteConfirmedError);
-                }
-                deleteConfirmedLanguageEdit = r5.Object;
-              });
-              
-            });
-          });
-        });
-
-      });
-
-      EnqueueConditional(() => isNewed);
-      EnqueueConditional(() => isSaved);
-      EnqueueConditional(() => isGotten);
-      EnqueueConditional(() => isDeleted);
-      EnqueueConditional(() => isDeleteConfirmed);
-      EnqueueCallback(
-                      () => { Assert.IsNull(newError); },
-                      () => { Assert.IsNull(savedError); },
-                      () => { Assert.IsNull(gottenError); },
-                      () => { Assert.IsNull(deletedError); },
-                      //WE EXPECT AN ERROR, AS WE TRIED A GET ON AN ID THAT SHOULD HAVE BEEN DELETED
-                      () => { Assert.IsNotNull(deleteConfirmedError); },
-
-                      () => { Assert.IsNotNull(languageEdit); },
-                      () => { Assert.IsNotNull(savedLanguageEdit); },
-                      () => { Assert.IsNotNull(gottenLanguageEdit); },
-                      () => { Assert.IsNotNull(deletedLanguageEdit); },
-                      () => { Assert.IsNull(deleteConfirmedLanguageEdit); });
-
-      EnqueueTestComplete();
+          Assert.IsNotNull(languageEdit);
+          Assert.IsNotNull(savedLanguageEdit);
+          Assert.IsNotNull(gottenLanguageEdit);
+          Assert.IsNotNull(deletedLanguageEdit);
+          Assert.AreEqual(Guid.Empty, deleteConfirmedLanguageEdit.Id);
+          Assert.AreEqual(string.Empty, deleteConfirmedLanguageEdit.Text);
+          Assert.AreEqual(Guid.Empty, deleteConfirmedLanguageEdit.UserId);
+          Assert.AreEqual(string.Empty, deleteConfirmedLanguageEdit.Username);
+        }
+      #region (...finally) Teardown
+      }
+      finally
+      {
+        Teardown();
+        isAsyncComplete = true;
+      }
+      #endregion
     }
 
     [TestMethod]
     [Asynchronous]
-    [Tag("lgetall")]
-    public void GET_ALL()
+    public async Task GET_ALL()
     {
+      var isAsyncComplete = false;
+      #region Setup (try..)
+      var isSetup = false;
+      await Setup();
+      try
       {
-        var isLoaded = false;
-        var isQueried = false;
-        int countEnglish = 0; 
+        isSetup = true;
+        EnqueueConditional(() => isSetup);
+      #endregion
+        int countEnglish = 0;
         int countSpanish = 0;
         Guid englishId = Guid.Empty;
         Guid spanishId = Guid.Empty;
-        Exception error = null;
-        LanguageList allLanguages = null;
-        LanguageList.GetAll((s, r) =>
-          {
-            error = r.Error;
-            if (error != null)
-              throw error;
+        var allLanguages = await LanguageList.GetAllAsync();
 
-            allLanguages = r.Object;
-            isLoaded = true;
+        var englishResults = from lang in allLanguages
+                             where lang.Text == SeedData.Ton.EnglishText
+                             select lang;
+        countEnglish = englishResults.Count();
+        var englishLang = englishResults.First();
+        englishId = englishLang.Id;
 
-            var englishResults = from lang in allLanguages
-                                 where lang.Text == SeedData.Ton.EnglishText
-                                 select lang;
-            countEnglish = englishResults.Count();
-            var englishLang = englishResults.First();
-            englishId = englishLang.Id;
+        var spanishResults = from lang in allLanguages
+                             where lang.Text == SeedData.Ton.SpanishText
+                             select lang;
 
-            var spanishResults = from lang in allLanguages
-                                 where lang.Text == SeedData.Ton.SpanishText
-                                 select lang;
-            countSpanish = spanishResults.Count();
-            var spanishLang = spanishResults.First();
-            spanishId = spanishLang.Id;
+        countSpanish = spanishResults.Count();
+        var spanishLang = spanishResults.First();
+        spanishId = spanishLang.Id;
+        
+        isAsyncComplete = true;
 
-            isQueried = true;
-          });
+        EnqueueConditional(() => isAsyncComplete);
 
-        EnqueueConditional(() => isLoaded);
-        EnqueueConditional(() => isQueried);
-        EnqueueCallback(() => { Assert.IsNull(error); },
-                        () => { Assert.IsNotNull(allLanguages); },
-                        () => { Assert.AreEqual(1, countEnglish); },
-                        () => { Assert.AreEqual(1, countSpanish); },
-                        () => { Assert.AreEqual(_EnglishId, englishId); },
-                        () => { Assert.AreEqual(_SpanishId, spanishId); },
-                        () => { Assert.IsTrue(allLanguages.Count > 0); });
+        EnqueueCallback(() => Assert.IsNotNull(allLanguages));
+        EnqueueCallback(() => Assert.AreEqual(1, countEnglish));
+        EnqueueCallback(() => Assert.AreEqual(1, countSpanish));
+        EnqueueCallback(() => Assert.AreEqual(_EnglishId, englishId));
+        EnqueueCallback(() => Assert.AreEqual(_SpanishId, spanishId));
+        EnqueueCallback(() => Assert.IsTrue(allLanguages.Count > 0));
+
         EnqueueTestComplete();
+
+      #region (...finally) Teardown
       }
+      finally
+      {
+        Teardown();
+      }
+      #endregion
     }
   }
 }

@@ -2,6 +2,7 @@
 using LearnLanguages.Business;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Common.ViewModelBases;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -23,21 +24,17 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public override void Save()
+    public override async Task SaveAsync()
     {
       try
       {
-        Model.BeginSave((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-          Model = (LanguageEdit)r.NewObject;
-          NotifyOfPropertyChange(() => CanSave);
-        });
+        var model = await Model.SaveAsync();
+        Model = model;
+        NotifyOfPropertyChange(() => CanSave);
       }
       catch (Csla.DataPortalException dpex)
       {
-        var errorMsgLanguageTextAlreadyExists = 
+        var errorMsgLanguageTextAlreadyExists =
           DataAccess.Exceptions.LanguageTextAlreadyExistsException.GetDefaultErrorMessage(Model.Text);
         if (dpex.Message.Contains(errorMsgLanguageTextAlreadyExists))
           System.Windows.MessageBox.Show(errorMsgLanguageTextAlreadyExists);

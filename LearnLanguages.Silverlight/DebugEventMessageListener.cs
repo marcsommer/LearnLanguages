@@ -17,8 +17,14 @@ namespace LearnLanguages.Silverlight
       //Debug.WriteLine("NavigationEventMessage Start");
       Debug.WriteLine(message.GetType().Name + " Start");
       Debug.WriteLine("NavigationId: " + message.NavigationInfo.NavigationId.ToString());
-      Debug.WriteLine(message.NavigationInfo.ViewModelCoreNoSpaces);
-      Debug.WriteLine(message.NavigationInfo.Uri.ToString());
+      Debug.WriteLine(message.NavigationInfo.TargetPage.NavSet);
+      Debug.WriteLine(message.NavigationInfo.TargetPage.NavText);
+      foreach (var role in message.NavigationInfo.TargetPage.Roles)
+        Debug.WriteLine("TargetPage role: " + role);
+      if (message.NavigationInfo.Uri == null)
+        Debug.WriteLine("NavigationInfo.Uri == null");
+      else
+        Debug.WriteLine(message.NavigationInfo.Uri.ToString());
       Debug.WriteLine("\r\n");
     }
   }

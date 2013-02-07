@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.Common.ViewModelBases;
+using System;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -8,19 +10,28 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class AddTranslationViewModel : ViewModelBase
   {
+    #region Ctors and Init
+
     public AddTranslationViewModel()
     {
-      BlankTranslationCreator.CreateNew((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-          var retriever = r.Object;
-
-          TranslationViewModel = Services.Container.GetExportedValue<AddTranslationTranslationEditViewModel>();
-          TranslationViewModel.Model = retriever.Translation;
-          HookInto(TranslationViewModel);
-        });
+      InitializeModelAsync();
     }
+
+    private async Task InitializeModelAsync()
+    {
+      var thinkId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      var blankTranslationCreator = await BlankTranslationCreator.CreateNewAsync();
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+
+      TranslationViewModel = Services.Container.GetExportedValue<AddTranslationTranslationEditViewModel>();
+      TranslationViewModel.Model = blankTranslationCreator.Translation;
+      HookInto(TranslationViewModel);
+    }
+
+    #endregion
+
+    #region Properties
 
     private AddTranslationTranslationEditViewModel _TranslationViewModel;
     public AddTranslationTranslationEditViewModel TranslationViewModel
@@ -36,6 +47,27 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
+    #endregion
+
+    #region Methods
+
+    private void HookInto(AddTranslationTranslationEditViewModel translationViewModel)
+    {
+      translationViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(translationViewModel_PropertyChanged);
+    }
+
+    #endregion
+
+    #region Events
+
+    void translationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+      NotifyOfPropertyChange(() => CanSave);
+    }
+
+    #endregion
+
+    #region Commands
 
     public bool CanSave
     {
@@ -58,14 +90,6 @@ namespace LearnLanguages.Silverlight.ViewModels
         });
     }
 
-    private void HookInto(AddTranslationTranslationEditViewModel translationViewModel)
-    {
-      translationViewModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(translationViewModel_PropertyChanged);
-    }
-
-    void translationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-      NotifyOfPropertyChange(() => CanSave);
-    }
+    #endregion
   }
 }

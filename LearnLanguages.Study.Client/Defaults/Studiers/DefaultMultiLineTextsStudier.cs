@@ -7,6 +7,8 @@ using Caliburn.Micro;
 using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Navigation.EventMessages;
+using System.Threading.Tasks;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study
 {
@@ -18,42 +20,24 @@ namespace LearnLanguages.Study
     {
       Services.EventAggregator.Subscribe(this);//navigation
     }
-    public override void InitializeForNewStudySession(MultiLineTextList target, 
-                                                      ExceptionCheckCallback completedCallback)
+    public override async Task InitializeForNewStudySessionAsync(MultiLineTextList target)
     {
       _AbortIsFlagged = false;
       _Target = target;
       _MeaningStudier = new DefaultMultiLineTextsMeaningStudier();
-      _MeaningStudier.InitializeForNewStudySession(target, (e) =>
-        {
-          if (e != null)
-            completedCallback(e);
-
-          if (_AbortIsFlagged)
-          {
-            completedCallback(null);
-            return;
-          }
-
-          _OrderStudier = new DefaultMultiLineTextsOrderStudier();
-          _OrderStudier.InitializeForNewStudySession(target, (e2) =>
-            {
-              if (e2 != null)
-                completedCallback(e2);
-
-              completedCallback(null);
-              return;
-            });
-        });
+      await _MeaningStudier.InitializeForNewStudySessionAsync(target);
+      if (_AbortIsFlagged)
+        return;
+      
+      _OrderStudier = new DefaultMultiLineTextsOrderStudier();
+      await _OrderStudier.InitializeForNewStudySessionAsync(target);
     }
 
-    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
+    public override async Task<ResultArgs<StudyItemViewModelArgs>> GetNextStudyItemViewModelAsync()
     {
       if (_AbortIsFlagged)
-      {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
-      }
+        return await StudyHelper.GetAbortedAsync();
+
       //THIS LAYER OF STUDY DECIDES ON WHAT IS IMPORTANT: MEANING OR ORDER, THEN DELEGATES STUDY TO
       //THE CORRESPONDING STUDIER.
 
@@ -69,14 +53,14 @@ namespace LearnLanguages.Study
       //if the randomDouble is below the threshold, then we go with meaning, else we go with order.
       if (ShouldStudyMeaning())
       {
-        _MeaningStudier.GetNextStudyItemViewModel(callback);
+        return await _MeaningStudier.GetNextStudyItemViewModelAsync();
         //_OrderStudier.GetNextStudyItemViewModel(callback);//DEBUG ONLY.  
       }
       else
       {
         //TODO: IMPLEMENT ORDER STUDIER DO AND REFERENCE THIS IN DEFAULT MLTS STUDIER
         //_MeaningStudier.GetNextStudyItemViewModel(callback);//only because this is the only impl i have going.  this DES NOT GO HERE!!!!!!!!!!!!!!!!!!!!
-        _OrderStudier.GetNextStudyItemViewModel(callback);
+        return await _OrderStudier.GetNextStudyItemViewModelAsync();
       }
     }
 

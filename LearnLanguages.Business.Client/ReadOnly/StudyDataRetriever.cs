@@ -4,6 +4,7 @@ using Csla;
 using Csla.Serialization;
 using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -21,10 +22,10 @@ namespace LearnLanguages.Business
     /// Retrieves the StudyDataEdit for the current user.  If the current user does not have one,
     /// a new one is created.  If the current user does have one, it is fetched.
     /// </summary>
-    /// <param name="callback">callback executed once retriever is completely populated</param>
-    public static void CreateNew(EventHandler<DataPortalResult<StudyDataRetriever>> callback)
+    public static async Task<StudyDataRetriever> CreateNewAsync()
     {
-      DataPortal.BeginCreate<StudyDataRetriever>(callback);
+      var result = await DataPortal.CreateAsync<StudyDataRetriever>();
+      return result;
     }
 
     #endregion
@@ -59,7 +60,7 @@ namespace LearnLanguages.Business
     #region DP_XYZ
 
 #if !SILVERLIGHT
-    public void DataPortal_Create(Criteria.ListOfPhrasesCriteria phrasesCriteria)
+    public void DataPortal_Create()
     {
       RetrieverId = Guid.NewGuid();
 
@@ -118,6 +119,5 @@ namespace LearnLanguages.Business
 #endif
 
     #endregion
-
   }
 }

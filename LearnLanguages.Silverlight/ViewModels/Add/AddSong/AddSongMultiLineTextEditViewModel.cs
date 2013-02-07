@@ -7,6 +7,7 @@ using LearnLanguages.Common.ViewModelBases;
 using System.Windows;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 
 namespace LearnLanguages.Silverlight.ViewModels
@@ -127,7 +128,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       if (sender != null)
         SongLanguage = ((LanguageEditViewModel)sender).Model;
     }
-    
+
     #endregion
 
     #region Commands
@@ -148,7 +149,8 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
 
     }
-    public override void Save()
+
+    public override async Task SaveAsync()
     {
       //TODO: PUT ALL SAVE SONG STUFF INTO ONE SAVER COMMAND OBJECT.  THIS OBJECT SHOULD TAKE THE ENTERED SONG INFO, PARSE THE SONG, AND SAVE ALL SUBPHRASES AS WE DO HERE.  THIS SHOULD *NOT* GO INTO THE SONGEDIT MODEL SAVE, AS THE SONG MODEL SHOULD NOT PARSE EVERY TIME IT IS SAVED.
 
@@ -168,17 +170,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       {
         var songText = SongText;
         var languageText = SongLanguage.Text;
-
-        //var lineDelimiter = ViewViewModelResources.LineDelimiter;
-        //lineDelimiter = lineDelimiter.Replace("\\r", "\r");
-        //lineDelimiter = lineDelimiter.Replace("\\n", "\n");
-        //var lines = new List<string>(songText.Split(new string[] { lineDelimiter }, StringSplitOptions.RemoveEmptyEntries));
-
         var lines = songText.ParseIntoLines(); //removes empty entries
-
-        //var splitIntoWordsPattern = CommonResources.RegExSplitPatternWords;
-        //splitIntoWordsPattern = splitIntoWordsPattern.Replace(@"\\", @"\");
-        //var words = new List<string>(Regex.Split(songText, splitIntoWordsPattern));
         var words = songText.ParseIntoWords();
         var wordCount = words.Count;
         var escapeHelper = 0;
@@ -194,108 +186,81 @@ namespace LearnLanguages.Silverlight.ViewModels
             break;
         }
 
-        //I'M CHANGING THIS TO UTILIZE MY LINELIST.NEWLINELIST(INFOS) ALREADY IN PLACE.
-        //SO AT THIS TIME, WE ONLY NEED TO SAVE THE WORDS THEMSELVES.  THE LINES WILL BE SAVED
-        //IN FUTURE STEP IN THIS BLOCK.
+        //I'M CHANGING THIS TO UTILIZE MY LINELIST.NEWLINELIST(INFOS) ALREADY IN 
+        //PLACE.
+        //SO AT THIS TIME, WE ONLY NEED TO SAVE THE WORDS THEMSELVES.  THE LINES 
+        //WILL BE SAVED IN FUTURE STEP IN THIS BLOCK.
         var allWords = new List<string>(words);
-        //var allSubPhrases = new List<string>(lines);
-        //allSubPhrases.AddRange(words);
-
-        ////REMOVE DUPLICATES - this is no longer necessary as this is done in the remove command execution
-        //allSubPhrases = allSubPhrases.Distinct().ToList();
 
         #region REMOVE ALL WORDS THAT ALREADY EXIST IN DB, SO THAT WE ARE LEFT WITH ONLY NEW WORDS
 
-        //we don't want to add duplicate words to the DB, so check to see if any of these words already exist in DB.
-        RemoveAlreadyExistingPhraseTextsCommand.BeginExecute(languageText, allWords, (s, r) =>
-          {
-            if (r.Error != null)
-              throw r.Error;
+        //WE DON'T WANT TO ADD DUPLICATE WORDS TO THE DB, SO CHECK TO SEE IF ANY 
+        //OF THESE WORDS ALREADY EXIST IN DB.
+        var removeCmd = await RemoveAlreadyExistingPhraseTextsCommand.ExecuteAsync(languageText, allWords);
+        var allWordsNotAlreadyInDatabase = removeCmd.PrunedPhraseTexts;
 
-            var allWordsNotAlreadyInDatabase = r.Object.PrunedPhraseTexts;
+        #region CREATE PHRASE FOR EACH NEW WORD
 
-            #region CREATE PHRASE FOR EACH NEW WORD
+        var criteria = new Business.Criteria.PhraseTextsCriteria(languageText,
+          allWordsNotAlreadyInDatabase);
+        var phraseListContainingAllWordsNotAlreadyInDatabase =
+          await PhraseList.NewPhraseListAsync(criteria);
 
-            PhraseList.NewPhraseList(new Business.Criteria.PhraseTextsCriteria(languageText, 
-                                                                               allWordsNotAlreadyInDatabase), 
-                                                                               (s2, r2) =>
-            {
-              if (r2.Error != null)
-                throw r2.Error;
+        #region SAVE ALL WORDS THAT ARE NEW (NOT ALREADY IN DATABASE)
 
-              var phraseListContainingAllWordsNotAlreadyInDatabase = r2.Object;
+        phraseListContainingAllWordsNotAlreadyInDatabase =
+          await phraseListContainingAllWordsNotAlreadyInDatabase.SaveAsync();
+        //SO NOW, ALL OF OUR SONG'S WORDS THAT WERE NOT ALREADY IN THE DATABASE 
+        //ARE INDEED NOW STORED IN THE DATABASE.
 
-              #region SAVE ALL WORDS THAT ARE NEW (NOT ALREADY IN DATABASE)
+        #region CREATE LINEEDIT OBJECTS FOR EACH TEXT LINE AND ADD TO MODEL
 
-              phraseListContainingAllWordsNotAlreadyInDatabase.BeginSave((s3, r3) =>
-              {
-                if (r3.Error != null)
-                  throw r3.Error;
+        var lineInfoDictionary = new Dictionary<int, string>();
+        for (int i = 0; i < lines.Count; i++)
+        {
+          lineInfoDictionary.Add(i, lines[i]);
+        }
 
-                phraseListContainingAllWordsNotAlreadyInDatabase = (PhraseList)r3.NewObject;
-                //SO NOW, ALL OF OUR SONG'S WORDS THAT WERE NOT ALREADY IN THE DATABASE ARE INDEED NOW 
-                //STORED IN THE DATABASE.
+        //WE NOW HAVE INFO DICTIONARY WHICH HAS LINE NUMBER AND CORRESPONDING LINE TEXT
+        //CREATE A NEW LINELIST WITH THIS CRITERIA WILL CREATE PHRASES WITH EACH LINE TEXT,
+        //AND LINEEDITS OBJECT FOR EACH LINE NUMBER + PHRASE.
+        var criteria2 = new Business.Criteria.LineInfosCriteria(languageText, lineInfoDictionary);
+        Model.Lines = await LineList.NewLineListAsync(criteria2);
 
-                #region CREATE LINEEDIT OBJECTS FOR EACH TEXT LINE AND ADD TO MODEL
+        //WE NOW HAVE A LIST OF LINEEDITS, EACH WITH A PHRASE WITH A SINGLE LINE OF TEXT AND LINE NUMBER.
+        //SET OUR MODEL.LINES TO THIS LINELIST
 
-                var lineInfoDictionary = new Dictionary<int, string>();
-                for (int i = 0; i < lines.Count; i++)
-                {
-                  lineInfoDictionary.Add(i, lines[i]);
-                }
-
-                //WE NOW HAVE INFO DICTIONARY WHICH HAS LINE NUMBER AND CORRESPONDING LINE TEXT
-                //CREATE A NEW LINELIST WITH THIS CRITERIA WILL CREATE PHRASES WITH EACH LINE TEXT,
-                //AND LINEEDITS OBJECT FOR EACH LINE NUMBER + PHRASE.
-                var criteria2 = new Business.Criteria.LineInfosCriteria(languageText, lineInfoDictionary);
-                LineList.NewLineList(criteria2, (s5, r5) =>
-                  {
-                    if (r5.Error != null)
-                      throw r5.Error;
-
-                    //WE NOW HAVE A LIST OF LINEEDITS, EACH WITH A PHRASE WITH A SINGLE LINE OF TEXT AND LINE NUMBER.
-                    //SET OUR MODEL.LINES TO THIS LINELIST
-                    Model.Lines = r5.Object;
-
-                    #region SET SONG TITLE (IF NECESSARY)
-                    //IF THE SONGTITLE IS EMPTY, THEN USE THE FIRST LINE OF THE SONG AS THE SONG TITLE
-                    if (string.IsNullOrEmpty(Model.Title))
-                      Model.Title = ViewViewModelResources.AutoTitlePrefix + Model.Lines.GetLine(0).Phrase.Text;
-                    #endregion
-
-                    #region ADD METADATA TYPEISSONG
-
-                    Model.AddMetadata(BusinessResources.MetadataKeyType, 
-                                      BusinessResources.MetadataValueTypeSong);
-
-                    #endregion
-
-                    #region SAVE THE ACTUAL SONG MODEL
-
-                    //NOW WE CAN USE THE BASE SAVE
-                    base.Save();
-                    SongHasBeenSaved = true;
-
-                    #endregion
-                  });
-                
-                #endregion
-              });
-
-              #endregion
-            });
-
-            #endregion
-
-          });
+        #region SET SONG TITLE (IF NECESSARY)
+        //IF THE SONGTITLE IS EMPTY, THEN USE THE FIRST LINE OF THE SONG AS THE SONG TITLE
+        if (string.IsNullOrEmpty(Model.Title))
+          Model.Title = ViewViewModelResources.AutoTitlePrefix + Model.Lines.GetLine(0).Phrase.Text;
         #endregion
 
+        #region ADD METADATA TYPEISSONG
 
+        Model.AddMetadata(BusinessResources.MetadataKeyType,
+                          BusinessResources.MetadataValueTypeSong);
+
+        #endregion
+
+        #region SAVE THE ACTUAL SONG MODEL
+
+        //NOW WE CAN USE THE BASE SAVE
+        await base.SaveAsync();
+        SongHasBeenSaved = true;
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #endregion
       }
-
       #endregion
     }
-
     #endregion
   }
 }

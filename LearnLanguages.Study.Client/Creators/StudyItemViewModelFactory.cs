@@ -5,8 +5,8 @@ using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Common;
-using LearnLanguages.Common.Translation;
 using LearnLanguages.Study.ViewModels;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -44,9 +44,9 @@ namespace LearnLanguages.Study
     /// This prepares the view model so that all that is necessary for the caller is to call
     /// viewmodel.Show(...);
     /// </summary>
-    public void Procure(PhraseEdit phrase, 
-                        string nativeLanguageText, 
-                        AsyncCallback<StudyItemViewModelBase> callback)
+    public async Task<StudyItemViewModelBase> ProcureAsync(PhraseEdit phrase,
+      string nativeLanguageText)
+    //public async Task<ResultArgs<StudyItemViewModelBase>> ProcureAsync(PhraseEdit phrase, 
     {
       //FOR NOW, THIS WILL JUST CREATE ONE TYPE OF STUDY ITEM VIEW MODEL: STUDY QUESTION ANSWER VIEWMODEL.
       //IT WILL SHOW THE QUESTION AND HIDE THE ANSWER FOR VARIOUS AMOUNTS OF TIME, DEPENDING ON QUESTION
@@ -68,62 +68,47 @@ namespace LearnLanguages.Study
         //DO A TRANSLATION Q & A
         //WE NEED TO FIND A TRANSLATION FOR THIS FOREIGN LANGUAGE PHRASE.
         PhraseEdit translatedPhrase = null;
+        #region Thinking (try..)
+        var targetId = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+        try
+        {
+        #endregion
+          var result = await GetTranslatedPhrase(phrase, nativeLanguageText);
+          translatedPhrase = result.Object;
+        #region (...finally) Thinked
+        }
+        finally
+        {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+        }
+        #endregion
 
-        GetTranslatedPhrase(phrase, nativeLanguageText, (s, r) =>
-          {
-            if (r.Error != null)
-            {
-              callback(this, new ResultArgs<StudyItemViewModelBase>(r.Error));
-              return;
-            }
+        //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
+        var timedQA = new ViewModels.StudyPhraseTimedQuestionAnswerViewModel();
+        var manualQA = new ViewModels.StudyPhraseTimedQuestionAnswerViewModel();
+        //hack: I'm just setting these both to timed, because that is what I've corrected
+        //for the async stuff and I want to make sure that it works.
+        //var manualQA = new ViewModels.StudyPhraseManualQuestionAnswerViewModel();
 
-            translatedPhrase = r.Object;
+        //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
+        StudyItemViewModelBase dummy = null;
+        var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
 
-            try
-            {
-              //RIGHT NOW, WE HAVE A MANUAL AND A TIMED QA.
-              var timedQA = new ViewModels.StudyPhraseTimedQuestionAnswerViewModel();
-              var manualQA = new ViewModels.StudyPhraseManualQuestionAnswerViewModel();
+        //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
+        PhraseEdit answer = null;
+        var question = RandomPicker.Ton.PickOne(phrase, translatedPhrase, out answer);
 
-              //PICK A RANDOM VIEW MODEL, EITHER TIMED OR MANUAL
-              StudyItemViewModelBase dummy = null;
-              var qaViewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(timedQA, manualQA, out dummy);
+        //INITIALIZE VIEWMODEL WITH Q & A
+        if (qaViewModel is ViewModels.StudyPhraseTimedQuestionAnswerViewModel)
+          ((ViewModels.StudyPhraseTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);//, (e1) =>
+        else
+          ((ViewModels.StudyPhraseTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
+          //((ViewModels.StudyPhraseManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer);
 
-              //ASSIGN QUESTION/ANSWER RANDOMLY FROM PHRASE AND TRANSLATED PHRASE
-              PhraseEdit answer = null;
-              var question = RandomPicker.Ton.PickOne(phrase, translatedPhrase, out answer);
-
-              //INITIALIZE VIEWMODEL WITH Q & A
-              if (qaViewModel is ViewModels.StudyPhraseTimedQuestionAnswerViewModel)
-                ((ViewModels.StudyPhraseTimedQuestionAnswerViewModel)qaViewModel).Initialize(question, answer, (e1) =>
-                  {
-                    //error callback
-                    if (e1 != null)
-                      callback(this, new ResultArgs<StudyItemViewModelBase>(e1));
-
-                    //success callback
-                    callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
-                  });
-              else
-                ((ViewModels.StudyPhraseManualQuestionAnswerViewModel)qaViewModel).Initialize(question, answer, (e2) =>
-                  {
-                    //error callback
-                    if (e2 != null)
-                      callback(this, new ResultArgs<StudyItemViewModelBase>(e2));
-
-                    //success callback
-                    callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
-                  });
-
-              ////INITIATE THE CALLBACK TO LET IT KNOW WE HAVE OUR VIEWMODEL!  WHEW THAT'S A LOT OF ASYNC.
-              //callback(this, new ResultArgs<StudyItemViewModelBase>(qaViewModel));
-            }
-            catch (Exception ex)
-            {
-              callback(this, new ResultArgs<StudyItemViewModelBase>(ex));
-            }
-          });
-
+        return qaViewModel;
+        //var resultQAViewModel = new ResultArgs<StudyItemViewModelBase>(qaViewModel);
+        //return await StudyHelper.WrapInTask<ResultArgs<StudyItemViewModelBase>>(resultQAViewModel);
       }
       else
       {
@@ -132,164 +117,193 @@ namespace LearnLanguages.Study
       }
     }
 
-    /// <summary>
-    /// Creates a study item using the line and MLT. 
-    /// This prepares the view model so that all that is necessary for the caller is to call
-    /// viewmodel.Show(...);
-    /// </summary>
-    public void Procure(LineEdit line,
-                        MultiLineTextEdit multiLineText,
-                        AsyncCallback<StudyItemViewModelBase> callback)
-    {
-      //FOR NOW, THIS WILL JUST CREATE ONE OF TWO STUDY ITEM VIEW MODELS: 
-      //STUDY LINE ORDER VIEWMODEL (TIMED OR MANUAL).
-      //IT WILL SHOW THE QUESTION AND HIDE THE ANSWER FOR VARIOUS AMOUNTS OF TIME, DEPENDING ON QUESTION
-      //LENGTH, AND OTHER FACTORS.
-      //IN THE FUTURE, THIS WILL BE EXTENSIBILITY POINT WHERE WE CAN SELECT DIFFERENT VARIETIES OF Q AND A 
-      //TRANSLATION VIEW MODELS BASED ON HOW SUCCESSFUL THEY ARE.  WE CAN ALSO HAVE DIFFERENT CONFIGURATIONS
-      //OF VARIETIES BE SELECTED HERE.
+    ///// <summary>
+    ///// Creates a study item using the line and MLT. 
+    ///// This prepares the view model so that all that is necessary for the caller is to call
+    ///// viewmodel.Show(...);
+    ///// </summary>
+    //public async Task<ResultArgs<StudyItemViewModelBase>> Procure(LineEdit line,
+    //  MultiLineTextEdit multiLineText)
+    //{
+    //  //FOR NOW, THIS WILL JUST CREATE ONE OF TWO STUDY ITEM VIEW MODELS: 
+    //  //STUDY LINE ORDER VIEWMODEL (TIMED OR MANUAL).
+    //  //IT WILL SHOW THE QUESTION AND HIDE THE ANSWER FOR VARIOUS AMOUNTS OF TIME, DEPENDING ON QUESTION
+    //  //LENGTH, AND OTHER FACTORS.
+    //  //IN THE FUTURE, THIS WILL BE EXTENSIBILITY POINT WHERE WE CAN SELECT DIFFERENT VARIETIES OF Q AND A 
+    //  //TRANSLATION VIEW MODELS BASED ON HOW SUCCESSFUL THEY ARE.  WE CAN ALSO HAVE DIFFERENT CONFIGURATIONS
+    //  //OF VARIETIES BE SELECTED HERE.
 
-      var manualViewModel = new StudyLineOrderManualQuestionAnswerViewModel();
-      var timedViewModel = new StudyLineOrderTimedQuestionAnswerViewModel();
-      StudyItemViewModelBase dummy = null;
-      var viewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(manualViewModel, timedViewModel, out dummy);
-      if (viewModel is StudyLineOrderManualQuestionAnswerViewModel)
-        manualViewModel.Initialize(line, multiLineText);
-      else
-        timedViewModel.Initialize(line, multiLineText);
-      callback(this, new ResultArgs<StudyItemViewModelBase>(viewModel));
-    }
+    //  var manualViewModel = new StudyLineOrderManualQuestionAnswerViewModel();
+    //  var timedViewModel = new StudyLineOrderTimedQuestionAnswerViewModel();
+    //  StudyItemViewModelBase dummy = null;
+    //  var viewModel = RandomPicker.Ton.PickOne<StudyItemViewModelBase>(manualViewModel, timedViewModel, out dummy);
+    //  if (viewModel is StudyLineOrderManualQuestionAnswerViewModel)
+    //    manualViewModel.Initialize(line, multiLineText);
+    //  else
+    //    timedViewModel.Initialize(line, multiLineText);
+    //  return await new Task<ResultArgs<StudyItemViewModelBase>>(
+    //    () =>
+    //    {
+    //      var result = new ResultArgs<StudyItemViewModelBase>(viewModel);
+    //      return result;
+    //    });
+    //}
 
     /// <summary>
     /// Uses auto translation service (as of writing, this is BingTranslatorService) to translate phrase
     /// into another phrase, which is returned in the callback.
     /// </summary>
-    private void AutoTranslate(PhraseEdit untranslatedPhrase,
-                               string targetLanguageText,
-                               AsyncCallback<PhraseEdit> callback)
+    private async Task<PhraseEdit> AutoTranslate(PhraseEdit untranslatedPhrase,
+                                                 string targetLanguageText)
     {
-      BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
+      throw new NotImplementedException();
+      //todo: implement this using common.translation.translator
+      //BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
 
-      client.TranslateCompleted += (s, r) =>
-      {
-        if (r.Error != null)
-        {
-          callback(this, new ResultArgs<PhraseEdit>(r.Error));
-          return;
-        }
+      //client.TranslateCompleted += (s, r) =>
+      //{
+      //  if (r.Error != null)
+      //  {
+      //    callback(this, new ResultArgs<PhraseEdit>(r.Error));
+      //    return;
+      //  }
 
-        var translatedText = r.Result;
-        PhraseEdit.NewPhraseEdit(targetLanguageText, (s2, r2) =>
-          {
-            if (r2.Error != null)
-            {
-              callback(this, new ResultArgs<PhraseEdit>(r.Error));
-              return;
-            }
+      //  var translatedText = r.Result;
+      //  PhraseEdit.NewPhraseEdit(targetLanguageText, (s2, r2) =>
+      //    {
+      //      if (r2.Error != null)
+      //      {
+      //        callback(this, new ResultArgs<PhraseEdit>(r.Error));
+      //        return;
+      //      }
 
-            var translatedPhrase = r2.Object;
-            translatedPhrase.Text = translatedText;
-            callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
-            return;
-          });
-      };
+      //      var translatedPhrase = r2.Object;
+      //      translatedPhrase.Text = translatedText;
+      //      callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+      //      return;
+      //    });
+      //};
 
-      var untranslatedPhraseLanguageCode = BingTranslateHelper.GetLanguageCode(untranslatedPhrase.Language.Text);
-      var targetLanguageCode = BingTranslateHelper.GetLanguageCode(targetLanguageText);
+      //var untranslatedPhraseLanguageCode = BingTranslateHelper.GetLanguageCode(untranslatedPhrase.Language.Text);
+      //var targetLanguageCode = BingTranslateHelper.GetLanguageCode(targetLanguageText);
 
-      try
-      {
-        client.TranslateAsync(StudyResources.BingAppId,
-                              untranslatedPhrase.Text,
-                              untranslatedPhraseLanguageCode,
-                              targetLanguageCode,
-                              @"text/plain", //this as opposed to "text/html"
-                              "general"); //only supported category is "general"
-        //GOTO ABOVE TRANSLATECOMPLETED HANDLER
-      }
-      catch (Exception ex)
-      {
-        callback(this, new ResultArgs<PhraseEdit>(ex));
-      }
+      //try
+      //{
+      //  client.TranslateAsync(StudyResources.BingAppId,
+      //                        untranslatedPhrase.Text,
+      //                        untranslatedPhraseLanguageCode,
+      //                        targetLanguageCode,
+      //                        @"text/plain", //this as opposed to "text/html"
+      //                        "general"); //only supported category is "general"
+      //  //GOTO ABOVE TRANSLATECOMPLETED HANDLER
+      //}
+      //catch (Exception ex)
+      //{
+      //  callback(this, new ResultArgs<PhraseEdit>(ex));
+      //}
     }
 
     /// <summary>
     /// First searches DB for translated phrase.  If not found there, uses AutoTranslate.
     /// </summary>
-    private void GetTranslatedPhrase(PhraseEdit phrase, 
-                                     string targetLanguageText, 
-                                     AsyncCallback<PhraseEdit> callback)
+    private async Task<ResultArgs<PhraseEdit>> GetTranslatedPhrase(PhraseEdit phrase, 
+      string targetLanguageText)
     {
-      //THIS IS THE PHRASE WE'RE LOOKING FOR
-      PhraseEdit translatedPhrase = null;
+      var criteria = new Business.Criteria.TranslationSearchCriteria(phrase, targetLanguageText, true);
+      var retriever = await TranslationSearchRetriever.CreateNewAsync(criteria);
 
-      //FIRST LOOK IN DB.  IF NOT, THEN AUTO TRANSLATE.
-      var searchCriteria = new Business.Criteria.TranslationSearchCriteria(phrase, targetLanguageText);
-      TranslationSearchRetriever.CreateNew(searchCriteria, (s, r) =>
+      if (retriever.Translation != null)
       {
-        if (r.Error != null)
-        {
-          callback(this, new ResultArgs<PhraseEdit>(r.Error));
-          return;
-        }
+        var translatedPhrase = BusinessHelper.ExtractPhrase(retriever.Translation, 
+                                                            targetLanguageText);
+        return new ResultArgs<PhraseEdit>(translatedPhrase);
+      }
+      else
+      {
+        return null;
+      }
 
-        var retriever = r.Object;
-        var foundTranslation = retriever.Translation;
-        if (foundTranslation != null)
-        {
-          //FOUND TRANSLATED PHRASE IN DATABASE.
-          translatedPhrase = (from p in foundTranslation.Phrases
-                              where p.Language.Text == targetLanguageText
-                              select p).First();
-          callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
-          return;
-        }
-        else
-        {
-          //NO TRANSLATION FOUND IN DB, WILL NEED TO AUTO TRANSLATE
-          AutoTranslate(phrase, targetLanguageText, (s2, r2) =>
-          {
-            if (r2.Error != null)
-            {
-              callback(this, new ResultArgs<PhraseEdit>(r2.Error));
-              return;
-            }
 
-            //GOT TRANSLATED PHRASE VIA AUTOTRANSLATE.  NEED TO CHECK IF WE ALREADY HAVE THIS
-            //PHRASE IN OUR DB, AND USE THAT OBJECT INSTEAD IF WE DO.
-            translatedPhrase = r2.Object;
-            var translatedPhraseLanguageText = translatedPhrase.Language.Text;
-            var criteriaPhrase = new Business.Criteria.ListOfPhrasesCriteria(translatedPhrase);
-            Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteriaPhrase, (s3, r3) =>
-              {
-                if (r3.Error != null)
-                {
-                  callback(this, new ResultArgs<PhraseEdit>(r2.Error));
-                  return;
-                }
+      //////THIS IS THE PHRASE WE'RE LOOKING FOR
+      //PhraseEdit translatedPhrase = null;
 
-                //CHECK OUR RETRIEVER IF IT SUCCESSFULLY FOUND A PHRASE EDIT IN THE DB.
-                //IF IT DID FIND ONE (NOT NULL), THEN ASSIGN OUR TRANSLATEDPHRASE VAR TO THE DB VERSION.
-                //THIS WAY, WE WON'T DUPLICATE PHRASES IN OUR DB.
-                var translatedPhraseRetriever = r3.Object;
-                var dbPhraseEdit = translatedPhraseRetriever.RetrievedPhrases[translatedPhrase.Id];
-                if (dbPhraseEdit != null)
-                  translatedPhrase = dbPhraseEdit;
+      ////FIRST LOOK IN DB.  IF NOT, THEN AUTO TRANSLATE.
+      //#region Thinking (try..)
+      //var targetId = Guid.NewGuid();
+      //History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      //try
+      //{
+      //#endregion
+      //  var searchCriteria = new Business.Criteria.TranslationSearchCriteria(phrase, targetLanguageText);
+      //  var retriever = await TranslationSearchRetriever.CreateNewAsync(searchCriteria);
+      //#region (...finally) Thinked
+      //}
+      //finally
+      //{
+      //  History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      //}
+      //  #endregion
+      ////    callback(this, new ResultArgs<PhraseEdit>(r.Error));
+      ////    return;
+      ////  }
 
-                //FIRE EVENT THAT WE HAVE AUTOTRANSLATED A PHRASE
-                var autoTranslatedEvent =
-                  new History.Events.PhraseAutoTranslatedEvent(phrase, translatedPhrase);
-                History.HistoryPublisher.Ton.PublishEvent(autoTranslatedEvent);
+      ////  var retriever = r.Object;
+      ////  var foundTranslation = retriever.Translation;
+      ////  if (foundTranslation != null)
+      ////  {
+      ////    //FOUND TRANSLATED PHRASE IN DATABASE.
+      ////    translatedPhrase = (from p in foundTranslation.Phrases
+      ////                        where p.Language.Text == targetLanguageText
+      ////                        select p).First();
+      ////    callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+      ////    return;
+      ////  }
+      ////  else
+      ////  {
+      //    //NO TRANSLATION FOUND IN DB, WILL NEED TO AUTO TRANSLATE
+      //    var translatedPhrase = await AutoTranslate(phrase, targetLanguageText);//, (s2, r2) =>
+      //    //{
+      //    //  if (r2.Error != null)
+      //    //  {
+      //    //    callback(this, new ResultArgs<PhraseEdit>(r2.Error));
+      //    //    return;
+      //    //  }
 
-                //CALLBACK
-                callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
-                return;
+      //    //  //GOT TRANSLATED PHRASE VIA AUTOTRANSLATE.  NEED TO CHECK IF WE ALREADY HAVE THIS
+      //    //  //PHRASE IN OUR DB, AND USE THAT OBJECT INSTEAD IF WE DO.
+      //    //  translatedPhrase = r2.Object;
+      //    //  var translatedPhraseLanguageText = translatedPhrase.Language.Text;
+      //    //  var criteriaPhrase = new Business.Criteria.ListOfPhrasesCriteria(translatedPhrase);
+      //    //  Business.PhrasesByTextAndLanguageRetriever.CreateNew(criteriaPhrase, (s3, r3) =>
+      //    //    {
+      //    //      if (r3.Error != null)
+      //    //      {
+      //    //        callback(this, new ResultArgs<PhraseEdit>(r2.Error));
+      //    //        return;
+      //    //      }
 
-              });
+      //    //      //CHECK OUR RETRIEVER IF IT SUCCESSFULLY FOUND A PHRASE EDIT IN THE DB.
+      //    //      //IF IT DID FIND ONE (NOT NULL), THEN ASSIGN OUR TRANSLATEDPHRASE VAR TO THE DB VERSION.
+      //    //      //THIS WAY, WE WON'T DUPLICATE PHRASES IN OUR DB.
+      //    //      var translatedPhraseRetriever = r3.Object;
+      //    //      var dbPhraseEdit = translatedPhraseRetriever.RetrievedPhrases[translatedPhrase.Id];
+      //    //      if (dbPhraseEdit != null)
+      //    //        translatedPhrase = dbPhraseEdit;
 
-          });
-        }
-      });
+      //    //      //FIRE EVENT THAT WE HAVE AUTOTRANSLATED A PHRASE
+      //    //      var autoTranslatedEvent =
+      //    //        new History.Events.PhraseAutoTranslatedEvent(phrase, translatedPhrase);
+      //    //      History.HistoryPublisher.Ton.PublishEvent(autoTranslatedEvent);
+
+      //    //      //CALLBACK
+      //    //      callback(this, new ResultArgs<PhraseEdit>(translatedPhrase));
+      //    //      return;
+
+      //    //    });
+
+      //    //});
+      ////  }
+      ////});
     }
   }
 

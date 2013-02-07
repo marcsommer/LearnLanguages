@@ -7,6 +7,7 @@ using System.Threading;
 using System.Collections.Generic;
 using LearnLanguages.History.Events;
 using LearnLanguages.History.Bases;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -25,17 +26,18 @@ namespace LearnLanguages.Study
       return true;
     }
 
-    protected override void Record(History.Events.ReviewedLineEvent message)
+    protected async override Task RecordAsync(History.Events.ReviewedLineEvent message)
     {
-        /// DETAILS: LINE ID
-        /// REVIEWMETHODID
-        /// LINETEXT
-        /// LINENUMBER
-        /// PHRASEID
-        /// LANGUAGEID
-        /// LANGUAGETEXT
-        /// FEEDBACKASDOUBLE
-        /// DURATION
+//CHANGE DEFAULT PHRASE RECORDER RECORDASYNC TO USE TASKS
+      /// DETAILS: LINE ID
+      /// REVIEWMETHODID
+      /// LINETEXT
+      /// LINENUMBER
+      /// PHRASEID
+      /// LANGUAGEID
+      /// LANGUAGETEXT
+      /// FEEDBACKASDOUBLE
+      /// DURATION
 
       var lineId = message.GetDetail<Guid>(HistoryResources.Key_LineId);
       var reviewMethodId = message.GetDetail<Guid>(HistoryResources.Key_ReviewMethodId);
@@ -81,39 +83,25 @@ namespace LearnLanguages.Study
       #endregion
 
       #region Action<object> createAndSaveBelief THIS IS THE ACTION THAT HAPPENS IN THE FOR LOOP.  IT USES _CURRENTWORDPHRASEID AND COMMON BELIEF PROPERTIES
-      Action<object> createAndSaveBelief = (object state) =>
+      Action<object> createAndSaveBelief = async (object state) =>
         {
           AutoResetEvent autoResetEvent = (AutoResetEvent)state;
-          
-          #region CREATE BELIEF
-          PhraseBeliefEdit.NewPhraseBeliefEdit(_CurrentWordPhraseId, (s, r) =>
-          {
-            if (r.Error != null)
-              throw r.Error;
 
-            var belief = r.Object;
+          //CREATE BELIEF
+          var belief = await PhraseBeliefEdit.NewPhraseBeliefEditAsync(_CurrentWordPhraseId);
 
-            if (belief.Phrase.Language.Text != languageText)
-              throw new Exception("languagetext does not match message");
+          if (belief.Phrase.Language.Text != languageText)
+            throw new Exception("languagetext does not match message");
 
-            belief.TimeStamp = beliefTimeStamp;
-            belief.Text = beliefText;
-            belief.Strength = beliefStrength;
-            belief.BelieverId = beliefBelieverId;
-            belief.ReviewMethodId = beliefReviewMethodId;
+          belief.TimeStamp = beliefTimeStamp;
+          belief.Text = beliefText;
+          belief.Strength = beliefStrength;
+          belief.BelieverId = beliefBelieverId;
+          belief.ReviewMethodId = beliefReviewMethodId;
 
-            #region SAVE BELIEF
-            belief.BeginSave((s3, r3) =>
-            {
-              if (r3.Error != null)
-                throw r3.Error;
-
-              autoResetEvent.Set();
-            });
-            #endregion
-          });
-
-          #endregion
+          //SAVE BELIEF
+          var savedBelief = await belief.SaveAsync();
+          autoResetEvent.Set();
         };
 
       #endregion

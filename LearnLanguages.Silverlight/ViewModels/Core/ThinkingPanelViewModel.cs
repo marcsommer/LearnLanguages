@@ -7,6 +7,7 @@ using LearnLanguages.Common.ViewModelBases;
 using LearnLanguages.Common.Interfaces;
 using System.Collections.Generic;
 using System.Windows;
+using LearnLanguages.Silverlight.Common;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -29,9 +30,22 @@ namespace LearnLanguages.Silverlight.ViewModels
     public void Handle(History.Events.ThinkingAboutTargetEvent message)
     {
       //IF WE AREN'T ALREADY TRACKING THIS TargetId, THEN ADD IT TO OUR THOUGHTS
-      if (!(Thoughts.Contains(message.TargetId)))
+      if (message.TargetId != Guid.Empty && !(Thoughts.Contains(message.TargetId)))
       {
         Thoughts.Add(message.TargetId);
+      }
+
+      UpdateThinkingText();
+    }
+
+    public void Handle(History.Events.ThinkedAboutTargetEvent message)
+    {
+      //IF THE TARGET ID IS GUID.EMPTY, THEN WE'RE JUST PINGING A THOUGHT, NO NEED TO TRACK
+      //IF WE ARE TRACKING THIS TargetId, THEN REMOVE IT FROM OUR THOUGHTS
+      if (message.TargetId != Guid.Empty && 
+          Thoughts.Contains(message.TargetId))
+      {
+        Thoughts.Remove(message.TargetId);
       }
 
       UpdateThinkingText();
@@ -40,26 +54,29 @@ namespace LearnLanguages.Silverlight.ViewModels
     private void UpdateThinkingText()
     {
       //todo: updatethinkingtext strings to resx
+      string thinkingDots = GenerateRandomThinkingDots();
       var thoughtCount = Thoughts.Count;
       if (thoughtCount > 1)
-        ThinkingText = "Thinking About " + thoughtCount.ToString() + " Thing(s)..." + (new Random().Next().ToString());
+        ThinkingText = "Thinking About " + thoughtCount.ToString() + " Thing(s)" + thinkingDots;
       else if (thoughtCount == 1)
-        ThinkingText = "Thinking About 1 Thing..." + (new Random().Next().ToString());
-      else 
-        ThinkingText = "Ready. Give me something to think about!";
+        ThinkingText = "Thinking About 1 Thing" + thinkingDots;
+      else
+        ThinkingText = "Ready. Give me something to think about!" ;
     }
 
-    public void Handle(History.Events.ThinkedAboutTargetEvent message)
+    private string GenerateRandomThinkingDots()
     {
-      //IF WE ARE TRACKING THIS TargetId, THEN REMOVE IT FROM OUR THOUGHTS
-      if (Thoughts.Contains(message.TargetId))
+      string retThinkingDotsString = "";
+      int maxLength = int.Parse(ViewViewModelResources.MaxThinkingDots);
+      Random r = new Random(DateTime.Now.Millisecond + DateTime.Now.Second + DateTime.Now.Minute);
+      int numDots = r.Next(1, maxLength + 1);
+      for (int i = 0; i < numDots; i++)
       {
-        Thoughts.Remove(message.TargetId);
+        retThinkingDotsString += ".";
       }
-
-      UpdateThinkingText();
+      return retThinkingDotsString;
     }
-    
+
     private string _ThinkingText;
     public string ThinkingText
     {

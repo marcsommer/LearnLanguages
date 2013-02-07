@@ -2,8 +2,8 @@
 
 namespace Compression
 {
-  public class CompressedProxy<T> : Csla.DataPortalClient.WcfProxy<T>
-    where T : Csla.Serialization.Mobile.IMobileObject
+  public class CompressedProxy/*<T>*/ : Csla.DataPortalClient.WcfProxy//<T>
+    //where T : Csla.Serialization.Mobile.IMobileObject
   {
     protected override Csla.WcfPortal.CriteriaRequest ConvertRequest(Csla.WcfPortal.CriteriaRequest request)
     {

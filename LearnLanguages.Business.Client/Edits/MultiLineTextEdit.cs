@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using Csla;
 using System.ComponentModel;
 using Csla.Serialization;
@@ -8,6 +8,7 @@ using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 
 namespace LearnLanguages.Business
@@ -58,41 +59,25 @@ namespace LearnLanguages.Business
     #region Silverlight Factory Methods
 #if SILVERLIGHT
 
-    public static void NewMultiLineTextEdit(EventHandler<DataPortalResult<MultiLineTextEdit>> callback)
+    public static async Task<MultiLineTextEdit> NewMultiLineTextEditAsync()
     {
-      DataPortal.BeginCreate<MultiLineTextEdit>(callback);
+      var result = await DataPortal.CreateAsync<MultiLineTextEdit>();
+      return result;
     }
 
-    ///// <summary>
-    ///// This happens DataPortal.ProxyModes.LocalOnly
-    ///// </summary>
-    //public static void NewMultiLineTextEdit(Guid id, EventHandler<DataPortalResult<MultiLineTextEdit>> callback)
-    //{
-    //  DataPortal.BeginCreate<MultiLineTextEdit>(id, callback, DataPortal.ProxyModes.LocalOnly);
-    //  //DataPortal.BeginCreate<MultiLineTextEdit>(id, callback);
-    //}
-
-    public static void GetMultiLineTextEdit(Guid id, EventHandler<DataPortalResult<MultiLineTextEdit>> callback)
+    public static async Task<MultiLineTextEdit> GetMultiLineTextEditAsync(Guid id)
     {
-      DataPortal.BeginFetch<MultiLineTextEdit>(id, callback);
+      var result = await DataPortal.FetchAsync<MultiLineTextEdit>(id);
+      return result;
     }
 
 #endif
     #endregion
+
     #endregion
 
     #region Business Properties
 
-    //PHRASES
-    //#region public ICollection<Guid> LineIds
-    //public static readonly PropertyInfo<ICollection<Guid>> LineIdsProperty =
-    //  RegisterProperty<ICollection<Guid>>(c => c.LineIds);
-    //public ICollection<Guid> LineIds
-    //{
-    //  get { return GetProperty(LineIdsProperty); }
-    //  set { SetProperty(LineIdsProperty, value); }
-    //}
-    //#endregion
     //SCALAR PROPERTIES
 
     #region public string Title
@@ -120,7 +105,7 @@ namespace LearnLanguages.Business
       set { SetProperty(LinesProperty, value); }
     }
     #endregion
-        
+
     //USER
     #region public Guid UserId
     public static readonly PropertyInfo<Guid> UserIdProperty = RegisterProperty<Guid>(c => c.UserId);
@@ -138,10 +123,10 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User
+    public static readonly PropertyInfo<UserIdentity> UserProperty =
+      RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    public UserIdentity User
     {
       get { return GetProperty(UserProperty); }
       private set { LoadProperty(UserProperty, value); }
@@ -188,7 +173,7 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
 
       BusinessRules.CheckRules();
@@ -216,13 +201,14 @@ namespace LearnLanguages.Business
     }
 
     /// <summary>
-    /// Begins to persist object
+    /// Persist object async.
     /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected async override Task<MultiLineTextEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
-
+    
     /// <summary>
     /// Loads the default properties, including generating a new Id, inside of a using (BypassPropertyChecks) block.
     /// </summary>

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.Common.ViewModelBases;
+using System;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -10,15 +12,29 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public AddPhraseViewModel()
     {
-      PhraseEdit.NewPhraseEdit((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+      InitializeModelAsync();
+    }
 
-          var phraseViewModel = Services.Container.GetExportedValue<AddPhrasePhraseEditViewModel>();
-          phraseViewModel.Model = r.Object;
-          Phrase = phraseViewModel;
-        });
+    private async Task InitializeModelAsync()
+    {
+      var thinkId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      var blankPhraseCreator = await BlankPhraseCreator.CreateNewAsync();
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      //var newPhraseEdit = await PhraseEdit.NewPhraseEditAsync();
+      var phraseViewModel = Services.Container.GetExportedValue<AddPhrasePhraseEditViewModel>();
+      phraseViewModel.Model = blankPhraseCreator.Phrase;
+      Phrase = phraseViewModel;
+
+      //PhraseEdit.NewPhraseEdit((s, r) =>
+      //{
+      //  if (r.Error != null)
+      //    throw r.Error;
+
+      //  var phraseViewModel = Services.Container.GetExportedValue<AddPhrasePhraseEditViewModel>();
+      //  phraseViewModel.Model = r.Object;
+      //  Phrase = phraseViewModel;
+      //});
     }
 
     private AddPhrasePhraseEditViewModel _Phrase;

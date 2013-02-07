@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
 using System.ComponentModel;
 using LearnLanguages.Business.Security;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -15,40 +16,41 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void GetAll(EventHandler<DataPortalResult<StudyDataList>> callback)
+    /// <summary>
+    /// Get all StudyDataEdits belonging to the current user.
+    /// </summary>
+    public static async Task<StudyDataList> GetAllAsync()
     {
-      DataPortal.BeginFetch<StudyDataList>(callback);
+      var result = await DataPortal.FetchAsync<StudyDataList>();
+      return result;
     }
 
-    public static void NewStudyDataList(ICollection<Guid> StudyDataIds, EventHandler<DataPortalResult<StudyDataList>> callback)
+    /// <summary>
+    /// Creates a list of StudyDataEdits with the given list of Ids that are accessible to the
+    /// current user.
+    /// </summary>
+    /// <param name="StudyDataIds"></param>
+    /// <returns></returns>
+    public static async Task<StudyDataList> NewStudyDataListAsync(ICollection<Guid> StudyDataIds)
     {
-      DataPortal.BeginFetch<StudyDataList>(StudyDataIds, callback);
+      var result = await DataPortal.FetchAsync<StudyDataList>(StudyDataIds);
+      return result;
     }
 
-    public static StudyDataList NewStudyDataList()
+    public static StudyDataList NewStudyDataListNewedUpOnly()
     {
       return new StudyDataList();
     }
     
-#if SILVERLIGHT
-    /// <summary>
-    /// Runs locally.
-    /// </summary>
-    /// <param name="callback"></param>
-    public static void NewStudyDataList(EventHandler<DataPortalResult<StudyDataList>> callback)
-    {
-      DataPortal.BeginCreate<StudyDataList>(callback, DataPortal.ProxyModes.LocalOnly);
-    }
-#else
     /// <summary>
     /// Runs locally.
     /// </summary>
     [RunLocal]
-    public static void NewStudyDataList(EventHandler<DataPortalResult<StudyDataList>> callback)
+    public static async Task<StudyDataList> NewStudyDataListAsync()
     {
-      DataPortal.BeginCreate<StudyDataList>(callback);
+      var result = await DataPortal.CreateAsync<StudyDataList>();
+      return result;
     }
-#endif
 
     #endregion
 
@@ -157,10 +159,10 @@ namespace LearnLanguages.Business
 
     private void StudyDataList_AddedNew(object sender, Csla.Core.AddedNewEventArgs<StudyDataEdit> e)
     {
-      //CustomIdentity.CheckAuthentication();
+      //Common.CommonHelper.CheckAuthentication();
       var StudyDataEdit = e.NewObject;
       StudyDataEdit.LoadCurrentUser();
-      //var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      //var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       //StudyDataEdit.UserId = identity.UserId;
       //StudyDataEdit.Username = identity.Name;
     }

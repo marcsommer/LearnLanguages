@@ -12,11 +12,16 @@
     <RootNamespace>LearnLanguages.Common</RootNamespace>
     <AssemblyName>LearnLanguages.Common</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -34,6 +39,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,23 +50,65 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoConfig>true</NoConfig>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro">
       <HintPath>..\dependencies\caliburn_silverlight\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\sl50\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Silverlight.4.5.10\lib\sl50\Csla.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CompilerServices.AsyncTargetingPack.1.0.0\lib\sl50\Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm.SL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.0.0\lib\sl4\Microsoft.Data.Edm.SL.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData.SL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.0.0\lib\sl4\Microsoft.Data.OData.SL.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client.SL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.0.0\lib\sl4\Microsoft.Data.Services.Client.SL.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
+    <Reference Include="System.ComponentModel.Composition, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.Composition.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=5.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Spatial.SL">
+      <HintPath>..\packages\System.Spatial.5.0.0\lib\sl4\System.Spatial.SL.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
+    <Reference Include="System.Xml.Linq, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\dependencies\csla_contrib\ErrorEventArgs.cs">
@@ -84,16 +132,40 @@
     <Compile Include="..\dependencies\csla_contrib\ScreenWithSubject.cs">
       <Link>CslaContrib\ScreenWithSubject.cs</Link>
     </Compile>
+    <Compile Include="Analysis\AnalyzerBaseOfTAnalysis.cs" />
     <Compile Include="CommonHelper.cs" />
+    <Compile Include="Core\PageBase.cs" />
     <Compile Include="Core\QuestionArgs.cs" />
     <Compile Include="Core\RandomPicker.cs" />
+    <Compile Include="Enums\IntendedUserAuthenticationState.cs" />
     <Compile Include="EventArgs\ResultArgsOfT.cs" />
     <Compile Include="Core\LearnLanguagesExtensions.cs" />
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="CommonResources.cs" />
+    <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="EventMessages\EnableNavigationRequestedEventMessage.cs" />
+    <Compile Include="EventMessages\DisableNavigationRequestedEventMessage.cs" />
+    <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />
+    <Compile Include="EventMessages\LanguageAddedEventMessage.cs" />
+    <Compile Include="EventMessages\LanguageEventMessage.cs" />
+    <Compile Include="EventMessages\NativeLanguageChangedEventMessage.cs" />
+    <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
+    <Compile Include="Events\MessageEvent.cs" />
+    <Compile Include="Exceptions\AnalysisTypeNotRecognizedException.cs" />
+    <Compile Include="Exceptions\AnalysisIdNotRecognizedException.cs" />
+    <Compile Include="Exceptions\RefineAttemptedBeforeAnalysisException.cs" />
     <Compile Include="Exceptions\UserNotAuthenticatedException.cs" />
+    <Compile Include="Interfaces\Analyzer\IAnalysis.cs" />
+    <Compile Include="Interfaces\Analyzer\IAnalyzer.cs" />
+    <Compile Include="Interfaces\Core\IModule.cs" />
+    <Compile Include="Interfaces\Core\IPageInitializer.cs" />
+    <Compile Include="Interfaces\Navigation\INavigationPanelViewModel.cs" />
+    <Compile Include="Interfaces\Navigation\INavigationSet.cs" />
+    <Compile Include="Interfaces\Core\IPageViewModel.cs" />
     <Compile Include="Interfaces\Core\IAdvisor.cs" />
     <Compile Include="Interfaces\Core\IInitialize.cs" />
+    <Compile Include="Interfaces\Core\IPage.cs" />
+    <Compile Include="Interfaces\Core\IShellViewModel.cs" />
     <Compile Include="Interfaces\Exchange\IStatusUpdateOfTTargetAndTProduct.cs" />
     <Compile Include="Interfaces\Exchange\IOfferResponse.cs" />
     <Compile Include="Interfaces\Exchange\IOffer.cs" />
@@ -111,7 +183,9 @@
     <Compile Include="Interfaces\Feedback\IFeedbackViewModelBase.cs" />
     <Compile Include="Interfaces\History\ICompoundEventMaker.cs" />
     <Compile Include="Interfaces\History\IStudyReviewMethod.cs" />
-    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Interfaces\ICanExpand.cs" />
+    <Compile Include="Interfaces\IPartSatisfiedEventMessage.cs" />
+    <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="CslaBases\BusinessBaseOfCAndCDto.cs" />
     <Compile Include="CslaBases\BusinessListBaseOfLAndCAndCDto.cs" />
     <Compile Include="CslaBases\CommandBaseOfC.cs" />
@@ -139,18 +213,23 @@
     <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="Logging\LogPriority.cs" />
     <Compile Include="Core\MagicStringsList.cs" />
+    <Compile Include="MessageShower\MessagePriority.cs" />
+    <Compile Include="MessageShower\MessageShower.cs" />
+    <Compile Include="MessageShower\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\ResultOfT.cs" />
     <Compile Include="Core\SaltedHashedPassword.cs" />
     <Compile Include="Core\Services.cs" />
     <Compile Include="Core\Tuple.cs" />
     <Compile Include="Core\UserInterfaceInfo.cs" />
-    <Compile Include="Translation\BingTranslateHelper.cs" />
+    <Compile Include="ViewModelBases\PageViewModelBase.cs" />
     <Compile Include="ViewModelBases\ViewModelBase.cs" />
     <Compile Include="ViewModelBases\ViewModelBaseOfTCslaModel.cs" />
     <Compile Include="ViewModelBases\ViewModelBaseOfTCslaModelList.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

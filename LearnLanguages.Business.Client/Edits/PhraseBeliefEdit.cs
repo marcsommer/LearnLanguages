@@ -8,6 +8,7 @@ using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
 using LearnLanguages.Common.CslaBases;
+using System.Threading.Tasks;
 
 
 namespace LearnLanguages.Business
@@ -46,21 +47,22 @@ namespace LearnLanguages.Business
     #region Silverlight Factory Methods
 #if SILVERLIGHT
 
-    public static void NewPhraseBeliefEdit(EventHandler<DataPortalResult<PhraseBeliefEdit>> callback)
+    public static async Task<PhraseBeliefEdit> NewPhraseBeliefEditAsync()
     {
-      //DataPortal.BeginCreate<PhraseBeliefEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<PhraseBeliefEdit>(callback);
+      var result = await DataPortal.CreateAsync<PhraseBeliefEdit>();
+      return result;
     }
 
-    public static void NewPhraseBeliefEdit(Guid phraseId, EventHandler<DataPortalResult<PhraseBeliefEdit>> callback)
+    public static async Task<PhraseBeliefEdit> NewPhraseBeliefEditAsync(Guid phraseId)
     {
-      //DataPortal.BeginCreate<PhraseBeliefEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<PhraseBeliefEdit>(phraseId, callback);
+      var result = await DataPortal.CreateAsync<PhraseBeliefEdit>(phraseId);
+      return result;
     }
 
-    public static void GetPhraseBeliefEdit(Guid id, EventHandler<DataPortalResult<PhraseBeliefEdit>> callback)
+    public static async Task<PhraseBeliefEdit> GetPhraseBeliefEditAsync(Guid id)
     {
-      DataPortal.BeginFetch<PhraseBeliefEdit>(id, callback);
+      var result = await DataPortal.FetchAsync<PhraseBeliefEdit>(id);
+      return result;
     }
 
 #endif
@@ -157,10 +159,10 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User
+    public static readonly PropertyInfo<UserIdentity> UserProperty =
+      RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    public UserIdentity User
     {
       get { return GetProperty(UserProperty); }
       private set { LoadProperty(UserProperty, value); }
@@ -190,31 +192,33 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
     }
     public override PhraseBeliefDto CreateDto()
     {
-      PhraseBeliefDto retDto = new PhraseBeliefDto(){
-                                          Id = this.Id,
-                                          TimeStamp = this.TimeStamp,
-                                          Text = this.Text,
-                                          Strength = this.Strength,
-                                          BelieverId = this.BelieverId,
-                                          ReviewMethodId = this.ReviewMethodId,
-                                          PhraseId = this.PhraseId,
-                                          UserId = this.UserId,
-                                          Username = this.Username
-                                        };
+      PhraseBeliefDto retDto = new PhraseBeliefDto()
+      {
+        Id = this.Id,
+        TimeStamp = this.TimeStamp,
+        Text = this.Text,
+        Strength = this.Strength,
+        BelieverId = this.BelieverId,
+        ReviewMethodId = this.ReviewMethodId,
+        PhraseId = this.PhraseId,
+        UserId = this.UserId,
+        Username = this.Username
+      };
       return retDto;
     }
 
     /// <summary>
-    /// Begins to persist object
+    /// Persists object async.
     /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected override async Task<PhraseBeliefEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
 
     /// <summary>
@@ -247,8 +251,8 @@ namespace LearnLanguages.Business
     /// </summary>
     internal void LoadCurrentUser()
     {
-      CustomIdentity.CheckAuthentication();
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      Common.CommonHelper.CheckAuthentication();
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       UserId = identity.UserId;
       Username = identity.Name;
       User = identity;

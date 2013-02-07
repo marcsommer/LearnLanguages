@@ -9,6 +9,7 @@ using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Navigation.EventMessages;
 using Caliburn.Micro;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -33,7 +34,7 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public override void InitializeForNewStudySession(PhraseEdit target, ExceptionCheckCallback completedCallback)
+    public override async Task InitializeForNewStudySessionAsync(PhraseEdit target)
     {
 #if DEBUG
       var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
@@ -45,71 +46,55 @@ namespace LearnLanguages.Study
       _Target = target;
 
       History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-      completedCallback(null);
     }
 
-    public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
+    public override async Task<ResultArgs<StudyItemViewModelArgs>> GetNextStudyItemViewModelAsync()
     {
       if (_AbortIsFlagged)
-      {
-        callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
-      }
+        return await StudyHelper.GetAbortedAsync();
+
       //USING THE TARGET PHRASE, 
       //IF IT IS IN THE NATIVE LANGUAGE, THEN IT JUST POPS UP A NATIVE LANGUAGE STUDY QUESTION.
       //IF IT IS IN A DIFFERENT LANGUAGE, THEN IT POPS UP EITHER DIRECTION Q & A, 50% CHANCE.
-      StudyDataRetriever.CreateNew((s, r) =>
-      {
-        if (r.Error != null)
-        {
-          callback(this, new ResultArgs<StudyItemViewModelArgs>(r.Error));
-          return;
-        }
+      #region Thinking
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      #endregion
+      var retriever = await StudyDataRetriever.CreateNewAsync();
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      #endregion
 
-        if (_AbortIsFlagged)
-        {
-          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-          return;
-        }
+      if (_AbortIsFlagged)
+        return await StudyHelper.GetAbortedAsync();
 
-        var retriever = r.Object;
-        var nativeLanguageText = retriever.StudyData.NativeLanguageText;
-        if (string.IsNullOrEmpty(nativeLanguageText))
-          throw new StudyException("No native language set.");
+      var nativeLanguageText = retriever.StudyData.NativeLanguageText;
+      if (string.IsNullOrEmpty(nativeLanguageText))
+        throw new StudyException("No native language set.");
 
-        if (_Target == null)
-          throw new StudyException("No PhraseEdit to study, _StudyJobInfo.Target == null.");
+      if (_Target == null)
+        throw new StudyException("No PhraseEdit to study, _StudyJobInfo.Target == null.");
 
-        var phraseEdit = _Target;
-        var phraseText = phraseEdit.Text;
-        if (string.IsNullOrEmpty(phraseText))
-          throw new StudyException("Attempted to study empty phrase text, (PhraseEdit)_Target.Text is null or empty.");
+      var phraseEdit = _Target;
+      var phraseText = phraseEdit.Text;
+      if (string.IsNullOrEmpty(phraseText))
+        throw new StudyException("Attempted to study empty phrase text, (PhraseEdit)_Target.Text is null or empty.");
 
-        var languageText = phraseEdit.Language.Text;
+      var languageText = phraseEdit.Language.Text;
 
-        //WE HAVE A PHRASEEDIT WITH A LANGUAGE AND WE HAVE OUR NATIVE LANGUAGE, 
-        //SO WE HAVE ENOUGH TO PROCURE A VIEW MODEL NOW.
-        StudyItemViewModelFactory.Ton.Procure(phraseEdit, nativeLanguageText, (s2, r2) =>
-          {
-            if (r2.Error != null)
-            {
-              callback(this, new ResultArgs<StudyItemViewModelArgs>(r2.Error));
-              return;
-            }
+      //WE HAVE A PHRASEEDIT WITH A LANGUAGE AND WE HAVE OUR NATIVE LANGUAGE, 
+      //SO WE HAVE ENOUGH TO PROCURE A VIEW MODEL NOW.
+      var result = await StudyItemViewModelFactory.Ton.ProcureAsync(phraseEdit, nativeLanguageText);
 
-            if (_AbortIsFlagged)
-            {
-              callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-              return;
-            }
+      if (_AbortIsFlagged)
+        return await StudyHelper.GetAbortedAsync();
 
-            var studyItemViewModel = r2.Object;
-            studyItemViewModel.Shown += new EventHandler(studyItemViewModel_Shown);
-            var result = new StudyItemViewModelArgs(studyItemViewModel);
-            _Phrase = phraseEdit;//hack
-            callback(this, new ResultArgs<StudyItemViewModelArgs>(result));
-          });
-      });
+      var studyItemViewModel = result.Object;
+      studyItemViewModel.Shown += new EventHandler(studyItemViewModel_Shown);
+      var args = new StudyItemViewModelArgs(studyItemViewModel);
+      var resultArgs = new ResultArgs<StudyItemViewModelArgs>(args);
+      _Phrase = phraseEdit;//hack
+      return await StudyHelper.WrapInTask<ResultArgs<StudyItemViewModelArgs>>(resultArgs);
     }
 
     private void studyItemViewModel_Shown(object sender, EventArgs e)

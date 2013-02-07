@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Common.Interfaces
 {
   public interface IGetFeedback
   {
     IFeedback GetFeedback(int timeoutMilliseconds);
-    void GetFeedbackAsync(int timeoutMilliseconds, Delegates.AsyncCallback<IFeedback> callback);
+    Task<IFeedback> GetFeedbackAsync(int timeoutMilliseconds);
   }
 }

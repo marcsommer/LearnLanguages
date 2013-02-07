@@ -6,6 +6,7 @@ using Csla.Data;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using LearnLanguages.Business.Security;
+using Csla.Core;
 
 namespace LearnLanguages.DataAccess.Ef
 {
@@ -179,7 +180,7 @@ namespace LearnLanguages.DataAccess.Ef
     //}
     protected override MultiLineTextDto NewImpl(object criteria)
     {
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       string currentUsername = identity.Name;
       Guid currentUserId = Guid.Empty;
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
@@ -204,7 +205,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override MultiLineTextDto FetchImpl(Guid id)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -246,7 +247,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override MultiLineTextDto UpdateImpl(MultiLineTextDto dto)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -292,7 +293,7 @@ namespace LearnLanguages.DataAccess.Ef
     }
     protected override MultiLineTextDto DeleteImpl(Guid id)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
@@ -335,8 +336,8 @@ namespace LearnLanguages.DataAccess.Ef
     {
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {
-        var allMultiLineTextDtos = new List<MultiLineTextDto>();
-        CustomIdentity identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+        var allMultiLineTextDtos = new MobileList<MultiLineTextDto>();
+        UserIdentity identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
 
         var datas = (from data in ctx.ObjectContext.MultiLineTextDatas
                      where data.UserDataId == identity.UserId
@@ -375,7 +376,7 @@ namespace LearnLanguages.DataAccess.Ef
 
     protected override ICollection<MultiLineTextDto> FetchByIdImpl(Guid lineId)
     {
-      var currentUserId = ((CustomIdentity)(Csla.ApplicationContext.User.Identity)).UserId;
+      var currentUserId = Business.BusinessHelper.GetCurrentUserId();
 
       using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
       {

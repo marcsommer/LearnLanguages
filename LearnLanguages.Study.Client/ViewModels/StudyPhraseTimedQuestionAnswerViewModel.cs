@@ -8,6 +8,9 @@ using LearnLanguages.Business;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.History;
 using LearnLanguages.History.Events;
+using System.Threading.Tasks;
+using LearnLanguages.Common.EventMessages;
+using System.Windows.Browser;
 
 namespace LearnLanguages.Study.ViewModels
 {
@@ -19,6 +22,7 @@ namespace LearnLanguages.Study.ViewModels
 
     public StudyPhraseTimedQuestionAnswerViewModel()
     {
+      StudyItemTitle = StudyResources.StudyPhraseTimedQuestionAnswerStudyItemTitle;
       Services.EventAggregator.Subscribe(this);
     }
 
@@ -145,6 +149,34 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+
+    private string _ButtonLabelResearchQuestion = StudyResources.ButtonLabelResearchQuestion;
+    public string ButtonLabelResearchQuestion
+    {
+      get { return _ButtonLabelResearchQuestion; }
+      set
+      {
+        if (value != _ButtonLabelResearchQuestion)
+        {
+          _ButtonLabelResearchQuestion = value;
+          NotifyOfPropertyChange(() => ButtonLabelResearchQuestion);
+        }
+      }
+    }
+
+    private string _ButtonLabelResearchAnswer = StudyResources.ButtonLabelResearchAnswer;
+    public string ButtonLabelResearchAnswer
+    {
+      get { return _ButtonLabelResearchAnswer; }
+      set
+      {
+        if (value != _ButtonLabelResearchAnswer)
+        {
+          _ButtonLabelResearchAnswer = value;
+          NotifyOfPropertyChange(() => ButtonLabelResearchAnswer);
+        }
+      }
+    }
     #endregion
 
     #region Methods
@@ -156,47 +188,22 @@ namespace LearnLanguages.Study.ViewModels
     /// <param name="answer">Answer PhraseEdit</param>
     /// <param name="questionDurationInMilliseconds"></param>
     /// <param name="callback"></param>
-    protected void AskQuestion(PhraseEdit question,
-                            PhraseEdit answer,
-                            int questionDurationInMilliseconds,
-                            ExceptionCheckCallback callback)
+    protected async Task AskQuestionAsync(PhraseEdit question,
+                                          PhraseEdit answer,
+                                          int questionDurationInMilliseconds)
     {
-      try
-      {
-        //BingTranslatorService.LanguageServiceClient client = new BingTranslatorService.LanguageServiceClient();
-        //client.SpeakCompleted += client_SpeakCompleted;
-        //client.SpeakAsync(StudyResources.BingAppId, question.Text, BingTranslateHelper.GetLanguageCode(question.Language.Text), string.Empty, string.Empty);
+      HideAnswer();
+      Question = question;
+      Answer = answer;
+      //WAIT IN THE BACKGROUND SO WE DON'T BLOCK OUR MAIN EXECUTION THREAD
+      await CommonHelper.WaitAsync(questionDurationInMilliseconds);
+      //Task waitTask = new Task(() => System.Threading.Thread.Sleep(questionDurationInMilliseconds));
+      //waitTask.Start();
+      //await waitTask;
 
-        HideAnswer();
-        Question = question;
-        Answer = answer;
-        //QuestionDurationInMilliseconds = questionDurationInMilliseconds;
-        BackgroundWorker timer = new BackgroundWorker();
-        timer.DoWork += (s, e) =>
-        {
-          try
-          {
-            System.Threading.Thread.Sleep(questionDurationInMilliseconds);
-            //if (AnswerVisibility == Visibility.Collapsed)
-              
-            ShowAnswer();
-            callback(null);
-          }
-          catch (Exception ex)
-          {
-            callback(ex);
-          }
-        };
-
-        timer.RunWorkerAsync();
-      }
-      catch (Exception ex)
-      {
-        callback(ex);
-      }
     }
 
-    public void Initialize(PhraseEdit question, PhraseEdit answer, ExceptionCheckCallback callback)
+    public void Initialize(PhraseEdit question, PhraseEdit answer)
     {
       _InitialQuestionText = question.Text;
       _ModifiedQuestionText = "";
@@ -211,7 +218,6 @@ namespace LearnLanguages.Study.ViewModels
       var durationMilliseconds = words.Count * (int.Parse(StudyResources.DefaultMillisecondsTimePerWordInQuestion));
       QuestionDurationInMilliseconds = durationMilliseconds;
       HideAnswer();
-      callback(null);
 
       //if (!question.IsValid)
       //  callback(new ArgumentException("question is not a valid phrase", "question"));
@@ -253,34 +259,29 @@ namespace LearnLanguages.Study.ViewModels
       //  });
     }
 
-    public override void Show(ExceptionCheckCallback callback)
+    protected override async Task ShowAsyncImpl()
     {
+      //PUBLISH EVENT THAT WE ARE VIEWING PHRASE ON SCREEN
       _DateTimeQuestionShown = DateTime.Now;
       ViewModelVisibility = Visibility.Visible;
-      DispatchShown();
       var eventViewing = new History.Events.ViewingPhraseOnScreenEvent(Question);
       History.HistoryPublisher.Ton.PublishEvent(eventViewing);
-      AskQuestion(Question, Answer, QuestionDurationInMilliseconds, (e) =>
-        {
-          if (e != null)
-          {
-            callback(e);
-          }
-          else
-          {
-            //WAIT FOR ALOTTED TIME FOR USER TO THINK ABOUT ANSWER.
-            System.Threading.Thread.Sleep(int.Parse(StudyResources.DefaultThinkAboutAnswerTime));
-            callback(null);
-          }
-        });
+
+      //ASK THE QUESTION
+      await AskQuestionAsync(Question, Answer, QuestionDurationInMilliseconds);
+
+      //SHOW THE ANSWER
+      ShowAnswer();
+
+      //WAIT FOR ALOTTED TIME FOR USER TO THINK ABOUT ANSWER.
+      var timeToWait = int.Parse(StudyResources.DefaultThinkAboutAnswerTime);
+      await CommonHelper.WaitAsync(timeToWait);
     }
 
     public override void Abort()
     {
       QuestionVisibility = Visibility.Collapsed;
       AnswerVisibility = Visibility.Collapsed;
-      if (_Callback != null)
-        _Callback(null);
     }
     
     private void HideAnswer()
@@ -290,13 +291,13 @@ namespace LearnLanguages.Study.ViewModels
       UpdateEditAnswerButtonVisibilities();
     }
 
-    public bool CanShowAnswer
-    {
-      get
-      {
-        return (Answer != null);
-      }
-    }
+    //public bool CanShowAnswer
+    //{
+    //  get
+    //  {
+    //    return (Answer != null);
+    //  }
+    //}
     public void ShowAnswer()
     {
       AnswerVisibility = Visibility.Visible;
@@ -317,8 +318,9 @@ namespace LearnLanguages.Study.ViewModels
 
     #endregion
 
-    #region Edit/Save Question Stuff
 
+    #region Edit/Save Question
+    
     #region Question
 
     private Visibility _EditQuestionButtonVisibility = Visibility.Visible;
@@ -390,109 +392,100 @@ namespace LearnLanguages.Study.ViewModels
         return Question != null && Question.IsValid && SaveQuestionButtonIsEnabled;
       }
     }
-    public void SaveQuestion()
+    public async Task SaveQuestion()
     {
       QuestionIsReadOnly = true;
       SaveQuestionButtonIsEnabled = false;
+      #region Thinking (try..)
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      DisableNavigationRequestedEventMessage.Publish();
+      try
+      {
+      #endregion
 
-      #region Get the DB version of question, then modify it and save
+        #region Get the DB version of question, then modify it and save
 
-      //STORE OUR MODIFIED TEXT
-      _ModifiedQuestionText = Question.Text;
+        //STORE OUR MODIFIED TEXT
+        _ModifiedQuestionText = Question.Text;
 
-      //PREPARE QUESTION TO BE SEARCHED FOR IN DB
-      Question.Text = _InitialQuestionText;
+        //PREPARE QUESTION TO BE SEARCHED FOR IN DB
+        Question.Text = _InitialQuestionText;
 
-      #region SEARCH IN DB FOR QUESTION (WITH INITIAL TEXT)
-      Business.PhrasesByTextAndLanguageRetriever.CreateNew(Question, (s, r) =>
+        #region SEARCH IN DB FOR QUESTION (WITH INITIAL TEXT)
+        PhrasesByTextAndLanguageRetriever retriever = null;
+        History.Events.ThinkingAboutTargetEvent.Publish(System.Guid.Empty);
         {
-          if (r.Error != null)
-            throw r.Error;
+          retriever = await Business.PhrasesByTextAndLanguageRetriever.CreateNewAsync(Question);
+        }
+        History.Events.ThinkingAboutTargetEvent.Publish(System.Guid.Empty);
 
-          var dbQuestion = r.Object.RetrievedSinglePhrase;
-          if (dbQuestion == null)
+        var dbQuestion = retriever.RetrievedSinglePhrase;
+        if (dbQuestion == null)
+        {
+          //QUESTION NOT IN DB, BUT QUESTION IS A CHILD
+          if (Question.IsChild)
           {
-            //QUESTION NOT IN DB, BUT QUESTION IS A CHILD
-            if (Question.IsChild)
-            {
-              //CANNOT SAVE THE QUESTION DIRECTLY BECAUSE IT IS A CHILD
+            //CANNOT SAVE THE QUESTION DIRECTLY BECAUSE IT IS A CHILD
+            #region CREATE NEW PHRASE EDIT, LOAD FROM QUESTION DTO, SAVE QUESTION
+            var newQuestionObj = await PhraseEdit.NewPhraseEditAsync();
 
-              #region CREATE NEW PHRASE EDIT, LOAD FROM QUESTION DTO, SAVE QUESTION
-              PhraseEdit.NewPhraseEdit((s3, r3) =>
-                {
-                  if (r3.Error != null)
-                    throw r3.Error;
+            Question.Text = _ModifiedQuestionText;
+            var dto = Question.CreateDto();
+            dto.Id = Guid.NewGuid();
 
-                  var newQuestionObj = r3.Object;
+            newQuestionObj.LoadFromDtoBypassPropertyChecks(dto);
+            Question = newQuestionObj;
 
-                  Question.Text = _ModifiedQuestionText;
-                  var dto = Question.CreateDto();
-                  dto.Id = Guid.NewGuid();
-
-                  newQuestionObj.LoadFromDtoBypassPropertyChecks(dto);
-                  Question = newQuestionObj;
-
-                  #region Save Question
-                  Question.BeginSave((s4, r4) =>
-                    {
-                      if (r4.Error != null)
-                        throw r4.Error;
-
-                      Question = (PhraseEdit)r4.NewObject;
-                      _InitialQuestionText = Question.Text;
-                      _ModifiedQuestionText = "";
-                      SaveQuestionButtonIsEnabled = true;
-                      QuestionIsReadOnly = true;
-                      UpdateEditQuestionButtonVisibilities();
-                    });
-                  #endregion
-                });
-              #endregion
-            }
-            //QUESTION NOT IN DB, BUT QUESTION IS NOT A CHILD
-            else
-            {
-              #region SAVE THE QUESTION DIRECTLY, B/C IT IS NOT A CHILD
-              Question.BeginSave((s2, r2) =>
-                {
-                  if (r2.Error != null)
-                    throw r2.Error;
-
-                  Question = (PhraseEdit)r2.NewObject;
-                  _InitialQuestionText = Question.Text;
-                  _ModifiedQuestionText = "";
-                  SaveQuestionButtonIsEnabled = true;
-                  QuestionIsReadOnly = true;
-                  UpdateEditQuestionButtonVisibilities();
-                });
+            #region Save Question
+            Question = await Question.SaveAsync();
+            _InitialQuestionText = Question.Text;
+            _ModifiedQuestionText = "";
+            SaveQuestionButtonIsEnabled = true;
+            QuestionIsReadOnly = true;
+            UpdateEditQuestionButtonVisibilities();
             #endregion
-            }
+            #endregion
           }
-          //QUESTION WAS FOUND IN DB
+          //QUESTION NOT IN DB, BUT QUESTION IS NOT A CHILD
           else
           {
-            #region REASSIGN THE QUESTION WITH THE DBQUESTION, SAVE WITH THE MODIFIED TEXT
-            Question = dbQuestion;
-            Question.Text = _ModifiedQuestionText;
-            Question.BeginSave((s5, r5) =>
-            {
-              if (r5.Error != null)
-                throw r5.Error;
-
-              Question = (PhraseEdit)r5.NewObject;
-              _InitialQuestionText = Question.Text;
-              _ModifiedQuestionText = "";
-              SaveQuestionButtonIsEnabled = true;
-              QuestionIsReadOnly = true;
-              UpdateEditQuestionButtonVisibilities();
-            });
+            #region SAVE THE QUESTION DIRECTLY, B/C IT IS NOT A CHILD
+            Question = await Question.SaveAsync();
+            _InitialQuestionText = Question.Text;
+            _ModifiedQuestionText = "";
+            SaveQuestionButtonIsEnabled = true;
+            QuestionIsReadOnly = true;
+            UpdateEditQuestionButtonVisibilities();
             #endregion
           }
-        });
+        }
+        //QUESTION WAS FOUND IN DB
+        else
+        {
+          #region REASSIGN THE QUESTION WITH THE DBQUESTION, SAVE WITH THE MODIFIED TEXT
+          Question = dbQuestion;
+          Question.Text = _ModifiedQuestionText;
+          Question = await Question.SaveAsync();
+          _InitialQuestionText = Question.Text;
+          _ModifiedQuestionText = "";
+          SaveQuestionButtonIsEnabled = true;
+          QuestionIsReadOnly = true;
+          UpdateEditQuestionButtonVisibilities();
+          #endregion
+        }
 
-      #endregion
+        #endregion
 
-      #endregion
+        #endregion
+        #region (...finally) Thinked
+      }
+      finally
+      {
+        EnableNavigationRequestedEventMessage.Publish();
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      }
+        #endregion
     }
 
     private bool _SaveQuestionButtonIsEnabled = true;
@@ -600,81 +593,71 @@ namespace LearnLanguages.Study.ViewModels
         return Answer != null && Answer.IsValid && SaveAnswerButtonIsEnabled;
       }
     }
-    public void SaveAnswer()
+    public async Task SaveAnswer()
     {
+
       AnswerIsReadOnly = true;
       SaveAnswerButtonIsEnabled = false;
 
-      #region Get the DB version of answer, then modify it and save
-
-      //STORE OUR MODIFIED TEXT
-      _ModifiedAnswerText = Answer.Text;
-
-      //PREPARE ANSWER TO BE SEARCHED FOR IN DB
-      Answer.Text = _InitialAnswerText;
-
-      #region SEARCH IN DB FOR ANSWER (WITH INITIAL TEXT)
-      Business.PhrasesByTextAndLanguageRetriever.CreateNew(Answer, (s, r) =>
+      #region Thinking (try..)
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      DisableNavigationRequestedEventMessage.Publish();
+      try
       {
-        if (r.Error != null)
-          throw r.Error;
+      #endregion
+        #region Get the DB version of answer, then modify it and save
 
-        var dbAnswer = r.Object.RetrievedSinglePhrase;
+        //STORE OUR MODIFIED TEXT
+        _ModifiedAnswerText = Answer.Text;
+
+        //PREPARE ANSWER TO BE SEARCHED FOR IN DB
+        Answer.Text = _InitialAnswerText;
+        PhrasesByTextAndLanguageRetriever retriever = null;
+        #region SEARCH IN DB FOR ANSWER (WITH INITIAL TEXT)
+        History.Events.ThinkingAboutTargetEvent.Publish(System.Guid.Empty);
+        {
+          retriever = await Business.PhrasesByTextAndLanguageRetriever.CreateNewAsync(Answer);
+        }
+        History.Events.ThinkingAboutTargetEvent.Publish(System.Guid.Empty);
+
+        var dbAnswer = retriever.RetrievedSinglePhrase;
         if (dbAnswer == null)
         {
           //ANSWER NOT IN DB, BUT ANSWER IS A CHILD
           if (Answer.IsChild)
           {
             //CANNOT SAVE THE ANSWER DIRECTLY BECAUSE IT IS A CHILD
-
             #region CREATE NEW PHRASE EDIT, LOAD FROM ANSWER DTO, SAVE ANSWER
-            PhraseEdit.NewPhraseEdit((s3, r3) =>
-            {
-              if (r3.Error != null)
-                throw r3.Error;
+            var newAnswerObj = await PhraseEdit.NewPhraseEditAsync();
 
-              var newAnswerObj = r3.Object;
+            Answer.Text = _ModifiedAnswerText;
+            var dto = Answer.CreateDto();
+            dto.Id = Guid.NewGuid();
 
-              Answer.Text = _ModifiedAnswerText;
-              var dto = Answer.CreateDto();
-              dto.Id = Guid.NewGuid();
+            newAnswerObj.LoadFromDtoBypassPropertyChecks(dto);
+            Answer = newAnswerObj;
 
-              newAnswerObj.LoadFromDtoBypassPropertyChecks(dto);
-              Answer = newAnswerObj;
-
-              #region Save Answer
-              Answer.BeginSave((s4, r4) =>
-              {
-                if (r4.Error != null)
-                  throw r4.Error;
-
-                Answer = (PhraseEdit)r4.NewObject;
-                _InitialAnswerText = Answer.Text;
-                _ModifiedAnswerText = "";
-                SaveAnswerButtonIsEnabled = true;
-                AnswerIsReadOnly = true;
-                UpdateEditAnswerButtonVisibilities();
-              });
-              #endregion
-            });
+            #region Save Answer
+            Answer = await Answer.SaveAsync();
+            _InitialAnswerText = Answer.Text;
+            _ModifiedAnswerText = "";
+            SaveAnswerButtonIsEnabled = true;
+            AnswerIsReadOnly = true;
+            UpdateEditAnswerButtonVisibilities();
+            #endregion
             #endregion
           }
           //ANSWER NOT IN DB, BUT ANSWER IS NOT A CHILD
           else
           {
             #region SAVE THE ANSWER DIRECTLY, B/C IT IS NOT A CHILD
-            Answer.BeginSave((s2, r2) =>
-            {
-              if (r2.Error != null)
-                throw r2.Error;
-
-              Answer = (PhraseEdit)r2.NewObject;
-              _InitialAnswerText = Answer.Text;
-              _ModifiedAnswerText = "";
-              SaveAnswerButtonIsEnabled = true;
-              AnswerIsReadOnly = true;
-              UpdateEditAnswerButtonVisibilities();
-            });
+            Answer = await Answer.SaveAsync();
+            _InitialAnswerText = Answer.Text;
+            _ModifiedAnswerText = "";
+            SaveAnswerButtonIsEnabled = true;
+            AnswerIsReadOnly = true;
+            UpdateEditAnswerButtonVisibilities();
             #endregion
           }
         }
@@ -684,25 +667,26 @@ namespace LearnLanguages.Study.ViewModels
           #region REASSIGN THE ANSWER WITH THE DBANSWER, SAVE WITH THE MODIFIED TEXT
           Answer = dbAnswer;
           Answer.Text = _ModifiedAnswerText;
-          Answer.BeginSave((s5, r5) =>
-          {
-            if (r5.Error != null)
-              throw r5.Error;
-
-            Answer = (PhraseEdit)r5.NewObject;
-            _InitialAnswerText = Answer.Text;
-            _ModifiedAnswerText = "";
-            SaveAnswerButtonIsEnabled = true;
-            AnswerIsReadOnly = true;
-            UpdateEditAnswerButtonVisibilities();
-          });
+          Answer = await Answer.SaveAsync();
+          _InitialAnswerText = Answer.Text;
+          _ModifiedAnswerText = "";
+          SaveAnswerButtonIsEnabled = true;
+          AnswerIsReadOnly = true;
+          UpdateEditAnswerButtonVisibilities();
           #endregion
         }
-      });
 
-      #endregion
+        #endregion
 
-      #endregion
+        #endregion
+        #region (...finally) Thinked
+      }
+      finally
+      {
+        EnableNavigationRequestedEventMessage.Publish();
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      }
+        #endregion
     }
 
     private bool _SaveAnswerButtonIsEnabled = true;
@@ -748,5 +732,26 @@ namespace LearnLanguages.Study.ViewModels
     #endregion
 
     #endregion
+
+    #region ResearchQuestion/Answer
+
+    public void ResearchQuestion()
+    {
+      var googleLink = string.Format(StudyResources.ResearchFormatStringGoogle, Question.Text);
+      var bingLink = string.Format(StudyResources.ResearchFormatStringBing, Question.Text);
+      //HtmlPage.Window.Navigate(new Uri(googleLink), "_blank");
+      HtmlPage.Window.Navigate(new Uri(bingLink), "_blank"); 
+    }
+
+    public void ResearchAnswer()
+    {
+      var googleLink = string.Format(StudyResources.ResearchFormatStringGoogle, Answer.Text);
+      var bingLink = string.Format(StudyResources.ResearchFormatStringBing, Answer.Text);
+      //HtmlPage.Window.Navigate(new Uri(googleLink), "_blank");
+      HtmlPage.Window.Navigate(new Uri(bingLink), "_blank");
+    }
+
+    #endregion
+
   }
 }

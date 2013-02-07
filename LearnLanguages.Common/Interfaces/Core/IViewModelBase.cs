@@ -6,9 +6,11 @@ namespace LearnLanguages.Common.Interfaces
 {
   public interface IViewModelBase : IPartImportsSatisfiedNotification 
   {
+    string ToolTip { get; set; }
     bool LoadFromUri(Uri uri);
     //string GetCoreViewModelName(bool withSpaces = false);
     bool ShowGridLines { get; }
     Visibility ViewModelVisibility { get; set; }
+    bool IsEnabled { get; set; }
   }
 }

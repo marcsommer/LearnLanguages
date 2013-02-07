@@ -9,7 +9,7 @@ using LearnLanguages.DataAccess.Exceptions;
 #endif
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
-
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -48,20 +48,22 @@ namespace LearnLanguages.Business
     #region Silverlight Factory Methods
 #if SILVERLIGHT
 
-    public static void NewLineEdit(EventHandler<DataPortalResult<LineEdit>> callback)
+    public static async Task<LineEdit> NewLineEditAsync()
     {
-      //DataPortal.BeginCreate<LineEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<LineEdit>(callback);
+      var result = await DataPortal.CreateAsync<LineEdit>();
+      return result;
     }
 
-    public static void NewLineEdit(string languageText, EventHandler<DataPortalResult<LineEdit>> callback)
+    public static async Task<LineEdit> NewLineEditAsync(string languageText)
     {
-      DataPortal.BeginCreate<LineEdit>(languageText, callback);
+      var result = await DataPortal.CreateAsync<LineEdit>(languageText);
+      return result;
     }
 
-    public static void GetLineEdit(Guid id, EventHandler<DataPortalResult<LineEdit>> callback)
+    public static async Task<LineEdit> GetLineEditAsync(Guid id)
     {
-      DataPortal.BeginFetch<LineEdit>(id, callback);
+      var result = await DataPortal.FetchAsync<LineEdit>(id);
+      return result;
     }
 
 #endif
@@ -69,7 +71,7 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Business Properties & Methods
-    
+
     //PHRASE
     #region public Guid PhraseId
     public static readonly PropertyInfo<Guid> PhraseIdProperty = RegisterProperty<Guid>(c => c.PhraseId);
@@ -126,10 +128,10 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User
+    public static readonly PropertyInfo<UserIdentity> UserProperty =
+      RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    public UserIdentity User
     {
       get { return GetProperty(UserProperty); }
       private set { LoadProperty(UserProperty, value); }
@@ -155,7 +157,7 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
     }
     public override LineDto CreateDto()
@@ -173,9 +175,10 @@ namespace LearnLanguages.Business
     /// <summary>
     /// Begins to persist object
     /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected override async Task<LineEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
 
     /// <summary>
@@ -205,8 +208,8 @@ namespace LearnLanguages.Business
     /// </summary>
     internal void LoadCurrentUser()
     {
-      CustomIdentity.CheckAuthentication();
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      Common.CommonHelper.CheckAuthentication();
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       UserId = identity.UserId;
       Username = identity.Name;
       User = identity;
@@ -219,8 +222,7 @@ namespace LearnLanguages.Business
     protected override void AddBusinessRules()
     {
       base.AddBusinessRules();
-
-      // TODO: add validation rules
+      
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(IdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(PhraseIdProperty));
       BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(UserIdProperty));
@@ -242,8 +244,9 @@ namespace LearnLanguages.Business
 
     #region Data Access (This is run on the server, unless run local set)
 
-    #region Wpf DP_XYZ
 #if !SILVERLIGHT
+
+    #region Wpf DP_XYZ
 
     [Transactional(TransactionalTypes.TransactionScope)]
     protected override void DataPortal_Create()
@@ -402,12 +405,9 @@ namespace LearnLanguages.Business
       }
     }
 
-#endif
     #endregion //Wpf DP_XYZ
     
     #region Child DP_XYZ
-    
-#if !SILVERLIGHT
     
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     protected override void Child_Create()
@@ -528,9 +528,10 @@ namespace LearnLanguages.Business
       }
     }
 
-#endif
 
     #endregion
+
+#endif
 
     #endregion
   }

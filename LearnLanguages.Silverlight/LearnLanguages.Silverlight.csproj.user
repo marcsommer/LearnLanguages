@@ -6,7 +6,7 @@
         <SilverlightProjectProperties>
           <StartPageUrl>
           </StartPageUrl>
-          <StartAction>OfflineApplication</StartAction>
+          <StartAction>DynamicPage</StartAction>
           <AspNetDebugging>True</AspNetDebugging>
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
@@ -18,8 +18,9 @@
           </StartCmdLineArguments>
           <StartWorkingDirectory>
           </StartWorkingDirectory>
-          <ShowWebRefOnDebugPrompt>False</ShowWebRefOnDebugPrompt>
-          <OutOfBrowserProjectToDebug>LearnLanguages.IISHost</OutOfBrowserProjectToDebug>
+          <ShowWebRefOnDebugPrompt>True</ShowWebRefOnDebugPrompt>
+          <OutOfBrowserProjectToDebug>
+          </OutOfBrowserProjectToDebug>
           <ShowRiaSvcsOnDebugPrompt>True</ShowRiaSvcsOnDebugPrompt>
         </SilverlightProjectProperties>
       </FlavorProperties>

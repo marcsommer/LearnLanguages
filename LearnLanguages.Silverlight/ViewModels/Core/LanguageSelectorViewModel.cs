@@ -4,6 +4,8 @@ using Caliburn.Micro;
 using LearnLanguages.Business;
 using System.Linq;
 using LearnLanguages.Common.ViewModelBases;
+using System.Threading.Tasks;
+using LearnLanguages.Common.EventMessages;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -11,7 +13,7 @@ namespace LearnLanguages.Silverlight.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   //public class LanguageSelectorViewModel : Conductor<LanguageEditViewModel>.Collection.OneActive, Interfaces.IViewModelBase
   public class LanguageSelectorViewModel : ViewModelBase, 
-                                           IHandle<EventMessages.LanguageEventMessage>
+                                           IHandle<LanguageEventMessage>
   {
     #region Ctors and Init
 
@@ -77,46 +79,41 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     #region Methods
 
-    private void ReloadLanguages()
+    private async Task ReloadLanguages()
     {
       Items.Clear();
 
-      LanguageList.GetAll((s, r) =>
+      var allLanguages = await LanguageList.GetAllAsync();
+      for (int i = 0; i < allLanguages.Count; i++)
       {
-        if (r.Error != null)
-          throw r.Error;
+        var languageEdit = allLanguages[i];
+        var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
+        languageViewModel.Model = languageEdit;
+        Items.Add(languageViewModel);
+      }
+     
+      if (SelectedItem != null && SelectedItem.Model != null)
+      {
+        //our currently selected item is not the actual item in the list, as it is being set
+        //before our list is getting populated.
+        SelectedItem = (from language in Items
+                        where language.Model.Id == SelectedItem.Model.Id
+                        select language).FirstOrDefault();
+      }
 
-        var allLanguages = r.Object;
-        foreach (var languageEdit in allLanguages)
-        {
-          var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
-          languageViewModel.Model = languageEdit;
-          Items.Add(languageViewModel);
-        }
+      NotifyOfPropertyChange(() => Items);
+      NotifyOfPropertyChange(() => SelectedItem);
+      //SelectedItem = Items[0];
+      //SelectedItem = Items[0];
+      //foreach (var language in allLanguages)
+      //{
+      //  //var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
+      //  //languageViewModel.Model = language;
+      //  //Items.Add(languageViewModel);
+      //  Items.Add(language);
+      //}
 
-        if (SelectedItem != null && SelectedItem.Model != null)
-        {
-          //our currently selected item is not the actual item in the list, as it is being set
-          //before our list is getting populated.
-          SelectedItem = (from language in Items
-                          where language.Model.Id == SelectedItem.Model.Id
-                          select language).FirstOrDefault();
-        }
-
-        NotifyOfPropertyChange(() => Items);
-        NotifyOfPropertyChange(() => SelectedItem);
-        //SelectedItem = Items[0];
-        //SelectedItem = Items[0];
-        //foreach (var language in allLanguages)
-        //{
-        //  //var languageViewModel = Services.Container.GetExportedValue<LanguageEditViewModel>();
-        //  //languageViewModel.Model = language;
-        //  //Items.Add(languageViewModel);
-        //  Items.Add(language);
-        //}
-
-        //ChangeActiveItem(Items[0], true);
-      });
+      //ChangeActiveItem(Items[0], true);
     }
     public void AddLanguage()
     {
@@ -124,7 +121,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       Services.WindowManager.ShowDialog(addLanguageViewModel);
     }
 
-    public void Handle(EventMessages.LanguageEventMessage message)
+    public void Handle(LanguageEventMessage message)
     {
       ReloadLanguages();
     }

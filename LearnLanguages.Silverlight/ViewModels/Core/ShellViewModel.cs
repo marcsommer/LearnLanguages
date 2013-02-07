@@ -4,33 +4,43 @@ using LearnLanguages.Silverlight.Interfaces;
 using LearnLanguages.Common.Interfaces;
 using LearnLanguages.Navigation.Interfaces;
 using LearnLanguages.Common.ViewModelBases;
+using LearnLanguages.Navigation.ViewModels;
+using LearnLanguages.Silverlight.Pages;
+using LearnLanguages.Common.EventMessages;
+using LearnLanguages.Navigation.EventMessages;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
 
-  [Export(typeof(ShellViewModel))]
+  //[Export(typeof(ShellViewModel))]
+  [Export(typeof(IShellViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
-  public class ShellViewModel : ViewModelBase
+  public class ShellViewModel : ViewModelBase, 
+                                IShellViewModel,
+                                IHandle<EnableNavigationRequestedEventMessage>,
+                                IHandle<DisableNavigationRequestedEventMessage>,
+                                IHandle<NavigatingEventMessage>,
+                                IHandle<NavigatedEventMessage>,
+                                IHandle<NavigationFailedEventMessage>
   {
     public ShellViewModel()
       : base()
     {
-      ReloadNavigationPanel();
-      Services.Container.SatisfyImportsOnce(this);
       Title = AppResources.DefaultAppTitle;
-      ThinkingPanel = Services.Container.GetExportedValue<ThinkingPanelViewModel>();
+      //NavigationPanelViewModel = Services.Container.GetExportedValue<NavigationPanelViewModel>();
+      Services.EventAggregator.Subscribe(this);
     }
 
-    /// <summary>
-    /// Reloads the navigation panel depending on the current user's roles.
-    /// </summary>
-    public void ReloadNavigationPanel()
-    {
-      NavigationPanel = Services.Container.GetExportedValue<NavigationPanelViewModel>();
-    }
+    ///// <summary>
+    ///// Reloads the navigation panel depending on the current user's roles.
+    ///// </summary>
+    //public void ReloadNavigationPanel()
+    //{
+    //  NavigationPanel = Services.Container.GetExportedValue<NavigationPanelViewModel>();
+    //}
 
-    [Import]
-    public INavigationController NavigationController { get; set; }
+    //[Import]
+    //public INavigationController NavigationController { get; set; }
 
     //private LoginViewModel _Login;
     //public LoginViewModel Login
@@ -75,6 +85,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     private ThinkingPanelViewModel _ThinkingPanel;
+    [Import]
     public ThinkingPanelViewModel ThinkingPanel
     {
       get { return _ThinkingPanel; }
@@ -88,20 +99,34 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    private NavigationPanelViewModel _NavigationPanel;
-    public NavigationPanelViewModel NavigationPanel
+    [Import]
+    public NavigationPanelViewModel _NavigationPanel;
+    public INavigationPanelViewModel NavigationPanelViewModel
     {
       get { return _NavigationPanel; }
       set
       {
         if (value != _NavigationPanel)
         {
-          _NavigationPanel = value;
-          NotifyOfPropertyChange(() => NavigationPanel);
+          _NavigationPanel = (NavigationPanelViewModel)value;
+          NotifyOfPropertyChange(() => NavigationPanelViewModel);
         }
       }
     }
 
+    private bool _NavPanelIsEnabled = true;
+    public bool NavPanelIsEnabled
+    {
+      get { return _NavPanelIsEnabled; }
+      set
+      {
+        if (value != _NavPanelIsEnabled)
+        {
+          _NavPanelIsEnabled = value;
+          NotifyOfPropertyChange(() => NavPanelIsEnabled);
+        }
+      }
+    }
     //private bool ShellModelSatisfied = false;
     //private bool NavigationControllerSatisfied = false;
     //private bool ICareAboutPartsSatisfiedMessages = true;
@@ -109,7 +134,9 @@ namespace LearnLanguages.Silverlight.ViewModels
     
     public override void OnImportsSatisfied()
     {
-      //
+      IPage loginPage = Services.Container.GetExportedValue<LoginPage>();
+      //Navigation.Navigator.Ton.RegisterPage(loginPage);
+      Navigation.Navigator.Ton.NavigateTo(loginPage);
     }
 
     private string _Title;
@@ -124,6 +151,34 @@ namespace LearnLanguages.Silverlight.ViewModels
           NotifyOfPropertyChange(() => Title);
         }
       }
+    }
+
+
+    public void Handle(EnableNavigationRequestedEventMessage message)
+    {
+      NavigationPanelViewModel.IsEnabled = true;
+      NavPanelIsEnabled = true;
+    }
+
+    public void Handle(DisableNavigationRequestedEventMessage message)
+    {
+      NavigationPanelViewModel.IsEnabled = false;
+      NavPanelIsEnabled = false;
+    }
+
+    public void Handle(NavigatingEventMessage message)
+    {
+      NavPanelIsEnabled = false;
+    }
+
+    public void Handle(NavigatedEventMessage message)
+    {
+      NavPanelIsEnabled = true;
+    }
+
+    public void Handle(NavigationFailedEventMessage message)
+    {
+      NavPanelIsEnabled = true;
     }
   }
 }

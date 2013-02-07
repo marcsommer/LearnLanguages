@@ -9,6 +9,8 @@ using LearnLanguages.Offer;
 using LearnLanguages.Common.Delegates;
 using LearnLanguages.Navigation.EventMessages;
 using LearnLanguages.History;
+using System.Threading.Tasks;
+using LearnLanguages.Common;
 
 namespace LearnLanguages.Study
 {
@@ -50,60 +52,45 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public override void GetNextStudyItemViewModel(AsyncCallback<StudyItemViewModelArgs> callback)
+    public async override Task<ResultArgs<StudyItemViewModelArgs>> GetNextStudyItemViewModelAsync()
     {
       if (_AbortIsFlagged)
+        return await StudyHelper.GetAbortedAsync();
+
+      LineEdit lineToStudy = null;
+
+      //IF WE KNOW ALL OF OUR GROUPS, RESET AND START OVER
+      if (_KnownGroupNumbers.Count == _LineGroups.Count)
       {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-        return;
+        _PrevGroupNumberStudied = -1;
+        _PrevStudyWasHit = false;
+        _KnownGroupNumbers.Clear();
+        foreach (var completedGroup in _LineGroups)
+          completedGroup.Reset();
       }
-      try
+
+      //GET THE INITIAL GROUP NUMBER TO TRY TO STUDY
+      int groupNumberToStudy = _PrevGroupNumberStudied;
+      LineGroup group = null;
+      if (_PrevStudyWasHit)
       {
-        LineEdit lineToStudy = null;
+        //PREV STUDY WAS HIT, SO TRY TO STAY WITH THE PREV GROUP.
+        group = GetGroupFromGroupNumber(_PrevGroupNumberStudied);
 
-        //IF WE KNOW ALL OF OUR GROUPS, RESET AND START OVER
-        if (_KnownGroupNumbers.Count == _LineGroups.Count)
+        if (group == null)
+          throw new Exception();//SINCE PREV STUDY WAS HIT, THIS SHOULD NEVER HAPPEN.
+
+        //IF THE GROUP IS NOT YET COMPLETED, GET ITS NEXT LINE, OTHERWISE WE NEED TO TRY THE NEXT GROUP.
+        if (!group.Completed)
         {
-          _PrevGroupNumberStudied = -1;
-          _PrevStudyWasHit = false;
-          _KnownGroupNumbers.Clear();
-          foreach (var completedGroup in _LineGroups)
-            completedGroup.Reset();
-        }
-
-        //GET THE INITIAL GROUP NUMBER TO TRY TO STUDY
-        int groupNumberToStudy = _PrevGroupNumberStudied;
-        LineGroup group = null;
-        if (_PrevStudyWasHit)
-        {
-          //PREV STUDY WAS HIT, SO TRY TO STAY WITH THE PREV GROUP.
-          group = GetGroupFromGroupNumber(_PrevGroupNumberStudied);
-
-          if (group == null)
-            throw new Exception();//SINCE PREV STUDY WAS HIT, THIS SHOULD NEVER HAPPEN.
-
-          //IF THE GROUP IS NOT YET COMPLETED, GET ITS NEXT LINE, OTHERWISE WE NEED TO TRY THE NEXT GROUP.
-          if (!group.Completed)
-          {
-            lineToStudy = group.GetLine();
-            if (lineToStudy == null)
-              throw new Exception();
-            _PrevGroupNumberStudied = group.GroupNumber;
-          }
-          else
-          {
-            //PREVIOUS GROUP WAS A HIT AND THAT COMPLETED THAT GROUP, SO GET NEXT GROUP
-            int nextGroupNumber = GetNextUnknownGroupNumber();
-            group = GetGroupFromGroupNumber(nextGroupNumber);
-            if (group.Completed)
-              throw new Exception();
-            lineToStudy = group.GetLine();
-            _PrevGroupNumberStudied = group.GroupNumber;
-          }
+          lineToStudy = group.GetLine();
+          if (lineToStudy == null)
+            throw new Exception();
+          _PrevGroupNumberStudied = group.GroupNumber;
         }
         else
         {
-          //PREVIOUS WAS A MISS, SO GET LINE FROM NEXT UNKNOWN GROUP
+          //PREVIOUS GROUP WAS A HIT AND THAT COMPLETED THAT GROUP, SO GET NEXT GROUP
           int nextGroupNumber = GetNextUnknownGroupNumber();
           group = GetGroupFromGroupNumber(nextGroupNumber);
           if (group.Completed)
@@ -111,44 +98,46 @@ namespace LearnLanguages.Study
           lineToStudy = group.GetLine();
           _PrevGroupNumberStudied = group.GroupNumber;
         }
-
-        //groupNumberToStudy = _PrevGroupNumberStudied;
-        //if (groupNumberToStudy == _LineGroups.Count)
-        //  groupNumberToStudy = 0;
-
-        ////FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
-        //for (int i = 0; i < _LineGroups.Count; i++)
-        //{
-        //  if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
-        //    break;
-
-        //  //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
-        //  groupNumberToStudy++;
-        //  if (groupNumberToStudy == _LineGroups.Count)
-        //    groupNumberToStudy = 0;
-        //}
-
-        ////WE NOW HAVE THE GROUP NUMBER TO STUDY.  
-        //var group = _LineGroups[groupNumberToStudy];
-        //var lineToStudy = group.GetLine();
-
-        //WE NOW HAVE THE LINE TO STUDY.  PROCURE A LINE ORDER 
-        StudyItemViewModelFactory.Ton.Procure(lineToStudy, group.MultiLineText, (s, r) =>
-          {
-            if (r.Error != null)
-              callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(r.Error));
-
-            var viewModel = r.Object;
-            StudyItemViewModelArgs args = new StudyItemViewModelArgs(viewModel);
-            callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(args));
-            return;
-          });
-        return;
       }
-      catch (Exception ex)
+      else
       {
-        callback(this, new Common.ResultArgs<StudyItemViewModelArgs>(ex));
+        //PREVIOUS WAS A MISS, SO GET LINE FROM NEXT UNKNOWN GROUP
+        int nextGroupNumber = GetNextUnknownGroupNumber();
+        group = GetGroupFromGroupNumber(nextGroupNumber);
+        if (group.Completed)
+          throw new Exception();
+        lineToStudy = group.GetLine();
+        _PrevGroupNumberStudied = group.GroupNumber;
       }
+
+      //groupNumberToStudy = _PrevGroupNumberStudied;
+      //if (groupNumberToStudy == _LineGroups.Count)
+      //  groupNumberToStudy = 0;
+
+      ////FIND THE FIRST GROUP NUMBER THAT IS UNKNOWN
+      //for (int i = 0; i < _LineGroups.Count; i++)
+      //{
+      //  if (!_KnownGroupNumbers.Contains(groupNumberToStudy))
+      //    break;
+
+      //  //THAT GROUP NUMBER IS ALREADY KNOWN.  UPDATE FOR THE NEXT TRY.
+      //  groupNumberToStudy++;
+      //  if (groupNumberToStudy == _LineGroups.Count)
+      //    groupNumberToStudy = 0;
+      //}
+
+      ////WE NOW HAVE THE GROUP NUMBER TO STUDY.  
+      //var group = _LineGroups[groupNumberToStudy];
+      //var lineToStudy = group.GetLine();
+
+      //WE NOW HAVE THE LINE TO STUDY.  PROCURE A LINE ORDER 
+      var result = await StudyItemViewModelFactory.Ton.Procure(lineToStudy, group.MultiLineText);
+      var viewModel = result.Object;
+      StudyItemViewModelArgs args = new StudyItemViewModelArgs(viewModel);
+      var resultArgs = new ResultArgs<StudyItemViewModelArgs>(args);
+
+      var retArgs = await StudyHelper.WrapInTask<ResultArgs<StudyItemViewModelArgs>>(resultArgs);
+      return retArgs;
     }
 
     private int GetNextUnknownGroupNumber()
@@ -183,29 +172,16 @@ namespace LearnLanguages.Study
       return retNextGroupNumber;
     }
 
-    public override void InitializeForNewStudySession(MultiLineTextList target,
-                                                      ExceptionCheckCallback completedCallback)
+    public async override Task InitializeForNewStudySessionAsync(MultiLineTextList target)
     {
-      try
-      {
-        _AbortIsFlagged = false;
-        _Target = target;
-        if (_AbortIsFlagged)
-        {
-          completedCallback(null);
-          return;
-        }
-        _PrevGroupNumberStudied = -1;
-        _PrevStudyWasHit = false;
-        PopulateGroups();
-        _KnownGroupNumbers.Clear();
-
-        completedCallback(null);
-      }
-      catch (Exception ex)
-      {
-        completedCallback(ex);
-      }
+      _AbortIsFlagged = false;
+      _Target = target;
+      if (_AbortIsFlagged)
+        return;
+      _PrevGroupNumberStudied = -1;
+      _PrevStudyWasHit = false;
+      PopulateGroups();
+      _KnownGroupNumbers.Clear();
     }
 
     private void PopulateGroups()
@@ -442,6 +418,8 @@ namespace LearnLanguages.Study
         _PrevStudyWasHit = false;
       }
     }
+
+
 
   }
 }

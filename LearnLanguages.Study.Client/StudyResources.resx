@@ -127,11 +127,29 @@
     <value>True</value>
     <comment>If true, this saves all phrases translated by the auto translator service to the DB.</comment>
   </data>
+  <data name="BeliefTextKeyValueEntrySeparator" xml:space="preserve">
+    <value>&amp;</value>
+  </data>
+  <data name="BeliefTextKeyValueEqualityOperator" xml:space="preserve">
+    <value>=</value>
+  </data>
+  <data name="BeliefTextPrefix" xml:space="preserve">
+    <value>?</value>
+  </data>
   <data name="BingAppId" xml:space="preserve">
     <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
   </data>
+  <data name="ButtonLabelApplyFilter" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="ButtonLabelEdit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="ButtonLabelResearchAnswer" xml:space="preserve">
+    <value>Research</value>
+  </data>
+  <data name="ButtonLabelResearchQuestion" xml:space="preserve">
+    <value>Research</value>
   </data>
   <data name="ButtonLabelSave" xml:space="preserve">
     <value>Save</value>
@@ -139,8 +157,14 @@
   <data name="ButtonLabelShowAnswer" xml:space="preserve">
     <value>Show Answer</value>
   </data>
+  <data name="ButtonLabelStudySongsGo" xml:space="preserve">
+    <value>Go!</value>
+  </data>
   <data name="CategoryStudy" xml:space="preserve">
     <value>Study</value>
+  </data>
+  <data name="ChartTitleSimpleProgress" xml:space="preserve">
+    <value>Words Learned (appx.)</value>
   </data>
   <data name="DefaultAmountDefaultMultiLineTextsStudier" xml:space="preserve">
     <value>10000</value>
@@ -150,6 +174,9 @@
   </data>
   <data name="DefaultBeliefStrength" xml:space="preserve">
     <value>1.0</value>
+  </data>
+  <data name="DefaultExpectedPrecision" xml:space="preserve">
+    <value>90</value>
   </data>
   <data name="DefaultFeedbackCheckIntervalMilliseconds" xml:space="preserve">
     <value>200</value>
@@ -186,7 +213,7 @@ debug=10 seconds (10000)</comment>
     <value>92A7E7C6-8278-4142-A962-6616E2959D1C</value>
   </data>
   <data name="DefaultOrderStudierLineGroupSize" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="DefaultPhraseAutoTranslatedRecorderId" xml:space="preserve">
     <value>4F8FA6A7-DD12-4A32-A3C6-FF248059926B</value>
@@ -206,8 +233,24 @@ debug=10 seconds (10000)</comment>
   <data name="DefaultTimeLineOrderQuestionInMilliseconds" xml:space="preserve">
     <value>2000</value>
   </data>
+  <data name="DefaultTimeoutGetPercentKnown" xml:space="preserve">
+    <value>500</value>
+    <comment>.5 seconds</comment>
+  </data>
   <data name="DefaultWordInPhraseReviewedRecorderId" xml:space="preserve">
     <value>73A27EAD-A83E-4FBA-B400-679A1AC58AC7</value>
+  </data>
+  <data name="DescriptionExecuteStudySongsPage" xml:space="preserve">
+    <value>Study here, study there, this is a description of how to study everywhere.</value>
+  </data>
+  <data name="DescriptionSimpleProgressPage" xml:space="preserve">
+    <value>This page shows your awesome progress what-do-you-know!</value>
+  </data>
+  <data name="DescriptionStudyASongViewModel" xml:space="preserve">
+    <value>Here you can study multiple songs in both your native language and foreign languages as well!</value>
+  </data>
+  <data name="DescriptionStudyStuffPage" xml:space="preserve">
+    <value>This page is for studying a bunch of stuff and whatnot how-do-you-do.</value>
   </data>
   <data name="ErrorMsgAnswerIsNull" xml:space="preserve">
     <value>The answer is null.</value>
@@ -224,8 +267,17 @@ debug=10 seconds (10000)</comment>
   <data name="ErrorMsgStudyException" xml:space="preserve">
     <value>An exception was thrown during study.  See inner exception for details.</value>
   </data>
+  <data name="InstructionsAskUserExtraData" xml:space="preserve">
+    <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
+  </data>
+  <data name="InstructionsAskUserExtraDataSelectNativeLanguageText" xml:space="preserve">
+    <value>Select your native language.  This is the language you feel most comfortable with, usually the one you grew up speaking the most.</value>
+  </data>
   <data name="InstructionsDefaultStudyPartner" xml:space="preserve">
     <value>To continue learning, click Next.  Choose your feedback.  More instructions here.....</value>
+  </data>
+  <data name="InstructionsExecuteStudySongsPage" xml:space="preserve">
+    <value>These are generic study instructions.</value>
   </data>
   <data name="InstructionsSelectFeedbackAll" xml:space="preserve">
     <value>You know this item completely. (95%-100%)</value>
@@ -241,6 +293,33 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="InstructionsSelectFeedbackSome" xml:space="preserve">
     <value>You know a little, or even perhaps, a decent amount of this item. (5%-50%)</value>
+  </data>
+  <data name="InstructionsStudySongsSelectSong" xml:space="preserve">
+    <value>Select the song(s) that you want to study...Once selected, press Go!</value>
+  </data>
+  <data name="InstructionsStudyStuff" xml:space="preserve">
+    <value>Study Some Stuff Don'tcha Know</value>
+  </data>
+  <data name="LabelAskUserExtraDataNativeLanguageText" xml:space="preserve">
+    <value>Your Native Language: </value>
+  </data>
+  <data name="LabelSelectNativeLanguageLanguageText" xml:space="preserve">
+    <value>Your Native Language: </value>
+  </data>
+  <data name="LabelStudySongsFilter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="MaxTriesToPickRandomFromEntireList" xml:space="preserve">
+    <value>50</value>
+  </data>
+  <data name="NavSetTextLanguages" xml:space="preserve">
+    <value>Languages</value>
+  </data>
+  <data name="NavTextSimpleProgressPage" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="NavTextStudySongs" xml:space="preserve">
+    <value>Study Songs</value>
   </data>
   <data name="PercentKnownAll" xml:space="preserve">
     <value>1.0</value>
@@ -263,6 +342,17 @@ debug=10 seconds (10000)</comment>
   <data name="ProbabilityChooseMeaningIfKnowSomeOfMeaning" xml:space="preserve">
     <value>0.9</value>
   </data>
+  <data name="RecorderIdReviewedPhrase" xml:space="preserve">
+    <value>67B84750-AA2A-4EE8-B817-56183FD56CDE</value>
+  </data>
+  <data name="ResearchFormatStringBing" xml:space="preserve">
+    <value>http://www.bing.com/?q=translate {0}</value>
+    <comment>{0} = phrase text to research</comment>
+  </data>
+  <data name="ResearchFormatStringGoogle" xml:space="preserve">
+    <value>http://www.google.com/?q=translate {0}</value>
+    <comment>{0} = phrase text to research</comment>
+  </data>
   <data name="ReviewMethodIdDefaultPhraseMeaningStudier" xml:space="preserve">
     <value>2DF2AF17-CE4E-462B-AD39-B6E31DF985A5</value>
   </data>
@@ -278,6 +368,18 @@ debug=10 seconds (10000)</comment>
   <data name="ReviewMethodIdStudyPhraseTimedQA" xml:space="preserve">
     <value>C7061A4F-43A1-4F31-B40D-4B6F5B8020A7</value>
   </data>
+  <data name="ShowGridLines" xml:space="preserve">
+    <value>False</value>
+  </data>
+  <data name="ShowInstructions" xml:space="preserve">
+    <value>True</value>
+  </data>
+  <data name="SortOrderSimpleProgressPage" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="SortOrderStudySongs" xml:space="preserve">
+    <value>5000</value>
+  </data>
   <data name="SourceNameDatabase" xml:space="preserve">
     <value>Database</value>
   </data>
@@ -289,6 +391,9 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="StudyContextTotal" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="StudyLineManualQuestionAnswerStudyItemTitle" xml:space="preserve">
+    <value>What is the next line?</value>
   </data>
   <data name="StudyLineOrderAnswerHeader" xml:space="preserve">
     <value />
@@ -308,6 +413,33 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="StudyLineOrderSeparatorBetweenLineNumberAndLineText" xml:space="preserve">
     <value>  </value>
+  </data>
+  <data name="StudyLineTimedQuestionAnswerStudyItemTitle" xml:space="preserve">
+    <value>What is the next line?</value>
+  </data>
+  <data name="StudyPhraseManualQuestionAnswerStudyItemTitle" xml:space="preserve">
+    <value>Translate this phrase.</value>
+  </data>
+  <data name="StudyPhraseTimedQuestionAnswerStudyItemTitle" xml:space="preserve">
+    <value>Translate this phrase.</value>
+  </data>
+  <data name="TitleExecuteStudySongsPage" xml:space="preserve">
+    <value>Study</value>
+  </data>
+  <data name="TitleSimpleProgressPage" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="TitleStudySongsViewModel" xml:space="preserve">
+    <value>Study Song(s)</value>
+  </data>
+  <data name="ToolTipExecuteStudySongsPage" xml:space="preserve">
+    <value>Study them songs yo!</value>
+  </data>
+  <data name="ToolTipSimpleProgressPage" xml:space="preserve">
+    <value>This page shows your awesome progress what-do-you-know!</value>
+  </data>
+  <data name="ToolTipStudySongs" xml:space="preserve">
+    <value>Study songs yo!</value>
   </data>
   <data name="WarningMsgEmptyAggregatePhraseTextFound" xml:space="preserve">
     <value>An empty phrase text was found in AggregatePhraseTexts.  This shouldn't happen.</value>

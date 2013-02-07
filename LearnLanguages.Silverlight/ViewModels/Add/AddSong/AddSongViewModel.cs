@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.Common.ViewModelBases;
+using System;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -10,31 +12,23 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public AddSongViewModel()
     {
-      MultiLineTextEdit.NewMultiLineTextEdit((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
-
-          var songViewModel = Services.Container.GetExportedValue<AddSongMultiLineTextEditViewModel>();
-          songViewModel.Model = r.Object;
-          Song = songViewModel;
-          Song.Saved += new System.EventHandler<Common.EventArgs.ModelEventArgs<MultiLineTextEdit>>(Song_Saved);
-        });
-      //PhraseEdit.NewPhraseEdit((s, r) =>
-      //  {
-      //    if (r.Error != null)
-      //      throw r.Error;
-
-      //    var phraseViewModel = Services.Container.GetExportedValue<AddSongMultiLineTextEditViewModel>();
-      //    phraseViewModel.Model = r.Object;
-      //    Song = phraseViewModel;
-      //  });
+      InitializeModelAsync();
     }
 
-    public void Song_Saved(object sender, Common.EventArgs.ModelEventArgs<MultiLineTextEdit> e)
+    private async Task InitializeModelAsync()
     {
-      //once the song is saved, we should go to a different screen...view songs maybe?  Save successful screen?
-      //edit song viewmodel?
+      #region Thinking
+      var thinkId = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      var newMultiLineTextEdit = await MultiLineTextEdit.NewMultiLineTextEditAsync();
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      #endregion
+
+      var songViewModel = Services.Container.GetExportedValue<AddSongMultiLineTextEditViewModel>();
+      songViewModel.Model = newMultiLineTextEdit;
+      Song = songViewModel;
     }
 
     private AddSongMultiLineTextEditViewModel _Song;

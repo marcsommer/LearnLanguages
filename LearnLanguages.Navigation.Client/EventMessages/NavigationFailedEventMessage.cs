@@ -40,5 +40,11 @@ namespace LearnLanguages.Navigation.EventMessages
     //}
 
     //public string ErrorInfo { get; private set; }
+
+    public static void Publish(NavigationInfo navInfo)
+    {
+      var eventMsg = new NavigationFailedEventMessage(navInfo);
+      Services.EventAggregator.Publish(eventMsg);
+    }
   }
 }

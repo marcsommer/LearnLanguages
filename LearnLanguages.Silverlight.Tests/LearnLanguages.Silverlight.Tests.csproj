@@ -12,7 +12,7 @@
     <RootNamespace>LearnLanguages.Silverlight.Tests</RootNamespace>
     <AssemblyName>LearnLanguages.Silverlight.Tests</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>true</SilverlightApplication>
     <SupportedCultures />
@@ -29,6 +29,10 @@
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <LinkedServerProject />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <!--
   //
@@ -72,21 +76,44 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoConfig>true</NoConfig>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csla">
-      <HintPath>..\dependencies\csla_silverlight\Csla.dll</HintPath>
+    <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Core.4.5.10\lib\sl50\Csla.dll</HintPath>
+    </Reference>
+    <Reference Include="Csla.Xaml, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CSLA-Silverlight.4.5.10\lib\sl50\Csla.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CompilerServices.AsyncTargetingPack.1.0.0\lib\sl50\Microsoft.CompilerServices.AsyncTargetingPack.Silverlight5.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Silverlight.Testing">
-      <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.Silverlight.Testing.dll</HintPath>
+      <HintPath>..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
-      <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+      <HintPath>..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
@@ -94,20 +121,21 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankTranslationRetrieverTests.cs" />
-    <Compile Include="Edits\PhraseBeliefTests.cs" />
-    <Compile Include="Edits\MultiLineTextTests.cs" />
     <Compile Include="Edits\LineTests.cs" />
+    <Compile Include="Edits\MultiLineTextTests.cs" />
+    <Compile Include="Edits\PhraseBeliefTests.cs" />
+    <Compile Include="Edits\PhraseTests.cs" />
+    <Compile Include="Edits\SecurityTests.cs" />
     <Compile Include="Edits\StudyDataTests.cs" />
     <Compile Include="Edits\TranslationTests.cs" />
+    <Compile Include="InitializeCleanupClass.cs" />
+    <Compile Include="Edits\LanguageTests.cs" />
     <Compile Include="Lists\LineListTests.cs" />
     <Compile Include="Lists\PhraseListTests.cs" />
-    <Compile Include="InitializeCleanupClass.cs" />
-    <Compile Include="Edits\SecurityTests.cs" />
-    <Compile Include="Edits\PhraseTests.cs" />
-    <Compile Include="Edits\LanguageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExpectedException.cs" />
+    <Compile Include="TestsBase.cs" />
+    <Compile Include="TestsHelper.cs" />
     <Compile Include="TestsResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -121,25 +149,8 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
-      <Project>{4314B702-58FE-44EC-BF55-61CC4483C05C}</Project>
-      <Name>LearnLanguages.Business.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
-      <Project>{B3A930C6-DD02-43EF-9970-0EDFAA81B9E9}</Project>
-      <Name>LearnLanguages.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.CompressedProxy\LearnLanguages.CompressedProxy.csproj">
-      <Project>{C6D3C11D-57E0-49CF-B9B8-7BB5710EB986}</Project>
-      <Name>LearnLanguages.CompressedProxy</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
-      <Project>{334F64FB-AA4B-40E7-99D6-F17435E5A319}</Project>
-      <Name>LearnLanguages.DataAccess.Client</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestsResources.resx">
@@ -147,6 +158,44 @@
       <LastGenOutput>TestsResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LearnLanguages.Business.Client\LearnLanguages.Business.Client.csproj">
+      <Project>{4314b702-58fe-44ec-bf55-61cc4483c05c}</Project>
+      <Name>LearnLanguages.Business.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Common\LearnLanguages.Common.csproj">
+      <Project>{b3a930c6-dd02-43ef-9970-0edfaa81b9e9}</Project>
+      <Name>LearnLanguages.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.CompressedProxy\LearnLanguages.CompressedProxy.csproj">
+      <Project>{c6d3c11d-57e0-49cf-b9b8-7bb5710eb986}</Project>
+      <Name>LearnLanguages.CompressedProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Client\LearnLanguages.DataAccess.Client.csproj">
+      <Project>{334f64fb-aa4b-40e7-99d6-f17435e5a319}</Project>
+      <Name>LearnLanguages.DataAccess.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.History.Client\LearnLanguages.History.Client.csproj">
+      <Project>{dfc14799-1426-4266-a064-4b880612559f}</Project>
+      <Name>LearnLanguages.History.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.csproj">
+      <Project>{1ceb7e12-3d55-4ee4-bfcd-1aab6f64f024}</Project>
+      <Name>LearnLanguages.Navigation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
+      <Project>{98ee87b2-152d-48d8-b509-93eeb92059be}</Project>
+      <Name>LearnLanguages.Offer.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj">
+      <Project>{02c0f892-7dd3-41fa-96c2-d02d4d4bb6c2}</Project>
+      <Name>LearnLanguages.Study.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\OutOfBrowserSettings.xml" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />
   <Import Condition="$(SilverlightVersion)=='v4.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v4.0)Microsoft.Silverlight.Toolkit.Build.targets" />

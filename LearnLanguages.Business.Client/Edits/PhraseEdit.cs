@@ -8,6 +8,7 @@ using LearnLanguages.Common.Interfaces;
 using LearnLanguages.DataAccess.Exceptions;
 using LearnLanguages.DataAccess;
 using LearnLanguages.Business.Security;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -15,6 +16,7 @@ namespace LearnLanguages.Business
   public class PhraseEdit : LearnLanguages.Common.CslaBases.BusinessBase<PhraseEdit, PhraseDto>, IHaveId
   {
     #region Factory Methods
+
     #region Wpf Factory Methods
 #if !SILVERLIGHT
 
@@ -51,22 +53,25 @@ namespace LearnLanguages.Business
     #endregion
 
     #region Silverlight Factory Methods
+
 #if SILVERLIGHT
 
-    public static void NewPhraseEdit(EventHandler<DataPortalResult<PhraseEdit>> callback)
+    public static async Task<PhraseEdit> NewPhraseEditAsync()
     {
-      //DataPortal.BeginCreate<PhraseEdit>(callback, DataPortal.ProxyModes.LocalOnly);
-      DataPortal.BeginCreate<PhraseEdit>(callback);
+      var result = await DataPortal.CreateAsync<PhraseEdit>();
+      return result;
     }
 
-    public static void NewPhraseEdit(string languageText, EventHandler<DataPortalResult<PhraseEdit>> callback)
+    public static async Task<PhraseEdit> NewPhraseEditAsync(string languageText)
     {
-      DataPortal.BeginCreate<PhraseEdit>(languageText, callback);
+      var result = await DataPortal.CreateAsync<PhraseEdit>(languageText);
+      return result;
     }
 
-    public static void GetPhraseEdit(Guid id, EventHandler<DataPortalResult<PhraseEdit>> callback)
+    public static async Task<PhraseEdit> GetPhraseEditAsync(Guid id)
     {
-      DataPortal.BeginFetch<PhraseEdit>(id, callback);
+      var result = await DataPortal.FetchAsync<PhraseEdit>(id);
+      return result;
     }
 
 #endif
@@ -96,16 +101,37 @@ namespace LearnLanguages.Business
       set { SetProperty(LanguageIdProperty, value); }
     }
     #endregion
-    #region public LanguageEdit Language
+    #region public LanguageEdit Language (Lazy)
+    //public static readonly PropertyInfo<LanguageEdit> LanguageProperty = RegisterProperty<LanguageEdit>(c => c.Language, RelationshipTypes.Child | RelationshipTypes.LazyLoad);
+    //public LanguageEdit Language
+    //{
+    //  get
+    //  {
+    //    if (LanguageId == Guid.Empty)
+    //      return null;
+
+    //    if (!FieldManager.FieldExists(LanguageProperty))
+    //    {
+    //      Language = DataPortal.FetchChild<LanguageEdit>(LanguageId);
+    //    }
+    //    return GetProperty(LanguageProperty);
+    //  }
+    //  set
+    //  {
+    //    LoadProperty(LanguageProperty, value);
+    //    OnPropertyChanged(LanguageProperty);
+    //  }
+    //}
+
     public static readonly PropertyInfo<LanguageEdit> LanguageProperty =
       RegisterProperty<LanguageEdit>(c => c.Language, RelationshipTypes.Child);
     public LanguageEdit Language
     {
       get { return GetProperty(LanguageProperty); }
-      set 
+      set
       {
         SetProperty(LanguageProperty, value);
-        
+
         if (value != null)
           LanguageId = value.Id;
         else
@@ -131,14 +157,36 @@ namespace LearnLanguages.Business
       set { SetProperty(UsernameProperty, value); }
     }
     #endregion
-    #region public CustomIdentity User
-    public static readonly PropertyInfo<CustomIdentity> UserProperty =
-      RegisterProperty<CustomIdentity>(c => c.User, RelationshipTypes.Child);
-    public CustomIdentity User
+    #region public UserIdentity User (Lazy)
+
+    public static readonly PropertyInfo<UserIdentity> UserProperty = RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child | RelationshipTypes.LazyLoad);
+    public UserIdentity User
     {
-      get { return GetProperty(UserProperty); }
-      private set { LoadProperty(UserProperty, value); }
+      get
+      {
+        if (string.IsNullOrEmpty(Username))
+          return null;
+
+        if (!FieldManager.FieldExists(UserProperty))
+        {
+          User = DataPortal.FetchChild<UserIdentity>(Username);
+        }
+        return GetProperty(UserProperty);
+      }
+      private set
+      {
+        LoadProperty(UserProperty, value);
+        OnPropertyChanged(UserProperty);
+      }
     }
+
+    //public static readonly PropertyInfo<UserIdentity> UserProperty =
+    //  RegisterProperty<UserIdentity>(c => c.User, RelationshipTypes.Child);
+    //public UserIdentity User
+    //{
+    //  get { return GetProperty(UserProperty); }
+    //  private set { LoadProperty(UserProperty, value); }
+    //}
     #endregion
 
     public override void LoadFromDtoBypassPropertyChecksImpl(PhraseDto dto)
@@ -148,13 +196,14 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(IdProperty, dto.Id);
         LoadProperty<string>(TextProperty, dto.Text);
         LoadProperty<Guid>(LanguageIdProperty, dto.LanguageId);
-        if (dto.LanguageId != Guid.Empty)
-          Language = DataPortal.FetchChild<LanguageEdit>(dto.LanguageId);
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
 
+        //THESE ARE DONE WITH LAZY LOADING NOW
+        if (dto.LanguageId != Guid.Empty)
+          Language = DataPortal.FetchChild<LanguageEdit>(dto.LanguageId);
         //if (!string.IsNullOrEmpty(dto.Username))
-        //  User = DataPortal.FetchChild<CustomIdentity>(dto.Username);
+        //  User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
     }
     public override PhraseDto CreateDto()
@@ -170,13 +219,14 @@ namespace LearnLanguages.Business
     }
 
     /// <summary>
-    /// Begins to persist object
+    /// Persists object async.
     /// </summary>
-    public override void BeginSave(bool forceUpdate, EventHandler<Csla.Core.SavedEventArgs> handler, object userState)
+    protected override async Task<PhraseEdit> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
-      base.BeginSave(forceUpdate, handler, userState);
+      var result = await base.SaveAsync(forceUpdate, userState, isSync);
+      return result;
     }
-
+    
     /// <summary>
     /// Loads the default properties, including generating a new Id, inside of a using (BypassPropertyChecks) block.
     /// </summary>
@@ -204,8 +254,8 @@ namespace LearnLanguages.Business
     /// </summary>
     internal void LoadCurrentUser()
     {
-      CustomIdentity.CheckAuthentication();
-      var identity = (CustomIdentity)Csla.ApplicationContext.User.Identity;
+      Common.CommonHelper.CheckAuthentication();
+      var identity = (UserIdentity)Csla.ApplicationContext.User.Identity;
       UserId = identity.UserId;
       Username = identity.Name;
       User = identity;

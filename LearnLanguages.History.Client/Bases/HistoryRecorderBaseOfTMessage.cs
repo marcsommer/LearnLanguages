@@ -1,6 +1,7 @@
 ﻿using System;
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.History.Bases
 {
@@ -37,10 +38,10 @@ namespace LearnLanguages.History.Bases
     public void Handle(TMessage message)
     {
       if (ShouldRecord(message))
-        Record(message);
+        RecordAsync(message);
     }
 
     protected abstract bool ShouldRecord(TMessage message);
-    protected abstract void Record(TMessage message);
+    protected abstract Task RecordAsync(TMessage message);
   }
 }

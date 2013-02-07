@@ -8,6 +8,7 @@ using System.Windows;
 using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -26,21 +27,30 @@ namespace LearnLanguages.Silverlight.ViewModels
       _FinalizeDeleteVisibility = Visibility.Collapsed;
       _ProgressVisibility = Visibility.Collapsed;
 
-      
-      var thinkingId = Guid.NewGuid();
-      History.Events.ThinkingAboutTargetEvent.Publish(thinkingId);
-      PhraseList.GetAll((s, r) =>
-      {
-        History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
-        if (r.Error != null)
-          throw r.Error;
+      InitializeModelAsync();
+    }
 
-        var allPhrases = r.Object;
-        ModelList = allPhrases;
-        History.Events.ThinkingAboutTargetEvent.Publish(thinkingId);
-        PopulateItems(allPhrases);
-        History.Events.ThinkedAboutTargetEvent.Publish(thinkingId);
-      });
+    private async Task InitializeModelAsync()
+    {
+      #region Thinking
+      var thinkId = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      var allPhrases = await PhraseList.GetAllAsync();
+      ModelList = allPhrases;
+
+      #region Thinking
+      var thinkId2 = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      PopulateItems(allPhrases);
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId2);
+      #endregion
+
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      #endregion
     }
 
     #endregion
@@ -316,6 +326,8 @@ namespace LearnLanguages.Silverlight.ViewModels
         int totalCount = filteredPhrases.Count();
         ProgressMaximum = totalCount;
 
+        Guid thinkId = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
         foreach (var phraseEdit in filteredPhrases)
         {
           var itemViewModel = Services.Container.GetExportedValue<ViewPhrasesItemViewModel>();
@@ -334,10 +346,16 @@ namespace LearnLanguages.Silverlight.ViewModels
               break;
             }
           }
+
+          //PING THINKING
+          History.Events.ThinkedAboutTargetEvent.Publish(Guid.Empty);
         }
 
-        //IsBusy = false;
         IsPopulating = false;
+
+        //TELL HISTORY WE'RE DONE THINKING
+        History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+
         //if (batch.Count > 0)
         //Items.AddRange(batch);
       });
@@ -518,5 +536,17 @@ namespace LearnLanguages.Silverlight.ViewModels
 
 
     #endregion
+
+    public string ToolTip
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
+      }
+    }
   }
 }

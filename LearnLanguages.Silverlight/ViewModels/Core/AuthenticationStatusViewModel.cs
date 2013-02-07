@@ -2,20 +2,21 @@
 using LearnLanguages.Common.ViewModelBases;
 using System;
 using Caliburn.Micro;
+using LearnLanguages.Common.EventMessages;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(AuthenticationStatusViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
   public class AuthenticationStatusViewModel : ViewModelBase, 
-                                               IHandle<EventMessages.AuthenticationChangedEventMessage>, 
+                                               IHandle<AuthenticationChangedEventMessage>, 
                                                IDisposable
   {
     public AuthenticationStatusViewModel()
     {
       Services.EventAggregator.Subscribe(this);
       //THIS INITIALIZES PROPERTIES INTERNALLY - IT DOES NOT _*PUBLISH*_ THE EVENT
-      var message = new EventMessages.AuthenticationChangedEventMessage();
+      var message = new AuthenticationChangedEventMessage();
       Handle(message);
     }
 
@@ -75,7 +76,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public void Handle(EventMessages.AuthenticationChangedEventMessage message)
+    public void Handle(AuthenticationChangedEventMessage message)
     {
       CurrentPrincipalName = message.CurrentPrincipalName;
       IsAuthenticated = message.IsAuthenticated;

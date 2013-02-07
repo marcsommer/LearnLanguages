@@ -2,6 +2,7 @@
 using System.Net;
 using Csla;
 using Csla.Serialization;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -13,9 +14,10 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void CreateNew(EventHandler<DataPortalResult<BlankTranslationCreator>> callback)
+    public static async Task<BlankTranslationCreator> CreateNewAsync()
     {
-      DataPortal.BeginCreate<BlankTranslationCreator>(callback);
+      var result = await DataPortal.CreateAsync<BlankTranslationCreator>();
+      return result;
     }
 
     #endregion
@@ -60,6 +62,5 @@ namespace LearnLanguages.Business
 #endif
 
     #endregion
-
   }
 }

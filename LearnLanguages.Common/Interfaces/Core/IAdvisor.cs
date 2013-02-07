@@ -1,5 +1,6 @@
 ﻿using System;
 using LearnLanguages.Common.Delegates;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Common.Interfaces
 {
@@ -12,6 +13,6 @@ namespace LearnLanguages.Common.Interfaces
     /// <summary>
     /// Can this advisor answer this type of question.  if Yes, return answer async.
     /// </summary>
-    bool AskAdvice(QuestionArgs questionArgs, AsyncCallback<object> answerCallback);
+    Task<ResultArgs<object>> AskAdviceAsync(QuestionArgs questionArgs);
   }
 }

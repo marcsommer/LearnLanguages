@@ -6,6 +6,7 @@ using Csla;
 using Csla.Serialization;
 using LearnLanguages.DataAccess;
 using LearnLanguages.DataAccess.Exceptions;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -33,9 +34,8 @@ namespace LearnLanguages.Business
     /// children to translation.Phrases.
     /// </summary>
     /// <param name="phrasesCriteria">collection of PhraseEdits, do not have to be marked as children.</param>
-    /// <param name="callback">callback executed once translation is completely populated</param>
-    public static void CreateNew(Criteria.TranslationPairSearchCriteria criteria,
-      EventHandler<DataPortalResult<TranslationPairSearchRetriever>> callback)
+    public static async Task<TranslationPairSearchRetriever> CreateNewAsync(
+      Criteria.TranslationPairSearchCriteria criteria)
     {
       if (criteria == null)
         throw new ArgumentNullException("criteria");
@@ -44,7 +44,8 @@ namespace LearnLanguages.Business
       if (criteria.PhraseB == null)
         throw new ArgumentException("criteria.PhraseB == null");
 
-      DataPortal.BeginCreate<TranslationPairSearchRetriever>(criteria, callback);
+      var result = await DataPortal.CreateAsync<TranslationPairSearchRetriever>(criteria);
+      return result;
     }
 
     #endregion

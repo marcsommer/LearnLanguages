@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Pkcs12ProtectedConfigurationProvider</id>
+    <version>1.0.1</version>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://archive.msdn.microsoft.com/pkcs12protectedconfg/Project/License.aspx</licenseUrl>
+    <projectUrl>http://archive.msdn.microsoft.com/pkcs12protectedconfg</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A protected configuration provider that works in Windows Azure.</description>
+    <references>
+      <reference file="PKCS12ProtectedConfigurationProvider.dll" />
+    </references>
+  </metadata>
+</package>

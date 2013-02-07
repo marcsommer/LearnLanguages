@@ -28,6 +28,12 @@ namespace LearnLanguages
     }
     public static string ErrorMsgUserNotAuthenticatedException { get { return "The current user has not been authenticated."; } }
 
+    public static string ErrorMsgAnalysisTypeNotRecognizedException { get { return "The analysis Type ({0}) is not recognized by this analyzer."; } }
+
+    public static string ErrorMsgAnalysisIdNotRecognizedException { get { return "The analysis Id ({0}) is not recognized by this analyzer."; } }
+
+    public static string ErrorMsgRefineAttemptedBeforeAnalysisException { get { return "Attempted to refine an analysis before actually doing the analysis. You must first call GetAnalysis<T> to build the initial analysis before calling RefineAnalysis."; } }
+    
     #endregion
 
     #region Result Messages
@@ -104,5 +110,8 @@ namespace LearnLanguages
 
     //Must contain digit, and an alpha, and can only contain digits, alphas, and !@#$%^&*() special characters
     public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()-_=+]{6,15}$";
+
+    public static string AzureServiceRootUriAddress = @"https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1";
+    public static string LearnLanguagesAccountKey = @"j4TwNcNsmN1prhbk21NS+wA7dR/fXtex4+32m9GS/Bg=";
   }
 }

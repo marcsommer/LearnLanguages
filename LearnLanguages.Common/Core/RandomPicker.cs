@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace LearnLanguages.Common
 {
@@ -70,6 +72,16 @@ namespace LearnLanguages.Common
     public int NextInt(int minInclusive, int maxExclusive)
     {
       return Randomizer.Next(minInclusive, maxExclusive);
+    }
+
+    public T PickOne<T>(IList<T> list) 
+    {
+      if (list.Count == 0)
+        return default(T);
+
+      var i = Randomizer.Next(0, list.Count);
+      var picked = list[i];
+      return picked;
     }
   }
 }

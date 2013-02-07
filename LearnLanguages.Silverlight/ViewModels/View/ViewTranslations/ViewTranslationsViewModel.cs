@@ -8,6 +8,7 @@ using System.Windows;
 using System.Collections.Generic;
 using LearnLanguages.Common.Interfaces;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -28,15 +29,23 @@ namespace LearnLanguages.Silverlight.ViewModels
       ViewModelVisibility = Visibility.Visible;
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
-      TranslationList.GetAll((s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
 
-        var allTranslations = r.Object;
-        ModelList = allTranslations;
-        PopulateViewModels(allTranslations);
-      });
+      InitializeModelAsync();
+    }
+
+    private async Task InitializeModelAsync()
+    {
+      #region Thinking
+      var thinkId = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      var allTranslations = await TranslationList.GetAllAsync();
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      #endregion
+
+      ModelList = allTranslations;
+      PopulateViewModels(allTranslations);
     }
     
     #endregion
@@ -263,6 +272,10 @@ namespace LearnLanguages.Silverlight.ViewModels
           int totalCount = filteredTranslations.Count();
           ProgressMaximum = totalCount;
 
+          //TELL HISTORY WE'RE THINKING
+          Guid thinkId = Guid.NewGuid();
+          History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+        
           //POPULATE NEW VIEWMODELS WITH FILTERED RESULTS IN TIGHT LOOP
           foreach (var translationEdit in filteredTranslations)
           {
@@ -284,7 +297,13 @@ namespace LearnLanguages.Silverlight.ViewModels
                 break;
               }
             }
+
+            //PING THINKING
+            History.Events.ThinkedAboutTargetEvent.Publish(Guid.Empty);
           }
+
+          //TELL HISTORY WE'RE DONE THINKING
+          History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
 
           IsPopulating = false;
         }); //END WORKER THREAD
@@ -453,5 +472,17 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     #endregion
+
+    public string ToolTip
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
+      }
+    }
   }
 }

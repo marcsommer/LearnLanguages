@@ -13,6 +13,7 @@ using Csla.Core;
 using LearnLanguages.Study.Interfaces;
 using LearnLanguages.Offer;
 using LearnLanguages.Study;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -27,10 +28,10 @@ namespace LearnLanguages.Silverlight.ViewModels
   /// control over to the StudyPartner who is then free to navigate however it likes.
   /// </summary>
   [Export(typeof(StudyASongViewModel))]
-  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+  [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
   public class StudyASongViewModel : Conductor<StudyASongItemViewModel>.Collection.AllActive,
                                      IHandle<Navigation.EventMessages.NavigatedEventMessage>,
-                                     IViewModelBase,
+                                     IPageViewModel,
                                      IHaveId,
                                      IHandle<IOffer<MultiLineTextList, IViewModelBase>>, 
                                      IHandle<IStatusUpdate<MultiLineTextList, IViewModelBase>>
@@ -56,42 +57,60 @@ namespace LearnLanguages.Silverlight.ViewModels
       Exchange.Ton.SubscribeToStatusUpdates(this);
       //THE NEXT INIT STUFF HAPPEN AS HANDLE(NAVIGATED MESSAGE)
     }
-    
-    private void InitializeViewModel()
+
+    private async Task InitializeViewModelAsync()
     {
+      ClearSongs();
       //RATHER COMPLICATED BECAUSE OF ASYNC.  THE STEPS OF INITIALIZATION ARE:
       //1) GET NATIVE LANGUAGE
       //2) POPULATE SONGS
 
-      //LET HISTORY KNOW WE'RE THINKING
+      //WE MUST FIRST KNOW WHAT THE USER'S NATIVE LANGUAGE IS.
+      StudyDataRetriever retriever = null;
+      #region Thinking (try..)
       var targetId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(targetId);
-      
-      //WE MUST FIRST KNOW WHAT THE USER'S NATIVE LANGUAGE IS.
-      StudyDataRetriever.CreateNew((s, r) =>
+      try
+      {
+      #endregion
+        retriever = await StudyDataRetriever.CreateNewAsync();
+      #region (...finally) Thinked
+      }
+      finally
       {
         History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      }
+        #endregion
 
-        if (r.Error != null)
-          throw r.Error;
+      StudyData = retriever.StudyData;
 
-        StudyData = r.Object.StudyData;
-
-        if (!r.Object.StudyDataAlreadyExisted)
-          AskUserForExtraDataAsync((s2, r2) =>
-          {
-            if (r2.Error != null)
-              throw r2.Error;
-
-            StudyData = r2.Object;
-
-            StartPopulateAllSongs();
-          });
-        else
+      if (!retriever.StudyDataAlreadyExisted)
+      {
+        #region Thinking
+        var targetId2 = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+        #endregion
+        AskUserForExtraDataAsync(async (s2, r2) =>
         {
-          StartPopulateAllSongs();
-        }
-      });
+          #region Thinked
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId2);
+          #endregion
+          if (r2.Error != null)
+            throw r2.Error;
+
+          StudyData = r2.Object;
+          await StartPopulateAllSongsAsync();
+        });
+      }
+      else
+      {
+        await StartPopulateAllSongsAsync();
+      }
+    }
+
+    private void ClearSongs()
+    {
+      Items.Clear();
     }
 
     #endregion
@@ -180,6 +199,50 @@ namespace LearnLanguages.Silverlight.ViewModels
         {
           _ButtonLabelGo = value;
           NotifyOfPropertyChange(() => ButtonLabelGo);
+        }
+      }
+    }
+
+    public IPage Page { get; set; }
+
+    private string _Title = ViewViewModelResources.TitleStudyASongViewModel;
+    public string Title
+    {
+      get { return _Title; }
+      set
+      {
+        if (value != _Title)
+        {
+          _Title = value;
+          NotifyOfPropertyChange(() => Title);
+        }
+      }
+    }
+
+    private string _Description = ViewViewModelResources.DescriptionStudyASongViewModel;
+    public string Description
+    {
+      get { return _Description; }
+      set
+      {
+        if (value != _Description)
+        {
+          _Description = value;
+          NotifyOfPropertyChange(() => Description);
+        }
+      }
+    }
+
+    private string _Instructions = ViewViewModelResources.InstructionsStudyASongSelectSong;
+    public string Instructions
+    {
+      get { return _Instructions; }
+      set
+      {
+        if (value != _Instructions)
+        {
+          _Instructions = value;
+          NotifyOfPropertyChange(() => Instructions);
         }
       }
     }
@@ -371,99 +434,105 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// <summary>
     /// Gets all songs in DB for this user, and calls PopulateItems.
     /// </summary>
-    private void StartPopulateAllSongs()
+    private async Task StartPopulateAllSongsAsync()
     {
-      //LET HISTORY KNOW WE'RE THINKING ABOUT SOMETHING
+      #region Thinking
       var targetId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(targetId);
-      
-      MultiLineTextList.GetAll((s, r) =>
+      #endregion
+      var allMultiLineTexts = await MultiLineTextList.GetAllAsync();
+      History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+
+      #region Sort MLT by Title Comparison (Comparison<MultiLineTextEdit> comparison = (a, b) =>)
+
+      Comparison<MultiLineTextEdit> comparison = (a, b) =>
       {
-        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+        //WE'RE GOING TO TEST CHAR ORDER IN ALPHABET
+        string aTitle = a.Title.ToLower();
+        string bTitle = b.Title.ToLower();
 
-        if (r.Error != null)
-          throw r.Error;
+        //IF THEY'RE THE SAME TITLES IN LOWER CASE, THEN THEY ARE EQUAL
+        if (aTitle == bTitle)
+          return 0;
 
-        #region Sort MLT by Title Comparison (Comparison<MultiLineTextEdit> comparison = (a, b) =>)
-
-        Comparison<MultiLineTextEdit> comparison = (a, b) =>
+        //ONLY NEED TO TEST CHARACTERS UP TO LENGTH
+        int shorterTitleLength = aTitle.Length;
+        bool aIsShorter = true;
+        if (bTitle.Length < shorterTitleLength)
         {
-          //WE'RE GOING TO TEST CHAR ORDER IN ALPHABET
-          string aTitle = a.Title.ToLower();
-          string bTitle = b.Title.ToLower();
+          shorterTitleLength = bTitle.Length;
+          aIsShorter = false;
+        }
 
-          //IF THEY'RE THE SAME TITLES IN LOWER CASE, THEN THEY ARE EQUAL
-          if (aTitle == bTitle)
-            return 0;
+        int result = 0; //assume a and b are equal (though we know they aren't if we've reached this point)
 
-          //ONLY NEED TO TEST CHARACTERS UP TO LENGTH
-          int shorterTitleLength = aTitle.Length;
-          bool aIsShorter = true;
-          if (bTitle.Length < shorterTitleLength)
+        for (int i = 0; i < shorterTitleLength; i++)
+        {
+          if (aTitle[i] < bTitle[i])
           {
-            shorterTitleLength = bTitle.Length;
-            aIsShorter = false;
+            result = -1;
+            break;
           }
-
-          int result = 0; //assume a and b are equal (though we know they aren't if we've reached this point)
-
-          for (int i = 0; i < shorterTitleLength; i++)
+          else if (aTitle[i] > bTitle[i])
           {
-            if (aTitle[i] < bTitle[i])
-            {
-              result = -1;
-              break;
-            }
-            else if (aTitle[i] > bTitle[i])
-            {
-              result = 1;
-              break;
-            }
+            result = 1;
+            break;
           }
+        }
 
-          //IF THEY ARE STILL EQUAL, THEN THE SHORTER PRECEDES THE LONGER
-          if (result == 0)
-          {
-            if (aIsShorter)
-              result = -1;
-            else
-              result = 1;
-          }
+        //IF THEY ARE STILL EQUAL, THEN THE SHORTER PRECEDES THE LONGER
+        if (result == 0)
+        {
+          if (aIsShorter)
+            result = -1;
+          else
+            result = 1;
+        }
 
-          return result;
-        };
+        return result;
+      };
 
-        #endregion
+      #endregion
 
-        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      ModelList = allMultiLineTexts;
 
-        var allMultiLineTexts = r.Object;
-        ModelList = r.Object;
-
-        var songs = (from multiLineText in allMultiLineTexts
-                     where multiLineText.AdditionalMetadata.Contains(MultiLineTextEdit.MetadataEntrySong)
-                     select multiLineText).ToList();
+      List<MultiLineTextEdit> songs = null;
+      #region Thinking (try..)
+      targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      try
+      {
+      #endregion
+        songs = (from multiLineText in allMultiLineTexts
+                 where multiLineText.AdditionalMetadata.Contains(MultiLineTextEdit.MetadataEntrySong)
+                 select multiLineText).ToList();
 
         songs.Sort(comparison);
-
+      #region (...finally) Thinked
+      }
+      finally
+      {
         History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      }
+        #endregion
 
-        //CACHE ALL SONGS SO WE WON'T HAVE TO DOWNLOAD THEM AGAIN.  THIS IS ASSUMING MY CURRENT NAVIGATION
-        //STRUCTURE WHICH MEANS THAT YOU CAN'T ADD SONGS WITHOUT RECREATING THIS ENTIRE VIEWMODEL.
-        //THIS CACHE WILL BE USED FOR FILTERING.
+      //CACHE ALL SONGS SO WE WON'T HAVE TO DOWNLOAD THEM AGAIN.  THIS IS ASSUMING MY CURRENT NAVIGATION
+      //STRUCTURE WHICH MEANS THAT YOU CAN'T ADD SONGS WITHOUT RECREATING THIS ENTIRE VIEWMODEL.
+      //THIS CACHE WILL BE USED FOR FILTERING.
 
-        SortedModelListCache = songs;
+      SortedModelListCache = songs;
 
-        PopulateItems();
-      });
+      PopulateItems();
     }
 
+    //todo: StudyASongViewModel uses background worker. Can convert this to using async keyword async method instead.
     private void PopulateItems()
     {
       if (IsPopulating && AbortIsFlagged)
         return;
 
       BackgroundWorker worker = new BackgroundWorker();
+      #region worker.DoWork += ((s, r) =>
       worker.DoWork += ((s, r) =>
       {
         //IsBusy = true;
@@ -571,9 +640,9 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         IsPopulating = false;
       });
+      #endregion
 
       worker.RunWorkerAsync();
-
     }
 
     private void HookInto(StudyASongItemViewModel viewModel)
@@ -653,7 +722,7 @@ namespace LearnLanguages.Silverlight.ViewModels
       History.Events.ThinkingAboutTargetEvent.Publish(targetId);
       try
       {
-        InitializeViewModel();
+        InitializeViewModelAsync();
       }
       finally
       {
@@ -694,7 +763,7 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// <summary>
     /// This method is called when the user presses the Go button.
     /// </summary>
-    public void Go()
+    public async Task Go()
     {
       var ids = new MobileList<Guid>();
       foreach (var songViewModel in Items)
@@ -706,50 +775,37 @@ namespace LearnLanguages.Silverlight.ViewModels
       //var targetId = new Guid(@"5D4355FE-C46E-4AA1-9E4A-45288C341C44");
       var targetId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(targetId);
-      MultiLineTextList.NewMultiLineTextList(ids, (s, r) =>
-        {
-          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      var songs = await MultiLineTextList.NewMultiLineTextListAsync(ids);
+      History.Events.ThinkedAboutTargetEvent.Publish(targetId);
 
-          if (r.Error != null)
-            throw r.Error;
+      var nativeLanguage = await LanguageEdit.GetLanguageEditAsync(GetNativeLanguageText());
+      var noExpirationDate = StudyJobInfo<MultiLineTextList, IViewModelBase>.NoExpirationDate;
+      var precision = double.Parse(AppResources.DefaultExpectedPrecision);
 
-          var songs = r.Object;
+      //CREATE JOB INFO 
+      var studyJobInfo = new StudyJobInfo<MultiLineTextList, IViewModelBase>(songs,
+                                                             nativeLanguage,
+                                                             noExpirationDate,
+                                                             precision);
+      //CREATE OPPORTUNITY
+      var opportunity = new Opportunity<MultiLineTextList, IViewModelBase>(Id,
+                                                           this,
+                                                           studyJobInfo,
+                                                           StudyResources.CategoryStudy);
 
+      //ADD OPPORTUNITY TO OUR FUTURE OPPORTUNITIES
+      FutureOpportunities.Add(opportunity);
 
-          LanguageEdit.GetLanguageEdit(GetNativeLanguageText(), (s2, r2) =>
-            {
-              if (r2.Error != null)
-                throw r2.Error;
-              var nativeLanguage = r2.Object;
-              var noExpirationDate = StudyJobInfo<MultiLineTextList, IViewModelBase>.NoExpirationDate;
-              var precision = double.Parse(AppResources.DefaultExpectedPrecision);
+      //LET THE HISTORY SHOW THAT YOU ARE THINKING ABOUT THIS OPPORTUNITY
+      var opportunityId = opportunity.Id;
+      History.Events.ThinkingAboutTargetEvent.Publish(opportunityId);
 
-              //CREATE JOB INFO 
-              var studyJobInfo = new StudyJobInfo<MultiLineTextList, IViewModelBase>(songs, 
-                                                                     nativeLanguage, 
-                                                                     noExpirationDate, 
-                                                                     precision);
-              //CREATE OPPORTUNITY
-              var opportunity = new Opportunity<MultiLineTextList, IViewModelBase>(Id, 
-                                                                   this, 
-                                                                   studyJobInfo, 
-                                                                   StudyResources.CategoryStudy);
-              
-              //ADD OPPORTUNITY TO OUR FUTURE OPPORTUNITIES
-              FutureOpportunities.Add(opportunity);
+      //PUBLISH THE OPPORTUNITY
+      Exchange.Ton.Publish(opportunity);
 
-              //LET THE HISTORY SHOW THAT YOU ARE THINKING ABOUT THIS OPPORTUNITY
-              var opportunityId = opportunity.Id;
-              History.Events.ThinkingAboutTargetEvent.Publish(opportunityId);
+      //NOW, WE WAIT UNTIL WE HEAR A HANDLE(OFFER) MESSAGE.
+      //TODO: TIMEOUT FOR OPPORTUNITY, BOTH EXPIRATION DATE AND WAITING FOR OFFER TIMEOUT
 
-              //PUBLISH THE OPPORTUNITY
-              Exchange.Ton.Publish(opportunity);
-
-              //NOW, WE WAIT UNTIL WE HEAR A HANDLE(OFFER) MESSAGE.
-              //TODO: TIMEOUT FOR OPPORTUNITY, BOTH EXPIRATION DATE AND WAITING FOR OFFER TIMEOUT
-            });
-          
-        });
     }
 
     public bool CanStopPopulating
@@ -900,6 +956,18 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         //NAVIGATE TO THE STUDY VIEWMODEL TO BEGIN STUDYING
         Navigation.Publish.NavigationRequest<StudyViewModel>(AppResources.BaseAddress);
+      }
+    }
+
+    public string ToolTip
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
       }
     }
   }

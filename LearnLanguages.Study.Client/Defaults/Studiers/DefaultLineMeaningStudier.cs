@@ -12,6 +12,7 @@ using LearnLanguages.History;
 using System.Threading;
 using LearnLanguages.Navigation.EventMessages;
 using LearnLanguages.History.Events;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Study
 {
@@ -97,13 +98,83 @@ namespace LearnLanguages.Study
 
     #region Methods
 
-    public override void GetNextStudyItemViewModel(Common.Delegates.AsyncCallback<StudyItemViewModelArgs> callback)
+    public override async Task InitializeForNewStudySessionAsync(LineEdit target)
     {
+      #region Thinking (methodThinkId)
+      var methodThinkId = target.Id;
+      History.Events.ThinkingAboutTargetEvent.Publish(methodThinkId);
+      #endregion
+
+      #region Initialize variables
+      _AbortIsFlagged = false;
+      _IsReady = false;
+      _Target = target;
+      AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
+      KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
+      AggregatePhraseTexts = new List<string>();
+      KnownPhraseTexts = new List<string>();
+      #endregion
+
       if (_AbortIsFlagged)
       {
-        callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
+        History.Events.ThinkedAboutTargetEvent.Publish(methodThinkId);
         return;
       }
+      #region Thinking (try...)
+      var targetId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      try
+      {
+      #endregion
+        await UpdateKnowledge();
+      #region (..finally) Thinked
+      }
+      finally
+      {
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+      }
+      #endregion
+
+      if (_AbortIsFlagged)
+      {
+        #region Thinked (methodThinkId)
+        History.Events.ThinkedAboutTargetEvent.Publish(methodThinkId);
+        #endregion
+        return;
+      }
+
+      PopulateAggregatePhraseTexts(AggregateSize);
+
+      #region Thinking (try..)
+      var targetId2 = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId2);
+      try
+      {
+      #endregion
+        AggregateAdjacentKnownPhraseTexts(
+        int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
+
+      #region (...finally) Thinked
+      }
+      finally
+      {
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId2);
+      }
+        #endregion
+     
+      await PopulateStudiersWithAggregatePhraseTexts();
+      #region Thinked (methodThinkId)
+      History.Events.ThinkedAboutTargetEvent.Publish(methodThinkId);
+      #endregion
+    }
+
+    public override async Task<ResultArgs<StudyItemViewModelArgs>> GetNextStudyItemViewModelAsync()
+    {
+      #region Abort Check
+      if (_AbortIsFlagged)
+        return await StudyHelper.GetAbortedAsync();
+      #endregion
+
       //IF OUR _LASTSTUDIEDINDEX IS MAXED OUT STUDIERS COUNT, THEN WE
       //HAVE COMPLETED ONE ITERATION THROUGH OUR UNKNOWN AGGREGATE PHRASE TEXTS.  
       if (_Studiers == null || _LastStudiedIndex >= (_Studiers.Count - 1))
@@ -111,92 +182,48 @@ namespace LearnLanguages.Study
         //NOW WE WILL AGGREGATE OUR ADJACENT KNOWN TEXTS AND REPOPULATE OUR PHRASE STUDIERS
         //WITH ONLY THOSE PHRASES THAT WE DON'T KNOW
         var maxIterations = int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts);
+        #region Abort Check
         if (_AbortIsFlagged)
-        {
-          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-          return;
-        }
+          return await StudyHelper.GetAbortedAsync();
+        #endregion
         AggregateAdjacentKnownPhraseTexts(maxIterations);
+
+        #region Abort Check
         if (_AbortIsFlagged)
+          return await StudyHelper.GetAbortedAsync();
+        #endregion
+        await PopulateStudiersWithAggregatePhraseTexts();
+        
+        #region Abort Check
+        if (_AbortIsFlagged)
+          return await StudyHelper.GetAbortedAsync();
+        #endregion
+        if (_Studiers.Count == 0)
         {
-          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-          return;
-        }
-        PopulateStudiersWithAggregatePhraseTexts((e) =>
-        {
-          //todo: go through all async code and make sure exceptions get relayed to callbacks instead of being thrown.
-          if (e != null)
-            callback(this, new ResultArgs<StudyItemViewModelArgs>(e));
-
-          if (_AbortIsFlagged)
-          {
-            callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-            return;
-          }
-
-          if (_Studiers.Count == 0)
-          {
-            //WE KNOW OUR ENTIRE LINE, SO POPULATE STUDIERS WITH A SINGLE PHRASE STUDIER WITH OUR LINE.PHRASE
-            var studier = new DefaultPhraseMeaningStudier();
-            studier.InitializeForNewStudySession(_Target.Phrase, (e2) =>
-            {
-              if (e2 != null)
-                callback(this, new ResultArgs<StudyItemViewModelArgs>(e2));
-
-              _Studiers.Add(0, studier);
-              _Studiers[0].GetNextStudyItemViewModel((s2, r2) =>
-                {
-                  if (r2.Error != null)
-                    callback(this, new ResultArgs<StudyItemViewModelArgs>(r2.Error));
-
-                  if (_AbortIsFlagged)
-                  {
-                    callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-                    return;
-                  }
-                  //r2.Object.ViewModel.Shown += new EventHandler(ViewModelShownWhenStudyingAnEntireLine);
-                });
-              _LastStudiedIndex = 0;
-            });
-            
-          }
-
-          if (_AbortIsFlagged)
-          {
-            callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-            return;
-          }
-
-          //WE NOW HAVE COMPLETELY NEW STUDIERS, ALREADY INITIALIZED, SO WE JUST NEED TO RUN 
-          //THE FIRST STUDIER AND UPDATE OUR LAST STUDIED INDEX
-          _Studiers[0].GetNextStudyItemViewModel(callback);
+          //WE KNOW OUR ENTIRE LINE, SO POPULATE STUDIERS WITH A SINGLE PHRASE STUDIER WITH OUR LINE.PHRASE
+          var studier = new DefaultPhraseMeaningStudier();
+          await studier.InitializeForNewStudySessionAsync(_Target.Phrase);
+          _Studiers.Add(0, studier);
           _LastStudiedIndex = 0;
-        });
+          return await _Studiers[0].GetNextStudyItemViewModelAsync();
+        }
+        else
+        {
+          //WE RETURN OUR FIRST STUDIER FOR THIS NEW STUDY CYCLE
+          return await _Studiers[0].GetNextStudyItemViewModelAsync();
+        }
       }
       else
       {
+        #region Abort Check
         if (_AbortIsFlagged)
-        {
-          callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-          return;
-        }
+          return await StudyHelper.GetAbortedAsync();
+        #endregion
+
         //WE ARE CONTINUING A STUDY CYCLE, SO RUN THE NEXT ONE AND UPDATE OUR LAST STUDIED INDEX.
         var indexToStudy = _LastStudiedIndex + 1;
-        _Studiers[indexToStudy].GetNextStudyItemViewModel((s, r) =>
-          {
-            if (r.Error != null)
-              callback(this, new ResultArgs<StudyItemViewModelArgs>(r.Error));
-
-            if (_AbortIsFlagged)
-            {
-              callback(this, new ResultArgs<StudyItemViewModelArgs>(StudyItemViewModelArgs.Aborted));
-              return;
-            }
-
-            //r.Object.ViewModel.Shown += ViewModelShownWhenStudyingAnEntireLine;
-            _LastStudiedIndex++;
-            callback(this, r);
-          });
+        _LastStudiedIndex++;
+        return await _Studiers[indexToStudy].GetNextStudyItemViewModelAsync();
       }
     }
 
@@ -214,156 +241,147 @@ namespace LearnLanguages.Study
     //  HistoryPublisher.Ton.PublishEvent(reviewingLineEvent);
     //}
 
-    private void PopulateStudiersWithAggregatePhraseTexts(ExceptionCheckCallback callback)
+    private async Task PopulateStudiersWithAggregatePhraseTexts()
     {
       if (_AbortIsFlagged)
-      {
-        callback(null);
         return;
-      }
       _Studiers.Clear();
       _LastStudiedIndex = -1;
 
       #region IF WE ONLY HAVE ONE AGGREGATE PHRASE TEXT, THEN POPULATE OUR STUDIER WITH OUR TARGET LINE
+
       if (AggregatePhraseTexts.Count == 1)
       {
         var studier = new DefaultPhraseMeaningStudier();
-        studier.InitializeForNewStudySession(_Target.Phrase, (e3) =>
+        #region Thinking (try..)
+        var targetId = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+        try
         {
-          if (e3 != null)
-            callback(e3);
-
-          if (_AbortIsFlagged)
-          {
-            callback(null);
-            return;
-          }
-
-          _Studiers.Add(0, studier);
-          callback(null);
-          return;
-        });
-
+        #endregion
+          await studier.InitializeForNewStudySessionAsync(_Target.Phrase);
+        #region (...finally) Thinked
+        }
+        finally
+        {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+        }
+          #endregion
+        _Studiers.Add(0, studier);
         return;
       }
 
       #endregion
 
-      var phraseTextsCriteria = 
+      var phraseTextsCriteria =
         new Business.Criteria.PhraseTextsCriteria(_Target.Phrase.Language.Text, AggregatePhraseTexts);
-      PhraseList.NewPhraseList(phraseTextsCriteria, (s, r) =>
+      PhraseList phraseList = null;
+      #region Thinking (try..)
+      var targetId2 = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId2);
+      try
+      {
+      #endregion
+        phraseList = await PhraseList.NewPhraseListAsync(phraseTextsCriteria);
+      #region (...finally) Thinked
+      }
+      finally
+      {
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId2);
+      }
+        #endregion
+      if (_AbortIsFlagged)
+        return;
+
+      List<PhraseEdit> unknownPhraseEdits = new List<PhraseEdit>();
+      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+      {
+        if (_AbortIsFlagged)
+          return;
+        var results = from phrase in phraseList
+                      where phrase.Text == AggregatePhraseTexts[i]
+                      select phrase;
+        unknownPhraseEdits.Insert(i, results.First());
+      }
+
+      //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS.
+      //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS.
+      //EACH PHRASE EDIT IS THE SAME INDEX AS ITS PHRASETEXT COUNTERPART.
+
+      //WE NEED TO FIND THE COUNT OF UNKNOWN TEXTS FIRST, TO INCREMENT OUR COUNTER FOR ASYNC FUNCTIONALITY.
+      int unknownCount = 0;
+      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+      {
+        if (_AbortIsFlagged)
+          return;
+
+        var phraseText = AggregatePhraseTexts[i];
+        if (!IsPhraseKnown(phraseText))
+          unknownCount++;
+      }
+
+      //UNKNOWNRELATIVEORDER: UNKNOWN IN THAT OUR PHRASE IS UNKNOWN.  RELATIVE ORDER MEANS
+      //THE ORDER/POSITION OF THIS PHRASE RELATIVE TO THE OTHER _UNKNOWN_ PHRASES.
+      var unknownRelativeOrder = -1;
+      int initializedCount = 0;
+      for (int i = 0; i < AggregatePhraseTexts.Count; i++)
+      {
+        if (_AbortIsFlagged)
+          return;
+
+        var phraseText = AggregatePhraseTexts[i];
+        if (IsPhraseKnown(phraseText))
+          continue;
+
+        //PHRASE IS UNKNOWN, SO INC OUR RELATIVE ORDER AND ADD THE STUDIER TO STUDIERS, INITIALIZING EACH STUDIER.
+        unknownRelativeOrder++;
+        var studier = new DefaultPhraseMeaningStudier();
+        #region Thinking (try..)
+        var targetId3 = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId3);
+        try
         {
-          try
-          {
-            if (r.Error != null)
-              throw r.Error;
+        #endregion
+          await studier.InitializeForNewStudySessionAsync(unknownPhraseEdits[i]);
+        #region (...finally) Thinked
+        }
+        finally
+        {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId3);
+        }
+          #endregion
+        if (_AbortIsFlagged)
+          return;
 
-            if (_AbortIsFlagged)
-            {
-              callback(null);
-              return;
-            }
-            var phraseList = r.Object;
-            List<PhraseEdit> unknownPhraseEdits = new List<PhraseEdit>();
-            for (int i = 0; i < AggregatePhraseTexts.Count; i++)
-            {
-              if (_AbortIsFlagged)
-              {
-                callback(null);
-                return;
-              }
-              var results = from phrase in phraseList
-                            where phrase.Text == AggregatePhraseTexts[i]
-                            select phrase;
-              unknownPhraseEdits.Insert(i, results.First());
-            }
+        _Studiers.Add(unknownRelativeOrder, studier);
+        initializedCount++;
+        //IF WE HAVE INITIALIZED ALL OF OUR UNKNOWN PHRASES, THEN WE ARE DONE AND CAN CALL CALLBACK.
+        if (initializedCount == unknownCount)
+          return;
+      }
 
-            //WE NOW HAVE AN ORDERED LIST OF KNOWN AND UNKNOWN AGGREGATE PHRASEEDITS.
-            //WE NEED TO FIND, AND KEEP IN RELATIVE ORDER, ONLY THE UNKNOWN PHRASEEDITS.
-            //EACH PHRASE EDIT IS THE SAME INDEX AS ITS PHRASETEXT COUNTERPART.
+      //THIS LINE IS ENTIRELY KNOWN, SO INITIALIZE A NEW STUDIER WITH THE ENTIRE LINE.
+      if (unknownCount == 0)
+      {
+        var studier = new DefaultPhraseMeaningStudier();
 
-            //WE NEED TO FIND THE COUNT OF UNKNOWN TEXTS FIRST, TO INCREMENT OUR COUNTER FOR ASYNC FUNCTIONALITY.
-            int unknownCount = 0;
-            for (int i = 0; i < AggregatePhraseTexts.Count; i++)
-            {
-              if (_AbortIsFlagged)
-              {
-                callback(null);
-                return;
-              }
-
-              var phraseText = AggregatePhraseTexts[i];
-              if (!IsPhraseKnown(phraseText))
-                unknownCount++;
-            }
-
-            //UNKNOWNRELATIVEORDER: UNKNOWN IN THAT OUR PHRASE IS UNKNOWN.  RELATIVE ORDER MEANS
-            //THE ORDER/POSITION OF THIS PHRASE RELATIVE TO THE OTHER _UNKNOWN_ PHRASES.
-            var unknownRelativeOrder = -1;
-            int initializedCount = 0;
-            for (int i = 0; i < AggregatePhraseTexts.Count; i++)
-            {
-              if (_AbortIsFlagged)
-              {
-                callback(null);
-                return;
-              }
-
-              var phraseText = AggregatePhraseTexts[i];
-              if (IsPhraseKnown(phraseText))
-                continue;
-
-              //PHRASE IS UNKNOWN, SO INC OUR RELATIVE ORDER AND ADD THE STUDIER TO STUDIERS, INITIALIZING EACH STUDIER.
-              unknownRelativeOrder++;
-              var studier = new DefaultPhraseMeaningStudier();
-              studier.InitializeForNewStudySession(unknownPhraseEdits[i], (e) =>
-                {
-                  if (e != null)
-                    callback(e);
-
-                  if (_AbortIsFlagged)
-                  {
-                    callback(null);
-                    return;
-                  }
-
-                  _Studiers.Add(unknownRelativeOrder, studier);
-                  initializedCount++;
-                  //IF WE HAVE INITIALIZED ALL OF OUR UNKNOWN PHRASES, THEN WE ARE DONE AND CAN CALL CALLBACK.
-                  if (initializedCount == unknownCount)
-                    callback(null);
-                });
-
-            }
-
-            //THIS LINE IS ENTIRELY KNOWN, SO INITIALIZE A NEW STUDIER WITH THE ENTIRE LINE.
-            if (unknownCount == 0)
-            {
-              var studier = new DefaultPhraseMeaningStudier();
-              
-              studier.InitializeForNewStudySession(_Target.Phrase, (e2) =>
-              {
-                if (e2 != null)
-                  callback(e2);
-
-                if (_AbortIsFlagged)
-                {
-                  callback(null);
-                  return;
-                }
-
-                _Studiers.Add(0, studier);
-                callback(null);
-              });
-            }
-          }
-          catch (Exception ex)
-          {
-            callback(ex);
-          }
-        });
-
-      
+        #region Thinking (try..)
+        var targetId4 = Guid.NewGuid();
+        History.Events.ThinkingAboutTargetEvent.Publish(targetId4);
+        try
+        {
+        #endregion
+          await studier.InitializeForNewStudySessionAsync(_Target.Phrase);
+        #region (...finally) Thinked
+        }
+        finally
+        {
+          History.Events.ThinkedAboutTargetEvent.Publish(targetId4);
+        }
+          #endregion
+        _Studiers.Add(0, studier);
+        return;
+      }
     }
 
     /// <summary>
@@ -373,75 +391,88 @@ namespace LearnLanguages.Study
     /// <param name="aggregateSize">the number of words contained in each aggregate phrase text.</param>
     private void PopulateAggregatePhraseTexts(int aggregateSize, bool skipAggregationIfLineIsKnown = true)
     {
-      if (aggregateSize == 0)
-        throw new ArgumentOutOfRangeException("aggregateSize");
-
-      AggregatePhraseTexts.Clear();
-
-      var lineText = _Target.Phrase.Text;
-      var lineIsKnown = IsPhraseKnown(lineText);
-      if (skipAggregationIfLineIsKnown && lineIsKnown)
+      #region Thinking (try..)
+      var methodThinkId = Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(methodThinkId);
+      try
       {
-        //IF WE ARE SKIPPING THE AGGREGATION (WE'RE NOT FORCING LINE TO BREAK INTO AGGREGATES)
-        //AND IF THE ENTIRE LINE TEXT IS KNOWN, 
-        //THEN ADD THE ENTIRE LINE TEXT TO THE AGGREGATE PHRASE TEXTS AND WE'RE DONE.
-        AggregatePhraseTexts.Add(lineText);
-        return;
-      }
-      
-      //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
-      //We will end up with 20/2 = 10 aggregate phrases.  
-      //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 
-      //phrases of lengths 7, 7, and 6.  So, in our for loop, we will iterate 
-      //Count/AggregateSize rounded up number of times.
+      #endregion
+        if (aggregateSize == 0)
+          throw new ArgumentOutOfRangeException("aggregateSize");
 
-      var words = lineText.ParseIntoWords();
-      var wordCount = words.Count;
-      var aggregateCount = (wordCount - 1) / aggregateSize + 1; //equivalent to Count/AggregateSize rounded up
+        AggregatePhraseTexts.Clear();
 
-      //IF AGGREGATE COUNT == 1, THEN OUR ENTIRE LINE IS OUR AGGREGATE PHRASE TEXT
-      if (aggregateCount == 1)
-      {
-        AggregatePhraseTexts.Add(lineText);
-        return;
-      }
-
-      //our first aggregate phrases up to the very last one will be of size aggregate size
-      //but our last one is the remainder and may contain anywhere from 1 to aggregateSize
-      //words in it.  so we must be mindful of this.
-      for (int i = 0; i < aggregateCount; i++)
-      {
-        var aggregatePhraseText = "";
-        for (int j = 0; j < aggregateSize; j++)
+        var lineText = _Target.Phrase.Text;
+        var lineIsKnown = IsPhraseKnown(lineText);
+        if (skipAggregationIfLineIsKnown && lineIsKnown)
         {
-          var wordIndex = (i * aggregateSize) + j;
-          if (wordIndex >= words.Count)
-            break;//we have reached the end of the last phrase
-          var currentWord = words[wordIndex];
-
-          if (string.IsNullOrEmpty(aggregatePhraseText))
-            aggregatePhraseText = currentWord;
-          else
-            aggregatePhraseText += " " + currentWord;
+          //IF WE ARE SKIPPING THE AGGREGATION (WE'RE NOT FORCING LINE TO BREAK INTO AGGREGATES)
+          //AND IF THE ENTIRE LINE TEXT IS KNOWN, 
+          //THEN ADD THE ENTIRE LINE TEXT TO THE AGGREGATE PHRASE TEXTS AND WE'RE DONE.
+          AggregatePhraseTexts.Add(lineText);
+          return;
         }
 
-        if (!string.IsNullOrEmpty(aggregatePhraseText))
-          AggregatePhraseTexts.Insert(i, aggregatePhraseText);
+        //lets say lineText is 20 words long (long line).  our aggregateSize is 2.  
+        //We will end up with 20/2 = 10 aggregate phrases.  
+        //Now, say aggregate size is 7.  We will have 20 / 7 = 2 6/7, rounded up = 3 
+        //phrases of lengths 7, 7, and 6.  So, in our for loop, we will iterate 
+        //Count/AggregateSize rounded up number of times.
 
-        //remove any phrases that are empty.  this shouldn't happen, but we'll log it if we find one.
-        var count = AggregatePhraseTexts.Count;
-        //counting down from bottom of index because we will be removing items if needed.
-        for (int k = count - 1; k >= 0; k--)
+        var words = lineText.ParseIntoWords();
+        var wordCount = words.Count;
+        var aggregateCount = (wordCount - 1) / aggregateSize + 1; //equivalent to Count/AggregateSize rounded up
+
+        //IF AGGREGATE COUNT == 1, THEN OUR ENTIRE LINE IS OUR AGGREGATE PHRASE TEXT
+        if (aggregateCount == 1)
         {
-          if (string.IsNullOrEmpty(AggregatePhraseTexts[k]))
+          AggregatePhraseTexts.Add(lineText);
+          return;
+        }
+
+        //our first aggregate phrases up to the very last one will be of size aggregate size
+        //but our last one is the remainder and may contain anywhere from 1 to aggregateSize
+        //words in it.  so we must be mindful of this.
+        for (int i = 0; i < aggregateCount; i++)
+        {
+          var aggregatePhraseText = "";
+          for (int j = 0; j < aggregateSize; j++)
           {
-            Services.Log(StudyResources.WarningMsgEmptyAggregatePhraseTextFound, 
-                         LogPriority.Medium, 
-                         LogCategory.Warning);
-            AggregatePhraseTexts.RemoveAt(k);
+            var wordIndex = (i * aggregateSize) + j;
+            if (wordIndex >= words.Count)
+              break;//we have reached the end of the last phrase
+            var currentWord = words[wordIndex];
+
+            if (string.IsNullOrEmpty(aggregatePhraseText))
+              aggregatePhraseText = currentWord;
+            else
+              aggregatePhraseText += " " + currentWord;
+          }
+
+          if (!string.IsNullOrEmpty(aggregatePhraseText))
+            AggregatePhraseTexts.Insert(i, aggregatePhraseText);
+
+          //remove any phrases that are empty.  this shouldn't happen, but we'll log it if we find one.
+          var count = AggregatePhraseTexts.Count;
+          //counting down from bottom of index because we will be removing items if needed.
+          for (int k = count - 1; k >= 0; k--)
+          {
+            if (string.IsNullOrEmpty(AggregatePhraseTexts[k]))
+            {
+              Services.Log(StudyResources.WarningMsgEmptyAggregatePhraseTextFound,
+                           LogPriority.Medium,
+                           LogCategory.Warning);
+              AggregatePhraseTexts.RemoveAt(k);
+            }
           }
         }
+        #region (...finally) Thinked
       }
+      finally
+      {
+        History.Events.ThinkedAboutTargetEvent.Publish(methodThinkId);
+      }
+        #endregion
     }
 
     /// <summary>
@@ -452,9 +483,8 @@ namespace LearnLanguages.Study
     private void AggregateAdjacentKnownPhraseTexts(int maxIterations)
     {
       if (_AbortIsFlagged)
-      {
         return;
-      }
+      
       //FIRST, GIVE US A FRESH START...I'M NOT ENTIRELY SURE THIS IS NECESSARY.
       PopulateAggregatePhraseTexts(AggregateSize);
 
@@ -470,10 +500,8 @@ namespace LearnLanguages.Study
       while (stillLooking && (iterations < maxIterations))
       {
         if (_AbortIsFlagged)
-        {
           return;
-        }
-
+        
         //This is "starting" as in before our next for loop which may modify AggregatePhraseTexts.Count.
         var startingPhraseCount = AggregatePhraseTexts.Count;
         var foundNewAggregate = false;
@@ -482,10 +510,8 @@ namespace LearnLanguages.Study
         for (int i = 0; i < startingPhraseCount - 1; i++)
         {
           if (_AbortIsFlagged)
-          {
             return;
-          }
-
+          
           var phraseA = AggregatePhraseTexts[i];
           var phraseB = AggregatePhraseTexts[i + 1];
           if (IsPhraseKnown(phraseA) && IsPhraseKnown(phraseB))
@@ -572,156 +598,46 @@ namespace LearnLanguages.Study
     /// Calculates the PercentKnown of this line.
     /// </summary>
     /// <returns></returns>
-    public double GetPercentKnown()
+    public async Task<double> GetPercentKnownAsync()
     {
       if (_Target == null)
-        return 0;
+        return 0;// await new Task<double>(() => { return 0; });
 
       if (_PercentKnownIsUpToDate)
         return _CachedPercentKnownValue;
 
-      ThreadPool.QueueUserWorkItem(new WaitCallback(GetPercentKnownTask), _AutoResetEvent);
+      var questionArgs =
+        new Common.QuestionArgs(StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown, 
+                                _Target.Phrase);
+      
+      var result = await DefaultPhrasePercentKnownAdvisor.Ton.AskAdviceAsync(questionArgs);
 
-      _AutoResetEvent.WaitOne();
+      _PercentKnownTaskVariable = (double)result.Object;
+
       _CachedPercentKnownValue = _PercentKnownTaskVariable;
       _PercentKnownIsUpToDate = true;
       return _PercentKnownTaskVariable;
-      #region old...without advice
-      //var listKnown = new List<string>();
-      //var listUnknown = new List<string>();
-      //for (int i = 0; i < AggregatePhraseTexts.Count; i++)
-      //{
-      //  var phraseText = AggregatePhraseTexts[i];
-      //  var phraseTextDistinctWords = phraseText.ParseIntoWords().Distinct();
-      //  if (IsPhraseKnown(phraseText))
-      //    listKnown.AddRange(phraseTextDistinctWords);
-      //  else
-      //    listUnknown.AddRange(phraseTextDistinctWords);
-      //}
-
-      //int knownWordsCount = listKnown.Count;
-      //int unknownWordsCount = listUnknown.Count;
-      //int totalWordsCount = knownWordsCount + unknownWordsCount;
-      //if (totalWordsCount == 0)
-      //  throw new Exception("knownWordsCount + unknownWordsCount == 0.  This means that we have an aggregate phrase of zero words in our LineAggregateInfo.  This shouldn't happen.");
-
-      //double percentKnown = (double)knownWordsCount / (double)(totalWordsCount);
-      //return percentKnown;
-      #endregion
     }
 
     private bool _PercentKnownIsUpToDate = false;
     private double _CachedPercentKnownValue = 0;
 
     private double _PercentKnownTaskVariable { get; set; }
-    public void GetPercentKnownTask(object state)
-    {
-      var are = (AutoResetEvent)state;
 
+    public async Task UpdateKnowledge()
+    {
+      //ASK ADVICE
       var questionArgs =
         new Common.QuestionArgs(StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown, _Target.Phrase);
-      if (_AbortIsFlagged)
-      {
-        are.Set();
-        return;
-      }
-      DefaultPhrasePercentKnownAdvisor.Ton.AskAdvice(questionArgs, (s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
-
-        _PercentKnownTaskVariable = (double)r.Object;
-        are.Set();
-      });
-    }
-
-    #endregion
-
-    public override void InitializeForNewStudySession(LineEdit target, ExceptionCheckCallback completedCallback)
-    {
-#if DEBUG
-      var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
-#endif
-      var thinkingTargetId = target.Id;
-      History.Events.ThinkingAboutTargetEvent.Publish(thinkingTargetId);
-
-      _AbortIsFlagged = false;
-      _IsReady = false;
-      _Target = target;
-      AggregateSize = int.Parse(StudyResources.DefaultMeaningStudierAggregateSize);
-      KnowledgeThreshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
-      AggregatePhraseTexts = new List<string>();
-      KnownPhraseTexts = new List<string>();
-      if (_AbortIsFlagged)
-      {
-        History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-        completedCallback(null);
-        return;
-      }
-      var targetId = Guid.NewGuid();
-      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
-      UpdateKnowledge((e2) =>
-        {
-          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
-          if (e2 != null)
-            throw e2;
-
-          if (_AbortIsFlagged)
-          {
-            History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-            completedCallback(null);
-            return;
-          }
-
-          PopulateAggregatePhraseTexts(AggregateSize);
-          AggregateAdjacentKnownPhraseTexts(
-            int.Parse(StudyResources.DefaultMaxIterationsAggregateAdjacentKnownPhraseTexts));
-          PopulateStudiersWithAggregatePhraseTexts((e) =>
-          {
-#if DEBUG
-            var threadId2 = System.Threading.Thread.CurrentThread.ManagedThreadId;
-#endif
-            if (e != null)
-              throw e;
-
-            if (_AbortIsFlagged)
-            {
-              History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-              completedCallback(null);
-              return;
-            }
-
-            History.Events.ThinkedAboutTargetEvent.Publish(thinkingTargetId);
-            completedCallback(null);
-          });
-        });
-      
-    }
-    
-    public void UpdateKnowledge(ExceptionCheckCallback callback)
-    {
-      var questionArgs =
-        new Common.QuestionArgs(StudyResources.AdvisorQuestionWhatIsPhrasePercentKnown, _Target.Phrase);
-      DefaultPhrasePercentKnownAdvisor.Ton.AskAdvice(questionArgs, (s, r) =>
-      {
-//#if DEBUG
-//        if (_Target.Phrase.Text.Contains("amour"))
-//          System.Diagnostics.Debugger.Break();
-//#endif
-        if (r.Error != null)
-          callback(r.Error);
-
-        _CachedPercentKnownValue = (double)r.Object;
-        _PercentKnownIsUpToDate = true;
-
-        if (_CachedPercentKnownValue >= KnowledgeThreshold)
-          MarkPhraseKnown(_Target.Phrase.Text);
-        else
-          MarkPhraseUnknown(_Target.Phrase.Text);
-
-        callback(null);
-        return;
-      });
+      var result = await DefaultPhrasePercentKnownAdvisor.Ton.AskAdviceAsync(questionArgs);
+     
+      //INTERPRET ADVICE
+      _CachedPercentKnownValue = (double)result.Object;
+      _PercentKnownIsUpToDate = true;
+      if (_CachedPercentKnownValue >= KnowledgeThreshold)
+        MarkPhraseKnown(_Target.Phrase.Text);
+      else
+        MarkPhraseUnknown(_Target.Phrase.Text);
     }
 
     public void Handle(History.Events.ReviewedPhraseEvent message)
@@ -767,6 +683,8 @@ namespace LearnLanguages.Study
     {
       AbortStudying();
     }
+
+      #endregion
 
     private void AbortStudying()
     {

@@ -2,12 +2,12 @@
 
 namespace Compression
 {
-  public class CompressedPortal : Csla.Server.Hosts.Silverlight.WcfPortal
+  public class CompressedPortal : Csla.Server.Hosts.Mobile.WcfPortal
   {
-    protected override Csla.Server.Hosts.Silverlight.CriteriaRequest ConvertRequest(
-      Csla.Server.Hosts.Silverlight.CriteriaRequest request)
+    protected override Csla.Server.Hosts.Mobile.CriteriaRequest ConvertRequest(
+      Csla.Server.Hosts.Mobile.CriteriaRequest request)
     {
-      var returnValue = new Csla.Server.Hosts.Silverlight.CriteriaRequest();
+      var returnValue = new Csla.Server.Hosts.Mobile.CriteriaRequest();
       returnValue.ClientContext = CompressionUtility.Decompress(request.ClientContext);
       returnValue.GlobalContext = CompressionUtility.Decompress(request.GlobalContext);
       if (request.CriteriaData != null)
@@ -17,10 +17,10 @@ namespace Compression
       return returnValue;
     }
 
-    protected override Csla.Server.Hosts.Silverlight.UpdateRequest ConvertRequest(
-      Csla.Server.Hosts.Silverlight.UpdateRequest request)
+    protected override Csla.Server.Hosts.Mobile.UpdateRequest ConvertRequest(
+      Csla.Server.Hosts.Mobile.UpdateRequest request)
     {
-      var returnValue = new Csla.Server.Hosts.Silverlight.UpdateRequest();
+      var returnValue = new Csla.Server.Hosts.Mobile.UpdateRequest();
       returnValue.ClientContext = CompressionUtility.Decompress(request.ClientContext);
       returnValue.GlobalContext = CompressionUtility.Decompress(request.GlobalContext);
       returnValue.ObjectData = CompressionUtility.Decompress(request.ObjectData);
@@ -28,10 +28,10 @@ namespace Compression
       return returnValue;
     }
 
-    protected override Csla.Server.Hosts.Silverlight.WcfResponse ConvertResponse(
-      Csla.Server.Hosts.Silverlight.WcfResponse response)
+    protected override Csla.Server.Hosts.Mobile.WcfResponse ConvertResponse(
+      Csla.Server.Hosts.Mobile.WcfResponse response)
     {
-      var returnValue = new Csla.Server.Hosts.Silverlight.WcfResponse();
+      var returnValue = new Csla.Server.Hosts.Mobile.WcfResponse();
       returnValue.GlobalContext = CompressionUtility.Compress(response.GlobalContext);
       returnValue.ObjectData = CompressionUtility.Compress(response.ObjectData);
       returnValue.ErrorData = response.ErrorData;

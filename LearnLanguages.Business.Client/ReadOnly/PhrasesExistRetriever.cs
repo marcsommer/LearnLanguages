@@ -6,6 +6,7 @@ using Csla.Serialization;
 using Csla.Core;
 using LearnLanguages.DataAccess;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -24,10 +25,10 @@ namespace LearnLanguages.Business
     /// WORKING OFF OF THAT ANYWAY.
     /// </summary>
     /// <param name="criteria">phrase texts to be checked for existence in data store.</param>
-    /// <param name="callback">callback executed once existence dictionary is completely populated</param>
-    public static void CreateNew(Criteria.PhraseTextsCriteria criteria, EventHandler<DataPortalResult<PhrasesExistRetriever>> callback)
+    public static async Task<PhrasesExistRetriever> CreateNewAsync(Criteria.PhraseTextsCriteria criteria)
     {
-      DataPortal.BeginCreate<PhrasesExistRetriever>(criteria, callback);
+      var result = await DataPortal.CreateAsync<PhrasesExistRetriever>(criteria);
+      return result;
     }
 
 #if !SILVERLIGHT

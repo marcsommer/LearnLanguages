@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using LearnLanguages.Business;
 using LearnLanguages.Common.ViewModelBases;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -10,15 +11,23 @@ namespace LearnLanguages.Silverlight.ViewModels
   {
     public AddLanguageViewModel()
     {
-      LanguageEdit.NewLanguageEdit((s, r) =>
-        {
-          if (r.Error != null)
-            throw r.Error;
+      InitializeModelAsync();
+    }
 
-          var languageViewModel = Services.Container.GetExportedValue<AddLanguageLanguageEditViewModel>();
-          languageViewModel.Model = r.Object;
-          LanguageViewModel = languageViewModel;
-        });
+    private async Task InitializeModelAsync()
+    {
+      #region Thinking
+      var thinkId = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      var newLanguage = await LanguageEdit.NewLanguageEditAsync();
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      #endregion
+
+      var languageViewModel = Services.Container.GetExportedValue<AddLanguageLanguageEditViewModel>();
+      languageViewModel.Model = newLanguage;
+      LanguageViewModel = languageViewModel;
     }
 
     private AddLanguageLanguageEditViewModel _LanguageViewModel;

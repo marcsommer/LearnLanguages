@@ -18,6 +18,7 @@
             Style="{StaticResource LargeViewSection}">
 
       <ContentControl x:Name="ThinkingPanel" 
+                      IsEnabled="{Binding Path=ThinkingPanel_IsEnabled}"
                       HorizontalContentAlignment="Stretch"
                       VerticalContentAlignment="Stretch"
                       TabIndex="2"
@@ -28,7 +29,8 @@
     <Border controls:DockPanel.Dock="Left"
             Style="{StaticResource LargeViewSection}">
       
-      <ContentControl x:Name="NavigationPanel" 
+      <ContentControl x:Name="NavigationPanelViewModel" 
+                      IsEnabled="{Binding Path=NavPanelIsEnabled}"
                       TabIndex="0" />
     </Border>
 

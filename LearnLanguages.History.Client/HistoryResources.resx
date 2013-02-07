@@ -177,6 +177,9 @@
   <data name="Key_PhraseText" xml:space="preserve">
     <value>PhraseText</value>
   </data>
+  <data name="Key_PhraseWasModifiedDuringReview" xml:space="preserve">
+    <value>PhraseWasModifiedDuringReview</value>
+  </data>
   <data name="Key_ReviewMethodId" xml:space="preserve">
     <value>ReviewMethodId</value>
   </data>

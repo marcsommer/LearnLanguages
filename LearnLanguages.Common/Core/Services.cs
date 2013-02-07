@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using LearnLanguages.Common.Interfaces;
 using System.ComponentModel.Composition.Hosting;
+using LearnLanguages.Common;
 
 namespace LearnLanguages
 {
@@ -73,5 +74,13 @@ namespace LearnLanguages
     //    return _Navigator;
     //  }
     //}
+
+    public static void PublishMessageEvent(string msgText, 
+                                           MessagePriority messagePriority, 
+                                           MessageType messageType)
+    {
+      var msgEvent = new Common.Events.MessageEvent(msgText, messagePriority, messageType);
+      EventAggregator.Publish(msgEvent);
+    }
   }
 }

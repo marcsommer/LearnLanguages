@@ -5,31 +5,35 @@ using Csla.Serialization;
 using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
   [Serializable]
   public class MultiLineTextList : Common.CslaBases.BusinessListBase<MultiLineTextList, MultiLineTextEdit, MultiLineTextDto>
   {
-    public static void GetAll(EventHandler<DataPortalResult<MultiLineTextList>> callback)
+    /// <summary>
+    /// Retrieve all MultiLineTexts in the database, for the current user.
+    /// </summary>
+    /// <returns></returns>
+    public static async Task<MultiLineTextList> GetAllAsync()
     {
-      DataPortal.BeginFetch<MultiLineTextList>(callback);
+      var result = await DataPortal.FetchAsync<MultiLineTextList>();
+      return result;
     }
 
-    ///// <summary>
-    ///// Gets all of the multiLineTexts that contain the given phrase, using that phrase's id.  This in 
-    ///// contrast to searching through all multiLineTexts' texts and matching up the phrase.text or regex, etc.
-    ///// </summary>
-    //public static void GetAllMultiLineTextsContainingPhraseById(PhraseEdit phrase, 
-    //  EventHandler<DataPortalResult<MultiLineTextList>> callback)
-    //{
-    //  var criteria = new Criteria.PhraseCriteria(phrase);
-    //  DataPortal.BeginFetch<MultiLineTextList>(criteria, callback);
-    //}
-
-    public static void NewMultiLineTextList(ICollection<Guid> multiLineTextIds, EventHandler<DataPortalResult<MultiLineTextList>> callback)
+    /// <summary>
+    /// Ids of MLTs to populate the list. This will retrieve the MLTs from the database 
+    /// via these ids, and load them as children to newly created list.
+    /// 
+    /// These ids must belong to the current user.
+    /// </summary>
+    /// <param name="multiLineTextIds"></param>
+    /// <returns></returns>
+    public static async Task<MultiLineTextList> NewMultiLineTextListAsync(ICollection<Guid> multiLineTextIds)
     {
-      DataPortal.BeginFetch<MultiLineTextList>(multiLineTextIds, callback);
+      var result = await DataPortal.FetchAsync<MultiLineTextList>(multiLineTextIds);
+      return result;
     }
 
 #if !SILVERLIGHT

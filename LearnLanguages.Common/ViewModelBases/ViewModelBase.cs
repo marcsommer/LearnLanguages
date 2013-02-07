@@ -5,10 +5,11 @@ using System.Windows;
 
 namespace LearnLanguages.Common.ViewModelBases
 {
-  public abstract class ViewModelBase : PropertyChangedBase, IViewModelBase
+  public abstract class ViewModelBase : Screen, IViewModelBase
   {
     public ViewModelBase()
     {
+      _IsEnabled = true;
       //Services.Container.SatisfyImportsOnce(this);
     }
 
@@ -116,6 +117,34 @@ namespace LearnLanguages.Common.ViewModelBases
         {
           _ViewModelVisibility = value;
           NotifyOfPropertyChange(() => ViewModelVisibility);
+        }
+      }
+    }
+
+    private string _ToolTip;
+    public string ToolTip
+    {
+      get { return _ToolTip; }
+      set
+      {
+        if (value != _ToolTip)
+        {
+          _ToolTip = value;
+          NotifyOfPropertyChange(() => ToolTip);
+        }
+      }
+    }
+
+    private bool _IsEnabled;
+    public bool IsEnabled
+    {
+      get { return _IsEnabled; }
+      set
+      {
+        if (value != _IsEnabled)
+        {
+          _IsEnabled = value;
+          NotifyOfPropertyChange(() => IsEnabled);
         }
       }
     }

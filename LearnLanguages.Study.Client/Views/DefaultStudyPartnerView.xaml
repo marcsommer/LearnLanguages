@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" 
+    xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
     
@@ -15,16 +15,22 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Grid.Resources>
-        <Style TargetType="toolkit:HeaderedContentControl" x:Key="HeaderStyle">
+        
+        <!--<Style TargetType="toolkit:HeaderedContentControl" x:Key="StudyPartnerHeaderStyle">
           <Setter Property="Padding" Value="5" />
-          <Setter Property="FontSize" Value="7" />
-          <Setter Property="FontStyle" Value="Italic" />
-        </Style>
+          <Setter Property="FontSize" Value="15" />
+          <Setter Property="FontStyle" Value="Normal" />
+          <Setter Property="FontWeight" Value="Thin" />
+          <Setter Property="Foreground" Value="DarkGreen" />
+          <Setter Property="FontFamily" Value="Impact" />
+        </Style>-->
+        
         <Style TargetType="TextBlock" x:Key="MultiLineTextTitle">
           <Setter Property="Padding" Value="0" />
           <Setter Property="FontSize" Value="14" />
           <Setter Property="FontStyle" Value="Normal" />
         </Style>
+        
       </Grid.Resources>
 
       <!--INSTRUCTIONS-->
@@ -36,8 +42,26 @@
 
       <!--STUDY CONTAINER-->
       <Border Grid.Row="1" Style="{StaticResource ViewSection}">
-        <toolkit:HeaderedContentControl Header="{Binding Path=StudyTitle}" 
-                                        Style="{StaticResource HeaderStyle}">
+        <toolkit:HeaderedContentControl Header="{Binding Path=StudyTitle}"
+                                        >
+          <toolkit:HeaderedContentControl.Resources>
+            <Style TargetType="toolkit:HeaderedContentControl">
+              <Setter Property="Padding" Value="5" />
+              <Setter Property="FontSize" Value="15" />
+              <Setter Property="FontStyle" Value="Normal" />
+              <Setter Property="FontFamily" Value="Impact" />
+              <Setter Property="FontWeight" Value="Thin" />
+              <Setter Property="Foreground" Value="DarkGreen" />
+            </Style>
+            <Style TargetType="ContentControl">
+              <Setter Property="Padding" Value="3" />
+              <Setter Property="FontSize" Value="13" />
+              <Setter Property="FontStyle" Value="Normal" />
+              <Setter Property="FontWeight" Value="Normal" />
+              <Setter Property="Foreground" Value="Black" />
+            </Style>
+          </toolkit:HeaderedContentControl.Resources>
+          
           <toolkit:HeaderedContentControl.Content>
 
             <!--<TextBlock Text="hello, this is the default study multilinetextsview" />-->

@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using System.Collections.Specialized;
 using System.Windows;
 using LearnLanguages.Common.Interfaces;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -21,15 +22,23 @@ namespace LearnLanguages.Silverlight.ViewModels
     {
       _InitiateDeleteVisibility = Visibility.Visible;
       _FinalizeDeleteVisibility = Visibility.Collapsed;
-      LanguageList.GetAll((s, r) =>
-      {
-        if (r.Error != null)
-          throw r.Error;
 
-        var allLanguages = r.Object;
-        ModelList = allLanguages;
-        PopulateViewModels(allLanguages);
-      });
+      InitializeModelAsync();
+    }
+
+    private async Task InitializeModelAsync()
+    {
+      #region Thinking
+      var thinkId = System.Guid.NewGuid();
+      History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
+      #endregion
+      var allLanguages = await LanguageList.GetAllAsync();
+      #region Thinked
+      History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+      #endregion
+
+      ModelList = allLanguages;
+      PopulateViewModels(allLanguages);
     }
 
     #endregion
@@ -287,5 +296,17 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
 
     #endregion
+
+    public string ToolTip
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
+      }
+    }
   }
 }

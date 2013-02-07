@@ -4,6 +4,7 @@ using Csla;
 using Csla.Serialization;
 using System.Collections.Generic;
 using LearnLanguages.DataAccess.Exceptions;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Business
 {
@@ -12,11 +13,12 @@ namespace LearnLanguages.Business
   {
     #region Factory Methods
 
-    public static void GetAll(EventHandler<DataPortalResult<LanguageList>> callback)
+    public static async Task<LanguageList> GetAllAsync()
     {
-      DataPortal.BeginFetch<LanguageList>(callback);
+      var result = await DataPortal.FetchAsync<LanguageList>();
+      return result;
     }
-
+    
 #if !SILVERLIGHT
     public static LanguageList GetAll()
     {
