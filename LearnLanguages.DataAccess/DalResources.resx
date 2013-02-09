@@ -358,7 +358,7 @@
     <comment>{0} = Inner exception msg</comment>
   </data>
   <data name="WcfProxyReleaseUrl" xml:space="preserve">
-    <value>http://krokercloudservice.cloudapp.net/SlPortal.svc</value>
+    <value>http://kroker.azurewebsites.net/SlPortal.svc</value>
   </data>
   <data name="WcfProxyStagingUrl" xml:space="preserve">
     <value>http://kroker.azurewebsites.net/SlPortal.svc</value>

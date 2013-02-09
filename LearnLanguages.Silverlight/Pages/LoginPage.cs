@@ -1,5 +1,7 @@
-﻿using LearnLanguages.Common.Core;
+﻿using Caliburn.Micro;
+using LearnLanguages.Common.Core;
 using LearnLanguages.Common.Interfaces;
+using LearnLanguages.Navigation.EventMessages;
 using LearnLanguages.Silverlight.Common;
 using LearnLanguages.Silverlight.ViewModels;
 using System.Collections.Generic;
@@ -9,7 +11,8 @@ namespace LearnLanguages.Silverlight.Pages
 {
   [Export(typeof(IPage))]
   [Export(typeof(LoginPage))]
-  public class LoginPage : PageBase
+  public class LoginPage : PageBase,
+                           IHandle<NavigatedEventMessage>
   {
     public override void Initialize()
     {
@@ -36,5 +39,18 @@ namespace LearnLanguages.Silverlight.Pages
         DataAccess.DalResources.RoleUser
       };
     }
+
+
+    public void Handle(NavigatedEventMessage message)
+    {
+      if (Navigation.Navigator.Ton.GetPreviousPage() == this)
+      {
+        //IF WE ARE MOVING AWAY, THEN GET RID OF OUR CONTENT VIEWMODEL
+        var loginVM = (LoginViewModel)ContentViewModel;
+        loginVM.Username = "";
+        loginVM.Password = "";
+      }
+    }
+
   }
 }

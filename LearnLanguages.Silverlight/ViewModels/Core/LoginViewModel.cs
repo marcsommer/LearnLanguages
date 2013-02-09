@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using LearnLanguages.Common.EventMessages;
 using LearnLanguages.Silverlight.Common;
+using Caliburn.Micro;
+using System.Windows.Input;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -45,6 +47,9 @@ namespace LearnLanguages.Silverlight.ViewModels
 
     public async Task Login()
     {
+      if (!CanLogin)
+        return;
+
       LoggingIn = true;
 #if DEBUG
       //var allEdits = await Business.PhraseList.GetAllAsync();
@@ -106,6 +111,18 @@ namespace LearnLanguages.Silverlight.ViewModels
       Title = ViewViewModelResources.TitleLoginPage;
       Description = ViewViewModelResources.DescriptionLoginPage;
       ToolTip = ViewViewModelResources.ToolTipLoginPage;
+    }
+
+    /// <summary>
+    /// Logs in when the user presses enter. Should refactor. But need
+    /// to change the view as well.
+    /// </summary>
+    public void ExecuteAction(ActionExecutionContext context)
+    {
+      var eventArgs = (KeyEventArgs)context.EventArgs;
+      if (eventArgs.Key != Key.Enter) return;
+
+      Login();
     }
   }
 }

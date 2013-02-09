@@ -78,8 +78,9 @@
     <NoConfig>true</NoConfig>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Caliburn.Micro">
-      <HintPath>..\dependencies\caliburn_silverlight\Caliburn.Micro.dll</HintPath>
+    <Reference Include="Caliburn.Micro, Version=1.4.1.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Caliburn.Micro.1.4.1\lib\sl5\Caliburn.Micro.dll</HintPath>
     </Reference>
     <Reference Include="Csla, Version=4.5.10.0, Culture=neutral, PublicKeyToken=93be5fdc093e4c30, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -130,7 +131,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.Windows.Data.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Interactivity">
+      <HintPath>..\packages\Caliburn.Micro.1.4.1\lib\sl5\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
@@ -155,9 +158,12 @@
     <Compile Include="Pages\AddSongPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\LogoutPage.cs" />
+    <Compile Include="Pages\ManageUsersPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Add\Song\AddSongMultiLineTextEditViewModel.cs" />
     <Compile Include="ViewModels\Add\Song\AddSongViewModel.cs" />
+    <Compile Include="ViewModels\Core\ManageUsersViewModel.cs" />
     <Compile Include="ViewModels\Core\ThinkingPanelViewModel.cs" />
     <Compile Include="ViewModels\Core\HomeViewModel.cs" />
     <Compile Include="ViewModels\Core\LoginFailedViewModel.cs" />
@@ -177,12 +183,15 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  
   <ItemGroup>
     <!-- CUSTOM SERVICE REFERENCES FILES-->
     <Content Include="ServiceReferences.ClientConfig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Page Include="Views\Core\ManageUsersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <None Include="ServiceReferences.Debug.ClientConfig">
       <DependentUpon>ServiceReferences.ClientConfig</DependentUpon>
     </None>
@@ -193,7 +202,6 @@
       <DependentUpon>ServiceReferences.ClientConfig</DependentUpon>
     </None>
   </ItemGroup>
-  
   <ItemGroup>
     <Page Include="Views\Core\ThinkingPanelView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -402,13 +410,11 @@
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="BeforeBuild" Condition="Exists('ServiceReferences.$(Configuration).ClientConfig')">
     <Move SourceFiles="ServiceReferences.ClientConfig" DestinationFiles="ServiceReferences.Build.ClientConfig" />
-
     <TransformXml Source="ServiceReferences.Build.ClientConfig" Destination="ServiceReferences.ClientConfig" Transform="ServiceReferences.$(Configuration).ClientConfig" />
   </Target>
   <Target Name="AfterBuild" Condition="Exists('ServiceReferences.Build.ClientConfig')">
     <Delete Files="ServiceReferences.ClientConfig" />
-    <Move SourceFiles="ServiceReferences.Build.ClientConfig"
-          DestinationFiles="ServiceReferences.ClientConfig" />
+    <Move SourceFiles="ServiceReferences.Build.ClientConfig" DestinationFiles="ServiceReferences.ClientConfig" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

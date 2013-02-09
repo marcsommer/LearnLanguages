@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:cal="http://www.caliburnproject.org"
     mc:Ignorable="d"
     d:DesignHeight="117" d:DesignWidth="229">
 
@@ -25,7 +26,9 @@
       <TextBox Grid.Row="0" Grid.Column="1" 
                x:Name="Username"
                Margin="2"
-               TabIndex="0"/>
+               TabIndex="0"
+               cal:Message.Attach="[Event KeyUp]=[Action ExecuteAction($executionContext)]"
+               />
 
       <!--password-->
       <TextBlock Grid.Row="1" Grid.Column="0"
@@ -34,7 +37,9 @@
       <PasswordBox Grid.Row="1" Grid.Column="1" 
                    x:Name="Password"
                    Margin="2"
-                   TabIndex="1"/>
+                   TabIndex="1"
+                   cal:Message.Attach="[Event KeyUp]=[Action ExecuteAction($executionContext)]"
+                   />
 
       <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
               x:Name="Login"

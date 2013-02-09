@@ -106,6 +106,24 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have been successfully logged out!.
+        /// </summary>
+        public static string DescriptionLogoutPage {
+            get {
+                return ResourceManager.GetString("DescriptionLogoutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page is where you go to add/remove users, reset user passwords, etc..
+        /// </summary>
+        public static string DescriptionManageUsersPage {
+            get {
+                return ResourceManager.GetString("DescriptionManageUsersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Optional) Add additional info about the song here.  This is still under construction though!!.
         /// </summary>
         public static string InstructionsAddSongEnterSongAdditionalMetadata {
@@ -185,6 +203,24 @@ namespace LearnLanguages.Silverlight.Common {
         public static string InstructionsLoginPage {
             get {
                 return ResourceManager.GetString("InstructionsLoginPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on the login button to log back in..
+        /// </summary>
+        public static string InstructionsLogoutPage {
+            get {
+                return ResourceManager.GetString("InstructionsLogoutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the user information and choose save..
+        /// </summary>
+        public static string InstructionsManageUsersPage {
+            get {
+                return ResourceManager.GetString("InstructionsManageUsersPage", resourceCulture);
             }
         }
         
@@ -315,6 +351,24 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have been successfully logged out!.
+        /// </summary>
+        public static string MsgLoggedOut {
+            get {
+                return ResourceManager.GetString("MsgLoggedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logging you out....
+        /// </summary>
+        public static string MsgLoggingOut {
+            get {
+                return ResourceManager.GetString("MsgLoggingOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string NavButtonTextLogin {
@@ -338,6 +392,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string NavSetTextAddSong {
             get {
                 return ResourceManager.GetString("NavSetTextAddSong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin.
+        /// </summary>
+        public static string NavSetTextAdmin {
+            get {
+                return ResourceManager.GetString("NavSetTextAdmin", resourceCulture);
             }
         }
         
@@ -387,6 +450,24 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string NavTextLogoutPage {
+            get {
+                return ResourceManager.GetString("NavTextLogoutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Users.
+        /// </summary>
+        public static string NavTextManageUsersPage {
+            get {
+                return ResourceManager.GetString("NavTextManageUsersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to True.
         /// </summary>
         public static string ShowGridLines {
@@ -432,6 +513,24 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 99.
+        /// </summary>
+        public static string SortOrderLogoutPage {
+            get {
+                return ResourceManager.GetString("SortOrderLogoutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3.
+        /// </summary>
+        public static string SortOrderManageUsersPage {
+            get {
+                return ResourceManager.GetString("SortOrderManageUsersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Language.
         /// </summary>
         public static string TitleAddLanguage {
@@ -468,6 +567,24 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logged Out.
+        /// </summary>
+        public static string TitleLogoutPage {
+            get {
+                return ResourceManager.GetString("TitleLogoutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin: Manage Users.
+        /// </summary>
+        public static string TitleManageUsersPage {
+            get {
+                return ResourceManager.GetString("TitleManageUsersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the song in the box, line by line..
         /// </summary>
         public static string ToolTipAddSongPage {
@@ -491,6 +608,24 @@ namespace LearnLanguages.Silverlight.Common {
         public static string ToolTipLoginPage {
             get {
                 return ResourceManager.GetString("ToolTipLoginPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on the login button to log back in..
+        /// </summary>
+        public static string ToolTipLogoutPage {
+            get {
+                return ResourceManager.GetString("ToolTipLogoutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage the users well!.
+        /// </summary>
+        public static string ToolTipManageUsersPage {
+            get {
+                return ResourceManager.GetString("ToolTipManageUsersPage", resourceCulture);
             }
         }
         

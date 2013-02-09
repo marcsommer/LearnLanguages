@@ -28,6 +28,7 @@ namespace LearnLanguages.Navigation
     {
       Pages = new Dictionary<string, IPage>();
       NavigationSets = new Dictionary<string, INavigationSet>();
+      PageHistory = new List<IPage>();
     }
 
     #region Singleton Pattern Members
@@ -57,6 +58,7 @@ namespace LearnLanguages.Navigation
 
     private Dictionary<string, IPage> Pages { get; set; }
     private Dictionary<string, INavigationSet> NavigationSets { get; set; }
+    public List<IPage> PageHistory { get; set; }
 
     //private INavigationPanelViewModel _NavigationPanel;
     //[Import]
@@ -92,6 +94,13 @@ namespace LearnLanguages.Navigation
 
       //ADD THE PAGE TO OUR COLLECTION
       Pages.Add(uniquePageIdText, page);
+
+      ////REGISTER PAGE WITH EVENT AGGREGATOR. IF HAS VIEWMODEL, REGISTER THAT TOO
+      
+      Services.EventAggregator.Subscribe(page);
+      
+      ////if (page.ContentViewModel != null)
+      ////  Services.EventAggregator.Subscribe(page.ContentViewModel);
 
       //GET THE NAVSET
       INavigationSet navSet = null;
@@ -142,6 +151,37 @@ namespace LearnLanguages.Navigation
       return text;
     }
 
+    /// <summary>
+    /// Returns the current page. Can return null if the current page has been freed
+    /// or if there is no current page (though this would be odd, if not an exception).
+    /// </summary>
+    public IPage GetCurrentPage()
+    {
+      if (PageHistory.Count != 0)
+      {
+        return PageHistory[PageHistory.Count - 1];
+      }
+      else
+      {
+        //ZERO PAGES IN HISTORY, SO NO CURRENT PAGE
+        return null;
+      }
+    }
+
+    public IPage GetPreviousPage()
+    {
+      //WE ONLY HAVE A PREVIOUS PAGE IF OUR PAGE HISTORY IS AT LEAST 2
+      if (PageHistory.Count >= 2)
+      {
+        return PageHistory[PageHistory.Count - 2];
+      }
+      else
+      {
+        //ZERO PAGES IN HISTORY, SO NO PREVIOUS PAGE
+        return null;
+      }
+    }
+
     public IPage GetNavigationPage(string pageIdString)
     {
       var page = Pages[pageIdString];
@@ -179,8 +219,13 @@ namespace LearnLanguages.Navigation
         //PUBLISH THE NAVIGATED EVENT MESSAGE
         NavigatedEventMessage.Publish(navInfo);
 
+        //ADD THE PAGE TO THE HISTORY
+        PageHistory.Add(targetPage);
+
         //SET THE RETURN VARIABLE
         navWasSuccessful = true;
+
+
       }
       catch
       {
@@ -288,5 +333,7 @@ namespace LearnLanguages.Navigation
 
     #endregion
 
+
+    
   }
 }
