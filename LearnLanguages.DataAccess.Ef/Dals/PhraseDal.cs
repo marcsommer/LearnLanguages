@@ -452,7 +452,7 @@ namespace LearnLanguages.DataAccess.Ef
           throw new Exceptions.GeneralDataAccessException(ex);
         }
       }
-
+      retDefaultLanguageId = Guid.Empty;
       return retDefaultLanguageId;
     }
 

@@ -113,7 +113,9 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LearnLanguages.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="LearnLanguages.edmx.diagram">
       <DependentUpon>LearnLanguages.edmx</DependentUpon>
     </None>

@@ -109,9 +109,15 @@ namespace LearnLanguages
     public static string UsernameValidationRegex = @"^[a-zA-Z0-9_]*$";
 
     //Must contain digit, and an alpha, and can only contain digits, alphas, and !@#$%^&*() special characters
-    public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()-_=+]{6,15}$";
+    public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()-_=+]{6,50}$";
 
     public static string AzureServiceRootUriAddress = @"https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1";
+
+
+#if !SILVERLIGHT && !NETFX_CORE
+    public static string AzureLearnLanguagesAccountKey = "AzureLearnLanguagesAccountKey";
     public static string LearnLanguagesAccountKey = @"j4TwNcNsmN1prhbk21NS+wA7dR/fXtex4+32m9GS/Bg=";
+#endif
+
   }
 }

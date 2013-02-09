@@ -187,6 +187,7 @@
     <!-- CUSTOM SERVICE REFERENCES FILES-->
     <Content Include="ServiceReferences.ClientConfig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Page Include="Views\Core\ManageUsersView.xaml">
       <Generator>MSBuild:Compile</Generator>

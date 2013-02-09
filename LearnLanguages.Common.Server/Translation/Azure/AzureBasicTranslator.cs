@@ -20,7 +20,11 @@ namespace LearnLanguages.Common.Translation.Azure
     {
       //PREPARE THE TRANSLATOR CONTAINER (TRANSLATION SERVICE CLIENT)
       var serviceRootUri = new Uri(CommonResources.AzureServiceRootUriAddress);
+//#if DEBUG
       var accountKey = CommonResources.LearnLanguagesAccountKey;
+//#else
+//      string accountKey = (string)System.Windows.Application.Current.Resources[CommonResources.AzureLearnLanguagesAccountKey];
+//#endif
       TranslatorContainer translatorContainer = new TranslatorContainer(serviceRootUri);
       translatorContainer.Credentials = new NetworkCredential(accountKey, accountKey);
 

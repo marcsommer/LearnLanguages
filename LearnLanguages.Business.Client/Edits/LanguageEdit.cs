@@ -187,8 +187,8 @@ namespace LearnLanguages.Business
         LoadProperty<string>(TextProperty, dto.Text);
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
-        if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
+        //if (!string.IsNullOrEmpty(dto.Username))
+        //  User = DataPortal.FetchChild<UserIdentity>(dto.Username);
       }
     }
 
