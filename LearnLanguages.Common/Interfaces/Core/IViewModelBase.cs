@@ -13,5 +13,6 @@ namespace LearnLanguages.Common.Interfaces
     Visibility ViewModelVisibility { get; set; }
     bool IsEnabled { get; set; }
     bool IsBusy { get; set; }
+    string BusyContent { get; set; }
   }
 }

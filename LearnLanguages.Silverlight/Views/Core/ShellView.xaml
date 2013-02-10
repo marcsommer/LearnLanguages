@@ -40,13 +40,15 @@
 
 
       <!--MAIN VIEW AREA-->
-      <Border Style="{StaticResource LargeViewSection}">
-        <ContentControl x:Name="Main" 
+      <controls:BusyIndicator IsBusy="{Binding Path=ContentIsBusy}">
+        <Border Style="{StaticResource LargeViewSection}">
+          <ContentControl x:Name="Main" 
                       HorizontalContentAlignment="Stretch" 
                       VerticalContentAlignment="Stretch" 
                       TabIndex="1"/>
-      </Border>
-
+        </Border>
+      </controls:BusyIndicator>
+      
     </controls:DockPanel>
   </controls:BusyIndicator>
 </navigation:Page>

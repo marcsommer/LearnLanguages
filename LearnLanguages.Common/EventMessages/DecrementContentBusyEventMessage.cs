@@ -1,8 +1,8 @@
 ﻿namespace LearnLanguages.Common.EventMessages
 {
-  public class DecrementApplicationBusyEventMessage
+  public class DecrementContentBusyEventMessage
   {
-    public DecrementApplicationBusyEventMessage(string description)
+    public DecrementContentBusyEventMessage(string description)
     {
       Description = description;
     }
@@ -11,7 +11,7 @@
 
     public static void Publish(string description)
     {
-      Services.EventAggregator.Publish(new DecrementApplicationBusyEventMessage(description));
+      Services.EventAggregator.Publish(new DecrementContentBusyEventMessage(description));
     }
 
   }

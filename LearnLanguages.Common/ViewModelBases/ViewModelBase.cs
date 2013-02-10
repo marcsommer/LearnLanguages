@@ -162,5 +162,19 @@ namespace LearnLanguages.Common.ViewModelBases
         }
       }
     }
+
+    private string _BusyContent;
+    public string BusyContent
+    {
+      get { return _BusyContent; }
+      set
+      {
+        if (value != _BusyContent)
+        {
+          _BusyContent = value;
+          NotifyOfPropertyChange(() => BusyContent);
+        }
+      }
+    }
   }
 }

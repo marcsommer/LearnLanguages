@@ -215,17 +215,34 @@ namespace LearnLanguages.Navigation.ViewModels
         }
       }
     }
+    private string _ToolTip;
     public string ToolTip
     {
-      get
-      {
-        throw new NotImplementedException();
-      }
+      get { return _ToolTip; }
       set
       {
-        throw new NotImplementedException();
+        if (value != _ToolTip)
+        {
+          _ToolTip = value;
+          NotifyOfPropertyChange(() => ToolTip);
+        }
       }
     }
+
+    private string _BusyContent;
+    public string BusyContent
+    {
+      get { return _BusyContent; }
+      set
+      {
+        if (value != _BusyContent)
+        {
+          _BusyContent = value;
+          NotifyOfPropertyChange(() => BusyContent);
+        }
+      }
+    }
+
 
     #endregion
   }

@@ -60,14 +60,17 @@ namespace LearnLanguages.Study.Pages
 
       var targetId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(targetId);
-      DisableNavigationRequestedEventMessage.Publish();
+      var description = "SimpleProgressPage.LoadDataAsync";
+      IncrementContentBusyEventMessage.Publish(description);
+      //DisableNavigationRequestedEventMessage.Publish();
       try
       {
         await vm.InitializeData();
       }
       finally
       {
-        EnableNavigationRequestedEventMessage.Publish();
+        DecrementContentBusyEventMessage.Publish(description);
+        //EnableNavigationRequestedEventMessage.Publish();
         History.Events.ThinkedAboutTargetEvent.Publish(targetId);
       }
 

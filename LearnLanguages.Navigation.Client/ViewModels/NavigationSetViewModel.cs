@@ -239,6 +239,19 @@ namespace LearnLanguages.Navigation.ViewModels
       }
     }
 
+    private string _BusyContent;
+    public string BusyContent
+    {
+      get { return _BusyContent; }
+      set
+      {
+        if (value != _BusyContent)
+        {
+          _BusyContent = value;
+          NotifyOfPropertyChange(() => BusyContent);
+        }
+      }
+    }
     #endregion
 
     public void Handle(ExpandedChangedEventMessage message)
