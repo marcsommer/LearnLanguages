@@ -7,8 +7,8 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
   <Border Style="{StaticResource DebugBorder}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-    <toolkit:BusyIndicator IsBusy="{Binding Path=IsSaving}">
-      <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
+
+    <Grid x:Name="LayoutRoot" Background="White" ShowGridLines="{Binding Path=ShowGridLines}">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
@@ -21,14 +21,14 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      
+
       <!--INSTRUCTIONS-->
       <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
               Style="{StaticResource InstructionsSection}">
         <TextBlock Text="{Binding Path=Instructions}" 
                    Style="{StaticResource InstructionsText}" />
       </Border>
-      
+
       <!--SONG LANGUAGE-->
       <!--LABEL-->
       <TextBlock Grid.Row="1" Grid.Column="0"
@@ -42,7 +42,7 @@
                       TabIndex="0"
                       HorizontalContentAlignment="Stretch"
                       ToolTipService.ToolTip="{Binding Path=InstructionsSelectLanguage}"/>
-      
+
       <!--SONG TITLE-->
       <!--LABEL-->
       <TextBlock Grid.Row="2" Grid.Column="0"
@@ -53,7 +53,7 @@
                x:Name="Model_Title"
                ToolTipService.ToolTip="{Binding Path=InstructionsEnterSongTitle}"
                TabIndex="1" />
-      
+
       <!--SONG ADDITIONAL METADATA-->
       <!--LABEL-->
       <TextBlock Grid.Row="3" Grid.Column="0"
@@ -92,6 +92,5 @@
               />
 
     </Grid>
-    </toolkit:BusyIndicator>
   </Border>
 </UserControl>

@@ -55,8 +55,16 @@ namespace LearnLanguages.Silverlight.ViewModels
       //var allEdits = await Business.PhraseList.GetAllAsync();
 #endif
 
-      var result = await UserPrincipal.LoginAsync(Username, Password);
-      AuthenticationChangedEventMessage.Publish();
+      IncrementApplicationBusyEventMessage.Publish("LoginViewModel.Login");
+      try
+      {
+        var result = await UserPrincipal.LoginAsync(Username, Password);
+        AuthenticationChangedEventMessage.Publish();
+      }
+      finally
+      {
+        DecrementApplicationBusyEventMessage.Publish("LoginViewModel.Login");
+      }
 
       if (Csla.ApplicationContext.User.Identity.IsAuthenticated)
       {
@@ -122,7 +130,15 @@ namespace LearnLanguages.Silverlight.ViewModels
       var eventArgs = (KeyEventArgs)context.EventArgs;
       if (eventArgs.Key != Key.Enter) return;
 
-      await Login();
+      IncrementApplicationBusyEventMessage.Publish("LoginViewModel.ExecuteAction");
+      try
+      {
+        await Login();
+      }
+      finally
+      {
+        DecrementApplicationBusyEventMessage.Publish("LoginViewModel.ExecuteAction");
+      }
     }
   }
 }

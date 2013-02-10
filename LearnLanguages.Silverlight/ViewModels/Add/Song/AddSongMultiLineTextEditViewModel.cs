@@ -173,7 +173,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public override async Task SaveAsync()
     {
       IsSaving = true;
-      DisableNavigationRequestedEventMessage.Publish();
+      IncrementApplicationBusyEventMessage.Publish("AddSongMultiLineTextEditViewModel.SaveAsync");
+      //DisableNavigationRequestedEventMessage.Publish();
       var thinkId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(thinkId);
       try
@@ -238,8 +239,8 @@ namespace LearnLanguages.Silverlight.ViewModels
 
           #region SAVE ALL WORDS THAT ARE NEW (NOT ALREADY IN DATABASE)
 
-          phraseListContainingAllWordsNotAlreadyInDatabase =
-            await phraseListContainingAllWordsNotAlreadyInDatabase.SaveAsync();
+          //phraseListContainingAllWordsNotAlreadyInDatabase =
+          //  await phraseListContainingAllWordsNotAlreadyInDatabase.SaveAsync();
           //SO NOW, ALL OF OUR SONG'S WORDS THAT WERE NOT ALREADY IN THE DATABASE 
           //ARE INDEED NOW STORED IN THE DATABASE.
 
@@ -300,7 +301,9 @@ namespace LearnLanguages.Silverlight.ViewModels
       finally
       {
         History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
-        EnableNavigationRequestedEventMessage.Publish();
+        //EnableNavigationRequestedEventMessage.Publish();
+        DecrementApplicationBusyEventMessage.Publish("AddSongMultiLineTextEditViewModel.SaveAsync");
+
       }
     }
     #endregion

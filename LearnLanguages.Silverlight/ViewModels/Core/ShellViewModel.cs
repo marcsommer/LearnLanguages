@@ -21,7 +21,10 @@ namespace LearnLanguages.Silverlight.ViewModels
                                 IHandle<DisableNavigationRequestedEventMessage>,
                                 IHandle<NavigatingEventMessage>,
                                 IHandle<NavigatedEventMessage>,
-                                IHandle<NavigationFailedEventMessage>
+                                IHandle<NavigationFailedEventMessage>,
+                                IHandle<IncrementApplicationBusyEventMessage>,
+                                IHandle<DecrementApplicationBusyEventMessage>
+
   {
     public ShellViewModel()
       : base()
@@ -131,7 +134,6 @@ namespace LearnLanguages.Silverlight.ViewModels
     //private bool NavigationControllerSatisfied = false;
     //private bool ICareAboutPartsSatisfiedMessages = true;
 
-    
     public override void OnImportsSatisfied()
     {
       IPage loginPage = Services.Container.GetExportedValue<LoginPage>();
@@ -152,7 +154,6 @@ namespace LearnLanguages.Silverlight.ViewModels
         }
       }
     }
-
 
     public void Handle(EnableNavigationRequestedEventMessage message)
     {
@@ -179,6 +180,51 @@ namespace LearnLanguages.Silverlight.ViewModels
     public void Handle(NavigationFailedEventMessage message)
     {
       NavPanelIsEnabled = true;
+    }
+
+    public void Handle(IncrementApplicationBusyEventMessage message)
+    {
+      IncrementApplicationBusy();
+    }
+
+    public void Handle(DecrementApplicationBusyEventMessage message)
+    {
+      DecrementApplicationBusy();
+    }
+
+    #region private int ApplicationBusyReferenceCount
+
+    private object __ApplicationBusyReferenceCountLock = new object();
+    private int _ApplicationBusyReferenceCount;
+    private int ApplicationBusyReferenceCount
+    {
+      get
+      {
+        lock (__ApplicationBusyReferenceCountLock)
+        {
+          return _ApplicationBusyReferenceCount;
+        }
+      }
+      set
+      {
+        lock (__ApplicationBusyReferenceCountLock)
+        {
+          _ApplicationBusyReferenceCount = value;
+        }
+      }
+    }
+
+    #endregion
+    private void IncrementApplicationBusy()
+    {
+      ApplicationBusyReferenceCount++;
+      IsBusy = ApplicationBusyReferenceCount > 0;
+    }
+
+    private void DecrementApplicationBusy()
+    {
+      ApplicationBusyReferenceCount--;
+      IsBusy = ApplicationBusyReferenceCount > 0;
     }
   }
 }

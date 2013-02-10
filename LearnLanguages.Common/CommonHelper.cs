@@ -19,6 +19,9 @@ namespace LearnLanguages.Common
       if (string.IsNullOrEmpty(username))
         return false;
 
+      if (username.Length > int.Parse(CommonResources.MaxUsernameLength))
+        return false;
+
       var isValid = Regex.IsMatch(username, CommonResources.UsernameValidationRegex);
       return isValid;
     }
