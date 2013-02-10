@@ -117,12 +117,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     /// Logs in when the user presses enter. Should refactor. But need
     /// to change the view as well.
     /// </summary>
-    public void ExecuteAction(ActionExecutionContext context)
+    public async void ExecuteAction(ActionExecutionContext context)
     {
       var eventArgs = (KeyEventArgs)context.EventArgs;
       if (eventArgs.Key != Key.Enter) return;
 
-      Login();
+      await Login();
     }
   }
 }

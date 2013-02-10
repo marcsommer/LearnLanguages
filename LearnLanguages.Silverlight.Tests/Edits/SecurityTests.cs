@@ -16,12 +16,12 @@ namespace LearnLanguages.Silverlight.Tests
   public class SecurityTests : TestsBase
   {
     private string _TestValidUsernameAdmin = "user";
-    private string _TestRoleAdmin = "Admin";
+    //private string _TestRoleAdmin = "Admin";
     private string _TestRoleUser = "User";
     private string _TestValidPasswordAdmin = "password";
     //private SaltedHashedPassword _TestSaltedHashedPassword;
-    private string _TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
-    private int _TestSalt = -54623530;
+    //private string _TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
+    //private int _TestSalt = -54623530;
 
     private string _TestInvalidUsername = "ImNotAValidUser";
     private string _TestInvalidPassword = "ImNotAValidPassword";
@@ -120,7 +120,7 @@ namespace LearnLanguages.Silverlight.Tests
     {
 
       var newUserLoginWasSuccessful = false;
-      var newUserIsInUserRole = false;
+      //var newUserIsInUserRole = false;
       //ASSUME DELETED USER LOGIN IS SUCCESSFUL
       var deletedUserLoginWasSuccessful = true;
 
@@ -219,7 +219,7 @@ namespace LearnLanguages.Silverlight.Tests
             var creator = await Business.NewUserCreator.CreateNewAsync(criteria);
             creationSuccesses++;
           }
-          catch (Exception ex)
+          catch (Exception)
           {
             //Don't care about errors.
             //we just don't increment creationSuccesses

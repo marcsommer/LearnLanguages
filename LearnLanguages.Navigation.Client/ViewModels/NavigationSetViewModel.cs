@@ -49,6 +49,20 @@ namespace LearnLanguages.Navigation.ViewModels
       }
     }
 
+    private bool _IsBusy;
+    public bool IsBusy
+    {
+      get { return _IsBusy; }
+      set
+      {
+        if (value != _IsBusy)
+        {
+          _IsBusy = value;
+          NotifyOfPropertyChange(() => IsBusy);
+        }
+      }
+    }
+
     private INavigationSet _NavigationSet;
     public INavigationSet NavigationSet
     {

@@ -11,18 +11,18 @@ namespace LearnLanguages.DataAccess.Mock
   {
     //private Guid _TestValidUserId = new Guid("89991D3B-0435-4167-8691-455D3D5000BC");
     private Guid _TestValidUserId = SeedData.Ton.DefaultTestValidUserId;
-    private string _TestValidUsername = "user";
+    //private string _TestValidUsername = "user";
     private static Guid _TestRoleId = new Guid("4E7DACEC-2EE7-4201-8657-694D51AA0487");
     private RoleDto _TestRole = new RoleDto()
     {
       Id = _TestRoleId,
       Text = DalResources.RoleAdmin
     };
-    private string _TestValidPassword = "password";
-    private string _TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
-    private int _TestSalt = -54623530;
-    private string _TestInvalidUsername = "ImNotAValidUser";
-    private string _TestInvalidPassword = "ImNotAValidPassword";
+    //private string _TestValidPassword = "password";
+    //private string _TestSaltedHashedPassword = @"瞌訖ꎚ壿喐ຯ缟㕧";
+    //private int _TestSalt = -54623530;
+    //private string _TestInvalidUsername = "ImNotAValidUser";
+    //private string _TestInvalidPassword = "ImNotAValidPassword";
 
     /// <summary>
     /// Returns Success(true) if verify user is valid, Success(false) if invalid. Throws exceptions if something bad happens.
@@ -245,7 +245,7 @@ namespace LearnLanguages.DataAccess.Mock
     {
       bool? retResult = null;
 
-      bool containsUsername = false;
+      //bool containsUsername = false;
       var results = from user in SeedData.Ton.Users
                     where user.Username == username
                     select user;

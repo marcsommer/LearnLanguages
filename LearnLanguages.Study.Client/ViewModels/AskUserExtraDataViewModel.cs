@@ -31,7 +31,7 @@ namespace LearnLanguages.Study.ViewModels
       else
         InstructionsVisibility = Visibility.Visible;
 
-      InitializeModelAsync();
+      var suppress = InitializeModelAsync();
     }
 
     private async Task InitializeModelAsync()
@@ -179,32 +179,32 @@ namespace LearnLanguages.Study.ViewModels
 
     #region Base
 
-    public bool LoadFromUri(Uri uri)
-    {
-      return true;
-    }
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(StudyResources.ShowGridLines); }
-    }
-    public void OnImportsSatisfied()
-    {
-      //
-    }
+    //public bool LoadFromUri(Uri uri)
+    //{
+    //  return true;
+    //}
+    //public bool ShowGridLines
+    //{
+    //  get { return bool.Parse(StudyResources.ShowGridLines); }
+    //}
+    //public void OnImportsSatisfied()
+    //{
+    //  //
+    //}
 
-    private Visibility _ViewModelVisibility;
-    public Visibility ViewModelVisibility
-    {
-      get { return _ViewModelVisibility; }
-      set
-      {
-        if (value != _ViewModelVisibility)
-        {
-          _ViewModelVisibility = value;
-          NotifyOfPropertyChange(() => ViewModelVisibility);
-        }
-      }
-    }
+    //private Visibility _ViewModelVisibility;
+    //public Visibility ViewModelVisibility
+    //{
+    //  get { return _ViewModelVisibility; }
+    //  set
+    //  {
+    //    if (value != _ViewModelVisibility)
+    //    {
+    //      _ViewModelVisibility = value;
+    //      NotifyOfPropertyChange(() => ViewModelVisibility);
+    //    }
+    //  }
+    //}
 
     #endregion
 

@@ -46,8 +46,8 @@ namespace LearnLanguages.Study
 
     #region Properties
 
-    public Guid Id { get; protected set; }
-    public Guid ConglomerateId { get; protected set; }
+    //public Guid Id { get; protected set; }
+    //public Guid ConglomerateId { get; protected set; }
 
     private object _AbortLock = new object();
     private bool _abortIsFlagged = false;
@@ -240,7 +240,7 @@ namespace LearnLanguages.Study
                                                             null);
       Exchange.Ton.Publish(completedUpdate);
 
-      StudyAsync(jobInfo.Target);
+      var suppress = StudyAsync(jobInfo.Target);
     }
     /// <summary>
     /// Handles cancelation messages. Not implemented yet.

@@ -8,12 +8,12 @@ namespace LearnLanguages.History.Bases
   [Serializable]
   public abstract class SingleLineEventBase : HistoryEventBase
   {
-    private Guid lineId;
-    private Guid reviewMethodId;
-    private string lineText;
-    private int lineNumber;
-    private double feedbackAsDoubleGiven;
-    private int duration;
+    //private Guid lineId;
+    //private Guid reviewMethodId;
+    //private string lineText;
+    //private int lineNumber;
+    //private double feedbackAsDoubleGiven;
+    //private int duration;
 
     public SingleLineEventBase()
       : base()

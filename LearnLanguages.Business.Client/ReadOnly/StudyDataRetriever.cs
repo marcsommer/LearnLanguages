@@ -79,7 +79,7 @@ namespace LearnLanguages.Business
         var userHasStudyData = resultExists.Obj;
 
         //POPULATE OUR STUDY DATA DTO
-        StudyDataDto dto = null;
+        //StudyDataDto dto = null;
 
         StudyDataAlreadyExisted = userHasStudyData;
         StudyData = DataPortal.Fetch<StudyDataEdit>();

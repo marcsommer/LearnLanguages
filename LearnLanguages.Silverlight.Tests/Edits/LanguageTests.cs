@@ -90,7 +90,7 @@ namespace LearnLanguages.Silverlight.Tests
           languageEdit = await LanguageEdit.GetLanguageEditAsync(testId);
           isGotten = true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
           isGotten = true;
           isError = true;

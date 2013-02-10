@@ -312,4 +312,15 @@
   <data name="ToolTipLogoutPage" xml:space="preserve">
     <value>Click on the login button to log back in.</value>
   </data>
+  <data name="ErrorMsgAddUserWasUnsuccessful" xml:space="preserve">
+    <value>The username ({0}) could NOT be added.</value>
+    <comment>{0} = Username</comment>
+  </data>
+  <data name="MessageUserWasRemoved" xml:space="preserve">
+    <value>The user ({0}) was successfully removed.</value>
+  </data>
+  <data name="ErrorMsgRemoveUserWasUnsuccessful" xml:space="preserve">
+    <value>The user ({0}) could NOT be removed.</value>
+    <comment>{0} = username</comment>
+  </data>
 </root>

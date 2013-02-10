@@ -19,10 +19,11 @@ namespace LearnLanguages.Silverlight.Common.ViewModels
 
     public LanguageSelectorViewModel()
     {
+      IsEnabled = true;
       Items = new BindableCollection<LanguageEditViewModel>();
       Services.EventAggregator.Subscribe(this);
 
-      ReloadLanguages();
+      var suppress = ReloadLanguages();
     }
 
     #endregion
@@ -59,19 +60,19 @@ namespace LearnLanguages.Silverlight.Common.ViewModels
       }
     }
 
-    private bool _IsEnabled = true;
-    public bool IsEnabled
-    {
-      get { return _IsEnabled; }
-      set
-      {
-        if (value != _IsEnabled)
-        {
-          _IsEnabled = value;
-          NotifyOfPropertyChange(() => IsEnabled);
-        }
-      }
-    }
+    //private bool _IsEnabled = true;
+    //public bool IsEnabled
+    //{
+    //  get { return _IsEnabled; }
+    //  set
+    //  {
+    //    if (value != _IsEnabled)
+    //    {
+    //      _IsEnabled = value;
+    //      NotifyOfPropertyChange(() => IsEnabled);
+    //    }
+    //  }
+    //}
 
     public string AddLanguageToolTip { get { return ViewViewModelResources.ToolTipTextAddLanguage; } }
 
@@ -123,21 +124,21 @@ namespace LearnLanguages.Silverlight.Common.ViewModels
 
     public void Handle(LanguageEventMessage message)
     {
-      ReloadLanguages();
+      var suppress = ReloadLanguages();
     }
     
-    public bool LoadFromUri(Uri uri)
-    {
-      return true;
-    }
-    public void OnImportsSatisfied()
-    {
-      //Navigation.Publish.PartSatisfied(ViewModelBase.GetCoreViewModelName(GetType()));
-    }
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(ViewViewModelResources.ShowGridLines); }
-    }
+    //public bool LoadFromUri(Uri uri)
+    //{
+    //  return true;
+    //}
+    //public void OnImportsSatisfied()
+    //{
+    //  //Navigation.Publish.PartSatisfied(ViewModelBase.GetCoreViewModelName(GetType()));
+    //}
+    //public bool ShowGridLines
+    //{
+    //  get { return bool.Parse(ViewViewModelResources.ShowGridLines); }
+    //}
 
 
     

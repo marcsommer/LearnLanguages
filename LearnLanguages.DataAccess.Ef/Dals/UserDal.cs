@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LearnLanguages.Common;
+using System.Data.Objects;
 
 namespace LearnLanguages.DataAccess.Ef
 {
@@ -71,7 +72,7 @@ namespace LearnLanguages.DataAccess.Ef
        
         return retRoles;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         System.Diagnostics.Debugger.Break();
         
@@ -113,7 +114,7 @@ namespace LearnLanguages.DataAccess.Ef
               throw new DataAccess.Exceptions.InvalidPasswordException(password);
 
             //GENERATE UNIQUE SALT 
-            bool saltAlreadyExists = true;
+            //bool saltAlreadyExists = true;
             int salt = -1;
             salt = EfHelper.GenerateNewUniqueSalt(ctx.ObjectContext);
             //Random r = new Random(DateTime.Now.Millisecond * DateTime.Now.Minute * DateTime.Now.Month);
@@ -511,11 +512,9 @@ namespace LearnLanguages.DataAccess.Ef
             {
               var userData = results.First();
 
-              //PERFORM THE DELETE
-              ctx.ObjectContext.UserDatas.DeleteObject(userData);
-
-              //SAVE THE CHANGES
-              ctx.ObjectContext.SaveChanges();
+              ObjectParameter userIdParam = new ObjectParameter(EfResources.SPParamName_UserId, userData.Id);
+              ObjectParameter usernameParam = new ObjectParameter(EfResources.SPParamName_Username, userData.Username);
+              ctx.ObjectContext.ExecuteFunction(EfResources.SPName_DeleteUser, userIdParam, usernameParam);
 
               //RETURN TRUE TO INDICATE THE USER WAS DELETED
               return true;

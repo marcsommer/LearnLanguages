@@ -230,6 +230,16 @@ namespace LearnLanguages.Business
 
     #region Equals overrides
 
+    public override int GetHashCode()
+    {
+      //THREE THINGS MAKE IT THE SAME: USERID, LANGUAGEID, AND LANGUAGE TEXT
+      var userIdString = "userId=" + UserId.ToString();
+      var languageIdString = "languageId=" + Id.ToString();
+      var languageTextString = "languageText=" + Text;
+
+      return (userIdString + "|" + languageIdString + "|" + languageTextString).GetHashCode();
+    }
+
     public override bool Equals(System.Object obj)
     {
       // If parameter is null return false.
@@ -244,7 +254,7 @@ namespace LearnLanguages.Business
       {
         return false;
       }
-
+      
       // Return true if the fields match:
       return Text == languageEdit.Text && 
              Id == languageEdit.Id;
@@ -306,7 +316,7 @@ namespace LearnLanguages.Business
 #if !SILVERLIGHT && !NETFX_CORE
 
     [Transactional(TransactionalTypes.TransactionScope)]
-    protected void DataPortal_Create()
+    protected override void DataPortal_Create()
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
@@ -465,7 +475,7 @@ namespace LearnLanguages.Business
 #if !SILVERLIGHT
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Create()
+    protected override void Child_Create()
     {
       using (BypassPropertyChecks)
       {

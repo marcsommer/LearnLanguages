@@ -91,31 +91,31 @@ namespace LearnLanguages.Silverlight.ViewModels
       }
     }
 
-    public void OnImportsSatisfied()
-    {
-      //var coreViewModelName = ViewModelBase.GetCoreViewModelName(typeof(ThinkingPanelViewModel));
-      //Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage(coreViewModelName));
-    }
-    public bool LoadFromUri(Uri uri)
-    {
-      return true;
-    }
-    public bool ShowGridLines
-    {
-      get { return bool.Parse(AppResources.ShowGridLines); }
-    }
-    private Visibility _ViewModelVisibility;
-    public Visibility ViewModelVisibility
-    {
-      get { return _ViewModelVisibility; }
-      set
-      {
-        if (value != _ViewModelVisibility)
-        {
-          _ViewModelVisibility = value;
-          NotifyOfPropertyChange(() => ViewModelVisibility);
-        }
-      }
-    }
+    //public void OnImportsSatisfied()
+    //{
+    //  //var coreViewModelName = ViewModelBase.GetCoreViewModelName(typeof(ThinkingPanelViewModel));
+    //  //Services.EventAggregator.Publish(new Events.PartSatisfiedEventMessage(coreViewModelName));
+    //}
+    //public bool LoadFromUri(Uri uri)
+    //{
+    //  return true;
+    //}
+    //public bool ShowGridLines
+    //{
+    //  get { return bool.Parse(AppResources.ShowGridLines); }
+    //}
+    //private Visibility _ViewModelVisibility;
+    //public Visibility ViewModelVisibility
+    //{
+    //  get { return _ViewModelVisibility; }
+    //  set
+    //  {
+    //    if (value != _ViewModelVisibility)
+    //    {
+    //      _ViewModelVisibility = value;
+    //      NotifyOfPropertyChange(() => ViewModelVisibility);
+    //    }
+    //  }
+    //}
   }
 }

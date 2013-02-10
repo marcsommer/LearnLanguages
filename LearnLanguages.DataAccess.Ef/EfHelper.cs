@@ -806,7 +806,7 @@ namespace LearnLanguages.DataAccess.Ef
       userData.SaltedHashedPasswordValue = dto.SaltedHashedPasswordValue;
 
       //NAVIGATION PROPERTIES
-      Guid navPropId = default(Guid);
+      //Guid navPropId = default(Guid);
       ICollection<Guid> ids = null;
 
       //LANGUAGES

@@ -42,7 +42,7 @@ namespace LearnLanguages.Study.Pages
       };
     }
 
-    public async void Handle(NavigatedEventMessage message)
+    public void Handle(NavigatedEventMessage message)
     {
       if (message.NavigationInfo.TargetPage == this)
       {

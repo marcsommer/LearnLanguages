@@ -15,8 +15,8 @@ namespace LearnLanguages.Silverlight.Tests
   [Tag("phrase")]
   public class PhraseTests : TestsBase
   {
-    private LanguageEdit _ServerEnglishLang;
-    private LanguageEdit _ServerSpanishLang;
+    //private LanguageEdit _ServerEnglishLang;
+    //private LanguageEdit _ServerSpanishLang;
 
     public override async System.Threading.Tasks.Task Setup()
     {

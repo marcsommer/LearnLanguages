@@ -333,6 +333,20 @@ namespace LearnLanguages.Study.ViewModels
       }
     }
 
+    private bool _IsBusy;
+    public bool IsBusy
+    {
+      get { return _IsBusy; }
+      set
+      {
+        if (value != _IsBusy)
+        {
+          _IsBusy = value;
+          NotifyOfPropertyChange(() => IsBusy);
+        }
+      }
+    }
+
     #region Flags
 
     private bool _GoInProgress;
@@ -793,7 +807,7 @@ namespace LearnLanguages.Study.ViewModels
     /// Initializes ViewModel after navigated.
     /// </summary>
     /// <param name="message"></param>
-    public async void Handle(Navigation.EventMessages.NavigatedEventMessage message)
+    public void Handle(Navigation.EventMessages.NavigatedEventMessage message)
     {
       //WE ARE LISTENING FOR A MESSAGE THAT SAYS WE WERE SUCCESSFULLY NAVIGATED TO.
       //SO WE ONLY CARE ABOUT IT IF WE ARE THE TARGETPAGE CONTENT VIEWMODEL
@@ -808,7 +822,7 @@ namespace LearnLanguages.Study.ViewModels
       try
       {
         Page = message.NavigationInfo.TargetPage;
-        InitializeViewModelAsync();
+        var suppress = InitializeViewModelAsync();
       }
       finally
       {

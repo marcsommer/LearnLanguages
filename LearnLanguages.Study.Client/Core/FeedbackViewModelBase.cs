@@ -35,19 +35,19 @@ namespace LearnLanguages.Study
       }
     }
 
-    private bool _IsEnabled;
-    public bool IsEnabled
-    {
-      get { return _IsEnabled; }
-      set
-      {
-        if (value != _IsEnabled)
-        {
-          _IsEnabled = value;
-          NotifyOfPropertyChange(() => IsEnabled);
-        }
-      }
-    }
+    //private bool _IsEnabled;
+    //public bool IsEnabled
+    //{
+    //  get { return _IsEnabled; }
+    //  set
+    //  {
+    //    if (value != _IsEnabled)
+    //    {
+    //      _IsEnabled = value;
+    //      NotifyOfPropertyChange(() => IsEnabled);
+    //    }
+    //  }
+    //}
 
     public virtual void Handle(NavigationRequestedEventMessage message)
     {

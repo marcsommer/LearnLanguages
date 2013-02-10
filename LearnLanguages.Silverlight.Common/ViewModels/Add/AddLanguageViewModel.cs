@@ -12,7 +12,7 @@ namespace LearnLanguages.Silverlight.Common.ViewModels
     public AddLanguageViewModel()
     {
       DisplayName = ViewViewModelResources.TitleAddLanguage;
-      InitializeModelAsync();
+      var suppress = InitializeModelAsync();
     }
 
     private async Task InitializeModelAsync()

@@ -148,5 +148,19 @@ namespace LearnLanguages.Common.ViewModelBases
         }
       }
     }
+
+    private bool _IsBusy;
+    public bool IsBusy
+    {
+      get { return _IsBusy; }
+      set
+      {
+        if (value != _IsBusy)
+        {
+          _IsBusy = value;
+          NotifyOfPropertyChange(() => IsBusy);
+        }
+      }
+    }
   }
 }

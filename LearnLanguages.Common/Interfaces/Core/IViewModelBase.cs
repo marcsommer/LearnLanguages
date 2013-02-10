@@ -12,5 +12,6 @@ namespace LearnLanguages.Common.Interfaces
     bool ShowGridLines { get; }
     Visibility ViewModelVisibility { get; set; }
     bool IsEnabled { get; set; }
+    bool IsBusy { get; set; }
   }
 }

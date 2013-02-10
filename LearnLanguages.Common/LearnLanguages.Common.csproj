@@ -148,6 +148,8 @@
     <Compile Include="Delegates\AsynchronousCallback.cs" />
     <Compile Include="CommonResources.cs" />
     <Compile Include="EventMessages\AuthenticationChangedEventMessage.cs" />
+    <Compile Include="EventMessages\DecrementApplicationBusyEventMessage.cs" />
+    <Compile Include="EventMessages\IncrementApplicationBusyEventMessage.cs" />
     <Compile Include="EventMessages\EnableNavigationRequestedEventMessage.cs" />
     <Compile Include="EventMessages\DisableNavigationRequestedEventMessage.cs" />
     <Compile Include="EventMessages\ExpandedChangedEventMessage.cs" />

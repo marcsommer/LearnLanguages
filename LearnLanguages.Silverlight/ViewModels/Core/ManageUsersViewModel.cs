@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System;
 using LearnLanguages.Silverlight.Common;
 using LearnLanguages.Common;
+using System.Threading.Tasks;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
@@ -15,6 +16,8 @@ namespace LearnLanguages.Silverlight.ViewModels
     public ManageUsersViewModel()
     {
     }
+
+    #region AddUser
 
     private string _NewUsername;
     public string NewUsername
@@ -82,7 +85,7 @@ namespace LearnLanguages.Silverlight.ViewModels
         return canAddUser;
       }
     }
-    public async void AddUser()
+    public async Task AddUser()
     {
       #region Thinking
       var thinkingId = Guid.NewGuid();
@@ -91,12 +94,11 @@ namespace LearnLanguages.Silverlight.ViewModels
       var criteria = new Csla.Security.UsernameCriteria(NewUsername, NewPassword);
       try
       {
-        var result = await Business.NewUserCreator.CreateNewAsync(criteria);
-        MessageBox.Show(string.Format(ViewViewModelResources.MessageNewUserAdded, NewUsername));
-      }
-      catch (Exception ex)
-      {
-        
+        var creator = await Business.NewUserCreator.CreateNewAsync(criteria);
+        if (creator.WasSuccessful)
+          MessageBox.Show(string.Format(ViewViewModelResources.MessageNewUserAdded, NewUsername));
+        else
+          MessageBox.Show(string.Format(ViewViewModelResources.ErrorMsgAddUserWasUnsuccessful, NewUsername));
       }
       finally
       {
@@ -105,6 +107,64 @@ namespace LearnLanguages.Silverlight.ViewModels
         #endregion
       }
     }
+
+    #endregion
+
+    #region RemoveUser
+
+    private string _UsernameToRemove;
+    public string UsernameToRemove
+    {
+      get { return _UsernameToRemove; }
+      set
+      {
+        if (value != _UsernameToRemove)
+        {
+          _UsernameToRemove = value;
+          NotifyOfPropertyChange(() => UsernameToRemove);
+          NotifyOfPropertyChange(() => CanRemoveUser);
+        }
+      }
+    }
+
+    public bool CanRemoveUser
+    {
+      get
+      {
+        return !string.IsNullOrEmpty(UsernameToRemove);
+      }
+    }
+    public async Task RemoveUser()
+    {
+      var result = MessageBox.Show("Are you sure you want to remove this user? This will permanently delete ALL data associated with the user.", 
+                                   "Warning!!!", 
+                                   MessageBoxButton.OKCancel);
+      if (result == MessageBoxResult.Cancel)
+      {
+        MessageBox.Show("Remove User Cancelled");
+        return;
+      }
+      #region Thinking
+      var targetId = new Guid("C2F2BD3D-AD11-43B0-B34D-F53F33A845CD");
+      History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      #endregion
+      try
+      {
+        var readOnly = await Business.DeleteUserReadOnly.CreateNewAsync(UsernameToRemove);
+        if (readOnly.WasSuccessful)
+          MessageBox.Show(string.Format(ViewViewModelResources.MessageUserWasRemoved, UsernameToRemove));
+        else
+          MessageBox.Show(string.Format(ViewViewModelResources.ErrorMsgRemoveUserWasUnsuccessful, NewUsername));
+      }
+      finally
+      {
+        #region Thinked
+        History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+        #endregion
+      }
+    }
+
+    #endregion
 
     protected override void InitializePageViewModelPropertiesImpl()
     {

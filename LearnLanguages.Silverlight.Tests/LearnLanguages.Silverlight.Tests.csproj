@@ -179,14 +179,6 @@
       <Project>{dfc14799-1426-4266-a064-4b880612559f}</Project>
       <Name>LearnLanguages.History.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Navigation.Client\LearnLanguages.Navigation.csproj">
-      <Project>{1ceb7e12-3d55-4ee4-bfcd-1aab6f64f024}</Project>
-      <Name>LearnLanguages.Navigation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj">
-      <Project>{98ee87b2-152d-48d8-b509-93eeb92059be}</Project>
-      <Name>LearnLanguages.Offer.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.Study.Client\LearnLanguages.Study.Client.csproj">
       <Project>{02c0f892-7dd3-41fa-96c2-d02d4d4bb6c2}</Project>
       <Name>LearnLanguages.Study.Client</Name>

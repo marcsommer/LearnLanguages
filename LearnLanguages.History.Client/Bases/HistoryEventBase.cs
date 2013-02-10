@@ -150,7 +150,7 @@ namespace LearnLanguages.History.Bases
         detail = (T)detailUncasted;
         return true;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         return false;
       }

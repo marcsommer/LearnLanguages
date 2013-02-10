@@ -23,7 +23,7 @@ namespace LearnLanguages.Silverlight.Tests
     [Asynchronous]
     public async Task CREATE_NEW()
     {
-      var isCreated = false;
+      //var isCreated = false;
       MultiLineTextEdit newMultiLineTextEdit = null;
 
       var isAsyncComplete = false;
@@ -101,8 +101,8 @@ namespace LearnLanguages.Silverlight.Tests
       string mltTitle = "My Test MLT Title Here";
       string lineAText = "MultiLineTextTests.neweditbeginsaveget.Test Line A Text.  This is line A in English.";
       string lineBText = "MultiLineTextTests.neweditbeginsaveget.Test Line BBBB Text.  This is line B in English.";
-      LineEdit lineA = null;
-      LineEdit lineB = null;
+      //LineEdit lineA = null;
+      //LineEdit lineB = null;
 
       bool gottenMultiLineTextLinesCountIsTwo = false;
       bool gottenMultiLineTextContainsLineA = false;

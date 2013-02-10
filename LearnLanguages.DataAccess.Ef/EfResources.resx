@@ -150,4 +150,13 @@
   <data name="MaxDeadlockAttempts" xml:space="preserve">
     <value>10</value>
   </data>
+  <data name="SPName_DeleteUser" xml:space="preserve">
+    <value>DeleteUser_SP</value>
+  </data>
+  <data name="SPParamName_UserId" xml:space="preserve">
+    <value>UserId</value>
+  </data>
+  <data name="SPParamName_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
 </root>
