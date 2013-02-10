@@ -19,4 +19,4 @@ the MLT into aggregate phrases of this size and analyze how much of these phrase
 Then based on this, it will choose which phrase to present to the user.  For now, this will be in the form of 
 a Q & A.  Once chosen, it will publish an acting event and then publish an offer.  At this point, the 
 MeaningStudier is done, though it may listen for feedback with that offer. (future, it can start anticipating 
-feedbacks and make ready its next offer).
+feedbacks and make ready its next offer). 
