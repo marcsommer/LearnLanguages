@@ -323,4 +323,13 @@
     <value>The user ({0}) could NOT be removed.</value>
     <comment>{0} = username</comment>
   </data>
+  <data name="MsgConfirmDeleteUser" xml:space="preserve">
+    <value>Are you sure you want to remove this user? This will permanently delete ALL data associated with the user.</value>
+  </data>
+  <data name="MsgConfirmDeleteUserTitle" xml:space="preserve">
+    <value>Warning!!!! This cannot be undone!</value>
+  </data>
+  <data name="MsgDeleteUserCanceled" xml:space="preserve">
+    <value>The operation was canceled.</value>
+  </data>
 </root>

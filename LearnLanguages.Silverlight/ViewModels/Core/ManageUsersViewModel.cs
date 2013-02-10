@@ -136,12 +136,12 @@ namespace LearnLanguages.Silverlight.ViewModels
     }
     public async Task RemoveUser()
     {
-      var result = MessageBox.Show("Are you sure you want to remove this user? This will permanently delete ALL data associated with the user.", 
-                                   "Warning!!!", 
+      var result = MessageBox.Show(ViewViewModelResources.MsgConfirmDeleteUser, 
+                                   ViewViewModelResources.MsgConfirmDeleteUserTitle, 
                                    MessageBoxButton.OKCancel);
       if (result == MessageBoxResult.Cancel)
       {
-        MessageBox.Show("Remove User Cancelled");
+        MessageBox.Show(ViewViewModelResources.MsgDeleteUserCanceled);
         return;
       }
       #region Thinking

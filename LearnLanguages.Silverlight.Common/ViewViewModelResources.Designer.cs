@@ -378,6 +378,33 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove this user? This will permanently delete ALL data associated with the user..
+        /// </summary>
+        public static string MsgConfirmDeleteUser {
+            get {
+                return ResourceManager.GetString("MsgConfirmDeleteUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning!!!! This cannot be undone!.
+        /// </summary>
+        public static string MsgConfirmDeleteUserTitle {
+            get {
+                return ResourceManager.GetString("MsgConfirmDeleteUserTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The operation was canceled..
+        /// </summary>
+        public static string MsgDeleteUserCanceled {
+            get {
+                return ResourceManager.GetString("MsgDeleteUserCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have been successfully logged out!.
         /// </summary>
         public static string MsgLoggedOut {

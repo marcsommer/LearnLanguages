@@ -74,7 +74,9 @@ namespace LearnLanguages.DataAccess.Ef
       }
       catch (Exception)
       {
+#if DEBUG
         System.Diagnostics.Debugger.Break();
+#endif
         
         throw;
       }
@@ -176,7 +178,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
@@ -310,7 +314,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
@@ -398,7 +404,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
@@ -475,7 +483,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
@@ -549,7 +559,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
@@ -557,8 +569,8 @@ namespace LearnLanguages.DataAccess.Ef
       }
 
       //IF WE REACH THIS POINT, THEN WE HAVE TRIED OUR MAX TRIES AT BREAKING A SQL DEADLOCK.
-#if DEBUG
       //if (retRoles == null)
+#if DEBUG
       System.Diagnostics.Debugger.Break();
 #endif
       var errorMsg2 = string.Format(DalResources.ErrorMsgVeryBadException,
@@ -628,7 +640,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
@@ -699,7 +713,9 @@ namespace LearnLanguages.DataAccess.Ef
           }
           else
           {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
+#endif
             //RETHROW THIS EXCEPTION
             throw;
           }
