@@ -334,6 +334,40 @@ namespace LearnLanguages.DataAccess.Ef
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userId">No Metadata Documentation available.</param>
+        /// <param name="username">No Metadata Documentation available.</param>
+        public int DeleteUser_SP(Nullable<global::System.Guid> userId, global::System.String username)
+        {
+            ObjectParameter userIdParameter;
+            if (userId.HasValue)
+            {
+                userIdParameter = new ObjectParameter("UserId", userId);
+            }
+            else
+            {
+                userIdParameter = new ObjectParameter("UserId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter usernameParameter;
+            if (username != null)
+            {
+                usernameParameter = new ObjectParameter("Username", username);
+            }
+            else
+            {
+                usernameParameter = new ObjectParameter("Username", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("DeleteUser_SP", userIdParameter, usernameParameter);
+        }
+
+        #endregion
+
     }
 
     #endregion
