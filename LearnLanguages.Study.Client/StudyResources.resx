@@ -139,6 +139,9 @@
   <data name="BingAppId" xml:space="preserve">
     <value>A71DCFCC34133403B25C909D017FE0B140799549</value>
   </data>
+  <data name="BusyContentSimpleProgressPageInitializingData" xml:space="preserve">
+    <value>Thinkin' hard bout that data!</value>
+  </data>
   <data name="ButtonLabelApplyFilter" xml:space="preserve">
     <value>Search</value>
   </data>

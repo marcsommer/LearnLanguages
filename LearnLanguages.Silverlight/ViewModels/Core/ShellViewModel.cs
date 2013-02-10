@@ -316,14 +316,14 @@ namespace LearnLanguages.Silverlight.ViewModels
     #endregion
     private void IncrementContentBusy()
     {
-      ContentBusyReferenceCount++;
-      ContentIsBusy = ContentBusyReferenceCount > 0;
+      //ContentBusyReferenceCount++;
+      //ContentIsBusy = ContentBusyReferenceCount > 0;
     }
 
     private void DecrementContentBusy()
     {
-      ContentBusyReferenceCount--;
-      ContentIsBusy = ContentBusyReferenceCount > 0;
+      //ContentBusyReferenceCount--;
+      //ContentIsBusy = ContentBusyReferenceCount > 0;
     }
 
     #endregion

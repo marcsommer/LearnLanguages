@@ -8,24 +8,29 @@
     d:DesignHeight="300" d:DesignWidth="400">
 
   <Grid x:Name="LayoutRoot" Background="White">
-    <toolkitCharting:Chart Title="Progress">
-      <toolkitCharting:Chart.Series>
-        <toolkitCharting:ColumnSeries Title="{Binding Path=ChartTitle}" 
+
+    <toolkitCharting:BusyIndicator IsBusy="{Binding Path=IsBusy}" BusyContent="{Binding Path=BusyContent}">
+
+      <toolkitCharting:Chart Title="Progress">
+        <toolkitCharting:Chart.Series>
+          <toolkitCharting:ColumnSeries Title="{Binding Path=ChartTitle}" 
                                       ItemsSource="{Binding Path=Data}"
                                       IndependentValueBinding="{Binding Key}"
                                       DependentValueBinding="{Binding Value}" 
                                       />
-            
-      </toolkitCharting:Chart.Series>
 
-      <toolkitCharting:Chart.Axes>
-        <toolkitCharting:LinearAxis Interval="1" />
-      </toolkitCharting:Chart.Axes>
-      <!--<toolkitCharting:Chart.Axes>
+        </toolkitCharting:Chart.Series>
+
+        <toolkitCharting:Chart.Axes>
+          <toolkitCharting:LinearAxis Interval="1" />
+        </toolkitCharting:Chart.Axes>
+        <!--<toolkitCharting:Chart.Axes>
         <toolkitCharting:LinearAxis Orientation="X" Location="Top" Title="Task" x:Name="TaskAxis" />
         <toolkitCharting:LinearAxis Orientation="X" Location="Bottom" Title="Benefits" x:Name="BenefitsAxis" />
       </toolkitCharting:Chart.Axes>-->
 
-    </toolkitCharting:Chart>
+      </toolkitCharting:Chart>
+
+    </toolkitCharting:BusyIndicator>
   </Grid>
 </UserControl>

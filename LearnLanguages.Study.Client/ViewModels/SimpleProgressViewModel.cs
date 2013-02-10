@@ -44,6 +44,8 @@ namespace LearnLanguages.Study.ViewModels
       #region Thinking (try..)
       var targetId = Guid.NewGuid();
       History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+      BusyContent = StudyResources.BusyContentSimpleProgressPageInitializingData;
+      IsBusy = true;
       try
       {
       #endregion
@@ -56,6 +58,8 @@ namespace LearnLanguages.Study.ViewModels
       finally
       {
         History.Events.ThinkedAboutTargetEvent.Publish(targetId);
+        IsBusy = false;
+        BusyContent = "";
       }
       #endregion
     }
