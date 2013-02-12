@@ -86,7 +86,7 @@
                Grid.Column="1"
                Margin="0,1,0,1" 
                MinWidth="250"
-               TabIndex="0"/>
+               TabIndex="4"/>
 
       <!--RemoveUser Button-->
       <Button x:Name="RemoveUser"
@@ -96,7 +96,7 @@
               HorizontalAlignment="Center"
               Width="100"
               Content="Remove User"
-              TabIndex="3"
+              TabIndex="5"
               />
 
 

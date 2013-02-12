@@ -109,11 +109,20 @@ namespace LearnLanguages
     public static string UsernameValidationRegex = @"^[a-zA-Z0-9_]*$";
 
     public static string MaxUsernameLength = "40";
+    public static string MinUsernameLength = "3";
 
-    //Must contain digit, and an alpha, and can only contain digits, alphas, and !@#$%^&*() special characters
+    //Must contain digit, and an alpha, and can only contain digits, alphas, and !@#$%^&*()-_=+ special characters
     public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()-_=+]{6,50}$";
 
     public static string AzureServiceRootUriAddress = @"https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1";
+
+    public static string ErrorMsgInvalidUsernameEmpty = "The username cannot be empty";
+
+    public static string ErrorMsgInvalidUsernameLength = "The username must be between " + MinUsernameLength + " and " + MaxUsernameLength;
+
+    public static string ErrorMsgInvalidUsernameComposition = "The username can only contain numbers, letters, and underscores";
+
+
 
 
 #if !SILVERLIGHT && !NETFX_CORE

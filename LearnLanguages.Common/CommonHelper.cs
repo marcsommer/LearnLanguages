@@ -16,15 +16,37 @@ namespace LearnLanguages.Common
 
     public static bool UsernameIsValid(string username)
     {
-      if (string.IsNullOrEmpty(username))
-        return false;
-
-      if (username.Length > int.Parse(CommonResources.MaxUsernameLength))
-        return false;
-
-      var isValid = Regex.IsMatch(username, CommonResources.UsernameValidationRegex);
+      string dummy = "";
+      var isValid = UsernameIsValid(username, out dummy);
       return isValid;
     }
+
+    public static bool UsernameIsValid(string username, out string errorDescription)
+    {
+      errorDescription = null;
+
+      if (string.IsNullOrEmpty(username))
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidUsernameEmpty;
+        return false;
+      }
+
+      if (username.Length < int.Parse(CommonResources.MinUsernameLength) ||
+          username.Length > int.Parse(CommonResources.MaxUsernameLength))
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidUsernameLength;
+        return false;
+      }
+
+      if (!Regex.IsMatch(username, CommonResources.UsernameValidationRegex))
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidUsernameComposition;
+        return false;
+      }
+
+      return true;
+    }
+
 
     /// <summary>
     ///ANY CODE RUNNING ON THE SERVER SHOULD ONLY

@@ -6,12 +6,14 @@ using System;
 using LearnLanguages.Silverlight.Common;
 using LearnLanguages.Common;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace LearnLanguages.Silverlight.ViewModels
 {
   [Export(typeof(ManageUsersViewModel))]
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-  public class ManageUsersViewModel : PageViewModelBase
+  public class ManageUsersViewModel : PageViewModelBase, 
+                                      IDataErrorInfo
   {
     public ManageUsersViewModel()
     {
@@ -172,6 +174,38 @@ namespace LearnLanguages.Silverlight.ViewModels
       Title = ViewViewModelResources.TitleManageUsersPage;
       Description = ViewViewModelResources.DescriptionManageUsersPage;
       ToolTip = ViewViewModelResources.ToolTipManageUsersPage;
+    }
+
+    public string Error
+    {
+      get { return null; }
+    }
+
+    public string this[string propertyName]
+    {
+      get
+      {
+        string validResults = "";
+
+        switch (propertyName)
+        {
+          case "NewUsername":
+            if (string.IsNullOrEmpty(NewUsername))
+              return null;
+            if (!CommonHelper.UsernameIsValid(NewUsername, out validResults))
+              return validResults;
+            break;
+          //case "NewPassword":
+          //  if (!IsValid("NewPassword", out validResults))
+          //    return validResults;
+          //  break;
+          default:
+            break;
+        }
+
+        //WE HAD NO ERRORS, SO RETURN NULL TO INDICATE NO ERRORS
+        return null;
+      }
     }
   }
 }
