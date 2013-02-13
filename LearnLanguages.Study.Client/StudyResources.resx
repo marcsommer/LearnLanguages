@@ -297,6 +297,9 @@ debug=10 seconds (10000)</comment>
   <data name="InstructionsSelectFeedbackSome" xml:space="preserve">
     <value>You know a little, or even perhaps, a decent amount of this item. (5%-50%)</value>
   </data>
+  <data name="InstructionsSelectSongsSelectSong" xml:space="preserve">
+    <value>Select a single song or multiple songs.</value>
+  </data>
   <data name="InstructionsStudySongsSelectSong" xml:space="preserve">
     <value>Select the song(s) that you want to study...Once selected, press Go!</value>
   </data>
@@ -437,6 +440,9 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="ToolTipExecuteStudySongsPage" xml:space="preserve">
     <value>Study them songs yo!</value>
+  </data>
+  <data name="ToolTipSelectSongs" xml:space="preserve">
+    <value>Select a single song or multiple songs.</value>
   </data>
   <data name="ToolTipSimpleProgressPage" xml:space="preserve">
     <value>This page shows your awesome progress what-do-you-know!</value>

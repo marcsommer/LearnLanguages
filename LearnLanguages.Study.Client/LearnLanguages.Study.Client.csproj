@@ -142,6 +142,8 @@
     </Compile>
     <Compile Include="Creators\StudyItemViewModelFactory.cs" />
     <Compile Include="ViewModels\AskUserExtraDataViewModel.cs" />
+    <Compile Include="ViewModels\SelectSongsItemViewModel.cs" />
+    <Compile Include="ViewModels\SelectSongsViewModel.cs" />
     <Compile Include="ViewModels\StudySongsItemViewModel.cs" />
     <Compile Include="ViewModels\StudySongsViewModel.cs" />
     <Compile Include="ViewModels\SimpleProgressViewModel.cs" />

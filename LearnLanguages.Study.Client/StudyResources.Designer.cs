@@ -583,6 +583,15 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a single song or multiple songs..
+        /// </summary>
+        public static string InstructionsSelectSongsSelectSong {
+            get {
+                return ResourceManager.GetString("InstructionsSelectSongsSelectSong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the song(s) that you want to study...Once selected, press Go!.
         /// </summary>
         public static string InstructionsStudySongsSelectSong {
@@ -993,6 +1002,15 @@ namespace LearnLanguages.Study {
         public static string ToolTipExecuteStudySongsPage {
             get {
                 return ResourceManager.GetString("ToolTipExecuteStudySongsPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a single song or multiple songs..
+        /// </summary>
+        public static string ToolTipSelectSongs {
+            get {
+                return ResourceManager.GetString("ToolTipSelectSongs", resourceCulture);
             }
         }
         
