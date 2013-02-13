@@ -33,7 +33,8 @@ namespace LearnLanguages
     public static string ErrorMsgAnalysisIdNotRecognizedException { get { return "The analysis Id ({0}) is not recognized by this analyzer."; } }
 
     public static string ErrorMsgRefineAttemptedBeforeAnalysisException { get { return "Attempted to refine an analysis before actually doing the analysis. You must first call GetAnalysis<T> to build the initial analysis before calling RefineAnalysis."; } }
-    
+
+    public static string ErrorMsgConfirmNewPasswordDoesNotMatch { get { return "The passwords must match."; } }
     #endregion
 
     #region Result Messages
@@ -111,8 +112,13 @@ namespace LearnLanguages
     public static string MaxUsernameLength = "40";
     public static string MinUsernameLength = "3";
 
+    public static string MaxPasswordLength = "50";
+    public static string MinPasswordLength = "8";
+
     //Must contain digit, and an alpha, and can only contain digits, alphas, and !@#$%^&*()-_=+ special characters
-    public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()-_=+]{6,50}$";
+    public static string PasswordValidationRegex = @"^(?=.*\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*()-_=+]{"
+                                                   + MinPasswordLength + "," + MaxPasswordLength 
+                                                   + @"}$";
 
     public static string AzureServiceRootUriAddress = @"https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1";
 
@@ -122,8 +128,12 @@ namespace LearnLanguages
 
     public static string ErrorMsgInvalidUsernameComposition = "The username can only contain numbers, letters, and underscores";
 
+    public static string ErrorMsgInvalidPasswordEmpty = "The password cannot be empty";
 
+    public static string ErrorMsgInvalidPasswordComposition = @"The password must contain at least one number, one letters, and one of the following special characters !@#$%^&*()-_=+";
 
+    public static string ErrorMsgInvalidPasswordLength = "The password must be between " + MinPasswordLength + " and " + MaxPasswordLength;
+    
 
 #if !SILVERLIGHT && !NETFX_CORE
     public static string AzureLearnLanguagesAccountKey = "AzureLearnLanguagesAccountKey";

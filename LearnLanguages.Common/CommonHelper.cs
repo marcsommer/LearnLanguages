@@ -7,11 +7,35 @@ namespace LearnLanguages.Common
   {
     public static bool PasswordIsValid(string password)
     {
-      if (string.IsNullOrEmpty(password))
-        return false;
-
-      var isValid = Regex.IsMatch(password, CommonResources.PasswordValidationRegex);
+      string dummy;
+      var isValid = PasswordIsValid(password, out dummy);
       return isValid;
+    }
+
+    public static bool PasswordIsValid(string password, out string errorDescription)
+    {
+
+      if (string.IsNullOrEmpty(password))
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidPasswordEmpty;
+        return false;
+      }
+
+      if (password.Length < int.Parse(CommonResources.MinPasswordLength) ||
+          password.Length > int.Parse(CommonResources.MaxPasswordLength))
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidPasswordLength;
+        return false;
+      }
+
+      if (!Regex.IsMatch(password, CommonResources.PasswordValidationRegex))
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidPasswordComposition;
+        return false;
+      }
+
+      errorDescription = null;
+      return true; //password is valid
     }
 
     public static bool UsernameIsValid(string username)
@@ -23,8 +47,6 @@ namespace LearnLanguages.Common
 
     public static bool UsernameIsValid(string username, out string errorDescription)
     {
-      errorDescription = null;
-
       if (string.IsNullOrEmpty(username))
       {
         errorDescription = CommonResources.ErrorMsgInvalidUsernameEmpty;
@@ -44,6 +66,7 @@ namespace LearnLanguages.Common
         return false;
       }
 
+      errorDescription = null;
       return true;
     }
 

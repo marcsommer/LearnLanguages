@@ -189,18 +189,39 @@ namespace LearnLanguages.Silverlight.ViewModels
 
         switch (propertyName)
         {
+          //ADD USER
           case "NewUsername":
             if (string.IsNullOrEmpty(NewUsername))
               return null;
             if (!CommonHelper.UsernameIsValid(NewUsername, out validResults))
               return validResults;
             break;
-          //case "NewPassword":
-          //  if (!IsValid("NewPassword", out validResults))
-          //    return validResults;
-          //  break;
+          case "NewPassword":
+            if (string.IsNullOrEmpty(NewPassword))
+              return null;
+            if (!CommonHelper.PasswordIsValid(NewPassword, out validResults))
+              return validResults;
+            break;
+          case "ConfirmNewPassword":
+            if (string.IsNullOrEmpty(ConfirmNewPassword))
+              return null;
+            if (NewPassword != ConfirmNewPassword)
+              return CommonResources.ErrorMsgConfirmNewPasswordDoesNotMatch;
+            break;
+
+
+          //REMOVE USER
+          case "UsernameToRemove":
+            if (string.IsNullOrEmpty(UsernameToRemove))
+              return null;
+            if (!CommonHelper.UsernameIsValid(UsernameToRemove, out validResults))
+              return validResults;
+            break;
+
+
           default:
             break;
+
         }
 
         //WE HAD NO ERRORS, SO RETURN NULL TO INDICATE NO ERRORS
