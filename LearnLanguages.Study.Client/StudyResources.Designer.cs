@@ -493,6 +493,24 @@ namespace LearnLanguages.Study {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Songs that could not be deleted: {0}.
+        /// </summary>
+        public static string ErrorMsgSomeSongsWereNotDeletedDetailed {
+            get {
+                return ResourceManager.GetString("ErrorMsgSomeSongsWereNotDeletedDetailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some songs could not be deleted. This has been logged..
+        /// </summary>
+        public static string ErrorMsgSomeSongsWereNotDeletedSimple {
+            get {
+                return ResourceManager.GetString("ErrorMsgSomeSongsWereNotDeletedSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exception was thrown during study.  See inner exception for details..
         /// </summary>
         public static string ErrorMsgStudyException {
@@ -642,6 +660,15 @@ namespace LearnLanguages.Study {
         public static string MaxTriesToPickRandomFromEntireList {
             get {
                 return ResourceManager.GetString("MaxTriesToPickRandomFromEntireList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The songs were successfully deleted..
+        /// </summary>
+        public static string MsgSongsSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("MsgSongsSuccessfullyDeleted", resourceCulture);
             }
         }
         

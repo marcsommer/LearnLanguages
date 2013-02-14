@@ -171,6 +171,9 @@
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\BlankTranslationCreator.cs">
       <Link>ReadOnly\BlankTranslationCreator.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\DeleteMultiLineTextsReadOnly.cs">
+      <Link>ReadOnly\DeleteMultiLineTextsReadOnly.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.Business.Client\ReadOnly\DeleteUserReadOnly.cs">
       <Link>ReadOnly\DeleteUserReadOnly.cs</Link>
     </Compile>

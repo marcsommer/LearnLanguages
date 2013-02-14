@@ -648,6 +648,8 @@ namespace LearnLanguages.Study.ViewModels
       if (!CanDeleteSelected)
         return;
 
+      Business.DeleteMultiLineTextsReadOnly deleter = null;
+
       var description = "SelectSongsViewModel.DeleteSelected";
       IncrementApplicationBusyEventMessage.Publish(description);
       try
@@ -665,58 +667,34 @@ namespace LearnLanguages.Study.ViewModels
             ids.Add(id);
           }
         }
-        MultiLineTextList songs = null;
-        #region Try ...(thinking)
-        //var targetId = new Guid(@"5D4355FE-C46E-4AA1-9E4A-45288C341C44");
-        var targetId = Guid.NewGuid();
-        History.Events.ThinkingAboutTargetEvent.Publish(targetId);
+
+        var thinkId = new Guid(@"70CDC58A-40CD-46C6-A496-BCF23D77E8C2");
         try
         {
-        #endregion
-          songs = await MultiLineTextList.NewMultiLineTextListAsync(ids);
-        #region ...Finally (thinked)
+          deleter = await Business.DeleteMultiLineTextsReadOnly.CreateNewAsync(ids);
+          
         }
-
         finally
         {
-          History.Events.ThinkedAboutTargetEvent.Publish(targetId);
-        }
-        #endregion
-
-        var nativeLanguage = await LanguageEdit.GetLanguageEditAsync(GetNativeLanguageText());
-        var noExpirationDate = StudyJobInfo<MultiLineTextList, IViewModelBase>.NoExpirationDate;
-        var precision = double.Parse(StudyResources.DefaultExpectedPrecision);
-
-        //CREATE JOB INFO 
-        var studyJobInfo = new StudyJobInfo<MultiLineTextList, IViewModelBase>(songs,
-                                                               nativeLanguage,
-                                                               noExpirationDate,
-                                                               precision);
-        //CREATE OPPORTUNITY
-        var opportunity = new Opportunity<MultiLineTextList, IViewModelBase>(Id,
-                                                             this,
-                                                             studyJobInfo,
-                                                             StudyResources.CategoryStudy);
-
-        //ADD OPPORTUNITY TO OUR FUTURE OPPORTUNITIES
-        FutureOpportunities.Add(opportunity);
-
-        //LET THE HISTORY SHOW THAT YOU ARE THINKING ABOUT THIS OPPORTUNITY
-        var opportunityId = opportunity.Id;
-        History.Events.ThinkingAboutTargetEvent.Publish(System.Guid.Empty);
-
-        //PUBLISH THE OPPORTUNITY
-        Exchange.Ton.Publish(opportunity);
-
-        //NOW, WE WAIT UNTIL WE HEAR A HANDLE(OFFER) MESSAGE.
-        //TODO: TIMEOUT FOR OPPORTUNITY, BOTH EXPIRATION DATE AND WAITING FOR OFFER TIMEOUT
-
+          History.Events.ThinkedAboutTargetEvent.Publish(thinkId);
+        }       
       }
       finally
       {
         DecrementApplicationBusyEventMessage.Publish(description);
       }
-    }
+
+      History.Events.ThinkingAboutTargetEvent.Publish(System.Guid.Empty);
+      if (!deleter.WasSuccessful)
+      {
+        MessageBox.Show(StudyResources.ErrorMsgSomeSongsWereNotDeletedSimple);
+        Services.PublishMessageEvent(string.Format(StudyResources.ErrorMsgSomeSongsWereNotDeletedDetailed, deleter.UnsuccessfulIds),
+                                     Common.MessagePriority.High,
+                                     Common.MessageType.Error);
+      }
+      else
+        MessageBox.Show(StudyResources.MsgSongsSuccessfullyDeleted);
+    }//left off here: front end done. need to create stored procedure and import it into the edmx. then fill it in in the dal.
 
     public bool CanStopPopulating
     {

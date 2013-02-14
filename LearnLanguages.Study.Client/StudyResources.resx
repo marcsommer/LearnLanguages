@@ -267,6 +267,13 @@ debug=10 seconds (10000)</comment>
   <data name="ErrorMsgQuestionIsNull" xml:space="preserve">
     <value>The question is null.</value>
   </data>
+  <data name="ErrorMsgSomeSongsWereNotDeletedDetailed" xml:space="preserve">
+    <value>Songs that could not be deleted: {0}</value>
+    <comment>{0} = UnsuccessfulIds</comment>
+  </data>
+  <data name="ErrorMsgSomeSongsWereNotDeletedSimple" xml:space="preserve">
+    <value>Some songs could not be deleted. This has been logged.</value>
+  </data>
   <data name="ErrorMsgStudyException" xml:space="preserve">
     <value>An exception was thrown during study.  See inner exception for details.</value>
   </data>
@@ -317,6 +324,9 @@ debug=10 seconds (10000)</comment>
   </data>
   <data name="MaxTriesToPickRandomFromEntireList" xml:space="preserve">
     <value>50</value>
+  </data>
+  <data name="MsgSongsSuccessfullyDeleted" xml:space="preserve">
+    <value>The songs were successfully deleted.</value>
   </data>
   <data name="NavSetTextLanguages" xml:space="preserve">
     <value>Languages</value>
