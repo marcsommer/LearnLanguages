@@ -18,6 +18,7 @@ namespace LearnLanguages.Study.ViewModels
   [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
   public class StudyPhraseTimedQuestionAnswerViewModel : StudyItemViewModelBase
   {
+
     #region Ctors and Init
 
     public StudyPhraseTimedQuestionAnswerViewModel()
@@ -317,7 +318,6 @@ namespace LearnLanguages.Study.ViewModels
     }
 
     #endregion
-
 
     #region Edit/Save Question
     

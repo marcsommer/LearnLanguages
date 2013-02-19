@@ -16,6 +16,8 @@ namespace LearnLanguages.Mobile.Mvc4
   {
     protected void Application_Start()
     {
+      ModelBinders.Binders.DefaultBinder = new Csla.Web.Mvc.CslaModelBinder();
+
       AreaRegistration.RegisterAllAreas();
 
       WebApiConfig.Register(GlobalConfiguration.Configuration);
