@@ -88,9 +88,16 @@ namespace LearnLanguages.Business.Security
     {
       base.AddBusinessRules();
       
+      //NAME REQUIRED
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.Required(NameProperty));
+
       //USERNAME REGEX
       string usernameRegexMatch = CommonResources.UsernameValidationRegex;
       BusinessRules.AddRule(new Csla.Rules.CommonRules.RegExMatch(NameProperty, usernameRegexMatch));
+      
+      //MIN/MAX USERNAME LENGTHS
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.MinLength(NameProperty, int.Parse(CommonResources.MinUsernameLength)));
+      BusinessRules.AddRule(new Csla.Rules.CommonRules.MaxLength(NameProperty, int.Parse(CommonResources.MaxUsernameLength)));
     }
 
 #if !SILVERLIGHT

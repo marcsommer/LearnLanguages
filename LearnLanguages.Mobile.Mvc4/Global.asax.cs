@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LearnLanguages.Business.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,6 +25,18 @@ namespace LearnLanguages.Mobile.Mvc4
       FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
       RouteConfig.RegisterRoutes(RouteTable.Routes);
       BundleConfig.RegisterBundles(BundleTable.Bundles);
+    }
+
+    protected void Application_AuthenticateRequest(Object sender, EventArgs e)
+    {
+      if (HttpContext.Current.Session != null)
+      {
+        var userIdentity = HttpContext.Current.Session[Mvc4Resources.IdentityKey];
+        if (userIdentity != null && userIdentity is UserIdentity && ((UserIdentity)userIdentity).IsAuthenticated)
+        {
+          UserPrincipal.Load(Csla.ApplicationContext.User.Identity.Name);
+        }
+      }
     }
   }
 }

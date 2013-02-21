@@ -1,10 +1,39 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LearnLanguages.Common
 {
   public static class CommonHelper
   {
+    /// <summary>
+    /// I've added these "ValidationResult" methods to be used with CustomValidationAttribute.
+    /// E.g. [CustomValidation(typeof(Common.CommonHelper), "UsernameIsValidValidationResult")]
+    /// </summary>
+    public static ValidationResult UsernameIsValidValidationResult(string username)
+    {
+      string errorDescription = "";
+      var isValid = UsernameIsValid(username, out errorDescription);
+      if (isValid)
+        return ValidationResult.Success;
+      else
+        return new ValidationResult(errorDescription);
+    }
+
+    /// <summary>
+    /// I've added these "ValidationResult" methods to be used with CustomValidationAttribute.
+    /// E.g. [CustomValidation(typeof(Common.CommonHelper), "UsernameIsValidValidationResult")]
+    /// </summary>
+    public static ValidationResult PasswordIsValidValidationResult(string password)
+    {
+      string errorDescription = "";
+      var isValid = PasswordIsValid(password, out errorDescription);
+      if (isValid)
+        return ValidationResult.Success;
+      else
+        return new ValidationResult(errorDescription);
+    }
+
     public static bool PasswordIsValid(string password)
     {
       string dummy;

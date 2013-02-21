@@ -141,11 +141,21 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MultiLineTextListController.cs" />
+    <Compile Include="DefaultMembershipService.cs" />
+    <Compile Include="Membership\CustomMembershipProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Interfaces\IMembershipService.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Mvc4Helper.cs" />
+    <Compile Include="Mvc4Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mvc4Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +276,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\MultiLineTextList\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -286,10 +297,24 @@
       <Project>{902eef10-42a2-460d-87fe-eeddc8ed6082}</Project>
       <Name>LearnLanguages.CompressedHost</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Ef\LearnLanguages.DataAccess.Ef.csproj">
+      <Project>{c3110ebf-314d-44d1-8bea-2c7cff21f3a4}</Project>
+      <Name>LearnLanguages.DataAccess.Ef</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LearnLanguages.DataAccess.Mock\LearnLanguages.DataAccess.Mock.csproj">
+      <Project>{1c862615-4006-421e-97c9-46a138f461a3}</Project>
+      <Name>LearnLanguages.DataAccess.Mock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnLanguages.DataAccess\LearnLanguages.DataAccess.csproj">
       <Project>{63bbc54e-3af9-40ae-9ea2-d72132d18a1b}</Project>
       <Name>LearnLanguages.DataAccess</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mvc4Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Mvc4Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
