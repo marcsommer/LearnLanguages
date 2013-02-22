@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 
-namespace LearnLanguages.Mobile.Mvc4
+namespace LearnLanguages.Mobile.Mvc4.Interfaces
 {
   public interface IMembershipService
   {

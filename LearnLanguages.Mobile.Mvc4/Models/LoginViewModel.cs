@@ -10,10 +10,15 @@ namespace LearnLanguages.Mobile.Mvc4.Models
   {
     [Required]
     [CustomValidation(typeof(Common.CommonHelper), "UsernameIsValidValidationResult")]
+    [Display(Name = "Username")]
     public string Username { get; set; }
 
     [Required]
     [CustomValidation(typeof(Common.CommonHelper), "PasswordIsValidValidationResult")]
+    [Display(Name = "Password")]
     public string Password { get; set; }
+
+    [Display(Name = "Remember Me?")]
+    public bool RememberMe { get; set; }
   }
 }

@@ -9,11 +9,10 @@ namespace LearnLanguages.Mobile.Mvc4
 {
   public class CustomMembershipProvider : MembershipProvider
   {
+
     public override bool ValidateUser(string username, string password)
     {
-      System.Diagnostics.Debugger.Break();//I want to see the execution locations
-      var thing = Csla.ApplicationContext.ExecutionLocation;
-      var thing2 = Csla.ApplicationContext.LogicalExecutionLocation;
+      //executes on the client?
       UserPrincipal.Login(username, password);
       return Csla.ApplicationContext.User.Identity.IsAuthenticated;
     }

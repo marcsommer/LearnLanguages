@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace LearnLanguages.Mobile.Mvc4
 {
@@ -22,21 +23,25 @@ namespace LearnLanguages.Mobile.Mvc4
       AreaRegistration.RegisterAllAreas();
 
       WebApiConfig.Register(GlobalConfiguration.Configuration);
+
+      //These filters set up an "implicit deny" type of structure. 
+      //Now, for any anonymous access, you have to add [AllowAnonymous]
+      GlobalFilters.Filters.Add(new HandleErrorAttribute());
+      GlobalFilters.Filters.Add(new System.Web.Mvc.AuthorizeAttribute());
       FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+
       RouteConfig.RegisterRoutes(RouteTable.Routes);
       BundleConfig.RegisterBundles(BundleTable.Bundles);
     }
 
     protected void Application_AuthenticateRequest(Object sender, EventArgs e)
     {
-      if (HttpContext.Current.Session != null)
+      if (Mvc4Helper.CurrentUserIsAuthenticated())
       {
-        var userIdentity = HttpContext.Current.Session[Mvc4Resources.IdentityKey];
-        if (userIdentity != null && userIdentity is UserIdentity && ((UserIdentity)userIdentity).IsAuthenticated)
-        {
-          UserPrincipal.Load(Csla.ApplicationContext.User.Identity.Name);
-        }
+        UserPrincipal.Load(Csla.ApplicationContext.User.Identity.Name);
       }
     }
+
+    
   }
 }

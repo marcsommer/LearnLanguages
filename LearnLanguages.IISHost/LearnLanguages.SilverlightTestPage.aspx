@@ -19,6 +19,9 @@
     }
     </style>
     <script type="text/javascript" src="Silverlight.js"></script>
+
+  
+    <%--function onSilverlightError(sender, args) {--%>
     <script type="text/javascript">
         function onSilverlightError(sender, args) {
             var appSource = "";

@@ -122,18 +122,21 @@ namespace LearnLanguages
 
     public static string AzureServiceRootUriAddress = @"https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1";
 
-    public static string ErrorMsgInvalidUsernameEmpty = "The username cannot be empty";
+    public static string ErrorMsgInvalidUsernameEmpty = "The username cannot be empty.";
 
-    public static string ErrorMsgInvalidUsernameLength = "The username must be between " + MinUsernameLength + " and " + MaxUsernameLength;
+    public static string ErrorMsgInvalidUsernameLength = "The username must be between " + MinUsernameLength + " and " + MaxUsernameLength + " characters in length.";
 
-    public static string ErrorMsgInvalidUsernameComposition = "The username can only contain numbers, letters, and underscores";
+    public static string ErrorMsgInvalidUsernameComposition = "The username can only contain numbers, letters, and underscores.";
 
-    public static string ErrorMsgInvalidPasswordEmpty = "The password cannot be empty";
+    public static string ErrorMsgInvalidPasswordEmpty = "The password cannot be empty.";
 
-    public static string ErrorMsgInvalidPasswordComposition = @"The password must contain at least one number, one letters, and one of the following special characters !@#$%^&*()-_=+";
+    public static string ErrorMsgInvalidPasswordComposition = @"The password must contain at least one number, one letter, and one of the following special characters !@#$%^&*()-_=+";
 
-    public static string ErrorMsgInvalidPasswordLength = "The password must be between " + MinPasswordLength + " and " + MaxPasswordLength;
-    
+    public static string ErrorMsgInvalidPasswordLength = "The password must be between " + MinPasswordLength + " and " + MaxPasswordLength + " characters in length.";
+
+    public static string DisplayNameUsernameMobile = "Username";
+    public static string DisplayNamePasswordMobile = "Password";
+    public static string DisplayNameRememberMeMobile = "Remember Me?";
 
 #if !SILVERLIGHT && !NETFX_CORE
     public static string AzureLearnLanguagesAccountKey = "AzureLearnLanguagesAccountKey";
