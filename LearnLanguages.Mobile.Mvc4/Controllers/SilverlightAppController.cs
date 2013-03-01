@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace LearnLanguages.Mobile.Mvc4.Controllers
 {
-  public class HomeController : Controller
+  public class SilverlightAppController : Controller
   {
     public ActionResult Index()
     {
@@ -15,20 +15,5 @@ namespace LearnLanguages.Mobile.Mvc4.Controllers
       return View();
     }
 
-    public ActionResult About()
-    {
-      ViewBag.Message = "Your app description page.";
-
-      return View();
-    }
-
-    public ActionResult Contact()
-    {
-      ViewBag.Message = "Your contact page.";
-
-      return View();
-    }
-
-    
   }
 }

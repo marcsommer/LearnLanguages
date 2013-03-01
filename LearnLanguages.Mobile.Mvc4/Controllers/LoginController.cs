@@ -11,7 +11,7 @@ using System.Web.Routing;
 
 namespace LearnLanguages.Mobile.Mvc4.Controllers
 {
-  public class LoginController : Controller
+  public class LoginController : Csla.Web.Mvc.Controller
   {
 
     public IFormsAuthenticationService FormsService { get; set; }
