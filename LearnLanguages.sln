@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Web
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.IISHost", "LearnLanguages.IISHost\LearnLanguages.IISHost.csproj", "{9F1027C8-8B23-433C-A6DC-9468EED77A08}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Silverlight", "LearnLanguages.Silverlight\LearnLanguages.Silverlight.csproj", "{23A302A7-4A66-4D8B-A13F-14A4453EF517}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.DataAccess", "LearnLanguages.DataAccess\LearnLanguages.DataAccess.csproj", "{63BBC54E-3AF9-40AE-9EA2-D72132D18A1B}"
@@ -27,7 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.History.Clie
 	ProjectSection(ProjectDependencies) = postProject
 		{63BBC54E-3AF9-40AE-9EA2-D72132D18A1B} = {63BBC54E-3AF9-40AE-9EA2-D72132D18A1B}
 		{9AB67D6B-F6B7-4AD4-8C51-C5049AE7898A} = {9AB67D6B-F6B7-4AD4-8C51-C5049AE7898A}
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08} = {9F1027C8-8B23-433C-A6DC-9468EED77A08}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Offer.Client", "LearnLanguages.Offer.Client\LearnLanguages.Offer.Client.csproj", "{98EE87B2-152D-48D8-B509-93EEB92059BE}"
@@ -44,11 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.CompressedPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Silverlight.Common", "LearnLanguages.Silverlight.Common\LearnLanguages.Silverlight.Common.csproj", "{671298A4-BD06-4E12-A844-D6DD0147D5E6}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "LearnLanguages.IISHost.Azure", "LearnLanguages.IISHost.Azure\LearnLanguages.IISHost.Azure.ccproj", "{821FD34A-0219-4325-81D3-F10AE9F4AFA8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Mobile.Mvc4", "LearnLanguages.Mobile.Mvc4\LearnLanguages.Mobile.Mvc4.csproj", "{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Mobile.Mvc4.Tests", "LearnLanguages.Mobile.Mvc4.Tests\LearnLanguages.Mobile.Mvc4.Tests.csproj", "{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnLanguages.Mvc4", "LearnLanguages.Mvc4\LearnLanguages.Mvc4.csproj", "{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,12 +50,6 @@ Global
 		Staging|Any CPU = Staging|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
-		{9F1027C8-8B23-433C-A6DC-9468EED77A08}.Staging|Any CPU.Build.0 = Staging|Any CPU
 		{23A302A7-4A66-4D8B-A13F-14A4453EF517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23A302A7-4A66-4D8B-A13F-14A4453EF517}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23A302A7-4A66-4D8B-A13F-14A4453EF517}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -169,24 +156,12 @@ Global
 		{671298A4-BD06-4E12-A844-D6DD0147D5E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{671298A4-BD06-4E12-A844-D6DD0147D5E6}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{671298A4-BD06-4E12-A844-D6DD0147D5E6}.Staging|Any CPU.Build.0 = Staging|Any CPU
-		{821FD34A-0219-4325-81D3-F10AE9F4AFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{821FD34A-0219-4325-81D3-F10AE9F4AFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{821FD34A-0219-4325-81D3-F10AE9F4AFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{821FD34A-0219-4325-81D3-F10AE9F4AFA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{821FD34A-0219-4325-81D3-F10AE9F4AFA8}.Staging|Any CPU.ActiveCfg = Release|Any CPU
-		{821FD34A-0219-4325-81D3-F10AE9F4AFA8}.Staging|Any CPU.Build.0 = Release|Any CPU
-		{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}.Staging|Any CPU.ActiveCfg = Release|Any CPU
-		{08C6D81E-B8DB-464E-9BF7-67DA96FB3076}.Staging|Any CPU.Build.0 = Release|Any CPU
-		{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}.Staging|Any CPU.ActiveCfg = Release|Any CPU
-		{9F9BCEEC-5C25-4E25-BB2A-D62F37900EA1}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{77224F3B-6C5C-46E1-BBD2-62CD220E66FC}.Staging|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
