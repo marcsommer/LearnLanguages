@@ -304,7 +304,20 @@ namespace LearnLanguages.Business
     public static void AddObjectAuthorizationRules()
     {
       // TODO: add object-level authorization rules
-      // Csla.Rules.CommonRules.Required
+      // USER MUST BE AUTHENTICATED TO BE IN THESE ROLES
+      Csla.Rules.BusinessRules.AddRule(typeof(LanguageEdit),
+        new Csla.Rules.CommonRules.IsInRole(Csla.Rules.AuthorizationActions.CreateObject, 
+          DalResources.RoleAdmin, DalResources.RoleUser));
+      Csla.Rules.BusinessRules.AddRule(typeof(LanguageEdit),
+        new Csla.Rules.CommonRules.IsInRole(Csla.Rules.AuthorizationActions.GetObject,
+          DalResources.RoleAdmin, DalResources.RoleUser));
+      Csla.Rules.BusinessRules.AddRule(typeof(LanguageEdit),
+        new Csla.Rules.CommonRules.IsInRole(Csla.Rules.AuthorizationActions.EditObject,
+          DalResources.RoleAdmin, DalResources.RoleUser));
+      Csla.Rules.BusinessRules.AddRule(typeof(LanguageEdit),
+        new Csla.Rules.CommonRules.IsInRole(Csla.Rules.AuthorizationActions.DeleteObject,
+          DalResources.RoleAdmin, DalResources.RoleUser));
+
     }
 
     #endregion
