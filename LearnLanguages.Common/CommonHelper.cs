@@ -63,6 +63,25 @@ namespace LearnLanguages.Common
         return false;
       }
 
+      //should fix the regex, but this will do for now.
+      var containsSpecialCharacter = false;
+      var specialChars = @"!@#$%^&*()-_=+";
+      for (int i = 0; i < password.Length; i++)
+      {
+        var passwordCharAsString = password[i].ToString();
+        if (specialChars.Contains(passwordCharAsString))
+        {
+          containsSpecialCharacter = true;
+          break;
+        }
+      }
+
+      if (!containsSpecialCharacter)
+      {
+        errorDescription = CommonResources.ErrorMsgInvalidPasswordComposition;
+        return false;
+      }
+
       errorDescription = null;
       return true; //password is valid
     }

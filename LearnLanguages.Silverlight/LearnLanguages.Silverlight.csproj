@@ -156,6 +156,7 @@
     </Compile>
     <Compile Include="MefBootstrapper.cs" />
     <Compile Include="Pages\AddSongPage.cs" />
+    <Compile Include="Pages\AccountSettingsPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\LogoutPage.cs" />
@@ -190,6 +191,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Page Include="Views\Core\AccountSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Core\ManageUsersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

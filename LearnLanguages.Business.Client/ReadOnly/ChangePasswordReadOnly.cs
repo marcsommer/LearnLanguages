@@ -64,7 +64,7 @@ namespace LearnLanguages.Business
           else
             throw new DataAccess.Exceptions.ChangePasswordFailedException(result.Msg);
         }
-        WasSuccessful = true;
+        WasSuccessful = result.Obj ?? false;
       }
     }
 #endif

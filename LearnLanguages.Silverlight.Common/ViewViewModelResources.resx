@@ -338,4 +338,25 @@
   <data name="TitleAccountSettingsPage" xml:space="preserve">
     <value>Account Settings</value>
   </data>
+  <data name="DescriptionAccountSettingsPage" xml:space="preserve">
+    <value>The account settings page is where the user can change any profile information, as well as change passwords and other contact information.</value>
+  </data>
+  <data name="ToolTipAccountSettingsPage" xml:space="preserve">
+    <value>Enter account information. Change your password.</value>
+  </data>
+  <data name="NavTextAccountSettingsPage" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="SortOrderAccountSettingsPage" xml:space="preserve">
+    <value>500</value>
+  </data>
+  <data name="NavSetTextAccountSettings" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="ErrorMsgPasswordChangeFailed" xml:space="preserve">
+    <value>The password was NOT changed. Be sure to type in the correct previous password.</value>
+  </data>
+  <data name="MsgPasswordWasSuccessfullyChanged" xml:space="preserve">
+    <value>Password was successfully changed!</value>
+  </data>
 </root>

@@ -79,6 +79,15 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The account settings page is where the user can change any profile information, as well as change passwords and other contact information..
+        /// </summary>
+        public static string DescriptionAccountSettingsPage {
+            get {
+                return ResourceManager.GetString("DescriptionAccountSettingsPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a new song in whatever language you want..
         /// </summary>
         public static string DescriptionAddSongPage {
@@ -129,6 +138,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string ErrorMsgAddUserWasUnsuccessful {
             get {
                 return ResourceManager.GetString("ErrorMsgAddUserWasUnsuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password was NOT changed. Be sure to type in the correct previous password..
+        /// </summary>
+        public static string ErrorMsgPasswordChangeFailed {
+            get {
+                return ResourceManager.GetString("ErrorMsgPasswordChangeFailed", resourceCulture);
             }
         }
         
@@ -432,6 +450,15 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password was successfully changed!.
+        /// </summary>
+        public static string MsgPasswordWasSuccessfullyChanged {
+            get {
+                return ResourceManager.GetString("MsgPasswordWasSuccessfullyChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string NavButtonTextLogin {
@@ -446,6 +473,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string NavButtonTextLogout {
             get {
                 return ResourceManager.GetString("NavButtonTextLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin.
+        /// </summary>
+        public static string NavSetTextAccountSettings {
+            get {
+                return ResourceManager.GetString("NavSetTextAccountSettings", resourceCulture);
             }
         }
         
@@ -482,6 +518,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string NavSetTextHome {
             get {
                 return ResourceManager.GetString("NavSetTextHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string NavTextAccountSettingsPage {
+            get {
+                return ResourceManager.GetString("NavTextAccountSettingsPage", resourceCulture);
             }
         }
         
@@ -545,6 +590,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string ShowInstructions {
             get {
                 return ResourceManager.GetString("ShowInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 500.
+        /// </summary>
+        public static string SortOrderAccountSettingsPage {
+            get {
+                return ResourceManager.GetString("SortOrderAccountSettingsPage", resourceCulture);
             }
         }
         
@@ -653,6 +707,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string TitleManageUsersPage {
             get {
                 return ResourceManager.GetString("TitleManageUsersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter account information. Change your password..
+        /// </summary>
+        public static string ToolTipAccountSettingsPage {
+            get {
+                return ResourceManager.GetString("ToolTipAccountSettingsPage", resourceCulture);
             }
         }
         
