@@ -69,6 +69,27 @@ namespace LearnLanguages.DataAccess
 
       return retResult;
     }
+
+    public Result<bool?> ChangePassword(string oldPassword, string newPassword)
+    {
+      Result<bool?> retResult = Result<bool?>.Undefined(null);
+      try
+      {
+        Common.CommonHelper.CheckAuthentication();
+
+        var wasSuccessful = ChangePasswordImpl(oldPassword, newPassword);
+        
+        retResult = Result<bool?>.Success(wasSuccessful);
+      }
+      catch (Exception ex)
+      {
+        var wrapperEx = new Exceptions.ChangePasswordFailedException(ex);
+        retResult = Result<bool?>.FailureWithInfo(null, wrapperEx);
+      }
+
+      return retResult;
+    }
+
     public Result<UserDto> New(object criteria)
     {
       Result<UserDto> retResult = Result<UserDto>.Undefined(null);
@@ -222,8 +243,10 @@ namespace LearnLanguages.DataAccess
       return retResult;
     }
 
+    
     protected abstract bool? VerifyUserImpl(string username, string password);
     protected abstract ICollection<RoleDto> GetRolesImpl(string username);
+    protected abstract bool? ChangePasswordImpl(string oldPassword, string newPassword);
 
     protected abstract UserDto AddUserImpl(Csla.Security.UsernameCriteria criteria);
     protected abstract bool? DeleteImpl(string username);
@@ -235,6 +258,9 @@ namespace LearnLanguages.DataAccess
     protected abstract UserDto InsertImpl(UserDto dto);
     protected abstract UserDto UpdateImpl(UserDto dto);
     protected abstract UserDto DeleteImpl(Guid id);
+
+
+
 
     
   }

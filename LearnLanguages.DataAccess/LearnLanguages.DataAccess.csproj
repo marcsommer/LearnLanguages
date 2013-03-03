@@ -97,6 +97,7 @@
     <Compile Include="Exceptions\LanguageTextNotFoundException.cs" />
     <Compile Include="Exceptions\StudyDataNotFoundForUserException.cs" />
     <Compile Include="Exceptions\User\AddUserFailedException.cs" />
+    <Compile Include="Exceptions\User\ChangePasswordFailedException.cs" />
     <Compile Include="Exceptions\User\InvalidUsernameException.cs" />
     <Compile Include="Exceptions\User\UsernameAlreadyExistsException.cs" />
     <Compile Include="Exceptions\User\LoadUserDataException.cs" />

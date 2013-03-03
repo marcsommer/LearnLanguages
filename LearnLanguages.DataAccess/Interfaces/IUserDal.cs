@@ -10,6 +10,7 @@ namespace LearnLanguages.DataAccess
     Result<bool?> VerifyUser(string username, string password);
     Result<ICollection<RoleDto>> GetRoles(string username);
     Result<UserDto> Fetch(string username);
+    Result<bool?> ChangePassword(string oldPassword, string newPassword);
 
     Result<UserDto> New(object criteria);
     Result<UserDto> AddUser(Csla.Security.UsernameCriteria criteria);

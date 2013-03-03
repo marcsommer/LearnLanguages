@@ -313,6 +313,15 @@ namespace LearnLanguages.DataAccess {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to change the password..
+        /// </summary>
+        public static string ErrorMsgChangePasswordFailedException {
+            get {
+                return ResourceManager.GetString("ErrorMsgChangePasswordFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Create operation failed. InnerExceptionMsg = {0}.
         /// </summary>
         public static string ErrorMsgCreateFailedException {

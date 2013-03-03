@@ -142,6 +142,15 @@ namespace LearnLanguages.Silverlight.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change your profile information, change your password..
+        /// </summary>
+        public static string InstructionsAccountSettingsPage {
+            get {
+                return ResourceManager.GetString("InstructionsAccountSettingsPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Optional) Add additional info about the song here.  This is still under construction though!!.
         /// </summary>
         public static string InstructionsAddSongEnterSongAdditionalMetadata {
@@ -581,6 +590,15 @@ namespace LearnLanguages.Silverlight.Common {
         public static string SortOrderManageUsersPage {
             get {
                 return ResourceManager.GetString("SortOrderManageUsersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Settings.
+        /// </summary>
+        public static string TitleAccountSettingsPage {
+            get {
+                return ResourceManager.GetString("TitleAccountSettingsPage", resourceCulture);
             }
         }
         

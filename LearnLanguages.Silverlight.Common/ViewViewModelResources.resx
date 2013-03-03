@@ -332,4 +332,10 @@
   <data name="MsgDeleteUserCanceled" xml:space="preserve">
     <value>The operation was canceled.</value>
   </data>
+  <data name="InstructionsAccountSettingsPage" xml:space="preserve">
+    <value>Change your profile information, change your password.</value>
+  </data>
+  <data name="TitleAccountSettingsPage" xml:space="preserve">
+    <value>Account Settings</value>
+  </data>
 </root>

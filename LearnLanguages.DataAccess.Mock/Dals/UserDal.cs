@@ -41,6 +41,7 @@ namespace LearnLanguages.DataAccess.Mock
       {
         //USERNAME FOUND. CHECK PASSWORD
         var userDto = results.First();
+
         SaltedHashedPassword saltedHashedPasswordObj =
           new SaltedHashedPassword(password, userDto.Salt);
         if (string.Compare(userDto.SaltedHashedPasswordValue,
@@ -272,6 +273,43 @@ namespace LearnLanguages.DataAccess.Mock
       retResult = SeedData.Ton.Users.ToList();
       return retResult;
     }
+
+    protected override bool? ChangePasswordImpl(string oldPassword, string newPassword)
+    {
+      //FIRST GET THE CURRENT USER'S DTO
+      var currentUsername = Csla.ApplicationContext.User.Identity.Name;
+      var currentUserDto = (from userDto in SeedData.Ton.Users
+                            where userDto.Username == currentUsername
+                            select userDto).First();
+
+      SaltedHashedPassword saltedHashedPasswordObj =
+         new SaltedHashedPassword(oldPassword, currentUserDto.Salt);
+      if (string.Compare(currentUserDto.SaltedHashedPasswordValue,
+                         saltedHashedPasswordObj.Value,
+                         StringComparison.InvariantCulture) == 0)
+      {
+        //PASSWORDS MATCH
+        //GENERATE A NEW SALT
+        var newSalt = SaltHelper.GenerateRandomSalt();
+
+        //CREATE SALTED/HASHED PASSWORD OBJECT
+        var newSaltedHashedPassword = new SaltedHashedPassword(newPassword, newSalt);
+
+        //STORE NEW SALT AND SALTED/HASHED PASSWORD IN "DATASTORE"
+        currentUserDto.Salt = newSalt;
+        currentUserDto.SaltedHashedPasswordValue = newSaltedHashedPassword.Value;
+
+        //RETURN TRUE FOR SUCCESS
+        return true;
+      }
+      else
+      {
+        //PASSWORDS DO *NOT* MATCH
+        return false;
+      }
+    }
+
+
   }
 }
 

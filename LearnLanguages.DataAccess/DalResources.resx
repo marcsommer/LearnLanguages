@@ -363,4 +363,7 @@
   <data name="WcfProxyStagingUrl" xml:space="preserve">
     <value>http://kroker.azurewebsites.net/SlPortal.svc</value>
   </data>
+  <data name="ErrorMsgChangePasswordFailedException" xml:space="preserve">
+    <value>An error occurred while trying to change the password.</value>
+  </data>
 </root>

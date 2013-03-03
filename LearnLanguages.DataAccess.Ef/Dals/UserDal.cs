@@ -731,5 +731,60 @@ namespace LearnLanguages.DataAccess.Ef
                                    DalResources.ErrorMsgVeryBadExceptionDetail_DeadlockRetriesExceededMaxTries);
       throw new Exceptions.VeryBadException(errorMsg2);
     }
+
+    protected override bool? ChangePasswordImpl(string oldPassword, string newPassword)
+    {
+      //FIRST GET THE CURRENT USER'S DTO
+      var currentUsername = Csla.ApplicationContext.User.Identity.Name;
+
+      using (var ctx = LearnLanguagesContextManager.Instance.GetManager())
+      {
+        var results = from userData in ctx.ObjectContext.UserDatas
+                      where userData.Username == currentUsername
+                      select userData;
+
+        if (results.Count() == 1)
+        {
+          //CURRENT USER FOUND
+          var userData = results.First();
+
+          var saltedHashedPasswordObj = new SaltedHashedPassword(oldPassword, userData.Salt);
+          if (string.Compare(userData.SaltedHashedPasswordValue,
+                             saltedHashedPasswordObj.Value,
+                             StringComparison.InvariantCulture) == 0)
+          {
+            //OLD PASSWORD MATCHES
+            //GENERATE A NEW SALT
+            var newSalt = SaltHelper.GenerateRandomSalt();
+
+            //CREATE SALTED/HASHED PASSWORD OBJECT
+            var newSaltedHashedPassword = new SaltedHashedPassword(newPassword, newSalt);
+
+            //STORE NEW SALT AND SALTED/HASHED PASSWORD IN "DATASTORE"
+            userData.Salt = newSalt;
+            userData.SaltedHashedPasswordValue = newSaltedHashedPassword.Value;
+
+            //SAVE THE CHANGES
+            ctx.ObjectContext.SaveChanges();
+
+            //RETURN TRUE FOR SUCCESS
+            return true;
+          }
+          else
+          {
+            //OLD PASSWORD DOES NOT MATCH (IS INCORRECT)
+            return false;
+          }
+        }
+        else if (results.Count() == 0)
+        {
+          throw new Exceptions.UsernameNotFoundException(currentUsername);
+        }
+        else
+        {
+          throw new Exceptions.VeryBadException();
+        }
+      }
+    }
   }
 }

@@ -189,6 +189,9 @@
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\StudyDataNotFoundForUserException.cs">
       <Link>Exceptions\StudyDataNotFoundForUserException.cs</Link>
     </Compile>
+    <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\ChangePasswordFailedException.cs">
+      <Link>Exceptions\User\ChangePasswordFailedException.cs</Link>
+    </Compile>
     <Compile Include="..\LearnLanguages.DataAccess\Exceptions\User\GetRolesFailedException.cs">
       <Link>Exceptions\User\GetRolesFailedException.cs</Link>
     </Compile>
