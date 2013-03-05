@@ -402,19 +402,10 @@ namespace LearnLanguages.Business
       //}
     }
 
-    //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    //public void Child_Fetch(Guid id)
-    //{
-    //  using (var dalManager = DalFactory.GetDalManager())
-    //  {
-    //    var studyDataDal = dalManager.GetProvider<IStudyDataDal>();
-    //    var result = studyDataDal.Fetch(id);
-    //    if (result.IsError)
-    //      throw new FetchFailedException(result.Msg);
-    //    StudyDataDto dto = result.Obj;
-    //    LoadFromDtoBypassPropertyChecks(dto);
-    //  }
-    //}
+    protected override void Child_Fetch(Guid id)
+    {
+      //elided
+    }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Insert()

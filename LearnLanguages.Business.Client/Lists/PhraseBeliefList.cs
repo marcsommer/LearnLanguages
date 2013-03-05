@@ -160,12 +160,19 @@ namespace LearnLanguages.Business
 
     private void AddDtos(ICollection<PhraseBeliefDto> dtos)
     {
-      foreach (var beliefDto in dtos)
+      var dtosList = dtos.ToList();
+      for (int i = 0; i < dtos.Count; i++)
       {
-        //var PhraseBeliefEdit = DataPortal.CreateChild<PhraseBeliefEdit>(PhraseBeliefDto);
+        var beliefDto = dtosList[i];
         var beliefEdit = DataPortal.FetchChild<PhraseBeliefEdit>(beliefDto);
         this.Add(beliefEdit);
       }
+      //foreach (var beliefDto in dtos)
+      //{
+      //  //var PhraseBeliefEdit = DataPortal.CreateChild<PhraseBeliefEdit>(PhraseBeliefDto);
+      //  var beliefEdit = DataPortal.FetchChild<PhraseBeliefEdit>(beliefDto);
+      //  this.Add(beliefEdit);
+      //}
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -193,6 +200,9 @@ namespace LearnLanguages.Business
         //RESULT WAS SUCCESSFUL
         var allPhraseBeliefDtos = result.Obj;
         LoadDtos(allPhraseBeliefDtos);
+        var loc1 = Csla.ApplicationContext.ExecutionLocation;
+        var loc2 = Csla.ApplicationContext.LogicalExecutionLocation;
+
         //foreach (var PhraseBeliefDto in allPhraseBeliefDtos)
         //{
         //  //var PhraseBeliefEdit = DataPortal.CreateChild<PhraseBeliefEdit>(PhraseBeliefDto);

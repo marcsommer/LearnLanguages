@@ -409,19 +409,19 @@ namespace LearnLanguages.Business
     
 #if !SILVERLIGHT
 
-    //[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    //public void Child_Fetch(Guid id)
-    //{
-    //  using (var dalManager = DalFactory.GetDalManager())
-    //  {
-    //    var TranslationDal = dalManager.GetProvider<ITranslationDal>();
-    //    var result = TranslationDal.Fetch(id);
-    //    if (result.IsError)
-    //      throw new FetchFailedException(result.Msg);
-    //    TranslationDto dto = result.Obj;
-    //    LoadFromDtoBypassPropertyChecks(dto);
-    //  }
-    //}
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    protected override void Child_Fetch(Guid id)
+    {
+      using (var dalManager = DalFactory.GetDalManager())
+      {
+        var TranslationDal = dalManager.GetProvider<ITranslationDal>();
+        var result = TranslationDal.Fetch(id);
+        if (result.IsError)
+          throw new FetchFailedException(result.Msg);
+        TranslationDto dto = result.Obj;
+        LoadFromDtoBypassPropertyChecks(dto);
+      }
+    }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Child_Fetch(TranslationDto dto)

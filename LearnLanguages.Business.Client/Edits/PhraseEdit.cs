@@ -533,7 +533,7 @@ namespace LearnLanguages.Business
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(Guid id)
+    protected override void Child_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())
       {

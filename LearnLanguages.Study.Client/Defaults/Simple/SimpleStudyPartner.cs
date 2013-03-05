@@ -194,14 +194,27 @@ namespace LearnLanguages.Study.Defaults.Simple
 
       //GET OUR UNKNOWNS OUT OF OUR CACHES
       var threshold = double.Parse(StudyResources.DefaultKnowledgeThreshold);
-      var unknownBeliefsFromCache = (from belief in _MostRecentPhraseBeliefsCache
-                                     where belief.Strength < threshold &&
-                                           PhraseTextIsInMultiLineTextList(belief.Phrase.Text, multiLineTextList)
-                                     select belief).ToList();
-      var unknownPseudoBeliefsFromCache = (from entry in _PseudoBeliefsCache
-                                           where entry.Value.Item2 < threshold &&
-                                                 PhraseTextIsInMultiLineTextList(entry.Key, multiLineTextList)
-                                           select entry).ToList();
+      ////debug
+      //var debug = _MostRecentPhraseBeliefsCache.First();
+      //try
+      //{
+      //  PhraseEdit debugPhrase = debug.Phrase;
+      //}
+      //catch (Exception ex)
+      //{
+      //  System.Windows.MessageBox.Show(ex.Message);
+      //}
+      ////debug
+      try
+      {
+        var unknownBeliefsFromCache = (from belief in _MostRecentPhraseBeliefsCache
+                                       where belief.Strength < threshold &&
+                                             PhraseTextIsInMultiLineTextList(belief.Phrase.Text, multiLineTextList)
+                                       select belief).ToList();
+        var unknownPseudoBeliefsFromCache = (from entry in _PseudoBeliefsCache
+                                             where entry.Value.Item2 < threshold &&
+                                                   PhraseTextIsInMultiLineTextList(entry.Key, multiLineTextList)
+                                             select entry).ToList();
 
       //GET OUR UNKNOWN PHRASES THAT DONT HAVE A BELIEF OR PSUEDO BELIEF REGISTERED WITH THEM YET
       var unregisteredUnknownPhrases = GetUnregisteredUnknownPhraseBeliefs(multiLineTextList, 
@@ -271,6 +284,12 @@ namespace LearnLanguages.Study.Defaults.Simple
       //IF WE'VE GOTTEN THIS FAR, THEN WE COULDN'T FIND AN UNKNOWN PHRASE
       Services.PublishMessageEvent("Couldn't retrieve unknown phrase.", MessagePriority.Medium, MessageType.Warning);
       return null;
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+
     }
 
     /// <summary>

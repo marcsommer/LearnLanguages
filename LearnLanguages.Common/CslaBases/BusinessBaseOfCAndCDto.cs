@@ -74,6 +74,18 @@ namespace LearnLanguages.Common.CslaBases
       base.DataPortal_Insert();
     }
 
+    /// <summary>
+    /// For some reason, this isn't seen in the children classes, so I'm making it abstract here.
+    /// </summary>
+    /// <param name="id"></param>
+    protected virtual void Child_Fetch(Guid id)
+    {
+      //wtf!!!!
+      var execLocation = Csla.ApplicationContext.ExecutionLocation;
+      var logExecLocation = Csla.ApplicationContext.LogicalExecutionLocation;
+      var wtf = @"WTF!!!!!!!!!!!!!";
+    }
+
     #endregion
 
   }

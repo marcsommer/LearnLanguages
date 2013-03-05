@@ -132,7 +132,7 @@ namespace LearnLanguages.Business
       get { return GetProperty(PhraseProperty); }
       set 
       {
-        LoadProperty(PhraseProperty, value);
+        SetProperty(PhraseProperty, value);
 
         if (value != null)
           PhraseId = value.Id;
@@ -171,6 +171,8 @@ namespace LearnLanguages.Business
 
     public override void LoadFromDtoBypassPropertyChecksImpl(PhraseBeliefDto dto)
     {
+      var loc1 = Csla.ApplicationContext.LogicalExecutionLocation;
+      var loc2 = Csla.ApplicationContext.ExecutionLocation;
       using (BypassPropertyChecks)
       {
         //ID
@@ -192,9 +194,15 @@ namespace LearnLanguages.Business
         LoadProperty<Guid>(UserIdProperty, dto.UserId);
         LoadProperty<string>(UsernameProperty, dto.Username);
         if (!string.IsNullOrEmpty(dto.Username))
-          User = DataPortal.FetchChild<UserIdentity>(dto.Username);
+        {
+          if (dto.Username == Csla.ApplicationContext.User.Identity.Name)
+            User = (UserIdentity)Csla.ApplicationContext.User.Identity;
+          else
+            User = DataPortal.FetchChild<UserIdentity>(dto.Username);
+        }
       }
     }
+
     public override PhraseBeliefDto CreateDto()
     {
       PhraseBeliefDto retDto = new PhraseBeliefDto()
@@ -527,7 +535,7 @@ namespace LearnLanguages.Business
     }
 
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public void Child_Fetch(Guid id)
+    protected override void Child_Fetch(Guid id)
     {
       using (var dalManager = DalFactory.GetDalManager())
       {
