@@ -238,6 +238,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <None Include="Properties\PublishProfiles\kroker - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\kroker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="LearnLanguages.CompressedProxyTestPage.aspx" />
     <Content Include="LearnLanguages.CompressedProxyTestPage.html" />
@@ -284,6 +286,7 @@
     <Content Include="Views\Shared\_SilverlightAppLayout.cshtml" />
     <Content Include="Views\SilverlightApp\Index.cshtml" />
     <Content Include="Views\Shared\_MobileLayout.cshtml" />
+    <Content Include="Views\Login\Index.mobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

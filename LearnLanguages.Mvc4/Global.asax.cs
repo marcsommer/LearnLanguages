@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
+using System.Web.WebPages;
 
 namespace LearnLanguages.Mvc4
 {
@@ -33,6 +34,12 @@ namespace LearnLanguages.Mvc4
       RouteConfig.RegisterRoutes(RouteTable.Routes);
       BundleConfig.RegisterBundles(BundleTable.Bundles);
       //BundleMobileConfig.RegisterBundles(BundleTable.Bundles);
+
+      DisplayModeProvider.Instance.Modes.Insert(0,
+        new DefaultDisplayMode("mobile")
+        {
+          ContextCondition = (ctx => ctx.Request.Browser.IsMobileDevice)
+        });
     }
 
     protected void Application_AuthenticateRequest(Object sender, EventArgs e)
