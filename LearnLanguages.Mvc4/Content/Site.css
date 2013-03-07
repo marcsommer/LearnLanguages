@@ -1,4 +1,32 @@
-﻿/* Styles for validation helpers
+﻿/* Styles for layout page
+-----------------------------------------------------------*/
+
+#ex_header {
+  background-color: #dbf7da;
+  color: white;
+  padding: 1px;
+}
+
+#content {
+  float: left;
+  margin: 10px;
+}
+
+#sidebar {
+  float: right;
+  margin: 10px;
+  padding: 10px;
+  border: dotted 5px red;
+  width: 180px;
+}
+
+#footer {
+  text-align: center;
+  clear: both;
+}
+
+
+/* Styles for validation helpers
 -----------------------------------------------------------*/
 .field-validation-error {
     color: #f00;

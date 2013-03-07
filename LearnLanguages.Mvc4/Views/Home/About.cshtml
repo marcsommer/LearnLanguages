@@ -1,14 +1,50 @@
 ﻿@{
     ViewBag.Title = "About";
+    
 }
 
-<h2>About</h2>
-<p>
-     Put content here.
-</p>
+@*@section Styles {
+    <link href="@Url.Content("~/Content/custom.css")" rel="stylesheet" type="text/css" />
+}*@
+
+
+<div style="font-family: GungsuhChe; 
+            font-style: inherit; 
+            background-image:url('/Content/images/ibgib_minimal_type.png');"
+            font="Impact">
+
+<div align="center"><h2>Ib. Gib. Ibgib.</h2></div>
+
+<p>Here at Ibgib, we are just a small company with one big idea: To Learn Everything in a Really Efficient and Nerdy Way.</p>
+
+<p>Whatever the subject matter, whatever the information, whatever the niche, whatever the *Data*...We want to use everything
+   at our sciency, nerdy disposal to maximize the little grey cells capabilities to *OWN* that information. </p>
+
+<p>But if we're not smart about it, if we're not nerdy about it, if we don't use a Sciency method, then we know the 
+  consequence, because we all know the saying: Use it or lose it! Or how I like to put it: The dreaded LEARN:</p>
+<ul>
+  <li>Learn</li>
+  <li>Everything</li>
+  <li>And</li>
+  <li>Remember</li>
+  <li>Nothing</li>
+</ul>
+
+<p>But Alas! There is HOPE! Ibgib is dedicated to fighting this cognitive bias of 
+  forgetfulness...this invisible thief with the quick fingers, dipping into our brain buckets and stealing our encephalodata; 
+  feasting on our poor little grey cellular ones and zeroes...Be Gone Ye Sneakie Daemon!</p>
+
+<p>Ibgib is all about beating away that demon and fighting back with whatever means necessary. We want our knowledge!
+  We don't want to just "LEARN" it. Rather, we want to *Remember* the data. We want to *Recall* the data. We want to 
+  *Maintain* the data. We want to cuddle it in our protective arms and drop-kick the hell out of the sneakthief.</p>
+
+<p>This is one interpretation - one ib - of Ibgib.</p>
+<div style="padding-right: 5em;" align="right" ><p>I. B. Ib. G. Gib. Ib. Gib. Ibgib.</p></div>
 
 <ul data-role="listview" data-inset="true">
     <li data-role="list-divider">Navigation</li>
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
 </ul>
+
+</div>
