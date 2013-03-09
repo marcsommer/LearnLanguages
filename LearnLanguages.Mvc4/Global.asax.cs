@@ -35,11 +35,26 @@ namespace LearnLanguages.Mvc4
       BundleConfig.RegisterBundles(BundleTable.Bundles);
       //BundleMobileConfig.RegisterBundles(BundleTable.Bundles);
 
-      DisplayModeProvider.Instance.Modes.Insert(0,
-        new DefaultDisplayMode("mobile")
-        {
-          ContextCondition = (ctx => ctx.Request.Browser.IsMobileDevice)
-        });
+      //The Android view
+      DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("android")
+      {
+        ContextCondition = Context => Context.Request.Browser.Platform == "Android"
+      });
+
+      //The iPhone view
+      DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("iphone")
+      {
+        ContextCondition = Context => Context.Request.Browser.MobileDeviceModel == "iPhone"
+      });
+
+      //The mobile view
+      //This has a lower priority than the other two so will only be used by a mobile device
+      //that isn't Android or iPhone
+      DisplayModeProvider.Instance.Modes.Insert(1, new DefaultDisplayMode("mobile")
+      {
+        ContextCondition = Context => Context.Request.Browser.IsMobileDevice
+      });
+
     }
 
     protected void Application_AuthenticateRequest(Object sender, EventArgs e)
