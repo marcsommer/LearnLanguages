@@ -12,7 +12,8 @@ namespace LearnLanguages.Mvc4.Controllers
     [AllowAnonymous]
     public ActionResult Index()
     {
-      //ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+
+      ViewBag.Message = "ibHome!";
 
       return View();
     }
@@ -20,7 +21,7 @@ namespace LearnLanguages.Mvc4.Controllers
     [AllowAnonymous]
     public ActionResult About()
     {
-      ViewBag.Message = "Your app description page.";
+      ViewBag.Message = "aboutGib!";
 
       return View();
     }
@@ -28,7 +29,15 @@ namespace LearnLanguages.Mvc4.Controllers
     [AllowAnonymous]
     public ActionResult Contact()
     {
-      ViewBag.Message = "Your contact page.";
+      ViewBag.Message = "contactGib!";
+
+      return View();
+    }
+
+    [AllowAnonymous]
+    public ActionResult Vision()
+    {
+      ViewBag.Message = "ibVision!";
 
       return View();
     }

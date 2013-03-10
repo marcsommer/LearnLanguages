@@ -300,6 +300,8 @@
     <Content Include="Views\Shared\_MobileLayout.cshtml" />
     <Content Include="Views\Login\Index.mobile.cshtml" />
     <Content Include="Views\Home\Index.mobile.cshtml" />
+    <Content Include="Views\Home\Contact.mobile.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
