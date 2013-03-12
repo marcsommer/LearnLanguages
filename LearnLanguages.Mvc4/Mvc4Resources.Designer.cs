@@ -22,7 +22,7 @@ namespace LearnLanguages.Mvc4 {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Mvc4Resources {
+    public class Mvc4Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace LearnLanguages.Mvc4 {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LearnLanguages.Mvc4.Mvc4Resources", typeof(Mvc4Resources).Assembly);
@@ -51,7 +51,7 @@ namespace LearnLanguages.Mvc4 {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,11 +61,200 @@ namespace LearnLanguages.Mvc4 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string ActionNameAbout {
+            get {
+                return ResourceManager.GetString("ActionNameAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact.
+        /// </summary>
+        public static string ActionNameContact {
+            get {
+                return ResourceManager.GetString("ActionNameContact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index.
+        /// </summary>
+        public static string ActionNameHome {
+            get {
+                return ResourceManager.GetString("ActionNameHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index.
+        /// </summary>
+        public static string ActionNameSilverlightApp {
+            get {
+                return ResourceManager.GetString("ActionNameSilverlightApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vision.
+        /// </summary>
+        public static string ActionNameVision {
+            get {
+                return ResourceManager.GetString("ActionNameVision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string ControllerNameHome {
+            get {
+                return ResourceManager.GetString("ControllerNameHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string ControllerNameLogin {
+            get {
+                return ResourceManager.GetString("ControllerNameLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiLineTextList.
+        /// </summary>
+        public static string ControllerNameMultiLineTextListController {
+            get {
+                return ResourceManager.GetString("ControllerNameMultiLineTextListController", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SilverlightApp.
+        /// </summary>
+        public static string ControllerNameSilverlightApp {
+            get {
+                return ResourceManager.GetString("ControllerNameSilverlightApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identity.
         /// </summary>
-        internal static string IdentityKey {
+        public static string IdentityKey {
             get {
                 return ResourceManager.GetString("IdentityKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to aboutGib.
+        /// </summary>
+        public static string LinkTextAboutPage {
+            get {
+                return ResourceManager.GetString("LinkTextAboutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ibContact.
+        /// </summary>
+        public static string LinkTextContactPage {
+            get {
+                return ResourceManager.GetString("LinkTextContactPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ibHome.
+        /// </summary>
+        public static string LinkTextHomePage {
+            get {
+                return ResourceManager.GetString("LinkTextHomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to appGib.
+        /// </summary>
+        public static string LinkTextSLAppPage {
+            get {
+                return ResourceManager.GetString("LinkTextSLAppPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ibVision.
+        /// </summary>
+        public static string LinkTextVisionPage {
+            get {
+                return ResourceManager.GetString("LinkTextVisionPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _NavPartial.
+        /// </summary>
+        public static string PartialNameNav {
+            get {
+                return ResourceManager.GetString("PartialNameNav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to aboutGib.
+        /// </summary>
+        public static string TitleAboutPage {
+            get {
+                return ResourceManager.GetString("TitleAboutPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ibContact.
+        /// </summary>
+        public static string TitleContactPage {
+            get {
+                return ResourceManager.GetString("TitleContactPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ibHome.
+        /// </summary>
+        public static string TitleHomePage {
+            get {
+                return ResourceManager.GetString("TitleHomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string TitleLoginPage {
+            get {
+                return ResourceManager.GetString("TitleLoginPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to appGib.
+        /// </summary>
+        public static string TitleSLAppPage {
+            get {
+                return ResourceManager.GetString("TitleSLAppPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ibVision.
+        /// </summary>
+        public static string TitleVisionPage {
+            get {
+                return ResourceManager.GetString("TitleVisionPage", resourceCulture);
             }
         }
     }

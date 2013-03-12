@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using LearnLanguages.Mvc4;
+
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -9,7 +11,9 @@
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
-      <div><p>Hi. This is the _MobileLayout.cshtml</p> </div>
+      
+      <div><p>Hi. Please wait while the mobile page loads...hmmm...have Faith...it WILL load!</p> </div>
+
       <!--Page-->
       <div data-role="page" data-theme="e">
       
@@ -27,10 +31,15 @@
         <div data-role="content">
           @RenderBody()
         </div>
-        
+
+        <!--Navigation-->
+        <div>
+          @Html.Partial("_NavPartial")
+        </div>        
       </div>
 
       @Scripts.Render("~/bundles/jquery", "~/bundles/jquerymobile")
       @RenderSection("scripts", required: false)
+      
     </body>
   </html>

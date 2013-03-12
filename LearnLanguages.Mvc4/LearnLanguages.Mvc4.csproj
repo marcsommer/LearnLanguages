@@ -177,7 +177,6 @@
     <Content Include="ClientBin\LearnLanguages.DataAccess.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.Tests.xap" />
     <Content Include="ClientBin\LearnLanguages.Silverlight.xap" />
-    <Content Include="Content\custom.css" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\ajax-loader.png" />
     <Content Include="Content\images\ibgib_abstract.jpg" />
@@ -186,6 +185,7 @@
     <Content Include="Content\images\icons-18-white.png" />
     <Content Include="Content\images\icons-36-black.png" />
     <Content Include="Content\images\icons-36-white.png" />
+    <Content Include="Content\images\learn_acronym.jpg" />
     <Content Include="Content\jquery.mobile-1.1.0.css" />
     <Content Include="Content\jquery.mobile-1.1.0.min.css" />
     <Content Include="Content\jquery.mobile.structure-1.1.0.css" />
@@ -297,11 +297,15 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_SilverlightAppLayout.cshtml" />
     <Content Include="Views\SilverlightApp\Index.cshtml" />
-    <Content Include="Views\Shared\_MobileLayout.cshtml" />
     <Content Include="Views\Login\Index.mobile.cshtml" />
     <Content Include="Views\Home\Index.mobile.cshtml" />
     <Content Include="Views\Home\Contact.mobile.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\About.mobile.cshtml" />
+    <Content Include="Views\Home\Vision.mobile.cshtml" />
+    <Content Include="Views\Shared\_Layout.mobile.cshtml" />
+    <Content Include="Views\Shared\_NavPartial.cshtml" />
+    <Content Include="Views\Shared\_NavPartial.mobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -311,7 +315,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mvc4Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Mvc4Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

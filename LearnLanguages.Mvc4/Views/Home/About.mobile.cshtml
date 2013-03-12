@@ -1,13 +1,10 @@
 ﻿@using LearnLanguages.Mvc4;
 
 @{
-  ViewBag.Title = @Mvc4Resources.TitleHomePage;
+  ViewBag.Title = @Mvc4Resources.TitleAboutPage;
 }
 
-@*<!--<h2>@ViewBag.Message</h2>-->*@
-<p>
-    Home Home Home is where you hang your hat.
-</p>
+<h2>@ViewBag.Message</h2>
 
 @*<ul data-role="listview" data-inset="true">
     <!--<li data-role="list-divider">This is a list divider, whatever that means</li>-->
@@ -22,9 +19,10 @@
    <input type="range" name="slider" id="slider-0" value="25" min="0" max="100" />
   <a href="#" data-role="button" data-icon="star" data-iconpos="left" data-theme="a">Just a button with a star</a>
   <a href="#" data-role="button" data-icon="" data-iconpos="left" data-theme="a">Just a button with a star</a>
+
 </div>
 
-@*<form id="form1" runat="server" style="height:100%">
+<form id="form1" runat="server" style="height:100%">
   <div id="silverlightControlHost">
     <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
       <param name="source" value="ClientBin/LearnLanguages.Silverlight.xap" />
@@ -41,4 +39,4 @@
   
     <iframe id="_sl_historyFrame" style="visibility:hidden;height:0px;width:0px;border:0px"></iframe>
   </div>
-</form>*@
+</form>

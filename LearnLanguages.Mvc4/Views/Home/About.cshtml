@@ -1,16 +1,10 @@
-﻿@{
-    ViewBag.Title = "aboutGib";
+﻿@using LearnLanguages.Mvc4;
+
+@{
+  ViewBag.Title = @Mvc4Resources.TitleAboutPage;
 }
 
 <h2>@ViewBag.Message</h2>
-
-<ul data-role="listview" data-inset="true">
-    <!--<li data-role="list-divider">This is a list divider, whatever that means</li>-->
-    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("SL App", "Index", "SilverlightApp")</li>
-    <li>@Html.ActionLink("About", "About", "Home")</li>
-    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-</ul>
 
 <div style="border:2px dotted red">
   <p>Testing Area</p>
@@ -38,3 +32,6 @@
     <iframe id="_sl_historyFrame" style="visibility:hidden;height:0px;width:0px;border:0px"></iframe>
   </div>
 </form>
+
+
+

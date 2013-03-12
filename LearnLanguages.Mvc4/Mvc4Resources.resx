@@ -117,8 +117,71 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActionNameAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="ActionNameContact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="ActionNameHome" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="ActionNameSilverlightApp" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="ActionNameVision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="ControllerNameHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="ControllerNameLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="ControllerNameMultiLineTextListController" xml:space="preserve">
+    <value>MultiLineTextList</value>
+  </data>
+  <data name="ControllerNameSilverlightApp" xml:space="preserve">
+    <value>SilverlightApp</value>
+  </data>
   <data name="IdentityKey" xml:space="preserve">
     <value>Identity</value>
     <comment>Key used in session object where the UserIdentity is stored for authenticated users.</comment>
+  </data>
+  <data name="LinkTextAboutPage" xml:space="preserve">
+    <value>aboutGib</value>
+  </data>
+  <data name="LinkTextContactPage" xml:space="preserve">
+    <value>ibContact</value>
+  </data>
+  <data name="LinkTextHomePage" xml:space="preserve">
+    <value>ibHome</value>
+  </data>
+  <data name="LinkTextSLAppPage" xml:space="preserve">
+    <value>appGib</value>
+  </data>
+  <data name="LinkTextVisionPage" xml:space="preserve">
+    <value>ibVision</value>
+  </data>
+  <data name="PartialNameNav" xml:space="preserve">
+    <value>_NavPartial</value>
+  </data>
+  <data name="TitleAboutPage" xml:space="preserve">
+    <value>aboutGib</value>
+  </data>
+  <data name="TitleContactPage" xml:space="preserve">
+    <value>ibContact</value>
+  </data>
+  <data name="TitleHomePage" xml:space="preserve">
+    <value>ibHome</value>
+  </data>
+  <data name="TitleLoginPage" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="TitleSLAppPage" xml:space="preserve">
+    <value>appGib</value>
+  </data>
+  <data name="TitleVisionPage" xml:space="preserve">
+    <value>ibVision</value>
   </data>
 </root>

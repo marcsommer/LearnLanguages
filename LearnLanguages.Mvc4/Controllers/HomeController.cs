@@ -13,7 +13,7 @@ namespace LearnLanguages.Mvc4.Controllers
     public ActionResult Index()
     {
 
-      ViewBag.Message = "ibHome!";
+      //ViewBag.Message = "ibHome!";
 
       return View();
     }
@@ -21,7 +21,7 @@ namespace LearnLanguages.Mvc4.Controllers
     [AllowAnonymous]
     public ActionResult About()
     {
-      ViewBag.Message = "aboutGib!";
+      //ViewBag.Message = "aboutGib!";
 
       return View();
     }
@@ -29,7 +29,7 @@ namespace LearnLanguages.Mvc4.Controllers
     [AllowAnonymous]
     public ActionResult Contact()
     {
-      ViewBag.Message = "contactGib!";
+      //ViewBag.Message = "contactGib!";
 
       return View();
     }
@@ -37,7 +37,7 @@ namespace LearnLanguages.Mvc4.Controllers
     [AllowAnonymous]
     public ActionResult Vision()
     {
-      ViewBag.Message = "ibVision!";
+      //ViewBag.Message = "ibVision!";
 
       return View();
     }
