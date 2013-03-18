@@ -205,6 +205,87 @@ namespace LearnLanguages.Mvc4 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ~/Scripts/custom_bundle.
+        /// </summary>
+        public static string ScriptVirtualPathCustom {
+            get {
+                return ResourceManager.GetString("ScriptVirtualPathCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Scripts/jquery_bundle.
+        /// </summary>
+        public static string ScriptVirtualPathJQuery {
+            get {
+                return ResourceManager.GetString("ScriptVirtualPathJQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Scripts/jquerymobile_bundle.
+        /// </summary>
+        public static string ScriptVirtualPathJQueryMobile {
+            get {
+                return ResourceManager.GetString("ScriptVirtualPathJQueryMobile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Scripts/jqueryui_bundle.
+        /// </summary>
+        public static string ScriptVirtualPathJQueryUi {
+            get {
+                return ResourceManager.GetString("ScriptVirtualPathJQueryUi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Scripts/jqueryval_bundle.
+        /// </summary>
+        public static string ScriptVirtualPathJQueryVal {
+            get {
+                return ResourceManager.GetString("ScriptVirtualPathJQueryVal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Scripts/modernizr_bundle.
+        /// </summary>
+        public static string ScriptVirtualPathModernizr {
+            get {
+                return ResourceManager.GetString("ScriptVirtualPathModernizr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Content/mobilecss.
+        /// </summary>
+        public static string StyleVirtualPathJQueryMobile {
+            get {
+                return ResourceManager.GetString("StyleVirtualPathJQueryMobile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Content/themes/base/css.
+        /// </summary>
+        public static string StyleVirtualPathJQueryUi {
+            get {
+                return ResourceManager.GetString("StyleVirtualPathJQueryUi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ~/Content/css.
+        /// </summary>
+        public static string StyleVirtualPathSite {
+            get {
+                return ResourceManager.GetString("StyleVirtualPathSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to aboutGib.
         /// </summary>
         public static string TitleAboutPage {

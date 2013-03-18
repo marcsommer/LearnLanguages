@@ -166,6 +166,33 @@
   <data name="PartialNameNav" xml:space="preserve">
     <value>_NavPartial</value>
   </data>
+  <data name="ScriptVirtualPathCustom" xml:space="preserve">
+    <value>~/Scripts/custom_bundle</value>
+  </data>
+  <data name="ScriptVirtualPathJQuery" xml:space="preserve">
+    <value>~/Scripts/jquery_bundle</value>
+  </data>
+  <data name="ScriptVirtualPathJQueryMobile" xml:space="preserve">
+    <value>~/Scripts/jquerymobile_bundle</value>
+  </data>
+  <data name="ScriptVirtualPathJQueryUi" xml:space="preserve">
+    <value>~/Scripts/jqueryui_bundle</value>
+  </data>
+  <data name="ScriptVirtualPathJQueryVal" xml:space="preserve">
+    <value>~/Scripts/jqueryval_bundle</value>
+  </data>
+  <data name="ScriptVirtualPathModernizr" xml:space="preserve">
+    <value>~/Scripts/modernizr_bundle</value>
+  </data>
+  <data name="StyleVirtualPathJQueryMobile" xml:space="preserve">
+    <value>~/Content/mobilecss</value>
+  </data>
+  <data name="StyleVirtualPathJQueryUi" xml:space="preserve">
+    <value>~/Content/themes/base/css</value>
+  </data>
+  <data name="StyleVirtualPathSite" xml:space="preserve">
+    <value>~/Content/css</value>
+  </data>
   <data name="TitleAboutPage" xml:space="preserve">
     <value>aboutGib</value>
   </data>

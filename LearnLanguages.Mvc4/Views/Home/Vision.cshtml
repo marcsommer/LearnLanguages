@@ -4,10 +4,18 @@
   ViewBag.Title = @Mvc4Resources.TitleVisionPage;
 }
 
-@*@section Styles {
-    <link href="@Url.Content("~/Content/custom.css")" rel="stylesheet" type="text/css" />
+<!--To be inserted into layout <head> section-->
+@*@section Head {
+  @Scripts.Render(Mvc4Resources.ScriptVirtualPathCustom)
 }*@
 
+<a href="" >Click to do alert</a>
+<div id="accordion">
+  <h3>First header</h3>
+    <div>First content panel</div>
+  <h3>Second header</h3>
+    <div>Second content panel</div>
+</div>
 
 <div style="font-family: 'Times New Roman'; 
             font-style: inherit; 
@@ -15,24 +23,43 @@
 
 <div align="center"><h2>Ib. Gib. Ibgib.</h2></div>
 
-<p>    Ibgib is a small company with a simple idea: <span style="font-weight:bold">To Learn Everything in an Extraordinarily Efficient 
+  <h3>Ib. Gib. The ibConcept.</h3>
+
+<p>Ibgib is a small company with a simple idea: <span style="font-weight:bold">To Learn Everything in an Extraordinarily Efficient 
    and Nerdy Way, and Maintain that Knowledge over an Entire Lifetime while Staying Lazy...Errrr...Efficient.</span></p>
 
-<p>    Whatever the subject matter, whatever the information, whatever the niche, whatever the *Data* may be...We want to use 
-   everything at our scientificky disposal to maximize the little grey cells' capabilities to *OWN* that data. </p>
+<p>Whatever the subject matter, whatever the information, whatever the niche, whatever the *Data* may be...We want to use 
+   everything at our scientificky disposal to maximize the little grey cells' capabilities to *OWN* that data, over our entire
+   lifetime.</p>
 
-<p>    But if we're not smart about it, if we're not nerdy about it,
+<p>But if we're not smart about it, if we're not nerdy about it,
   <img src="/Content/images/learn_acronym.jpg" alt="Learn Everything And Remember Nothing! ibgib." />
    if we don't use a scientificky method, then the outcome is a 
    foregone conclusion: Use it or lose it! </p>
 
-<p>    But Alas! There is HOPE! Ibgib is dedicated to fighting this cognitive bias of 
-   forgetfulness; this invisible thief with slippery fingers that double-dip into our brain buckets and pinch our encephalodata. 
-   This beast feasts on our poor little grey cellular 1s and 0s, lo we say - Be Gone Ye Sneakie Daemon!</p>
+<p>But Alas! There <i>is</i> HOPE! Ibgib is dedicated to fighting this cognitive bias of 
+   forgetfulness; this beast that feasts on our brains' little grey 1s and 0s. LO!, we say - Be Gone Ye Sneakie Daemon!</p>
 
-<p>    Ibgib is all about beating back that demon and fighting with whatever means necessary. And this necessarily means
-   We don't want to just "LEARN" our data; rather, we want to *Recall* it, we want to 
-   *Maintain* it...we want to <i><b>Completely Own It</b></i>.</p>
+  
+<p>Ibgib is all about beating back that demon and fighting with whatever means necessary. And this necessarily means
+   We don't want to just "LEARN" our data - not to just forget it all in a couple weeks or months. Rather, we want to 
+   *Retain* the information...We want to maintain it for the entirety of our lifespan, while still being extremely 
+   clever (lazy) about how we go about it!</p>
+
+  <h3>Ib. Gib. The appGib.<i>(or, how we learn to beat the sneakthief!)</i></h3>
+
+<p>Ibgib is continuously developing the appGib, and it has been formulated from approximately a bajillion principles. 
+   However, at this stage of its life, the appGib can be said to comprise a few core tenets listed as follows 
+  (skip this section if you don't care about the scientificky
+   type stuff):</p>
+
+  <ol>
+    <li>The ibData MUST be centrally located in the cloud, and it must be available via any device.</li>
+    <li>The ibData MUST be understood to be composed of living entities - always dynamic and evolving, 
+        and never static and stagnant.</li>
+    <li>The ibData MUST be able to grow both top-down, flowing from "teacher" to student, as well as organically from 
+        the bottom-up, directed by the student's interests and abilities.</li>
+  </ol>
 
 <div style="padding-right: 5em;" align="right" ><p>I. B. Ib. G. Gib. Ib. Gib. Ibgib. ibgib.</p></div>
 
