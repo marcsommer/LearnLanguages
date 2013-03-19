@@ -1,10 +1,15 @@
 ﻿
 //Attaches accordion to all classes marked accordion
-$(document).ready(function DoSomething() {
+$(document).ready(function () {
 
-  $("a").click(function ShowAlertDummy() {
-    alert("jquery script was run!");
+  $("#testlink").click(function ShowAlertDummy() {
+    alert("jquery script is a runnin!");
   });
 
-  $("#accordion").accordion();
+  AttachAccordion();
 });
+
+function AttachAccordion() {
+  $("#accordion").accordion({ collapsible: true });
+}
+

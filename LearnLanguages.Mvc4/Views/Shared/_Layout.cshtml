@@ -25,50 +25,30 @@
                    Mvc4Resources.StyleVirtualPathJQueryUi,
                    Mvc4Resources.StyleVirtualPathJQueryMobile
                    )
-    @*<script>
-      $(document).ready(function DoSomething() {
-
-        $("a").click(function ShowAlertDummy() {
-          alert("jquery script was run!");
-        });
-
-        $("#accordion").accordion();
-      });
-    </script>*@
 
 
   </head>
   <body>
 
-    
-
-
-
     <!--Page-->
     <div data-role="page" data-theme="e">
-    
-      <a href="" >dooooodoooo</a>
-    
-    <div id="accordion">
-      <h3>First header</h3>
-      <div>First content panel</div>
-  
-      <h3>Second header</h3>
-      <div>Second content panel</div>
-    </div>
-        
+
+          
       <!--Header-->      
       <div data-role="header">
         @if (IsSectionDefined("Header")) {
             @RenderSection("Header")
-        } else {
+        }
+        @*else {
             <h1>@ViewBag.Title</h1>
             @Html.Partial("_LoginPartial")
-        }
+        }*@
       </div>
           
       <!--Content-->
       <div data-role="content">
+        <a id="testlink" href="" >test javascript</a>
+
         @RenderBody()
       </div>
         
@@ -77,7 +57,7 @@
       </div>
     </div>
 
-    @Scripts.Render("~/bundles/jquery", "~/bundles/jquerymobile")
+    @*@Scripts.Render("~/bundles/jquery", "~/bundles/jquerymobile")*@
     @RenderSection("scripts", required: false)
   </body>
 </html>

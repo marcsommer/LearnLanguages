@@ -5,32 +5,29 @@
 }
 
 <!--To be inserted into layout <head> section-->
-@*@section Head {
-  @Scripts.Render(Mvc4Resources.ScriptVirtualPathCustom)
-}*@
+@section Head {
 
-<a href="" >Click to do alert</a>
-<div id="accordion">
-  <h3>First header</h3>
-    <div>First content panel</div>
-  <h3>Second header</h3>
-    <div>Second content panel</div>
-</div>
+}
 
-<div style="font-family: 'Times New Roman'; 
-            font-style: inherit; 
-            background-image:url('/Content/images/ibgib_minimal_type.png');">
 
-<div align="center"><h2>Ib. Gib. Ibgib.</h2></div>
+<div align="center"><h1>Lazy, Efficient, Lifetime Learning</h1></div>
+<div align="center"><h2>Ibgib.</h2></div>
 
-  <h3>Ib. Gib. The ibConcept.</h3>
+<div id="accordion" style="font-family: 'Times New Roman'; 
+                    font-style: inherit; 
+                    background-image:url('/Content/images/ibgib_minimal_type.png');">
+
+
+  <h3 class="accordion-header">ibConcept</h3>
+  <div>
 
 <p>Ibgib is a small company with a simple idea: <span style="font-weight:bold">To Learn Everything in an Extraordinarily Efficient 
    and Nerdy Way, and Maintain that Knowledge over an Entire Lifetime while Staying Lazy...Errrr...Efficient.</span></p>
 
-<p>Whatever the subject matter, whatever the information, whatever the niche, whatever the *Data* may be...We want to use 
-   everything at our scientificky disposal to maximize the little grey cells' capabilities to *OWN* that data, over our entire
-   lifetime.</p>
+<p>Whatever the subject matter, the information, the process, the dialect, the niche - whatever the 
+  <span class="accented-vision">Data</span> may be, we want to use 
+   everything at our scientificky disposal to maximize the little grey cells' capabilities to <b>own that data
+   over our entire lifetime</b>.</p>
 
 <p>But if we're not smart about it, if we're not nerdy about it,
   <img src="/Content/images/learn_acronym.jpg" alt="Learn Everything And Remember Nothing! ibgib." />
@@ -41,26 +38,42 @@
    forgetfulness; this beast that feasts on our brains' little grey 1s and 0s. LO!, we say - Be Gone Ye Sneakie Daemon!</p>
 
   
-<p>Ibgib is all about beating back that demon and fighting with whatever means necessary. And this necessarily means
-   We don't want to just "LEARN" our data - not to just forget it all in a couple weeks or months. Rather, we want to 
+<p>Ibgib is all about beating back that demon with whatever means necessary. And this necessarily means
+   we don't want to just "LEARN" our data - not to just forget it all in a couple weeks or months. Rather, we want to 
    *Retain* the information...We want to maintain it for the entirety of our lifespan, while still being extremely 
    clever (lazy) about how we go about it!</p>
+    
+  </div>
+  
+  
+  <h3 class="accordion-header">appGib</h3>
+  
+  <div>
+    <p>Ibgib is continuously developing the appGib, and it has been formulated from approximately a bajillion principles. 
+       However, at this stage of its life, the appGib can be said to comprise a few core tenets listed as follows 
+      (skip this section if you don't care about the scientificky
+       type stuff):</p>
 
-  <h3>Ib. Gib. The appGib.<i>(or, how we learn to beat the sneakthief!)</i></h3>
+      <ol>
+        <li>The ibData MUST be centrally located in the cloud, and it must be available via any device.</li>
+        <li>The ibData MUST be understood to be composed of living entities - always dynamic and evolving, 
+            and never static and stagnant.</li>
+        <li>The ibData MUST be able to grow both top-down, flowing from "teacher" to student, as well as organically from 
+            the bottom-up, directed by the student's interests and abilities.</li>
+      </ol>
 
-<p>Ibgib is continuously developing the appGib, and it has been formulated from approximately a bajillion principles. 
-   However, at this stage of its life, the appGib can be said to comprise a few core tenets listed as follows 
-  (skip this section if you don't care about the scientificky
-   type stuff):</p>
+  </div>
+</div>
 
-  <ol>
-    <li>The ibData MUST be centrally located in the cloud, and it must be available via any device.</li>
-    <li>The ibData MUST be understood to be composed of living entities - always dynamic and evolving, 
-        and never static and stagnant.</li>
-    <li>The ibData MUST be able to grow both top-down, flowing from "teacher" to student, as well as organically from 
-        the bottom-up, directed by the student's interests and abilities.</li>
-  </ol>
-
+@section scripts{
+<style>
+  .accordion-header {
+    padding-left: 35px;
+    /*font-style: italic;*/
+    font-weight: bold;
+    font-size: 20px;
+  }
+</style>  
+}
 <div style="padding-right: 5em;" align="right" ><p>I. B. Ib. G. Gib. Ib. Gib. Ibgib. ibgib.</p></div>
 
-</div>
