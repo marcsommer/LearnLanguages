@@ -183,6 +183,7 @@
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\ajax-loader.png" />
     <Content Include="Content\images\ibgib_abstract.jpg" />
+    <Content Include="Content\images\ibgib_logo.jpg" />
     <Content Include="Content\images\ibgib_minimal_type.png" />
     <Content Include="Content\images\icons-18-black.png" />
     <Content Include="Content\images\icons-18-white.png" />
