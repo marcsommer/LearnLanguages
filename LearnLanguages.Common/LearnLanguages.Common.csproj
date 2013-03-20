@@ -166,6 +166,11 @@
     <Compile Include="Exceptions\UserNotAuthenticatedException.cs" />
     <Compile Include="Interfaces\Analyzer\IAnalysis.cs" />
     <Compile Include="Interfaces\Analyzer\IAnalyzer.cs" />
+    <Compile Include="Interfaces\Autonomous\IAutonomousServiceInfo.cs" />
+    <Compile Include="Interfaces\Autonomous\IAutonomousServiceContext.cs" />
+    <Compile Include="Interfaces\Autonomous\IAutonomousServiceManager.cs" />
+    <Compile Include="Interfaces\Autonomous\IAutonomousServiceImpl.cs" />
+    <Compile Include="Interfaces\Autonomous\IAutonomousService.cs" />
     <Compile Include="Interfaces\Core\IModule.cs" />
     <Compile Include="Interfaces\Core\IPageInitializer.cs" />
     <Compile Include="Interfaces\Navigation\INavigationPanelViewModel.cs" />
