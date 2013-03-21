@@ -45,11 +45,11 @@ namespace LearnLanguages.Common.CslaBases
       }
     }
 
-    public override Task<C> SaveAsync(bool forceUpdate)
-    {
-      //EXPOSES METHOD TO DESCENDANTS
-      return base.SaveAsync(forceUpdate);
-    }
+    //public override Task<C> SaveAsync(bool forceUpdate)
+    //{
+    //  //EXPOSES METHOD TO DESCENDANTS
+    //  return base.SaveAsync(forceUpdate);
+    //}
 
     protected override Task<C> SaveAsync(bool forceUpdate, object userState, bool isSync)
     {
