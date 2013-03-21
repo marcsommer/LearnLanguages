@@ -20,6 +20,12 @@ namespace LearnLanguages.Common
         return new ValidationResult(errorDescription);
     }
 
+    public void foo()
+    {
+      Task blah = null;
+      blah.Dispose();
+    }
+
     /// <summary>
     /// I've added these "ValidationResult" methods to be used with CustomValidationAttribute.
     /// E.g. [CustomValidation(typeof(Common.CommonHelper), "UsernameIsValidValidationResult")]

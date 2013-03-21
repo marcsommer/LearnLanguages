@@ -2,9 +2,11 @@
 {
   /// <summary>
   /// This represents the state information of an autonomous 
-  /// service. This is tightly coupled to that service.
+  /// service. This is tightly coupled to that service, but 
+  /// there is no reference to this info object on the Service
+  /// object. The service should not know this information.
   /// </summary>
-  public interface IAutonomousServiceInfo
+  public interface IAutonomousServiceInfo : IHaveId
   {
     /// <summary>
     /// The Service that this info is tightly coupled to.
