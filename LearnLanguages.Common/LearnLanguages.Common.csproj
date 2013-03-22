@@ -153,6 +153,7 @@
     <Compile Include="Core\PageBase.cs" />
     <Compile Include="Core\QuestionArgs.cs" />
     <Compile Include="Core\RandomPicker.cs" />
+    <Compile Include="Enums\Autonomous\AutonomousServiceContextStates.cs" />
     <Compile Include="Enums\IntendedUserAuthenticationState.cs" />
     <Compile Include="EventArgs\ResultArgsOfT.cs" />
     <Compile Include="Core\LearnLanguagesExtensions.cs" />

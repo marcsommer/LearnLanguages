@@ -1,7 +1,11 @@
 ﻿namespace LearnLanguages.Common.Interfaces.Autonomous
 {
   /// <summary>
-  /// This is class that exposes 
+  /// External classes (manager, context, possibly others in the future) 
+  /// use this as a dumb executor in a controlled environment. This 
+  /// things job is to let others know if it can do anything (if it is
+  /// flagged as enabled), and if it can, then others can use it to
+  /// execute.
   /// </summary>
   public interface IAutonomousService : IHaveId
   {
@@ -34,17 +38,18 @@
     bool Disable();
 
     /// <summary>
-    /// Executes a service recommendedIterations times.
+    /// Can this object perform an iteration of execution? Is it ready to go?
     /// </summary>
-    /// <param name="recommendedIterations">number of iterations recommended to execute, based on past performance</param>
-    /// <param name="maxExecutionTimeInMs">timeout in ms for execute method</param>
-    void Execute(int recommendedIterations, int maxExecutionTimeInMs);
+    bool CanExecute { get; }
 
     /// <summary>
-    /// Number of iterations that this service has completed during
-    /// this execution cycle.
+    /// Executes the behavior of this service. At the most granular level,
+    /// this should be a single iteration of execution. Or, IOW, this service
+    /// will be measured/controlled by external things, so it should provide
+    /// as stable behavior as possible, and that is most easily achieved 
+    /// through as small and manageable chunks of execution as possible.
     /// </summary>
-    int NumIterationsCompletedThisExecution { get; }
+    void Execute();
 
     /// <summary>
     /// Number of iterations that this service has completed during
@@ -60,6 +65,5 @@
     /// marked as an untrustworthy service. 
     /// </summary>
     void Abort(int timeAllowed);
-
   }
 }

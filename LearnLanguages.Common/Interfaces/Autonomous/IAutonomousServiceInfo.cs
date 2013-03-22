@@ -5,6 +5,11 @@
   /// service. This is tightly coupled to that service, but 
   /// there is no reference to this info object on the Service
   /// object. The service should not know this information.
+  /// 
+  /// This is a major point for extensibility in future iterations
+  /// of autonomous services. The more meaning information you can 
+  /// gather about competing services, the more effectively you 
+  /// can provide services to the user and ibgib.
   /// </summary>
   public interface IAutonomousServiceInfo : IHaveId
   {
