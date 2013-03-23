@@ -171,6 +171,7 @@
     <Compile Include="EventMessages\LanguageEventMessage.cs" />
     <Compile Include="EventMessages\NativeLanguageChangedEventMessage.cs" />
     <Compile Include="EventMessages\PartSatisfiedEventMessage.cs" />
+    <Compile Include="Events\AutonomousEvent.cs" />
     <Compile Include="Events\MessageEvent.cs" />
     <Compile Include="Exceptions\AnalysisTypeNotRecognizedException.cs" />
     <Compile Include="Exceptions\AnalysisIdNotRecognizedException.cs" />

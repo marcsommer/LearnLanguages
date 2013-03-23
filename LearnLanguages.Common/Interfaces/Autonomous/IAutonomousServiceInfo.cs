@@ -1,4 +1,6 @@
-﻿namespace LearnLanguages.Common.Interfaces.Autonomous
+﻿using System.Collections.Generic;
+
+namespace LearnLanguages.Common.Interfaces.Autonomous
 {
   /// <summary>
   /// This represents the state information of an autonomous 
@@ -43,5 +45,17 @@
     /// <param name="amount">amount to subtract from the balance</param>
     /// <returns>Should return this info object, as per fluent-style coding.</returns>
     IAutonomousServiceInfo ApplyCost(int amount);
+
+    /// <summary>
+    /// Gets the level of trust for the service via parsing
+    /// the service history.
+    /// </summary>
+    double GetTrustLevel();
+
+    /// <summary>
+    /// History for the 
+    /// </summary>
+    IList<Events.AutonomousEvent> ServiceEventHistory { get; }
+
   }
 }
